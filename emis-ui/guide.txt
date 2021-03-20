@@ -1,0 +1,19 @@
+installatiion of front end:
+    - install ui:cpmposet require laravel/ui
+    -   to enable sass and other:  php artisan ui --auth
+    - install adminlte : npm install admin-lte@^3.0.5 --save
+    - import in resources/sass/app.scss for compilation:  @import '~admin-lte/dist/css/adminlte.css';
+    - install font awosome: npm install --save @fortawesome/fontawesome-free
+    - also import for compilation:
+        @import '~@fortawesome/fontawesome-free/scss/brands';
+        @import '~@fortawesome/fontawesome-free/scss/solid';
+        @import '~@fortawesome/fontawesome-free/scss/fontawesome';
+        @import "~@fortawesome/fontawesome-free/css/all.min.css"; 
+
+    - install vue router: npm install vue-router and register in the app.js import VueRouter from 'vue-router';
+
+    - installatiom of v-form: npm i vform and import in app.js import { Form, HasError, AlertError } from 'vform';
+
+
+
+
