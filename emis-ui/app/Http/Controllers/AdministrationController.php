@@ -70,7 +70,7 @@ class AdministrationController extends Controller{
                 'status'    =>  'required',
             ];
         }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title"){
+        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"){
             $rules = [
                 'parent_field'=> 'required',
                 'name'  =>  'required',
@@ -95,7 +95,7 @@ class AdministrationController extends Controller{
             ];
         }
         
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage"){
             $rules = [
                 'name'  =>  'required',
                 'code'  =>  'required',
