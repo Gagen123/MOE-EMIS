@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Masters;
+namespace App\Http\Controllers\masters;
 use App\Http\Controllers\Controller;
 
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\StaffMasters\WorkingAgency;
-use App\Models\StaffMasters\TransferReason;
-use App\Models\StaffMasters\MgmnDesignation;
-use App\Models\StaffMasters\StaffMajorGrop;
-use App\Models\StaffMasters\StaffSubMajorGrop;
-use App\Models\StaffMasters\PositionTitle;
-use App\Models\StaffMasters\PositionLevel;
-use App\Models\StaffMasters\QualificationType;
-use App\Models\StaffMasters\QualificationLevel;
-use App\Models\StaffMasters\Qualification;
-use App\Models\StaffMasters\Relationship;
-use App\Models\StaffMasters\MaritalStatus;
-use App\Models\StaffMasters\StaffSubjectArea;
-use App\Models\StaffMasters\Subjects;
-use App\Models\StaffMasters\CureerStage;
+use App\Models\staff_masters\WorkingAgency;
+use App\Models\staff_masters\TransferReason;
+use App\Models\staff_masters\MgmnDesignation;
+use App\Models\staff_masters\StaffMajorGrop;
+use App\Models\staff_masters\StaffSubMajorGrop;
+use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\QualificationType;
+use App\Models\staff_masters\QualificationLevel;
+use App\Models\staff_masters\Qualification;
+use App\Models\staff_masters\Relationship;
+use App\Models\staff_masters\MaritalStatus;
+use App\Models\staff_masters\StaffSubjectArea;
+use App\Models\staff_masters\Subjects;
+use App\Models\staff_masters\CureerStage;
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";

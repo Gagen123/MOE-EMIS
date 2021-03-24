@@ -6,6 +6,9 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
+                                <span class="card-title pt-2 mb-0">
+                                        <b>Dzongkhag/Thromde</b>
+                                    </span>
                                 <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_dzongkhag')"><i class="fa fa-list"></i> List</button>
                                 <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('create_dzongkhag')"><i class="fa fa-plus"></i> Add New</button>
                             </div>

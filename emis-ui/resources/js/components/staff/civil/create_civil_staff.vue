@@ -13,11 +13,6 @@
                             <label class="mb-0.5">Qualification </label>
                         </a>
                     </li>
-                    <li class="nav-item sen-tab" id="sentab" style="display:none">
-                        <a class="nav-link" data-toggle="pill" @click="shownexttab('sen-tab')" role="tab">
-                            <label class="mb-0.5">Sen Details</label>
-                        </a>
-                    </li>
                     <li class="nav-item nomination-tab">
                         <a class="nav-link" data-toggle="pill" @click="shownexttab('nomination-tab')" role="tab">
                             <label class="mb-0.5">Nominees & Family Members</label>
@@ -52,21 +47,21 @@
                                 <input type="text" class="form-control" name="emp_id" id="cid"  readonly>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0.5">Full Name:</label>
+                            <label class="mb-0.5">Full Name:<i class="text-danger">*</i></label>
                                 <input type="text" @change="remove_error('full_name')" v-model="personal_form.full_name" :class="{ 'is-invalid': personal_form.errors.has('full_name') }" class="form-control" name="emp_id" id="empname"  readonly>
                                 <has-error :form="personal_form" field="full_name"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0.5">Position Title:</label>
+                            <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
                                 <input type="text" @change="remove_error('position_title')" v-model="personal_form.position_title" :class="{ 'is-invalid': personal_form.errors.has('position_title') }" class="form-control" name="position_title" id="position_title"  readonly>
                                 <has-error :form="personal_form" field="position_title"></has-error>
                             </div> 
                         </div>                        
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0.5">Working Agency:</label>
+                            <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
                                 <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
-                                <select v-model="personal_form.working_agency" @change="remove_error('working_agency')" :class="{ 'is-invalid select2-hidden-accessible': personal_form.errors.has('working_agency') }" class="form-control select2bs4" name="working_agency" id="working_agency">
+                                <select v-model="personal_form.working_agency" @change="remove_error('working_agency')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency') }" class="form-control select2" name="working_agency" id="working_agency">
                                     <option value=""> --Select--</option>
                                     <option value="1"> Mothithang HSS</option>
                                     <option value="2"> Yangchenphug HSS</option>
@@ -75,12 +70,12 @@
                                 <has-error :form="personal_form" field="working_agency"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Contact Number:</label>
+                                <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
                                 <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
                                 <has-error :form="personal_form" field="contact_number"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0.5">Email:</label>
+                            <label class="mb-0.5">Email:<i class="text-danger">*</i></label>
                                 <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
                                 <has-error :form="personal_form" field="email"></has-error>
                             </div> 
@@ -88,23 +83,24 @@
                
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Compulsory Subject:</label>
-                                <select @change="remove_error('comp_sub')" v-model="personal_form.comp_sub" :class="{ 'is-invalid select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2bs4" name="comp_sub" id="comp_sub">
+                                <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
+                                <select v-model="personal_form.comp_sub" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2" name="comp_sub" id="comp_sub">
+                                    <option value=""> --Select--</option>
                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="comp_sub"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Elective Subject 1:</label>
-                                <select @change="remove_error('elective_sub1')" v-model="personal_form.elective_sub1" :class="{'is-invalid select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2bs4" name="elective_sub1" id="elective_sub1">
+                                <label class="mb-0.5">Elective Subject 1:<i class="text-danger">*</i></label>
+                                <select v-model="personal_form.elective_sub1" :class="{'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2" name="elective_sub1" id="elective_sub1">
                                    <option value=""> --Select--</option>
                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="elective_sub1"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Elective Subject 2:</label>
-                                <select @change="remove_error('elective_sub2')" v-model="personal_form.elective_sub2" :class="{ 'is-invalid select2-hidden-accessible': personal_form.errors.has('elective_sub2') }" class="form-control select2bs4" name="elective_sub2" id="elective_sub2">
+                                <label class="mb-0.5">Elective Subject 2:</label> 
+                                <select v-model="personal_form.elective_sub2" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub2') }" class="form-control select2" name="elective_sub2" id="elective_sub2">
                                     <option value=""> --Select--</option>
                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
@@ -118,8 +114,8 @@
                                 <input type="radio" name="sen"  value="No"> No
                             </div>  -->
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Career Stage:</label><br>
-                                <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2bs4" name="currier_stage" id="currier_stage">
+                                <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
+                                <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
                                     <option value=""> --Select--</option>
                                     <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
@@ -175,7 +171,7 @@
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Description:<i class="text-danger">*</i></label>
-                                                        <select class="form-control select2bs4" id="qdescription">
+                                                        <select class="form-control select2" id="qdescription">
                                                             <option value="">--Select--</option>
                                                             <option value="Initial Professional Qualification">Initial Professional Qualification</option>
                                                             <option value="Heighest Professional Qualification">Heighest Professional Qualification</option>
@@ -186,7 +182,7 @@
                                                     </div>
                                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5"> Qualification:<i class="text-danger">*</i></label>
-                                                        <select class="form-control select2bs4" id="qualification">
+                                                        <select class="form-control select2" id="qualification">
                                                             <option value="">--Select--</option>
                                                             <option value="PTC">PTC</option>
                                                             <option value="ZTC">ZTC</option>
@@ -203,7 +199,7 @@
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Course Mode/Type:<i class="text-danger">*</i></label>
-                                                        <select class="form-control select2bs4" id="coursemode">
+                                                        <select class="form-control select2" id="coursemode">
                                                             <option value="">--Select--</option>
                                                             <option value="Mix Mode">Mix Mode</option>
                                                             <option value="Full Mode">Full Mode</option>
@@ -220,7 +216,7 @@
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">First Subject:<i class="text-danger">*</i></label>
-                                                        <select class="form-control select2bs4" id="firstsub">
+                                                        <select class="form-control select2" id="firstsub">
                                                             <option value="">--Select--</option>
                                                             <option value="Biological Science">Biological Science</option>
                                                             <option value="Buddhist Studies">Buddhist Studies</option>
@@ -230,7 +226,7 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Second subject:</label>
-                                                        <select class="form-control select2bs4" id="sectsub">
+                                                        <select class="form-control select2" id="sectsub">
                                                             <option value="">--Select--</option>
                                                             <option value="Biological Science">Biological Science</option>
                                                             <option value="Buddhist Studies">Buddhist Studies</option>
@@ -242,7 +238,7 @@
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Country:<i class="text-danger">*</i></label>
-                                                        <select class="form-control select2bs4" id="country">
+                                                        <select class="form-control select2" id="country">
                                                             <option value="">--Select--</option>
                                                             <option value="Bhutan">Bhutan</option>
                                                             <option value="AFGHANISTAN">AFGHANISTAN</option>
@@ -302,91 +298,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="sen-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <ul class="bg-cyan mb-2">
-                            <li class="pl-2 text-white">Providing details for: <span class="personname"></span></li>
-                        </ul>
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                 <table id="training-table" class="table table-sm table-bordered table-striped">
-                                    <thead>
-                                        <td>Sl#</td>
-                                        <td>Question and Answer</td>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td> 
-                                                Does the Teacher have difficulty in seeing, even if wearing glasses?<br>
-                                                <input type="radio" name="seing"> No
-                                                <input type="radio" name="seing"> Yes - some difficulty
-                                                <input type="radio" name="seing"> Yes - a lot of difficulty
-                                                <input type="radio" name="seing"> Cannot do at all
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td> 
-                                                Does the Teacher have difficulty in hearing, even if using a hearing aid?<br>
-                                                <input type="radio" name="hearing"> No
-                                                <input type="radio" name="hearing"> Yes - some difficulty
-                                                <input type="radio" name="hearing"> Yes - a lot of difficulty
-                                                <input type="radio" name="hearing"> Cannot do at all
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td> 
-                                                Does the Teacher have difficulty in walking or climbing?<br>
-                                                <input type="radio" name="walking"> No
-                                                <input type="radio" name="walking"> Yes - some difficulty
-                                                <input type="radio" name="walking"> Yes - a lot of difficulty
-                                                <input type="radio" name="walking"> Cannot do at all
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td> 
-                                                Does the Teacher have difficulty in learning or remembering new things?<br>
-                                                <input type="radio" name="remember"> No
-                                                <input type="radio" name="remember"> Yes - some difficulty
-                                                <input type="radio" name="remember"> Yes - a lot of difficulty
-                                                <input type="radio" name="remember"> Cannot do at all
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td> 
-                                                Does the Teacher have difficulty focusing on an activity that they enjoy doing?<br>
-                                                <input type="radio" name="focus"> No
-                                                <input type="radio" name="focus"> Yes - some difficulty
-                                                <input type="radio" name="focus"> Yes - a lot of difficulty
-                                                <input type="radio" name="focus"> Cannot do at all
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">Note: Need to confirm questions and answers related to teacher or staff</td>
-                                        </tr>
-                                    </tbody>
-                                 </table>
-                                <ol>
-                                    <li>
-                                       
-                                    </li>
-                                    <li>
-                                        
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('qualification-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('nomination-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
-                            </div>
-                        </div>
-                    </div>
                     <div class="tab-pane fade tab-content-details" id="nomination-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <ul class="bg-cyan mb-2">
                             <li class="pl-2 text-white">Providing details for: <span class="personname"></span></li>
@@ -427,7 +338,7 @@
                                                 <input type="emial" v-model="nom.email" id="email" class="form-control">
                                             </td>
                                             <td>
-                                                <select class="form-control select2bs4">
+                                                <select class="form-control select2">
                                                     <option value="">--Select--</option>
                                                     <option value="1">Spouse</option>
                                                     <option value="1">Father</option>
@@ -620,30 +531,52 @@ export default {
                 });
             }
             else{
-                if(!this.sentab && nextclass=="sen-tab"){
-                    nextclass='nomination-tab';
-                }
-                if(!this.sentab && nextclass=="sen-tab-back"){
-                    nextclass='qualification-tab';
-                }
-                if(this.sentab && nextclass=="sen-tab-back"){
-                    nextclass='sen-tab';
-                }
                 if(nextclass=="qualification-tab"){
-                    alert(this.personal_form.comp_sub);
+                    this.personal_form.comp_sub=$('#comp_sub').val();
+                    this.personal_form.working_agency=$('#working_agency').val();
+                    this.personal_form.elective_sub1=$('#elective_sub1').val();
+                    this.personal_form.elective_sub2=$('#elective_sub2').val();
+                    this.personal_form.currier_stage=$('#currier_stage').val();
                     this.personal_form.post('staff/savePersonalDetails')
                     .then((response) => {  
                         Toast.fire({
                             icon: 'success',
                             title: 'Data Updated Successfully'
                         });
+                        $('.select2').select2();
+                        $('.select2').select2({
+                            theme: 'bootstrap4'
+                        });
                         this.change_tab(nextclass);
                     })
-                    .catch((error) => {
-                        validated=false;
+                    .catch((error) => {  
+                        if(!$('#working_agency').attr('class').includes('select2-hidden-accessible')){
+                            $('#working_agency').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#comp_sub').attr('class').includes('select2-hidden-accessible')){
+                            $('#comp_sub').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#elective_sub1').attr('class').includes('select2-hidden-accessible')){
+                            $('#elective_sub1').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#elective_sub2').attr('class').includes('select2-hidden-accessible')){
+                            $('#elective_sub2').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#currier_stage').attr('class').includes('select2-hidden-accessible')){
+                            $('#currier_stage').addClass('select2-hidden-accessible');
+                        }
+                       
+                        // $('.select2').select2();
+                        // $('.select2').select2({
+                        //     theme: 'bootstrap4'
+                        // }); 
+                        this.change_tab('personal-tab');
                         console.log("Error......"+error)
-                    })
+                    });
                 }  
+                else{
+                    this.change_tab(nextclass);
+                }
             }
         },
         change_tab(nextclass){
@@ -682,13 +615,18 @@ export default {
         },
     },
     mounted() {
-        $('.select2').select2()
-        $('.select2bs4').select2({
+        $('.select2').select2();
+        $('.select2').on('select2:select', function (el) {
+            if($('#'+$(this).attr('id')).val()!=""){
+                $('#'+$(this).attr('id')).removeClass('is-invalid select2');
+                $('#'+$(this).attr('id')).addClass('select2 ');
+            }
+        });
+        $('.select2').select2({
             theme: 'bootstrap4'
         });
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
     },
-    
 }
 </script>

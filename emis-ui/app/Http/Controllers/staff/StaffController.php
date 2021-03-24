@@ -16,16 +16,17 @@ class StaffController extends Controller{
 
     public function savePersonalDetails(Request $request){
         $rules = [
-            'emp_type'          =>  'required',
-            'cid_no'          =>  'required',
-            'full_name'      =>  'required',
+            'emp_type'              =>  'required',
+            'cid_no'                =>  'required',
+            'full_name'             =>  'required',
             'position_title'        =>  'required',
             'working_agency'        =>  'required',
             'contact_number'        =>  'required',
-            'email'        =>  'required',
-            'comp_sub'        =>  'required',
-            'currier_stage'        =>  'required',
-            'emp_file_code'        =>  'required',
+            'email'                 =>  'required',
+            'comp_sub'              =>  'required',
+            'elective_sub1'         =>  'required',
+            'currier_stage'         =>  'required',
+            'emp_file_code'         =>  'required',
         ];
         $this->validate($request, $rules);
         $personal_details =[

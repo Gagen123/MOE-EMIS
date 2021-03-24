@@ -10,17 +10,26 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/nationality_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Nationality/Coutry 
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/dzongkhag_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                       Dzongkhag
+                       Dzongkhag/Thromde
+                    </router-link> 
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/gewog_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Gewog
                     </router-link>
                 </li>
-               
+                <li class="nav-item active pr-1">
+                    <router-link to="/village_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Village/Chewog
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>
