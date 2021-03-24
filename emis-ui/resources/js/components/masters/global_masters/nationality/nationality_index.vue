@@ -2,7 +2,7 @@
     <div>
         <div class="card card-primary card-outline">
             <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white"> 
-                <span class="card-title">
+                <span class="card-title pt-2 mb-0">
                     <b>Nationality/Country</b>
                 </span>
                 <span class="fa-pull-right pt-1">

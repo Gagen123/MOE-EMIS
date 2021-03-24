@@ -11,16 +11,16 @@
             @foreach (session('User_Details')['modules'] as $mod)
                 @if($mod['module_route']!=null || $mod['module_route']!="")
                 <li class="nav-item" >
-                    <router-link :to="{ name: '{{ $mod['module_route']}}', query: {data:'{{ $mod['mod_id'] }}' } }" class="nav-link" onclick="afterclick()">
+                    <router-link id="{{$mod['module_route']}}" :to="{ name: '{{ $mod['module_route']}}', query: {data:'{{ $mod['mod_id'] }}' } }" class="nav-link" onclick="afterclick()">
                         <i class=" nav-icon {{ $mod['module_icon']}}"></i>
-                        <p>{{$mod['mod_name']}}</p>
+                        <p>{{$mod['mod_name']}} </p>
                     </router-link>
                 </li>
                 @else
                 <li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas {{ $mod['module_icon']}}"></i>
-                        <p>{{$mod['mod_name']}}
+                    <p>{{$mod['mod_name']}}
                         <i class="right fas fa-angle-left"></i>
                     </p>
                 </a>

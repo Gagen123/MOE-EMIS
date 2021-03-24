@@ -12,28 +12,28 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
                     <router-link to="/civil_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
-                        Civil Staff 
+                        Civil Staff static 
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/private_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
-                        Private Staff 
+                        Private Staff static
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
                     <router-link to ="/transfer_window_index" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
-                        Transfer Time Schedule
+                        Transfer Time Schedule static
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('nomination')">
                     <router-link to="/transfer_index" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Transfer
+                        Transfer static
                     </router-link>
                 </li>
             </ul>
@@ -68,7 +68,7 @@ export default {
             this.$router.push({name:data,query: {data:action}});
         },
     },
-    mounted() {
+    mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);

@@ -82,11 +82,21 @@
                        Marital Status
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/qualification_subject_masters" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                       Qualification Subject
+                 <li class="nav-item active pr-1">
+                    <router-link to="/subject_area_masters" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Subject Area
                     </router-link>
-                </li> -->
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/teaching_subjects" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Subjects
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/currier_stage" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Currier Stage
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

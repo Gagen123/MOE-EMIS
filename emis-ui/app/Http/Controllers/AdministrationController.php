@@ -20,34 +20,46 @@ class AdministrationController extends Controller{
     
     public function save_global_masters(Request $request){
         $rules=[];
+        $customMessages =[];
         if($request['record_type']=="country"){
             $rules = [
-                'name'  =>  'required',
-                'nationality'  =>  'required',
-                'code'  =>  'required',
-                'status'    =>  'required',
+                'name'          =>  'required',
+                'nationality'   =>  'required',
+                'code'          =>  'required',
+                'status'        =>  'required',
             ];
         } 
         if($request['record_type']=="dzongkhag"){
             $rules = [
-                'name'  =>  'required',
-                'code'  =>  'required',
+            'name'          =>  'required',
+                'code'      =>  'required',
                 'status'    =>  'required',
             ];
         }
-        $this->validate($request, $rules);
+        if($request['record_type']=="gewog" || $request['record_type']=="village"){
+            $rules = [
+                'name'          =>  'required',
+                'parent_field'  => 'required',
+                'code'          =>  'required',
+                'status'        =>  'required',
+            ];
+            $customMessages = [
+                'parent_field.required' => 'This field is required',
+            ];
+        }
+        $this->validate($request, $rules,$customMessages);
         $data =[ 
-            'name'  =>  $request['name'],
-            'nationality'  =>  $request['nationality'],
-            'code'  =>  $request['code'],
-            'status'    =>  $request['status'],
+            'name'          =>  $request['name'],
+            'nationality'   =>  $request['nationality'],
+            'parent_field'  =>  $request['parent_field'],
+            'code'          =>  $request['code'],
+            'status'        =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'record_type'=>$request['record_type'],
-            'user_id'=>$this->user_id() 
+            'id'            =>  $request['id'],
+            'record_type'   =>$request['record_type'],
+            'user_id'       =>$this->user_id() 
         ];
         try{
-            
             $response_data= $this->apiService->createData('emis/masters/save_global_masters', $data);
             return $response_data;
         }
@@ -61,6 +73,11 @@ class AdministrationController extends Controller{
         return $global_masters;
     }
 
+    public function all_active_gewog_under_dzongkhag($model="",$parent_id=""){
+        $response_data = $this->apiService->listData('emis/masters/load_dropdown/'.$model."/".$parent_id);
+        return $response_data;
+    }
+
     public function save_sfatt_masters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -70,7 +87,7 @@ class AdministrationController extends Controller{
                 'status'    =>  'required',
             ];
         }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title"){
+        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"){
             $rules = [
                 'parent_field'=> 'required',
                 'name'  =>  'required',
@@ -95,7 +112,7 @@ class AdministrationController extends Controller{
             ];
         }
         
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage"){
             $rules = [
                 'name'  =>  'required',
                 'code'  =>  'required',

@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Http\Controllers\Masters;
+namespace App\Http\Controllers\masters;
 use App\Http\Controllers\Controller;
 
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\StaffMasters\WorkingAgency;
-use App\Models\StaffMasters\TransferReason;
-use App\Models\StaffMasters\MgmnDesignation;
-use App\Models\StaffMasters\StaffMajorGrop;
-use App\Models\StaffMasters\StaffSubMajorGrop;
-use App\Models\StaffMasters\PositionTitle;
-use App\Models\StaffMasters\PositionLevel;
-use App\Models\StaffMasters\QualificationType;
-use App\Models\StaffMasters\QualificationLevel;
-use App\Models\StaffMasters\Qualification;
-use App\Models\StaffMasters\Relationship;
-use App\Models\StaffMasters\MaritalStatus;
-
+use App\Models\staff_masters\WorkingAgency;
+use App\Models\staff_masters\TransferReason;
+use App\Models\staff_masters\MgmnDesignation;
+use App\Models\staff_masters\StaffMajorGrop;
+use App\Models\staff_masters\StaffSubMajorGrop;
+use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\QualificationType;
+use App\Models\staff_masters\QualificationLevel;
+use App\Models\staff_masters\Qualification;
+use App\Models\staff_masters\Relationship;
+use App\Models\staff_masters\MaritalStatus;
+use App\Models\staff_masters\StaffSubjectArea;
+use App\Models\staff_masters\Subjects;
+use App\Models\staff_masters\CureerStage;
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
@@ -57,7 +59,7 @@ class StaffMastersController extends Controller{
                 $response_data = $data;
             }
         }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title"){
+        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="sub_major_group"){
@@ -65,6 +67,9 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="position_title"){
                     $table="stf_position_title";
+                }
+                if($request['record_type']=="staff_subject"){
+                    $table="stf_subject";
                 }
                 $rules = [
                     'parent_field'    =>  'required',
@@ -79,6 +84,7 @@ class StaffMastersController extends Controller{
                 $this->validate($request, $rules,$customMessages);
                 $data = [
                     'group_id'  =>  $request['parent_field'],
+                    'sub_area_id'  =>  $request['parent_field'],
                     'sub_group_id'  =>  $request['parent_field'],
                     'name'  =>  $request['name'],
                     'code'    =>  $request['code'],
@@ -91,20 +97,32 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="position_title"){
                     $response_data = PositionTitle::create($data);
-                }                
+                } 
+                if($request['record_type']=="staff_subject"){
+                    $response_data = Subjects::create($data);
+                }               
             }
             if($request->actiontype=="edit"){
                 $data ="";
                 $table="";
+                $parent_id="";
                 if($request['record_type']=="sub_major_group"){
                     $data = StaffSubMajorGrop::find($request['id']);
                     $table="stf_sub_group";
+                    $parent_id=$data->group_id;
                 }
                 if($request['record_type']=="position_title"){
                     $data = PositionTitle::find($request['id']);
                     $table="stf_position_title";
+                    $parent_id=$data->group_id;
                 }
-                $messs_det='parent id:'.$data->group_id.'; name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+                
+                if($request['record_type']=="staff_subject"){
+                    $data = Subjects::find($request['id']);
+                    $table="stf_subject";
+                    $parent_id=$data->sub_area_id;
+                } 
+                $messs_det='parent id:'.$parent_id.'; name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 $data->name = $request['name'];
                 $data->status = $request['status'];
@@ -113,6 +131,9 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="position_title"){
                     $data->sub_group_id = $request['parent_field'];
+                }
+                if($request['record_type']=="staff_subject"){
+                    $data->sub_area_id = $request['parent_field'];
                 }
                 $data->updated_by = $request['user_id'];
                 $data->updated_at = date('Y-m-d h:i:s');
@@ -179,7 +200,7 @@ class StaffMastersController extends Controller{
             }
         }
 
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="transfer_reason"){
@@ -206,7 +227,12 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="marital_status"){
                     $table="stf_marital_status";
                 }
-                
+                if($request['record_type']=="subject_area"){
+                    $table="stf_subject_area";
+                }
+                if($request['record_type']=="cureer_stage"){
+                    $table="stf_cureer_stage";
+                }
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
                     'code'    =>  'required|unique:'.$table,
@@ -244,6 +270,12 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="marital_status"){
                     $response_data = MaritalStatus::create($data);
                 }
+                if($request['record_type']=="subject_area"){
+                    $response_data = StaffSubjectArea::create($data);
+                }
+                if($request['record_type']=="cureer_stage"){
+                    $response_data = CureerStage::create($data);
+                }
 
             }
             if($request->actiontype=="edit"){
@@ -280,6 +312,14 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="marital_status"){
                     $data = MaritalStatus::find($request['id']);
                     $table="stf_marital_status";
+                }
+                if($request['record_type']=="subject_area"){
+                    $data = StaffSubjectArea::find($request['id']);
+                    $table="stf_subject_area";
+                }
+                if($request['record_type']=="cureer_stage"){
+                    $data = CureerStage::find($request['id']);
+                    $table="stf_cureer_stage";
                 }
                 $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
@@ -344,11 +384,43 @@ class StaffMastersController extends Controller{
             return $this->successResponse(Qualification::with('quialificationtype','quialificationlevel')->get());
             // return $this->successResponse(Qualification::all());
         }
+        if($param=="all_active_qualification_List"){
+            return $this->successResponse(Qualification::where('status','1')->get());
+        }
+
         if($param=="all_relationship_list"){
             return $this->successResponse(Relationship::all());
         }
+        if($param=="all_active_relationship_list"){
+            return $this->successResponse(Relationship::where('status','1')->get());
+        }
+
         if($param=="all_marital_list"){
             return $this->successResponse(MaritalStatus::all());
+        }
+        if($param=="all_active_marital_list"){
+            return $this->successResponse(MaritalStatus::where('status','1')->get());
+        }
+
+        if($param=="all_subject_area_List"){
+            return $this->successResponse(StaffSubjectArea::all());
+        }
+        if($param=="all_active_subject_area_list"){
+            return $this->successResponse(StaffSubjectArea::where('status','1')->get());
+        }
+
+        if($param=="all_subject_List"){
+            return $this->successResponse(Subjects::with('subjectArea')->get());
+        }
+        if($param=="all_active_subject_List"){
+            return $this->successResponse(Subjects::where('status','1')->get());
+        }
+
+        if($param=="all_cureer_stage_list"){
+            return $this->successResponse(CureerStage::all());
+        }
+        if($param=="all_active_cureer_stage_list"){
+            return $this->successResponse(CureerStage::where('status','1')->get());
         }
     }
 }

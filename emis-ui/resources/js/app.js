@@ -6,6 +6,7 @@ import VTooltip from 'v-tooltip';
 import vDatepicker from 'vuejs-datepicker';
 Vue.use(VueRouter);
 Vue.use(VTooltip)
+//vue select
 import vSelect from 'vue-select';
 import { Form, HasError, AlertError } from 'vform';
 window.form = Form;
@@ -52,6 +53,26 @@ const routes = [
           { path: '/list_dzongkhag',name:'list_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/List_dzongkhag_master.vue').default },
           { path: '/create_dzongkhag', name:'create_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/create_dzongkhag.vue').default },
           { path: '/edit_dzongkhag', name:'edit_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/edit_dzongkhag.vue').default },
+        ],
+      },
+      
+      { path: '/gewog_master', 
+        component: require('./components/masters/global_masters/gewog/gewog_index.vue').default,
+        children:[
+          { path: '/',name:'gewog_master', component: require('./components/masters/global_masters/gewog/list_gewog.vue').default },
+          { path: '/list_gewog',name:'list_gewog', component: require('./components/masters/global_masters/gewog/list_gewog.vue').default },
+          { path: '/create_gewog', name:'create_gewog', component: require('./components/masters/global_masters/gewog/create_gewog.vue').default },
+          { path: '/edit_gewog', name:'edit_gewog', component: require('./components/masters/global_masters/gewog/edit_gewog.vue').default },
+        ],
+      },
+      
+      { path: '/village_master', 
+        component: require('./components/masters/global_masters/village/village_index.vue').default,
+        children:[
+          { path: '/',name:'village_master', component: require('./components/masters/global_masters/village/list_village.vue').default },
+          { path: '/list_village',name:'list_village', component: require('./components/masters/global_masters/village/list_village.vue').default },
+          { path: '/create_village', name:'create_village', component: require('./components/masters/global_masters/village/create_village.vue').default },
+          { path: '/edit_village', name:'edit_village', component: require('./components/masters/global_masters/village/edit_village.vue').default },
         ],
       },
     ]
@@ -180,7 +201,34 @@ const routes = [
           { path: '/edit_marital_status', name:'edit_marital_status', component: require('./components/masters/staff_masters/marital_status/edit_marital_status.vue').default },
         ],
       },
-
+      
+      { path: '/subject_area_masters',
+        component: require('./components/masters/staff_masters/subject_area/subject_area_index.vue').default, 
+        children:[ 
+          { path: '/',name:'subject_area_masters', component: require('./components/masters/staff_masters/subject_area/list_subject_area.vue').default },
+          { path: '/list_subject_area',name:'list_subject_area', component: require('./components/masters/staff_masters/subject_area/list_subject_area.vue').default },
+          { path: '/create_subject_area',name:'create_subject_area', component: require('./components/masters/staff_masters/subject_area/create_subject_area.vue').default },
+          { path: '/edit_subject_area', name:'edit_subject_area', component: require('./components/masters/staff_masters/subject_area/edit_subject_area.vue').default },
+        ],
+      },
+      { path: '/teaching_subjects',
+        component: require('./components/masters/staff_masters/subject/marital_status_index.vue').default, 
+        children:[ 
+          { path: '/',name:'teaching_subjects', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
+          { path: '/list_subject',name:'list_subject', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
+          { path: '/create_subject',name:'create_subject', component: require('./components/masters/staff_masters/subject/create_subject.vue').default },
+          { path: '/edit_subject', name:'edit_subject', component: require('./components/masters/staff_masters/subject/edit_subject.vue').default },
+        ],
+      },
+      { path: '/currier_stage',
+        component: require('./components/masters/staff_masters/currier_stage/currier_stage_index.vue').default, 
+        children:[ 
+          { path: '/',name:'currier_stage', component: require('./components/masters/staff_masters/currier_stage/list_currier_stage.vue').default },
+          { path: '/list_currier_stage',name:'list_currier_stage', component: require('./components/masters/staff_masters/currier_stage/list_currier_stage.vue').default },
+          { path: '/create_currier_stage',name:'create_currier_stage', component: require('./components/masters/staff_masters/currier_stage/create_currier_stage.vue').default },
+          { path: '/edit_currier_stage', name:'edit_currier_stage', component: require('./components/masters/staff_masters/currier_stage/edit_currier_stage.vue').default },
+        ],
+      }, 
     ],
   },
 
@@ -472,6 +520,51 @@ const routes = [
 const router = new VueRouter({
     routes 
 })
+
+
+
+router.beforeEach((to, from, next) => {
+  if ($("body").hasClass("request_loading"))
+      $("body").removeClass("request_loading");
+  if (to.meta.middleware){
+    const middleware = Array.isArray(to.meta.middleware) ? to.meta.middleware : [to.meta.middleware];
+    const context = { from, next, router, to};
+    const nextMiddleware = nextFactory(context, middleware, 1);
+    return middleware[0] ({...context, next: nextMiddleware });
+  }
+  return next();
+});
+
+var numberOfAjaxCAllPending = 0;
+
+// Add a request interceptor
+axios.interceptors.request.use(function (config) {
+  numberOfAjaxCAllPending++;
+
+  var $body = $("body");
+  $body.addClass("request_loading");
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
+
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+  numberOfAjaxCAllPending--;
+
+  if (numberOfAjaxCAllPending == 0) {
+      var $body = $("body");
+      $body.removeClass("request_loading");
+  }
+  return response;
+}, function (error) { 
+  numberOfAjaxCAllPending--;
+  if (numberOfAjaxCAllPending == 0) {
+      var $body = $("body");
+      $body.removeClass("request_loading");
+  }
+  return Promise.reject(error);
+});
 const app = new Vue({
     el: '#app',
     router,
