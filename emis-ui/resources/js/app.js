@@ -335,6 +335,26 @@ const routes = [
           { path: '/equipment_item_list', name:'EquipmentItemList', component: require('./components/masters/organization_masters/equipment_item_list.vue').default },
         ]    
       },
+      { path: '/class_index', 
+        component: require('./components/masters/organization_masters/class_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/class_list.vue').default },
+          { path: '/class_add', name:'ClassAdd', component: require('./components/masters/organization_masters/class_add.vue').default },
+          { path: '/class_edit', name:'ClassEdit', component: require('./components/masters/organization_masters/class_edit.vue').default },
+          { path: '/class_list', name:'ClassList', component: require('./components/masters/organization_masters/class_list.vue').default },
+        ]    
+      },
+      { path: '/stream_index', 
+        component: require('./components/masters/organization_masters/stream_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/stream_list.vue').default },
+          { path: '/stream_add', name:'StreamAdd', component: require('./components/masters/organization_masters/stream_add.vue').default },
+          { path: '/stream_edit', name:'StreamEdit', component: require('./components/masters/organization_masters/stream_edit.vue').default },
+          { path: '/stream_list', name:'StreamList', component: require('./components/masters/organization_masters/stream_list.vue').default },
+        ]    
+      },
     ]  
   },
   //STUDET MASTER
@@ -414,6 +434,40 @@ const routes = [
       // { path: '/connectivity', component: require('./components/organization/general/connectivity.vue').default },
     ] 
   },
+
+  // organization establishment route
+  { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
+  children:[
+   
+    { path: '/establishment', component: require('./components/organization/establishment/establishment.vue').default },
+  ] 
+},
+
+ // organization restructuring route
+ { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
+ children:[
+  { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
+  { path: '/merger', component: require('./components/organization/restructuring/merger.vue').default },
+
+  { path: '/bifurcation_index', 
+  component: require('./components/organization/restructuring/bifurcation_index.vue').default ,
+      children: [
+          { path: '/', component: require('./components/organization/restructuring/bifurcation_list.vue').default },
+          { path: '/bifurcation_list', component: require('./components/organization/restructuring/bifurcation_list.vue').default },
+          { path: '/bifurcation', component: require('./components/organization/restructuring/bifurcation.vue').default },
+      ]    
+  },
+
+  { path: '/closure_index', 
+  component: require('./components/organization/restructuring/closure_index.vue').default ,
+      children: [
+          { path: '/', component: require('./components/organization/restructuring/closure_list.vue').default },
+          { path: '/closure_list', component: require('./components/organization/restructuring/closure_list.vue').default },
+          { path: '/closure', component: require('./components/organization/restructuring/closure.vue').default },
+      ]    
+  },
+] 
+},
 ]
 const router = new VueRouter({
     routes 

@@ -170,22 +170,22 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <!-- <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
-                        <router-link to="/establishment_link" class="nav-link">
+                    <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
+                        <router-link to="/establishment_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Establishment 
                             </p>
                         </router-link>
-                    </li> -->
-                    <!-- <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/restructuring_link" class="nav-link">
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/restructuring_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Restructuring 
                             </p>
                         </router-link>
-                    </li> -->
+                    </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/structural_index" class="nav-link">
                             <p>

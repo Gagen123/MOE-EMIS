@@ -19,7 +19,6 @@
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewDisasterList(item)"><i class="fas fa-edit"></i ></a>
-                            <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
                         </div>
                     </td>
                 </tr>
