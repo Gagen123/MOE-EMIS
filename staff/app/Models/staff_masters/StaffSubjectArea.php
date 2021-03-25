@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
 class StaffSubjectArea extends Model{
     use HasFactory, Uuid;
-    protected $table="stf_subject_area";
+    protected $table="master_stf_subject_area";
     public $timestamps = false;
     protected $fillable = [
         'id',

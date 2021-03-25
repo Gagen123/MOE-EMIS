@@ -6,12 +6,12 @@ use Illuminate\Support\Facades\Schema;
 
 class StfQualification extends Migration{
     public function up(){
-        Schema::create('stf_qualification', function (Blueprint $table) {
+        Schema::create('master_stf_qualification', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('q_level_id',36)->nullable(false);
-            $table->foreign('q_level_id')->references('id')->on('stf_qualification_level');
+            $table->foreign('q_level_id')->references('id')->on('master_stf_qualification_level');
             $table->char('q_type_id',36)->nullable(false);
-            $table->foreign('q_type_id')->references('id')->on('stf_qualification_type');
+            $table->foreign('q_type_id')->references('id')->on('master_stf_qualification_type');
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
@@ -23,6 +23,6 @@ class StfQualification extends Migration{
     }
 
     public function down(){
-        Schema::dropIfExists('stf_qualification');
+        Schema::dropIfExists('master_stf_qualification');
     }
 }

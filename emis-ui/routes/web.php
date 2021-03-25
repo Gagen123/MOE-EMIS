@@ -10,7 +10,7 @@ Route::get('/get_screens_on_submodules/{type}/{id}', [App\Http\Controllers\HomeC
 Route::prefix('masters')->group(function () {
     Route::post('/save_global_masters', [App\Http\Controllers\AdministrationController::class, 'save_global_masters'])->name('save_global_masters');
     Route::get('/load_global_masters/{param}', [App\Http\Controllers\AdministrationController::class, 'load_global_masters'])->name('load_global_masters');
-    Route::get('/all_active_gewog_under_dzongkhag/{model}/{parent_id}', [App\Http\Controllers\AdministrationController::class, 'all_active_gewog_under_dzongkhag'])->name('all_active_gewog_under_dzongkhag');
+    Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdministrationController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
     
     Route::post('/save_sfatt_masters', [App\Http\Controllers\AdministrationController::class, 'save_sfatt_masters'])->name('save_sfatt_masters');
     Route::get('/load_staff_masters/{param}', [App\Http\Controllers\AdministrationController::class, 'load_staff_masters'])->name('load_staff_masters');
@@ -94,10 +94,11 @@ Route::prefix('organization')->group(function () {
     Route::get('/getStructureFacilityInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getStructureFacilityInDropdown'])->name('getStructureFacilityInDropdown');
 
 });
+
 Route::prefix('staff')->group(function () {
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
+    Route::get('/loaddraftpersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
 });   
-
  
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 

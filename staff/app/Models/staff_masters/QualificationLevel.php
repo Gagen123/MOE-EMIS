@@ -9,7 +9,7 @@ use App\Traits\Uuid;
 class QualificationLevel extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_qualification_level";
+    protected $table="master_stf_qualification_level";
     public $timestamps = false;
     protected $fillable = [
         'id',

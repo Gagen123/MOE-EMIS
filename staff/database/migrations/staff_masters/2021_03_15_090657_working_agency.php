@@ -8,7 +8,7 @@ class WorkingAgency extends Migration{
   
     public function up()
     {
-        Schema::create('working_agency_master', function (Blueprint $table) {
+        Schema::create('master_working_agency', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
             $table->boolean('status')->default(1);
@@ -20,6 +20,6 @@ class WorkingAgency extends Migration{
     }
     public function down()
     {
-        Schema::dropIfExists('working_agency_master');
+        Schema::dropIfExists('master_working_agency');
     }
 }

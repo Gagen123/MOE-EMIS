@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkingAgency extends Model{
     use HasFactory, Uuid;
-    protected $table="working_agency_master";
+    protected $table="master_working_agency";
     public $timestamps = false;
     protected $fillable = [
         'id',

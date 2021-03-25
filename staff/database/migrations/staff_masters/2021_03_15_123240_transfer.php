@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class Transfer extends Migration{
    
     public function up(){
-        Schema::create('transfer_reason_master', function (Blueprint $table) {
+        Schema::create('master_transfer_reason', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
@@ -20,6 +20,6 @@ class Transfer extends Migration{
     }
 
     public function down(){
-        Schema::dropIfExists('transfer_reason_master');
+        Schema::dropIfExists('master_transfer_reason');
     }
 }

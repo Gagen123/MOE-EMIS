@@ -9,7 +9,7 @@ use App\Traits\Uuid;
 class StaffMajorGrop extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_major_group";
+    protected $table="master_stf_major_group";
     public $timestamps = false;
     protected $fillable = [
         'id',

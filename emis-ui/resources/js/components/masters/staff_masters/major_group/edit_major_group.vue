@@ -38,7 +38,7 @@ export default {
                 name: '',
                 code:'',
                 status:'',
-                record_type:'marital_status',
+                record_type:'major_group',
                 action_type:'edit',
             })
         }
@@ -62,7 +62,7 @@ export default {
                         icon: 'success',
                         title: 'Details updated successfully'
                     })
-                    this.$router.push('/list_marital_status');
+                    this.$router.push('/list_major_group');
                 })
                 .catch(() => { 
                     console.log("Error......")

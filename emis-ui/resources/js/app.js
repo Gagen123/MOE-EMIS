@@ -75,6 +75,16 @@ const routes = [
           { path: '/edit_village', name:'edit_village', component: require('./components/masters/global_masters/village/edit_village.vue').default },
         ],
       },
+      
+      { path: '/gender_master', 
+        component: require('./components/masters/global_masters/gender/gender_index.vue').default,
+        children:[
+          { path: '/',name:'gender_master', component: require('./components/masters/global_masters/gender/list_gender.vue').default },
+          { path: '/list_gender',name:'list_gender', component: require('./components/masters/global_masters/gender/list_gender.vue').default },
+          { path: '/create_gender', name:'create_gender', component: require('./components/masters/global_masters/gender/create_gender.vue').default },
+          { path: '/edit_gender', name:'edit_gender', component: require('./components/masters/global_masters/gender/edit_gender.vue').default },
+        ], 
+      },
     ]
   },
 

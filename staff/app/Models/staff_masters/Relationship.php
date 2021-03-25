@@ -8,7 +8,7 @@ use App\Traits\Uuid;
 class Relationship extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_relationship";
+    protected $table="master_stf_relationship";
     public $timestamps = false;
     protected $fillable = [
         'id',

@@ -8,7 +8,7 @@ use App\Traits\Uuid;
 class CureerStage extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_cureer_stage";
+    protected $table="master_stf_cureer_stage";
     public $timestamps = false;
     protected $fillable = [
         'id',

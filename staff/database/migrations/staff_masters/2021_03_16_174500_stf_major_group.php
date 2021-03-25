@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class StfMajorGroup extends Migration{
     public function up()    {
-        Schema::create('stf_major_group', function (Blueprint $table) {
+        Schema::create('master_stf_major_group', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
@@ -19,6 +19,6 @@ class StfMajorGroup extends Migration{
     }
 
     public function down()    {
-        Schema::dropIfExists('stf_major_group');
+        Schema::dropIfExists('master_stf_major_group');
     }
 }

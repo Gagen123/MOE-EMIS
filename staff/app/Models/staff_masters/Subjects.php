@@ -8,7 +8,7 @@ use App\Traits\Uuid;
 class Subjects extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_subject";
+    protected $table="master_stf_subject";
     public $timestamps = false;
     protected $fillable = [
         'id',

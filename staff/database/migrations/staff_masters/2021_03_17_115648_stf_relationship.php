@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class StfRelationship extends Migration{
    
     public function up(){
-        Schema::create('stf_relationship', function (Blueprint $table) {
+        Schema::create('master_stf_relationship', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
@@ -21,6 +21,6 @@ class StfRelationship extends Migration{
 
     
     public function down() {
-        Schema::dropIfExists('stf_relationship');
+        Schema::dropIfExists('master_stf_relationship');
     }
 }

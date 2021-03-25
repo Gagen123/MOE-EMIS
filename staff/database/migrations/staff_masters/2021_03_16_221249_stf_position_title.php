@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Schema;
 class StfPositionTitle extends Migration{
     
     public function up(){
-        Schema::create('stf_position_title', function (Blueprint $table) {
+        Schema::create('master_stf_position_title', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('sub_group_id',36)->nullable(false);
-            $table->foreign('sub_group_id')->references('id')->on('stf_sub_group');
+            $table->foreign('sub_group_id')->references('id')->on('master_stf_sub_group');
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
@@ -22,6 +22,6 @@ class StfPositionTitle extends Migration{
     }
 
     public function down(){
-        Schema::dropIfExists('stf_position_title');
+        Schema::dropIfExists('master_stf_position_title');
     }
 }

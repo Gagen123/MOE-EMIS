@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MgmnDesignation extends Model{
     use HasFactory, Uuid;
-    protected $table="mgmn_designation_master";
+    protected $table="master_mgmn_designation";
     public $timestamps = false;
     protected $fillable = [
         'id',

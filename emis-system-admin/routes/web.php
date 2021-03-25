@@ -23,6 +23,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/save_global_masters', ['uses' => 'AdministrationController@save_global_masters']);
         $router->get('/load_global_masters/{param}','AdministrationController@load_global_masters');
         $router->get('/load_dropdown/{model}/{parent_id}','AdministrationController@load_dropdown');
+
+        $router->get('/load_gewog_details_by_village_id/{id}','AdministrationController@load_gewog_details_by_village_id');
+        $router->get('/load_dzongkhag_details_by_id/{id}','AdministrationController@load_dzongkhag_details_by_id');
     });
 });
 

@@ -29,7 +29,7 @@ class AdministrationController extends Controller{
                 'status'        =>  'required',
             ];
         } 
-        if($request['record_type']=="dzongkhag"){
+        if($request['record_type']=="dzongkhag" || $request['record_type']=="gender"){
             $rules = [
             'name'          =>  'required',
                 'code'      =>  'required',
@@ -73,7 +73,7 @@ class AdministrationController extends Controller{
         return $global_masters;
     }
 
-    public function all_active_gewog_under_dzongkhag($model="",$parent_id=""){
+    public function all_active_dropdowns($model="",$parent_id=""){
         $response_data = $this->apiService->listData('emis/masters/load_dropdown/'.$model."/".$parent_id);
         return $response_data;
     }

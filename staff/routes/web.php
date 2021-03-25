@@ -22,5 +22,6 @@ $router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
+        $router->get('/loaddraftpersonalDetails/{user_id}', ['uses' => 'staff\StaffController@loaddraftpersonalDetails']);
     });
 });

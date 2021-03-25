@@ -34,40 +34,86 @@
                
                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
-                                <input type="text" v-model="personal_form.cid_no" @change="remove_error('cid_no')" :class="{ 'is-invalid': personal_form.errors.has('cid_no') }"  class="form-control" name="cid_no" id="cid_no">
-                                <has-error :form="personal_form" field="cid_no"></has-error>
+                                <input type="text" v-model="personal_form.cid_work_permit" @change="remove_error('cid_work_permit')" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }"  class="form-control" name="cid_work_permit" id="cid_work_permit">
+                                <has-error :form="personal_form" field="cid_work_permit"></has-error>
                             </div> 
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mt-4">
                                 <button type="button" class="btn btn-sm btn-primary" @click="fetchDetails()"><i class="fa fa-download"></i> Fetch</button>
                             </div> 
                         </div>
                         <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="cidsection">
-                                <label class="mb-0.5">CID/Work Permit No:</label>
-                                <input type="text" class="form-control" name="emp_id" id="cid"  readonly>
-                            </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label class="mb-0.5">Full Name:<i class="text-danger">*</i></label>
-                                <input type="text" @change="remove_error('full_name')" v-model="personal_form.full_name" :class="{ 'is-invalid': personal_form.errors.has('full_name') }" class="form-control" name="emp_id" id="empname"  readonly>
-                                <has-error :form="personal_form" field="full_name"></has-error>
+                                <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name"  readonly>
+                                <has-error :form="personal_form" field="name"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
-                                <input type="text" @change="remove_error('position_title')" v-model="personal_form.position_title" :class="{ 'is-invalid': personal_form.errors.has('position_title') }" class="form-control" name="position_title" id="position_title"  readonly>
+                                <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
+                                <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
+                                    <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
                                 <has-error :form="personal_form" field="position_title"></has-error>
                             </div> 
-                        </div>                        
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
+                                <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
+                                    <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="personal_form" field="sex_id"></has-error>
+                            </div> 
+                        </div> 
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
+                                <select v-model="personal_form.country_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('country_id') }" class="form-control select2" name="country_id" id="country_id">
+                                    <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.nationality }}</option>
+                                </select>
+                                <has-error :form="personal_form" field="country_id"></has-error>
+                            </div> 
+                        </div>
+                        <div class="form-group row" id="bhutanese_address">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Dzongkhag:</label>
+                                <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="personal_form" field="dzongkhag"></has-error>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Gewog:</label>
+                                <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="personal_form" field="gewog"></has-error>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Village:</label>
+                                <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
+                                    <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="personal_form" field="village_id"></has-error>
+                            </div> 
+                        </div> 
+                        <div class="form-group row" id="foreign_address" style="display:none">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Address:</label>
+                                <textarea @change="remove_error('address')" class="form-control" v-model="personal_form.address" :class="{ 'is-invalid': personal_form.errors.has('address') }" name="address" id="address"></textarea>
+                                <has-error :form="personal_form" field="address"></has-error>
+                            </div>
+                        </div>                         
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
                                 <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
-                                <select v-model="personal_form.working_agency" @change="remove_error('working_agency')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency') }" class="form-control select2" name="working_agency" id="working_agency">
+                                <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
                                     <option value=""> --Select--</option>
                                     <option value="1"> Mothithang HSS</option>
                                     <option value="2"> Yangchenphug HSS</option>
                                     <option value="3"> Mathematics</option>
                                 </select>
-                                <has-error :form="personal_form" field="working_agency"></has-error>
+                                <has-error :form="personal_form" field="working_agency_id"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
@@ -395,6 +441,12 @@ export default {
         return{ 
             totle:0,
             sentab:false,
+            sex_idList:[],
+            positiontitleList:[],
+            countryList:[],
+            dzongkhagList:[],
+            gewog_list:[],
+            villageList:[],
             subjectList:[],
             cureerstageList:[],
             qualificationlist:
@@ -406,11 +458,17 @@ export default {
                 cid:'',name:'',desig:'',address:'',contact:'',email:'',relation:'',percentage:''
             }],
             personal_form: new form({
+                personal_id: '',
                 emp_type: 'Regular',
-                cid_no:'',
-                full_name:'',
+                cid_work_permit:'',
+                name:'',
                 position_title:'',
-                working_agency:'',
+                sex_id:'',
+                country_id:'c879c252-b4f7-4ab6-964b-1661ae9f0aa5',//insert id of bhutan to preselect
+                dzongkhag:'',
+                village_id:'',
+                gewog:'',
+                working_agency_id:'',
                 contact_number:'',
                 email:'',
                 comp_sub:'',
@@ -431,13 +489,11 @@ export default {
         showemptypedtab(type){
             if(type){
                 $('#empidcid').html('Emp Id/CID');
-                $('#cidsection').show();
                 $('#position').prop('readonly',true);
                 $('#working').prop('readonly',true);
             }
             else{
                 $('#empidcid').html('CID/Work Permit No.');
-                $('#cidsection').hide();
                 $('#position').prop('readonly',false);
                 $('#working').prop('readonly',false);
             }
@@ -490,9 +546,7 @@ export default {
             data.address='Permanent Address '+data.cid;
         },
         fetchDetails(){
-            this.personal_form.cid_no='12312312312';
-            $('#cid').val('12312312312');
-            this.personal_form.full_name='Pema Dechen';
+            this.personal_form.name='Pema Dechen';
             this.personal_form.position_title='Principal';
             this.personal_form.contact_number='12312312';
             this.personal_form.email='pema@gov.bt';
@@ -532,11 +586,6 @@ export default {
             }
             else{
                 if(nextclass=="qualification-tab"){
-                    this.personal_form.comp_sub=$('#comp_sub').val();
-                    this.personal_form.working_agency=$('#working_agency').val();
-                    this.personal_form.elective_sub1=$('#elective_sub1').val();
-                    this.personal_form.elective_sub2=$('#elective_sub2').val();
-                    this.personal_form.currier_stage=$('#currier_stage').val();
                     this.personal_form.post('staff/savePersonalDetails')
                     .then((response) => {  
                         Toast.fire({
@@ -547,11 +596,12 @@ export default {
                         $('.select2').select2({
                             theme: 'bootstrap4'
                         });
+                        response.data.id
                         this.change_tab(nextclass);
                     })
                     .catch((error) => {  
-                        if(!$('#working_agency').attr('class').includes('select2-hidden-accessible')){
-                            $('#working_agency').addClass('select2-hidden-accessible');
+                        if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
+                            $('#working_agency_id').addClass('select2-hidden-accessible');
                         }
                         if(!$('#comp_sub').attr('class').includes('select2-hidden-accessible')){
                             $('#comp_sub').addClass('select2-hidden-accessible');
@@ -573,6 +623,10 @@ export default {
                         this.change_tab('personal-tab');
                         console.log("Error......"+error)
                     });
+                }
+                if(nextclass=="personal-tab"){
+                    this.loaddraftpersonalDetails();
+                    this.change_tab(nextclass);
                 }  
                 else{
                     this.change_tab(nextclass);
@@ -588,6 +642,36 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
+        },
+        loaddraftpersonalDetails(){
+            axios.get('staff/loaddraftpersonalDetails')
+            .then((response) => {  
+                let data=response.data.data;
+                this.personal_form.personal_id=data.id
+                this.personal_form.emp_type=data.emp_type_id;
+                this.personal_form.cid_work_permit=data.cid_work_permit;
+                this.personal_form.name=data.name;
+                this.personal_form.position_title=data.position_title_id;
+                this.personal_form.sex_id=data.sex_id;
+                this.personal_form.country_id=data.country_id;
+                this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
+                this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
+                this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
+                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+                this.personal_form.village_id=data.village_id;
+                this.personal_form.working_agency_id=data.working_agency_id;
+                this.personal_form.contact_number=data.contact_no;
+                this.personal_form.email=data.email;
+                this.personal_form.comp_sub=data.comp_sub_id;
+                this.personal_form.elective_sub1=data.elective_sub_id1;
+                this.personal_form.elective_sub2=data.elective_sub_id2;
+                this.personal_form.currier_stage=data.cureer_stagge_id;
+                this.personal_form.emp_file_code=data.employee_code;
+                this.personal_form.remarks=data.remarks;
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
         },
         loadactivesubjectList(uri="masters/load_staff_masters/all_active_subject_List"){
             axios.get(uri)
@@ -613,18 +697,148 @@ export default {
                 }
             });
         },
+        loadactivesex_idList(uri="masters/load_global_masters/all_active_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.sex_idList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadpositiontitleList(uri="masters/load_staff_masters/all_active_position_title"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.positiontitleList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+        loadactivecountryList(uri="masters/load_global_masters/all_active_country"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.countryList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadactivedzongkhagList(uri="masters/load_global_masters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dzongkhagList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        async getgewoglist(id){
+            let dzoId=$('#dzongkhag').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        async getvillagelist(id){
+            let gewogId=$('#gewog').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id).addClass('select2 ');
+            }
+            if(id=="position_title"){
+                this.personal_form.position_title=$('#position_title').val();
+            }
+            if(id=="sex_id"){
+                this.personal_form.sex_id=$('#sex_id').val();
+            }
+            if(id=="country_id"){
+                this.personal_form.country_id=$('#'+$(this).attr('id')).val();
+                if($(this).val()!='c879c252-b4f7-4ab6-964b-1661ae9f0aa5'){
+                    $('#bhutanese_address').hide();
+                    $('#foreign_address').show();
+                }
+                else{
+                    $('#bhutanese_address').show();
+                    $('#foreign_address').hide();
+                }
+            }
+            if(id=="dzongkhag"){
+                this.personal_form.village=$('#dzongkhag').val();
+                this.getgewoglist();
+            }
+            if(id=="gewog"){
+                this.personal_form.village=$('#gewog').val();
+                this.getvillagelist();
+            }
+            if(id=="village_id"){
+                this.personal_form.village_id=$('#village_id').val();
+                
+            }
+            if(id=="working_agency_id"){
+                this.personal_form.working_agency_id=$('#working_agency_id').val();
+            }
+            if(id=="comp_sub"){
+                this.personal_form.comp_sub=$('#comp_sub').val();
+            }
+            if(id=="elective_sub1"){
+                this.personal_form.elective_sub1=$('#elective_sub1').val();
+            }
+            if(id=="elective_sub2"){
+                this.personal_form.elective_sub2=$('#elective_sub2').val();
+            }
+            if(id=="currier_stage"){
+                this.personal_form.currier_stage=$('#currier_stage').val();
+            }
+        }
+        
     },
+    
     mounted() {
         $('.select2').select2();
-        $('.select2').on('select2:select', function (el) {
-            if($('#'+$(this).attr('id')).val()!=""){
-                $('#'+$(this).attr('id')).removeClass('is-invalid select2');
-                $('#'+$(this).attr('id')).addClass('select2 ');
-            }
-        });
         $('.select2').select2({
             theme: 'bootstrap4'
         });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        this.loaddraftpersonalDetails();
+        this.loadactivesex_idList();
+        this.loadpositiontitleList();
+        this.loadactivecountryList();
+        this.loadactivedzongkhagList();
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
     },
