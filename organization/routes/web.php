@@ -97,6 +97,20 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     });
 
+    $router->group(['prefix' => 'masters/class'], function () use ($router) {
+        // class route
+        $router->post('/saveClass', 'Masters\ClassController@saveClass');
+        $router->get('/loadClass', 'Masters\ClassController@loadClass');
+    });
+    
+    $router->group(['prefix' => 'masters/stream'], function () use ($router) {
+        // class route
+        $router->post('/saveStream', 'Masters\StreamController@saveStream');
+        $router->get('/loadStream', 'Masters\StreamController@loadStream');
+        $router->get('/getClassInDropdown', 'Masters\StreamController@getClassInDropdown');
+
+    });
+
     $router->group(['prefix' => 'organization/equipment'], function () use ($router) {
         // equipment route
         $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
@@ -136,6 +150,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getCategoryInDropdown', 'structuralFacility\InfrastructureController@getCategoryInDropdown');
         $router->get('/getSubCategoryInDropdown/{categoryId}', 'structuralFacility\InfrastructureController@getSubCategoryInDropdown');
         $router->get('/getStructureFacilityInDropdown', 'structuralFacility\InfrastructureController@getStructureFacilityInDropdown');
+    });
+
+    $router->group(['prefix' => 'organization/establishment'], function () use ($router) {
+        $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
+        $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');
+        $router->post('/saveEstablishment', 'establishment\EstablishmentController@saveEstablishment');
+        $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
+        $router->get('/getClass', 'establishment\EstablishmentController@getClass');
+        $router->get('/getStream', 'establishment\EstablishmentController@getStream');
+
     });
 
 });

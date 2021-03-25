@@ -39,7 +39,7 @@ class SectionController extends Controller
         $sec = Section::create($section);
         $sectionId = DB::table('sections')->orderBy('id','desc')->limit(1)->pluck('id');
 
-        foreach ($request->input('users') as $i=> $user){
+        foreach ($request->input('users') as $i => $user){
             $section_details = array(
                 'sectionId'=>$sectionId[0],
                 'section'=>$user['section'],

@@ -46,7 +46,7 @@ class DisasterController extends Controller
 
             $data = Disaster::find($request['id']);
 
-            $messs_det='disasterName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='className:'.$data->class.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','disaster','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $disaster = Disaster::where('id', $id)->update($dis);

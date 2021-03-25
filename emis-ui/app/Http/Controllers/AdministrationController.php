@@ -165,7 +165,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/location/saveLocation', $loc);
@@ -196,7 +196,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         // dd($dis);
         try{
@@ -229,7 +229,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
@@ -257,7 +257,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
@@ -286,7 +286,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
         return $response_data;
@@ -313,7 +313,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
@@ -340,7 +340,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
@@ -367,7 +367,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
@@ -394,7 +394,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
         return $response_data;
@@ -425,7 +425,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
         return $response_data;
@@ -461,11 +461,37 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->getSessionUserID()
+            'user_id'=>$this->user_id()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
         return $response_data;
         
+    }
+
+    public function saveClass(Request $request){
+        $rules = [
+            'className'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'className.required' => 'Class is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $class =[
+            'className'  =>  $request['className'],
+            'status'  =>  $request['status'],
+            'id'    =>  $request['id'],
+            'user_id'=>$this->user_id()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
+        return $response_data;
+        
+    }
+
+    public function loadClass(Request $request){
+            $loadClass = $this->apiService->listData('emis/masters/class/loadClass');
+        return $loadClass;
     }
 
     public function getEquipmentTypeDropdown(Request $request){
@@ -476,6 +502,36 @@ class AdministrationController extends Controller{
     public function loadEquipmentItem(Request $request){
         $strCategory = $this->apiService->listData('emis/masters/equipmentItem/loadEquipmentItem');
         return $strCategory;
+    }
+
+    public function saveStream(Request $request){
+        $rules = [
+            'streamName'    =>  'required',
+            'status'        =>  'required',
+        ];
+        $customMessages = [
+            'streamName.required'   => 'Stream is required',
+            'status.required'       => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $stream =[
+            'streamName'    =>  $request['streamName'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->user_id()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/stream/saveStream', $stream);
+        return $response_data;
+    }
+
+    public function getClassInDropdown(Request $request){
+        $classDropdown = $this->apiService->listData('emis/masters/stream/getClassInDropdown');
+        return $classDropdown;
+    }
+
+    public function loadStream(Request $request){
+        $loadStream = $this->apiService->listData('emis/masters/stream/loadStream');
+        return $loadStream;
     }
 
     public function saveStudentHealth(Request $request){

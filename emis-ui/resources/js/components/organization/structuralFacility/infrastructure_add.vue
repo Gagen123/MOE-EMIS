@@ -4,27 +4,27 @@
             <div class="card-body">
                 <div class="form-group row">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="">Category:<span class="text-danger">*</span></label> 
                         <select name="category" id="category" class="form-control editable_fields" v-model="form.category" @change="getSubCategoryDropdown()">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="">Sub Category</label> 
                         <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
                         </select>
                     </div>
-                </div>
-                                    
-                <div class="form-group row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="">Structure No./Name:<span class="text-danger">*</span></label> 
                         <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
                     </div>
+                </div>
+                                    
+                <div class="form-group row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="">Year of Construction:<span class="text-danger">*</span></label> 
                         <input class="form-control editable_fields " id="yearOfConst" type="text" v-model="form.yearOfConstruction">
@@ -61,6 +61,8 @@
                             <option value="4">Others</option>
                         </select>
                     </div>
+                </div>
+                <div class="form-group row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="">Ramp Access in Ground Floor</label>
                         <br>
