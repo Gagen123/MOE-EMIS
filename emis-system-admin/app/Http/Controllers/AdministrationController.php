@@ -184,5 +184,11 @@ class AdministrationController extends Controller{
     public function load_dzongkhag_details_by_id($id=""){
         return $this->successResponse(Dzongkhag::where('id',$id)->first());
     }
+    public function load_country_details_by_id($id=""){
+        return $this->successResponse(Country::where('id',$id)->first());
+    }
+    public function load_Gender_details_by_id($id=""){
+        return $this->successResponse(Gender::where('id',$id)->first());
+    }
     
 }

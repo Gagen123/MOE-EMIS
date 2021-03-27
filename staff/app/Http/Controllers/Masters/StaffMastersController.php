@@ -22,6 +22,9 @@ use App\Models\staff_masters\MaritalStatus;
 use App\Models\staff_masters\StaffSubjectArea;
 use App\Models\staff_masters\Subjects;
 use App\Models\staff_masters\CureerStage;
+use App\Models\staff_masters\QualificationDescription;
+use App\Models\staff_masters\CourseMode;
+
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
@@ -200,7 +203,7 @@ class StaffMastersController extends Controller{
             }
         }
 
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="transfer_reason"){
@@ -232,6 +235,12 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="cureer_stage"){
                     $table="master_stf_cureer_stage";
+                }
+                if($request['record_type']=="qualification_description"){
+                    $table="master_qualification_description";
+                }
+                if($request['record_type']=="course_mode"){
+                    $table="master_course_mode";
                 }
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
@@ -275,6 +284,13 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="cureer_stage"){
                     $response_data = CureerStage::create($data);
+                }
+                if($request['record_type']=="qualification_description"){
+                    $response_data = QualificationDescription::create($data);
+                }
+                if($request['record_type']=="course_mode"){
+                    $response_data = CourseMode::create($data);
+                    // $table="master_course_mode";
                 }
 
             }
@@ -320,6 +336,14 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="cureer_stage"){
                     $data = CureerStage::find($request['id']);
                     $table="master_stf_cureer_stage";
+                }
+                if($request['record_type']=="qualification_description"){
+                    $data = QualificationDescription::find($request['id']);
+                    $table="master_qualification_description";
+                }
+                if($request['record_type']=="course_mode"){
+                    $data = CourseMode::find($request['id']);
+                    $table="master_course_mode";
                 }
                 $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
@@ -425,5 +449,42 @@ class StaffMastersController extends Controller{
         if($param=="all_active_cureer_stage_list"){
             return $this->successResponse(CureerStage::where('status','1')->get());
         }
+
+        if($param=="all_qualification_description_list"){
+            return $this->successResponse(QualificationDescription::all());
+        }
+        if($param=="all_active_qualification_description_list"){
+            return $this->successResponse(QualificationDescription::where('status','1')->get());
+        }
+
+        if($param=="all_coursemode_list"){
+            return $this->successResponse(CourseMode::all());
+        }
+        if($param=="all_active_coursemode_list"){
+            return $this->successResponse(CourseMode::where('status','1')->get());
+        }
+
+    }
+    public function load_staff_masters_by_id($param="",$id=""){
+        if($param=="qdescription"){
+            return $this->successResponse(QualificationDescription::where('id',$id)->first());
+        }
+        if($param=="qualification"){
+            return $this->successResponse(Qualification::where('id',$id)->first());
+        }
+        if($param=="coursemode"){
+            return $this->successResponse(CourseMode::where('id',$id)->first());
+        }
+        if($param=="subject"){
+            return $this->successResponse(Subjects::where('id',$id)->first());
+        }
+        if($param=="relation"){
+            return $this->successResponse(Relationship::where('id',$id)->first());
+        }
+        if($param=="position_title"){
+            return $this->successResponse(PositionTitle::where('id',$id)->first());
+        }
+        
+        
     }
 }
