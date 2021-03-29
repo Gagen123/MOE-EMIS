@@ -8,7 +8,7 @@ use App\Traits\Uuid;
 class QualificationType extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_qualification_type";
+    protected $table="master_stf_qualification_type";
     public $timestamps = false;
     protected $fillable = [
         'id',

@@ -79,7 +79,7 @@ export default {
         },
         async getgewoglist(){
             let dzoId=$('#dzo_id').val();
-            let uri = 'masters/all_active_gewog_under_dzongkhag/dzongkhag/'+dzoId;
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
             axios.get(uri)
             .then(response =>{
                 let data = response;

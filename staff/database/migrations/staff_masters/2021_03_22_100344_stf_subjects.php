@@ -7,10 +7,10 @@ use Illuminate\Support\Facades\Schema;
 class StfSubjects extends Migration{
    
     public function up(){
-        Schema::create('stf_subject', function (Blueprint $table) {
+        Schema::create('master_stf_subject', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('sub_area_id',36)->nullable(false);
-            $table->foreign('sub_area_id')->references('id')->on('stf_subject_area');
+            $table->foreign('sub_area_id')->references('id')->on('master_stf_subject_area');
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
@@ -22,6 +22,6 @@ class StfSubjects extends Migration{
     }
 
     public function down() {
-        Schema::dropIfExists('stf_subject');
+        Schema::dropIfExists('master_stf_subject');
     }
 }

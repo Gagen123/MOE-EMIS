@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TransferReason extends Model{
     use HasFactory, Uuid;
-    protected $table="transfer_reason_master";
+    protected $table="master_transfer_reason";
     public $timestamps = false;
     protected $fillable = [
         'id',

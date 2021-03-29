@@ -13,27 +13,29 @@ class StfPersonalDetails extends Migration{
             $table->string('cid_work_permit',100)->nullable(false);
             $table->string('sex_id',100)->nullable(true);
             $table->date('dob',20)->nullable(true);
-            $table->char('working_agency_id',20)->nullable(false);
-            $table->char('position_title_id',20)->nullable(false);
-            $table->char('merital_status',20)->nullable(true);
+            $table->char('working_agency_id',36)->nullable(false);
+            $table->char('position_title_id',36)->nullable(false);
+            $table->char('merital_status',36)->nullable(true);
             $table->char('country_id',36)->nullable(false);
             $table->char('village_id',36)->nullable(true);
+            $table->string('address',255)->nullable(true);
             $table->string('email',100)->nullable(false);
-            $table->Integer('contact_no',8)->nullable(false);
+            $table->string('contact_no',8)->nullable(false);
             $table->char('comp_sub_id',36)->nullable(false);
-            $table->foreign('comp_sub_id')->references('id')->on('stf_subject');
+            $table->foreign('comp_sub_id')->references('id')->on('master_stf_subject');
             $table->char('elective_sub_id1',36)->nullable(false);
-            $table->foreign('elective_sub_id1')->references('id')->on('stf_subject');
+            $table->foreign('elective_sub_id1')->references('id')->on('master_stf_subject');
             $table->char('elective_sub_id2',36)->nullable(true);
-            $table->foreign('elective_sub_id2')->references('id')->on('stf_subject');
+            $table->foreign('elective_sub_id2')->references('id')->on('master_stf_subject');
             $table->char('cureer_stagge_id',36)->nullable(false);
-            $table->foreign('cureer_stagge_id')->references('id')->on('stf_cureer_stage');
+            $table->foreign('cureer_stagge_id')->references('id')->on('master_stf_cureer_stage');
             $table->char('employee_code',100)->nullable(false);
             $table->string('remarks')->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable(true);
             $table->timestamp('updated_at')->nullable(true);
+            $table->enum('status', ['Pending', 'Created'])->default('Pending')->nullable(false);
         });
     }
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class MgmnDesignation extends Migration{
     public function up(){
-        Schema::create('mgmn_designation_master', function (Blueprint $table) {
+        Schema::create('master_mgmn_designation', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
@@ -19,6 +19,6 @@ class MgmnDesignation extends Migration{
     }
 
     public function down(){
-        Schema::dropIfExists('mgmn_designation_master');
+        Schema::dropIfExists('master_mgmn_designation');
     }
 }

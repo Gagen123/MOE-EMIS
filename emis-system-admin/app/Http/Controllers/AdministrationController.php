@@ -9,6 +9,8 @@ use App\Models\global_masters\Country;
 use App\Models\global_masters\Dzongkhag;
 use App\Models\global_masters\Gewog;
 use App\Models\global_masters\Village;
+use App\Models\global_masters\Gender;
+
 class AdministrationController extends Controller{
     use ApiResponser;
     public $database="emis_system_admin";
@@ -49,7 +51,7 @@ class AdministrationController extends Controller{
             }
 
         }
-        if($request->record_type=="dzongkhag" || $request->record_type=="gewog" || $request['record_type']=="village"){
+        if($request->record_type=="dzongkhag" || $request->record_type=="gewog" || $request['record_type']=="village" || $request['record_type']=="gender"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request->record_type=="dzongkhag"){
@@ -60,6 +62,9 @@ class AdministrationController extends Controller{
                 }
                 if($request->record_type=="village"){
                     $table="village_master";
+                }
+                if($request->record_type=="gender"){
+                    $table="gender_master";
                 }
                 $rule =[
                     'name'      => 'required|string|unique:'.$table,
@@ -86,6 +91,9 @@ class AdministrationController extends Controller{
                 if($request->record_type=="village"){
                     $response_data = Village::create($data);
                 }
+                if($request->record_type=="gender"){
+                    $response_data = Gender::create($data);
+                }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }
             if($request->actiontype=="edit"){
@@ -105,6 +113,10 @@ class AdministrationController extends Controller{
                     $data = Village::find($request['id']);
                     $table="village_master";
                     $aditionla_param="; gewog_id: ".$data->gewog_id;
+                }
+                if($request->record_type=="gender"){
+                    $data = Gender::find($request['id']);
+                    $table="gender_master";
                 }
                 $messs_det='name:'.$data->name.$aditionla_param.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
@@ -129,9 +141,14 @@ class AdministrationController extends Controller{
         if($param=="all_country"){
             return $this->successResponse(Country::all());
         }
+        if($param=="all_active_country"){
+            return $this->successResponse(Country::where('status','1')->get());
+        }
+        
         if($param=="all_dzongkhag"){
             return $this->successResponse(Dzongkhag::all());
         }
+
         if($param=="all_active_dzongkhag"){
             return $this->successResponse(Dzongkhag::where('status','1')->get());
         }
@@ -142,11 +159,36 @@ class AdministrationController extends Controller{
         if($param=="all_village_List"){
             return $this->successResponse(Village::with('dzothroughgewog','gewog')->get());
         }
+        
+
+        if($param=="all_gender"){
+            return $this->successResponse(Gender::all());
+        }
+        if($param=="all_active_gender"){
+            return $this->successResponse(Gender::where('status','1')->get());
+        }
+        
     }
     public function load_dropdown($model="",$parent_id=""){
         if($model=="dzongkhag"){
             return $this->successResponse(Gewog::where('dzongkhag_id',$parent_id)->get());
         }
+        if($model=="gewog"){
+            return $this->successResponse(Village::where('gewog_id',$parent_id)->get());
+        }
+    }
+    public function load_gewog_details_by_village_id($id=""){
+        $gewog_id=Village::where('id',$id)->first()->gewog_id;
+        return $this->successResponse(Gewog::where('id',$gewog_id)->first());
+    }
+    public function load_dzongkhag_details_by_id($id=""){
+        return $this->successResponse(Dzongkhag::where('id',$id)->first());
+    }
+    public function load_country_details_by_id($id=""){
+        return $this->successResponse(Country::where('id',$id)->first());
+    }
+    public function load_Gender_details_by_id($id=""){
+        return $this->successResponse(Gender::where('id',$id)->first());
     }
     
 }

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class MaritalStatus extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_marital_status";
+    protected $table="master_stf_marital_status";
     public $timestamps = false;
     protected $fillable = [
         'id',

@@ -14,24 +14,27 @@ class PersonalDetails extends Model{
         'emp_type_id',
         'name',
         'cid_work_permit',
+        'position_title_id',
         'sex_id',
         'dob',
         'working_agency_id',
         'merital_status',
         'country_id',
         'village_id',
+        'address',
         'email',
         'contact_no',
         'comp_sub_id',
-        'emp_type_id1',
-        'emp_type_id2',
+        'elective_sub_id1',
+        'elective_sub_id2',
         'cureer_stagge_id',
         'employee_code',
         'remarks',
         'created_by',
         'updated_by',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'status'
     ];
 
 }

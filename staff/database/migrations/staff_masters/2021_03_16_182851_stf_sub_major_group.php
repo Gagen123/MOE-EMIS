@@ -6,10 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 class StfSubMajorGroup extends Migration{
     public function up(){
-        Schema::create('stf_sub_group', function (Blueprint $table) {
+        Schema::create('master_stf_sub_group', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('group_id',36)->nullable(false);
-            $table->foreign('group_id')->references('id')->on('stf_major_group');
+            $table->foreign('group_id')->references('id')->on('master_stf_major_group');
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
@@ -21,6 +21,6 @@ class StfSubMajorGroup extends Migration{
     }
 
     public function down() {
-        Schema::dropIfExists('stf_sub_group');
+        Schema::dropIfExists('master_stf_sub_group');
     }
 }

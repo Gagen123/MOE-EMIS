@@ -75,6 +75,16 @@ const routes = [
           { path: '/edit_village', name:'edit_village', component: require('./components/masters/global_masters/village/edit_village.vue').default },
         ],
       },
+      
+      { path: '/gender_master', 
+        component: require('./components/masters/global_masters/gender/gender_index.vue').default,
+        children:[
+          { path: '/',name:'gender_master', component: require('./components/masters/global_masters/gender/list_gender.vue').default },
+          { path: '/list_gender',name:'list_gender', component: require('./components/masters/global_masters/gender/list_gender.vue').default },
+          { path: '/create_gender', name:'create_gender', component: require('./components/masters/global_masters/gender/create_gender.vue').default },
+          { path: '/edit_gender', name:'edit_gender', component: require('./components/masters/global_masters/gender/edit_gender.vue').default },
+        ], 
+      },
     ]
   },
 
@@ -220,6 +230,7 @@ const routes = [
           { path: '/edit_subject', name:'edit_subject', component: require('./components/masters/staff_masters/subject/edit_subject.vue').default },
         ],
       },
+
       { path: '/currier_stage',
         component: require('./components/masters/staff_masters/currier_stage/currier_stage_index.vue').default, 
         children:[ 
@@ -229,6 +240,25 @@ const routes = [
           { path: '/edit_currier_stage', name:'edit_currier_stage', component: require('./components/masters/staff_masters/currier_stage/edit_currier_stage.vue').default },
         ],
       }, 
+      { path: '/qualification_description',
+        component: require('./components/masters/staff_masters/qualification_description/qualification_description_index.vue').default, 
+        children:[ 
+          { path: '/',name:'qualification_description', component: require('./components/masters/staff_masters/qualification_description/list_qualification_description.vue').default },
+          { path: '/list_qualification_description',name:'list_qualification_description', component: require('./components/masters/staff_masters/qualification_description/list_qualification_description.vue').default },
+          { path: '/create_qualification_description',name:'create_qualification_description', component: require('./components/masters/staff_masters/qualification_description/create_qualification_description.vue').default },
+          { path: '/edit_qualification_description', name:'edit_qualification_description', component: require('./components/masters/staff_masters/qualification_description/edit_qualification_description.vue').default },
+        ],
+      },
+      { path: '/course_mode',
+        component: require('./components/masters/staff_masters/course_mode/course_mode_index.vue').default, 
+        children:[ 
+          { path: '/',name:'course_mode', component: require('./components/masters/staff_masters/course_mode/list_course_mode.vue').default },
+          { path: '/list_course_mode',name:'list_course_mode', component: require('./components/masters/staff_masters/course_mode/list_course_mode.vue').default },
+          { path: '/create_course_mode',name:'create_course_mode', component: require('./components/masters/staff_masters/course_mode/create_course_mode.vue').default },
+          { path: '/edit_course_mode', name:'edit_course_mode', component: require('./components/masters/staff_masters/course_mode/edit_course_mode.vue').default },
+        ],
+      },
+
     ],
   },
 
@@ -243,6 +273,8 @@ const routes = [
           { path: '/',name:'civil_staff',  component: require('./components/staff/civil/civil_list.vue').default },
           { path: '/list_civil_staff',name:'list_civil_staff',  component: require('./components/staff/civil/civil_list.vue').default },
           { path: '/create_civil_staff',name:'create_civil_staff',  component: require('./components/staff/civil/create_civil_staff.vue').default },
+          { path: '/edit_civil_staff',name:'edit_civil_staff',  component: require('./components/staff/civil/edit_civil_staff.vue').default },
+          // { path: '/create_civil_staff',name:'create_civil_staff',  component: require('./components/staff/civil/create_staff.vue').default },
         ],
       },
       { path: '/private_staff', 

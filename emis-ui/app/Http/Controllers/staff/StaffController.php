@@ -6,9 +6,11 @@ use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\AuthUser;
 
 class StaffController extends Controller{
     use ServiceHelper;
+    use AuthUser;
     public $apiService;
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
@@ -17,34 +19,191 @@ class StaffController extends Controller{
     public function savePersonalDetails(Request $request){
         $rules = [
             'emp_type'              =>  'required',
-            'cid_no'                =>  'required',
-            'full_name'             =>  'required',
-            'position_title'        =>  'required',
-            'working_agency'        =>  'required',
+            'marital_status'        =>  'required',
+            'cid_work_permit'       =>  'required',
+            'name'                  =>  'required',
+            'sex_id'                =>  'required',
+            'dob'                   =>  'required',
             'contact_number'        =>  'required',
             'email'                 =>  'required',
+            'position_title'        =>  'required',
+            'working_agency_id'     =>  'required',
             'comp_sub'              =>  'required',
             'elective_sub1'         =>  'required',
             'currier_stage'         =>  'required',
             'emp_file_code'         =>  'required',
         ];
-        $this->validate($request, $rules);
+        $customMessages = [
+            'cid_work_permit.required'      => 'This field is required',
+            'marital_status.required'       => 'This field is required',
+            'name.required'                 => 'This field is required',
+            'sex_id.required'               => 'This field is required',
+            'dob.required'                  => 'This field is required',
+            'contact_number.required'       => 'This field is required',
+            'email.required'                => 'This field is required',
+            'position_title.required'       => 'This field is required',
+            'working_agency_id.required'    => 'This field is required',
+            'comp_sub.required'             => 'This field is required',
+            'elective_sub1.required'        => 'This field is required',
+            'currier_stage.required'        => 'This field is required',
+            'emp_file_code.required'        => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        
         $personal_details =[
+            'personal_id'       =>  $request->personal_id,
             'emp_type'          =>  $request->emp_type,
-            'cid_no'            =>  $request->cid_no,
-            'full_name'         =>  $request->full_name,
-            'position_title'    =>  $request->position_title,
-            'working_agency'    =>  $request->working_agency,
+            'cid_work_permit'   =>  $request->cid_work_permit,
+            'name'              =>  $request->name,
+            'sex_id'            =>  $request->sex_id,
+            'marital_status'    =>  $request->marital_status,
+            'dob'               =>  $request->dob,
+            'country_id'        =>  $request->country_id,
+            'village_id'        =>  $request->village_id,
+            'address'           =>  $request->address,
             'contact_number'    =>  $request->contact_number,
             'email'             =>  $request->email,
+            'remarks'           =>  $request->remarks,
+            'position_title'    =>  $request->position_title,
+            'working_agency_id' =>  $request->working_agency_id,
             'comp_sub'          =>  $request->comp_sub,
             'elective_sub1'     =>  $request->elective_sub1,
             'elective_sub2'     =>  $request->elective_sub2,
             'currier_stage'     =>  $request->currier_stage,
             'emp_file_code'     =>  $request->emp_file_code,
-            'remarks'           =>  $request->remarks,
+            'user_id'           =>$this->user_id() 
         ];
+        // dd($personal_details);
         $response_data= $this->apiService->createData('emis/staff/savePersonalDetails', $personal_details);
         return $response_data;
     }
+    public function loaddraftpersonalDetails(Request $request){
+        $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$this->user_id());
+        return $response_data;
+    }
+    public function loadpersonalDetails($id=""){
+        $response_data= $this->apiService->listData('emis/staff/loadpersonalDetails/'.$id);
+        return $response_data;
+    }
+    
+    public function savequalificationDetails(Request $request){
+        $rules = [
+            'description'      =>  'required',
+            'qualification'    =>  'required',
+            'coursemode'       =>  'required',
+            'coursetitle'      =>  'required',
+            'firstsub'         =>  'required',
+            'country'          =>  'required',
+            'startdate'        =>  'required',
+            'enddate'          =>  'required'
+        ];
+        $customMessages = [
+            'description.required'        => 'This field is required',
+            'qualification.required'      => 'This field is required',
+            'coursemode.required'         => 'This field is required',
+            'coursetitle.required'        => 'This field is required',
+            'firstsub.required'           => 'This field is required',
+            'country.required'            => 'Country field is required',
+            'startdate.required'          => 'This field is required',
+            'enddate.required'            => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        
+        $qualification_details =[
+            'personal_id'                       =>  $request->personal_id,
+            'qualification_id'                  =>  $request->qualification_id,
+            'action_type'                       =>  $request->action_type,
+            'description'                       =>  $request->description,
+            'qualification'                     =>  $request->qualification,
+            'coursemode'                        =>  $request->coursemode,
+            'coursetitle'                       =>  $request->coursetitle,
+            'firstsub'                          =>  $request->firstsub,
+            'secondsub'                         =>  $request->secondsub,
+            'country'                           =>  $request->country,
+            'startdate'                         =>  $request->startdate,
+            'enddate'                           =>  $request->enddate,
+            'status'                            =>  $request->status,
+            'user_id'                           =>  $this->user_id() 
+        ];
+        // dd($personal_details);
+        $response_data= $this->apiService->createData('emis/staff/savequalificationDetails', $qualification_details);
+        return $response_data;
+    }
+    
+    public function load_qualification($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/load_qualification/'.$staff_id.'/'.$this->user_id());
+        return $response_data;
+    }
+    public function load_staff_qualification($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/load_staff_qualification/'.$staff_id);
+        return $response_data;
+    }
+    
+    public function savenominationDetails(Request $request){
+        $rules = [
+            'nomi_cid'          =>  'required',
+            'nomi_name'         =>  'required',
+            'nomi_desig'        =>  'required',
+            'nomi_address'      =>  'required',
+            'nomi_contact'      =>  'required',
+            'nomi_email'        =>  'required',
+            'nomi_relation'     =>  'required',
+            'nomi_percentage'   =>  'required'
+        ];
+        $customMessages = [
+            'nomi_name.required'            => 'This field is required',
+            'nomi_cid.required'             => 'This field is required',
+            'nomi_desig.required'           => 'This field is required',
+            'nomi_address.required'         => 'This field is required',
+            'nomi_email.required'           => 'This field is required',
+            'nomi_relation.required'        => 'Country field is required',
+            'nomi_percentage.required'      => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        
+        $nomination_details =[
+            'personal_id'                       =>  $request->personal_id,
+            'nomination_id'                     =>  $request->nomination_id,
+            'action_type'                       =>  $request->action_type,
+            'nomi_cid'                          =>  $request->nomi_cid,
+            'nomi_name'                         =>  $request->nomi_name,
+            'nomi_desig'                        =>  $request->nomi_desig,
+            'nomi_address'                      =>  $request->nomi_address,
+            'nomi_contact'                      =>  $request->nomi_contact,
+            'nomi_email'                        =>  $request->nomi_email,
+            'nomi_relation'                     =>  $request->nomi_relation,
+            'nomi_percentage'                   =>  $request->nomi_percentage,
+            'status'                            =>  $request->status,
+            'user_id'                           =>  $this->user_id() 
+        ];
+        // dd($personal_details);
+        $response_data= $this->apiService->createData('emis/staff/savenominationDetails', $nomination_details);
+        return $response_data;
+    }
+    
+    public function load_nominations($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/load_nominations/'.$staff_id.'/'.$this->user_id());
+        return $response_data;
+    }
+    public function load_staff_nomination($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/load_staff_nomination/'.$staff_id);
+        return $response_data;
+    }
+    
+    
+    public function updatefinalstaffDetails(Request $request){
+        $staff_details =[
+            'personal_id'                       =>  $request->personal_id,
+            'nomination_id'                     =>  $request->nomination_id,
+            'user_id'                           =>  $this->user_id() 
+        ];
+        $response_data= $this->apiService->createData('emis/staff/updatefinalstaffDetails', $staff_details);
+        return $response_data;
+    }
+    
+    public function loadAllStaff($type=""){
+        $response_data= $this->apiService->listData('emis/staff/loadAllStaff/'.$type);
+        return $response_data;
+    }
+    
 }

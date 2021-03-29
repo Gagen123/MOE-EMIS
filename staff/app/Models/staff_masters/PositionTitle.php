@@ -8,7 +8,7 @@ use App\Traits\Uuid;
 
 class PositionTitle extends Model{
     use HasFactory, Uuid;
-    protected $table="stf_position_title";
+    protected $table="master_stf_position_title";
     public $timestamps = false;
     protected $fillable = [
         'id',

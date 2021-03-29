@@ -9,7 +9,7 @@ use App\Traits\Uuid;
 class PositionLevel extends Model
 {
     use HasFactory, Uuid;
-    protected $table="stf_position_level";
+    protected $table="master_stf_position_level";
     public $timestamps = false;
     protected $fillable = [
         'id',
