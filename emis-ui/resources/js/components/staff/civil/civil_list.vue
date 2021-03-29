@@ -27,7 +27,7 @@
                             <td>{{ item.email}}</td>
                             <td>{{ item.contact_no}}</td>
                             <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="shownominationedit(item)">Edit</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -45,11 +45,11 @@ export default {
         } 
     },
     methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
+        loadeditpage(staff){
+            this.$router.push({name:"edit_civil_staff",params:{data:staff}});
 		},
         loadstff(){
-             axios.get('staff/loadAllStaff/Regular')
+            axios.get('staff/loadAllStaff/Regular,Volunteer')
             .then((response) => {  
                 this.substaffList =  response.data.data;
              })

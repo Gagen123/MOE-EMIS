@@ -27,11 +27,8 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Emp Type:<i class="text-danger">*</i> </label><br>
                                 <input type="radio" v-model="personal_form.emp_type" name="etype" @click="showemptypedtab(true)" value="Regular"> Civil Servent
-                                <!-- <input type="radio" name="etype" @click="showemptypedtab(true)" value="Contract"> Contract -->
                                 <input type="radio" v-model="personal_form.emp_type" name="etype" @click="showemptypedtab(false)" value="Volunteer"> Volunteer & Project Based
-                                <!-- <input type="radio" name="etype" @click="showemptypedtab(false)" value="Project Based"> Project Based -->
                             </div> 
-               
                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
                                 <input type="text" v-model="personal_form.cid_work_permit" @change="remove_error('cid_work_permit')" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }"  class="form-control" name="cid_work_permit" id="cid_work_permit">
@@ -54,7 +51,6 @@
                                 <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
                                 <has-error :form="personal_form" field="dob"></has-error>
                             </div> 
-                             
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
                                 <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
@@ -177,11 +173,6 @@
                             </div> 
                         </div>
                         <div class="form-group row">
-                            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Is in SEN Team:</label><br>
-                                <input type="radio" name="sen" value="Yes"> Yes
-                                <input type="radio" name="sen"  value="No"> No
-                            </div>  -->
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
                                 <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
@@ -196,14 +187,6 @@
                                 <has-error :form="personal_form" field="emp_file_code"></has-error>
                             </div> 
                         </div>
-                        <!-- <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Has Received Training on Supporting Children with Disabilities:</label><br>
-                                <input type="radio" name="sentraining" value="Yes"> Yes
-                                <input type="radio" name="sentraining" value="No"> No
-                            </div> 
-                        </div> -->
-                        
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Remarks:</label>
@@ -219,12 +202,6 @@
                         </div>
                     </div>
                     <div class="tab-pane fade tab-content-details" id="qualification-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <!-- <ul class="bg-cyan mb-2 pb-1">
-                            <li class="pl-2 text-white">
-                                
-                            </li>
-                        </ul> -->
-                        
                         <div class="modal fade" id="qualification-modal" tabindex="-1" role="dialog">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -488,56 +465,6 @@
                                                 <input readonly type="number" v-model="grand_total" id="percentagetotla" class="form-control">
                                             </td>
                                         </tr>
-                                        <!-- <tr v-for='(nom, index) in this.nomination_form.nominies' :key="index">
-                                            <td>
-                                                <input type="number" v-model="nom.cid" id="cid" @change="getpersonaldetails(nom)" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly v-model="nom.name" id="name" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly v-model="nom.desig" id="desig" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="text" readonly v-model="nom.address" id="address" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="number" v-model="nom.contact" id="contact" class="form-control">
-                                            </td>
-                                            <td>
-                                                <input type="emial" v-model="nom.email" id="email" class="form-control">
-                                            </td>
-                                            <td>
-                                                <select class="form-control select2">
-                                                    <option value="">--Select--</option>
-                                                    <option value="1">Spouse</option>
-                                                    <option value="1">Father</option>
-                                                    <option value="1">Mother</option>
-                                                    <option value="1">Son</option>
-                                                    <option value="1">Daughter</option>
-                                                    <option value="1">Brother</option>
-                                                    <option value="1">Sister</option>
-                                                    <option value="1">Others</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="number" v-model="nom.percentage" id="percentage" @change="calcualtetotla(nom)" class="form-control">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="6"> 
-                                                <button type="button" class="btn btn-xs btn-primary btn-sm" id="addMore" 
-                                                @click="addMore('nom')"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-xs btn-sm btn-danger" id="addMore" 
-                                                @click="remove('nom')"><i class="fa fa-trash"></i> Remove</button>
-                                            </td>
-                                            <td>
-                                                Total: 
-                                            </td>
-                                            <td>
-                                                <input readonly type="number" id="percentagetotla" class="form-control">
-                                            </td>
-                                        </tr>   -->
                                     </tbody>
                                 </table>
                             </div>
@@ -546,7 +473,7 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('qualification-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save </button>
+                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Done </button>
                             </div>
                         </div>
                     </div>
@@ -561,22 +488,22 @@ export default {
     data(){
         return{ 
             grand_total:0,
-            qualification_tbl_row_count:0,
             sex_idList:[],
             marital_statusList:[],
-            positiontitleList:[],
             countryList:[],
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
+
             subjectList:[],
             cureerstageList:[],
             qualificationDescription:[],
             staffqualificationlist:[],
+            positiontitleList:[],
             coursemodeList:[],
             repationshipList:[],
             staff_nomination_list:[],
-            
+            staff_qualification_list:'',
             personal_form: new form({
                 personal_id: '',
                 emp_type: 'Regular',
@@ -613,7 +540,7 @@ export default {
                 startdate:'',
                 enddate:'',
                 action_type:'',
-                status:'Pending',
+                status:'Created',
             }),
             nomination_form: new form({
                 personal_id: '',
@@ -627,31 +554,12 @@ export default {
                 nomi_relation:'',
                 nomi_percentage:'',
                 action_type:'',
-                status:'Pending',
+                status:'Created',
             }),  
-            staff_qualification_list:'',
+            
         } 
     },
     methods: {
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        }, 
-        showemptypedtab(type){
-            if(type){
-                $('#empidcid').html('Emp Id/CID');
-                $('#position').prop('readonly',true);
-                $('#working').prop('readonly',true);
-            }
-            else{
-                $('#empidcid').html('CID/Work Permit No.');
-                $('#position').prop('readonly',false);
-                $('#working').prop('readonly',false);
-            }
-        },
-        
         showaddmodal(type){
             if(type=="qualification-modal"){
                 this.qualification_form.action_type='add';
@@ -746,39 +654,22 @@ export default {
         },
         addMore: function(type){
             if(type=="qualification"){ 
-                // this.qualification_form.stfqualifications.push({description:$('#qdescription').val(),qualification:$('#qualification').val(),coursemode:$('#coursemode').val(),
-                // coursetitle:$('#coursetitle').val(),firstsub:$('#firstsub').val(),secondsub:$('#sectsub').val(),
-                // country:$('#qualificationcountry').val(),startdate:$('#startdate').val(),enddate:$('#enddate').val()})
                 this.qualification_form.post('staff/savequalificationDetails')
                 .then((response) => {  
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data saved Successfully'
-                    });
-                    this.loadqualication(this.qualification_form.personal_id);
-                    $('#qualification-modal').modal('hide');
+                    if(response!=""){
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                        this.load_staff_qualication(this.qualification_form.personal_id);
+                        $('#qualification-modal').modal('hide');
+                        
+                    }
+                   
                 })
                 .catch((error) => {  
                     console.log("Error:"+error)
                 });
-
-                // let deletefunction="this.deletequalification('stfqua"+this.qualification_tbl_row_count+"')";
-                // let tabledata="<tr id='stfqua"+this.qualification_tbl_row_count+"'>"+
-                //     "<td><input type='hidden' id='stfquadesc"+this.qualification_tbl_row_count+"' value='"+$('#qdescription').val()+"'>"+$('#qdescription option:selected').text()+"</td>"+
-                //     "<td><input type='hidden' id='stfqualification"+this.qualification_tbl_row_count+"' value='"+$('#qualification').val()+"'>"+$('#qualification option:selected').text()+"</td>"+
-                //     "<td><input type='hidden' id='stfcoursemode"+this.qualification_tbl_row_count+"' value='"+$('#coursemode').val()+"'>"+$('#coursemode option:selected').text()+"</td>"+
-                //     "<td><input type='hidden' id='stfcoursetitle"+this.qualification_tbl_row_count+"' value='"+$('#coursetitle').val()+"'>"+$('#coursetitle').val()+"</td>"+
-                //     "<td><input type='hidden' id='stffirstsub"+this.qualification_tbl_row_count+"' value='"+$('#firstsub').val()+"'>"+$('#firstsub option:selected').text()+"</td>"+
-                //     "<td><input type='hidden' id='stfsectsub"+this.qualification_tbl_row_count+"' value='"+$('#sectsub').val()+"'>"+$('#sectsub option:selected').text()+"</td>"+
-                //     "<td><input type='hidden' id='stfcountry"+this.qualification_tbl_row_count+"' value='"+$('#qualificationcountry').val()+"'>"+$('#qualificationcountry option:selected').text()+"</td>"+ 
-                //     "<td><input type='hidden' id='stfstartdate"+this.qualification_tbl_row_count+"' value='"+$('#startdate').val()+"'>"+$('#startdate').val()+"</td>"+
-                //     "<td><input type='hidden' id='stfenddate"+this.qualification_tbl_row_count+"' value='"+$('#enddate').val()+"'>"+$('#enddate').val()+"</td>"+
-                //     "<td><button type='button' class='btn btn-sm btn-success btn-flat btn-block pt-0 pb-0'>Edit</button>"+
-                //     "<button type='button' @click="+deletefunction+" class='btn btn-sm btn-danger btn-flat btn-block pt-0 pb-0'>Delete</button> </td>"+
-                // "</tr>";
-                // $('#qualificationlist').append(tabledata);
-                // 
-                // this.qualification_tbl_row_count++;
             }
             else if(type=="nomination"){
                 if(parseInt(this.grand_total)+parseInt(this.nomination_form.nomi_percentage)>100){
@@ -795,7 +686,7 @@ export default {
                             icon: 'success',
                             title: 'Data saved Successfully'
                         });
-                        this.loadnomination(this.qualification_form.personal_id);
+                        this.load_staff_nomination(this.qualification_form.personal_id);
                         $('#nomination-modal').modal('hide');
                     })
                     .catch((error) => {  
@@ -803,276 +694,8 @@ export default {
                     });
                 }
                
-               // this.nomination_form.nominies.push({nomi_cid:'',nomi_name:'',nomi_desig:'',nomi_address:'',nomi_contact:'',nomi_email:'',nomi_relation:'',nomi_percentage:''})
             }
         }, 
-        loadqualication(staff_id){
-            if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/load_qualification/'+staff_id;
-                axios.get(uri)
-                .then(response =>{
-                    let data = response;
-                    this.staff_qualification_list = data.data.data;
-                })
-                .catch(function (error){
-                    console.log("Error:"+error)
-                });
-            }
-        },
-        remove(type,index){ 
-            if(type=="qua"){
-                this.qualificationlist.splice(index,1); 
-            } 
-            else{
-                if(this.nomination_form.nominies.length>1){
-                    this.nomination_form.nominies.splice(index,1); 
-                }
-            }            
-        },
-        getpersonaldetails(data){
-            data.name='Full Name'+data.cid;
-            data.desig='MR';
-            data.address='Permanent Address '+data.cid;
-        },
-        fetchDetails(){
-            this.personal_form.name='Pema Dechen';
-            this.personal_form.position_title='Principal';
-            this.personal_form.contact_number='12312312';
-            this.personal_form.email='pema@gov.bt';
-        },
-        calcualtetotla(data){
-            this.totle+=parseInt(data.percentage);
-            if(this.grand_total>100){
-                this.totle-=parseInt(data.percentage);
-                Swal.fire(
-                    'error!',
-                    'Your total percentage cannot be more the 100.',
-                    'error',
-                )
-                data.percentage=0;
-            }
-            $('#percentagetotla').val(this.totle);
-        },
-        loadqualificationdescription(){
-            let uri = 'masters/load_staff_masters/all_active_qualification_description_list';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.qualificationDescription = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadqualification(){
-            let uri = 'masters/load_staff_masters/all_active_qualification_List';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffqualificationlist = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        
-        loadnomination(staff_id){
-            if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/load_nominations/'+staff_id;
-                axios.get(uri)
-                .then(response =>{
-                    let data = response;
-                    this.staff_nomination_list = data.data.data;
-                    this.grand_total=data.data.total_percentage;
-                })
-                .catch(function (error){
-                    console.log("Error:"+error)
-                });
-            }
-        },
-        
-        loadcoursemode(){
-            let uri = 'masters/load_staff_masters/all_active_coursemode_list';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.coursemodeList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
-                if(this.staff_nomination_list.length<1){
-                    Swal.fire(
-                        'error!',
-                        'Please provide nomination details.',
-                        'error',
-                    );
-                }else{
-                    Swal.fire({
-                        text: "Are you sure you wish to safe this staff details ?",
-                        icon: 'info',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes!',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.nomination_form.post('staff/updatefinalstaffDetails')
-                            .then((response) => {  
-                                Swal.fire(
-                                    'Success!',
-                                    'Details has been saved successfully.',
-                                    'success',
-                                )
-                                this.$router.push('/list_civil_staff');
-                            })
-                            .catch((error) => {  
-                                console.log("Error......"+error)
-                            });
-                        }
-                    });
-                }
-                
-            }
-            else{
-                if(nextclass=="qualification-tab"){
-                    this.personal_form.post('staff/savePersonalDetails')
-                    .then((response) => {   
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                        $('.select2').select2();
-                        $('.select2').select2({
-                            theme: 'bootstrap4'
-                        });
-                        this.change_tab(nextclass);
-                        this.loadqualificationdescription();
-                        this.loadqualification();
-                        this.loadcoursemode();
-                        this.loadqualication(this.personal_form.personal_id);
-                        
-                    })
-                    .catch((error) => {  
-                        if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
-                            $('#working_agency_id').addClass('select2-hidden-accessible');
-                        }
-                        if(!$('#comp_sub').attr('class').includes('select2-hidden-accessible')){
-                            $('#comp_sub').addClass('select2-hidden-accessible');
-                        }
-                        if(!$('#elective_sub1').attr('class').includes('select2-hidden-accessible')){
-                            $('#elective_sub1').addClass('select2-hidden-accessible');
-                        }
-                        if(!$('#elective_sub2').attr('class').includes('select2-hidden-accessible')){
-                            $('#elective_sub2').addClass('select2-hidden-accessible');
-                        }
-                        if(!$('#currier_stage').attr('class').includes('select2-hidden-accessible')){
-                            $('#currier_stage').addClass('select2-hidden-accessible');
-                        }
-                        this.change_tab('personal-tab');
-                        console.log("Error......"+error)
-                    });
-                }
-                if(nextclass=="personal-tab"){
-                    this.loaddraftpersonalDetails();
-                    this.change_tab(nextclass);
-                }  
-                else{
-                    if(nextclass=="nomination-tab" && this.staff_qualification_list.length<1){
-                        Swal.fire(
-                            'error!',
-                            'Please provide qualification details.',
-                            'error',
-                        );
-                        this.change_tab('qualification-tab');
-                    }
-                    else{
-                        this.change_tab(nextclass);
-                        this.loadnomination(this.personal_form.personal_id);
-                    }
-                }
-            }
-        },
-        change_tab(nextclass){
-            $('.personname').html(this.personal_form.name);
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-        },
-        loaddraftpersonalDetails(){
-            axios.get('staff/loaddraftpersonalDetails')
-            .then((response) => {  
-                let data=response.data.data;
-                if(data.village_id!=null){
-                    this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
-                    this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
-                    this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
-                    this.getvillagelist(JSON.parse(response.data.gewog).data.id);
-                    this.personal_form.village_id=data.village_id;
-                }
-                else{
-                    this.personal_form.address=data.address;
-                    $('#bhutanese_address').hide();
-                    $('#foreign_address').show();
-                }
-                this.personal_form.personal_id=data.id;
-                // this.loadqualication(data.id);
-                this.qualification_form.personal_id=data.id;
-                this.nomination_form.personal_id=data.id;
-                this.personal_form.emp_type=data.emp_type_id;
-                this.personal_form.cid_work_permit=data.cid_work_permit;
-                this.personal_form.name=data.name;
-                this.personal_form.position_title=data.position_title_id;
-                this.personal_form.marital_status=data.merital_status;
-                this.personal_form.dob=data.dob;
-                
-                this.personal_form.sex_id=data.sex_id;
-                this.personal_form.country_id=data.country_id;
-                this.personal_form.working_agency_id=data.working_agency_id;
-                this.personal_form.contact_number=data.contact_no;
-                this.personal_form.email=data.email;
-                this.personal_form.comp_sub=data.comp_sub_id;
-                this.personal_form.elective_sub1=data.elective_sub_id1;
-                this.personal_form.elective_sub2=data.elective_sub_id2;
-                this.personal_form.currier_stage=data.cureer_stagge_id;
-                this.personal_form.emp_file_code=data.employee_code;
-                this.personal_form.remarks=data.remarks;
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
-        loadactivesubjectList(uri="masters/load_staff_masters/all_active_subject_List"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.subjectList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-        loadactivecureerstageList(uri="masters/load_staff_masters/all_active_cureer_stage_list"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.cureerstageList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
         loadactivesex_idList(uri="masters/load_global_masters/all_active_gender"){
             axios.get(uri)
             .then(response => {
@@ -1090,31 +713,6 @@ export default {
                 this.marital_statusList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-        loadpositiontitleList(uri="masters/load_staff_masters/all_active_position_title"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.positiontitleList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-        
-        loadrelationshipList(uri="masters/load_staff_masters/all_active_relationship_list"){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.repationshipList =  data.data.data;
-            })
-            .catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
@@ -1169,6 +767,307 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
+        },
+        loadrelationshipList(uri="masters/load_staff_masters/all_active_relationship_list"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.repationshipList =  data.data.data;
+            })
+            .catch(function (error){
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+        loadactivecureerstageList(uri="masters/load_staff_masters/all_active_cureer_stage_list"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.cureerstageList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+        loadactivesubjectList(uri="masters/load_staff_masters/all_active_subject_List"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.subjectList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+        loadcoursemode(){
+            let uri = 'masters/load_staff_masters/all_active_coursemode_list';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.coursemodeList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadqualification(){
+            let uri = 'masters/load_staff_masters/all_active_qualification_List';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.staffqualificationlist = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadqualificationdescription(){
+            let uri = 'masters/load_staff_masters/all_active_qualification_description_list';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.qualificationDescription = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadpositiontitleList(uri="masters/load_staff_masters/all_active_position_title"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.positiontitleList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+        
+        remove(type,index){ 
+            if(type=="qua"){
+                this.qualificationlist.splice(index,1); 
+            } 
+            else{
+                if(this.nomination_form.nominies.length>1){
+                    this.nomination_form.nominies.splice(index,1); 
+                }
+            }            
+        },
+        getpersonaldetails(data){
+            data.name='Full Name'+data.cid;
+            data.desig='MR';
+            data.address='Permanent Address '+data.cid;
+        },
+        fetchDetails(){
+            this.personal_form.name='Pema Dechen';
+            this.personal_form.position_title='Principal';
+            this.personal_form.contact_number='12312312';
+            this.personal_form.email='pema@gov.bt';
+        },
+        shownexttab(nextclass){ 
+            if(nextclass=="final-tab"){ 
+                if(this.staff_nomination_list.length<1){
+                    Swal.fire(
+                        'error!',
+                        'Please provide nomination details.',
+                        'error',
+                    );
+                }else{
+                    Swal.fire({
+                        text: "Are you sure you wish to safe this staff details ?",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.$router.push('/list_civil_staff');
+                        }
+                    });
+                }
+                
+            }
+            else{
+                if(nextclass=="qualification-tab"){
+                    this.personal_form.post('staff/savePersonalDetails')
+                    .then((response) => {   
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                        $('.select2').select2();
+                        $('.select2').select2({
+                            theme: 'bootstrap4'
+                        });
+                        this.change_tab(nextclass);
+                        this.loadqualificationdescription();
+                        this.loadqualification();
+                        this.loadcoursemode();
+                        this.load_staff_qualication(this.personal_form.personal_id);
+                        
+                    })
+                    .catch((error) => {  
+                        this.change_tab('personal-tab');
+                        console.log("Error."+error)
+                    });
+                }
+                if(nextclass=="personal-tab"){
+                    this.loadpersonalDetails();
+                    this.change_tab(nextclass);
+                }  
+                else{
+                    if(nextclass=="nomination-tab" && this.staff_qualification_list.length<1){
+                        Swal.fire(
+                            'error!',
+                            'Please provide qualification details.',
+                            'error',
+                        );
+                        this.change_tab('qualification-tab');
+                    }
+                    else{
+                        this.change_tab(nextclass);
+                        this.load_staff_nomination(this.personal_form.personal_id);
+                    }
+                }
+            }
+        },
+        change_tab(nextclass){
+            $('.personname').html(this.personal_form.name);
+            $('#tabhead >li >a').removeClass('active');
+            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').addClass('active');
+            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').removeClass('disabled');
+            $('.tab-content-details').hide();
+            $('#'+nextclass).show().removeClass('fade');
+        },
+        loadpersonalDetails(){
+            axios.get('staff/loadpersonalDetails/'+this.$route.params.data.id)
+            .then((response) => {  
+                let data=response.data.data;
+                if(data.village_id!=null){
+                    this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
+                    this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
+                    this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
+                    this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+                    this.personal_form.village_id=data.village_id;
+                }
+                else{
+                    this.personal_form.address=data.address;
+                    $('#bhutanese_address').hide();
+                    $('#foreign_address').show();
+                }
+                this.personal_form.personal_id=data.id;
+                this.personal_form.emp_type=data.emp_type_id;
+                this.personal_form.cid_work_permit=data.cid_work_permit;
+                this.personal_form.name=data.name;
+                this.personal_form.position_title=data.position_title_id;
+                this.personal_form.marital_status=data.merital_status;
+                this.personal_form.dob=data.dob;
+                
+                this.personal_form.sex_id=data.sex_id;
+                this.personal_form.country_id=data.country_id;
+                this.personal_form.working_agency_id=data.working_agency_id;
+                this.personal_form.contact_number=data.contact_no;
+                this.personal_form.email=data.email;
+                this.personal_form.comp_sub=data.comp_sub_id;
+                this.personal_form.elective_sub1=data.elective_sub_id1;
+                this.personal_form.elective_sub2=data.elective_sub_id2;
+                this.personal_form.currier_stage=data.cureer_stagge_id;
+                this.personal_form.emp_file_code=data.employee_code;
+                this.personal_form.remarks=data.remarks;
+                this.qualification_form.personal_id=data.id;
+                this.nomination_form.personal_id=data.id;
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+        load_staff_qualication(staff_id){
+            if(staff_id!=null && staff_id!=""){
+                let uri = 'staff/load_staff_qualification/'+staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response;
+                    this.staff_qualification_list = data.data.data;
+                })
+                .catch(function (error){
+                    console.log("Error:"+error)
+                });
+            }
+        },
+        load_staff_nomination(staff_id){
+            if(staff_id!=null && staff_id!=""){
+                let uri = 'staff/load_staff_nomination/'+staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response;
+                    this.staff_nomination_list = data.data.data;
+                    this.grand_total=data.data.total_percentage;
+                })
+                .catch(function (error){
+                    console.log("Error:"+error)
+                });
+            }
+        },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
+        getDetailsbyCID(){
+            if ($this.nomination_form.nomi_cid.length != 11){
+                this.ciderror = 'Please ender 11 digit CID';
+            }
+            else {
+                axios.get('getpersonbycid/'+ $this.nomination_form.nomi_cid)
+                .then(response => {
+                    this.ciderror = '';
+                    alert(response.data);
+                    // if (Object.keys(response).length) {
+                    if (response.data.citizenDetail[0]) {
+                        this.instructor = response.data.citizenDetail[0];
+                        if(this.instructor == ""){
+                            Swal.fire({
+                                html: "No data found for matching CID",
+                                icon: 'info'
+                            });
+                        }else{
+                            // this.form.instructor_name = this.instructor.firstName + " " + this.instructor.lastName;
+                            // this.form.dob = this.instructor.dob;
+                            // this.form.gender = this.instructor.gender;
+                            // this.form.qualification = this.instructor.qualification;
+                            // this.form.dzongkhag = this.instructor.dzongkhagName;
+                            // this.form.gewog = this.instructor.gewogName;
+                            // this.form.village = this.instructor.villageName;
+                            // this.form.thram_no = this.instructor.thramNo;
+                            // this.form.house_no = this.instructor.houseNo;
+                        }
+                    }else{
+                        this.ciderror = 'Invalid CID.';
+                        Swal.fire({
+                            html: "No data found for matching CID",
+                            icon: 'info'
+                        });
+                    }
+                })
+                .catch(() => {
+                        this.ciderror = 'Invalid CID / service down.';
+                        Swal.fire({
+                                html: "No data found for matching CID/service down",
+                                icon: 'error'
+                        });
+                });
+            }
         },
         async changefunction(id){
             if($('#'+id).val()!=""){
@@ -1249,52 +1148,6 @@ export default {
                 this.nomination_form.nomi_relation=$('#nomi_relation').val();
             }
         },
-        getDetailsbyCID(){
-            if ($this.nomination_form.nomi_cid.length != 11){
-                this.ciderror = 'Please ender 11 digit CID';
-            }
-            else {
-                axios.get('getpersonbycid/'+ $this.nomination_form.nomi_cid)
-                .then(response => {
-                    this.ciderror = '';
-                    alert(response.data);
-                    // if (Object.keys(response).length) {
-                    if (response.data.citizenDetail[0]) {
-                        this.instructor = response.data.citizenDetail[0];
-                        if(this.instructor == ""){
-                            Swal.fire({
-                                html: "No data found for matching CID",
-                                icon: 'info'
-                            });
-                        }else{
-                            // this.form.instructor_name = this.instructor.firstName + " " + this.instructor.lastName;
-                            // this.form.dob = this.instructor.dob;
-                            // this.form.gender = this.instructor.gender;
-                            // this.form.qualification = this.instructor.qualification;
-                            // this.form.dzongkhag = this.instructor.dzongkhagName;
-                            // this.form.gewog = this.instructor.gewogName;
-                            // this.form.village = this.instructor.villageName;
-                            // this.form.thram_no = this.instructor.thramNo;
-                            // this.form.house_no = this.instructor.houseNo;
-                        }
-                    }else{
-                        this.ciderror = 'Invalid CID.';
-                        Swal.fire({
-                            html: "No data found for matching CID",
-                            icon: 'info'
-                        });
-                    }
-                })
-                .catch(() => {
-                        this.ciderror = 'Invalid CID / service down.';
-                        Swal.fire({
-                                html: "No data found for matching CID/service down",
-                                icon: 'error'
-                        });
-                });
-            }
-        }
-        
     },
     
     mounted() {
@@ -1306,12 +1159,12 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
-        
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadpersonalDetails();
+
         this.loadactivemaritalList();
-        this.loaddraftpersonalDetails();
         this.loadactivesex_idList();
         this.loadpositiontitleList();
         this.loadactivecountryList();
@@ -1319,7 +1172,6 @@ export default {
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
         this.loadrelationshipList();
-        
     },
 }
 </script>

@@ -76,6 +76,10 @@ class StaffController extends Controller{
     public function loaddraftpersonalDetails(Request $request,$user_id=""){
         return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->first());
     }
+    
+    public function loadpersonalDetails($id=""){
+        return $this->successResponse(PersonalDetails::where('id',$id)->where('status','Created')->first());
+    }
 
     public function savequalificationDetails(Request $request){
         $response_data=[];
@@ -104,6 +108,7 @@ class StaffController extends Controller{
             'startdate'             =>  $request->startdate,
             'enddate'               =>  $request->enddate,
             'created_by'            =>  $request->user_id,
+            'status'                =>  $request->status,
             'created_at'            =>  date('Y-m-d h:i:s')
         ];
         if($request->action_type=="add"){
@@ -119,6 +124,9 @@ class StaffController extends Controller{
     
     public function load_qualification($staff_id="",$user_id=""){
         return $this->successResponse(QualificationDetails::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
+    }
+    public function load_staff_qualification($staff_id=""){
+        return $this->successResponse(QualificationDetails::where('personal_id',$staff_id)->where('status','Created')->get());
     }
 
     public function savenominationDetails(Request $request){
@@ -156,8 +164,9 @@ class StaffController extends Controller{
             'nomi_email'                        =>  $request->nomi_email,
             'nomi_relation'                     =>  $request->nomi_relation,
             'nomi_percentage'                   =>  $request->nomi_percentage,
-            'created_by'            =>  $request->user_id,
-            'created_at'            =>  date('Y-m-d h:i:s')
+            'created_by'                        =>  $request->user_id,
+            'status'                            =>  $request->status,
+            'created_at'                        =>  date('Y-m-d h:i:s')
         ];
         if($request->action_type=="add"){
             $response_data = Nomination::create($nomination_details);
@@ -172,6 +181,9 @@ class StaffController extends Controller{
 
     public function load_nominations($staff_id="",$user_id=""){
         return $this->successResponse(Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
+    }
+    public function load_staff_nomination($staff_id=""){
+        return $this->successResponse(Nomination::where('personal_id',$staff_id)->where('status','Created')->get());
     }
     
     public function updatefinalstaffDetails(Request $request){
@@ -196,7 +208,17 @@ class StaffController extends Controller{
 
     
     public function loadAllStaff($type=""){
-        return $this->successResponse(PersonalDetails::where('emp_type_id',$type)->where('status','Created')->get());
+        if(strpos($type,',')){
+            $emp_type=[];
+            foreach(explode(',',$type) as $emp){
+                array_push($emp_type,$emp);
+            }
+            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
+        }
+        else{
+            return $this->successResponse(PersonalDetails::where('emp_type_id',$type)->where('status','Created')->get());
+        }
+        
     }
     
 }
