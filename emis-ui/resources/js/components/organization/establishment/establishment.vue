@@ -86,7 +86,7 @@
                                             <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
                                         </div> 
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Sen School/ECCD:<span class="text-danger">*</span></label>
+                                            <label class="mb-0">Sen School:<span class="text-danger">*</span></label>
                                             <br>
                                             <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
                                             <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
@@ -148,43 +148,6 @@
                                             <label class="mb-0">Select classes and streams</label>
                                         </div>
                                     </div><br>
-                                    <!-- <div class="row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <ul>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="PP"><label> &nbsp;&nbsp;&nbsp;PP</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="I"><label> &nbsp;&nbsp;&nbsp;I</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="II"><label> &nbsp;&nbsp;&nbsp;II</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="III"><label> &nbsp;&nbsp;&nbsp;III</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="IV"><label> &nbsp;&nbsp;&nbsp;IV</label></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <ul>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="V"><label> &nbsp;&nbsp;&nbsp;V</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="VI"><label> &nbsp;&nbsp;&nbsp;VI</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="VII"><label> &nbsp;&nbsp;&nbsp;VII</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="VIII"><label> &nbsp;&nbsp;&nbsp;VIII</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="IX"><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <ul>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="X"><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                                <li><input type="checkbox" v-model="classStreamForm.class" value="XI" id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                                <ul id="xlsection"  style="display:none" class="pl-4">
-                                                    <li><input type="checkbox" v-model="classStreamForm.stream" value="XI##Science"><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                    <li><input type="checkbox" v-model="classStreamForm.stream" value="XI##Commerce"><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                    <li><input type="checkbox" v-model="classStreamForm.stream" value="XI##Arts"><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                                </ul>
-                                            <li><input type="checkbox" v-model="classStreamForm.class" value="XII" id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                                <ul id="xlisection" style="display:none" class="pl-4">
-                                                    <li><input type="checkbox" v-model="classStreamForm.stream" value="XII##Sciences"><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                    <li><input type="checkbox" v-model="classStreamForm.stream" value="XII##Commerces"><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                    <li><input type="checkbox" v-model="classStreamForm.stream" value="XII##Artss"><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                                </ul>
-                                            </ul>
-                                        </div>
-                                    </div> -->
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                         <span v-for="(item, key, index) in  classList" :key="index">
                                             <br>
@@ -192,7 +155,7 @@
                                             <span v-for="(stm, key, index) in streamList" :key="index" >
                                                 <span v-if="item.class=='XI' || item.class=='XII'">
                                                     <br>
-                                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
                                                 </span>
                                             </span>
                                         </span> 
@@ -209,7 +172,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="card-footer">
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -276,7 +238,7 @@ export default {
             });
         },
 
-        shownexttab(presentclass,nextclass){  
+        shownexttab(nextclass){  
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
             $('.'+nextclass+' >a').addClass('active');
@@ -317,14 +279,7 @@ export default {
                 })
             }
         },
-        showchild(type){
-            if($('#'+type+'_check').prop('checked')){
-                $('#'+type).show();
-            }
-            else{
-                $('#'+type).hide();
-            }
-        },
+       
         getClassAndStream(level){
             if($('#level').val()=="6"){
                 $('#othercategoryforeccd').html('<input type="radio" name="category" value="NGO" @change="showprivatedetails("ngo")" > NGO <input type="radio"  @change="showprivatedetails("public")"  name="category" value="Coporate"> Coporate');

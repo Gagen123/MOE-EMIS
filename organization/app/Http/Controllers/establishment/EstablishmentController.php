@@ -21,11 +21,9 @@ class EstablishmentController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
+    public function __construct() {
+        date_default_timezone_set('Asia/Dhaka');
     }
-
     /**
      * method to get level in dropdown
      */
@@ -61,8 +59,12 @@ class EstablishmentController extends Controller
             'fullName'                      =>  $request['name'],
             'phoneNo'                       =>  $request['phoneNo'],
             'email'                         =>  $request['email'],
-            'statusId'                      =>  1,
+            'status'                        =>  "Pending",
             'applicationNo'                 =>  1,
+            'service'                       =>  "New Establishment",
+            'orgId1'                        =>  "",
+            'orgId2'                        =>  "",
+            'year'                          =>  "",
             ];
             $establishment = Establishment::create($estd);
 
@@ -75,33 +77,40 @@ class EstablishmentController extends Controller
     public function saveClassStream(Request $request){
         $classes=$request->class;
         $classStream='';
-            foreach ($classes as $cls){
-                if($request->stream!="" && sizeof($request->stream)>0){
-                    foreach ($request->stream as $stm){
-                        if(explode('##',$stm)[0]==$cls){
-                            $classStream = [
-                                'establishmentId'   => 1,
-                                'classId'           =>$cls,
-                                'streamId'          =>$stm,
-                            ];
-                        }else{
-                            $classStream = [
-                                'establishmentId'   => 1,
-                                'classId'           => $cls,
-                            ];
+        $inserted_class="";
+        if($request->stream!="" && sizeof($request->stream)>0){
+            foreach ($request->stream as $stm){
+                foreach ($classes as $cls){
+                    if(explode('##',$stm)[0]==$cls){
+                        $classStream = [
+                            'establishmentId'   => 1,
+                            'classId'           =>$cls,
+                            'streamId'          =>explode('##',$stm)[1],
+                            'created_by'           =>$request->user_id,
+                            'created_at'        =>date('Y-m-d h:i:s'),
+                            
+                        ];
+                        if(strpos($inserted_class,$cls)===false){
+                            $inserted_class.=$cls;
                         }
+                        $class = EstablishmentClassStream::create($classStream);
                     }
                 }
-                else{
-                    $classStream = [
-                        'establishmentId'   => 1,
-                        'classId'           => $cls,
-                    ];
-                }
+            }
+        }
+        foreach ($classes as $cls){
+            if(strpos($inserted_class,$cls)===false){
+                $classStream = [
+                    'establishmentId'   => 1,
+                    'classId'           => $cls,
+                    'created_by'           =>$request->user_id,
+                    'created_at'        =>date('Y-m-d h:i:s'),
+                ];
                 if($classStream != ""){
                     $class = EstablishmentClassStream::create($classStream);
                 }
             }
+        }
         return $this->successResponse($class, Response::HTTP_CREATED);
     }
 

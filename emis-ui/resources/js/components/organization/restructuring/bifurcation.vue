@@ -80,28 +80,18 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <ul>
-                                        <li><input type="checkbox" checked readonly="readonly"><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                        <li><input type="checkbox" checked readonly="readonly"><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <ul>
-                                        <li><input type="checkbox" checked id="xlsection_check" readonly><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                        <ul id="xlsection" class="pl-4">
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                        </ul>
-                                    <li><input type="checkbox" checked id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                        <ul id="xlisection" class="pl-4">
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                        </ul>
-                                    </ul>
-                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classList" :key="index">
+                                    <br>
+                                    <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                    <span v-for="(stm, key, index) in streamList" :key="index" >
+                                        <span v-if="item.class=='XI' || item.class=='XII'">
+                                            <br>
+                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                        </span>
+                                    </span>
+                                </span> 
+                            </div>
                             </div>
                         </div>
                         <hr>
@@ -122,11 +112,11 @@
                                             <div class="form-group row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Name:<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" id="cname"/>
+                                                    <input type="text" class="form-control" id="cname" v-model="form.name"/>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Level:<span class="text-danger">*</span></label>
-                                                    <select name="category" id="clevel" class="form-control currentDetails">
+                                                    <select name="category" id="clevel" class="form-control currentDetails" v-model="form.level">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Higher Secondary School</option>
                                                         <option value="2">Middle Secondary School</option>
@@ -140,13 +130,13 @@
                                             <div class="form-group row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Category:<span class="text-danger">*</span></label><br>
-                                                    <input type="radio" name="category" @change="showprivatedetails('public')" value="Public"> Public
-                                                    <input type="radio" name="category" @change="showprivatedetails('private')" value="Private"> Private
+                                                    <input type="radio" v-model="form.category" name="category" @change="showprivatedetails('public')" value="Public"> Public
+                                                    <input type="radio" v-model="form.category" name="category" @change="showprivatedetails('private')" value="Private"> Private
                                                     <span id="othercategoryforeccd"></span>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Dzongkhag:<span class="text-danger">*</span></label>
-                                                    <select name="dzongkhag" id="cdzongkhag" class="form-control currentDetails">
+                                                    <select name="dzongkhag" v-model="form.dzongkhag" id="cdzongkhag" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Thimphu</option>
                                                         <option value="2">Paro</option>
@@ -158,7 +148,7 @@
                                             <div class="form-group row">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Gewog:<span class="text-danger">*</span></label>
-                                                    <select name="category" id="cgewog" class="form-control currentDetails">
+                                                    <select name="category" v-model="form.gewog" id="cgewog" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Kabisa</option>
                                                         <option value="2">Babesa</option>
@@ -168,7 +158,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Chiwog:<span class="text-danger">*</span></label>
-                                                    <select name="category" id="cchiwog" class="form-control currentDetails">
+                                                    <select name="category" v-model="form.chiwog" id="cchiwog" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">olakha</option>
                                                         <option value="2">chngbandu</option>
@@ -178,28 +168,31 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Location Category:</label>
-                                                    <select name="category" id="clocationCategory" class="form-control currentDetails">
+                                                    <select name="category" v-model="form.location" id="clocationCategory" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="2">Urban grade 1</option>
                                                         <option value="1">Urban grade 2</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Geopolitically Located:</label><br>
-                                                    <input type="radio" name="geo"  value="Yes"> Yes
-                                                    <input type="radio" name="geo"  value="No"> No
+                                                    <label>Geopolitically Located:</label>
+                                                    <br>
+                                                    <label><input  type="radio" v-model="form.geoLocated" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.geoLocated" value="0"  tabindex=""/> No</label>
                                                 </div>
                                             </div> 
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>SEN School:<span class="text-danger">*</span></label><br>
-                                                    <input type="radio" name="sen"  value="Yes"> Yes
-                                                    <input type="radio" name="sen"  value="No"> No
+                                                    <label>SEN School:<span class="text-danger">*</span></label>
+                                                    <br>
+                                                    <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.senSchool" value="0"  tabindex=""/> No</label>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Co-located with Parent School:</label><br>
-                                                    <input type="radio" name="parent"  value="Yes"> Yes
-                                                    <input type="radio" name="parent"  value="No"> No
+                                                    <label>Co-located with Parent School:</label>
+                                                    <br>
+                                                    <label><input  type="radio" v-model="form.coLocated" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.coLocated" value="0"  tabindex=""/> No</label>
                                                 </div>
                                             </div>
                                             <div class="row form-group">
@@ -219,41 +212,17 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <ul>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;PP</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;I</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;II</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;III</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;IV</label></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <ul>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;V</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VI</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VII</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VIII</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <ul>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                                        <li><input type="checkbox" id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                                        <ul id="xlsection"  style="display:none" class="pl-4">
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                                        </ul>
-                                                    <li><input type="checkbox" id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                                        <ul id="xlisection" style="display:none" class="pl-4">
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                                        </ul>
-                                                    </ul>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                                    <span v-for="(item, key, index) in  classList" :key="index">
+                                                        <br>
+                                                        <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                                        <span v-for="(stm, key, index) in streamList" :key="index" >
+                                                            <span v-if="item.class=='XI' || item.class=='XII'">
+                                                                <br>
+                                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                                            </span>
+                                                        </span>
+                                                    </span> 
                                                 </div>
                                             </div>
                                         </div>
@@ -268,11 +237,11 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Name:<span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control currentDetails" id="afterChangeName"/>
+                                                    <input type="text" class="form-control currentDetails" id="" v-model="form.name1"/>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Level:<span class="text-danger">*</span></label>
-                                                    <select name="category" id="afterChangeLevel" class="form-control currentDetails">
+                                                    <select name="category" v-model="form.category1" id="afterChangeLevel" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Higher Secondary School</option>
                                                         <option value="2">Middle Secondary School</option>
@@ -292,7 +261,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Dzongkhag:<span class="text-danger">*</span></label>
-                                                    <select name="dzongkhag" id="afterChangeDzongkhag" class="form-control currentDetails">
+                                                    <select name="dzongkhag" v-model="form.dzongkhag1" id="afterChangeDzongkhag" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Thimphu</option>
                                                         <option value="2">Paro</option>
@@ -304,7 +273,7 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Gewog:<span class="text-danger">*</span></label>
-                                                    <select name="category" id="afterChangeGewog" class="form-control currentDetails">
+                                                    <select name="category" v-model="form.gewog1" id="afterChangeGewog" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Kabisa</option>
                                                         <option value="2">Babesa</option>
@@ -314,7 +283,7 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Chiwog:<span class="text-danger">*</span></label>
-                                                    <select name="category" id="afterChangeChiwog" class="form-control currentDetails">
+                                                    <select name="chiwog" v-model="form.chiwog1" id="afterChangeChiwog" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">olakha</option>
                                                         <option value="2">chngbandu</option>
@@ -324,34 +293,36 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Location Category:</label>
-                                                    <select name="category" id="afterChangeLocationCategory" class="form-control currentDetails">
+                                                    <select name="location1" v-model="form.location1" id="" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="2">Urban grade 1</option>
                                                         <option value="1">Urban grade 2</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Geopolitically Located:</label><br>
-                                                    <input type="radio" name="geo" value="Yes"> Yes
-                                                    <input type="radio" name="geo" value="No"> No
+                                                    <label>Geopolitically Located:</label>
+                                                    <br>
+                                                    <label><input  type="radio" v-model="form.geoLocated1" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.geoLocated1" value="0"  tabindex=""/> No</label>
                                                 </div>
                                             </div> 
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>SEN School:<span class="text-danger">*</span></label><br>
-                                                    <input type="radio" name="sen" value="Yes"> Yes
-                                                    <input type="radio" name="sen" value="No"> No
+                                                    <label>SEN School:<span class="text-danger">*</span></label>
+                                                    <br>
+                                                    <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Co-located with Parent School:</label><br>
-                                                    <input type="radio" name="parent" value="Yes"> Yes
-                                                    <input type="radio" name="parent" value="No"> No
+                                                    <label><input  type="radio" v-model="form.parentSchool" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.parentSchool" value="0"  tabindex=""/> No</label>
                                                 </div>
                                             </div>
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Parent School:</label>
-                                                    <select name="category" id="afterChangeParentSchool" class="form-control currentDetails">
+                                                    <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
                                                         <option value="">--- Please Select ---</option>
                                                         <option value="1">Kabisa</option>
                                                     </select>
@@ -365,42 +336,18 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <ul>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;PP</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;I</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;II</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;III</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;IV</label></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <ul>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;V</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VI</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VII</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VIII</label></li>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                                        
-                                                    </ul>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <ul>
-                                                        <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                                        <li><input type="checkbox" id="xlsections_check" @click="showchild1('xlsections')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                                        <ul id="xlsections"  style="display:none" class="pl-4">
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                                        </ul>
-                                                    <li><input type="checkbox" id="xlisections_check" @click="showchild1('xlisections')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                                        <ul id="xlisections" style="display:none" class="pl-4">
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                                        </ul>
-                                                    </ul>
-                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                                <span v-for="(item, key, index) in  classList" :key="index">
+                                                    <br>
+                                                    <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                                    <span v-for="(stm, key, index) in streamList" :key="index" >
+                                                        <span v-if="item.class=='XI' || item.class=='XII'">
+                                                            <br>
+                                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                                        </span>
+                                                    </span>
+                                                </span> 
+                                            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -423,7 +370,10 @@
 export default {
     data(){
         return{
-
+            form: new form({
+                id: '',name:'',
+                
+            }),
         }
     },
     methods:{
@@ -463,22 +413,6 @@ export default {
             }
         },
 
-        showchild(type){
-            if($('#'+type+'_check').prop('checked')){
-                $('#'+type).show();
-            }
-            else{
-                $('#'+type).hide();
-            }
-        },
-        showchild1(type){
-            if($('#'+type+'_check').prop('checked')){
-                $('#'+type).show();
-            }
-            else{
-                $('#'+type).hide();
-            }
-        },
     }
 }
 </script>

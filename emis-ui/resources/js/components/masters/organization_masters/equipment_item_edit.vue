@@ -13,7 +13,8 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Equipment Type:<span class="text-danger">*</span></label> 
                         <select name="type" class="form-control" v-model="form.equipmentType" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="equipmentType" @change="remove_err('equipmentType')">
-                            <option selected value="">--- Please Select ---</option>
+                            <option value="">--- Please Select ---</option>
+                            <option v-for="(item, index) in equipmentTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="sub_name"></has-error>
                     </div>
@@ -43,6 +44,7 @@
 export default {
     data(){
         return{
+            equipmentTypeList:[],
             count:10,
             form: new form({
                 id: '',
@@ -82,15 +84,28 @@ export default {
                 })
             }
 		},
+        getEquipmentType(uri = '/masters/getEquipmentTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.equipmentTypeList = data;
+            });
+        },
+    },
+        
+    
+     created() {
+        this.getEquipmentType();
     },
 
-    created() {
+    mounted(){
         this.form.equipmentItem=this.$route.params.data.equipmentItem;
-        this.form.equipmentType=this.$route.params.data.equipmentType;
+        this.form.equipmentType=this.$route.params.data.equipmentTypeId;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
-        this.form.action_type=this.$route.params.data.action;
     },
+   
+    
 }
 </script>

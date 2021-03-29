@@ -12,7 +12,8 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Equipment Type:<span class="text-danger">*</span></label> 
                         <select name="type" class="form-control" v-model="form.equipmentType" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="equipmentType" @change="remove_err('equipmentType')">
-                            <option selected value="">--- Please Select ---</option>
+                            <option value="">--- Please Select ---</option>
+                            <option v-for="(item, index) in equipmentTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="sub_name"></has-error>
                     </div>
@@ -42,6 +43,7 @@
 export default {
     data(){
         return{
+            equipmentTypeList:[],
             count:10,
             form: new form({
                 id: '',
@@ -82,23 +84,16 @@ export default {
             }
 		},
 
-        /**
-         * method to get equipment Item dropdown
-         */
-        getEquipmentType:function(){
-            axios.get('masters/getEquipmentTypeDropdown')
+        getEquipmentType(uri = 'masters/getEquipmentTypeDropdown'){
+            axios.get(uri)
             .then(response => {
-                let equipmentTypeList = response.data;
-                let innerhtml='<option value ="">--- Please Select --- </option>';
-                for(var i=0;i < equipmentTypeList.length;i++){
-                    innerhtml+= '<option value='+ equipmentTypeList[i].id+'>'+ equipmentTypeList[i].name +'</option>'
-                }
-                $("#equipmentType").html(innerhtml);
-            })
-        }
+                let data = response.data;
+                this.equipmentTypeList = data;
+            });
+        },
     },
 
-    created(){
+    mounted(){
         this.getEquipmentType();
     }
 }

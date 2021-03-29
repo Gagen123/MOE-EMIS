@@ -162,4 +162,20 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     });
 
+    $router->group(['prefix' => 'organization/changeDetails'], function () use ($router) {
+        $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
+        $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
+
+    });
+
+    $router->group(['prefix' => 'organization/merger'], function () use ($router) {
+        $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
+
+    });
+
+    $router->group(['prefix' => 'organization/closure'], function () use ($router) {
+        $router->post('/saveClosure', 'restructuring\ClosureController@saveClosure');
+
+    });
+
 });

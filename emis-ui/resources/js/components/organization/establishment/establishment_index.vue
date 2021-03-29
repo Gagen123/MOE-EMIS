@@ -13,7 +13,7 @@
             <li class="nav-item pr-1"  @click="activatelink('volunteer')">
                 <router-link id="volunteer" to="/establishment" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                   New Application
+                   New Establishment
                 </router-link>
             </li> 
             <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
@@ -26,6 +26,12 @@
                 <router-link to="/headQuaterOffice1" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     HQ/Dzongkhag Office
+                </router-link>
+            </li>
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/sample" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Sample
                 </router-link>
             </li>
         </ul>

@@ -13,7 +13,7 @@ class CreateEstablishmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('establishments', function (Blueprint $table) {
+        Schema::create('application_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('proposedName');
             $table->tinyInteger('category');
@@ -30,8 +30,12 @@ class CreateEstablishmentsTable extends Migration
             $table->string('fullName')->nullable(true);
             $table->integer('phoneNo')->nullable(true);
             $table->string('email')->nullable(true);
-            $table->tinyInteger('statusId')->nullable(true);
+            $table->string('status')->nullable(true);
             $table->string('applicationNo');
+            $table->string('service');
+            $table->integer('oldOrganizationId1')->nullable(true);
+            $table->integer('oldOrganizationId2')->nullable(true);
+            $table->string('year')->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

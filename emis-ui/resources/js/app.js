@@ -488,6 +488,8 @@ const routes = [
   children:[
    
     { path: '/establishment', component: require('./components/organization/establishment/establishment.vue').default },
+    { path: '/sample', component: require('./components/organization/establishment/sample.vue').default },
+
   ] 
 },
 

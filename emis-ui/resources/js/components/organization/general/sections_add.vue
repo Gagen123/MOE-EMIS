@@ -7,7 +7,6 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>School:<span class="text-danger">*</span></label> 
                             <select name="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="school" @change="remove_err('school')">
-                                <!-- <option selected value="">--- Please Select ---</option> -->
                                 <option value="">--- Please Select ---</option>
                                 <option value="1">Yangchenphug</option>
                             </select>
@@ -16,7 +15,6 @@
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Class:<span class="text-danger">*</span></label> 
                             <select name="class" class="form-control" v-model="form.classes" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="classes" @change="remove_err('classes')">
-                                <!-- <option selected value="">--- Please Select ---</option> -->
                                 <option value="">--- Please Select ---</option>
                                 <option value="1">IX</option>
                                 <option value="2">X</option>

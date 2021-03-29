@@ -31,7 +31,7 @@ class EquipmentItemController extends Controller
     public function loadEquipmentItem(){
         $subCategory = DB::table('equipment_items as a')
             ->join('equipment_type as b', 'b.id', '=', 'a.equipmentType')
-            ->select('a.id as id', 'a.equipmentItem as equipmentItem','b.name as equipmentType',
+            ->select('a.id as id', 'a.equipmentItem as equipmentItem','b.name as equipmentType','b.id as equipmentTypeId',
             'a.description as description','a.status as status')->get();
             return $subCategory;
     }
@@ -77,7 +77,6 @@ class EquipmentItemController extends Controller
     */
     
     public function getEquipmentTypeDropdown(){
-        $subCategory = EquipmentType::all();
-        return $subCategory;
+        return EquipmentType::get(['id','name']);
     }
 }

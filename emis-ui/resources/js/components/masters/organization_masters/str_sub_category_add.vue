@@ -6,7 +6,8 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Structure Category:<span class="text-danger">*</span></label> 
                         <select name="type" class="form-control" v-model="form.structureCategory" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="structureCategory" @change="remove_err('structureCategory')">
-                            <option selected value="">--- Please Select ---</option>
+                            <option value="">--- Please Select ---</option>
+                            <option v-for="(item, index) in structureCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="spo_name"></has-error>
                     </div>
@@ -41,6 +42,7 @@
 export default {
     data(){
         return{
+             structureCategoryList:[],
             count:10,
             form: new form({
                 id: '',
@@ -80,20 +82,13 @@ export default {
             }
 		},
 
-        /**
-         * method to get structure category dropdown
-         */
-        getStructureCategory:function(){
-            axios.get('masters/getStrCategoryDropdown')
+        getStructureCategory(uri = '/masters/getStrCategoryDropdown'){
+            axios.get(uri)
             .then(response => {
-                let structureCategoryList = response.data;
-                let innerhtml='<option value ="">--- Please Select --- </option>';
-                for(var i=0;i < structureCategoryList.length;i++){
-                    innerhtml+= '<option value='+ structureCategoryList[i].id+'>'+ structureCategoryList[i].name +'</option>'
-                }
-                $("#structureCategory").html(innerhtml);
-            })
-        }
+                let data = response.data;
+                this.structureCategoryList = data;
+            });
+        },
     },
 
     created(){
