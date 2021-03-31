@@ -11,24 +11,25 @@
                             <th>Sex</th> 
                             <th>Position Title</th>    
                             <th>Working Agency</th>
-                            <th>Type</th>    
+                            <th>Email</th>
+                            <th>Contact No.</th>
                             <th>Action</th>                     
                         </tr>
                     </thead> 
                     <tbody>
-                        
-                        <tr>
-                            <td> 5</td>
-                            <td>20203323321</td>
-                            <td>Sonam Tshomo</td>
-                            <td>Female</td>
-                            <td>Teacher</td>
-                            <td> Mothithang HSS</td>
-                            <td> Volunteer</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_staff')"><i class="fa fa-edit"></i> Edit</button>
+                        <tr v-for="(item, index) in substaffList" :key="index">
+                            <td>{{ index+1}}</td>
+                            <td>{{ item.emp_type_id}}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.gender.name}}</td>
+                            <td>{{ item.position_title.name}}</td>
+                            <td>{{ item.working_agency_id}}</td>
+                            <td>{{ item.email}}</td>
+                            <td>{{ item.contact_no}}</td>
+                            <td>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
                             </td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -40,14 +41,25 @@ export default {
     data(){
         return{ 
             totle:0,
+            substaffList:[],
         } 
     },
     methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
+        loadeditpage(staff){
+            this.$router.push({name:"edit_private_staff",params:{data:staff}});
 		},
+        loadstff(){
+            axios.get('staff/loadAllStaff/Private')
+            .then((response) => {  
+                this.substaffList =  response.data.data;
+             })
+            .catch((error) => {  
+                console.log("Error."+error);
+            });
+        },
     },
     mounted() {
+        this.loadstff();
         $("#training-table").DataTable({
             "responsive": true,
             "autoWidth": true,

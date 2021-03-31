@@ -513,7 +513,7 @@ export default {
                 sex_id:'',
                 dob:'',
                 marital_status:'',
-                country_id:'c879c252-b4f7-4ab6-964b-1661ae9f0aa5',//insert id of bhutan to preselect
+                country_id:'',
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
@@ -526,6 +526,7 @@ export default {
                 currier_stage:'',
                 emp_file_code:'',
                 remarks:'',
+                status:'Created',
             }),
             qualification_form: new form({
                 personal_id: '',
@@ -744,6 +745,7 @@ export default {
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            this.gewog_list = [];
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -759,6 +761,7 @@ export default {
                 gewogId=id;
             }
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+             this.villageList =[];
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -993,7 +996,7 @@ export default {
         },
         load_staff_qualication(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/load_staff_qualification/'+staff_id;
+                let uri = 'staff/loadStaffQualification/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -1006,7 +1009,7 @@ export default {
         },
         load_staff_nomination(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/load_staff_nomination/'+staff_id;
+                let uri = 'staff/loadStaffNomination/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -1088,13 +1091,13 @@ export default {
                 this.personal_form.village='';
                 this.personal_form.gewog='';
                 this.personal_form.village_id='';
-                if($('#'+id).val()!='c879c252-b4f7-4ab6-964b-1661ae9f0aa5'){
-                    $('#bhutanese_address').hide();
-                    $('#foreign_address').show();
-                }
-                else{
+                if($('#country_id option:selected').text().includes('Bhutan')){
                     $('#bhutanese_address').show();
                     $('#foreign_address').hide();
+                }
+                else{
+                    $('#bhutanese_address').hide();
+                    $('#foreign_address').show();
                 }
                 this.personal_form.country_id=$('#'+id).val();
             }

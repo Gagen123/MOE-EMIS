@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\QualificationDetails;
 use App\Models\staff\Nomination;
+use App\Models\staff\TransferWindow;
 use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller{
@@ -23,7 +24,6 @@ class StaffController extends Controller{
         if($request->personal_id==""){
             $rules = [
                 'emp_type'              =>  'required',
-                'marital_status'        =>  'required',
                 'cid_work_permit'       =>  'required|unique:stf_staff',
                 'name'                  =>  'required',
                 'sex_id'                =>  'required',
@@ -35,10 +35,16 @@ class StaffController extends Controller{
                 'comp_sub'              =>  'required',
                 'elective_sub1'         =>  'required',
                 'currier_stage'         =>  'required',
-                'emp_file_code'         =>  'required',
             ];
+            if($request->emp_type=="Regular" || $request->emp_type=="Volunteer"){
+                $rules=array_merge($rules,
+                    array('marital_status'        =>  'required',
+                    'emp_file_code'         =>  'required',)
+                );
+            }
             $this->validate($request, $rules);
         }
+        
         $data =[
             'emp_type_id'           =>  $request->emp_type,
             'cid_work_permit'       =>  $request->cid_work_permit,
@@ -59,9 +65,24 @@ class StaffController extends Controller{
             'cureer_stagge_id'      =>  $request->currier_stage,
             'employee_code'         =>  $request->emp_file_code,
             'remarks'               =>  $request->remarks,
-            'created_by'            =>  $request->user_id,
-            'created_at'            =>  date('Y-m-d h:i:s')
+            'status'                =>  $request->status,
         ];
+        
+        if($request->status=="Pending"){
+            $data=array_merge($data,
+                array('created_by'            =>  $request->user_id,
+                      'created_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+        }
+        if($request->status=="Created"){
+            $data=array_merge($data,
+                array('updated_by'            =>  $request->user_id,
+                      'updated_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+        }
+        
         if($request->personal_id==""){
             $response_data = PersonalDetails::create($data);
         }
@@ -73,12 +94,18 @@ class StaffController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
-    public function loaddraftpersonalDetails(Request $request,$user_id=""){
-        return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->first());
+    public function loaddraftpersonalDetails(Request $request,$type="",$user_id=""){
+        if($type=="Private"){
+            return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->where('emp_type_id',$type)->first());
+        }
+        else{
+            $emp_type=['Regular','Volunteer'];
+            return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->wherein('emp_type_id',$emp_type)->first());
+        }
     }
     
-    public function loadpersonalDetails($id=""){
-        return $this->successResponse(PersonalDetails::where('id',$id)->where('status','Created')->first());
+    public function loadpersonalDetails($status="",$id=""){
+        return $this->successResponse(PersonalDetails::where('id',$id)->where('status',$status)->first());
     }
 
     public function savequalificationDetails(Request $request){
@@ -107,10 +134,22 @@ class StaffController extends Controller{
             'country'               =>  $request->country,
             'startdate'             =>  $request->startdate,
             'enddate'               =>  $request->enddate,
-            'created_by'            =>  $request->user_id,
             'status'                =>  $request->status,
-            'created_at'            =>  date('Y-m-d h:i:s')
         ];
+        if($request->status=="Pending"){
+            $data=array_merge($data,
+                array('created_by'            =>  $request->user_id,
+                      'created_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+        }
+        if($request->status=="Created"){
+            $data=array_merge($data,
+                array('updated_by'            =>  $request->user_id,
+                      'updated_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+        }
         if($request->action_type=="add"){
             $response_data = QualificationDetails::create($data);
         }
@@ -122,10 +161,10 @@ class StaffController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
-    public function load_qualification($staff_id="",$user_id=""){
+    public function loadQualification($staff_id="",$user_id=""){
         return $this->successResponse(QualificationDetails::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
     }
-    public function load_staff_qualification($staff_id=""){
+    public function loadStaffQualification($staff_id=""){
         return $this->successResponse(QualificationDetails::where('personal_id',$staff_id)->where('status','Created')->get());
     }
 
@@ -164,10 +203,22 @@ class StaffController extends Controller{
             'nomi_email'                        =>  $request->nomi_email,
             'nomi_relation'                     =>  $request->nomi_relation,
             'nomi_percentage'                   =>  $request->nomi_percentage,
-            'created_by'                        =>  $request->user_id,
             'status'                            =>  $request->status,
-            'created_at'                        =>  date('Y-m-d h:i:s')
         ];
+        if($request->status=="Pending"){
+            $nomination_details=array_merge($nomination_details,
+                array('created_by'            =>  $request->user_id,
+                      'created_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+        }
+        if($request->status=="Created"){
+            $nomination_details=array_merge($nomination_details,
+                array('updated_by'            =>  $request->user_id,
+                      'updated_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+        }
         if($request->action_type=="add"){
             $response_data = Nomination::create($nomination_details);
         }
@@ -179,10 +230,10 @@ class StaffController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    public function load_nominations($staff_id="",$user_id=""){
+    public function loadNominations($staff_id="",$user_id=""){
         return $this->successResponse(Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
     }
-    public function load_staff_nomination($staff_id=""){
+    public function loadStaffNomination($staff_id=""){
         return $this->successResponse(Nomination::where('personal_id',$staff_id)->where('status','Created')->get());
     }
     
@@ -206,6 +257,22 @@ class StaffController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
+    public function updatefinalPrivatestaffDetails(Request $request){
+        $response_data=[];
+        $final_details =[
+            'status'           =>  'Created',
+            'created_by'       =>  $request->user_id,
+            'created_at'       =>  date('Y-m-d h:i:s')
+        ];
+        $act_det = PersonalDetails::where('id', $request->personal_id)->firstOrFail();
+        $act_det->fill($final_details);
+        $response_data=$act_det->save();
+
+        QualificationDetails::where('personal_id', '=',$request->personal_id)->where('status', 'Pending')
+        ->update($final_details);
+
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
     
     public function loadAllStaff($type=""){
         if(strpos($type,',')){
@@ -218,7 +285,66 @@ class StaffController extends Controller{
         else{
             return $this->successResponse(PersonalDetails::where('emp_type_id',$type)->where('status','Created')->get());
         }
+    }
+    
+    public function getemisusers($empId=""){
+        return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->first());
+    }
+
+    public function saveTransferWindow(Request $request){
+        $response_data=[];
+        $rules = [
+            'from_date'                         =>  'required',
+            'to_date'                           =>  'required | date | after:from_date',
+        ];
+        $customMessages = [
+            'from_date.required'                => 'Please select from date',
+            'to_date.required'                  => 'Please select to date',
+        ];
+        if($request->action_type=="add"){
+            $rules=array_merge($rules,
+                array(
+                'year'                              =>  'required |unique:stf_transfer_window',)
+            );
+            $customMessages=array_merge($customMessages,
+                array(
+                    'year.required'                     => 'Current Year is required',
+                    'year.unique'                       => 'Current Year is already recorded',
+                )
+            );
+        }
+        $this->validate($request, $rules,$customMessages);
         
+        $data =[
+            'year'                              =>  $request->year,
+            'from_date'                         =>  $request->from_date,
+            'to_date'                           =>  $request->to_date,
+            'remarks'                           =>  $request->remarks,
+            'status'                            =>  $request->status,
+        ];
+        if($request->action_type=="add"){
+            $data=array_merge($data,
+                array('created_by'            =>  $request->user_id,
+                      'created_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+            $response_data = TransferWindow::create($data);
+        }
+        else if($request->action_type=="edit"){
+            $data=array_merge($data,
+                array('updated_by'            =>  $request->user_id,
+                      'updated_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+            $act_det = TransferWindow::where ('id', $request->id)->firstOrFail();
+            $act_det->fill($data);
+            $response_data=$act_det->save();
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function loadTransferWindow(){
+        return $this->successResponse(TransferWindow::all());
     }
     
 }

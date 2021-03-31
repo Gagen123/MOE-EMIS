@@ -277,13 +277,28 @@ const routes = [
           // { path: '/create_civil_staff',name:'create_civil_staff',  component: require('./components/staff/civil/create_staff.vue').default },
         ],
       },
+
       { path: '/private_staff', 
         component: require('./components/staff/private/private_staff_index.vue').default,
         children:[
           { path: '/',name:'private_staff',  component: require('./components/staff/private/private_staff_list.vue').default },
-          { path: '/create_pricate_staff', component: require('./components/staff/private/create_pricate_staff.vue').default },
+          { path: '/list_private_staff',name:'list_private_staff',  component: require('./components/staff/private/private_staff_list.vue').default },
+          { path: '/create_private_staff',name:'create_private_staff', component: require('./components/staff/private/create_private_staff.vue').default },
+          { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
         ],
       },
+      
+      { path: '/transfer_window_index', 
+        component: require('./components/staff/transfer_window/transfer_window_index.vue').default,
+        children:[
+          { path: '/', name:'transfer_window_index',  component: require('./components/staff/transfer_window/transfer_window_list.vue').default },
+          { path: '/list_transfer_window',name:'list_transfer_window',  component: require('./components/staff/transfer_window/transfer_window_list.vue').default },
+          { path: '/create_transfer_window',name:'create_transfer_window', component: require('./components/staff/transfer_window/create_transfer_window.vue').default },
+          { path: '/edit_transfer_window', name:'edit_transfer_window', component: require('./components/staff/transfer_window/edit_transfer_window.vue').default },
+        ],
+      },
+
+
     ]
   },
 

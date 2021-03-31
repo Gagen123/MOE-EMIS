@@ -24,20 +24,27 @@ $router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
-        $router->get('/loaddraftpersonalDetails/{user_id}', ['uses' => 'staff\StaffController@loaddraftpersonalDetails']);
-        $router->get('/loadpersonalDetails/{id}', ['uses' => 'staff\StaffController@loadpersonalDetails']);
+        $router->get('/loaddraftpersonalDetails/{type}/{user_id}', ['uses' => 'staff\StaffController@loaddraftpersonalDetails']);
+        $router->get('/loadpersonalDetails/{status}/{id}', ['uses' => 'staff\StaffController@loadpersonalDetails']);
         
         $router->post('/savequalificationDetails', ['uses' => 'staff\StaffController@savequalificationDetails']);
-        $router->get('/load_qualification/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@load_qualification']);
-        $router->get('/load_staff_qualification/{staff_id}', ['uses' => 'staff\StaffController@load_staff_qualification']);
+        $router->get('/loadQualification/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@loadQualification']);
+        $router->get('/loadStaffQualification/{staff_id}', ['uses' => 'staff\StaffController@loadStaffQualification']);
         
         $router->post('/savenominationDetails', ['uses' => 'staff\StaffController@savenominationDetails']);
-        $router->get('/load_nominations/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@load_nominations']);
-        $router->get('/load_staff_nomination/{staff_id}', ['uses' => 'staff\StaffController@load_staff_nomination']);
+        $router->get('/loadNominations/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@loadNominations']);
+        $router->get('/loadStaffNomination/{staff_id}', ['uses' => 'staff\StaffController@loadStaffNomination']);
         
         
         $router->post('/updatefinalstaffDetails', ['uses' => 'staff\StaffController@updatefinalstaffDetails']);
+        $router->post('/updatefinalPrivatestaffDetails', ['uses' => 'staff\StaffController@updatefinalPrivatestaffDetails']);
+        
         $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
+
+        $router->get('/getemisusers/{empId}', ['uses' => 'staff\StaffController@getemisusers']);
+
+        $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
+        $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);
         
     });
 });

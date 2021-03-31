@@ -29,7 +29,7 @@ class StfPersonalDetails extends Migration{
             $table->foreign('elective_sub_id2')->references('id')->on('master_stf_subject');
             $table->char('cureer_stagge_id',36)->nullable(false);
             $table->foreign('cureer_stagge_id')->references('id')->on('master_stf_cureer_stage');
-            $table->char('employee_code',100)->nullable(false);
+            $table->char('employee_code',100)->nullable(true);
             $table->string('remarks')->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
