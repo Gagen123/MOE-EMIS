@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Schema;
 class Gewog extends Migration{
     public function up() {
         Schema::create('gewog_master', function (Blueprint $table) {
-            $table->char('id',36)->unique()->primary();
-            $table->char('dzongkhag_id',36)->nullable(false);
+            $table->increments('id',11);
+            $table->integer('dzongkhag_id')->length(11)->unsigned();
             $table->foreign('dzongkhag_id')->references('id')->on('dzongkhag_master');
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);

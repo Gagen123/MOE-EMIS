@@ -8,6 +8,7 @@ class StfPersonalDetails extends Migration{
     public function up(){
         Schema::create('stf_staff', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
+            $table->string('emp_id',20)->nullable(true);
             $table->char('emp_type_id',36)->nullable(false);
             $table->string('name',250)->nullable(false);
             $table->string('cid_work_permit',100)->nullable(false);
@@ -29,7 +30,7 @@ class StfPersonalDetails extends Migration{
             $table->foreign('elective_sub_id2')->references('id')->on('master_stf_subject');
             $table->char('cureer_stagge_id',36)->nullable(false);
             $table->foreign('cureer_stagge_id')->references('id')->on('master_stf_cureer_stage');
-            $table->char('employee_code',100)->nullable(false);
+            $table->char('employee_code',100)->nullable(true);
             $table->string('remarks')->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);

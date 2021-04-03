@@ -4,12 +4,11 @@ namespace App\Models\global_masters;
 use App\Models\global_masters\Gewog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Village extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory;
     protected $table="village_master";
     public $timestamps = false;
     protected $fillable = [

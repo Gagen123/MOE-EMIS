@@ -6,10 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 class Dzongkhag extends Migration
 {
-    
     public function up() {
         Schema::create('dzongkhag_master', function (Blueprint $table) {
-            $table->char('id',36)->unique()->primary();
+            $table->increments('id',11);
             $table->string('name',150)->nullable(false);
             $table->string('code',150)->nullable(false);
             $table->boolean('status')->default(1);
