@@ -135,6 +135,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization/location'], function () use ($router) {
         // locations route
         $router->post('/saveLocation', 'generalInformation\LocationsController@saveLocation');
+        $router->get('/getDisasterListInCheckbox', 'generalInformation\LocationsController@getDisasterListInCheckbox');
 
    });
 
@@ -150,6 +151,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getCategoryInDropdown', 'structuralFacility\InfrastructureController@getCategoryInDropdown');
         $router->get('/getSubCategoryInDropdown/{categoryId}', 'structuralFacility\InfrastructureController@getSubCategoryInDropdown');
         $router->get('/getStructureFacilityInDropdown', 'structuralFacility\InfrastructureController@getStructureFacilityInDropdown');
+        $router->get('/loadInfrastructureList', 'structuralFacility\InfrastructureController@loadInfrastructureList');
     });
 
     $router->group(['prefix' => 'organization/establishment'], function () use ($router) {
@@ -159,12 +161,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
         $router->get('/getClass', 'establishment\EstablishmentController@getClass');
         $router->get('/getStream', 'establishment\EstablishmentController@getStream');
-
+        $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
     });
 
     $router->group(['prefix' => 'organization/changeDetails'], function () use ($router) {
         $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
         $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
+    });
+
+    $router->group(['prefix' => 'organization/bifurcation'], function () use ($router) {
+        $router->post('/saveBifurcation', 'restructuring\BifurcationController@saveBifurcation');
+        $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
 
     });
 

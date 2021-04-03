@@ -99,6 +99,9 @@
                 </div>
             </div>
                 
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label class="mb-0">Contact Details</label>
+            </div>    
             <div class="card">
                 <div class="form-group row">
                     <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">

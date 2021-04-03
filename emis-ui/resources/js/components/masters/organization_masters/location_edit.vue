@@ -9,7 +9,6 @@
                         <input class="form-control" v-model="form.locationName" :class="{ 'is-invalid': form.errors.has('locationName') }" id="locationName" @change="remove_err('locationName')" type="text">
                         <has-error :form="form" field="locationName"></has-error>
                     </div>
-                    
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>

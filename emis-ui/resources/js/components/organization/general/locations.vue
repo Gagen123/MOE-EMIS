@@ -80,10 +80,10 @@
                             <has-error :form="form" field="compoundArea"></has-error>
                         </div> 
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <label >Disaster risks:</label>
-                            <br><input type="checkbox" value="1"> Flood &nbsp;
-                            <input type="checkbox" value="2"> Landslide&nbsp;
-                            <input type="checkbox" value="3"> Windstrom&nbsp;
+                            <label >Disaster risks:</label><br>
+                            <span v-for="(item, key, index) in  disasterList" :key="index">
+                                <input type="checkbox" v-model="form.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                            </span>
                         </div>
                     </div>
 
@@ -139,18 +139,19 @@
 export default {
     data(){
         return{
+            disasterList:[],
             form: new form({
                 id: '', organizationId:'1',landOwnership: '1',compoundFencing: '1',entranceGate: '1',longitude: '',
                 latitude: '',altitude: '',thramNo: '', cid:'', name: '',compoundArea: '',
-                action_type:'add',
+                action_type:'add', disaster:[]
             }),
         }
     },
 
     methods:{
         getLat: function(){
-            $("#latitude").val(27.514162);
-            $("#longitude").val(90.433601);
+            this.form.latitude = 27.514162;
+            this.form.longitude = 90.433601;
         },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -174,6 +175,20 @@ export default {
                 })
             }
 		},
+
+        /**
+         * method to get disaster list in checkbox
+         */
+        getDisasterList:function(){
+            axios.get('/organization/getDisasterListInCheckbox')
+              .then(response => {
+                this.disasterList = response.data;
+            });
+        },
+    },
+
+    mounted(){
+        this.getDisasterList();
     }
 }
 </script>

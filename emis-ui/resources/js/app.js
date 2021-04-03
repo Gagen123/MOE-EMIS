@@ -303,13 +303,13 @@ const routes = [
         ]    
       },
       { path: '/disaster_index', 
-        component: require('./components/masters/organization_masters/disaster_index.vue').default ,
+        component: require('./components/masters/organization_masters/disaster/disaster_index.vue').default ,
         children: 
         [
-          { path: '', component: require('./components/masters/organization_masters/disaster_list.vue').default },
-          { path: '/disaster_add', name:'DisasterAdd', component: require('./components/masters/organization_masters/disaster_add.vue').default },
-          { path: '/disaster_edit', name:'DisasterEdit', component: require('./components/masters/organization_masters/disaster_edit.vue').default },
-          { path: '/disaster_list', name:'DisasterList', component: require('./components/masters/organization_masters/disaster_list.vue').default },
+          { path: '', component: require('./components/masters/organization_masters/disaster/disaster_list.vue').default },
+          { path: '/disaster_add', name:'DisasterAdd', component: require('./components/masters/organization_masters/disaster/disaster_add.vue').default },
+          { path: '/disaster_edit', name:'DisasterEdit', component: require('./components/masters/organization_masters/disaster/disaster_edit.vue').default },
+          { path: '/disaster_list', name:'DisasterList', component: require('./components/masters/organization_masters/disaster/disaster_list.vue').default },
                   
         ]    
       },
@@ -406,23 +406,23 @@ const routes = [
       },
 
       { path: '/equipment_item_index', 
-        component: require('./components/masters/organization_masters/equipment_item_index.vue').default ,
+        component: require('./components/masters/organization_masters/equipment_item/equipment_item_index.vue').default ,
         children: 
         [
-          { path: '', component: require('./components/masters/organization_masters/equipment_item_list.vue').default },
-          { path: '/equipment_item_add', name:'EquipmentItemAdd', component: require('./components/masters/organization_masters/equipment_item_add.vue').default },
-          { path: '/equipment_item_edit', name:'EquipmentItemEdit', component: require('./components/masters/organization_masters/equipment_item_edit.vue').default },
-          { path: '/equipment_item_list', name:'EquipmentItemList', component: require('./components/masters/organization_masters/equipment_item_list.vue').default },
+          { path: '', component: require('./components/masters/organization_masters/equipment_item/equipment_item_list.vue').default },
+          { path: '/equipment_item_add', name:'EquipmentItemAdd', component: require('./components/masters/organization_masters/equipment_item/equipment_item_add.vue').default },
+          { path: '/equipment_item_edit', name:'EquipmentItemEdit', component: require('./components/masters/organization_masters/equipment_item/equipment_item_edit.vue').default },
+          { path: '/equipment_item_list', name:'EquipmentItemList', component: require('./components/masters/organization_masters/equipment_item/equipment_item_list.vue').default },
         ]    
       },
       { path: '/class_index', 
-        component: require('./components/masters/organization_masters/class_index.vue').default ,
+        component: require('./components/masters/organization_masters/class/class_index.vue').default ,
         children: 
         [
-          { path: '', component: require('./components/masters/organization_masters/class_list.vue').default },
-          { path: '/class_add', name:'ClassAdd', component: require('./components/masters/organization_masters/class_add.vue').default },
-          { path: '/class_edit', name:'ClassEdit', component: require('./components/masters/organization_masters/class_edit.vue').default },
-          { path: '/class_list', name:'ClassList', component: require('./components/masters/organization_masters/class_list.vue').default },
+          { path: '', component: require('./components/masters/organization_masters/class/class_list.vue').default },
+          { path: '/class_add', name:'ClassAdd', component: require('./components/masters/organization_masters/class/class_add.vue').default },
+          { path: '/class_edit', name:'ClassEdit', component: require('./components/masters/organization_masters/class/class_edit.vue').default },
+          { path: '/class_list', name:'ClassList', component: require('./components/masters/organization_masters/class/class_list.vue').default },
         ]    
       },
       { path: '/stream_index', 
@@ -511,7 +511,9 @@ const routes = [
           { path: '/sport_list', name:'SportList', component: require('./components/organization/structuralFacility/sport_list.vue').default },
         ]    
       },
-      // { path: '/connectivity', component: require('./components/organization/general/connectivity.vue').default },
+      { path: '/wash', component: require('./components/organization/structuralFacility/wash.vue').default },
+      { path: '/school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
+
     ] 
   },
 
@@ -536,7 +538,7 @@ const routes = [
       children: [
           { path: '/', component: require('./components/organization/restructuring/bifurcation_list.vue').default },
           { path: '/bifurcation_list', component: require('./components/organization/restructuring/bifurcation_list.vue').default },
-          { path: '/bifurcation', component: require('./components/organization/restructuring/bifurcation.vue').default },
+          { path: '/bifurcation', name:'BifurcationAdd', component: require('./components/organization/restructuring/bifurcation.vue').default },
       ]    
   },
 
@@ -545,7 +547,7 @@ const routes = [
       children: [
           { path: '/', component: require('./components/organization/restructuring/closure_list.vue').default },
           { path: '/closure_list', component: require('./components/organization/restructuring/closure_list.vue').default },
-          { path: '/closure', component: require('./components/organization/restructuring/closure.vue').default },
+          { path: '/closure', name:'ClosureAdd', component: require('./components/organization/restructuring/closure.vue').default },
       ]    
   },
 ] 

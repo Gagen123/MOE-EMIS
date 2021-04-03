@@ -19,7 +19,6 @@
                     <td>{{ item.item}}</td>
                     <td>{{ item.location}}</td>
                     <td>{{ item.number}}</td>
-
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -41,6 +40,10 @@ export default {
     },
 
     methods:{
+
+        /**
+         * method ti load equipment list
+         */
         loadEquipmentList(uri = 'organization/loadEquipment'){
             axios.get(uri)
             .then(response => {
@@ -59,6 +62,10 @@ export default {
                 }); 
             }, 300);  
         },
+
+        /**
+         * method to view equipment list
+         */
         viewEquipmentList(data){
             data.action='edit';
             this.$router.push({name:'EquipmentEdit',params: {data:data}});

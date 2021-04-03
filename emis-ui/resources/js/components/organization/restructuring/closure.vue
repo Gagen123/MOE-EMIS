@@ -4,7 +4,7 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Code:</label>
-                    <input type="text" class="form-control" v-model="form.code" readonly/>
+                    <input type="text" id="name" class="form-control" v-model="form.code" readonly/>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Name:</label>
@@ -12,7 +12,9 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Category:</label>
-                    <input type="text" class="form-control" v-model="form.category" readonly/>
+                    <br>
+                    <label><input  type="radio" v-model="form.category" value="1" tabindex=""/> Public</label>
+                    <label><input  type="radio" v-model="form.category" value="0" tabindex=""/> Private</label>
                 </div>
             </div>
             <div class="form-group row">
@@ -54,12 +56,9 @@
                     <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
                 </div>
                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Reason:</label>
-                    <select class="form-control" v-model="form.reason">
-                        <option value="">--Select--</option>
-                        <option value="Closing for reason 1">Closing for reason 1</option>
-                        <option value="Closing for reason 1">Closing for reason 2</option>
-                    </select>
+                    <label class="mb-0">Reason:<span class="text-danger">*</span></label>
+                    <textarea class="form-control" v-model="form.reason" :class="{ 'is-invalid': form.errors.has('reason') }" @change="remove_error('reason')"></textarea>
+                    <has-error :form="form" field="reason"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Remarks:</label>
@@ -79,7 +78,7 @@ export default {
     data(){
         return{
             form: new form({
-                code:'000101',name:'YHSS',category:'Public',level:'HSS',dzongkhag:'Thimphu',
+                code:'',name:'YHSS',category:'1',level:'HSS',dzongkhag:'Thimphu',
                 gewog:'Babesa',chiwog:'Babesa',location:'Urban',
                 geoLocated:'1',senSchool:'0',reason:'',remark:''
             })
@@ -87,6 +86,16 @@ export default {
     },
 
     methods:{
+        /**
+         * method to remove error
+         */
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
+        
         formaction: function(type){
             if(type=="reset"){
                 this.form.reason = '';
@@ -109,7 +118,18 @@ export default {
 
     },
     mounted(){
-        
+        this.form.code=this.$route.params.data.code;
+        this.form.name=this.$route.params.data.name;
+        this.form.category=this.$route.params.data.category;
+        this.form.level=this.$route.params.data.level;
+        this.form.dzongkhag=this.$route.params.data.dzongkhag;
+        this.form.gewog=this.$route.params.data.gewog;
+        this.form.chiwog=this.$route.params.data.chiwog;
+        this.form.location=this.$route.params.data.location;
+        this.form.geoLocated=this.$route.params.data.geoLocated;
+        this.form.senSchool=this.$route.params.data.senSchool;
+        this.form.reason=this.$route.params.data.reason;
+        this.form.remark=this.$route.params.data.remark;
     }
 }
 </script>

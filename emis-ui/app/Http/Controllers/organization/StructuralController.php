@@ -103,6 +103,11 @@ class StructuralController extends Controller
             return $e;
         }
     }
+
+    public function loadInfrastructureList(){
+        $list = $this->apiService->listData('emis/organization/infrastructure/loadInfrastructureList');
+        return $list;
+    }
                             
     public function getCategoryInDropdown(){
         $categoryDropdown = $this->apiService->listData('emis/organization/infrastructure/getCategoryInDropdown');

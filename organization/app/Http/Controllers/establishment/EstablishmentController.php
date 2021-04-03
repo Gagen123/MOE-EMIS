@@ -12,6 +12,8 @@ use App\Models\Masters\Classes;
 use App\Models\Masters\Stream;
 use App\Models\establishment\Establishment;
 use App\Models\establishment\EstablishmentClassStream;
+use Illuminate\Support\Facades\DB;
+
 
 class EstablishmentController extends Controller
 {
@@ -43,51 +45,88 @@ class EstablishmentController extends Controller
      */
     public function saveEstablishment(Request $request){
         $id = $request->id;
-            $estd = [
-            'proposedName'                  =>  $request['proposedName'],
-            'category'                      =>  $request['category'],
-            'levelId'                       =>  $request['level'],
-            'dzongkhagId'                   =>  $request['dzongkhag'],
-            'gewogId'                       =>  $request['gewog'],
-            'chiwogId'                      =>  $request['chiwog'],
-            'locationId'                    =>  $request['locationType'], 
-            'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
-            'isSenSchool'                   =>  $request['senSchool'],
-            'parentSchoolId'                =>  $request['parentSchool'],
-            'isColocated'                   =>  $request['design'],
-            'cid'                           =>  $request['cid'],
-            'fullName'                      =>  $request['name'],
-            'phoneNo'                       =>  $request['phoneNo'],
-            'email'                         =>  $request['email'],
-            'status'                        =>  "Pending",
-            'applicationNo'                 =>  1,
-            'service'                       =>  "New Establishment",
-            'orgId1'                        =>  "",
-            'orgId2'                        =>  "",
-            'year'                          =>  "",
-            ];
-            $establishment = Establishment::create($estd);
+        $applicationNo = 'establishment_' . '0001';
 
-        return $this->successResponse($establishment, Response::HTTP_CREATED);
+        if($id != null){
+            $estd = [
+                'proposedName'                  =>  $request['proposedName'],
+                'category'                      =>  $request['category'],
+                'levelId'                       =>  $request['level'],
+                'dzongkhagId'                   =>  $request['dzongkhag'],
+                'gewogId'                       =>  $request['gewog'],
+                'chiwogId'                      =>  $request['chiwog'],
+                'locationId'                    =>  $request['locationType'], 
+                'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
+                'isSenSchool'                   =>  $request['senSchool'],
+                'parentSchoolId'                =>  $request['parentSchool'],
+                'isColocated'                   =>  $request['design'],
+                'cid'                           =>  $request['cid'],
+                'fullName'                      =>  $request['name'],
+                'phoneNo'                       =>  $request['phoneNo'],
+                'email'                         =>  $request['email'],
+                'status'                        =>  $request['status'],
+                'applicationNo'                 =>  $applicationNo,
+                'service'                       =>  "New Establishment",
+                'updated_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s')
+                ];
+                // $data = Establishment::find($request['id']);
+
+                $establishment = Establishment::where('id', $id)->update($estd);
+                return $this->successResponse($establishment, Response::HTTP_CREATED);
+        }else{
+            $estd = [
+                'proposedName'                  =>  $request['proposedName'],
+                'category'                      =>  $request['category'],
+                'levelId'                       =>  $request['level'],
+                'dzongkhagId'                   =>  $request['dzongkhag'],
+                'gewogId'                       =>  $request['gewog'],
+                'chiwogId'                      =>  $request['chiwog'],
+                'locationId'                    =>  $request['locationType'], 
+                'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
+                'isSenSchool'                   =>  $request['senSchool'],
+                'parentSchoolId'                =>  $request['parentSchool'],
+                'isColocated'                   =>  $request['coLocatedParent'],
+                'cid'                           =>  $request['cid'],
+                'fullName'                      =>  $request['name'],
+                'phoneNo'                       =>  $request['phoneNo'],
+                'email'                         =>  $request['email'],
+                'status'                        =>  "Pending",
+                'applicationNo'                 =>  $applicationNo,
+                'service'                       =>  "New Establishment",
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s')
+                ];
+
+                $establishment = Establishment::create($estd);
+                return $this->successResponse($establishment, Response::HTTP_CREATED);
+        }
     }
 
     /**
-     * method to save sport details
+     * method to save class and stream
      */
     public function saveClassStream(Request $request){
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
+
+        $applicationNo = DB::table('application_details as a')
+                         ->select('a.applicationNo')
+                         ->where('created_by',$request->user_id)
+                         ->where('status', 'pending')
+                         ->get();
+                       
         if($request->stream!="" && sizeof($request->stream)>0){
             foreach ($request->stream as $stm){
                 foreach ($classes as $cls){
                     if(explode('##',$stm)[0]==$cls){
                         $classStream = [
-                            'establishmentId'   => 1,
-                            'classId'           =>$cls,
-                            'streamId'          =>explode('##',$stm)[1],
-                            'created_by'           =>$request->user_id,
-                            'created_at'        =>date('Y-m-d h:i:s'),
+                            'applicationNo'     => $applicationNo[0]->applicationNo,
+                            'classId'           => $cls,
+                            'streamId'          => explode('##',$stm)[1],
+                            'created_by'        => $request->user_id,
+                            'created_at'        => date('Y-m-d h:i:s'),
                             
                         ];
                         if(strpos($inserted_class,$cls)===false){
@@ -101,16 +140,19 @@ class EstablishmentController extends Controller
         foreach ($classes as $cls){
             if(strpos($inserted_class,$cls)===false){
                 $classStream = [
-                    'establishmentId'   => 1,
+                    'applicationNo'     => $applicationNo[0]->applicationNo,
                     'classId'           => $cls,
-                    'created_by'           =>$request->user_id,
-                    'created_at'        =>date('Y-m-d h:i:s'),
+                    'created_by'        => $request->user_id,
+                    'created_at'        => date('Y-m-d h:i:s'),
                 ];
                 if($classStream != ""){
                     $class = EstablishmentClassStream::create($classStream);
                 }
             }
         }
+        $array = ['status' => $request->status];
+        DB::table('application_details')->where('applicationNo',$applicationNo[0]->applicationNo)->update($array);
+
         return $this->successResponse($class, Response::HTTP_CREATED);
     }
 
@@ -126,5 +168,12 @@ class EstablishmentController extends Controller
      */
     public function getStream(){
         return Stream::get(['id','stream']);
+    }
+
+    /**
+     * method to load organization details
+     */
+    public function loadOrganizationDetails($user_id=""){
+        return $this->successResponse(Establishment::where('created_by',$user_id)->where('status','Pending')->first());
     }
 }

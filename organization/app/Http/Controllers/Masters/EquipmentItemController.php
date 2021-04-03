@@ -36,7 +36,7 @@ class EquipmentItemController extends Controller
             return $subCategory;
     }
 
-/** 
+    /** 
      * method to save or update equipment item 
     */
     public function saveEquipmentItem(Request $request){
@@ -45,10 +45,10 @@ class EquipmentItemController extends Controller
             $equ = [
                 'equipmentItem'          => $request['equipmentItem'],
                 'equipmentType'          => $request['equipmentType'],
-                'description'          => $request['description'],
-                'status'        => $request['status'],
-                'updated_by'    =>$request['user_id'],
-                'created_at'    =>date('Y-m-d h:i:s'),
+                'description'            => $request['description'],
+                'status'                 => $request['status'],
+                'updated_by'             =>$request['user_id'],
+                'created_at'             =>date('Y-m-d h:i:s'),
             ];
 
             $data = EquipmentItem::find($request['id']);
@@ -63,10 +63,10 @@ class EquipmentItemController extends Controller
             $equ = [
                 'equipmentItem'          => $request['equipmentItem'],
                 'equipmentType'          => $request['equipmentType'],
-                'description'          => $request['description'],
-                'status'        => $request['status'],
-                'created_by'    =>$request['user_id'],
-                'created_at'    =>date('Y-m-d h:i:s'),
+                'description'            => $request['description'],
+                'status'                 => $request['status'],
+                'created_by'             => $request['user_id'],
+                'created_at'             => date('Y-m-d h:i:s'),
             ];
             $equipment= EquipmentItem::create($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);

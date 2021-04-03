@@ -10,6 +10,7 @@ use App\Models\structuralFacility\Infrastructure;
 use App\Models\Masters\StructureCategory;
 use App\Models\Masters\StructureSubCategory;
 use App\Models\Masters\StructureFacility;
+use App\Models\structuralFacility\FacilityInStructure;
 use Illuminate\Support\Facades\DB;
 
 
@@ -55,19 +56,7 @@ class InfrastructureController extends Controller
      */
     public function saveInfrastructure(Request $request){
         $id = $request->id;
-        // if( $id != null){
-        //     $sport = [
-        //         'organizationId'                        =>  $request['organizationId'],
-        //         'facility'                              =>  $request['facility'],
-        //         'type'                                  =>  $request['type'],
-        //         'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
-        //         'status'                                =>  $request['status'],
-        //         'supportedBy'                           =>  $request['supportedBy'],
-        //         'noOfFacility'                          =>  $request['numberOfFacility'], 
-        //         'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
-        //     ];
-        //     $spo = Sport::where('id', $id)->update($sport);
-        // }else{
+
             $infrastructure = [
             'organizationId'            =>  $request['organizationId'],
             'categoryId'                =>  $request['category'],
@@ -81,22 +70,37 @@ class InfrastructureController extends Controller
             'presentCondition'          =>  $request['presentCondition'],
             'design'                    =>  $request['design'],
             ];
+            
             $infra = Infrastructure::create($infrastructure);
+            $infrastructureId = DB::table('infrastructures')->orderBy('id','desc')->limit(1)->pluck('id');
 
             foreach ($request->input('users') as $i=> $user){
                 $facilityInStructure = array(
-                    'infrastructureId'        =>  $request[1],
-                    'facility'                =>  $request['facility'],
-                    'type'                    =>  $user['type'],
-                    'facilityNo'              =>  $user['facilityNo'],
-                    'capacity'                =>  $user['capacity'],
-                    'noOfFacility'            =>  $user['noOfFacility'],
-                    'accessibleDisabled'      =>  $user['accessibleDisabled'],
-                    'internetConnection'      =>  $user['internetConnection'],
+                    'infrastructureId'              =>  $infrastructureId[0],
+                    'facilityTypeId'                =>  $user['facility'],
+                    'typeId'                        =>  $user['type'],
+                    'facilityName'                  =>  $user['facilityNo'],
+                    'capacity'                      =>  $user['capacity'],
+                    'noOfFacility'                  =>  $user['noOfFacility'],
+                    'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
+                    'noWithInternetConnection'      =>  $user['internetConnection'],
             );
-                 $infra = ContactDetails::create($facilityInStructure);
+                $infra = FacilityInStructure::create($facilityInStructure);
             }
-        // }
         return $this->successResponse($infra, Response::HTTP_CREATED);
+    }
+
+    public function loadInfrastructureList(){
+
+        $list = DB::table('infrastructures as a')
+            ->join('structure_category as b', 'b.id', '=', 'a.categoryId')
+            ->join('structure_sub_categories as c', 'c.id', '=', 'a.subCategoryId')
+            ->select('a.id AS id','b.name AS categorgName', 'c.subCategoryName AS subCategoryName',
+            'a.structureNo AS structureNo','a.organizationId AS organizationId',
+            'a.yearOfConstruction AS yearOfConstruction','a.plintchArea AS plintchArea',
+            'a.noOfFloor AS noOfFloor','a.totalCapacity AS totalCapacity', 
+            'a.rampAccess AS rampAccess', 'a.presentCondition AS presentCondition',
+            'a.design AS design','a.categoryId AS categoryId','a.subCategoryId AS subCategoryId')->get();
+        return $list;
     }
 }

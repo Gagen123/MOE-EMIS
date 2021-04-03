@@ -30,7 +30,7 @@ class SectionController extends Controller
 
         $section = [
                 'organizationId'          => $request['school'],
-                'classId'        => $request['classes'],
+                'classId'                 => $request['classes'],
             ];
         $sectionDetails = [
                 'users'        => $request['users'],

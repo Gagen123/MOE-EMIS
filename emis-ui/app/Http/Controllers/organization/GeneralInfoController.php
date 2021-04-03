@@ -163,6 +163,7 @@ class GeneralInfoController extends Controller
             'name'                  =>  $request['name'],
             'compoundArea'          =>  $request['compoundArea'],
             'id'                    =>  $request['id'],
+            'disaster'              =>  $request['disaster'],
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
@@ -171,5 +172,10 @@ class GeneralInfoController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+
+    public function getDisasterListInCheckbox(){
+        $disasterList = $this->apiService->listData('emis/organization/location/getDisasterListInCheckbox');
+        return $disasterList;
     }
 }

@@ -177,9 +177,15 @@ class AdministrationController extends Controller{
             return $this->successResponse(Village::where('gewog_id',$parent_id)->get());
         }
     }
+    public function load_village_details_by_village_id($id=""){
+        return $this->successResponse(Village::where('id',$id)->first());
+    }
     public function load_gewog_details_by_village_id($id=""){
         $gewog_id=Village::where('id',$id)->first()->gewog_id;
         return $this->successResponse(Gewog::where('id',$gewog_id)->first());
+    }
+    public function load_gewog_details_by_id($id=""){
+        return $this->successResponse(Gewog::where('id',$id)->first());
     }
     public function load_dzongkhag_details_by_id($id=""){
         return $this->successResponse(Dzongkhag::where('id',$id)->first());

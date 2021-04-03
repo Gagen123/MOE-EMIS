@@ -1,213 +1,212 @@
 <template>
     <div>
-        <form class="bootbox-form" id="establishmentId">
-            <div class=""> 
-                <div class="" >
-                    <div class="card card-primary card-outline card-outline-tabs">
-                        <div class="card-header p-0 border-bottom-0">
-                            <ul class="nav nav-tabs" id="tabhead">
-                                <li class="nav-item organization-details-tabs" @click="shownexttab('','organization-details-tabs')">
-                                    <a class="nav-link active" data-toggle="pill" role="tab"> 
-                                        <label> Organization Details </label>                              
-                                    </a>
-                                </li>
-                                <li class="nav-item class-tab">
-                                    <a class="nav-link" data-toggle="pill" @click="shownexttab('organization-details-tabs','class-tab')" role="tab">
-                                        <label> Classes and Streams</label>
-                                    </a>
-                                </li>
-                            </ul>
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
+                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
+                        <a class="nav-link active" data-toggle="pill" role="tab"> 
+                            <label class="mb-0.5">Organization Details </label>                              
+                        </a>
+                    </li>
+                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Classes and Stream </label>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body pt-0 mt-1">
+                <div class="tab-content">
+                    <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <input type="hidden" class="form-control" v-model="form.id"/>
+                        <div class="form-group row"> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Proposed Name:<span class="text-danger">*</span></label>
+                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" />
+                                <has-error :form="form" field="proposedName"></has-error>
+                            </div>  
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Level:<span class="text-danger">*</span></label>
+                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control editable_fields" @change="getClassAndStream('level'),remove_error('level')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="level"></has-error>
+                            </div>  
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Category:<span class="text-danger">*</span></label>
+                                <br> 
+                                <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
+                                <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
+                                <span id="othercategoryforeccd"></span>
+                                <has-error :form="form" field="proposedName"></has-error>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <div class="tab-content">
-                                <div class="tab-pane fade active show tab-content-details" id="organization-details-tabs" role="tabpanel" aria-labelledby="basicdetails">
-                                    <div class="form-group row"> 
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Proposed Name:<span class="text-danger">*</span></label>
-                                            <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_err('proposedName')" class="form-control" id="proposedName" />
-                                            <has-error :form="form" field="proposedName"></has-error>
-                                        </div>  
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Level:<span class="text-danger">*</span></label>
-                                            <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control editable_fields" @change="getClassAndStream('level'),remove_err('level')">
-                                                <option value="">--- Please Select ---</option>
-                                                <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                            </select>
-                                            <has-error :form="form" field="level"></has-error>
-                                        </div>  
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Category:<span class="text-danger">*</span></label>
-                                            <br> 
-                                            <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
-                                            <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
-                                            <span id="othercategoryforeccd"></span>
-                                            <has-error :form="form" field="proposedName"></has-error>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Dzongkhag:<span class="text-danger">*</span></label>
-                                            <select v-model="form.dzongkhag" name="dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" id="dzongkhag" class="form-control editable_fields" @change="remove_err('dzongkhag')">
-                                                <option value="">--- Please Select ---</option>
-                                                <option value="1">Thimphu</option>
-                                            </select>
-                                            <has-error :form="form" field="dzongkhag"></has-error>
-                                        </div>  
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Gewog:<span class="text-danger">*</span></label>
-                                            <select v-model="form.gewog" name="gewog" id="gewog" :class="{ 'is-invalid': form.errors.has('gewog') }" class="form-control editable_fields" @change="remove_err('gewog')">
-                                                <option value="">--- Please Select ---</option>
-                                                <option value="1">chang</option>
-                                            </select>
-                                            <has-error :form="form" field="gewog"></has-error>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Chiwog:<span class="text-danger">*</span></label>
-                                            <select v-model="form.chiwog" name="chiwog" id="chiwog" :class="{ 'is-invalid': form.errors.has('chiwog') }" class="form-control editable_fields" @change="remove_err('chiwog')">
-                                                <option value="">--- Please Select ---</option>
-                                                <option value="1">chang</option>
-                                            </select>
-                                            <has-error :form="form" field="proposedName"></has-error>
-                                        </div>                 
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Location Type:<span class="text-danger">*</span></label>
-                                            <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationCategory" class="form-control editable_fields" @change="remove_err('locationCategory')">
-                                                <option value="">--- Please Select ---</option>
-                                                <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                            </select>
-                                            <has-error :form="form" field="proposedName"></has-error>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Geopolitically Located:</label>
-                                            <br>
-                                            <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
-                                        </div> 
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Sen School:<span class="text-danger">*</span></label>
-                                            <br>
-                                            <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
-                                        </div>                  
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
-                                            <label class="mb-0">Parent School:</label>
-                                            <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  editable_fields">
-                                                <option value="">--- Please Select ---</option>
-                                                <option value="1">Kabisa</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
-                                            <label class="mb-0">Co-located with Parent School:</label>
-                                            <br>
-                                            <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
-                                        </div>                   
-                                    </div>
-                                    <div id="privatedetails" style="display:none">
-                                        <div class="row pb-2">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label class="mb-0">Proprietor Details</label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="mb-0">CID:<span class="text-danger">*</span></label>
-                                                <input type="nubmer" v-model="form.cid" class="form-control" id="cid"/>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="mb-0">Full Name:<span class="text-danger">*</span></label>
-                                                <input type="text" v-model="form.name" class="form-control" id="fullname"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" >
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="mb-0">Phone No:<span class="text-danger">*</span></label>
-                                                <input type="nubmer" v-model="form.phoneNo" class="form-control" id="cid"/>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label class="mb-0">Email:<span class="text-danger">*</span></label>
-                                                <input type="email" v-model="form.email" class="form-control" id="fullname"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <hr>
-                                    <div class="row form-group fa-pull-right">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <button class="btn btn-flat btn-primary" @click="shownexttab('organization-details-tabs','class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
-                                        </div>
-                                    </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Dzongkhag:<span class="text-danger">*</span></label>
+                                <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="dzongkhag"></has-error>
+                            </div>  
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Gewog:<span class="text-danger">*</span></label>
+                                <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="gewog"></has-error>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Chiwog:<span class="text-danger">*</span></label>
+                                <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="chiwog"></has-error>
+                            </div>                 
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Location Type:<span class="text-danger">*</span></label>
+                                <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationCategory" class="form-control editable_fields" @change="remove_error('locationCategory')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="locationType"></has-error>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Geopolitically Located:</label>
+                                <br>
+                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Sen School:<span class="text-danger">*</span></label>
+                                <br>
+                                <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                            </div>                  
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
+                                <label class="mb-0">Parent School:</label>
+                                <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  editable_fields">
+                                    <option value="">--- Please Select ---</option>
+                                    <option value="1">Kabisa</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
+                                <label class="mb-0">Co-located with Parent School:</label>
+                                <br>
+                                <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
+                            </div>                   
+                        </div>
+                        <div id="privatedetails" style="display:none">
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0">Proprietor Details</label>
                                 </div>
-                                <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                                    <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="mb-0">Select classes and streams</label>
-                                        </div>
-                                    </div><br>
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                        <span v-for="(item, key, index) in  classList" :key="index">
-                                            <br>
-                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                            <span v-for="(stm, key, index) in streamList" :key="index" >
-                                                <span v-if="item.class=='XI' || item.class=='XII'">
-                                                    <br>
-                                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
-                                                </span>
-                                            </span>
-                                        </span> 
-                                    </div>
-                                    <hr>
-                                    <div class="row form-group fa-pull-right">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <button class="btn btn-flat btn-success" @click="shownexttab('','organization-details-tabs')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                            <button type="button" class="btn btn-flat btn-primary" @click="shownexttab('class-tab','final-tab')"> <i class="fa fa-save"></i> Submit</button>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">CID:<span class="text-danger">*</span></label>
+                                    <input type="nubmer" v-model="form.cid" class="form-control" id="cid"/>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Full Name:<span class="text-danger">*</span></label>
+                                    <input type="text" v-model="form.name" class="form-control" id="fullname"/>
+                                </div>
+                            </div>
+                            <div class="form-group row" >
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Phone No:<span class="text-danger">*</span></label>
+                                    <input type="nubmer" v-model="form.phoneNo" class="form-control" id="cid"/>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Email:<span class="text-danger">*</span></label>
+                                    <input type="email" v-model="form.email" class="form-control" id="fullname"/>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Select classes and streams</label>
+                            </div>
+                        </div><br>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <span v-for="(item, key, index) in  classList" :key="index">
+                                <br>
+                                <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                <span v-for="(stm, key, index) in streamList" :key="index" >
+                                    <span v-if="item.class=='XI' || item.class=='XII'">
+                                        <br>
+                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                    </span>
+                                </span>
+                            </span> 
+                        </div>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <div class="row form-group fa-pull-right">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        </div>
-                    </div> 
-                </div>
             </div>
-        </form>
+        </div>
+        
     </div>
-    
 </template>
-
-,<script>
+<script>
 export default {
     data(){
-        return{
+        return{ 
             levelList:[],
             locationList:[],
+            dzongkhagList:[],
+            gewog_list:[],
+            villageList:[],
             classList:[],
             streamList:[],
             form: new form({
                 id: '',proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',locationType:'',
                 geopolicaticallyLocated:'0',senSchool:'0',parentSchool:'',coLocatedParent:'0',cid:'',name:'',
-                phoneNo:'',email:''
+                phoneNo:'',email:'',status:'pending'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[]
-            })
-        }
+                id: '',class:[], stream:[], status:'submitted'
+            }) 
+        } 
     },
-    methods:{
-        remove_err(field_id){
+    methods: {
+        /**
+         * method to remove error
+         */
+        remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
             }
-        },
+        }, 
+
+        /**
+         * method to get level in dropdown
+         */
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -216,6 +215,9 @@ export default {
             });
         },
 
+        /**
+         * method to get location in dropdown
+         */
         getLocation(uri = '/organization/getLocationInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -224,6 +226,77 @@ export default {
             });
         },
 
+        /**
+         * method to get active dzongkhag list
+         */
+        loadactivedzongkhagList(uri="masters/load_global_masters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.dzongkhagList =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get gewog list
+         */
+        async getgewoglist(id){
+            let dzoId=$('#dzongkhag').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        /**
+         * method to get gewog list
+         */
+        async getvillagelist(id){
+            let gewogId=$('#gewog').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if(id=="dzongkhag"){
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.getgewoglist();
+            }
+            if(id=="gewog"){
+                this.form.gewog=$('#gewog').val();
+                this.getvillagelist();
+            }
+            if(id=="chiwog"){
+                this.form.chiwog=$('#chiwog').val();
+            }
+        },
+
+        /**
+         * method to get class in checkbox
+         */
         getClass:function(){
             axios.get('/organization/getClass')
               .then(response => {
@@ -231,6 +304,9 @@ export default {
             });
         },
 
+        /**
+         * method to get stream in checkbox
+         */
         getStream:function(){
             axios.get('/organization/getStream')
               .then(response => {
@@ -238,18 +314,13 @@ export default {
             });
         },
 
-        shownexttab(nextclass){  
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            //body
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
+        /**
+         * method to show next tab
+         */
+        shownexttab(nextclass){ 
             if(nextclass=="final-tab"){ 
                 Swal.fire({
-                    text: "Are you sure you wish to submit the form detials?",
+                    text: "Are you sure you wish to safe this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -258,28 +329,49 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.classStreamForm.post('organization/saveClassStream')
-                            .then(() => {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Establishment is saved successfully'
-                                })
+                        .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Establishment is saved successfully'
+                            })
+                    })
+                        .catch(() => {
+                            console.log("Error......")
                         })
-                            .catch(() => {
-                                console.log("Error......")
-                         })
-                        window.reload();
                     }
                 });
-            }else{
-                this.form.post('organization/saveEstablishment',this.form)
+            }
+            else{
+                if(nextclass=="class-tab"){
+                     this.form.post('organization/saveEstablishment',this.form)
+                     
                     .then(() => {
-                })
-                .catch(() => {
-                    console.log("Error......")
-                })
+                        
+                    })
+                    .catch(() => {
+                        console.log("Error......")
+                    })
+                }
+                this.change_tab(nextclass);
             }
         },
-       
+
+        /**
+         * method to change tabs
+         */
+        change_tab(nextclass){
+            $('#tabhead >li >a').removeClass('active');
+            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').addClass('active');
+            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').removeClass('disabled');
+            $('.tab-content-details').hide();
+            $('#'+nextclass).show().removeClass('fade');
+        },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
         getClassAndStream(level){
             if($('#level').val()=="6"){
                 $('#othercategoryforeccd').html('<input type="radio" name="category" value="NGO" @change="showprivatedetails("ngo")" > NGO <input type="radio"  @change="showprivatedetails("public")"  name="category" value="Coporate"> Coporate');
@@ -288,6 +380,10 @@ export default {
                 $('#othercategoryforeccd').html('');
             }
         },
+
+        /**
+         * method to show private fields
+         */
         showprivatedetails(type){
             if(type=='private'){
                 $('#privatedetails').show();
@@ -295,13 +391,62 @@ export default {
             else{
                 $('#privatedetails').hide();
             }
-        }
+        },
+
+        /**
+         * method to load organization details
+         */
+         loaddOrganizationDetails(){
+            axios.get('organization/loadOrganizationDetails')
+            .then((response) => {  
+                let data=response.data.data;
+                
+                this.form.id  =   data.id;
+                this.form.proposedName  =   data.proposedName;
+                this.form.level         =   data.levelId;
+                this.form.category      =   data.category;
+                this.form.locationType  =   data.locationId;
+                
+                this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
+                this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
+                this.form.gewog = JSON.parse(response.data.gewog).data.id;
+                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+                this.form.chiwog = data.chiwogId;
+
+                this.form.geopolicaticallyLocated   =   data.isGeopoliticallyLocated;
+                this.form.senSchool                 =   data.isSenSchool;
+                this.form.parentSchool              =   data.parentSchoolId;
+                this.form.coLocated                 =   data.isColocated;
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
     },
-    mounted() { 
+
+    created(){
         this.getLevel();
         this.getLocation();
+    },
+    
+    mounted() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+       
         this.getClass();
         this.getStream();
-    }
+        this.loadactivedzongkhagList();
+        this.loaddOrganizationDetails();
+    },
 }
 </script>

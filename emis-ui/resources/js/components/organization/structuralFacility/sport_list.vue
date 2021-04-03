@@ -34,6 +34,9 @@ export default {
     },
 
     methods:{
+        /**
+         * method to load sport facility
+         */
         loadSportList(uri = 'organization/loadSport'){
             axios.get(uri)
             .then(response => {
@@ -52,6 +55,10 @@ export default {
                 }); 
             }, 300);  
         },
+
+        /**
+         * method to view sport list
+         */
         viewSportList(data){
             data.action='edit';
             this.$router.push({name:'SportEdit',params: {data:data}});

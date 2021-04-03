@@ -4,54 +4,55 @@
             <div class="card-body">
                 <div class="form-group row">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Category:<span class="text-danger">*</span></label> 
                         <select name="category" id="category" class="form-control editable_fields" v-model="form.category" @change="getSubCategoryDropdown()">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Sub Category</label> 
                         <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
                         </select>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Structure No./Name:<span class="text-danger">*</span></label> 
                         <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
                     </div>
                 </div>
                                     
                 <div class="form-group row">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Year of Construction:<span class="text-danger">*</span></label> 
                         <input class="form-control editable_fields " id="yearOfConst" type="text" v-model="form.yearOfConstruction">
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Plinth Area (sq. m):</label>
                         <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">No. of Floors:</label> 
                         <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
                     </div>
                 </div>
                                     
                 <div class="form-group row">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Total Capacity</label> 
                         <input class="form-control editable_fields " id="totalCapacity" type="number" v-model="form.totalCapacity">
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Present Condition of Structure<span class="text-danger">*</span> </label> 
                         <select name="presentCondition" id="presentCondition" class="form-control editable_fields" v-model="form.presentCondition" >
                             <option value="">--- Please Select ---</option>
                             <option value="1">Usable</option>
+                            <option value="2">Not Usable</option>
                         </select>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Designed by</label>
                         <select name="design" id="design" class="form-control editable_fields" v-model="form.design">
                             <option value="">--- Please Select ---</option>
@@ -181,7 +182,7 @@ export default {
                         icon: 'success',
                         title: 'Infrastructure is added successfully'
                     })
-                    // this.$router.push('/infrastructure_list');
+                    this.$router.push('/infrastructure_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -189,6 +190,9 @@ export default {
             }
 		},
 
+        /**
+         * method to get category in dropdown
+         */
         getCategoryDropdown(uri = '/organization/getCategoryInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -197,6 +201,9 @@ export default {
             });
         },
 
+        /**
+         * method to get sub category in dropdown
+         */
         getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
             axios.get(uri)
             .then(response => {
@@ -205,6 +212,9 @@ export default {
             });
         },
 
+        /**
+         * method to get facility in dropdown
+         */
         getFacilityDropdown(uri = '/organization/getStructureFacilityInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -218,8 +228,9 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',
-                                  accessibleDisabled:'',internetConnection:''})    
+            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',
+                                  noOfFacility:'',accessibleDisabled:'',
+                                  internetConnection:''})    
         }, 
         /**
          * method to remove fields

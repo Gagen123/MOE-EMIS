@@ -65,11 +65,14 @@ class EstablishmentController extends Controller
             'senSchool'                    =>  $request['senSchool'],
             'geopolicaticallyLocated'      =>  $request['geopolicaticallyLocated'],
             'parentSchool'                 =>  $request['parentSchool'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
             'cid'                          =>  $request['cid'],
             'name'                         =>  $request['name'],
             'phoneNo'                      =>  $request['phoneNo'],
             'email'                        =>  $request['email'],
+            'status'                       =>  $request['status'],
             'id'                           =>  $request['id'],
+            'user_id'                      =>  $this->user_id() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $estd);
@@ -91,8 +94,9 @@ class EstablishmentController extends Controller
         $this->validate($request, $rules, $customMessages);
         $classStream =[
             'class'        =>  $request['class'],
-            'stream'        =>  $request['stream'],
-            'user_id'        =>  $this->user_id() ,
+            'stream'       =>  $request['stream'],
+            'status'       =>  $request['status'],
+            'user_id'      =>  $this->user_id() ,
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
@@ -111,6 +115,11 @@ class EstablishmentController extends Controller
     public function getStream(){
         $streamInCheckbox = $this->apiService->listData('emis/organization/establishment/getStream' );
         return $streamInCheckbox;
+    }
+
+    public function loadOrganizationDetails(){
+        $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->user_id() );
+        return $loadOrganizationDetails;
     }
 
 }

@@ -11,17 +11,17 @@
                 </tr>
             </thead>
             <tbody id="tbody">
-                <!-- <tr v-for="(item, index) in infrastructureList" :key="index">
+                <tr v-for="(item, index) in infrastructureList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.category}}</td>
-                    <td>{{ item.subCategory}}</td>
+                    <td>{{ item.categorgName}}</td>
+                    <td>{{ item.subCategoryName}}</td>
                     <td>{{ item.structureNo}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewDisasterList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewInfrastructureList(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
-                </tr> -->
+                </tr>
             </tbody>
         </table>
     </div>
@@ -31,8 +31,36 @@
 export default {
     data(){
         return{
-            
+            infrastructureList:[]
         }
-    }
+    },
+
+    methods:{
+        loadInfrastructureList(uri = 'organization/loadInfrastructureList'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.infrastructureList =  data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#infrastructure-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 300);  
+        },
+        viewInfrastructureList(data){
+            data.action='edit';
+            this.$router.push({name:'InfrastructureEdit',params: {data:data}});
+        },
+    },
+    mounted(){
+        this.loadInfrastructureList();
+    },
 }
 </script>

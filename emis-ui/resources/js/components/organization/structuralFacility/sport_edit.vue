@@ -101,9 +101,29 @@ export default {
                 })
             }
 		},
+
+        getFacilityDropdown(uri = '/organization/getFacilityInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.facilityList = data;
+            });
+        },
+        getSupportDropdown(uri = '/organization/getSupportInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.supportList = data;
+            });
+        },
     },
 
     created() {
+        this.getFacilityDropdown();
+        this.getSupportDropdown();
+    },
+
+    mounted(){
         this.form.facility=this.$route.params.data.facility;
         this.form.type=this.$route.params.data.type;
         this.form.yearOfEstablish=this.$route.params.data.yearOfEstablishment;
@@ -113,6 +133,6 @@ export default {
         this.form.facilityAccessibleToDisabled=this.$route.params.data.accessibleToDisabled;
         this.form.id=this.$route.params.data.id;
         this.form.id=this.$route.params.data.organizationId;
-    },
+    }
 }
 </script>

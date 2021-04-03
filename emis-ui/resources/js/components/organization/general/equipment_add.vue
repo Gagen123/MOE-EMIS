@@ -89,7 +89,7 @@ export default {
                 })
             }
 		},
-         getType(uri = '/organization/getType'){
+        getType(uri = '/organization/getType'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
