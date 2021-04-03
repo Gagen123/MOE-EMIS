@@ -21,6 +21,9 @@ $router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
         $router->get('/load_staff_masters/{param}','masters\StaffMastersController@load_staff_masters');
         $router->get('/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
         
+        $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
+        $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
+        $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
@@ -40,8 +43,9 @@ $router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
         $router->post('/updatefinalPrivatestaffDetails', ['uses' => 'staff\StaffController@updatefinalPrivatestaffDetails']);
         
         $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
-
-        $router->get('/getemisusers/{empId}', ['uses' => 'staff\StaffController@getemisusers']);
+        $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
+        
+        $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
         $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
         $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);

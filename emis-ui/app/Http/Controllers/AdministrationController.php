@@ -86,43 +86,39 @@ class AdministrationController extends Controller{
                 'name'  =>  'required',
                 'status'    =>  'required',
             ];
-        }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"){
-            $rules = [
-                'parent_field'=> 'required',
-                'name'  =>  'required',
-                'code'  =>  'required',
-                'status'    =>  'required',
-            ];
-            $customMessages = [
-                'parent_field.required' => 'This field is required',
-            ];
-        }
-        if($request['record_type']=="staff_qualification"){
-            $rules = [
-                'parent_field'=> 'required',
-                'parent_field1'=> 'required',
-                'name'  =>  'required',
-                'code'  =>  'required',
-                'status'    =>  'required',
-            ];
-            $customMessages = [
-                'parent_field.required' => 'This field is required',
-                'parent_field1.required' => 'This field is required',
-            ];
-        }
-        
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"){
-            $rules = [
-                'name'  =>  'required',
-                'code'  =>  'required',
-                'status'    =>  'required',
-            ];
             $customMessages = [
                 'name.required' => 'This field is required',
+                'status.required' => 'This field is required',
             ];
         }
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification"){
+            $rules=array_merge($rules,
+                array('code'  =>  'required|numeric|digits:4',)
+            );
+            $customMessages=array_merge($customMessages,
+                array('code.required'  =>  'This field is required',
+                'code.numeric'         => 'The field must be numeric.',
+                'code.digits'          => 'The field should be of 4 digits.',)
+            );
+        }
+        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification"){
+            $rules=array_merge($rules,
+                array('parent_field'=> 'required',)
+            );
+            $customMessages=array_merge($customMessages,
+                array('parent_field.required'=> 'This field is required',)
+            );
+        }
+        if($request['record_type']=="staff_qualification"){
+            $rules=array_merge($rules,
+                array('parent_field1'  =>  'required',)
+            );
+            $customMessages=array_merge($customMessages,
+                array('parent_field1.required'  =>  'This field is required',)
+            );
+        }
         $this->validate($request, $rules,$customMessages);
+        
         $data =[ 
             'name'  =>  $request['name'],
             'parent_field'    =>  $request['parent_field'],
@@ -136,6 +132,7 @@ class AdministrationController extends Controller{
         ];
         // dd($data);
         $response_data= $this->apiService->createData('emis/masters/save_sfatt_masters', $data);
+        // dd($response_data);
         return $response_data;
     }
     

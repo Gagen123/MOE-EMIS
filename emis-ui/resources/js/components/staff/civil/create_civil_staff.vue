@@ -580,6 +580,7 @@ export default {
             personal_form: new form({
                 personal_id: '',
                 emp_type: 'Regular',
+                emp_id:'',
                 cid_work_permit:'',
                 name:'',
                 position_title:'',
@@ -833,6 +834,7 @@ export default {
         getpersonaldetails(data){
             data.name='Full Name'+data.cid;
             data.desig='MR';
+            this.personal_form.emp_id=this.personal_form.cid_work_permit;
             data.address='Permanent Address '+data.cid;
         },
         fetchDetails(){

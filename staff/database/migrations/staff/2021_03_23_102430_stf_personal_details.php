@@ -8,6 +8,7 @@ class StfPersonalDetails extends Migration{
     public function up(){
         Schema::create('stf_staff', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
+            $table->string('emp_id',20)->nullable(true);
             $table->char('emp_type_id',36)->nullable(false);
             $table->string('name',250)->nullable(false);
             $table->string('cid_work_permit',100)->nullable(false);

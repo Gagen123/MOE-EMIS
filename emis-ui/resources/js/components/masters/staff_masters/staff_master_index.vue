@@ -48,6 +48,11 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'transfer_undertaking'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Transfer Undertaking
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
                     <router-link :to="{name: 'service_type'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Service Type Master
                     </router-link>
@@ -59,17 +64,17 @@
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'qualification_type'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qulification Type
+                       Qualification Type
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'qualification_level'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qulification Level
+                       Qualification Level
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_qualification'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Qulification
+                       Staff Qualification
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
@@ -94,7 +99,7 @@
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/currier_stage" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                       Currier Stage
+                       Career Stage
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">

@@ -61,6 +61,7 @@ class StaffController extends Controller{
             'personal_id'       =>  $request->personal_id,
             'emp_type'          =>  $request->emp_type,
             'cid_work_permit'   =>  $request->cid_work_permit,
+            'emp_id'            =>  $request->emp_id,
             'name'              =>  $request->name,
             'sex_id'            =>  $request->sex_id,
             'marital_status'    =>  $request->marital_status,
@@ -251,5 +252,10 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loadTransferWindow');
         return $response_data;
     }
+    public function loadStaff(){
+        $response_data= $this->apiService->listData('emis/staff/loadStaff');
+        return $response_data;
+    }
+    
     
 }

@@ -48,6 +48,7 @@ class StaffController extends Controller{
         $data =[
             'emp_type_id'           =>  $request->emp_type,
             'cid_work_permit'       =>  $request->cid_work_permit,
+            'emp_id'                =>  $request->emp_id,
             'name'                  =>  $request->name,
             'sex_id'                =>  $request->sex_id,
             'dob'                   =>  $request->dob,
@@ -287,8 +288,13 @@ class StaffController extends Controller{
         }
     }
     
-    public function getemisusers($empId=""){
-        return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->first());
+    public function getEmisUsers($empId=""){
+        if(strlen($empId)==11){
+            return $this->successResponse(PersonalDetails::where('cid_work_permit',$empId)->where('status','Created')->first());
+        }
+        else{
+            return $this->successResponse(PersonalDetails::where('emp_id',$empId)->where('status','Created')->first());
+        }
     }
 
     public function saveTransferWindow(Request $request){
@@ -345,6 +351,10 @@ class StaffController extends Controller{
     
     public function loadTransferWindow(){
         return $this->successResponse(TransferWindow::all());
+    }
+    
+    public function loadStaff(){
+        return $this->successResponse(PersonalDetails::all());
     }
     
 }
