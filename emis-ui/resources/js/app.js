@@ -671,7 +671,7 @@ const routes = [
   },
 
   // organization establishment route
-  { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
+  { path: '/establishment_index',name:'establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
   children:[
    
     { path: '/establishment', component: require('./components/organization/establishment/establishment.vue').default },

@@ -94,6 +94,7 @@ class HomeController extends Controller{
                                 'mod_id'=> $work->mod_id,
                                 'mod_name' => $work->moduleName,
                                 'module_icon'=>$work->module_icon,
+                                'module_route'=>$work->module_route,
                             ];
                             array_push($module,$mod);
                         }
@@ -104,9 +105,11 @@ class HomeController extends Controller{
                                 'sub_mod_id'=> $work->sub_mod_id,
                                 'sub_mod_name' => $work->sub_mod_name,
                                 'submod_icon'=>$work->submod_icon,
+                                'submod_route' =>$work->sub_mod_route,
                             ];
                             array_push($sub_modules,$sub_mod);
                         }
+                        // dd($sub_modules);
                         $screen=[
                             'mod_id'=> $work->mod_id,
                             'sub_mod_id'=> $work->sub_mod_id,
