@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadqualificationtype(uri = 'masters/load_staff_masters/all_qualification_tpe_List'){
+        loadqualificationtype(uri = 'masters/loadStaffMasters/all_qualification_tpe_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;

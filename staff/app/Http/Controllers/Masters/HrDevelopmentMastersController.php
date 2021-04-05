@@ -16,6 +16,8 @@ use App\Models\hr_development_masters\Category;
 use App\Models\hr_development_masters\Donor;
 use App\Models\hr_development_masters\ProjectDonor;
 use App\Models\hr_development_masters\Degree;
+use App\Models\hr_development_masters\NatureOfParticipant;
+use App\Models\hr_development_masters\TargetGroup;
 
 class HrDevelopmentMastersController extends Controller{
     use ApiResponser;
@@ -58,6 +60,13 @@ class HrDevelopmentMastersController extends Controller{
         if($request['record_type']=="project_donor_agency"){
             $table_name="master_donor_project";
         }
+        if($request['record_type']=="nature_of_participant"){
+            $table_name="master_nature_participant";
+        }
+        if($request['record_type']=="target_group"){
+            $table_name="master_target_group";
+        }
+        
         $rules = [
             'name'      =>  'required:',
             'status'    =>  'required',
@@ -131,6 +140,12 @@ class HrDevelopmentMastersController extends Controller{
             if($request['record_type']=="project_donor_agency"){
                 $response_data = ProjectDonor::create($data);
             }
+            if($request['record_type']=="nature_of_participant"){
+                $response_data = NatureOfParticipant::create($data);
+            }
+            if($request['record_type']=="target_group"){
+                $response_data = TargetGroup::create($data);
+            }
         }
         
         if($request->actiontype=="edit"){
@@ -163,6 +178,12 @@ class HrDevelopmentMastersController extends Controller{
             }
             if($request['record_type']=="project_donor_agency"){
                 $update_data = ProjectDonor::find($request->id); 
+            }
+            if($request['record_type']=="nature_of_participant"){
+                $update_data = NatureOfParticipant::find($request->id); 
+            }
+            if($request['record_type']=="target_group"){
+                $update_data = TargetGroup::find($request->id); 
             }
             $messs_det='name:'.$update_data->name.'; Status:'.$update_data->status.'; updated_by:'.$update_data->updated_by.'; updated_date:'.$update_data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$table_name."','".$request->id."','".$messs_det."','".$request->user_id."','Edit')");
@@ -246,6 +267,21 @@ class HrDevelopmentMastersController extends Controller{
         if($type=="active_degree_list"){
             return $this->successResponse(Degree::where ('status', '1')->get());
         }
+
+        if($type=="all_nature_of_participant_list"){
+            return $this->successResponse(NatureOfParticipant::all());
+        }
+        if($type=="active_nature_of_participant_list"){
+            return $this->successResponse(NatureOfParticipant::where ('status', '1')->get());
+        }
+        
+        if($type=="all_target_group_list"){
+            return $this->successResponse(TargetGroup::all());
+        }
+        if($type=="active_target_group_list"){
+            return $this->successResponse(TargetGroup::where ('status', '1')->get());
+        }
+        
         
     }
     public function loadHrDevelopmentDepedentMastersData($model="",$parent_id=""){

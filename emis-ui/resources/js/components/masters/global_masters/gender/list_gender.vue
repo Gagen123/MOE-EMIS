@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadgenderList(uri = 'masters/load_global_masters/all_gender'){
+        loadgenderList(uri = 'masters/loadGlobalMasters/all_gender'){
             axios.get(uri)
             .then(response => {
                 let data = response;

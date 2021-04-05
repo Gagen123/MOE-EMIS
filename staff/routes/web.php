@@ -17,8 +17,8 @@ $router->get('/', function () use ($router) {
 });
 $router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters'], function () use ($router) {
-        $router->post('/save_sfatt_masters', ['uses' => 'masters\StaffMastersController@save_sfatt_masters']);
-        $router->get('/load_staff_masters/{param}','masters\StaffMastersController@load_staff_masters');
+        $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
+        $router->get('/loadStaffMasters/{param}','masters\StaffMastersController@loadStaffMasters');
         $router->get('/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
         
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);

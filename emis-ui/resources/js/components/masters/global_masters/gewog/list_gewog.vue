@@ -38,7 +38,7 @@ export default {
         }
     },
     methods:{
-       loadgewogList(uri = 'masters/load_global_masters/all_gewog_List'){
+       loadgewogList(uri = 'masters/loadGlobalMasters/all_gewog_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;

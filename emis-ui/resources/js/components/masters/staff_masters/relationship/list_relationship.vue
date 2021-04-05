@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadrelationship(uri = 'masters/load_staff_masters/all_relationship_list'){
+        loadrelationship(uri = 'masters/loadStaffMasters/all_relationship_list'){
             axios.get(uri)
             .then(response => {
                 let data = response;

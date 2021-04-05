@@ -32,7 +32,7 @@ export default {
         }
     },
     methods:{
-        loadundertakingList(uri = 'masters/load_staff_masters/all_transfe_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffMasters/all_transfe_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;

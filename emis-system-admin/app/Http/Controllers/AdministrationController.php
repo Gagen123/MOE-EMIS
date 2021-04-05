@@ -10,6 +10,7 @@ use App\Models\global_masters\Dzongkhag;
 use App\Models\global_masters\Gewog;
 use App\Models\global_masters\Village;
 use App\Models\global_masters\Gender;
+use App\Models\global_masters\MotherTongue;
 
 class AdministrationController extends Controller{
     use ApiResponser;
@@ -17,7 +18,7 @@ class AdministrationController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    public function save_global_masters(Request $request){
+    public function saveGlobalMasters(Request $request){
         if($request->record_type=="country"){
             if($request->actiontype=="add"){
                 $rule =[
@@ -51,7 +52,7 @@ class AdministrationController extends Controller{
             }
 
         }
-        if($request->record_type=="dzongkhag" || $request->record_type=="gewog" || $request['record_type']=="village" || $request['record_type']=="gender"){
+        if($request->record_type=="dzongkhag" || $request->record_type=="gewog" || $request['record_type']=="village" || $request['record_type']=="gender" || $request['record_type']=="mothertongue"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request->record_type=="dzongkhag"){
@@ -65,6 +66,9 @@ class AdministrationController extends Controller{
                 }
                 if($request->record_type=="gender"){
                     $table="gender_master";
+                }
+                if($request->record_type=="mothertongue"){
+                    $table="mother_tongue_master";
                 }
                 $rule =[
                     'name'      => 'required|string|unique:'.$table,
@@ -94,6 +98,9 @@ class AdministrationController extends Controller{
                 if($request->record_type=="gender"){
                     $response_data = Gender::create($data);
                 }
+                if($request->record_type=="mothertongue"){
+                    $response_data = MotherTongue::create($data);
+                }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }
             if($request->actiontype=="edit"){
@@ -118,8 +125,14 @@ class AdministrationController extends Controller{
                     $data = Gender::find($request['id']);
                     $table="gender_master";
                 }
+                if($request->record_type=="mothertongue"){
+                    $data = MotherTongue::find($request['id']);
+                    $table="mother_tongue_master";
+                }
+                //storing audit trials
                 $messs_det='name:'.$data->name.$aditionla_param.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                
                 $data->name         = $request['name'];
                 if($request->record_type=="gewog"){
                     $data->dzongkhag_id = $request['parent_field'];
@@ -137,7 +150,7 @@ class AdministrationController extends Controller{
         }
         
     }
-    public function load_global_masters($param=""){
+    public function loadGlobalMasters($param=""){
         if($param=="all_country"){
             return $this->successResponse(Country::all());
         }
@@ -159,13 +172,19 @@ class AdministrationController extends Controller{
         if($param=="all_village_List"){
             return $this->successResponse(Village::with('dzothroughgewog','gewog')->get());
         }
-        
 
         if($param=="all_gender"){
             return $this->successResponse(Gender::all());
         }
         if($param=="all_active_gender"){
             return $this->successResponse(Gender::where('status','1')->get());
+        }
+
+        if($param=="all_mother_tongue"){
+            return $this->successResponse(MotherTongue::all());
+        }
+        if($param=="active_mother_tongue"){
+            return $this->successResponse(MotherTongue::where('status','1')->get());
         }
         
     }

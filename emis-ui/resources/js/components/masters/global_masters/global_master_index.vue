@@ -12,7 +12,7 @@
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/nationality_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Nationality/Coutry 
+                        Nationality/Country 
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
@@ -33,6 +33,11 @@
                 <li class="nav-item active pr-1">
                     <router-link to="/gender_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Sex/gender
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/mother_tongue_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Mother Tongue
                     </router-link>
                 </li>
             </ul>

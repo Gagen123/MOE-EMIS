@@ -37,7 +37,7 @@ export default {
         }
     },
     methods:{
-        loaddzongkhagList(uri = 'masters/load_global_masters/all_dzongkhag'){
+        loaddzongkhagList(uri = 'masters/loadGlobalMasters/all_dzongkhag'){
             axios.get(uri)
             .then(response => {
                 let data = response;

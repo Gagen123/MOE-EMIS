@@ -68,7 +68,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadQualificationTypeList(uri = 'masters/load_staff_masters/active_qualification_type_List'){
+        loadQualificationTypeList(uri = 'masters/loadStaffMasters/active_qualification_type_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -79,7 +79,7 @@ export default {
             });
         },
         
-        loadQualificationLevelList(uri = 'masters/load_staff_masters/active_qualification_level_List'){
+        loadQualificationLevelList(uri = 'masters/loadStaffMasters/active_qualification_level_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -95,7 +95,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/save_sfatt_masters',this.form)
+                this.form.post('/masters/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

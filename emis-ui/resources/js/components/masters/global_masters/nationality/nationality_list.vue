@@ -39,7 +39,7 @@ export default {
         }
     },
     methods:{
-        loadcountryList(uri = 'masters/load_global_masters/all_country'){
+        loadcountryList(uri = 'masters/loadGlobalMasters/all_country'){
             axios.get(uri)
             .then(response => {
                 let data = response;

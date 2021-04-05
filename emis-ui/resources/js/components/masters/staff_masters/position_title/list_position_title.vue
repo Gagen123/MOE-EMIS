@@ -38,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadpositionTitleList(uri = 'masters/load_staff_masters/all_position_title_List'){
+        loadpositionTitleList(uri = 'masters/loadStaffMasters/all_position_title_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
