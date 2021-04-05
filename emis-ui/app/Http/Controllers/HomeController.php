@@ -176,7 +176,9 @@ class HomeController extends Controller{
     public function get_screens_on_submodules(Request $request,$type="",$id=""){
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
+        // dd($type.' : '.$id);
         $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
+        $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.json_decode($user_Det)->system_id, [], $headers);
         $screens=[];
         $screens_ids="";
         if($role_riv!=null){
