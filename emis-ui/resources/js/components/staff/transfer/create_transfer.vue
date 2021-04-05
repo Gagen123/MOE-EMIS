@@ -252,7 +252,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/load_staff_masters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -262,7 +262,7 @@ export default {
                console.log("Error:"+error)
             });
         },
-        loadactivedzongkhagList(uri="masters/load_global_masters/all_active_dzongkhag"){
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -272,7 +272,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadundertakingList(uri = 'masters/load_staff_masters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;

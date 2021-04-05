@@ -34,7 +34,7 @@ export default {
         }
     },
     methods:{
-        loadcoursemodeList(uri = 'masters/load_staff_masters/all_coursemode_list'){
+        loadcoursemodeList(uri = 'masters/loadStaffMasters/all_coursemode_list'){
             axios.get(uri)
             .then(response => {
                 let data = response;

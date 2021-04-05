@@ -52,7 +52,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/save_sfatt_masters',this.form)
+                this.form.post('/masters/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

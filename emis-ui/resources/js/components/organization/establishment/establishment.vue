@@ -229,7 +229,7 @@ export default {
         /**
          * method to get active dzongkhag list
          */
-        loadactivedzongkhagList(uri="masters/load_global_masters/all_active_dzongkhag"){
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response.data;

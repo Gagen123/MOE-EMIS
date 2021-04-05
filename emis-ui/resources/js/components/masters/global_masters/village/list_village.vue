@@ -40,7 +40,7 @@ export default {
         }
     },
     methods:{
-       loadvillageList(uri = 'masters/load_global_masters/all_village_List'){
+       loadvillageList(uri = 'masters/loadGlobalMasters/all_village_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;

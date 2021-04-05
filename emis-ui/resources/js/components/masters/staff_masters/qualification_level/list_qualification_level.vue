@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadqualificationLevelList(uri = 'masters/load_staff_masters/all_qualification_level_List'){
+        loadqualificationLevelList(uri = 'masters/loadStaffMasters/all_qualification_level_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;

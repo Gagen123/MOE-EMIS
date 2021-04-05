@@ -67,7 +67,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loaddzolist(uri = 'masters/load_global_masters/all_active_dzongkhag'){
+        loaddzolist(uri = 'masters/loadGlobalMasters/all_active_dzongkhag'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -99,7 +99,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/save_global_masters',this.form)
+                this.form.post('/masters/saveGlobalMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

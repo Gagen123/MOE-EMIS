@@ -49,8 +49,8 @@ const routes = [
       { path: '/dzongkhag_master', 
         component: require('./components/masters/global_masters/dzongkhag/dzongkhag_master.vue').default,
         children:[
-          { path: '/',name:'dzongkhag_master', component: require('./components/masters/global_masters/dzongkhag/List_dzongkhag_master.vue').default },
-          { path: '/list_dzongkhag',name:'list_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/List_dzongkhag_master.vue').default },
+          { path: '/',name:'dzongkhag_master', component: require('./components/masters/global_masters/dzongkhag/list_dzongkhag_master.vue').default },
+          { path: '/list_dzongkhag',name:'list_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/list_dzongkhag_master.vue').default },
           { path: '/create_dzongkhag', name:'create_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/create_dzongkhag.vue').default },
           { path: '/edit_dzongkhag', name:'edit_dzongkhag', component: require('./components/masters/global_masters/dzongkhag/edit_dzongkhag.vue').default },
         ],
@@ -83,6 +83,15 @@ const routes = [
           { path: '/list_gender',name:'list_gender', component: require('./components/masters/global_masters/gender/list_gender.vue').default },
           { path: '/create_gender', name:'create_gender', component: require('./components/masters/global_masters/gender/create_gender.vue').default },
           { path: '/edit_gender', name:'edit_gender', component: require('./components/masters/global_masters/gender/edit_gender.vue').default },
+        ], 
+      },
+      { path: '/mother_tongue_master', 
+        component: require('./components/masters/global_masters/mother_tongue/mother_tongue_index.vue').default,
+        children:[
+          { path: '/',name:'mother_tongue_master', component: require('./components/masters/global_masters/mother_tongue/list_mother_tongue.vue').default },
+          { path: '/list_mother_tongue',name:'list_mother_tongue', component: require('./components/masters/global_masters/mother_tongue/list_mother_tongue.vue').default },
+          { path: '/create_mother_tongue', name:'create_mother_tongue', component: require('./components/masters/global_masters/mother_tongue/create_mother_tongue.vue').default },
+          { path: '/edit_mother_tongue', name:'edit_mother_tongue', component: require('./components/masters/global_masters/mother_tongue/edit_mother_tongue.vue').default },
         ], 
       },
     ]
@@ -370,7 +379,25 @@ const routes = [
           { path: '/edit_degree', name:'edit_degree', component: require('./components/masters/hr_development_masters/degree/edit_degree.vue').default },
         ],
       },
-
+      { path: '/nature_of_participation',
+        component: require('./components/masters/hr_development_masters/nature_of_participation/nature_of_participation_index.vue').default,
+        children:[
+          { path: '/',name:'nature_of_participation', component: require('./components/masters/hr_development_masters/nature_of_participation/nature_of_participation_list.vue').default },
+          { path: '/list_nature_of_participation', name:'list_nature_of_participation', component: require('./components/masters/hr_development_masters/nature_of_participation/nature_of_participation_list.vue').default },
+          { path: '/create_nature_of_participation',name:'create_nature_of_participation', component: require('./components/masters/hr_development_masters/nature_of_participation/create_nature_of_participation.vue').default },
+          { path: '/edit_nature_of_participation', name:'edit_nature_of_participation', component: require('./components/masters/hr_development_masters/nature_of_participation/edit_nature_of_participation.vue').default },
+        ],
+      },
+      { path: '/target_group',
+        component: require('./components/masters/hr_development_masters/target_group/target_group_index.vue').default,
+        children:[
+          { path: '/',name:'target_group', component: require('./components/masters/hr_development_masters/target_group/target_group_list.vue').default },
+          { path: '/list_target_group', name:'list_target_group', component: require('./components/masters/hr_development_masters/target_group/target_group_list.vue').default },
+          { path: '/create_target_group',name:'create_target_group', component: require('./components/masters/hr_development_masters/target_group/create_target_group.vue').default },
+          { path: '/edit_target_group', name:'edit_target_group', component: require('./components/masters/hr_development_masters/target_group/edit_target_group.vue').default },
+        ],
+      },
+      
     ]
   },
 

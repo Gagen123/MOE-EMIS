@@ -31,7 +31,7 @@ class StaffMastersController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    public function save_sfatt_masters(Request $request){
+    public function saveStaffMasters(Request $request){
         $response_data=[];
         
         if($request['record_type']=="working_agency"){
@@ -376,7 +376,7 @@ class StaffMastersController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
-    public function load_staff_masters($param=""){
+    public function loadStaffMasters($param=""){
         if($param=="all_workingagency"){
             return $this->successResponse(WorkingAgency::all());
         }

@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-       loadcureerList(uri = 'masters/load_staff_masters/all_cureer_stage_list'){
+       loadcureerList(uri = 'masters/loadStaffMasters/all_cureer_stage_list'){
             axios.get(uri)
             .then(response => {
                 let data = response;

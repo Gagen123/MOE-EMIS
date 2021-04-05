@@ -733,7 +733,7 @@ export default {
             });
         },
         
-        loadactivemaritalList(uri="masters/load_staff_masters/all_active_marital_list"){
+        loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -745,7 +745,7 @@ export default {
                 }
             });
         },
-        loadactivesubjectList(uri="masters/load_staff_masters/all_active_subject_List"){
+        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -757,7 +757,7 @@ export default {
                 }
             });
         },
-        loadactivecureerstageList(uri="masters/load_staff_masters/all_active_cureer_stage_list"){
+        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -769,7 +769,7 @@ export default {
                 }
             });
         },
-        loadactivesex_idList(uri="masters/load_global_masters/all_active_gender"){
+        loadactivesex_idList(uri="masters/loadGlobalMasters/all_active_gender"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -779,7 +779,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadpositiontitleList(uri="masters/load_staff_masters/all_active_position_title"){
+        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -791,7 +791,7 @@ export default {
                 }
             });
         },
-        loadactivecountryList(uri="masters/load_global_masters/all_active_country"){
+        loadactivecountryList(uri="masters/loadGlobalMasters/all_active_country"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -801,7 +801,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadactivedzongkhagList(uri="masters/load_global_masters/all_active_dzongkhag"){
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response;

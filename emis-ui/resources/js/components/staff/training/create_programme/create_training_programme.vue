@@ -123,7 +123,7 @@
                                 </div>
                             </div>
                         </span>
-                        <span id="qualification_upgradation_section">
+                        <span id="qualification_upgradation_section" style="display:none">
                             <hr/>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -143,7 +143,7 @@
                                     <has-error :form="form" field="donor_agency"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Project of Donor Angency</label>
+                                    <label class="mb-0.5">Project of Donor Angency:</label>
                                     <select v-model="form.projectofdonor" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('projectofdonor') }" class="form-control select2" name="projectofdonor" id="projectofdonor">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in projectofdonorList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
@@ -162,7 +162,7 @@
                                     <has-error :form="form" field="study_country"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Course Mode/Area/Type:</label>
+                                    <label class="mb-0.5">Course Mode/Area/Type:<i class="text-danger">*</i></label>
                                     <select v-model="form.coursemode" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('coursemode') }" class="form-control select2" name="coursemode" id="coursemode">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in coursemodeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
@@ -170,7 +170,7 @@
                                     <has-error :form="form" field="coursemode"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Degree</label>
+                                    <label class="mb-0.5">Degree:<i class="text-danger">*</i></label>
                                     <select v-model="form.degree" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('degree') }" class="form-control select2" name="degree" id="degree">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in degreeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
@@ -196,66 +196,146 @@
                                     <has-error :form="form" field="subject2"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Thesis Title<i class="text-danger">*</i></label>
+                                    <label class="mb-0.5">Thesis Title:<i class="text-danger">*</i></label>
                                     <input type="text" class="form-control" @change="remove_err('thesis_title')" :class="{ 'is-invalid' :form.errors.has('thesis_title') }" v-model="form.thesis_title" id="thesis_title"/>
                                     <has-error :form="form" field="thesis_title"></has-error>
                                 </div>
                             </div>
                         </span>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table id="dynamic-table" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>File(Image,Doc,Excel,Pdf)</th>                           
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                            <td>
+                                                <input type="text" class="form-control" @change="remove_err('file_name_err'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                <span class="text-danger" :id="'file_name_err'+(index+1)"></span>
+                                            </td>
+                                            <td>                                
+                                                <input type="file" class="form-control" @change="remove_err('attach')" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <span class="text-danger" :id="'attach'+(index+1)"></span>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td colspan="3"> 
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
+                                            </td>
+                                        </tr>                                          
+                                    </tbody>
+                                </table> 
+                            </div>
+                        </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade tab-content-details" id="eligibility-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Attachments</label>
-                                <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th> 
-                                            <th>File</th> 
-                                        </tr>
-                                    </thead> 
-                                    <tbody>
-                                        <tr id="record1" v-for='(file, index) in form.attachments' :key="index">
-                                            <td>
-                                                <input type="text" class="form-control" @change="remove_err('attachment_name'+(index+1))" v-model="file.attachment_name" :id="'attachment_name'+(index+1)"/>
-                                                <span class="text-danger" :id="'attachment_name'+(index+1)"></span>
-                                            </td>
-                                            <td>
-                                                <input type="file" class="form-control" @change="remove_err('attach_file'+(index+1))" :id="'attach_file'+(index+1)"/>
-                                                <span class="text-danger" :id="'attach_file'+(index+1)"></span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Nomination Start Date:<i class="text-danger">*</i></label>
+                                <input type="date" class="form-control" @change="remove_err('nomination_start_date')" :class="{ 'is-invalid' :form.errors.has('nomination_start_date') }" v-model="form.nomination_start_date" id="nomination_start_date"/>
+                                <has-error :form="form" field="nomination_start_date"></has-error>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Nomination End Date:<i class="text-danger">*</i></label>
+                                <input type="date" class="form-control" @change="remove_err('nomination_end_date')" :class="{ 'is-invalid' :form.errors.has('nomination_end_date') }" v-model="form.nomination_end_date" id="nomination_end_date"/>
+                                <has-error :form="form" field="nomination_end_date"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Nature of participation:<i class="text-danger">*</i></label>
+                                <select v-model="form.nature_of_participant" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('nature_of_participant') }" class="form-control select2" name="nature_of_participant" id="nature_of_participant">
+                                    <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in nature_of_participantList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="nature_of_participant"></has-error>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Target Group:</label>
+                                <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
+                                    <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in target_groupList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="target_group"></has-error>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
+                                <select v-model="form.org_level" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('org_level') }" class="form-control select2" name="org_level" id="org_level">
+                                    <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in org_levelList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="org_level"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5"><u>Undertaking</u></label><br />
-                                <label>I hereby declare that the information given herein is true to the best of my knowledge and I also certify that:</label>
+                                <table id="dynamic-table" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sequence</th>
+                                            <th>Authority Type</th>
+                                            <th>Role</th>                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="record1" v-for='(user, index) in form.role_action_mapp' :key="index">
+                                            <td>
+                                                <input type="hidden" v-model="user.sequence">
+                                                {{user.sequence}}
+                                            </td>
+                                            <td>
+                                                <select name="authority" :id="'authority'+(index+1)" @change="remove_added_error('authority','authority_err',(index+1))" class="form-control select2" v-model="user.authority">
+                                                    <option value="1">Nomination</option>
+                                                    <option value="2">Shortlisting</option>
+                                                    <option value="3">Final Selection</option>
+                                                </select>
+                                                <span class="text-danger" :id="'authority_err'+(index+1)"></span>
+                                            </td>
+                                            <td>                                
+                                                <select name="role" :id="'role'+(index+1)" @change="remove_added_error('role','role_err',(index+1))" class="form-control select2" v-model="user.role">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
+                                                </select>
+                                                <span class="text-danger" :id="'role_err'+(index+1)"></span>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td colspan="3"> 
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                            </td>
+                                        </tr>                                          
+                                    </tbody>
+                                </table> 
                             </div>
                         </div>
-                        <span v-for="(item, key, index) in  undertakingList" :key="index">
-                            <div class="form-group row">
-                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                                    <input type="checkbox" v-model="form.undertaking" class="icheck-success d-inline" :id="{index}" :class="{ 'is-invalid': form.errors.has('undertaking') }" :value="item.id">
-                                </div> 
-                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-                                    <label class="pr-4"> &nbsp;{{ item.name }}</label><br />
-                                </div> 
-                            </div> 
-                        </span>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Remarks<i class="text-danger">*</i></label>
+                                <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
+                                <has-error :form="form" field="remarks"></has-error>
+                            </div>
+                        </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('service-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>submit </button>
+                                <button class="btn btn-success" @click="shownexttab('programme-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save & Apply </button>
                             </div>
                         </div>
                     </div>
@@ -268,6 +348,8 @@
 export default {
     data(){
         return {
+            count:1,
+            filecount:1,
             trainingtypeList:[],
             relatedProgrammeList:[],
             programmeLevelList:[],
@@ -281,14 +363,20 @@ export default {
             coursemodeList:[],
             degreeList:[],
             subjectList:[],
+            nature_of_participantList:[],
+            target_groupList:[],
+            org_levelList:[],
+            roleList:[],
             form: new form({
-                id: '',
+                id: '', 
                 training_type: '',
+                training_type_text:'',
                 course_title:'',
                 organizer:'',
                 related_programme:'',
                 start_date:'',
                 end_date:'',
+
                 programme_level:'',
                 programme_type:'',
                 course_type:'',
@@ -297,6 +385,7 @@ export default {
                 total_budget:'',
                 total_hrs:'',
                 financial_source:'',
+
                 category:'',
                 donor_agency:'',
                 projectofdonor:'',
@@ -306,14 +395,64 @@ export default {
                 subject1:'',
                 subject2:'',
                 thesis_title:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+
+                nomination_start_date:'',
+                nomination_end_date:'',
+                nature_of_participant:'',
+                target_group:'',
+                org_level:'',
+                role_action_mapp:
+                [{
+                    sequence:1,authority:'',role:''
+                }],
+                remarks:'',
             })
         }
     },
     methods: {
+        addMore: function(){
+            this.count++;
+            this.form.role_action_mapp.push({sequence:this.count,authority:'',role:''})
+        },
+        addMoreattachments: function(){
+            this.filecount++;
+            this.form.attachments.push({file_name:'',attachment:''})
+        },
+        remove(index){    
+            if(this.form.role_action_mapp.length>1){
+                this.count--;
+                this.form.role_action_mapp.pop(); 
+            }
+        },
+        removeattachments(index){    
+            if(this.form.attachments.length>1){
+                this.filecount--;
+                this.form.attachments.pop(); 
+            }
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
+        },
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            alert(currentcount); 
+            if($('#file_name'+currentcount).val()!=""){
+                this.form.attachmentse[currentcount]={file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]};
+            }
+            else{
+                $('#file_name_err'+currentcount).html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+            // this.form.attachments = e.target.files[0];
+            // this.form.attachments = $("#attachments").file[0].name;
+            // this.form.file_size = e.target.files[0].size;
+            // this.form.file_type = e.target.files[0].type;
         },
         loadactivetraingitypelist(uri = 'masters/loadHrDevelopmentMastersData/active_training_type_list'){
             axios.get(uri)
@@ -408,7 +547,7 @@ export default {
                 console.log("Error:"+error);
             });
         },
-        loadstudy_countryList(uri = 'masters/load_global_masters/all_active_country'){
+        loadstudy_countryList(uri = 'masters/loadGlobalMasters/all_active_country'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -418,8 +557,7 @@ export default {
                 console.log("Error:"+error);
             });
         },
-        loadcoursemode(){
-            let uri = 'masters/load_staff_masters/all_active_coursemode_list';
+        loadcoursemode(uri = 'masters/loadStaffMasters/all_active_coursemode_list'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -439,11 +577,41 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadsubjectList(uri = 'masters/load_staff_masters/all_active_subject_List'){
+        loadsubjectList(uri = 'masters/loadStaffMasters/all_active_subject_List'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
                 this.subjectList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadnature_of_participantList(uri = 'masters/loadHrDevelopmentMastersData/active_nature_of_participant_list'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.nature_of_participantList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadtarget_groupList(uri = 'masters/loadHrDevelopmentMastersData/active_target_group_list'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.target_groupList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadroleList(uri = 'staff/getRoles/active'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.roleList = data.data; 
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -471,6 +639,116 @@ export default {
                 });
             }
             else{
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                
+                // attachments:
+                // [{
+                //     file_name:'',attachment:''
+                // }],
+                // role_action_mapp:
+                // [{
+                //     sequence:1,authority:'',role:''
+                // }],
+                let formData = new FormData();
+                formData.append('id', this.form.id);
+                formData.append('training_type', this.form.training_type);
+                formData.append('training_type_text', this.form.training_type_text);
+                formData.append('course_title', this.form.course_title);
+                formData.append('organizer', this.form.organizer);
+                formData.append('related_programme', this.form.related_programme);
+                formData.append('start_date', this.form.start_date);
+                formData.append('end_date', this.form.end_date);
+
+                formData.append('programme_level', this.form.programme_level);
+                formData.append('programme_type', this.form.programme_type);
+                formData.append('course_type', this.form.course_type);
+                formData.append('course_provider', this.form.course_provider);
+                formData.append('vanue', this.form.vanue);
+                formData.append('total_budget', this.form.total_budget);
+                formData.append('total_hrs', this.form.total_hrs);
+                formData.append('financial_source', this.form.financial_source);
+
+                formData.append('category', this.form.category);
+                formData.append('donor_agency', this.form.donor_agency);
+                formData.append('projectofdonor', this.form.projectofdonor);
+                formData.append('study_country', this.form.study_country);
+                formData.append('coursemode', this.form.coursemode);
+                formData.append('degree', this.form.degree);
+                formData.append('subject1', this.form.subject1);
+                formData.append('subject2', this.form.subject2);
+                formData.append('thesis_title', this.form.thesis_title);
+                formData.append('nomination_start_date', this.form.nomination_start_date);
+                formData.append('nomination_end_date', this.form.nomination_end_date);
+                formData.append('nature_of_participant', this.form.nature_of_participant);
+                formData.append('target_group', this.form.target_group);
+                formData.append('org_level', this.form.org_level);
+                formData.append('remarks', this.form.remarks);
+                
+                this.form.post('/staff/saveprogramDetails', formData, config)
+                .then((response) => {  
+                    alert(response.data);
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data Saved Successfully'
+                    });
+                    $('.select2').select2();
+                    $('.select2').select2({
+                        theme: 'bootstrap4'
+                    });
+                    this.pulldata();
+                })
+                .catch((error) => { 
+                    this.change_tab('programme-tab');
+                    if(!$('#training_type').attr('class').includes('select2-hidden-accessible')){
+                        $('#training_type').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#programme_level').attr('class').includes('select2-hidden-accessible')){
+                        $('#programme_level').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#programme_type').attr('class').includes('select2-hidden-accessible')){
+                        $('#programme_type').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#course_type').attr('class').includes('select2-hidden-accessible')){
+                        $('#course_type').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#course_type').attr('class').includes('select2-hidden-accessible')){
+                        $('#course_type').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#financial_source').attr('class').includes('select2-hidden-accessible')){
+                        $('#financial_source').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#category').attr('class').includes('select2-hidden-accessible')){
+                        $('#category').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#donor_agency').attr('class').includes('select2-hidden-accessible')){
+                        $('#donor_agency').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#projectofdonor').attr('class').includes('select2-hidden-accessible')){
+                        $('#projectofdonor').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#study_country').attr('class').includes('select2-hidden-accessible')){
+                        $('#study_country').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#coursemode').attr('class').includes('select2-hidden-accessible')){
+                        $('#coursemode').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#degree').attr('class').includes('select2-hidden-accessible')){
+                        $('#degree').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#subject1').attr('class').includes('select2-hidden-accessible')){
+                        $('#subject1').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#subject2').attr('class').includes('select2-hidden-accessible')){
+                        $('#subject2').addClass('select2-hidden-accessible');
+                    }
+                   
+                    this.pullfirstdata();
+                    console.log("Error:"+error)
+                });
                 this.change_tab(nextclass);
             }
         },
@@ -483,14 +761,45 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
+        pulldata(){
+            this.loadcategoryList();
+            this.loaddonor_agencyList();
+            this.loadstudy_countryList();
+            this.loadcoursemode();
+            this.loaddegreeList();
+            this.loadsubjectList();
+            this.loadnature_of_participantList();
+            this.loadtarget_groupList();
+            this.loadroleList();
+        },
+        pullfirstdata(){
+            this.loadactivetraingitypelist();
+            this.loadrelatedProgrammeList();
+            this.loadprogrammeLevelList();
+            this.loadprogrammeTypeList();
+            this.loadcourseTypeList();
+            this.loadfinancialSourceList();
+        },
+        displayfields(type_id){
+            $('#qualification_upgradation_section').hide();
+            $('#professional_development_section').hide();
+            this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
+            if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
+                $('#qualification_upgradation_section').show();
+            }
+            if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
+               $('#professional_development_section').show(); 
+            }
+        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="position_title"){
+            if(id=="training_type"){
                 this.form.training_type=$('#training_type').val();
+                this.displayfields(id);
             }
             if(id=="related_programme"){
                 this.form.related_programme=$('#related_programme').val();
@@ -535,6 +844,7 @@ export default {
         },
     },
     mounted() {
+        this.count=1,
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -547,19 +857,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadactivetraingitypelist();
-        this.loadrelatedProgrammeList();
-        this.loadprogrammeLevelList();
-        this.loadprogrammeTypeList();
-        this.loadcourseTypeList();
-        this.loadfinancialSourceList();
-
-        this.loadcategoryList();
-        this.loaddonor_agencyList();
-        this.loadstudy_countryList();
-        this.loadcoursemode();
-        this.loaddegreeList();
-        this.loadsubjectList();
+        this.pullfirstdata();
+        
     },
 }
 </script>

@@ -1,7 +1,9 @@
 <template>
     <div> 
         <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h6 class="pt-1">Training</h6></li>
+            <li class="pl-2 form-inline "><h6 class="pt-1">
+                Training (HR Development) Programme
+            </h6></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">

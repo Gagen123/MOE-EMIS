@@ -61,6 +61,16 @@
                        Degree (QU)
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'nature_of_participation'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Nature of participation
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'target_group'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Target Group
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

@@ -18,7 +18,7 @@ class AdministrationController extends Controller{
         $this->apiService = $apiService;
     }
     
-    public function save_global_masters(Request $request){
+    public function saveGlobalMasters(Request $request){
         $rules=[];
         $customMessages =[];
         if($request['record_type']=="country"){
@@ -59,8 +59,9 @@ class AdministrationController extends Controller{
             'record_type'   =>$request['record_type'],
             'user_id'       =>$this->user_id() 
         ];
+        // dd($data);
         try{
-            $response_data= $this->apiService->createData('emis/masters/save_global_masters', $data);
+            $response_data= $this->apiService->createData('emis/masters/saveGlobalMasters', $data);
             return $response_data;
         }
         catch(GuzzleHttp\Exception\ClientException $e){
@@ -68,8 +69,8 @@ class AdministrationController extends Controller{
         }
     }
     
-    public function load_global_masters($param=""){
-        $global_masters = $this->apiService->listData('emis/masters/load_global_masters/'.$param);
+    public function loadGlobalMasters($param=""){
+        $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
         return $global_masters;
     }
 
@@ -78,7 +79,7 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
-    public function save_sfatt_masters(Request $request){
+    public function saveStaffMasters(Request $request){
         $rules=[];
         $customMessages =[];
         if($request['record_type']=="working_agency"){
@@ -131,13 +132,13 @@ class AdministrationController extends Controller{
             'user_id'=>$this->user_id()
         ];
         // dd($data);
-        $response_data= $this->apiService->createData('emis/masters/save_sfatt_masters', $data);
+        $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
         // dd($response_data);
         return $response_data;
     }
     
-    public function load_staff_masters($param=""){
-        $global_masters = $this->apiService->listData('emis/masters/load_staff_masters/'.$param);
+    public function loadStaffMasters($param=""){
+        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
         // dd($global_masters);
         return $global_masters;
     }

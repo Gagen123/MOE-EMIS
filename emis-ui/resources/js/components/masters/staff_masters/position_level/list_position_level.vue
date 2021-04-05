@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadpositionLevelList(uri = 'masters/load_staff_masters/all_position_level_List'){
+        loadpositionLevelList(uri = 'masters/loadStaffMasters/all_position_level_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
