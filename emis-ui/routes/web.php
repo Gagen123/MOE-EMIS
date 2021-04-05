@@ -14,13 +14,10 @@ Route::prefix('masters')->group(function () {
     
     Route::post('/save_sfatt_masters', [App\Http\Controllers\AdministrationController::class, 'save_sfatt_masters'])->name('save_sfatt_masters');
     Route::get('/load_staff_masters/{param}', [App\Http\Controllers\AdministrationController::class, 'load_staff_masters'])->name('load_staff_masters');
-<<<<<<< HEAD
-=======
 
     Route::post('/saveHrDevelopmentMasters', [App\Http\Controllers\staff\HrDevelopmentMastersController::class, 'saveHrDevelopmentMasters'])->name('saveHrDevelopmentMasters');
     Route::get('/loadHrDevelopmentMastersData/{type}', [App\Http\Controllers\staff\HrDevelopmentMastersController::class, 'loadHrDevelopmentMastersData'])->name('loadHrDevelopmentMastersData');
     Route::get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}', [App\Http\Controllers\staff\HrDevelopmentMastersController::class, 'loadHrDevelopmentDepedentMastersData'])->name('loadHrDevelopmentDepedentMastersData');
->>>>>>> ca48bdfe4c3ef4c66508e9e5529a688eaebf34c9
 
     Route::post('/saveDzongkhag', [App\Http\Controllers\AdministrationController::class, 'saveDzongkhag'])->name('savedzongkhag');
     Route::get('/loadalldzongkhag', [App\Http\Controllers\AdministrationController::class, 'loadalldzongkhag'])->name('loadalldzongkhag');

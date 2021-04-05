@@ -46,7 +46,7 @@ class LocationsController extends Controller
 
         foreach ($disasters as $dis){
                 $disasterRisk = [
-                    'locationId'        => $locationId[0]->locationId,
+                    'locationId'        => $locationId[0],
                     'disasterTypeId'    => $dis,
                     // 'created_by'        => $request->user_id,
                     // 'created_at'        => date('Y-m-d h:i:s'),
