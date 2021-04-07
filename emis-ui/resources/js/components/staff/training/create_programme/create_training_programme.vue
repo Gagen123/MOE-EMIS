@@ -22,7 +22,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Trainig Type:<i class="text-danger">*</i></label>
                                 <select v-model="form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
-                                    <option value=""> --Select--</option>
+                                    <option value="">--Select--</option>
                                     <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="training_type"></has-error>
@@ -214,12 +214,12 @@
                                     <tbody> 
                                         <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                             <td>
-                                                <input type="text" class="form-control" @change="remove_err('file_name_err'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                <span class="text-danger" :id="'file_name_err'+(index+1)"></span>
+                                                <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                             </td>
                                             <td>                                
-                                                <input type="file" class="form-control" @change="remove_err('attach')" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                <span class="text-danger" :id="'attach'+(index+1)"></span>
+                                                <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                             </td>
                                         </tr> 
                                         <tr>
@@ -367,6 +367,7 @@ export default {
             target_groupList:[],
             org_levelList:[],
             roleList:[],
+            
             form: new form({
                 id: '', 
                 training_type: '',
@@ -399,6 +400,8 @@ export default {
                 [{
                     file_name:'',attachment:''
                 }],
+                status:'Pending',
+                ref_docs:[],
 
                 nomination_start_date:'',
                 nomination_end_date:'',
@@ -410,6 +413,7 @@ export default {
                     sequence:1,authority:'',role:''
                 }],
                 remarks:'',
+                
             })
         }
     },
@@ -432,23 +436,25 @@ export default {
             if(this.form.attachments.length>1){
                 this.filecount--;
                 this.form.attachments.pop(); 
+                this.form.ref_docs.pop();
             }
         },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
             }
         },
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
-            alert(currentcount); 
             if($('#file_name'+currentcount).val()!=""){
-                this.form.attachmentse[currentcount]={file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]};
+                this.form.ref_docs.push({file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]});
+                $('#file_name'+currentcount).prop('readonly',true);
             }
             else{
-                $('#file_name_err'+currentcount).html('Please mention file name');
+                $('#file_name'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            }
+            } 
             // this.form.attachments = e.target.files[0];
             // this.form.attachments = $("#attachments").file[0].name;
             // this.form.file_size = e.target.files[0].size;
@@ -638,23 +644,21 @@ export default {
                     }
                 });
             }
-            else{
+            else if(nextclass=="eligibility-tab"){ 
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
                 }
                 
-                // attachments:
-                // [{
-                //     file_name:'',attachment:''
-                // }],
-                // role_action_mapp:
-                // [{
-                //     sequence:1,authority:'',role:''
-                // }],
                 let formData = new FormData();
                 formData.append('id', this.form.id);
+                formData.append('ref_docs[]', this.form.ref_docs);
+                for(let i=0;i<this.form.ref_docs.length;i++){
+                    formData.append('attachments[]', this.form.ref_docs[i].attachment);
+                    // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
+                    formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
+                }
                 formData.append('training_type', this.form.training_type);
                 formData.append('training_type_text', this.form.training_type_text);
                 formData.append('course_title', this.form.course_title);
@@ -662,25 +666,29 @@ export default {
                 formData.append('related_programme', this.form.related_programme);
                 formData.append('start_date', this.form.start_date);
                 formData.append('end_date', this.form.end_date);
-
-                formData.append('programme_level', this.form.programme_level);
-                formData.append('programme_type', this.form.programme_type);
-                formData.append('course_type', this.form.course_type);
-                formData.append('course_provider', this.form.course_provider);
-                formData.append('vanue', this.form.vanue);
-                formData.append('total_budget', this.form.total_budget);
-                formData.append('total_hrs', this.form.total_hrs);
-                formData.append('financial_source', this.form.financial_source);
-
-                formData.append('category', this.form.category);
-                formData.append('donor_agency', this.form.donor_agency);
-                formData.append('projectofdonor', this.form.projectofdonor);
-                formData.append('study_country', this.form.study_country);
-                formData.append('coursemode', this.form.coursemode);
-                formData.append('degree', this.form.degree);
-                formData.append('subject1', this.form.subject1);
-                formData.append('subject2', this.form.subject2);
-                formData.append('thesis_title', this.form.thesis_title);
+                if(this.form.training_type_text.toLowerCase().includes('qualification upgrad')){
+                    formData.append('category', this.form.category);
+                    formData.append('donor_agency', this.form.donor_agency);
+                    formData.append('projectofdonor', this.form.projectofdonor);
+                    formData.append('study_country', this.form.study_country);
+                    formData.append('coursemode', this.form.coursemode);
+                    formData.append('degree', this.form.degree);
+                    formData.append('subject1', this.form.subject1);
+                    formData.append('subject2', this.form.subject2);
+                    formData.append('thesis_title', this.form.thesis_title);
+                }
+                if(this.form.training_type_text.toLowerCase().includes('professional development')){
+                    formData.append('programme_level', this.form.programme_level);
+                    formData.append('programme_type', this.form.programme_type);
+                    formData.append('course_type', this.form.course_type);
+                    formData.append('course_provider', this.form.course_provider);
+                    formData.append('vanue', this.form.vanue);
+                    formData.append('total_budget', this.form.total_budget);
+                    formData.append('total_hrs', this.form.total_hrs);
+                    formData.append('financial_source', this.form.financial_source);
+                }
+                formData.append('status', this.form.status);
+                
                 formData.append('nomination_start_date', this.form.nomination_start_date);
                 formData.append('nomination_end_date', this.form.nomination_end_date);
                 formData.append('nature_of_participant', this.form.nature_of_participant);
@@ -688,7 +696,8 @@ export default {
                 formData.append('org_level', this.form.org_level);
                 formData.append('remarks', this.form.remarks);
                 
-                this.form.post('/staff/saveprogramDetails', formData, config)
+                // this.form.post('/staff/saveprogramDetails', formData, config)
+                axios.post('/staff/saveprogramDetails', formData, config)
                 .then((response) => {  
                     alert(response.data);
                     Toast.fire({
@@ -699,7 +708,7 @@ export default {
                     $('.select2').select2({
                         theme: 'bootstrap4'
                     });
-                    this.pulldata();
+                    
                 })
                 .catch((error) => { 
                     this.change_tab('programme-tab');
@@ -708,6 +717,9 @@ export default {
                     }
                     if(!$('#programme_level').attr('class').includes('select2-hidden-accessible')){
                         $('#programme_level').addClass('select2-hidden-accessible');
+                    }
+                    if(!$('#organizer').attr('class').includes('select2-hidden-accessible')){
+                        $('#organizer').addClass('select2-hidden-accessible');
                     }
                     if(!$('#programme_type').attr('class').includes('select2-hidden-accessible')){
                         $('#programme_type').addClass('select2-hidden-accessible');
@@ -745,10 +757,11 @@ export default {
                     if(!$('#subject2').attr('class').includes('select2-hidden-accessible')){
                         $('#subject2').addClass('select2-hidden-accessible');
                     }
-                   
-                    this.pullfirstdata();
                     console.log("Error:"+error)
                 });
+                this.change_tab(nextclass);
+            }
+            else{
                 this.change_tab(nextclass);
             }
         },
@@ -760,8 +773,11 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
+            if(nextclass=="programme-tab"){
+                this.loaddraftDetails();
+            }
         },
-        pulldata(){
+        async pullQualificationData(){
             this.loadcategoryList();
             this.loaddonor_agencyList();
             this.loadstudy_countryList();
@@ -772,9 +788,7 @@ export default {
             this.loadtarget_groupList();
             this.loadroleList();
         },
-        pullfirstdata(){
-            this.loadactivetraingitypelist();
-            this.loadrelatedProgrammeList();
+        pullPDPData(){
             this.loadprogrammeLevelList();
             this.loadprogrammeTypeList();
             this.loadcourseTypeList();
@@ -783,12 +797,29 @@ export default {
         displayfields(type_id){
             $('#qualification_upgradation_section').hide();
             $('#professional_development_section').hide();
-            this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
-            if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
-                $('#qualification_upgradation_section').show();
+            if($('#'+type_id+' option:selected').text()=='--Select--'){
+                this.pullPDPData();
+                this.pullQualificationData();
+                setTimeout(function(){
+                    this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
+                    if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
+                        $('#qualification_upgradation_section').show();
+                    }
+                    if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
+                        $('#professional_development_section').show(); 
+                    }
+                }, 3000); 
             }
-            if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
-               $('#professional_development_section').show(); 
+            else{
+                this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
+                if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
+                    this.pullQualificationData();
+                    $('#qualification_upgradation_section').show();
+                }
+                if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
+                    this.pullPDPData();
+                    $('#professional_development_section').show(); 
+                }
             }
         },
         async changefunction(id){
@@ -803,6 +834,9 @@ export default {
             }
             if(id=="related_programme"){
                 this.form.related_programme=$('#related_programme').val();
+            }
+            if(id=="organizer"){
+                this.form.organizer=$('#organizer').val();
             }
             if(id=="programme_level"){ 
                 this.form.programme_level=$('#programme_level').val();
@@ -842,9 +876,66 @@ export default {
                 this.form.subject2=$('#subject2').val();
             }
         },
+        loaddraftDetails(){
+             axios.get('staff/loadDraftDetails')
+            .then((response) => {   
+                let data=response.data.data;
+                this.form.id=data.id;
+                this.form.training_type=data.training_type;
+                this.displayfields('training_type');
+                this.form.course_title=data.course_title;
+                this.form.organizer=data.organizer;
+                this.form.related_programme=data.related_programme;
+                this.form.start_date=data.start_date;
+                this.form.end_date=data.end_date;
+
+                this.form.programme_level=data.programme_level;
+                this.form.programme_type=data.programme_type;
+                this.form.course_type=data.course_type;
+                this.form.course_provider=data.course_provider;
+                this.form.vanue=data.vanue;
+                this.form.total_budget=data.total_budget;
+                this.form.total_hrs=data.total_hrs;
+                this.form.financial_source=data.financial_source;
+
+                this.form.category=data.category;
+                this.form.donor_agency=data.donor_agency;
+                this.form.projectofdonor=data.projectofdonor;
+                this.form.study_country=data.study_country;
+                this.form.coursemode=data.coursemode;
+                this.form.degree=data.degree;
+                this.form.subject1=data.subject1;
+                this.form.subject2=data.subject2;
+                this.form.thesis_title=data.thesis_title;
+                let doc=JSON.parse(response.data.documents);
+                if(doc.data.length>0){ 
+                    this.form.attachments=[];
+                    for(let i=0;i<doc.data.length;i++){ 
+                        this.form.attachments.push({file_name:doc.data[i].user_defined_name,attachment:doc.data[i].path})
+                    }
+                }
+                
+                // attachments:
+                // [{
+                //     file_name:'',attachment:''
+                // }],
+                // status:'Pending',
+
+                // nomination_start_date:'',
+                // nomination_end_date:'',
+                // nature_of_participant:'',
+                // target_group:'',
+                // org_level:'',
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        }
     },
+    
     mounted() {
         this.count=1,
+        this.loaddraftDetails();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -857,7 +948,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.pullfirstdata();
+        this.loadactivetraingitypelist();
+        this.loadrelatedProgrammeList();
         
     },
 }

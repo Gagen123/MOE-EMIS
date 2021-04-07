@@ -49,6 +49,11 @@ $router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
 
         $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
         $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);
+
+        $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
+        $router->get('/loadDraftDetails/{user_id}', ['uses' => 'staff\HrDevelopmentController@loadDraftDetails']);
+        $router->get('/loadDocuments/{id}', ['uses' => 'staff\HrDevelopmentController@loadDocuments']);
+        
         
     });
 });

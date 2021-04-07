@@ -150,7 +150,15 @@
                             <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
                                 <router-link to="/StudentMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Student Health Master
+                                    Health Master
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                                <router-link to="/StudentMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Non-Academics Master
                                 </router-link>
                             </li>
                         </ul>
@@ -234,10 +242,30 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                   <li class="nav-item" id="student_health" onclick="setclass('studentlink','','student_health')">
-                       <router-link to="/student_health" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                            Student Health 
+                   <!-- student services side menu -->
+                   <li class="nav-item" id="studentservices" @click="setclass('studentaffairs','','studentservices')">
+                        <router-link to="/student_services" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Student Services 
+                            </p>
+                        </router-link>
+                    </li>
+                    <!-- student extracurricular side menu  -->
+                    <li class="nav-item" id="extracurricular" @click="setclass('studentaffairs','','extracurricular')">
+                        <router-link to="/student_extracurricular" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Extra-Curricular 
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="studenthealth" @click="setclass('studentaffairs','','studenthealth')">
+                        <router-link to="/studenthealth_link" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Student Health
+                            </p>
                         </router-link>
                     </li>
                 </ul>
