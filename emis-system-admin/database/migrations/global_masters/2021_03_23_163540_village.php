@@ -8,8 +8,8 @@ class Village extends Migration{
     
     public function up(){
         Schema::create('village_master', function (Blueprint $table) {
-            $table->char('id',36)->unique()->primary();
-            $table->char('gewog_id',36)->nullable(false);
+            $table->increments('id',11);
+            $table->integer('gewog_id')->length(11)->unsigned();
             $table->foreign('gewog_id')->references('id')->on('gewog_master');
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);

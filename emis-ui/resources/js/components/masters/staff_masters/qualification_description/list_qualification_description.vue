@@ -34,7 +34,7 @@ export default {
         }
     },
     methods:{
-       loadqualificationdescriptionList(uri = 'masters/load_staff_masters/all_qualification_description_list'){
+       loadqualificationdescriptionList(uri = 'masters/loadStaffMasters/all_qualification_description_list'){
             axios.get(uri)
             .then(response => {
                 let data = response;

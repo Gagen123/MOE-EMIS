@@ -24,7 +24,7 @@
                         Private Staff static
                     </router-link>
                 </li>
-                <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
+                <li class="nav-item pr-1">
                     <router-link to ="/transfer_window_index" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Transfer Time Schedule static

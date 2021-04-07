@@ -2,11 +2,10 @@
 
 namespace App\Models\global_masters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Gewog extends Model{
-    use HasFactory, Uuid;
+    use HasFactory;
     protected $table="gewog_master";
     public $timestamps = false;
     protected $fillable = [

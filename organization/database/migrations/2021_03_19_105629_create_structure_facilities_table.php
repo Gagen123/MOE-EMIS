@@ -13,8 +13,16 @@ class CreateStructureFacilitiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('structure_facilities', function (Blueprint $table) {
+        Schema::create('infrastructure_facilities', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('infrastructureId',36);
+            $table->char('facilityTypeId',36);
+            $table->char('typeId',36);
+            $table->string('facilityName');
+            $table->string('capacity');
+            $table->integer('noOfFacility');
+            $table->integer('noAccessibleToDisabled');
+            $table->integer('noWithInternetConnection');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

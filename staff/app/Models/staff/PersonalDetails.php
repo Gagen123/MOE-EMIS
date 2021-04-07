@@ -12,6 +12,7 @@ class PersonalDetails extends Model{
     protected $fillable = [
         'id',
         'emp_type_id',
+        'emp_id',
         'name',
         'cid_work_permit',
         'position_title_id',

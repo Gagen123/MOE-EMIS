@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-       loadmaritalList(uri = 'masters/load_staff_masters/all_marital_list'){
+       loadmaritalList(uri = 'masters/loadStaffMasters/all_marital_list'){
             axios.get(uri)
             .then(response => {
                 let data = response;

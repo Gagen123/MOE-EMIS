@@ -8,10 +8,12 @@ use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
+use App\Traits\AuthUser;
 use App\Http\Controllers\Controller;
 
 class EstablishmentController extends Controller
 {
+    use AuthUser;
     use ServiceHelper;
     public $apiService;
 
@@ -39,7 +41,6 @@ class EstablishmentController extends Controller
             'chiwog'                =>  'required',
             'locationType'          =>  'required',
             'senSchool'             =>  'required',
-            
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
@@ -54,21 +55,24 @@ class EstablishmentController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $estd =[
-            'proposedName'                      =>  $request['proposedName'],
-            'level'                             =>  $request['level'],
-            'category'                          =>  $request['category'],
-            'dzongkhag'                         =>  $request['dzongkhag'],
-            'gewog'                             =>  $request['gewog'],
-            'chiwog'                            =>  $request['chiwog'],
-            'locationType'                      =>  $request['locationType'],
-            'senSchool'                         =>  $request['senSchool'],
-            'geopolicaticallyLocated'           =>  $request['geopolicaticallyLocated'],
-            'parentSchool'                      =>  $request['parentSchool'],
-            'cid'                               =>  $request['cid'],
-            'name'                              =>  $request['name'],
-            'phoneNo'                           =>  $request['phoneNo'],
-            'email'                             =>  $request['email'],
-            'id'                                =>  $request['id'],
+            'proposedName'                 =>  $request['proposedName'],
+            'level'                        =>  $request['level'],
+            'category'                     =>  $request['category'],
+            'dzongkhag'                    =>  $request['dzongkhag'],
+            'gewog'                        =>  $request['gewog'],
+            'chiwog'                       =>  $request['chiwog'],
+            'locationType'                 =>  $request['locationType'],
+            'senSchool'                    =>  $request['senSchool'],
+            'geopolicaticallyLocated'      =>  $request['geopolicaticallyLocated'],
+            'parentSchool'                 =>  $request['parentSchool'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'cid'                          =>  $request['cid'],
+            'name'                         =>  $request['name'],
+            'phoneNo'                      =>  $request['phoneNo'],
+            'email'                        =>  $request['email'],
+            'status'                       =>  $request['status'],
+            'id'                           =>  $request['id'],
+            'user_id'                      =>  $this->user_id() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $estd);
@@ -90,7 +94,9 @@ class EstablishmentController extends Controller
         $this->validate($request, $rules, $customMessages);
         $classStream =[
             'class'        =>  $request['class'],
-            'stream'        =>  $request['stream'],
+            'stream'       =>  $request['stream'],
+            'status'       =>  $request['status'],
+            'user_id'      =>  $this->user_id() ,
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
@@ -110,4 +116,10 @@ class EstablishmentController extends Controller
         $streamInCheckbox = $this->apiService->listData('emis/organization/establishment/getStream' );
         return $streamInCheckbox;
     }
+
+    public function loadOrganizationDetails(){
+        $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->user_id() );
+        return $loadOrganizationDetails;
+    }
+
 }

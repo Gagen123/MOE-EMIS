@@ -13,9 +13,9 @@ class CreateEstablishmentClassStreamsTable extends Migration
      */
     public function up()
     {
-        Schema::create('establishment_class_streams', function (Blueprint $table) {
+        Schema::create('application_class_streams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->char('establishmentId',36);
+            $table->string('applicationNo');
             $table->char('classId',36);
             $table->char('streamId',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);

@@ -59,7 +59,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadworkingagencyList(uri = 'masters/load_staff_masters/all_active_sub_group_List'){
+        loadworkingagencyList(uri = 'masters/loadStaffMasters/all_active_sub_group_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -76,7 +76,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/save_sfatt_masters',this.form)
+                this.form.post('/masters/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

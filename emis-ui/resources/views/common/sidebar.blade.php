@@ -102,7 +102,6 @@
             @endforeach
             @endif
             <hr>
-
             <li class="nav-item has-treeview" id="mastermanagment">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-database"></i>
@@ -131,7 +130,14 @@
                             <i class="fa fa-users nav-icon"></i>
                             Staff Masters
                         </router-link>
-                    </li>                
+                    </li>  
+                   
+                    <li class="nav-item has-treeview" id="staff_master">
+                        <router-link to="/traing_master" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-users nav-icon"></i>
+                            HR Development (Training)
+                        </router-link>
+                    </li>               
                     <li class="nav-item has-treeview" id="studentmaster">
                         <a href="#" class="nav-link pt-1 pb-1">
                             <i class="nav-icon fas fa-database"></i>

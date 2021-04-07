@@ -19,7 +19,6 @@ class StaffController extends Controller{
     public function savePersonalDetails(Request $request){
         $rules = [
             'emp_type'              =>  'required',
-            'marital_status'        =>  'required',
             'cid_work_permit'       =>  'required',
             'name'                  =>  'required',
             'sex_id'                =>  'required',
@@ -31,11 +30,10 @@ class StaffController extends Controller{
             'comp_sub'              =>  'required',
             'elective_sub1'         =>  'required',
             'currier_stage'         =>  'required',
-            'emp_file_code'         =>  'required',
         ];
+        
         $customMessages = [
             'cid_work_permit.required'      => 'This field is required',
-            'marital_status.required'       => 'This field is required',
             'name.required'                 => 'This field is required',
             'sex_id.required'               => 'This field is required',
             'dob.required'                  => 'This field is required',
@@ -46,14 +44,24 @@ class StaffController extends Controller{
             'comp_sub.required'             => 'This field is required',
             'elective_sub1.required'        => 'This field is required',
             'currier_stage.required'        => 'This field is required',
-            'emp_file_code.required'        => 'This field is required',
         ];
+        if($request->emp_type=="Regular" || $request->emp_type=="Volunteer"){
+            $rules=array_merge($rules,
+                array('marital_status'        =>  'required',
+                'emp_file_code'         =>  'required',)
+            );
+            $customMessages =array_merge($customMessages,
+                array('marital_status.required'       => 'This field is required',
+                'emp_file_code.required'        => 'This field is required',
+                )
+            );
+        }
         $this->validate($request, $rules,$customMessages);
-        
         $personal_details =[
             'personal_id'       =>  $request->personal_id,
             'emp_type'          =>  $request->emp_type,
             'cid_work_permit'   =>  $request->cid_work_permit,
+            'emp_id'            =>  $request->emp_id,
             'name'              =>  $request->name,
             'sex_id'            =>  $request->sex_id,
             'marital_status'    =>  $request->marital_status,
@@ -71,14 +79,14 @@ class StaffController extends Controller{
             'elective_sub2'     =>  $request->elective_sub2,
             'currier_stage'     =>  $request->currier_stage,
             'emp_file_code'     =>  $request->emp_file_code,
+            'status'            =>  $request->status,
             'user_id'           =>$this->user_id() 
         ];
-        // dd($personal_details);
         $response_data= $this->apiService->createData('emis/staff/savePersonalDetails', $personal_details);
         return $response_data;
     }
-    public function loaddraftpersonalDetails(Request $request){
-        $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$this->user_id());
+    public function loaddraftpersonalDetails(Request $request,$type=""){
+        $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$type.'/'.$this->user_id());
         return $response_data;
     }
     public function loadpersonalDetails($id=""){
@@ -125,17 +133,17 @@ class StaffController extends Controller{
             'status'                            =>  $request->status,
             'user_id'                           =>  $this->user_id() 
         ];
-        // dd($personal_details);
+        // dd($qualification_details);
         $response_data= $this->apiService->createData('emis/staff/savequalificationDetails', $qualification_details);
         return $response_data;
     }
     
-    public function load_qualification($staff_id=""){
-        $response_data= $this->apiService->listData('emis/staff/load_qualification/'.$staff_id.'/'.$this->user_id());
+    public function loadQualification($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/loadQualification/'.$staff_id.'/'.$this->user_id());
         return $response_data;
     }
-    public function load_staff_qualification($staff_id=""){
-        $response_data= $this->apiService->listData('emis/staff/load_staff_qualification/'.$staff_id);
+    public function loadStaffQualification($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/loadStaffQualification/'.$staff_id);
         return $response_data;
     }
     
@@ -181,12 +189,12 @@ class StaffController extends Controller{
         return $response_data;
     }
     
-    public function load_nominations($staff_id=""){
-        $response_data= $this->apiService->listData('emis/staff/load_nominations/'.$staff_id.'/'.$this->user_id());
+    public function loadNominations($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/loadNominations/'.$staff_id.'/'.$this->user_id());
         return $response_data;
     }
-    public function load_staff_nomination($staff_id=""){
-        $response_data= $this->apiService->listData('emis/staff/load_staff_nomination/'.$staff_id);
+    public function loadStaffNomination($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/loadStaffNomination/'.$staff_id);
         return $response_data;
     }
     
@@ -200,10 +208,55 @@ class StaffController extends Controller{
         $response_data= $this->apiService->createData('emis/staff/updatefinalstaffDetails', $staff_details);
         return $response_data;
     }
+    public function updatefinalPrivatestaffDetails(Request $request){
+        $staff_details =[
+            'personal_id'                       =>  $request->personal_id,
+            'user_id'                           =>  $this->user_id() 
+        ];
+        $response_data= $this->apiService->createData('emis/staff/updatefinalPrivatestaffDetails', $staff_details);
+        return $response_data;
+    }
     
     public function loadAllStaff($type=""){
         $response_data= $this->apiService->listData('emis/staff/loadAllStaff/'.$type);
         return $response_data;
     }
+    public function saveTransferWindow(Request $request){
+        $rules = [
+            'year'                  =>  'required  ',
+            'from_date'             =>  'required | date',
+            'to_date'               =>  'required | date | after:from_date',
+        ];
+        $customMessages = [
+            'year.required'                     => 'Current Year is required',
+            'from_date.required'                => 'Please select from date',
+            'to_date.required'                  => 'Please select to date',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $transfer_window_details =[
+            'id'                                =>  $request->id,
+            'year'                              =>  $request->year,
+            'from_date'                         =>  $request->from_date,
+            'to_date'                           =>  $request->to_date,
+            'action_type'                       =>  $request->action_type,
+            'remarks'                           =>  $request->remarks,
+            'status'                            =>  $request->status,
+            'user_id'                           =>  $this->user_id() 
+        ];
+        // dd($personal_details);
+        $response_data= $this->apiService->createData('emis/staff/saveTransferWindow', $transfer_window_details);
+        return $response_data;
+    }
+    
+    public function loadTransferWindow(){
+        $response_data= $this->apiService->listData('emis/staff/loadTransferWindow');
+        return $response_data;
+    }
+    public function loadStaff(){
+        $response_data= $this->apiService->listData('emis/staff/loadStaff');
+        return $response_data;
+    }
+    
+    
     
 }

@@ -580,13 +580,14 @@ export default {
             personal_form: new form({
                 personal_id: '',
                 emp_type: 'Regular',
+                emp_id:'',
                 cid_work_permit:'',
                 name:'',
                 position_title:'',
                 sex_id:'',
                 dob:'',
                 marital_status:'',
-                country_id:'c879c252-b4f7-4ab6-964b-1661ae9f0aa5',//insert id of bhutan to preselect
+                country_id:'',
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
@@ -599,6 +600,7 @@ export default {
                 currier_stage:'',
                 emp_file_code:'',
                 remarks:'',
+                status:'Pending',
             }),
             qualification_form: new form({
                 personal_id: '',
@@ -808,7 +810,7 @@ export default {
         }, 
         loadqualication(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/load_qualification/'+staff_id;
+                let uri = 'staff/loadQualification/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -832,6 +834,7 @@ export default {
         getpersonaldetails(data){
             data.name='Full Name'+data.cid;
             data.desig='MR';
+            this.personal_form.emp_id=this.personal_form.cid_work_permit;
             data.address='Permanent Address '+data.cid;
         },
         fetchDetails(){
@@ -854,7 +857,7 @@ export default {
             $('#percentagetotla').val(this.totle);
         },
         loadqualificationdescription(){
-            let uri = 'masters/load_staff_masters/all_active_qualification_description_list';
+            let uri = 'masters/loadStaffMasters/all_active_qualification_description_list';
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -865,7 +868,7 @@ export default {
             });
         },
         loadqualification(){
-            let uri = 'masters/load_staff_masters/all_active_qualification_List';
+            let uri = 'masters/loadStaffMasters/all_active_qualification_List';
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -878,7 +881,7 @@ export default {
         
         loadnomination(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/load_nominations/'+staff_id;
+                let uri = 'staff/loadNominations/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -892,7 +895,7 @@ export default {
         },
         
         loadcoursemode(){
-            let uri = 'masters/load_staff_masters/all_active_coursemode_list';
+            let uri = 'masters/loadStaffMasters/all_active_coursemode_list';
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -949,12 +952,15 @@ export default {
                         $('.select2').select2({
                             theme: 'bootstrap4'
                         });
+                        if(response.data.data.id!=undefined){
+                            this.qualification_form.personal_id=response.data.data.id;
+                            this.nomination_form.personal_id=response.data.data.id;
+                        }
                         this.change_tab(nextclass);
                         this.loadqualificationdescription();
                         this.loadqualification();
                         this.loadcoursemode();
                         this.loadqualication(this.personal_form.personal_id);
-                        
                     })
                     .catch((error) => {  
                         if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
@@ -1007,7 +1013,7 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
         loaddraftpersonalDetails(){
-            axios.get('staff/loaddraftpersonalDetails')
+            axios.get('staff/loaddraftpersonalDetails/Regular')
             .then((response) => {  
                 let data=response.data.data;
                 if(data.village_id!=null){
@@ -1049,7 +1055,7 @@ export default {
                 console.log("Error......"+error);
             });
         },
-        loadactivesubjectList(uri="masters/load_staff_masters/all_active_subject_List"){
+        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -1061,7 +1067,7 @@ export default {
                 }
             });
         },
-        loadactivecureerstageList(uri="masters/load_staff_masters/all_active_cureer_stage_list"){
+        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -1073,7 +1079,7 @@ export default {
                 }
             });
         },
-        loadactivesex_idList(uri="masters/load_global_masters/all_active_gender"){
+        loadactivesex_idList(uri="masters/loadGlobalMasters/all_active_gender"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -1083,7 +1089,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadactivemaritalList(uri="masters/load_staff_masters/all_active_marital_list"){
+        loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -1095,7 +1101,7 @@ export default {
                 }
             });
         },
-        loadpositiontitleList(uri="masters/load_staff_masters/all_active_position_title"){
+        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -1108,7 +1114,7 @@ export default {
             });
         },
         
-        loadrelationshipList(uri="masters/load_staff_masters/all_active_relationship_list"){
+        loadrelationshipList(uri="masters/loadStaffMasters/all_active_relationship_list"){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -1120,17 +1126,22 @@ export default {
                 }
             });
         },
-        loadactivecountryList(uri="masters/load_global_masters/all_active_country"){
+        loadactivecountryList(uri="masters/loadGlobalMasters/all_active_country"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.countryList =  data.data.data;
+                for(let i=0; i<this.countryList.length;i++){
+                    if(this.countryList[i].nationality.toLowerCase().includes('bhutan')){
+                        this.personal_form.country_id=this.countryList[i].id;
+                    }
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
-        loadactivedzongkhagList(uri="masters/load_global_masters/all_active_dzongkhag"){
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -1146,6 +1157,7 @@ export default {
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            this.gewog_list =[];
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -1161,6 +1173,7 @@ export default {
                 gewogId=id;
             }
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+             this.villageList =[];
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -1189,13 +1202,14 @@ export default {
                 this.personal_form.village='';
                 this.personal_form.gewog='';
                 this.personal_form.village_id='';
-                if($('#'+id).val()!='c879c252-b4f7-4ab6-964b-1661ae9f0aa5'){
-                    $('#bhutanese_address').hide();
-                    $('#foreign_address').show();
+                
+                if($('#country_id option:selected').text().includes('Bhutan')){
+                   $('#bhutanese_address').show();
+                    $('#foreign_address').hide();
                 }
                 else{
-                    $('#bhutanese_address').show();
-                    $('#foreign_address').hide();
+                     $('#bhutanese_address').hide();
+                    $('#foreign_address').show();
                 }
                 this.personal_form.country_id=$('#'+id).val();
             }

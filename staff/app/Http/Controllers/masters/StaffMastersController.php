@@ -24,14 +24,14 @@ use App\Models\staff_masters\Subjects;
 use App\Models\staff_masters\CureerStage;
 use App\Models\staff_masters\QualificationDescription;
 use App\Models\staff_masters\CourseMode;
-
+use App\Models\staff_masters\TransferUndertaking;
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    public function save_sfatt_masters(Request $request){
+    public function saveStaffMasters(Request $request){
         $response_data=[];
         
         if($request['record_type']=="working_agency"){
@@ -203,11 +203,14 @@ class StaffMastersController extends Controller{
             }
         }
 
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="transfer_uindertaking"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="transfer_reason"){
                     $table="master_transfer_reason";
+                }
+                if($request['record_type']=="transfer_uindertaking"){
+                    $table="master_transfer_undertaking";
                 }
                 if($request['record_type']=="mgmn_designation"){
                     $table="master_mgmn_designation";
@@ -244,19 +247,30 @@ class StaffMastersController extends Controller{
                 }
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
-                    'code'    =>  'required|unique:'.$table,
                     'status'    =>  'required',
                 ];
+                if($request['record_type']!="master_transfer_undertaking"){
+                    $rules=array_merge($rules,
+                        array('code'    =>  'required|unique:'.$table,)
+                    );
+                }
                 $this->validate($request, $rules);
                 $data = [
                     'name'  =>  $request['name'],
-                    'code'    =>  $request['code'],
                     'status'    =>  $request['status'],
                     'created_by'=>$request['user_id'],
                     'created_at'=>date('Y-m-d h:i:s'),
                 ];
+                if($request['record_type']!="master_transfer_undertaking"){
+                    $data=array_merge($data,
+                        array('code'    =>  $request['code'],)
+                    );
+                }
                 if($request['record_type']=="transfer_reason"){
                     $response_data = TransferReason::create($data);
+                }
+                if($request['record_type']=="transfer_uindertaking"){
+                    $response_data = TransferUndertaking::create($data);
                 }
                 if($request['record_type']=="mgmn_designation"){
                     $response_data = MgmnDesignation::create($data);
@@ -292,7 +306,6 @@ class StaffMastersController extends Controller{
                     $response_data = CourseMode::create($data);
                     // $table="master_course_mode";
                 }
-
             }
             if($request->actiontype=="edit"){
                 $data ="";
@@ -300,6 +313,10 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="transfer_reason"){
                     $data = TransferReason::find($request['id']);
                     $table="master_transfer_reason";
+                }
+                if($request['record_type']=="transfer_uindertaking"){
+                    $data = TransferUndertaking::find($request['id']);
+                    $table="master_transfer_undertaking";
                 }
                 if($request['record_type']=="mgmn_designation"){
                     $data = MgmnDesignation::find($request['id']);
@@ -355,17 +372,25 @@ class StaffMastersController extends Controller{
                 $data->update();
                 $response_data = $data;
             }
-           
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
-    public function load_staff_masters($param=""){
+    public function loadStaffMasters($param=""){
         if($param=="all_workingagency"){
             return $this->successResponse(WorkingAgency::all());
         }
         if($param=="all_transfer"){
             return $this->successResponse(TransferReason::all());
+        }
+        if($param=="active_transfer"){
+            return $this->successResponse(TransferReason::where ('status', '1')->get());
+        }
+        if($param=="all_transfe_undertakingr"){
+            return $this->successResponse(TransferUndertaking::all());
+        }
+        if($param=="active_transfer_undertakingr"){
+            return $this->successResponse(TransferUndertaking::where ('status', '1')->get());
         }
         if($param=="all_mgmn_desig"){
             return $this->successResponse(MgmnDesignation::all());

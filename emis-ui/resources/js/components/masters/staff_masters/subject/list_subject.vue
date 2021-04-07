@@ -38,7 +38,7 @@ export default {
         }
     },
     methods:{
-       loadsubjectList(uri = 'masters/load_staff_masters/all_subject_List'){
+       loadsubjectList(uri = 'masters/loadStaffMasters/all_subject_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -31,7 +31,8 @@ class StructureSubCategoryController extends Controller
     public function loadStrSubCategory(){
         $subCategory = DB::table('structure_sub_categories as a')
             ->join('structure_category as b', 'b.id', '=', 'a.structureCategory')
-            ->select('a.id as id', 'b.name as structureCategory','a.structureCategory as structureID','a.subCategoryName as subCategoryName',
+            ->select('a.id as id', 'b.name as structureCategory','b.id as structureCategoryId',
+            'a.structureCategory as structureID','a.subCategoryName as subCategoryName',
             'a.description as description','a.status as status')->get();
             return $subCategory;
     }
@@ -78,7 +79,6 @@ class StructureSubCategoryController extends Controller
     */
     
     public function getStrCategoryDropdown(){
-        $subCategory = StructureCategory::all();
-        return $subCategory;
+        return StructureCategory::get(['id','name']);
     }
 }

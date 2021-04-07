@@ -57,7 +57,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/save_global_masters',this.form)
+                this.form.post('/masters/saveGlobalMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

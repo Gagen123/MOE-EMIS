@@ -34,7 +34,8 @@ class EquipmentController extends Controller
             ->join('equipment_type as b', 'a.type', '=', 'b.id')
             ->join('equipment_items as c', 'a.item', '=', 'c.id')
             ->join('equipment_usage as d', 'a.location', '=', 'd.id')
-            ->select('b.name as type', 'c.equipmentItem as item','d.name as location','a.number as number')->get();
+            ->select('b.name as type', 'c.equipmentItem as item','d.name as location','a.number as number',
+            'b.id AS typeId', 'c.id AS itemId', 'd.id AS locationUsageId')->get();
         return $equi;
     }
 

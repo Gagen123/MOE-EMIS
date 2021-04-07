@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-       loadworkingagencyList(uri = 'masters/load_staff_masters/all_transfer'){
+       loadworkingagencyList(uri = 'masters/loadStaffMasters/all_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response;

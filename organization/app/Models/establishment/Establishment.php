@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Establishment extends Model
 {
     use HasFactory, Uuid;
-    protected $table="establishments";
+    protected $table="application_details";
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +19,7 @@ class Establishment extends Model
     protected $fillable = [
         'id','proposedName','category','levelId','dzongkhagId','gewogId','chiwogId','locationId',
         'isGeopoliticallyLocated','isSenSchool','parentSchoolId','isColocated','cid',
-        'fullName','phoneNo','email','statusId','applicationNo','created_by','updated_by'
+        'fullName','phoneNo','email','status','applicationNo', 'service',
+        'oldOrganizationId1','oldOrganizationId2','year','created_by','updated_by'
     ];
 }

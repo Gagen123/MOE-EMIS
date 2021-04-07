@@ -40,7 +40,7 @@ export default {
         }
     },
     methods:{
-       loadqualifictionList(uri = 'masters/load_staff_masters/all_qualification_List'){
+       loadqualifictionList(uri = 'masters/loadStaffMasters/all_qualification_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;

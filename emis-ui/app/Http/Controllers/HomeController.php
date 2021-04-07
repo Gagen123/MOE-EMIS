@@ -29,9 +29,10 @@ class HomeController extends Controller{
                 // dd($user);
                 $token =json_decode($user_Det)->user_details->token;
                 $headers['Authorization'] = 'bearer '. $token;
+                // dd(json_decode($user_Det)->system_id);
                 $role_riv=$this->apiService->listData('getprivilleges/'.json_decode($user_Det)->system_id, [], $headers);
                 $role_riv=json_decode($role_riv);
-                $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter', [], $headers);
+                $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.json_decode($user_Det)->system_id, [], $headers);
                 // dd($role_riv);
                 $module=[];
                 $mod_ids="";
@@ -84,7 +85,7 @@ class HomeController extends Controller{
                     }
                 }
 
-                // dd($module);
+                // dd($role_workflow_submitter);
                 if($role_workflow_submitter!=null){
                     foreach(json_decode($role_workflow_submitter) as $i=> $work){
                         if($work->moduleName != "" && strpos($mod_ids,$work->mod_id)===false){
@@ -93,6 +94,7 @@ class HomeController extends Controller{
                                 'mod_id'=> $work->mod_id,
                                 'mod_name' => $work->moduleName,
                                 'module_icon'=>$work->module_icon,
+                                'module_route'=>$work->module_route,
                             ];
                             array_push($module,$mod);
                         }
@@ -103,9 +105,11 @@ class HomeController extends Controller{
                                 'sub_mod_id'=> $work->sub_mod_id,
                                 'sub_mod_name' => $work->sub_mod_name,
                                 'submod_icon'=>$work->submod_icon,
+                                'submod_route' =>$work->sub_mod_route,
                             ];
                             array_push($sub_modules,$sub_mod);
                         }
+                        // dd($sub_modules);
                         $screen=[
                             'mod_id'=> $work->mod_id,
                             'sub_mod_id'=> $work->sub_mod_id,
@@ -142,8 +146,8 @@ class HomeController extends Controller{
                     'roles' => $roles,//roles will be multiple
                 ];
 
-                //dd($user_details);
-                $role_workflow=$this->apiService->listData('getworkflows/all', [], $headers);
+                // dd($user_details);
+                $role_workflow=$this->apiService->listData('getworkflows/all/'.json_decode($user_Det)->system_id, [], $headers);
                 Session::put('User_Details', $user_details);
                 Session::put('User_Token', $token);
                 
@@ -172,7 +176,9 @@ class HomeController extends Controller{
     public function get_screens_on_submodules(Request $request,$type="",$id=""){
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
+        // dd($type.' : '.$id);
         $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
+        $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.json_decode($user_Det)->system_id, [], $headers);
         $screens=[];
         $screens_ids="";
         if($role_riv!=null){

@@ -31,12 +31,12 @@ class EquipmentItemController extends Controller
     public function loadEquipmentItem(){
         $subCategory = DB::table('equipment_items as a')
             ->join('equipment_type as b', 'b.id', '=', 'a.equipmentType')
-            ->select('a.id as id', 'a.equipmentItem as equipmentItem','b.name as equipmentType',
+            ->select('a.id as id', 'a.equipmentItem as equipmentItem','b.name as equipmentType','b.id as equipmentTypeId',
             'a.description as description','a.status as status')->get();
             return $subCategory;
     }
 
-/** 
+    /** 
      * method to save or update equipment item 
     */
     public function saveEquipmentItem(Request $request){
@@ -45,10 +45,10 @@ class EquipmentItemController extends Controller
             $equ = [
                 'equipmentItem'          => $request['equipmentItem'],
                 'equipmentType'          => $request['equipmentType'],
-                'description'          => $request['description'],
-                'status'        => $request['status'],
-                'updated_by'    =>$request['user_id'],
-                'created_at'    =>date('Y-m-d h:i:s'),
+                'description'            => $request['description'],
+                'status'                 => $request['status'],
+                'updated_by'             =>$request['user_id'],
+                'created_at'             =>date('Y-m-d h:i:s'),
             ];
 
             $data = EquipmentItem::find($request['id']);
@@ -63,10 +63,10 @@ class EquipmentItemController extends Controller
             $equ = [
                 'equipmentItem'          => $request['equipmentItem'],
                 'equipmentType'          => $request['equipmentType'],
-                'description'          => $request['description'],
-                'status'        => $request['status'],
-                'created_by'    =>$request['user_id'],
-                'created_at'    =>date('Y-m-d h:i:s'),
+                'description'            => $request['description'],
+                'status'                 => $request['status'],
+                'created_by'             => $request['user_id'],
+                'created_at'             => date('Y-m-d h:i:s'),
             ];
             $equipment= EquipmentItem::create($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);
@@ -77,7 +77,6 @@ class EquipmentItemController extends Controller
     */
     
     public function getEquipmentTypeDropdown(){
-        $subCategory = EquipmentType::all();
-        return $subCategory;
+        return EquipmentType::get(['id','name']);
     }
 }
