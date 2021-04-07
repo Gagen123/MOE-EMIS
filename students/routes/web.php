@@ -16,7 +16,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'students_api/v1'], function () use ($router) {
     
     $router->group(['prefix' => 'masters/studentHealth'], function () use ($router) {
         // studenthealth route
@@ -40,5 +40,24 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadTerm', 'Masters\StudentHealthController@loadTerm');
         
     });
+
+    
+    $router->group(['prefix' => 'masters/students'], function () use ($router) {
+        $router->post('/saveStudentAward', 'Masters\StudentMasterController@saveStudentAward');
+        $router->get('/loadStudentAwards', 'Masters\StudentMasterController@loadStudentAwards');
+        $router->post('/saveStudentMasters', ['uses' => 'Masters\StudentMasterController@saveStudentMasters']);
+        $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
+        $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
+        
+    });
+
+    /*
+    $router->group(['prefix' => 'masters/student'], function () use ($router) {
+        // term  route
+        $router->post('/saveStudentAward', 'Masters\StudentMasterController@saveStudentAward');
+        $router->get('/loadStudentAwards', 'Masters\StudentMasterController@loadStudentAwards');
+        
+    });
+    */
 
 });

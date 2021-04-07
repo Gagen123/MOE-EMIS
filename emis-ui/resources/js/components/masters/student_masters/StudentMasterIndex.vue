@@ -5,19 +5,64 @@
         </ol>
         <ul class="nav nav-pills mb-2" role="tablist">
             
-            <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                <router-link to="health_screening_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item active pr-1" @click="activatelink('health_screening_index')">
+                <router-link to="health_screening_index" id="health_screening_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                  Health Screening  
                 </router-link>
             </li>
-            <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                <router-link to="/studenthealth_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item active pr-1" @click="activatelink('studenthealth_index')">
+                <router-link to="/studenthealth_index" id="studenthealth_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                   Vaccination  
                 </router-link>
             </li>
-             <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                <router-link to="/term_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item active pr-1" @click="activatelink('term_index')">
+                <router-link to="/term_index" id="term_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                   Term 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('student_award_list')">
+                <router-link to="/student_award_list" id="student_award_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Award 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('offence_type_list')">
+                <router-link to="/offence_type_list" id="offence_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Offence Type 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('offence_severity_list')">
+                <router-link to="/offence_severity_list" id="offence_severity_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Offence Severity 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('action_taken_list')">
+                <router-link to="/action_taken_list" id="action_taken_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Action Taken 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('roles_responsibilities_list')">
+                <router-link to="/roles_responsibilities_list" id="roles_responsibilities_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Roles & Responsibilities 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('program_name_list')">
+                <router-link to="/program_name_list" id="program_name_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Program Name 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('program_support_list')">
+                <router-link to="/program_support_list" id="program_support_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Program Support 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('program_roles_list')">
+                <router-link to="/program_roles_list" id="program_roles_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Program Roles 
+                </router-link>
+            </li>
+            <li class="nav-item active pr-1" @click="activatelink('project_type_list')">
+                <router-link to="/project_type_list" id="project_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 Project Type 
                 </router-link>
             </li>
         </ul>
