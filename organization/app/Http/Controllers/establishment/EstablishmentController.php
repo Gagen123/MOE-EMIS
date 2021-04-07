@@ -10,8 +10,9 @@ use App\Models\Masters\Level;
 use App\Models\Masters\Location;
 use App\Models\Masters\Classes;
 use App\Models\Masters\Stream;
-use App\Models\establishment\Establishment;
-use App\Models\establishment\EstablishmentClassStream;
+use App\Models\establishment\ApplicationDetails;
+use App\Models\establishment\ApplicationClassStream;
+use App\Models\establishment\ApplicationProprietorDetails;
 use Illuminate\Support\Facades\DB;
 
 
@@ -70,9 +71,24 @@ class EstablishmentController extends Controller
                 'updated_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s')
                 ];
-                // $data = Establishment::find($request['id']);
 
-                $establishment = Establishment::where('id', $id)->update($estd);
+                // update proprietor details if category is private
+                if($request['category'] == 0){
+                   
+                    $pvtDetails = [
+                        'applicationId'            =>  1,
+                        'cid'                      =>  $request['cid'],
+                        'fullName'                 =>  $request['name'],
+                        'phoneNo'                  =>  $request['phoneNo'],
+                        'email'                    =>  $request['email'],
+                        'updated_by'               =>  $request->user_id,
+                        'created_at'               =>  date('Y-m-d h:i:s')
+                        ];
+                    
+                    $establishment = ApplicationProprietorDetails::where('applicationId', 1)->update($pvtDetails);
+                }
+
+                $establishment = ApplicationDetails::where('id', $id)->update($estd);
                 return $this->successResponse($establishment, Response::HTTP_CREATED);
         }else{
             $estd = [
@@ -97,8 +113,23 @@ class EstablishmentController extends Controller
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s')
                 ];
+                
+                // save proprietor details if category is private
+                if($request['category'] == 0){
+                    $pvtDetails = [
+                        'applicationId'            =>  1,
+                        'cid'                      =>  $request['cid'],
+                        'fullName'                 =>  $request['name'],
+                        'phoneNo'                  =>  $request['phoneNo'],
+                        'email'                    =>  $request['email'],
+                        'created_by'               =>  $request->user_id,
+                        'created_at'               =>  date('Y-m-d h:i:s')
+                        ];
+                    
+                    $establishment = ApplicationProprietorDetails::create($pvtDetails);
+                }
 
-                $establishment = Establishment::create($estd);
+                $establishment = ApplicationDetails::create($estd);
                 return $this->successResponse($establishment, Response::HTTP_CREATED);
         }
     }
@@ -132,7 +163,7 @@ class EstablishmentController extends Controller
                         if(strpos($inserted_class,$cls)===false){
                             $inserted_class.=$cls;
                         }
-                        $class = EstablishmentClassStream::create($classStream);
+                        $class = ApplicationClassStream::create($classStream);
                     }
                 }
             }
@@ -146,7 +177,7 @@ class EstablishmentController extends Controller
                     'created_at'        => date('Y-m-d h:i:s'),
                 ];
                 if($classStream != ""){
-                    $class = EstablishmentClassStream::create($classStream);
+                    $class = ApplicationClassStream::create($classStream);
                 }
             }
         }
@@ -174,6 +205,13 @@ class EstablishmentController extends Controller
      * method to load organization details
      */
     public function loadOrganizationDetails($user_id=""){
-        return $this->successResponse(Establishment::where('created_by',$user_id)->where('status','Pending')->first());
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','Pending')->first());
+    }
+
+    /**
+     * method to load organization details
+     */
+    public function loadProprietorDetails(){
+        return $this->successResponse(ApplicationProprietorDetails::all());
     }
 }
