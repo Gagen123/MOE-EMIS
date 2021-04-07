@@ -37,4 +37,8 @@ return [
         'logout_uri' => env('SYSTEM_REDIRECTION_URL')
     ],
 
+    'constant'=>[
+        'file_stored_base_path' => env('FILE__BASE_PATH')
+    ],
+
 ];

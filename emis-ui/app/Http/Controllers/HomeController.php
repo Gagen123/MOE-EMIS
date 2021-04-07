@@ -144,6 +144,7 @@ class HomeController extends Controller{
                     'screens'=>$screens,
                     'ministry_user'=>$user->ministry_user,
                     'roles' => $roles,//roles will be multiple
+                    'system_id' =>json_decode($user_Det)->system_id,
                 ];
 
                 // dd($user_details);
@@ -176,9 +177,10 @@ class HomeController extends Controller{
     public function get_screens_on_submodules(Request $request,$type="",$id=""){
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
-        // dd($type.' : '.$id);
+        // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
         $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
-        $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.json_decode($user_Det)->system_id, [], $headers);
+        $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.Session::get('User_Details')['system_id'], [], $headers);
+        // dd($role_workflow_submitter);
         $screens=[];
         $screens_ids="";
         if($role_riv!=null){

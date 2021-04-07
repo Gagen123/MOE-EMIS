@@ -21,6 +21,7 @@ class HrDevelopmentController extends Controller{
     }
 
     public function saveprogramDetails(Request $request){
+       
         $rules = [
             'training_type'             =>  'required  ',
             'course_title'              =>  'required',
@@ -82,13 +83,34 @@ class HrDevelopmentController extends Controller{
         }
         
         $this->validate($request, $rules,$customMessages);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopment';
+        if(sizeof($files)>0 && !is_dir($file_store_path)){
+            mkdir($file_store_path,0777,TRUE);
+        }
+        foreach($files as $index => $file){
+            $file_name = time().'_' .$file->getClientOriginalName();
+            move_uploaded_file($file,$file_store_path.'/'.$file_name);
+            array_push($attachment_details,
+                array(
+                    'path'        =>  $file_store_path,
+                    'original_name'           =>  $file_name,
+                    'user_defined_name'       =>  $filenames[$index],
+                )
+            );
+        }
         $request_data =[
             'id'                                =>  $request->id,
             'training_type'                     =>  $request->training_type,
+            'files'                             =>  $request->files,
             'course_title'                      =>  $request->course_title,
             'organizer'                         =>  $request->organizer,
             'start_date'                        =>  $request->start_date,
             'end_date'                          =>  $request->end_date,
+            'related_programme'                 =>  $request->related_programme,
 
             'programme_level'                   =>  $request->programme_level,
             'programme_type'                    =>  $request->programme_type,
@@ -108,12 +130,16 @@ class HrDevelopmentController extends Controller{
             'subject1'                          =>  $request->subject1,
             'subject2'                          =>  $request->subject2,
             'thesis_title'                      =>  $request->thesis_title,
-
+            'attachment_details'                =>  $attachment_details,
             'status'                            =>  $request->status,
             'user_id'                           =>  $this->user_id() 
         ];
-        dd($request_data);
-        $response_data= $this->apiService->createData('emis/staff/saveTransferWindow', $transfer_window_details);
+        $response_data= $this->apiService->createData('emis/staff/saveprogramDetails', $request_data);
+        return $response_data;
+    }
+    
+    public function loadDraftDetails(){
+        $response_data= $this->apiService->listData('emis/staff/loadDraftDetails/'.$this->user_id());
         return $response_data;
     }
 }
