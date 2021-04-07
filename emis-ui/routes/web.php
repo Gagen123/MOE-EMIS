@@ -61,15 +61,11 @@ Route::prefix('masters')->group(function () {
     Route::get('/getClassInDropdown', [App\Http\Controllers\AdministrationController::class, 'getClassInDropdown'])->name('getClassInDropdown');
     Route::get('/loadStream', [App\Http\Controllers\AdministrationController::class, 'loadStream'])->name('loadStream');
 
-    //Student Masters   
-    Route::post('/saveStudentHealth', [App\Http\Controllers\AdministrationController::class, 'saveStudentHealth'])->name('saveStudentHealth');
-    Route::get('/loadStudentHealth', [App\Http\Controllers\AdministrationController::class, 'loadStudentHealth'])->name('loadStudentHealth');
-   
-    Route::post('/saveScreening', [App\Http\Controllers\AdministrationController::class, 'saveScreening'])->name('saveScreening');
-    Route::get('/loadScreening', [App\Http\Controllers\AdministrationController::class, 'loadScreening'])->name('loadScreening');
+    //Student Masters
+    Route::post('/saveStudentMasters', [App\Http\Controllers\student\StudentMasterController::class, 'saveStudentMasters'])->name('saveStudentMasters');
+    Route::get('/loadStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
+    Route::get('/allActiveStudentDropdowns/{model}/{parent_id}', [App\Http\Controllers\student\StudentMasterController::class, 'allActiveStudentDropdowns'])->name('allActiveStudentDropdowns');
     
-    Route::post('/saveTerm', [App\Http\Controllers\AdministrationController::class, 'saveTerm'])->name('saveTerm');
-    Route::get('/loadTerm', [App\Http\Controllers\AdministrationController::class, 'loadTerm'])->name('loadTerm');
 }); 
 
 Route::prefix('organization')->group(function () {
@@ -129,7 +125,14 @@ Route::prefix('staff')->group(function () {
 
     
     
-});   
+});
+
+Route::prefix('students')->group(function () {
+    Route::post('/saveStdResponsibility', [App\Http\Controllers\student\GeneralInfoController::class, 'saveStdResponsibility'])->name('saveStdResponsibility');
+    Route::get('/loadStdResponsibility', [App\Http\Controllers\student\GeneralInfoController::class, 'loadStdResponsibility'])->name('loadStdResponsibility');
+    
+    
+}); 
  
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getpersonbycid'])->name('getpersonbycid');
