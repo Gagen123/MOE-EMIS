@@ -532,6 +532,67 @@ class AdministrationController extends Controller{
         return $loadStream;
     }
 
+    public function saveElectricitySource(Request $request){
+        $rules = [
+            'sourceName'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'sourceName.required' => 'Source Name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $source =[
+            'sourceName'    =>  $request['sourceName'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->user_id()
+        ];
+        // dd($dis);
+        try{
+            $response_data= $this->apiService->createData('emis/masters/electricitySource/saveElectricitySource', $source);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadElectricitySource(){
+        $loadElectricitySource = $this->apiService->listData('emis/masters/electricitySource/loadElectricitySource');
+        return $loadElectricitySource;
+    }
+
+    public function saveElectricitySupply(Request $request){
+        $rules = [
+            'supplyName'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'supplyName.required' => 'Source Name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $source =[
+            'supplyName'    =>  $request['supplyName'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->user_id()
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/masters/electricitySupply/saveElectricitySupply', $source);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadElectricitySupply(){
+        $loadElectricitySupply = $this->apiService->listData('emis/masters/electricitySupply/loadElectricitySupply');
+        return $loadElectricitySupply;
+    }
+
     public function saveStudentHealth(Request $request){
         $rules = [
             'studenthealthName'  =>  'required',

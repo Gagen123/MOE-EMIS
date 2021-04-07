@@ -18,7 +18,7 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <input type="hidden" class="form-control" v-model="form.id"/>
+                        <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                         <div class="form-group row"> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Proposed Name:<span class="text-danger">*</span></label>
@@ -184,7 +184,7 @@ export default {
             classList:[],
             streamList:[],
             form: new form({
-                id: '',proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',locationType:'',
+                id: '',proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
                 geopolicaticallyLocated:'0',senSchool:'0',parentSchool:'',coLocatedParent:'0',cid:'',name:'',
                 phoneNo:'',email:'',status:'pending'
             }),
@@ -393,6 +393,21 @@ export default {
             }
         },
 
+        loadProprietorDetails(){
+            axios.get('organization/loadProprietorDetails')
+            .then((response) => {  
+
+                let data=response.data.data[0];
+                this.form.cid           =   data.cid;
+                this.form.name          =   data.fullName;
+                this.form.phoneNo       =   data.phoneNo;
+                this.form.email         =   data.email;
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+        
         /**
          * method to load organization details
          */
@@ -400,12 +415,17 @@ export default {
             axios.get('organization/loadOrganizationDetails')
             .then((response) => {  
                 let data=response.data.data;
-                
                 this.form.id  =   data.id;
                 this.form.proposedName  =   data.proposedName;
                 this.form.level         =   data.levelId;
                 this.form.category      =   data.category;
                 this.form.locationType  =   data.locationId;
+                
+                //to populate proprietor details if category is private
+                if(data.category == 0){
+                    this.showprivatedetails('private');
+                    this.loadProprietorDetails();
+                }
                 
                 this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
                 this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
@@ -417,11 +437,15 @@ export default {
                 this.form.senSchool                 =   data.isSenSchool;
                 this.form.parentSchool              =   data.parentSchoolId;
                 this.form.coLocated                 =   data.isColocated;
+
+                
             })
             .catch((error) => {  
                 console.log("Error......"+error);
             });
         },
+
+        
     },
 
     created(){

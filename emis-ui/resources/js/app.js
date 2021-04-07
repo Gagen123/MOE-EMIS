@@ -657,7 +657,7 @@ const routes = [
         ]    
       },
       { path: '/service_provider_index', 
-        component: require('./components/masters/organization_masters/road_type/road_type_index.vue').default ,
+        component: require('./components/masters/organization_masters/service_provider/service_provider_index.vue').default ,
         children: 
         [
           { path: '', component: require('./components/masters/organization_masters/service_provider/service_provider_list.vue').default },
@@ -977,7 +977,16 @@ const routes = [
   children:[
    
     { path: '/establishment', component: require('./components/organization/establishment/establishment.vue').default },
+    { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
+    { path: '/register', component: require('./components/organization/establishment/register.vue').default },
+    { path: '/school_list', component: require('./components/organization/establishment/school_list.vue').default },
+    // need to remove this
     { path: '/sample', component: require('./components/organization/establishment/sample.vue').default },
+    { path: '/establishment_verification', component: require('./components/organization/verification/establishment_verification.vue').default },
+    { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
+    { path: '/change_basic_details_verification', component: require('./components/organization/verification/change_basic_details_verification.vue').default },
+    { path: '/merger_verification', component: require('./components/organization/verification/merger_verification.vue').default },
+    { path: '/closure_verification', component: require('./components/organization/verification/closure_verification.vue').default },
 
   ] 
 },

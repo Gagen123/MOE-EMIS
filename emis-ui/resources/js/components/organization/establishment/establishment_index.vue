@@ -12,7 +12,7 @@
             </li>
 
             <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                <router-link id="regularstaff" to="/schoolList1" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link id="regularstaff" to="/school_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     School List
                 </router-link>
@@ -24,21 +24,51 @@
                 </router-link>
             </li> 
             <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
-                <router-link to ="/register1" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link to ="/register" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     Register
                 </router-link>
             </li>
             <li class="nav-item pr-1" @click="activatelink('nomination')">
-                <router-link to="/headQuaterOffice1" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link to="/head_quater_office" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     HQ/Dzongkhag Office
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('nomination')">
+            <!-- <li class="nav-item pr-1" @click="activatelink('nomination')">
                 <router-link to="/sample" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     Sample
+                </router-link>
+            </li> -->
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/establishment_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Establishment Verification
+                </router-link>
+            </li>
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/bifurcation_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Bifurcation Verification
+                </router-link>
+            </li>
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/change_basic_details_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Change Basic Details Verification
+                </router-link>
+            </li>
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/merger_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Merger Verification
+                </router-link>
+            </li>
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/closure_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Closure Verification
                 </router-link>
             </li>
         </ul>

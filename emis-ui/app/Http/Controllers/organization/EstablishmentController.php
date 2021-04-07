@@ -122,4 +122,9 @@ class EstablishmentController extends Controller
         return $loadOrganizationDetails;
     }
 
+    public function loadProprietorDetails(){  
+        $loadProprietorDetails = $this->apiService->listData('emis/organization/establishment/loadProprietorDetails');
+        return $loadProprietorDetails;
+    }
+
 }
