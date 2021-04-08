@@ -615,6 +615,67 @@ const routes = [
           { path: '/stream_list', name:'StreamList', component: require('./components/masters/organization_masters/stream/stream_list.vue').default },
         ]    
       },
+      { path: '/contact_type_index', 
+        component: require('./components/masters/organization_masters/contact_type/contact_type_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/contact_type/contact_type_list.vue').default },
+          { path: '/contact_type_add', name:'ContactTypeAdd', component: require('./components/masters/organization_masters/contact_type/contact_type_add.vue').default },
+          { path: '/contact_type_edit', name:'ContactTypeEdit', component: require('./components/masters/organization_masters/contact_type/contact_type_edit.vue').default },
+          { path: '/contact_type_list', name:'ContactTypeList', component: require('./components/masters/organization_masters/contact_type/contact_type_list.vue').default },
+        ]    
+      },
+
+      { path: '/electricity_source_index', 
+        component: require('./components/masters/organization_masters/electricity_source/electricity_source_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/electricity_source/electricity_source_list.vue').default },
+          { path: '/electricity_source_add', name:'ElectricitySourceAdd', component: require('./components/masters/organization_masters/electricity_source/electricity_source_add.vue').default },
+          { path: '/electricity_source_edit', name:'ElectricitySourceEdit', component: require('./components/masters/organization_masters/electricity_source/electricity_source_edit.vue').default },
+          { path: '/electricity_source_list', name:'ElectricitySourceList', component: require('./components/masters/organization_masters/electricity_source/electricity_source_list.vue').default },
+        ]    
+      },
+      { path: '/electricity_supply_index', 
+        component: require('./components/masters/organization_masters/electricity_supply/electricity_supply_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/electricity_supply/electricity_supply_list.vue').default },
+          { path: '/electricity_supply_add', name:'ElectricitySupplyAdd', component: require('./components/masters/organization_masters/electricity_supply/electricity_supply_add.vue').default },
+          { path: '/electricity_supply_edit', name:'ElectricitySupplyEdit', component: require('./components/masters/organization_masters/electricity_supply/electricity_supply_edit.vue').default },
+          { path: '/electricity_supply_list', name:'ElectricitySupplyList', component: require('./components/masters/organization_masters/electricity_supply/electricity_supply_list.vue').default },
+        ]    
+      },
+      { path: '/road_type_index', 
+        component: require('./components/masters/organization_masters/road_type/road_type_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/road_type/road_type_list.vue').default },
+          { path: '/road_type_add', name:'RoadTypeAdd', component: require('./components/masters/organization_masters/road_type/road_type_add.vue').default },
+          { path: '/road_type_edit', name:'RoadTypeEdit', component: require('./components/masters/organization_masters/road_type/road_type_edit.vue').default },
+          { path: '/road_type_list', name:'RoadTypeList', component: require('./components/masters/organization_masters/road_type/road_type_list.vue').default },
+        ]    
+      },
+      { path: '/service_provider_index', 
+        component: require('./components/masters/organization_masters/service_provider/service_provider_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/service_provider/service_provider_list.vue').default },
+          { path: '/service_provider_add', name:'ServiceProviderAdd', component: require('./components/masters/organization_masters/service_provider/service_provider_add.vue').default },
+          { path: '/service_provider_edit', name:'ServiceProviderEdit', component: require('./components/masters/organization_masters/service_provider/service_provider_edit.vue').default },
+          { path: '/service_provider_list', name:'ServiceProviderList', component: require('./components/masters/organization_masters/service_provider/service_provider_list.vue').default },
+        ]    
+      },
+      { path: '/structure_designer_index', 
+        component: require('./components/masters/organization_masters/structure_designer/structure_designer_index.vue').default ,
+        children: 
+        [
+          { path: '', component: require('./components/masters/organization_masters/structure_designer/structure_designer_list.vue').default },
+          { path: '/structure_designer_add', name:'StructureDesignerAdd', component: require('./components/masters/organization_masters/structure_designer/structure_designer_add.vue').default },
+          { path: '/structure_designer_edit', name:'StructureDesignerEdit', component: require('./components/masters/organization_masters/structure_designer/structure_designer_edit.vue').default },
+          { path: '/structure_designer_list', name:'StructureDesignerList', component: require('./components/masters/organization_masters/structure_designer/structure_designer_list.vue').default },
+        ]    
+      },
     ]  
   },
   //STUDENT MASTER
@@ -916,7 +977,16 @@ const routes = [
   children:[
    
     { path: '/establishment', component: require('./components/organization/establishment/establishment.vue').default },
+    { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
+    { path: '/register', component: require('./components/organization/establishment/register.vue').default },
+    { path: '/school_list', component: require('./components/organization/establishment/school_list.vue').default },
+    // need to remove this
     { path: '/sample', component: require('./components/organization/establishment/sample.vue').default },
+    { path: '/establishment_verification', component: require('./components/organization/verification/establishment_verification.vue').default },
+    { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
+    { path: '/change_basic_details_verification', component: require('./components/organization/verification/change_basic_details_verification.vue').default },
+    { path: '/merger_verification', component: require('./components/organization/verification/merger_verification.vue').default },
+    { path: '/closure_verification', component: require('./components/organization/verification/closure_verification.vue').default },
 
   ] 
 },

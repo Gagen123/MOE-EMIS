@@ -111,6 +111,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     });
 
+    $router->group(['prefix' => 'masters/electricitySource'], function () use ($router) {
+        $router->post('/saveElectricitySource', 'Masters\ElectricitySourceController@saveElectricitySource');
+        $router->get('/loadElectricitySource', 'Masters\ElectricitySourceController@loadElectricitySource');
+    });
+
+    $router->group(['prefix' => 'masters/electricitySupply'], function () use ($router) {
+        $router->post('/saveElectricitySupply', 'Masters\ElectricitySupplyController@saveElectricitySupply');
+        $router->get('/loadElectricitySupply', 'Masters\ElectricitySupplyController@loadElectricitySupply');
+    });
+
     $router->group(['prefix' => 'organization/equipment'], function () use ($router) {
         // equipment route
         $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
@@ -146,6 +156,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getSupportInDropdown', 'structuralFacility\SportController@getSupportInDropdown');
     });
 
+    $router->group(['prefix' => 'organization/schoolFeeding'], function () use ($router) {
+        $router->post('/saveKitchenStatus', 'structuralFacility\SchoolFeedingController@saveKitchenStatus');
+        $router->get('/loadKitchenStatus/{user_id}', ['uses' => 'structuralFacility\SchoolFeedingController@loadKitchenStatus']);
+
+    });
+
     $router->group(['prefix' => 'organization/infrastructure'], function () use ($router) {
         $router->post('/saveInfrastructure', 'structuralFacility\InfrastructureController@saveInfrastructure');
         $router->get('/getCategoryInDropdown', 'structuralFacility\InfrastructureController@getCategoryInDropdown');
@@ -162,6 +178,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClass', 'establishment\EstablishmentController@getClass');
         $router->get('/getStream', 'establishment\EstablishmentController@getStream');
         $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
+        $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
+
     });
 
     $router->group(['prefix' => 'organization/changeDetails'], function () use ($router) {

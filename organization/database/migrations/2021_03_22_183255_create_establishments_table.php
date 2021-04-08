@@ -26,10 +26,6 @@ class CreateEstablishmentsTable extends Migration
             $table->tinyInteger('isSenSchool');
             $table->char('parentSchoolId',36)->nullable(true);
             $table->tinyInteger('isColocated')->nullable(true);;
-            $table->integer('cid')->nullable(true);
-            $table->string('fullName')->nullable(true);
-            $table->integer('phoneNo')->nullable(true);
-            $table->string('email')->nullable(true);
             $table->string('status')->nullable(true);
             $table->string('applicationNo');
             $table->string('service');
