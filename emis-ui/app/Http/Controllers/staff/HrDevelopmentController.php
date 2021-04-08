@@ -19,9 +19,8 @@ class HrDevelopmentController extends Controller{
         $system = $this->apiService->listData('system/get_roles/'.$param);
         return $system;
     }
-
+    
     public function saveprogramDetails(Request $request){
-       
         $rules = [
             'training_type'             =>  'required  ',
             'course_title'              =>  'required',
@@ -81,27 +80,31 @@ class HrDevelopmentController extends Controller{
                 )
             );
         }
-        
         $this->validate($request, $rules,$customMessages);
 
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopment';
-        if(sizeof($files)>0 && !is_dir($file_store_path)){
-            mkdir($file_store_path,0777,TRUE);
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'        =>  $file_store_path,
+                            'original_name'           =>  $file_name,
+                            'user_defined_name'       =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
         }
-        foreach($files as $index => $file){
-            $file_name = time().'_' .$file->getClientOriginalName();
-            move_uploaded_file($file,$file_store_path.'/'.$file_name);
-            array_push($attachment_details,
-                array(
-                    'path'        =>  $file_store_path,
-                    'original_name'           =>  $file_name,
-                    'user_defined_name'       =>  $filenames[$index],
-                )
-            );
-        }
+        
         $request_data =[
             'id'                                =>  $request->id,
             'training_type'                     =>  $request->training_type,
@@ -134,12 +137,46 @@ class HrDevelopmentController extends Controller{
             'status'                            =>  $request->status,
             'user_id'                           =>  $this->user_id() 
         ];
+        // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/saveprogramDetails', $request_data);
         return $response_data;
     }
     
     public function loadDraftDetails(){
         $response_data= $this->apiService->listData('emis/staff/loadDraftDetails/'.$this->user_id());
+        return $response_data;
+    }
+    public function saveprogramFinalDetails(Request $request){
+        $rules = [
+            'nomination_start_date'             =>  'required | date',
+            'nomination_end_date'               =>  'required | date',
+            'nature_of_participant'             =>  'required',
+            // 'target_group'                      =>  'required',
+            'role_action_mapp'                  =>  'required',
+            
+        ];
+        $customMessages = [
+            'nomination_start_date.required'              => 'Please select nomination start date',
+            'nomination_end_date.required'                => 'Please select nomination end date',
+            'nature_of_participant.required'              => 'Please select this field',
+            // 'target_group.required'                       => 'Please select this field',
+            'role_action_mapp.required'                   => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $request_data =[
+            'id'                               =>  $request->id,
+            'nomination_start_date'            =>  $request->nomination_start_date,
+            'nomination_end_date'              =>  $request->nomination_end_date,
+            'nature_of_participant'            =>  $request->nature_of_participant,
+            'target_group'                     =>  $request->target_group,
+            'org_level'                        =>  $request->org_level,
+            'role_action_mapp'                 =>  $request->role_action_mapp,
+            'remarks'                          =>  $request->remarks,
+            'user_id'                           =>  $this->user_id() 
+            
+        ];
+        // dd($request_data);
+        $response_data= $this->apiService->createData('emis/staff/saveprogramFinalDetails', $request_data);
         return $response_data;
     }
 }

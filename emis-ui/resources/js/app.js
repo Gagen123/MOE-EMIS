@@ -458,8 +458,8 @@ const routes = [
       { path: '/programme_index', 
         component: require('./components/staff/training/create_programme/programme_index.vue').default, 
         children:[
-          { path: '/',name:'programme_index',  component: require('./components/staff/training/create_programme/programme_list.vue').default },
-          { path: '/list_civil_staff',name:'list_civil_staff',  component: require('./components/staff/training/create_programme/programme_list.vue').default },
+          { path: '/',name:'programme_index',  component: require('./components/staff/training/create_programme/list_programme.vue').default },
+          { path: '/list_programme',name:'list_programme',  component: require('./components/staff/training/create_programme/list_programme.vue').default },
           { path: '/create_training_programme',name:'create_training_programme',  component: require('./components/staff/training/create_programme/create_training_programme.vue').default },
           // { path: '/edit_civil_staff',name:'edit_civil_staff',  component: require('./components/staff/civil/edit_civil_staff.vue').default },
         ],
