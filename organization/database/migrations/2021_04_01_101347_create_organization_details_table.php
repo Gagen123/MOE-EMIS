@@ -27,11 +27,10 @@ class CreateOrganizationDetailsTable extends Migration
             $table->tinyInteger('isSenSchool');
             $table->char('parentSchoolId',36)->nullable(true);
             $table->tinyInteger('isColocated')->nullable(true);;
-            $table->integer('cid')->nullable(true);
-            $table->string('fullName')->nullable(true);
-            $table->integer('phoneNo')->nullable(true);
-            $table->string('email')->nullable(true);
             $table->string('status')->nullable(true);
+            $table->integer("yearOfEstablishment");
+            $table->string("organizationType");
+            $table->string("zestAgencyCode");
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

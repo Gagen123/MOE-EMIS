@@ -28,4 +28,10 @@ trait AuthUser
         return $this->currentUser()['Dzo_Id'];
 
     }
+
+    public function get_working_agency_id()
+    {
+        return $this->currentUser()['Agency_Code'];
+
+    }
 }

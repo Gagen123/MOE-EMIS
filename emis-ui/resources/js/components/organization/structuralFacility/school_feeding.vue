@@ -36,142 +36,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1">
-                                    <td>Adequate size of the kitchen for the number of students? </td>
+                                <input type="hidden" v-model="form.type" class="form-control"/>
+                                <tr id="record1" v-for='(kit, index) in form.kitchen_status' :key="index">
+                                    <td>
+                                        <input type="text" class="form-control" v-model="kit.question" :id="'question'+(index+1)" readonly>
+                                        <span class="text-danger" :id="'question'+(index+1)"></span>
+                                    </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.adequateSize"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.adequateSize"  value="0" tabindex=""/> No</label>
+                                            <label><input  type="radio" v-model="kit.value" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="kit.value" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
-                                </tr>
-                                <tr id="record2">
-                                    <td>Safe water connecion inside the kitchen? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.waterInKitchen"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.waterInKitchen"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record3">
-                                    <td>Continuous water supply throughout the year in the kitchen? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.waterSupply"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.waterSupply"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record4">
-                                    <td>Separate dish washing space in the kitchen? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.dishWashing"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.dishWashing"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record5">
-                                    <td>wash basin with water connection for handwashing? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.basin"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.basin"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record6">
-                                    <td>Proper functioning smoke outlet/chimney? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.chinmey"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.chinmey"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record7">
-                                    <td>Adequate shelves in the kitchen to store utensils neatly? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.shelves"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.shelves"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record8">
-                                    <td>Concrete floor? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.concreteFloor"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.concreteFloor"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record9">
-                                    <td>Concrete walls? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.concreteWall"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.concreteWall"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record10">
-                                    <td>Proper closed ceiling? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.closedCeiling"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.closedCeiling"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record11">
-                                    <td>Windows with proper closures? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.windwoProperClosure"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.windowProperClosure"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record12">
-                                    <td>Doors with proper closures? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.doorProperClosure"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.doorProperClosure"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record13">
-                                    <td>Adequate ventilations? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.adequateVantillation"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.adequateVantillation"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record14">
-                                    <td>Functioning drainage system inside and outside of the kitchen? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.drainageSystem"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.drainageSystem"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record15">
-                                    <td>Changing room? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form.changingRoom"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.changingRoom"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-
+                                </tr> 
                             </tbody>
                         </table>
                         <hr>
@@ -190,129 +67,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1">
-                                    <td>Separate store exist for perishable and non-perisable items? </td>
+                                <tr id="record1" v-for='(food, index) in form1.food_status' :key="index">
                                     <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.separateStore"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.separateStore"  value="0" tabindex=""/> No</label>
-                                        </div>
+                                        <input type="text" class="form-control" v-model="food.question" :id="'question'+(index+1)" readonly>
+                                        <span class="text-danger" :id="'question'+(index+1)"></span>
                                     </td>
-                                </tr>
-                                <tr id="record2">
-                                    <td>Adequate space is available to store food comodities? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.storeFood"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.storeFood"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record3">
-                                    <td>Proper pallets are in place to store all non-perishable food items? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.properPallets"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.properPallets"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record4">
-                                    <td>Proper containers are in place to store perishable food items? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.properContainer"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.properContainer"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record5">
-                                    <td>Functioning weighing balance is in place? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.weighingBalance"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.weighingBalance"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record6">
-                                    <td>Windows in proper closures? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.windowProperClosure"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.windowProperClosure"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record7">
-                                    <td>Doors in proper closure? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.doorProperClosure"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.doorProperClosure"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record8">
-                                    <td>Proper containers are in place to store opened non-perishable items to prevent contamination and spoilage? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.properContainer"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.properContainer"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record9">
-                                    <td>Working tables and space is available with store? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.workingTable"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.workingTable"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record10">
-                                    <td>Concrete floor? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.concreteFloor"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.concreteFloor"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record11">
-                                    <td>Concrete walls? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.concreteWall"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.concreteWall"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record12">
-                                    <td>Proper closed ceilings? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.closedCeiling"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.closedCeiling"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record13">
-                                    <td>Adequate ventilations? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.ventillation"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.ventillation"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record14">
-                                    <td>Proper roofing without leakages? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form1.properRoofing"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form1.properRoofing"  value="0" tabindex=""/> No</label>
+                                            <label><input  type="radio" v-model="food.value" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="food.value" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -335,66 +98,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1">
-                                    <td>Adequate number of functioning cooking stoves? </td>
+                                <tr id="record1" v-for='(equi, index) in form2.equipment_kitchen' :key="index">
                                     <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.cookingStove"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.cookingStove"  value="0" tabindex=""/> No</label>
-                                        </div>
+                                        <input type="text" class="form-control" v-model="equi.question" :id="'question'+(index+1)" readonly>
+                                        <span class="text-danger" :id="'question'+(index+1)"></span>
                                     </td>
-                                </tr>
-                                <tr id="record2">
-                                    <td>Adequate number of pots existing for serving? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.potForServing"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.prtForServing"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record3">
-                                    <td>Adequate number of pots/bowls/buckets exist for washing vegetables? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.cookingStove"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.cookingStove"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record4">
-                                    <td>Adequate number of ladles exist? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.ladles"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.ladles"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record5">
-                                    <td>Adequate separate cutlery for vegetables and meat items exist? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.cutlery"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.cutlery"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record6">
-                                    <td>Working tables are in place with clean surface for cutting vegetables/meats etc? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.workingTables"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.workingTables"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record7">
-                                    <td>Waste bins with proper lid is in place? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form2.washBasins"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form2.washBasins"  value="0" tabindex=""/> No</label>
+                                            <label><input  type="radio" v-model="equi.value" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="equi.value" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -417,93 +129,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1">
-                                    <td>Does the school have a dinning hall? </td>
+                                <tr id="record1" v-for='(din, index) in form3.dinning_hall' :key="index">
                                     <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.dinningHall"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.dinningHall"  value="0" tabindex=""/> No</label>
-                                        </div>
+                                        <input type="text" class="form-control" v-model="din.question" :id="'question'+(index+1)" readonly>
+                                        <span class="text-danger" :id="'question'+(index+1)"></span>
                                     </td>
-                                </tr>
-                                <tr id="record2">
-                                    <td>Adequate space is available to accommodate all students? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.spaceAvailable"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.spaceAvailable"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record3">
-                                    <td>Adequate furniture to accommodate all students? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.adequateFurniture"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.adequateFurniture"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record4">
-                                    <td>Windows with proper closures? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.windowsWithClosure"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.windowsWithClosure"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record5">
-                                    <td>Concrete floor? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.washBasins"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.washBasins"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record6">
-                                    <td>Concrete walls? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.concreteWall"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.concreteWall"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record7">
-                                    <td>Proper closed ceilings? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.closedCeiling"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.closedCeiling"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record8">
-                                    <td>Adequate ventilations? </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.adequateVentillation"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.adequateVentillation"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record9">
-                                    <td>Proper roofing without leakages </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.roofingWithoutLeakages"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.roofingWithoutLeakages"  value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record9">
-                                    <td>Waste bins with proper lid is in place </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="form3.wasteBins"  value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form3.wasteBins"  value="0" tabindex=""/> No</label>
+                                            <label><input  type="radio" v-model="din.value" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="din.value" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -527,31 +161,80 @@ export default {
     data(){
         return {
             form: new form({
-                id: '',adequateSize:'1',waterInKitchen:'1',waterSupply:'1',dishWashing:'1',basin:'1',chinmey:'1',
-                shelves:'1',concreteFloor:'1',concreteWall:'1',closedCeiling:'1',windwoProperClosure:'1',doorProperClosure:'1',
-                adequateVantillation:'1',drainageSystem:'1',changingRoom:'1'
+                kitchen_status:[
+                    {question:'Adequate size of the kitchen for the number of students?',value:'1'},
+                    {question:'Safe water connecion inside the kitchen?',value:'1'},
+                    {question:'Continuous water supply throughout the year in the kitchen?',value:'1'},
+                    {question:'Separate dish washing space in the kitchen?',value:'1'},
+                    {question:'wash basin with water connection for handwashing?',value:'1'},
+                    {question:'Proper functioning smoke outlet/chimney?',value:'1'},
+                    {question:'Adequate shelves in the kitchen to store utensils neatly?',value:'1'},
+                    {question:'Concrete floor?',value:'1'},
+                    {question:'Concrete walls?',value:'1'},
+                    {question:'Proper closed ceiling?',value:'1'},
+                    {question:'Windows with proper closures?',value:'1'},
+                    {question:'Doors with proper closures?',value:'1'},
+                    {question:'Adequate ventilations?',value:'1'},
+                    {question:'Functioning drainage system inside and outside of the kitchen?',value:'1'},
+                    {question:'Changing room?',value:'1'},
+                ],
+                type: '',status:'pending'
+                
             }),
             form1: new form({
-                separateStore:'1',storeFood:'1',properPallets:'1',properContainer:'1',weighingBalance:'1',
-                windowProperClosure:'1',doorProperClosure:'1',properContainer:'1',
-                workingTable:'1',concreteFloor:'1',concreteWall:'1',closedCeiling:'1',ventillation:'1',properRoofing:'1'
+                food_status:[
+                    {question:'Separate store exist for perishable and non-perisable items?',value:'1'},
+                    {question:'Adequate space is available to store food comodities?',value:'1'},
+                    {question:'Proper pallets are in place to store all non-perishable food items?',value:'1'},
+                    {question:'Proper containers are in place to store perishable food items?',value:'1'},
+                    {question:'Functioning weighing balance is in place?',value:'1'},
+                    {question:'Windows in proper closures?',value:'1'},
+                    {question:'Doors in proper closure?',value:'1'},
+                    {question:'Proper containers are in place to store opened non-perishable items to prevent contamination and spoilage?',value:'1'},
+                    {question:'Working tables and space is available with store?',value:'1'},
+                    {question:'Concrete floor?',value:'1'},
+                    {question:'Concrete walls?',value:'1'},
+                    {question:'Proper closed ceilings?',value:'1'},
+                    {question:'Adequate ventilations?',value:'1'},
+                    {question:'Proper roofing without leakages?',value:'1'},
+                ],
+                type: '',status:'pending'
             }),
             form2: new form({
-                cookingStove:'1',potForServing:'1',cookingStove:'1',ladles:'1',cutlery:'1',workingTables:'1',
-                washBasins:'1'
+                equipment_kitchen:[
+                    {question:'Adequate number of functioning cooking stoves?',value:'1'},
+                    {question:'Adequate number of pots existing for serving?',value:'1'},
+                    {question:'Adequate number of pots/bowls/buckets exist for washing vegetables?',value:'1'},
+                    {question:'Adequate number of ladles exist?',value:'1'},
+                    {question:'Adequate separate cutlery for vegetables and meat items exist?',value:'1'},
+                    {question:'Working tables are in place with clean surface for cutting vegetables/meats etc?',value:'1'},
+                    {question:'Waste bins with proper lid is in place?',value:'1'},
+                ],
+                type: '',status:'pending'
             }),
             form3: new form({
-                dinningHall:'1',spaceAvailable:'1',adequateFurniture:'1',windowsWithClosure:'1',washBasins:'1',concreteWall:'1',
-                closedCeiling:'1',adequateVentillation:'1',roofingWithoutLeakages:'1',wasteBins:'1'
+                dinning_hall:[
+                    {question:'Does the school have a dinning hall?',value:'1'},
+                    {question:'Adequate space is available to accommodate all students?',value:'1'},
+                    {question:'Adequate furniture to accommodate all students?',value:'1'},
+                    {question:'Windows with proper closures?',value:'1'},
+                    {question:'Concrete floor?',value:'1'},
+                    {question:'Concrete walls?',value:'1'},
+                    {question:'Proper closed ceilings?',value:'1'},
+                    {question:'Adequate ventilations?',value:'1'},
+                    {question:'Proper roofing without leakages?',value:'1'},
+                    {question:'Waste bins with proper lid is in place?',value:'1'},
+                ],
+                type: '',status:'pending'
             }),
         }
     },
 
     methods: {
-            shownexttab(nextclass){ 
+        shownexttab(nextclass){ 
             if(nextclass=="final-tab"){ 
                 Swal.fire({
-                    text: "Are you sure you wish to send this detials for approval ?",
+                    text: "Are you sure you wish to save this detials?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -559,19 +242,34 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        Swal.fire(
-                            'Success!',
-                            'Details has been saved successfully.',
-                            'success',
-                        )
-                        this.$router.push('/list_transfer');
+
                     }
                 });
-            }
-            else{
+            }else {
+                if(nextclass=="service-tab"){
+                    this.form.post('organization/saveKitchenStatus')
+                    .then((response) => { 
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                    })
+                    .catch((error) => {  
+                        this.change_tab('application-tab');
+                        console.log("Error: "+error)
+                    });
+                }else if(nextclass=="service1-tab"){
+
+                }else if(nextclass=="undertaking-tab"){
+
+                }   
                 this.change_tab(nextclass);
             }
+            
         },
+        /**
+         * method to change tabs
+         */
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -582,9 +280,40 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
 
+        /**
+         * method to load organization details
+         */
+         loadKitchenStatus(){
+            axios.get('organization/loadKitchenStatus')
+            .then((response) => {  
+                let data=response.data.data;
+                
+                this.form.kitchen_status.push(
+                {question:'Safe water connecion inside the kitchen?',value:data.value[0]},
+                // {question:'Continuous water supply throughout the year in the kitchen?',value:'1'},
+                // {question:'Separate dish washing space in the kitchen?',value:'1'},
+                // {question:'wash basin with water connection for handwashing?',value:'1'},
+                // {question:'Proper functioning smoke outlet/chimney?',value:'1'},
+                // {question:'Adequate shelves in the kitchen to store utensils neatly?',value:'1'},
+                // {question:'Concrete floor?',value:'1'},
+                // {question:'Concrete walls?',value:'1'},
+                // {question:'Proper closed ceiling?',value:'1'},
+                // {question:'Windows with proper closures?',value:'1'},
+                // {question:'Doors with proper closures?',value:'1'},
+                // {question:'Adequate ventilations?',value:'1'},
+                // {question:'Functioning drainage system inside and outside of the kitchen?',value:'1'},
+                // {question:'Changing room?',value:'1'},
+        );
+
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+
     },
     mounted() {
-        
+        this.loadKitchenStatus();
     },
 }
 </script>

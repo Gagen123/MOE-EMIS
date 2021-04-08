@@ -9,9 +9,12 @@ use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\AuthUser;
+
 
 class StructuralController extends Controller
 {
+    use AuthUser;
     use ServiceHelper;
     public $apiService;
 
@@ -122,5 +125,28 @@ class StructuralController extends Controller
     public function getStructureFacilityInDropdown(){
         $dropdown = $this->apiService->listData('emis/organization/infrastructure/getStructureFacilityInDropdown');
         return $dropdown;
+    }
+
+    public function saveKitchenStatus(Request $request){
+        $kitchenStatus =[
+            'organizationId'             =>  1,
+            'kitchen_status'             =>  $request['kitchen_status'],
+            'status'                     =>  $request['status'],
+            'type'                       =>  $request['type'],
+            'id'                         =>  $request['id'],
+            'user_id'                    =>  $this->user_id() 
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveKitchenStatus', $kitchenStatus);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadKitchenStatus(){
+        $loadKitchenStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadKitchenStatus/'.$this->user_id() );
+        return $loadKitchenStatus;
     }
 }

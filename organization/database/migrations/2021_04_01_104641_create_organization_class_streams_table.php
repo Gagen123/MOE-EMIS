@@ -15,6 +15,7 @@ class CreateOrganizationClassStreamsTable extends Migration
     {
         Schema::create('organization_class_streams', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('organization',36);
             $table->char('classId',36);
             $table->char('streamId',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);

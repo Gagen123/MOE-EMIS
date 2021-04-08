@@ -36,10 +36,18 @@ class HrDevelopment extends Model{
         'total_hrs',
         'financial_source',
 
+        'nomination_start_date',
+        'nomination_end_date',
+        'nature_of_participant',
+        'target_group',
+        'org_level',
+        'remarks',
+
         'created_by',
         'updated_by',
         'created_at',
         'updated_at',
+        'published_date',
         'status'
     ];
 }

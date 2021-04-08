@@ -30,15 +30,22 @@ class StaffProgramDetails extends Migration{
             $table->char('course_type',36)->nullable(true);
             $table->char('course_provider',36)->nullable(true);
             $table->string('vanue',200)->nullable(true);
-            $table->integer('total_budget')->length(11)->unsigned();
+            $table->integer('total_budget')->length(11)->unsigned()->default(0)->nullable(true);
             $table->string('total_hrs',10)->nullable(true);
-            $table->char('financial_source',36)->nullable(true);
-            
+            $table->char('financial_source',36)->nullable(true)->default(0);
+
+            $table->date('nomination_start_date',10)->nullable(false);
+            $table->date('nomination_end_date',10)->nullable(false);
+            $table->string('nature_of_participant')->nullable(true);
+            $table->string('target_group')->nullable(true);
+            $table->string('org_level')->nullable(true);
+
             $table->string('remarks')->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable(true);
             $table->timestamp('updated_at')->nullable(true);
+            $table->timestamp('published_date')->nullable(true);
             $table->enum('status', ['Pending', 'Created'])->default('Pending')->nullable(false);
         });
     }
