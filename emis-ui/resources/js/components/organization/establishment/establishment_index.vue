@@ -6,7 +6,7 @@
     <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
             <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                 <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                    <span :class="item.screen_icon"></span> ll
+                    <span :class="item.screen_icon"></span> 
                     {{ item.screen_name}}
                 </router-link>
             </li>

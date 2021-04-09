@@ -64,7 +64,7 @@ class RestructuringController extends Controller
         $classStream =[
             'class'        =>  $request['class'],
             'stream'        =>  $request['stream'],
-            'user_id'        =>  $this->user_id() ,
+            'user_id'        =>  $this->userId() ,
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/changeDetails/saveChangeClass', $classStream);

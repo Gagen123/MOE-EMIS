@@ -142,7 +142,7 @@ class HomeController extends Controller{
                     'modules'  => $module,
                     'sub_modules' =>$sub_modules,
                     'screens'=>$screens,
-                    'ministry_user'=>$user->ministry_user,
+                    'acess_level'=>$user->ministry_user,
                     'roles' => $roles,//roles will be multiple
                     'system_id' =>json_decode($user_Det)->system_id,
                 ];
@@ -197,6 +197,25 @@ class HomeController extends Controller{
                         'work_flow_status'=>'NA',
                         'actions' => json_decode($actions)[0]->action_name,
                         'screen_icon'=>$priv->screen_icon,
+                    ];
+                    array_push($screens,$screen);
+                }
+            }
+        }
+        if($role_workflow_submitter!=null || $role_workflow_submitter!=""){
+            $screens=[];
+            $screens_ids="";
+            foreach(json_decode($role_workflow_submitter) as $i=> $work){
+                if(strpos($screens_ids,$work->screen_id)===false){  
+                    $screens_ids.=$work->screen_id.',';
+                    $screen=[
+                        'mod_id'=> $work->mod_id,
+                        'sub_mod_id'=> $work->sub_mod_id,
+                        'screen_id' => $work->screen_id,
+                        'screen_name' => $work->screen_name,
+                        'route' =>$work->Route,
+                        'work_flow_status'=>$work->workflow_status,
+                        'screen_icon'=>$work->screen_icon,
                     ];
                     array_push($screens,$screen);
                 }

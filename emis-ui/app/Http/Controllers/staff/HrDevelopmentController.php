@@ -135,7 +135,7 @@ class HrDevelopmentController extends Controller{
             'thesis_title'                      =>  $request->thesis_title,
             'attachment_details'                =>  $attachment_details,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
         ];
         // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/saveprogramDetails', $request_data);
@@ -143,7 +143,7 @@ class HrDevelopmentController extends Controller{
     }
     
     public function loadDraftDetails(){
-        $response_data= $this->apiService->listData('emis/staff/loadDraftDetails/'.$this->user_id());
+        $response_data= $this->apiService->listData('emis/staff/loadDraftDetails/'.$this->userId());
         return $response_data;
     }
     public function saveprogramFinalDetails(Request $request){
@@ -172,7 +172,7 @@ class HrDevelopmentController extends Controller{
             'org_level'                        =>  $request->org_level,
             'role_action_mapp'                 =>  $request->role_action_mapp,
             'remarks'                          =>  $request->remarks,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
             
         ];
         // dd($request_data);

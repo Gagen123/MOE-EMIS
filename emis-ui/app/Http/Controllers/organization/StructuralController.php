@@ -134,7 +134,7 @@ class StructuralController extends Controller
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
             'id'                         =>  $request['id'],
-            'user_id'                    =>  $this->user_id() 
+            'user_id'                    =>  $this->userId() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveKitchenStatus', $kitchenStatus);
@@ -146,7 +146,7 @@ class StructuralController extends Controller
     }
 
     public function loadKitchenStatus(){
-        $loadKitchenStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadKitchenStatus/'.$this->user_id() );
+        $loadKitchenStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadKitchenStatus/'.$this->userId() );
         return $loadKitchenStatus;
     }
 }
