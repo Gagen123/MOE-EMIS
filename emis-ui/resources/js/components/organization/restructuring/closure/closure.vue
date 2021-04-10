@@ -74,8 +74,8 @@ export default {
     data(){
         return{
             form: new form({
-                code:'',name:'YHSS',category:'1',level:'HSS',dzongkhag:'Thimphu',
-                gewog:'Babesa',chiwog:'Babesa',location:'Urban',
+                code:'',name:'',category:'1',level:'',dzongkhag:'',
+                gewog:'',chiwog:'',location:'',
                 geoLocated:'1',senSchool:'0',reason:'',remark:''
             })
         }
