@@ -135,6 +135,63 @@ class EstablishmentController extends Controller
         return $loadProprietorDetails;
     }
 
+    public function saveBasicDetails(Request $request){
+        $rules = [
+            'agencyType'          =>  'required',
+            
+        ];
+        $customMessages = [
+            'agencyType.required'         => 'Agency type is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $basicDetails =[
+            'agencyCode'        =>  $request['agencyCode'],
+            'agencyName'        =>  $request['agencyName'],
+            'parentAgency'      =>  $request['parentAgency'],
+            'dzongkhag'         =>  $request['dzongkhag'],
+            'gewog'             =>  $request['gewog'],
+            'chiwog'            =>  $request['chiwog'],
+            'agencyType'        =>  $request['agencyType'],
+            'status'            =>  $request['status'],
+            'id'                =>  $request['id'],
+            'user_id'           =>  $this->user_id() ,
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/headQuater/saveBasicDetails', $basicDetails);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadBasicDetails(){ 
+        $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/loadBasicDetails/'.$this->user_id() );
+        return $loadBasicDetails;
+    }
+
+    public function saveContactDetails(Request $request){
+        // $rules = [
+        //     'users'          =>  'required',
+            
+        // ];
+        // $customMessages = [
+        //     'users.required'         => 'users is required',
+        // ];
+        // $this->validate($request, $rules, $customMessages);
+        $contactDetails =[
+            'users'        =>  $request['users'],
+            'user_id'      =>  $this->user_id() ,
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/headQuater/saveContactDetails', $contactDetails);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
     public function loadEstbDetailsForVerification($appNo="",$type=""){
         $update_data=[
             'applicationNo'     =>  $appNo,

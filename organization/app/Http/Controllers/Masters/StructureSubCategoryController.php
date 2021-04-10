@@ -34,7 +34,7 @@ class StructureSubCategoryController extends Controller
             ->select('a.id as id', 'b.name as structureCategory','b.id as structureCategoryId',
             'a.structureCategory as structureID','a.subCategoryName as subCategoryName',
             'a.description as description','a.status as status')->get();
-            return $subCategory;
+        return $subCategory;
     }
 
     /** 

@@ -3,19 +3,19 @@
 namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class CustomerType extends Model
+class ContactType extends Model
 {
-    //
-    public $timestamps = false; // to disable created_at and updated_at
-    protected $table = "org_contact_type";
-
-     /**
+    use HasFactory, Uuid;
+    protected $table="contact_types";
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'Id','Name', 'DisplayOrder', 'Status'
+        'id','name', 'status','created_by','updated_by'
     ];
 }

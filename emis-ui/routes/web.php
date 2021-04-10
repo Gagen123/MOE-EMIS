@@ -69,6 +69,18 @@ Route::prefix('masters')->group(function () {
 
     Route::post('/saveElectricitySupply', [App\Http\Controllers\AdministrationController::class, 'saveElectricitySupply'])->name('saveElectricitySupply');
     Route::get('/loadElectricitySupply', [App\Http\Controllers\AdministrationController::class, 'loadElectricitySupply'])->name('loadElectricitySupply');
+    
+    Route::post('/saveRoadType', [App\Http\Controllers\AdministrationController::class, 'saveRoadType'])->name('saveRoadType');
+    Route::get('/loadRoadType', [App\Http\Controllers\AdministrationController::class, 'loadRoadType'])->name('loadRoadType');
+    
+    Route::post('/saveServiceProvider', [App\Http\Controllers\AdministrationController::class, 'saveServiceProvider'])->name('saveServiceProvider');
+    Route::get('/loadServiceProvider', [App\Http\Controllers\AdministrationController::class, 'loadServiceProvider'])->name('loadServiceProvider');
+    
+    Route::post('/saveStructureDesigner', [App\Http\Controllers\AdministrationController::class, 'saveStructureDesigner'])->name('saveStructureDesigner');
+    Route::get('/loadStructureDesigner', [App\Http\Controllers\AdministrationController::class, 'loadStructureDesigner'])->name('loadStructureDesigner');
+
+    Route::post('/saveContactType', [App\Http\Controllers\AdministrationController::class, 'saveContactType'])->name('saveContactType');
+    Route::get('/loadContactType', [App\Http\Controllers\AdministrationController::class, 'loadContactType'])->name('loadContactType');
 
     //Student Masters
     Route::post('/saveStudentMasters', [App\Http\Controllers\student\StudentMasterController::class, 'saveStudentMasters'])->name('saveStudentMasters');
@@ -80,9 +92,19 @@ Route::prefix('masters')->group(function () {
 Route::prefix('organization')->group(function () {
     /** general information route  */
     Route::post('/saveSection', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSection'])->name('saveSection');
-    
+    Route::get('/getClassByOrganizationId/{orgId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getClassByOrganizationId'])->name('getClassByOrganizationId');
+
+    Route::post('/saveClassMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveClassMapping'])->name('saveClassMapping');
+
     //connectivity
     Route::post('/saveConnectivity', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveConnectivity'])->name('saveConnectivity');
+    Route::get('/getRoadTypeDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getRoadTypeDropdown'])->name('getRoadTypeDropdown');
+    Route::get('/getElectricitySourceDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getElectricitySourceDropdown'])->name('getElectricitySourceDropdown');
+    Route::get('/getElectricitySupplyDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getElectricitySupplyDropdown'])->name('getElectricitySupplyDropdown');
+    Route::get('/getServiceProviderDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getServiceProviderDropdown'])->name('getServiceProviderDropdown');
+    Route::get('/getServiceProviderDropdown1', [App\Http\Controllers\organization\GeneralInfoController::class, 'getServiceProviderDropdown1'])->name('getServiceProviderDropdown1');
+    Route::get('/getContactTypeDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getContactTypeDropdown'])->name('getContactTypeDropdown');
+
     //location
     Route::post('/saveLocation', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveLocation'])->name('saveLocation');
     Route::get('/getDisasterListInCheckbox', [App\Http\Controllers\organization\GeneralInfoController::class, 'getDisasterListInCheckbox'])->name('getDisasterListInCheckbox');
@@ -99,8 +121,14 @@ Route::prefix('organization')->group(function () {
     Route::get('/loadSport', [App\Http\Controllers\organization\StructuralController::class, 'loadSport'])->name('loadSport');
     Route::get('/getFacilityInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getFacilityInDropdown'])->name('getFacilityInDropdown');
     Route::get('/getSupportInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getSupportInDropdown'])->name('getSupportInDropdown');
+    
     Route::post('/saveKitchenStatus', [App\Http\Controllers\organization\StructuralController::class, 'saveKitchenStatus'])->name('saveKitchenStatus');
     Route::get('/loadKitchenStatus', [App\Http\Controllers\organization\StructuralController::class, 'loadKitchenStatus'])->name('loadKitchenStatus');
+    Route::post('/saveFoodStoreStatus', [App\Http\Controllers\organization\StructuralController::class, 'saveFoodStoreStatus'])->name('saveFoodStoreStatus');
+    Route::post('/saveUtensilKitchen', [App\Http\Controllers\organization\StructuralController::class, 'saveUtensilKitchen'])->name('saveUtensilKitchen');
+    Route::post('/saveDinningHall', [App\Http\Controllers\organization\StructuralController::class, 'saveDinningHall'])->name('saveDinningHall');
+    Route::get('/loadFoodStoreStatus', [App\Http\Controllers\organization\StructuralController::class, 'loadFoodStoreStatus'])->name('loadFoodStoreStatus');
+    Route::get('/loadUtensilKitchenStatus', [App\Http\Controllers\organization\StructuralController::class, 'loadUtensilKitchenStatus'])->name('loadUtensilKitchenStatus');
 
     // infrastructure route
     Route::post('/saveInfrastructure', [App\Http\Controllers\organization\StructuralController::class, 'saveInfrastructure'])->name('saveInfrastructure');
@@ -108,6 +136,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getSubCategoryDropdown/{categoryId}', [App\Http\Controllers\organization\StructuralController::class, 'getSubCategoryDropdown'])->name('getSubCategoryDropdown');
     Route::get('/getStructureFacilityInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getStructureFacilityInDropdown'])->name('getStructureFacilityInDropdown');
     Route::get('/loadInfrastructureList', [App\Http\Controllers\organization\StructuralController::class, 'loadInfrastructureList'])->name('loadInfrastructureList');
+    Route::get('/getDesignerDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getDesignerDropdown'])->name('getDesignerDropdown');
 
     // establishment route
     Route::get('/getLevelInDropdown', [App\Http\Controllers\organization\EstablishmentController::class, 'getLevelInDropdown'])->name('getLeveInDropdown');
@@ -122,6 +151,11 @@ Route::prefix('organization')->group(function () {
     Route::get('/loadProprietorDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadProprietorDetails'])->name('loadProprietorDetails');
     Route::get('/loadApprovedOrgs', [App\Http\Controllers\organization\EstablishmentController::class, 'loadApprovedOrgs'])->name('loadApprovedOrgs');
     
+    // head quater office route
+    Route::post('/saveBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveBasicDetails'])->name('saveBasicDetails');
+    Route::post('/saveContactDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveContactDetails'])->name('saveContactDetails');
+    Route::get('/loadBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadBasicDetails'])->name('loadBasicDetails');
+
     // Change Basic route
     Route::post('/saveChangeBasicDetails', [App\Http\Controllers\organization\RestructuringController::class, 'saveChangeBasicDetails'])->name('saveChangeBasicDetails');
     Route::post('/saveChangeClass', [App\Http\Controllers\organization\RestructuringController::class, 'saveChangeClass'])->name('saveChangeClass');

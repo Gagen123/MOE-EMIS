@@ -127,6 +127,11 @@ class StructuralController extends Controller
         return $dropdown;
     }
 
+    public function getDesignerDropdown(){
+        $serviceProvider = $this->apiService->listData('emis/organization/infrastructure/getDesignerDropdown');
+        return $serviceProvider;
+    }
+
     public function saveKitchenStatus(Request $request){
         $kitchenStatus =[
             'organizationId'             =>  1,
@@ -148,5 +153,69 @@ class StructuralController extends Controller
     public function loadKitchenStatus(){
         $loadKitchenStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadKitchenStatus/'.$this->userId() );
         return $loadKitchenStatus;
+    }
+
+    public function saveFoodStoreStatus(Request $request){
+        $foodStatus =[
+            'organizationId'             =>  1,
+            'food_status'                =>  $request['food_status'],
+            'status'                     =>  $request['status'],
+            'type'                       =>  $request['type'],
+            'id'                         =>  $request['id'],
+            'user_id'                    =>  $this->user_id() 
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveFoodStoreStatus', $foodStatus);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function saveUtensilKitchen(Request $request){
+        $equipmentKitchen =[
+            'organizationId'             =>  1,
+            'equipment_kitchen'          =>  $request['equipment_kitchen'],
+            'status'                     =>  $request['status'],
+            'type'                       =>  $request['type'],
+            'id'                         =>  $request['id'],
+            'user_id'                    =>  $this->user_id() 
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveUtensilKitchen', $equipmentKitchen);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function saveDinningHall(Request $request){
+        $dinningHall =[
+            'organizationId'             =>  1,
+            'dinning_hall'               =>  $request['dinning_hall'],
+            'status'                     =>  $request['status'],
+            'type'                       =>  $request['type'],
+            'id'                         =>  $request['id'],
+            'user_id'                    =>  $this->user_id() 
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveDinningHall', $dinningHall);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadFoodStoreStatus(){
+        $loadFoodStoreStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadFoodStoreStatus/'.$this->user_id() );
+        return $loadFoodStoreStatus;
+    }
+
+    public function loadUtensilKitchenStatus(){
+        $utensil = $this->apiService->listData('emis/organization/schoolFeeding/loadUtensilKitchenStatus/'.$this->user_id() );
+        return $utensil;
     }
 }

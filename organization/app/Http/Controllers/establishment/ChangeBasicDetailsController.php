@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
-use App\Models\establishment\Establishment;
-use App\Models\establishment\EstablishmentClassStream;
+use App\Models\establishment\ApplicationDetails;
+use App\Models\establishment\ApplicationClassStream;
 
 class ChangeBasicDetailsController extends Controller
 {
@@ -47,7 +47,7 @@ class ChangeBasicDetailsController extends Controller
             'applicationNo'                 =>      1,
             'service'                       =>      "Change Basic Details",
             ];
-            $establishment = Establishment::create($change);
+            $establishment = ApplicationDetails::create($change);
 
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
@@ -64,7 +64,7 @@ class ChangeBasicDetailsController extends Controller
                 foreach ($classes as $cls){
                     if(explode('##',$stm)[0]==$cls){
                         $classStream = [
-                            'establishmentId'   => 1,
+                            'applicationNo'   => 1,
                             'classId'           =>$cls,
                             'streamId'          =>explode('##',$stm)[1],
                             'created_by'           =>$request->user_id,
@@ -74,7 +74,7 @@ class ChangeBasicDetailsController extends Controller
                         if(strpos($inserted_class,$cls)===false){
                             $inserted_class.=$cls;
                         }
-                        $class = EstablishmentClassStream::create($classStream);
+                        $class = ApplicationClassStream::create($classStream);
                     }
                 }
             }
@@ -82,13 +82,13 @@ class ChangeBasicDetailsController extends Controller
         foreach ($classes as $cls){
             if(strpos($inserted_class,$cls)===false){
                 $classStream = [
-                    'establishmentId'   => 1,
+                    'applicationNo'   => 1,
                     'classId'           => $cls,
                     'created_by'           =>$request->user_id,
                     'created_at'        =>date('Y-m-d h:i:s'),
                 ];
                 if($classStream != ""){
-                    $class = EstablishmentClassStream::create($classStream);
+                    $class = ApplicationClassStream::create($classStream);
                 }
             }
         }

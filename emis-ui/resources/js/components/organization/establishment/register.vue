@@ -188,7 +188,7 @@ export default {
         async changefunction(id){
             if(id=="category"){
                 this.applicaitondetailsform.category=$('#category').val();
-                this.display_respective_section();
+                this.display_respective_section()();
             }
             if(id=="organizationid"){
                 this.applicaitondetailsform.organizationid=$('#organizationid').val();

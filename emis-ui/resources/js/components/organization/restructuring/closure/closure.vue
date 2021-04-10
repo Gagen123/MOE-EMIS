@@ -4,63 +4,59 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Code:</label>
-                    <input type="text" id="name" class="form-control" v-model="form.code" readonly/>
+                    <span class="text-indigo-600" id="code">{{form.code}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Name:</label>
-                    <input type="text" class="form-control" v-model="form.name" readonly/>
+                    <span class="text-indigo-600" id="name">{{form.name}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Category:</label>
-                    <br>
-                    <label><input  type="radio" v-model="form.category" value="1" tabindex=""/> Public</label>
-                    <label><input  type="radio" v-model="form.category" value="0" tabindex=""/> Private</label>
+                    <span class="text-indigo-600" id="name">{{form.category}}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Level:</label>
-                    <input type="text" class="form-control" v-model="form.level" readonly/>
+                    <span class="text-indigo-600" id="level">{{form.level}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Dzongkhag:</label>
-                    <input type="text" class="form-control" v-model="form.dzongkhag" readonly/>
+                    <span class="text-indigo-600" id="dzongkhag">{{form.dzongkhag}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Gewog:</label>
-                    <input type="text" class="form-control" v-model="form.gewog" readonly/>
+                    <span class="text-indigo-600" id="gewog">{{form.gewog}}</span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Chiwog:</label>
-                    <input type="text" class="form-control" v-model="form.chiwog" readonly/>
+                    <span class="text-indigo-600" id="chiwog">{{form.chiwog}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Location Type:</label>
-                    <input type="text" class="form-control" v-model="form.location" readonly/>
+                    <span class="text-indigo-600" id="chiwog">{{form.location}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Geopolitically Located:</label>
-                    <br>
-                    <label><input  type="radio" v-model="form.geoLocated" value="1" tabindex=""/> Yes</label>
-                    <label><input  type="radio" v-model="form.geoLocated" value="0" tabindex=""/> No</label>
+                    <span class="text-indigo-600" id="geoLocated">{{form.geoLocated}}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>SEN School:</label>
-                    <br>
-                    <label><input  type="radio" v-model="form.senSchool" value="1" tabindex="" /> Yes</label>
-                    <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                    <span class="text-indigo-600" id="geoLocated">{{form.senSchool}}</span>
                 </div>
+            </div>
+            <div class="form-group row">
                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0">Reason:<span class="text-danger">*</span></label>
                     <textarea class="form-control" v-model="form.reason" :class="{ 'is-invalid': form.errors.has('reason') }" @change="remove_error('reason')"></textarea>
                     <has-error :form="form" field="reason"></has-error>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label>Remarks:</label>
                     <textarea class="form-control" v-model="form.remark"></textarea>
                 </div>
@@ -121,15 +117,13 @@ export default {
         this.form.code=this.$route.params.data.code;
         this.form.name=this.$route.params.data.name;
         this.form.category=this.$route.params.data.category;
-        this.form.level=this.$route.params.data.level;
-        this.form.dzongkhag=this.$route.params.data.dzongkhag;
-        this.form.gewog=this.$route.params.data.gewog;
-        this.form.chiwog=this.$route.params.data.chiwog;
-        this.form.location=this.$route.params.data.location;
-        this.form.geoLocated=this.$route.params.data.geoLocated;
-        this.form.senSchool=this.$route.params.data.senSchool;
-        this.form.reason=this.$route.params.data.reason;
-        this.form.remark=this.$route.params.data.remark;
+        this.form.level=this.$route.params.data.levelId;
+        this.form.dzongkhag=this.$route.params.data.dzongkhagId;
+        this.form.gewog=this.$route.params.data.gewogId;
+        this.form.chiwog=this.$route.params.data.chiwogId;
+        this.form.location=this.$route.params.data.locationId;
+        this.form.geoLocated=this.$route.params.data.isGeopoliticallyLocated;
+        this.form.senSchool=this.$route.params.data.isSenSchool;
     }
 }
 </script>

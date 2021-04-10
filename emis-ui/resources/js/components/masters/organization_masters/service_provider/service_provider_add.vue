@@ -5,12 +5,17 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Service Type:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.serviceType" :class="{ 'is-invalid': form.errors.has('serviceType') }" id="serviceType" @change="remove_err('serviceType')" type="text" tabindex="1" autofocus="true">
+                        <!-- <input class="form-control" v-model="form.serviceType" :class="{ 'is-invalid': form.errors.has('serviceType') }" id="serviceType" @change="remove_err('serviceType')" type="text" tabindex="1" autofocus="true"> -->
+                        <select v-model="form.serviceType" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('serviceType') }" @change="remove_err('serviceType')" tabindex="1">
+                            <option value="">--- Please Select ---</option>
+                            <option value="1">Internet</option>
+                            <option value="2">Telephone</option>
+                        </select>
                         <has-error :form="form" field="serviceType"></has-error>
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Service Name:<span class="text-danger">*</span></label> 
+                        <label>Service Provider:<span class="text-danger">*</span></label> 
                         <input class="form-control" v-model="form.serviceName" :class="{ 'is-invalid': form.errors.has('serviceName') }" id="serviceName" @change="remove_err('serviceName')" type="text" tabindex="1" autofocus="true">
                         <has-error :form="form" field="serviceName"></has-error>
                     </div>
@@ -46,7 +51,31 @@ export default {
     },
 
     methods:{
-        
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+        formaction: function(type){
+            if(type=="reset"){
+                this.form.serviceType= '';
+                this.form.serviceName= '';
+                this.form.status= 1;
+            }
+            if(type=="save"){
+                this.form.post('masters/saveServiceProvider',this.form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Service provoder is added successfully'
+                    })
+                    this.$router.push('/service_provider_list');
+                })
+                .catch(() => {
+                    console.log("Error......")
+                })
+            }
+		},
     }
 }
 </script>

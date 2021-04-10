@@ -10,6 +10,16 @@ use App\Models\restructuring\Closure;
 
 class ClosureController extends Controller
 {
+    use ApiResponser;
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct() {
+        date_default_timezone_set('Asia/Dhaka');
+    }
+    
     public function saveClosure(Request $request){
         $id = $request->id;
         $closure =[

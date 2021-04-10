@@ -37,6 +37,18 @@
                 </router-link>
             </li>
 
+            <!-- <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/sample" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Sample
+                </router-link>
+            </li> -->
+            <!-- <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/establishment_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Establishment Verification
+                </router-link>
+            </li>
             <li class="nav-item pr-1" @click="activatelink('nomination')">
                 <router-link to="/bifurcation_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
@@ -60,7 +72,7 @@
                     <span class=""></span>
                     Closure Verification
                 </router-link>
-            </li>
+            </li> -->
         </ul>
         <router-view></router-view>
     </div>

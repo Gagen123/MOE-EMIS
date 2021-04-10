@@ -16,15 +16,15 @@ class CreateConnectivitiesTable extends Migration
         Schema::create('connectivities', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
-            $table->integer('roadTypeId')->nullable(true);
+            $table->char('roadTypeId',36);
             $table->decimal('distanceFromRoad')->nullable(true);;
             $table->decimal('daysFromRoad')->nullable(true);;
             $table->decimal('hoursFromRoad')->nullable(true);;
-            $table->integer('electricitySourceId');
-            $table->integer('electricitySupplyId')->nullable(true);;
+            $table->char('electricitySourceId',36);
+            $table->char('electricitySupplyId',36)->nullable(true);;
             $table->integer('hasElectricalSubstation');
-            $table->integer('telephoneServiceProvoderId');
-            $table->integer('internetServiceProviderId');
+            $table->char('telephoneServiceProvoderId',36);
+            $table->char('internetServiceProviderId',36);
             $table->char('mbps')->nullable(true);;
             $table->integer('drukRenConnection');
             $table->char('created_by',36)->nullable(true);
