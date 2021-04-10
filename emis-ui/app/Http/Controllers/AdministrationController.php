@@ -57,7 +57,7 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'            =>  $request['id'],
             'record_type'   =>$request['record_type'],
-            'user_id'       =>$this->user_id() 
+            'user_id'       =>$this->userId() 
         ];
         // dd($data);
         try{
@@ -129,7 +129,7 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
             'record_type'=>$request['record_type'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($data);
         $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
@@ -163,7 +163,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/location/saveLocation', $loc);
@@ -194,7 +194,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($dis);
         try{
@@ -227,7 +227,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
@@ -255,7 +255,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
@@ -284,7 +284,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
         return $response_data;
@@ -311,7 +311,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
@@ -338,7 +338,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
@@ -365,7 +365,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
@@ -392,7 +392,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
         return $response_data;
@@ -423,7 +423,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
         return $response_data;
@@ -459,7 +459,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
         return $response_data;
@@ -480,7 +480,7 @@ class AdministrationController extends Controller{
             'className'  =>  $request['className'],
             'status'  =>  $request['status'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
@@ -516,7 +516,7 @@ class AdministrationController extends Controller{
             'streamName'    =>  $request['streamName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/stream/saveStream', $stream);
         return $response_data;
@@ -546,7 +546,7 @@ class AdministrationController extends Controller{
             'sourceName'    =>  $request['sourceName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         // dd($dis);
         try{
@@ -577,7 +577,7 @@ class AdministrationController extends Controller{
             'supplyName'    =>  $request['supplyName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/electricitySupply/saveElectricitySupply', $source);

@@ -16,7 +16,9 @@ class EstablishmentController extends Controller
     use AuthUser;
     use ServiceHelper;
     public $apiService;
-
+    public $database_name="organization_db";
+    public $table_name="application_details";
+    public $service_name="New Establishment";
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
@@ -32,6 +34,7 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
+       
         $rules = [
             'proposedName'          =>  'required',
             'level'                 =>  'required',
@@ -72,21 +75,15 @@ class EstablishmentController extends Controller
             'email'                        =>  $request['email'],
             'status'                       =>  $request['status'],
             'id'                           =>  $request['id'],
-            'user_id'                      =>  $this->user_id() 
+            'user_id'                      =>  $this->userId() 
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $estd);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $estd);
+        return $response_data;
     }
 
     public function saveClassStream(Request $request){
         $rules = [
             'class'          =>  'required',
-            
         ];
         $customMessages = [
             'class.required'         => 'Class is required',
@@ -96,15 +93,26 @@ class EstablishmentController extends Controller
             'class'        =>  $request['class'],
             'stream'       =>  $request['stream'],
             'status'       =>  $request['status'],
-            'user_id'      =>  $this->user_id() ,
+            'user_id'      =>  $this->userId() ,
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
+        // dd($response_data->data->applicationNo);
+        $workflowdet=$this->getsubmitterStatus('new establishment');
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,
+            'application_number'=>json_decode($response_data)->data->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$workflowdet['status'],
+            'remarks'           =>null,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
     }
 
     public function getClass(){
@@ -118,7 +126,7 @@ class EstablishmentController extends Controller
     }
 
     public function loadOrganizationDetails(){        
-        $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->user_id() );
+        $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->userId() );
         return $loadOrganizationDetails;
     }
 
@@ -127,6 +135,7 @@ class EstablishmentController extends Controller
         return $loadProprietorDetails;
     }
 
+<<<<<<< HEAD
     public function saveBasicDetails(Request $request){
         $rules = [
             'agencyType'          =>  'required',
@@ -184,4 +193,43 @@ class EstablishmentController extends Controller
         }
     }
 
+=======
+    public function loadEstbDetailsForVerification($appNo="",$type=""){
+        $update_data=[
+            'applicationNo'     =>  $appNo,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
+        $loadOrganizationDetails->app_stage=$workflowstatus;
+        return json_encode($loadOrganizationDetails);
+    }
+
+    public function updateNewEstablishmentApplication(Request $request){
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('new establishment');
+        $work_status=$workflowdet['status'];
+        if($request->actiontype=="reject"){
+            $work_status=0;
+        }
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,
+            'application_number'=>$request->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$work_status,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
+    }
+
+
+>>>>>>> 99abd4af36bfee92fd61df6c1a1a791e585ad61a
 }

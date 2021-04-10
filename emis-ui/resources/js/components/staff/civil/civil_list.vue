@@ -20,9 +20,10 @@
                         <tr v-for="(item, index) in substaffList" :key="index">
                             <td>{{ index+1}}</td>
                             <td>{{ item.emp_type_id}}</td>
-                            <td>{{ item.name}}</td>
-                            <td>{{ item.gender.name}}</td>
-                            <td>{{ item.position_title.name}}</td>
+                            <td>{{ item.name}}</td> 
+                            <td>{{ genderArray[item.sex_id]}}</td>
+                            <!-- <td>{{ item.position_title.name}}</td> -->
+                            <td>{{ positiontitleList[item.position_title_id]}}</td>
                             <td>{{ item.working_agency_id}}</td>
                             <td>{{ item.email}}</td>
                             <td>{{ item.contact_no}}</td>
@@ -40,8 +41,9 @@
 export default {
     data(){
         return{ 
-            totle:0,
             substaffList:[],
+            genderArray:{},
+            positiontitleList:{},
         } 
     },
     methods: {
@@ -58,9 +60,35 @@ export default {
                 console.log("Error."+error);
             });
         },
+        loadgenderList(uri = 'masters/loadGlobalMasters/all_active_gender'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error){
+               console.log('Error: '+error);
+            });
+        },
+        loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
+        },
     },
-    mounted() {
-        this.loadstff();
+    mounted(){
+        this.loadgenderList();
+        this.loadpositionTitleList();
+        this.loadstff();        
         $("#training-table").DataTable({
             "responsive": true,
             "autoWidth": true,

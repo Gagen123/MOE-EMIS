@@ -270,6 +270,22 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item" id="track_application">
+                <router-link to="/track_application" class="nav-link">
+                    <p>
+                        <i class="fa fa-search nav-icon"></i>
+                        Track Application
+                    </p>
+                </router-link>
+            </li>
+            <li class="nav-item" id="tasklist">
+                <router-link to="/tasklist" class="nav-link">
+                    <p>
+                        <i class="fa fa-list nav-icon"></i>
+                        Task List
+                    </p>
+                </router-link>
+            </li>
             <li class="nav-item" id="select_system">
                 <a href="{{route('select_system') }}" class="nav-link text-white">
                     <i class="nav-icon fa fa-sign-out-alt pr-4"></i>

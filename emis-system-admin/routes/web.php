@@ -32,5 +32,16 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/load_gewog_details_by_id/{id}','AdministrationController@load_gewog_details_by_id');
         
     });
+
+    $router->group(['prefix' => 'workflow'], function () use ($router){
+        $router->post('/insertWorkflow', ['uses' => 'WorkflowController@insertWorkflow']);
+        $router->post('/updateTaskDetails', ['uses' => 'WorkflowController@updateTaskDetails']);
+    });
+    $router->group(['prefix' => 'common'], function () use ($router){
+        $router->get('/getApplicationDetials/{applicationId}', ['uses' => 'CommonController@getApplicationDetials']);
+        $router->get('/getTaskList/{type}/{user_id}/{param}', ['uses' => 'CommonController@getTaskList']);
+        $router->get('/getDzoNameById/{id}', ['uses' => 'CommonController@getDzoNameById']);
+        $router->get('/getGewogNameById/{id}', ['uses' => 'CommonController@getGewogNameById']);
+    });
 });
 

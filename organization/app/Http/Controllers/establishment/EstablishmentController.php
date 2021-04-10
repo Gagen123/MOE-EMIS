@@ -5,6 +5,7 @@ namespace App\Http\Controllers\establishment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
@@ -13,6 +14,8 @@ use App\Models\Masters\Stream;
 use App\Models\establishment\ApplicationDetails;
 use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
+use App\Models\ApplicationSequence;
+
 use Illuminate\Support\Facades\DB;
 
 
@@ -46,8 +49,6 @@ class EstablishmentController extends Controller
      */
     public function saveEstablishment(Request $request){
         $id = $request->id;
-        $applicationNo = 'establishment_' . '0001';
-
         if($id != null){
             $estd = [
                 'proposedName'                  =>  $request['proposedName'],
@@ -61,36 +62,63 @@ class EstablishmentController extends Controller
                 'isSenSchool'                   =>  $request['senSchool'],
                 'parentSchoolId'                =>  $request['parentSchool'],
                 'isColocated'                   =>  $request['design'],
-                'cid'                           =>  $request['cid'],
-                'fullName'                      =>  $request['name'],
-                'phoneNo'                       =>  $request['phoneNo'],
-                'email'                         =>  $request['email'],
+                // 'cid'                           =>  $request['cid'],
+                // 'fullName'                      =>  $request['name'],
+                // 'phoneNo'                       =>  $request['phoneNo'],
+                // 'email'                         =>  $request['email'],
                 'status'                        =>  $request['status'],
-                'applicationNo'                 =>  $applicationNo,
                 'service'                       =>  "New Establishment",
                 'updated_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s')
+            ];
+
+            // update proprietor details if category is private
+            if($request['category'] == 0){
+                $pvtDetails = [
+                    'applicationId'            =>  1,
+                    'cid'                      =>  $request['cid'],
+                    'fullName'                 =>  $request['name'],
+                    'phoneNo'                  =>  $request['phoneNo'],
+                    'email'                    =>  $request['email'],
+                    'updated_by'               =>  $request->user_id,
+                    'created_at'               =>  date('Y-m-d h:i:s')
                 ];
+                
+                $establishment = ApplicationProprietorDetails::where('applicationId', 1)->update($pvtDetails);
+            }
 
-                // update proprietor details if category is private
-                if($request['category'] == 0){
-                   
-                    $pvtDetails = [
-                        'applicationId'            =>  1,
-                        'cid'                      =>  $request['cid'],
-                        'fullName'                 =>  $request['name'],
-                        'phoneNo'                  =>  $request['phoneNo'],
-                        'email'                    =>  $request['email'],
-                        'updated_by'               =>  $request->user_id,
-                        'created_at'               =>  date('Y-m-d h:i:s')
-                        ];
-                    
-                    $establishment = ApplicationProprietorDetails::where('applicationId', 1)->update($pvtDetails);
-                }
-
-                $establishment = ApplicationDetails::where('id', $id)->update($estd);
-                return $this->successResponse($establishment, Response::HTTP_CREATED);
+            $establishment = ApplicationDetails::where('id', $id)->update($estd);
+            return $this->successResponse($establishment, Response::HTTP_CREATED);
         }else{
+            $last_seq=ApplicationSequence::where('service_name','New Establishment')->first();
+            if($last_seq==null || $last_seq==""){
+                $last_seq=1;
+                $app_details = [
+                    'service_name'                  =>  'New Establishment',
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::create($app_details);
+            }
+            else{
+                $last_seq=$last_seq->last_sequence+1;
+                $app_details = [
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::where('service_name', 'New Establishment')->update($app_details);
+            }
+            $application_no='Estb-';
+            if(strlen($last_seq)==1){
+                $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
+            }
+            else if(strlen($last_seq)==2){
+                $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
+            }
+            else if(strlen($last_seq)==3){
+                $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
+            }
+            else if(strlen($last_seq)==4){
+                $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
+            }
             $estd = [
                 'proposedName'                  =>  $request['proposedName'],
                 'category'                      =>  $request['category'],
@@ -108,29 +136,26 @@ class EstablishmentController extends Controller
                 'phoneNo'                       =>  $request['phoneNo'],
                 'email'                         =>  $request['email'],
                 'status'                        =>  "Pending",
-                'applicationNo'                 =>  $applicationNo,
+                'applicationNo'                 =>  $application_no,
                 'service'                       =>  "New Establishment",
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s')
-                ];
-                
-                // save proprietor details if category is private
-                if($request['category'] == 0){
-                    $pvtDetails = [
-                        'applicationId'            =>  1,
-                        'cid'                      =>  $request['cid'],
-                        'fullName'                 =>  $request['name'],
-                        'phoneNo'                  =>  $request['phoneNo'],
-                        'email'                    =>  $request['email'],
-                        'created_by'               =>  $request->user_id,
-                        'created_at'               =>  date('Y-m-d h:i:s')
-                        ];
-                    
-                    $establishment = ApplicationProprietorDetails::create($pvtDetails);
-                }
-
-                $establishment = ApplicationDetails::create($estd);
-                return $this->successResponse($establishment, Response::HTTP_CREATED);
+            ];
+            $establishment = ApplicationDetails::create($estd);
+            // save proprietor details if category is private
+            if($request['category'] == 0){
+                $pvtDetails = [
+                    'applicationId'            =>  $establishment->id,
+                    'cid'                      =>  $request['cid'],
+                    'fullName'                 =>  $request['name'],
+                    'phoneNo'                  =>  $request['phoneNo'],
+                    'email'                    =>  $request['email'],
+                    'created_by'               =>  $request->user_id,
+                    'created_at'               =>  date('Y-m-d h:i:s')
+                    ];
+                $establishment = ApplicationProprietorDetails::create($pvtDetails);
+            }
+            return $this->successResponse($establishment, Response::HTTP_CREATED);
         }
     }
 
@@ -142,23 +167,23 @@ class EstablishmentController extends Controller
         $classStream='';
         $inserted_class="";
 
-        $applicationNo = DB::table('application_details as a')
-                         ->select('a.applicationNo')
-                         ->where('created_by',$request->user_id)
-                         ->where('status', 'pending')
-                         ->get();
-                       
+        // $applicationNo = DB::table('application_details as a')
+        //     ->select('a.applicationNo')
+        //     ->where('created_by',$request->user_id)
+        //     ->where('status', 'pending')
+        //     ->get();
+        $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('status', 'pending')->first();
+        // return $application_details;     
         if($request->stream!="" && sizeof($request->stream)>0){
             foreach ($request->stream as $stm){
                 foreach ($classes as $cls){
                     if(explode('##',$stm)[0]==$cls){
                         $classStream = [
-                            'applicationNo'     => $applicationNo[0]->applicationNo,
+                            'applicationNo'     => $application_details->applicationNo,
                             'classId'           => $cls,
                             'streamId'          => explode('##',$stm)[1],
                             'created_by'        => $request->user_id,
                             'created_at'        => date('Y-m-d h:i:s'),
-                            
                         ];
                         if(strpos($inserted_class,$cls)===false){
                             $inserted_class.=$cls;
@@ -171,7 +196,7 @@ class EstablishmentController extends Controller
         foreach ($classes as $cls){
             if(strpos($inserted_class,$cls)===false){
                 $classStream = [
-                    'applicationNo'     => $applicationNo[0]->applicationNo,
+                    'applicationNo'     => $application_details->applicationNo,
                     'classId'           => $cls,
                     'created_by'        => $request->user_id,
                     'created_at'        => date('Y-m-d h:i:s'),
@@ -182,9 +207,9 @@ class EstablishmentController extends Controller
             }
         }
         $array = ['status' => $request->status];
-        DB::table('application_details')->where('applicationNo',$applicationNo[0]->applicationNo)->update($array);
+        DB::table('application_details')->where('applicationNo',$application_details->applicationNo)->update($array);
 
-        return $this->successResponse($class, Response::HTTP_CREATED);
+        return $this->successResponse($application_details, Response::HTTP_CREATED);
     }
 
     /**
@@ -213,5 +238,25 @@ class EstablishmentController extends Controller
      */
     public function loadProprietorDetails(){
         return $this->successResponse(ApplicationProprietorDetails::all());
+    }
+
+    public function loadEstbDetailsForVerification($appNo=""){
+        $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
+        $response_data->application_date=date_format(Carbon::parse($response_data->created_at), 'Y-m-d h:i:s');
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
+        $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+            
+        }
+        foreach($sections as $sec){
+            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        }
+        $response_data->class_section=$classSection;
+        $response_data->sections=$sections;
+        return $this->successResponse($response_data); 
     }
 }
