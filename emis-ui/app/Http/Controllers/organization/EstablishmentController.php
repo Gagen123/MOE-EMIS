@@ -135,7 +135,6 @@ class EstablishmentController extends Controller
         return $loadProprietorDetails;
     }
 
-<<<<<<< HEAD
     public function saveBasicDetails(Request $request){
         $rules = [
             'agencyType'          =>  'required',
@@ -193,7 +192,6 @@ class EstablishmentController extends Controller
         }
     }
 
-=======
     public function loadEstbDetailsForVerification($appNo="",$type=""){
         $update_data=[
             'applicationNo'     =>  $appNo,
@@ -231,5 +229,4 @@ class EstablishmentController extends Controller
     }
 
 
->>>>>>> 99abd4af36bfee92fd61df6c1a1a791e585ad61a
 }

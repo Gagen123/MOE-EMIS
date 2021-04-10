@@ -948,7 +948,7 @@ const routes = [
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
         { path: '/infrastructure_index', 
-        component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
+          component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [
             { path: '', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_list.vue').default },
             { path: '/infrastructure_add', name:'InfrastructureAdd', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_add.vue').default },
@@ -957,17 +957,18 @@ const routes = [
           ]    
         },
         { path: '/sport_index', 
-        component: require('./components/organization/structuralFacility/sport/sport_index.vue').default ,
+          component: require('./components/organization/structuralFacility/sport/sport_index.vue').default ,
           children: [
-<<<<<<< HEAD
-              { path: '/', component: require('./components/students/StudentExtraCurricular/Scouts/student_scouts_list.vue').default },
-              { path: '/student_scouts_list', component: require('./components/students/StudentExtraCurricular/Scouts/student_scouts_list.vue').default },
-              { path: '/add_student_scouts', component: require('./components/students/StudentExtraCurricular/Scouts/add_student_scouts.vue').default },
-              { path: '/edit_student_scouts', component: require('./components/students/StudentExtraCurricular/Scouts/edit_student_scouts.vue').default },
+            { path: '', component: require('./components/organization/structuralFacility/sport/sport_list.vue').default },
+            { path: '/sport_add', name:'SportAdd', component: require('./components/organization/structuralFacility/sport/sport_add.vue').default },
+            { path: '/sport_edit', name:'SportEdit', component: require('./components/organization/structuralFacility/sport/sport_edit.vue').default },
+            { path: '/sport_list', name:'SportList', component: require('./components/organization/structuralFacility/sport/sport_list.vue').default },
           ] 
-      },
-  ] 
-},
+        },
+        { path: '/wash', component: require('./components/organization/structuralFacility/wash.vue').default },
+        { path: '/school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
+      ] 
+    },
 
   // organization general information route
   { path: '/general_index', component: require('./components/organization/general/general_index.vue').default,
@@ -988,21 +989,6 @@ const routes = [
     ] 
   },
   
-  // organization structural facility route
-=======
-            { path: '', component: require('./components/organization/structuralFacility/sport/sport_list.vue').default },
-            { path: '/sport_add', name:'SportAdd', component: require('./components/organization/structuralFacility/sport/sport_add.vue').default },
-            { path: '/sport_edit', name:'SportEdit', component: require('./components/organization/structuralFacility/sport/sport_edit.vue').default },
-            { path: '/sport_list', name:'SportList', component: require('./components/organization/structuralFacility/sport/sport_list.vue').default },
-          ]    
-        },
-        { path: '/wash', component: require('./components/organization/structuralFacility/wash.vue').default },
-        { path: '/school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
-
-      ] 
-    },
->>>>>>> 99abd4af36bfee92fd61df6c1a1a791e585ad61a
-
     // organization establishment route
     { path: '/establishment_index',name:'establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
     children:[
