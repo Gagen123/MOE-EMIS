@@ -6,22 +6,26 @@
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/infrastructure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link id="regularstaff" to="/infrastructure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         Infrastructure
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/sport_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('volunteer')">
+                    <router-link id="volunteer" to="/sport_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         Sports
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/wash" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Wash 
+                <li class="nav-item active pr-1" @click="activatelink('trainingprogram')">
+                    <router-link id="trainingprogram" to="/wash" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Wash
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/school_feeding" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('nomination')">
+                    <router-link id="nomination" to="/school_feeding" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         School Feeding
                     </router-link>
                 </li>
