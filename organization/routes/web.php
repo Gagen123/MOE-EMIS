@@ -225,7 +225,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
         $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
         $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
-        
+        $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
     });
 
     $router->group(['prefix' => 'organization/headQuater'], function () use ($router) {

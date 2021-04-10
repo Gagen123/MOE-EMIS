@@ -19,11 +19,11 @@
                                <tr v-for="(item, index) in schoolList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ item.name }}</td>
-                                    <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}} {{  }}</td>
+                                    <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}}</td>
                                     <td>{{ item.level}}</td>
                                     <td>{{ item.status }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails()"> <i class="fa fa-eye"></i> View</button>                                                
+                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-eye"></i> View</button>                                                
                                     </td>
                                 </tr>
                             </tbody>
@@ -47,11 +47,11 @@ export default {
             axios.get('organization/getschoolDetials')
             .then(response => {
                 let data = response;
-                this.schoolList = data.data;
+                this.schoolList = data.data.data;
             });
         },
-        showfulldetails(){
-
+        showfulldetails(id){
+            this.$router.push({name:'school_details',query: {data:id}});
         }
     },
     created(){

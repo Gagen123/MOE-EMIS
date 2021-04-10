@@ -182,7 +182,7 @@ class HomeController extends Controller{
         $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
         $screens=[];
         $screens_ids="";
-        if($role_workflow_submitter!=null || $role_workflow_submitter!=""){
+        if(($role_workflow_submitter!=null || $role_workflow_submitter!="") && $role_workflow_submitter!="Unauthorized."){
             foreach(json_decode($role_workflow_submitter) as $i=> $work){
                 if(strpos($screens_ids,$work->screen_id)===false){  
                     $screens_ids.=$work->screen_id.',';

@@ -299,5 +299,10 @@ class EstablishmentController extends Controller
         $response_data = $this->apiService->listData('emis/organization/establishment/getschoolDetials/'.$param);
         return $response_data;
     }
+    public function getFullSchoolDetials($id=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/getFullSchoolDetials/'.$id);
+        return $response_data;
+    }
+    
 
 }

@@ -393,9 +393,27 @@ class EstablishmentController extends Controller
         if($access_level=="Org"){
             $response_data=OrganizationDetails::where('id',explode('SSS',$param)[2])->get();
         }
-        // if($response_data->levelId!=null && $response_data->levelId!=""){
-        //     $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
-        // }
+        foreach($response_data as $det){
+            $det->level=Level::where('id',$det->levelId)->first()->name;
+        }
         return $this->successResponse($response_data);
+    }
+    
+    public function getFullSchoolDetials($id=""){
+        $response_data=OrganizationDetails::where('id',$id)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->get();
+        $classSection=OrganizationClassStream::where('organizationId',$id)->groupBy('classId')->get();
+        $sections=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        }
+        foreach($sections as $sec){
+            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        }
+        $response_data->class_section=$classSection;
+        $response_data->sections=$sections;
+        return $this->successResponse($response_data); 
     }
 }

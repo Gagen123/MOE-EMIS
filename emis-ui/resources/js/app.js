@@ -983,7 +983,7 @@ const routes = [
       { path: '/acknowledgement', name:'acknowledgement', component: require('./components/organization/establishment/acknowledgement.vue').default },
       { path: '/register',name:'register', component: require('./components/organization/establishment/register.vue').default },
       { path: '/school_list',name:"school_list", component: require('./components/organization/establishment/school_list.vue').default },
-      
+      { path: '/school_details',  name:'school_details',component: require('./components/organization/establishment/school_details.vue').default },
       { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
       { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
       { path: '/change_basic_details_verification', component: require('./components/organization/verification/change_basic_details_verification.vue').default },
@@ -992,9 +992,10 @@ const routes = [
       ] 
     },
     { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
+    
 
   // organization restructuring route
-  { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index.vue').default,
+  { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
     children:[
       { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index_list.vue').default },
       { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
