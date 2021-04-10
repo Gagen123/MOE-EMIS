@@ -26,7 +26,7 @@ class CreateEstablishmentsTable extends Migration
             $table->tinyInteger('isSenSchool');
             $table->char('parentSchoolId',36)->nullable(true);
             $table->tinyInteger('isColocated')->nullable(true);;
-            $table->string('status')->nullable(true);
+            $table->string('status')->nullable(true)->comment('Pending->Submitted->Under Process or Rejectd->Approved ->Registered');
             $table->string('applicationNo');
             $table->string('service');
             $table->integer('oldOrganizationId1')->nullable(true);
@@ -34,6 +34,7 @@ class CreateEstablishmentsTable extends Migration
             $table->string('year')->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
+            $table->string('updated_remarks')->nullable(true);
             $table->timestamps();
         });
     }

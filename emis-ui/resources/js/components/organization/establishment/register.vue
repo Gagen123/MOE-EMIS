@@ -4,244 +4,140 @@
             <div class="card-body" >
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="col-md-5 ">Category:<span class="text-danger">*</span></label>
-                        <select name="category" id="category" class="form-control editable_fields " @change="show()">
-                                <option value="">--- Please Select ---</option>
-                                <option value="1">Public</option>
-                                <option value="2">Private</option>
-                                <option value="3">NGo</option>
-                                <option value="3">Coporate</option>
+                        <label>Category:<span class="text-danger">*</span></label>
+                        <select name="category" id="category" v-model="applicaitondetailsform.category" class="form-control select2" >
+                            <option value="1">Public</option>
+                            <option value="0">Private & Others</option>
                         </select>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="col-md-10 ">Year of Establishment:</label>
-                            <input type="text" class="form-control editable_fields" id="yearOfEst"/>
-                        </div>                   
-                </div>
-                
-                <!-- for public category -->
-                <div class="hidden" id="publicCategory">
-                    <div class="form-group row" >  
-                        <label class="col-md-7 ">ZEST Working Agency Code:<span class="text-danger">*</span></label>
-                        <div class="input-group col-md-12 col-sm-12 col-xs-12">
-                            <input type="text" id="workingAgencyCode" class="col-md-4 form-control editable_fields" @change="removeerror('workingAgencyCode','workingAgencyCode_error')"/>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Year of Establishment:</label>
+                        <input type="text" class="form-control" id="yearOfEst" v-model="applicaitondetailsform.yearestb" name="yearOfEst"/>
+                    </div>   
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="zest_code_section">
+                        <label>ZEST Working Agency Code:<span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <input type="text" id="workingAgencyCode" class="form-control" v-model="applicaitondetailsform.zestcode" @change="remove_error('workingAgencyCode')"/>
                             <div class="input-group-append">
-                                <span type="button" class="col-md-12 btn  btn-primary" @click="getSchoolDeails()"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="col-md-12 btn  btn-primary" @click="getApprovedOrgDetails('1')"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div>
                         </div>
-                        <span id="workingAgencyCode_error" class="text-danger"></span>
+                        <span id="workingAgencyCode_err" class="text-danger"></span>
                     </div>
-                    <div class="form-group row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="school1" style="display:none">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Working Agency Code:</label>
-                                    <span class="text-indigo-600" id="scode">00020292</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Name:</label>
-                                    <span class="text-indigo-600" id="sname">YangchenPhug HSS</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Parent Agency:</label>
-                                    <span class="text-indigo-600" id="scategory">MOE</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Level:</label>
-                                    <span class="text-indigo-600" id="slevel">Higher Secondary School</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Dzongkhag:</label>
-                                    <span class="text-indigo-600" id="slevel">Thimphu</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Gewog:</label>
-                                    <span class="text-indigo-600" id="sdzongkhag">Thimthrom</span>
-                                </div>
-                                
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Chiwog:</label>
-                                    <span class="text-indigo-600" id="sdzongkhag">Thimthrom</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Location Type:</label>
-                                    <span class="text-indigo-600" id="slevel">Urban Grade 1</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Geopolitically Located:</label>
-                                    <span class="text-indigo-600" id="sdzongkhag">No</span>
-                                </div>
-                                
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Sen School/ECCD:</label>
-                                    <span class="text-indigo-600" id="sdzongkhag">No</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Location Type:</label>
-                                    <span class="text-indigo-600" id="slevel">Urban Grade 1</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Geopolitically Located:</label>
-                                    <span class="text-indigo-600" id="sdzongkhag">No</span>
-                                </div>
-                                
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Classes and Streams</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <ul>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <ul>
-                                        <li><input type="checkbox" checked id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                        <ul id="xlsection"   class="pl-4">
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                        </ul>
-                                    <li><input type="checkbox" checked id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                        <ul id="xlisection"  class="pl-4">
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                        </ul>
-                                    </ul>
-                                </div>
-                            </div>
+                    <span class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="approved_schol_list" style="display:none">  
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
+                                <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
+                                <select name="organizationid" id="organizationid" v-model="applicaitondetailsform.organizationid" :class="{ 'is-invalid': applicaitondetailsform.errors.has('organizationid') }" class="form-control select2">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
+                                </select>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                                <br/>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('0')"><i class="fa fa-search">&nbsp;Search</i></span>
+                            </div> 
                         </div>
-                    </div>  
+                    </span>           
                 </div>
-
                 <!-- for private category -->
-                <div class="hidden" id="privateCategory">
-                    <div class="form-group row" >    
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
-                            <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
-                            <select name="organization" id="organization" class="form-control editable_fields " @change="getPvtApprovedSchoolDetails()">
-                                <option value="">--- Please Select ---</option>
-                                <option value="1">Kelki HSS</option>
-                            </select>
-                        </div> 
-                    </div> 
-
+                <div class="hidden" id="org_details" style="display:none">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="privateSchoolDetails" style="display:none">
-                        <div class="form-group row">
+                        <div class="form-group row"> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Name:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Kelki HSS</span>
-                            </div>
+                                <label class="mb-0">Proposed Name:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.proposedName}}</span>
+                            </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Level:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Higher Secondary School</span>
-                            </div>
+                                <label class="mb-0">Level:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.level}}</span>
+                            </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Dzongkhag:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Thimphu</span>
+                                <label class="mb-0">Category:</label>
+                                <span class="text-blue text-bold">
+                                    {{ applicaitondetailsform.category  == 1 ? "public" :  "private"}}
+                                </span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Gewog:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Thimthrom</span>
+                                <label class="mb-0">Dzongkhag:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.dzongkhag}}</span>
+                            </div>  
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Gewog:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.gewog}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Chiwog:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Thimthrom</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Location:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Urban Grade 1</span>
-                            </div>
+                                <label class="mb-0">Chiwog:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.village}}</span>
+                            </div>                 
                         </div>
-                                                    
-                        <div class="row form-group">
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">No</span>
-                            </div>
+                                <label class="mb-0">Location Type:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.locationType}}</span>
+                            </div>   
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>SEN School:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">No</span>
-                            </div>
+                                <label class="mb-0">Geopolitically Located:</label>
+                                <span class="text-blue text-bold">
+                                    {{ applicaitondetailsform.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
+                                </span>
+                            </div> 
                         </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Proprietor Details:</label>
-                            </div>
+
+                        <div class="form-group row" v-if="applicaitondetailsform.senSchool==1">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                                <label class="mb-0">Parent School:</label>
+                                <span class="text-blue text-bold">{{applicaitondetailsform.parentSchool}}</span>
+                            </div>   
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Co-located with Parent School</label>
+                                <span class="text-blue text-bold">
+                                    {{ applicaitondetailsform.coLocated  == 1 ? "Yes" :  "No"}}
+                                </span>
+                            </div> 
                         </div>
-                        <div class="row form-group">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>CID:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">10604002392</span>
+                        <div v-if="applicaitondetailsform.category==0">
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4><u>Proprietor Details</u></h4>
+                                </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Name:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">Sonam Dorji</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Phone:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">17439832</span>
-                            </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Email:</label>
-                                <span class="text-indigo-600" id="sdzongkhag">sonam@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Classes and Streams</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <ul>
-                                    <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                    <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                </ul>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <ul>
-                                    <li><input type="checkbox" checked id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                    <ul id="xlsection"   class="pl-4">
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                    </ul>
-                                <li><input type="checkbox" checked id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                    <ul id="xlisection"  class="pl-4">
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                    </ul>
-                                </ul>
+                            <div v-for="(pro, index) in proprietorList" :key="index">
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">CID:</label>
+                                        <span class="text-blue text-bold">{{pro.cid}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Full Name:</label>
+                                        <span class="text-blue text-bold">{{pro.fullName}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Phone No:</label>
+                                        <span class="text-blue text-bold">{{pro.phoneNo}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Email:</label>
+                                        <span class="text-blue text-bold">{{pro.email}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <div class="row form-group fa-pull-right">
-                <div class="col-md-12">
-                    <!-- <button type="button" class="btn btn-flat btn-warning" id="reset" @click="reset()"><i class="fa fa-ban"></i> Reset</button> -->
-                    <button type="button" class="btn btn-flat btn-primary" @click="save()"> <i class="fa fa-save"></i> Save</button>                                                
-                </div>
-            </div> 
+            <div class="card-footer">
+                <div class="row form-group fa-pull-right">
+                    <div class="col-md-12">
+                        <!-- <button type="button" class="btn btn-flat btn-danger" id="reset" @click="reset()"><i class="fa fa-ban"></i> Reset</button> -->
+                        <button type="button" class="btn btn-flat btn-primary" @click="save()"> <i class="fa fa-save"></i> Save</button>                                                
+                    </div>
+                </div> 
+            </div>
         </div>
     </div>
 </template>
@@ -250,45 +146,93 @@
 export default {
     data(){
         return{
-
+            orgList:[],
+             applicaitondetailsform: new form({
+                id: '',category:'1',yearestb:'',zestcode:'',organizationid:'',applicationNo:'',application_date:'',service:'',proposedName:'',
+                level:'',category:'1',dzongkhag:'',gewog:'',village:'',locationType:'',
+                geopolicaticallyLocated:'0',senSchool:'0',parentSchool:'',coLocatedParent:'0',cid:'',name:'',
+                phoneNo:'',email:'',status:'',remarks:''
+            }),
+             
         }
     },
-
     methods:{
-        /** method to show div*/
-        show: function(){
-            let category = $("#category").val();
-
-            if(category == 1 || category == 3 || category == 4){
-                $("#publicCategory").show();
-                $("#privateCategory").hide();
+        display_respective_section: function(){
+            $("#zest_code_section").hide();
+            $("#approved_schol_list").hide();
+            if(this.form.category == 1){
+               $("#zest_code_section").show();
 
             }else{
-                $("#privateCategory").show();
-                $("#publicCategory").hide();
+                this.loadApproveSchoolname();
+                $("#approved_schol_list").show();
+            }
+        },
+        loadApproveSchoolname(){
+            axios.get('organization/loadApprovedOrgs')
+            .then((response) => {  
+                let data=response.data.data;
+                this.orgList   =   data;
+            })
+            .catch((error) => {  
+                console.log("Error:"+error);
+            });
+        },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        }, 
+        async changefunction(id){
+            if(id=="category"){
+                this.form.category=$('#category').val();
+                this.display_respective_section()();
+            }
+            if(id=="organizationid"){
+                this.form.organizationid=$('#organizationid').val();
             }
         },
 
-        /** method to get org details from ZEST system */
-
-        getSchoolDeails: function(){
-            if($('#workingAgencyCode').val()==""){
-                $('#workingAgencyCode_error').html('Please enter zest working agency code.');
-                $('#workingAgencyCode').focus();
-                $('#workingAgencyCode').removeClass('is-invalid');
+        getApprovedOrgDetails(type){
+            let key="";
+            if(type==1){
+                key=this.applicaitondetailsform.zestcode;
             }
-            else{
-                $('#school1').show();
-                $('#school2').show();
+            if(type==0){
+                key=this.applicaitondetailsform.zestcode;
             }
+            axios.get('organization/getApprovedOrgDetails/'+type+'/')
+            .then((response) => {  
+                let data=response.data.data;
+                this.orgList   =   data;
+                $("#org_details").show();
+            })
+            .catch((error) =>{  
+                $("#org_details").hide();
+                console.log("Error:"+error);
+            });
         },
-
-        getPvtApprovedSchoolDetails: function(){
-            $("#code").val("201.00005.11.0925");
-            $("#schoolName").val("Private 1");
-            $("#privateSchoolDetails").show();
-            $("#classAndStream").show();
-        },
+    },
+    mounted() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+    },
+    created(){
+        let currentdate = new Date();
+        let current_year =(currentdate.getFullYear());
+        // let month =(currentdate.getMonth() + 1);
+        // let day = currentdate.getDate();
+        this.applicaitondetailsform.yearestb=current_year;
     }
 }
 </script>

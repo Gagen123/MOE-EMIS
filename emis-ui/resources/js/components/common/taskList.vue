@@ -16,8 +16,8 @@
                             <th>Sl No</th>
                             <th>Application Number</th>
                             <th>Service Name</th>
-                            <th>Applicant Name</th>
-                            <th>Application Submission Date</th>
+                            <th>Last Action By</th>
+                            <th>Last Action Date</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,8 +47,8 @@
                             <th>Sl No</th>
                             <th>Application Number</th>
                             <th>Service Name</th>
-                            <th>Applicant Name</th>
-                            <th>Application Submission Date</th>
+                            <th>Last Action By</th>
+                            <th>Last Action Date</th>
                         </tr>
                     </thead>
                     <tbody>

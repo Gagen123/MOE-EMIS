@@ -151,8 +151,13 @@ class EstablishmentController extends Controller
     public function updateNewEstablishmentApplication(Request $request){
         $workflowdet=$this->getcurrentworkflowStatusForUpdate('new establishment');
         $work_status=$workflowdet['status'];
+        $org_status='Under Process';
         if($request->actiontype=="reject"){
             $work_status=0;
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -168,7 +173,19 @@ class EstablishmentController extends Controller
             'action_by'         =>$this->userId(),
         ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $estd =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->remarks,
+            'user_id'                      =>   $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $work_response_data;
+    }
+    
+    public function loadApprovedOrgs(){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/loadApprovedOrgs');
+        return $response_data;
     }
 
 

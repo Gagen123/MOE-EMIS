@@ -1,9 +1,10 @@
 <template>
 <div>
-    <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-        <li class="pl-2 form-inline "><h5>E</h5><h6 class="pt-1">STABLISHMENT</h6></li>
+    <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
+        <li class="form-inline "><h5>E</h5><h6 class="pt-1">STABLISHMENT</h6></li>
     </ol>
-    <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
+    <div class="container-fluid">
+        <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
             <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                 <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                     <span :class="item.screen_icon"></span> 
@@ -35,18 +36,7 @@
                     HQ/Dzongkhag Office
                 </router-link>
             </li>
-            <!-- <li class="nav-item pr-1" @click="activatelink('nomination')">
-                <router-link to="/sample" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    <span class=""></span>
-                    Sample
-                </router-link>
-            </li> -->
-            <li class="nav-item pr-1" @click="activatelink('nomination')">
-                <router-link to="/establishment_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    <span class=""></span>
-                    Establishment Verification
-                </router-link>
-            </li>
+
             <li class="nav-item pr-1" @click="activatelink('nomination')">
                 <router-link to="/bifurcation_verification" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
@@ -73,6 +63,7 @@
             </li>
         </ul>
         <router-view></router-view>
+    </div>
 </div>
     
 </template>
