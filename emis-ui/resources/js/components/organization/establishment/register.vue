@@ -147,6 +147,7 @@ export default {
     data(){
         return{
             orgList:[],
+            proprietorList:[],
              applicaitondetailsform: new form({
                 id: '',category:'1',yearestb:'',zestcode:'',organizationid:'',applicationNo:'',application_date:'',service:'',proposedName:'',
                 level:'',category:'1',dzongkhag:'',gewog:'',village:'',locationType:'',
@@ -160,7 +161,7 @@ export default {
         display_respective_section: function(){
             $("#zest_code_section").hide();
             $("#approved_schol_list").hide();
-            if(this.form.category == 1){
+            if(this.applicaitondetailsform.category == 1){
                $("#zest_code_section").show();
 
             }else{
@@ -186,11 +187,11 @@ export default {
         }, 
         async changefunction(id){
             if(id=="category"){
-                this.form.category=$('#category').val();
-                this.display_respective_section()();
+                this.applicaitondetailsform.category=$('#category').val();
+                this.display_respective_section();
             }
             if(id=="organizationid"){
-                this.form.organizationid=$('#organizationid').val();
+                this.applicaitondetailsform.organizationid=$('#organizationid').val();
             }
         },
 
