@@ -1,32 +1,37 @@
 <template>
     <div>
-        <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h5>G</h5><h6 class="pt-1">ENERAL INFORMATION</h6></li>
+        <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
+            <li class="form-inline "><h5>G</h5><h6 class="pt-1">ENERAL INFORMATION</h6></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link id="regularstaff" to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         Location
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/connectivity" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff1')">
+                    <router-link id="regularstaff1" to="/connectivity" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         Connectivity
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/equipment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Equipment & Furniture 
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff2')">
+                    <router-link id="regularstaff2" to="/equipment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Equipment & Furniture
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff3')">
+                    <router-link id="regularstaff3" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         Class Mapping
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/sections_add" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff4')">
+                    <router-link id="regularstaff4" to="/sections_add" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
                         Sections
                     </router-link>
                 </li>

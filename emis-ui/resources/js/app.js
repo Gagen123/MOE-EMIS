@@ -926,27 +926,11 @@ const routes = [
       ] 
     },
 
-    // organization general information route
-    { path: '/general_index', component: require('./components/organization/general/general_index.vue').default,
-      children:[
-        { path: '/equipment_index', 
-        component: require('./components/organization/general/equipment/equipment_index.vue').default ,
-          children: [
-            { path: '', component: require('./components/organization/general/equipment/equipment_list.vue').default },
-            { path: '/equipment_add', name:'EquipmentAdd', component: require('./components/organization/general/equipment/equipment_add.vue').default },
-            { path: '/equipment_edit', name:'EquipmentEdit', component: require('./components/organization/general/equipment/equipment_edit.vue').default },
-            { path: '/equipment_list', name:'EquipmentList', component: require('./components/organization/general/equipment/equipment_list.vue').default },
-          ]    
-        },
-        { path: '/locations',  component: require('./components/organization/general/locations.vue').default },
-        { path: '/sections_add',component: require('./components/organization/general/sections_add.vue').default },
-        { path: '/connectivity', component: require('./components/organization/general/connectivity.vue').default },
-      ] 
-    },
-
     // organization structural facility route
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
+        { path: '/structural_index',name:"structural_index", component: require('./components/organization/structuralFacility/structural_index_list.vue').default },
+
         { path: '/infrastructure_index', 
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [
@@ -972,7 +956,9 @@ const routes = [
 
   // organization general information route
   { path: '/general_index', component: require('./components/organization/general/general_index.vue').default,
-    children:[
+    children:[    
+      { path: '/general_index',name:"general_index", component: require('./components/organization/general/general_index_list.vue').default },
+  
       { path: '/equipment_index', 
       component: require('./components/organization/general/equipment/equipment_index.vue').default ,
         children: [
@@ -981,7 +967,7 @@ const routes = [
           { path: '/equipment_edit', name:'EquipmentEdit', component: require('./components/organization/general/equipment/equipment_edit.vue').default },
           { path: '/equipment_list', name:'EquipmentList', component: require('./components/organization/general/equipment/equipment_list.vue').default },
         ]    
-      },
+      },      
       { path: '/locations',  component: require('./components/organization/general/locations.vue').default },
       { path: '/sections_add',component: require('./components/organization/general/sections_add.vue').default },
       { path: '/connectivity', component: require('./components/organization/general/connectivity.vue').default },
@@ -1010,6 +996,7 @@ const routes = [
   // organization restructuring route
   { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index.vue').default,
     children:[
+      { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index_list.vue').default },
       { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
       { path: '/merger', component: require('./components/organization/restructuring/merger.vue').default },
       { path: '/bifurcation_index', 

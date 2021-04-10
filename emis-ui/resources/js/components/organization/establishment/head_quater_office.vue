@@ -24,12 +24,12 @@
                             <div class="form-group row" >  
                                 <label class="col-md-7 ">ZEST Working Agency Code:<span class="text-danger">*</span></label>
                                 <div class="input-group mb-3 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control editable_fields"/>
+                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control"/>
                                         <div class="input-group-append">
-                                            <span type="button" class="col-md-12 btn  btn-primary" @click="getOrgDetais()"><i class="fa fa-search">&nbsp;Search</i></span>
+                                            <span type="button" class="col-md-12 btn btn-primary" @click="getOrgDetais(),remove_error('workingAgencyCode')"><i class="fa fa-search">&nbsp;Search</i></span>
                                         </div>
                                 </div>
-                                <span id="workingAgencyCode_error" class="text-danger"></span>
+                                <has-error :form="form" field="workingAgencyCode"></has-error>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="showDetails" style="display:none">
                                 <div class="form-group row">
@@ -63,11 +63,12 @@
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
                                         <label class="col-md-7 ">Agency Type:<span class="text-danger">*</span></label>
-                                        <select name="agencyType" id="agencyType" v-model="form.agencyType" class="form-control editable_fields" @change="remove_error('agencyType')">
+                                        <select name="agencyType" id="agencyType" v-model="form.agencyType" class="form-control" :class="{ 'is-invalid': form.errors.has('agencyType') }" @change="remove_error('agencyType')">
                                             <option value="">--- Please Select ---</option>
                                             <option value="1">Agency in HQ</option>
                                             <option value="2">Dzongkhag Education Office</option>
                                         </select>
+                                        <has-error :form="form" field="agencyType"></has-error>
                                     </div> 
                                 </div>
                             </div>
@@ -239,8 +240,10 @@ export default {
                                 icon: 'success',
                                 title: 'Data is saved successfully'
                             })
+                            this.change_tab(nextclass);
                     })
                     .catch(() => {
+                        this.change_tab('organization-tab');
                         console.log("Error......")
                     })
                 }

@@ -321,6 +321,11 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
+
+        loaddOrganizationDetails(){
+            
+        }
+        
     },
     
     created() {
