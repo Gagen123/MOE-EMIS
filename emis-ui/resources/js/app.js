@@ -990,28 +990,26 @@ const routes = [
   },
   
     // organization establishment route
-    { path: '/establishment_index',name:'establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
+    { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
     children:[
+      { path: '/establishment_index',name:"establishment_index", component: require('./components/organization/establishment/establishment_index_list.vue').default },
       { path: '/establishment',name:"establishment", component: require('./components/organization/establishment/establishment.vue').default },
       { path: '/acknowledgement', name:'acknowledgement', component: require('./components/organization/establishment/acknowledgement.vue').default },
-      
+      { path: '/register',name:'register', component: require('./components/organization/establishment/register.vue').default },
 
       { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
-      { path: '/register', component: require('./components/organization/establishment/register.vue').default },
       { path: '/school_list', component: require('./components/organization/establishment/school_list.vue').default },
 
-      // need to remove this
-      { path: '/sample', component: require('./components/organization/establishment/sample.vue').default },
-      
       { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
       { path: '/change_basic_details_verification', component: require('./components/organization/verification/change_basic_details_verification.vue').default },
       { path: '/merger_verification', component: require('./components/organization/verification/merger_verification.vue').default },
       { path: '/closure_verification', component: require('./components/organization/verification/closure_verification.vue').default },
-    ] 
-  },
+      ] 
+    },
+    { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
 
   // organization restructuring route
-  { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
+  { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index.vue').default,
     children:[
       { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
       { path: '/merger', component: require('./components/organization/restructuring/merger.vue').default },
@@ -1038,7 +1036,7 @@ const routes = [
   { path: '/profile', name:'profile', component: require('./components/common/profile.vue').default },
   { path: '/tasklist', name:'tasklist', component: require('./components/common/taskList.vue').default },
   { path: '/track_application',  name:'track_application',component: require('./components/common/track_application.vue').default },
-  { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
+  
   
 ]
 const router = new VueRouter({

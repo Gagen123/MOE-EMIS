@@ -259,4 +259,18 @@ class EstablishmentController extends Controller
         $response_data->sections=$sections;
         return $this->successResponse($response_data); 
     }
+
+    public function updateEstablishment(Request $request){
+        $estd =[
+            'status'                       =>   $request->status,
+            'updated_remarks'              =>   $request->remarks,
+            'updated_by'                   =>   $request->user_id, 
+        ];
+        $establishment = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
+        return $this->successResponse($establishment, Response::HTTP_CREATED);
+    }
+    
+    public function loadApprovedOrgs(){
+        return $this->successResponse(ApplicationDetails::where('status','Approved')->where('category','0')->get());
+    }
 }

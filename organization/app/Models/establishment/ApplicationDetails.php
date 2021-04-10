@@ -20,6 +20,6 @@ class ApplicationDetails extends Model
         'id','proposedName','category','levelId','dzongkhagId','gewogId','chiwogId','locationId',
         'isGeopoliticallyLocated','isSenSchool','parentSchoolId','isColocated','status',
         'applicationNo', 'service','oldOrganizationId1','oldOrganizationId2','year',
-        'created_by','updated_by'
+        'created_by','updated_by','updated_remarks'
     ];
 }

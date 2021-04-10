@@ -214,13 +214,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
         $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');
         $router->post('/saveEstablishment', 'establishment\EstablishmentController@saveEstablishment');
+        $router->post('/updateEstablishment', 'establishment\EstablishmentController@updateEstablishment');
         $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
         $router->get('/getClass', 'establishment\EstablishmentController@getClass');
         $router->get('/getStream', 'establishment\EstablishmentController@getStream');
         $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
         $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
         $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
-
+        $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
+        
     });
 
     $router->group(['prefix' => 'organization/headQuater'], function () use ($router) {
