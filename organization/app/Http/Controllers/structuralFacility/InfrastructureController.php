@@ -10,6 +10,7 @@ use App\Models\structuralFacility\Infrastructure;
 use App\Models\Masters\StructureCategory;
 use App\Models\Masters\StructureSubCategory;
 use App\Models\Masters\StructureFacility;
+use App\Models\Masters\StructureDesigner;
 use App\Models\structuralFacility\FacilityInStructure;
 use Illuminate\Support\Facades\DB;
 
@@ -32,6 +33,13 @@ class InfrastructureController extends Controller
      */
     public function getCategoryInDropdown(){
         return StructureCategory::get(['id','name']);
+    }
+
+    /**
+     * method to get structure Designer in dropdown
+     */
+    public function getDesignerDropdown(){
+        return StructureDesigner::get(['id','name']);
     }
 
     /**

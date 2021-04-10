@@ -48,4 +48,12 @@ class SectionController extends Controller
         }
         return $this->successResponse($sec, Response::HTTP_CREATED);
     }
+
+
+    public function getClassByOrganizationId($orgId){
+        $class = DB::table('class_mappings as a')
+            ->join('classes as b', 'b.id', '=', 'a.classId')
+            ->select('a.classId as id', 'b.class as class')->where('organizationId', $orgId)->get();
+        return $class;
+    }
 }

@@ -13,14 +13,14 @@
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Sub Category</label> 
+                        <label class="">Sub Category:<span class="text-danger">*</span></label> 
                         <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Structure No./Name:<span class="text-danger">*</span></label> 
+                        <label class="">Structure No:</label> 
                         <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
                     </div>
                 </div>
@@ -79,7 +79,7 @@
                             <thead>
                                 <tr>
                                     <th>Facility</th>
-                                    <th>Type</th>
+                                    <!-- <th>Type</th> -->
                                     <th>Facility No./Name</th>
                                     <th>Capacity</th>
                                     <th>Total number of Facility</th>
@@ -95,13 +95,12 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    <td>                                
+                                    <!-- <td>                                
                                         <select name="type" id="type" class="form-control editable_fields" v-model="user.type">
                                             <option value="">--- Please Select ---</option>
-                                            <!-- <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option> -->
                                             <option value="1">Type 1</option>
                                         </select>
-                                    </td>
+                                    </td> -->
                                     <td>                                
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
                                     </td>

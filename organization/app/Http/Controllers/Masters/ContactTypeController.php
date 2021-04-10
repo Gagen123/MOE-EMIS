@@ -3,72 +3,62 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
-
-use App\Models\Masters\ContactType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
+use App\Models\Masters\ContactType;
+use Illuminate\Support\Facades\DB;
 
 class ContactTypeController extends Controller
 {
     use ApiResponser;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-    //region public method
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $contactTyoe = ContactType::all();
-        return $this->successResponse($contactTyoe);
+    public function __construct() {
+        date_default_timezone_set('Asia/Dhaka');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $id = $request->Id;
+    /** 
+     * method to save or update disaster type
+    */
+    public function saveContactType(Request $request){
+
+        //return($request['disasterName']);
+        $id = $request->id;
         if( $id != null){
-            $contactType = ContactType::where('Id', $id)->update($request->all());
-            return $this->successResponse($contactType, Response::HTTP_CREATED);
+            $src = [
+                'name'          => $request['contactName'],
+                'status'        => $request['status'],
+                'updated_by'    =>$request['user_id'],
+                'created_at'    =>date('Y-m-d h:i:s'),
+            ];
+
+            $data = ContactType::find($request['id']);
+            $messs_det='contactName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','contact_types','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                
+            $source = ContactType::where('id', $id)->update($src);
+            return $this->successResponse($source, Response::HTTP_CREATED);
         }else{
-            $contactType = ContactType::create($request->all());
-            return $this->successResponse($contactType, Response::HTTP_CREATED);
+
+            $dis = [
+                'name'          => $request['contactName'],
+                'status'        => $request['status'],
+                'created_by'    =>$request['user_id'],
+                'created_at'    =>date('Y-m-d h:i:s'),
+            ];
+
+            $disaster = ContactType::create($dis);
+            return $this->successResponse($disaster, Response::HTTP_CREATED);
         }
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\ContactType  $contactType
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $contactTyoe = ContactType::findOrFail($id)->delete();
-        return $this->successResponse($contactTyoe);
+     * method to list disaster type
+    */
+    
+    public function loadContactType(){
+        $loadContactType = ContactType::all();
+        return $loadContactType;
     }
 
-    /** method to get contact type by Id */
-    public function getContactTypeById($id){
-        $contactType = DisasterType::findOrFail($id);
-        return $this->successResponse($contactType);
-    }
-
-    //endregion
 }

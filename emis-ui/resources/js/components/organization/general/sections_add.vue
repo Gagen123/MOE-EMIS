@@ -6,7 +6,7 @@
                     <div class="row form-group">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>School:<span class="text-danger">*</span></label> 
-                            <select name="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="school" @change="remove_err('school')">
+                            <select name="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="school" @change="remove_err('school'),getClassByOrganizationId()">
                                 <option value="">--- Please Select ---</option>
                                 <option value="1">Yangchenphug</option>
                             </select>
@@ -14,17 +14,13 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Class:<span class="text-danger">*</span></label> 
-                            <select name="class" class="form-control" v-model="form.classes" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="classes" @change="remove_err('classes')">
+                            <select name="class" id="class" class="form-control editable_fields" v-model="form.classes">
                                 <option value="">--- Please Select ---</option>
-                                <option value="1">IX</option>
-                                <option value="2">X</option>
-                                <option value="3">XI</option>
-                                <option value="4">XII</option>
+                                <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
                             </select>
                             <has-error :form="form" field="str_name"></has-error>
                         </div>
                     </div>  
-                    
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Sections:<span class="text-danger">*</span></label>
                         <div class="form-group row" v-for='(user, index) in form.users' :key="index"> 
@@ -55,6 +51,7 @@ export default {
         return{
             count:1,
             users: [],
+            classList:[],
             form: new form({
                 id: '',
                 school: '',
@@ -94,6 +91,18 @@ export default {
                 })
             }
 		},
+
+        /**
+         * method to get class by organizationId
+         */
+        getClassByOrganizationId:function(){
+            axios.get('/organization/getClassByOrganizationId/'+this.form.school)
+              .then(response => {
+                  let data = response.data;
+                  this.classList = data;
+            });
+        },
+
         /**method to add more field */
         addMore: function(){
             this.count++;

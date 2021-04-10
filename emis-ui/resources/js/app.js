@@ -941,9 +941,10 @@ const routes = [
       { path: '/locations',  component: require('./components/organization/general/locations.vue').default },
       { path: '/sections_add',component: require('./components/organization/general/sections_add.vue').default },
       { path: '/connectivity', component: require('./components/organization/general/connectivity.vue').default },
+      { path: '/org_class_mapping', component: require('./components/organization/general/org_class_mapping.vue').default },
     ] 
   },
-
+  
   // organization structural facility route
 
   { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,

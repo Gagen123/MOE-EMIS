@@ -40,7 +40,30 @@ export default {
     },
 
     methods:{
-        
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+        formaction: function(type){
+            if(type=="reset"){
+                this.form.roadType= '';
+                this.form.status= 1;
+            }
+            if(type=="save"){
+                this.form.post('masters/saveRoadType',this.form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Road Type is added successfully'
+                    })
+                    this.$router.push('/road_type_list');
+                })
+                .catch(() => {
+                    console.log("Error......")
+                })
+            }
+		},
     }
 }
 </script>

@@ -23,17 +23,13 @@
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Name:</label>
-                                        <input type="text" class="form-control" v-model="form.name" value="Yangchenphug HSS" id="name"/>
+                                        <input type="text" class="form-control" v-model="form.name" id="name"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Level:</label>
-                                        <select name="level" id="level" class="form-control" v-model="form.level">
-                                            <option value="1">Higher Secondary School</option>
-                                            <option value="2">Middle Secondary School</option>
-                                            <option value="3">Lower Secondary School</option>
-                                            <option value="4">Primary School</option>
-                                            <option value="5">ECR</option>
-                                            <option value="6">ECCD</option>
+                                        <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control editable_fields" @change="remove_error('level')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -45,36 +41,32 @@
                                     <div class="row form-group">
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Dzongkhag:</label>
-                                            <select name="dzongkhag" id="dzongkhag" v-model="form.dzongkhag" class="form-control">
-                                                <option value="1">Thimphu</option>
-                                                <option value="2">Paro</option>
-                                                <option value="3">punakha</option>
-                                                <option value="4">Lhuntse</option>
+                                            <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                                <option value="">--- Please Select ---</option>
+                                                <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Gewog:</label>
-                                            <select name="gewog" id="gewog" v-model="form.gewog" class="form-control">
-                                                <option value="1">Thimthrom</option>
-                                                <option value="2">Babesa</option>
-                                                <option value="3">Motithang</option>
-                                                <option value="4">Chubachu</option>
+                                            <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                                <option value="">--- Please Select ---</option>
+                                                <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Chiwog:</label>
-                                            <select name="chiwog" id="chiwog" v-model="form.chiwog" class="form-control">
-                                                <option value="1">Thimthrom</option>
-                                                <option value="2">chngbandu</option>
+                                            <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
+                                                <option value="">--- Please Select ---</option>
+                                                <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Location Type:</label>
-                                            <select name="locationType" id="locationType" v-model="form.locationType" class="form-control editable_fields">
-                                                <option value="1">Urban Grade 1</option>
-                                                <option value="1">Urban Grade 2</option>
+                                            <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationCategory" class="form-control editable_fields" @change="remove_error('locationCategory')">
+                                                <option value="">--- Please Select ---</option>
+                                                <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -140,11 +132,16 @@
 
 export default {
     data(){
-        return{ 
+        return{
+            levelList:[],
+            locationList:[],
+            dzongkhagList:[],
+            gewog_list:[],
+            villageList:[], 
            classList:[],
             streamList:[],
             form: new form({
-                name:'sdf',level:'1',category:'1',dzongkhag:'1',gewog:'1',chiwog:'1',
+                name:'',level:'1',category:'1',dzongkhag:'1',gewog:'1',chiwog:'1',
                 locationType:'1',geoLocated:'0',senSchool:'0', coLocated:'0'
             }),
             classStreamForm: new form({
@@ -162,6 +159,96 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
+
+        /**
+         * method to get level in dropdown
+         */
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+            });
+        },
+
+        /**
+         * method to get location in dropdown
+         */
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.locationList = data;
+            });
+        },
+
+        /**
+         * method to get active dzongkhag list
+         */
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.dzongkhagList =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get gewog list
+         */
+        async getgewoglist(id){
+            let dzoId=$('#dzongkhag').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        /**
+         * method to get gewog list
+         */
+        async getvillagelist(id){
+            let gewogId=$('#gewog').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if(id=="dzongkhag"){
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.getgewoglist();
+            }
+            if(id=="gewog"){
+                this.form.gewog=$('#gewog').val();
+                this.getvillagelist();
+            }
+            if(id=="chiwog"){
+                this.form.chiwog=$('#chiwog').val();
+            }
+        },
 
         /**
          * method to get class in checkbox
@@ -236,14 +323,29 @@ export default {
         },
     },
     
-    mounted() {
-        this.getClass();
-        this.getStream();
+    created() {
+        this.getLevel();
+        this.getLocation();
     },
     
      mounted() { 
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+       
         this.getClass();
         this.getStream();
+        this.loadactivedzongkhagList();
+        this.loaddOrganizationDetails();
     }
 }
 </script>

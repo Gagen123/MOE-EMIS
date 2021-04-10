@@ -34,11 +34,11 @@ export default {
     },
 
     methods:{
-        loadDesignerList(uri = 'masters/loadDisaster'){
+        loadDesignerList(uri = 'masters/loadStructureDesigner'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.disasterList =  data.data;
+                this.designerList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

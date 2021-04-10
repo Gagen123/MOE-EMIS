@@ -121,6 +121,25 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadElectricitySupply', 'Masters\ElectricitySupplyController@loadElectricitySupply');
     });
 
+    $router->group(['prefix' => 'masters/roadType'], function () use ($router) {
+        $router->post('/saveRoadType', 'Masters\RoadTypeController@saveRoadType');
+        $router->get('/loadRoadType', 'Masters\RoadTypeController@loadRoadType');
+    });
+
+    $router->group(['prefix' => 'masters/serviceProvider'], function () use ($router) {
+        $router->post('/saveServiceProvider', 'Masters\ServiceProviderController@saveServiceProvider');
+        $router->get('/loadServiceProvider', 'Masters\ServiceProviderController@loadServiceProvider');
+    });
+
+    $router->group(['prefix' => 'masters/contactType'], function () use ($router) {
+        $router->post('/saveContactType', 'Masters\ContactTypeController@saveContactType');
+        $router->get('/loadContactType', 'Masters\ContactTypeController@loadContactType');
+    });
+
+    $router->group(['prefix' => 'masters/structureDesigner'], function () use ($router) {
+        $router->post('/saveStructureDesigner', 'Masters\StructureDesignerController@saveStructureDesigner');
+        $router->get('/loadStructureDesigner', 'Masters\StructureDesignerController@loadStructureDesigner');
+    });
     $router->group(['prefix' => 'organization/equipment'], function () use ($router) {
         // equipment route
         $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
@@ -134,13 +153,28 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization/section'], function () use ($router) {
         // section route
         $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
+        $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
+
+    });
+
+    $router->group(['prefix' => 'organization/classMapping'], function () use ($router) {
+        // section route
+        $router->post('/saveClassMapping', 'generalInformation\ClassMappingController@saveClassMapping');
+
     });
 
     $router->group(['prefix' => 'organization/connectivity'], function () use ($router) {
          // connectivity route
          $router->post('/saveConnectivity', 'generalInformation\ConnectivityController@saveConnectivity');
+         $router->get('/getRoadTypeDropdown', 'generalInformation\ConnectivityController@getRoadTypeDropdown');
+         $router->get('/getElectricitySourceDropdown', 'generalInformation\ConnectivityController@getElectricitySourceDropdown');
+         $router->get('/getElectricitySupplyDropdown', 'generalInformation\ConnectivityController@getElectricitySupplyDropdown');
+         $router->get('/getElectricitySupplyDropdown', 'generalInformation\ConnectivityController@getElectricitySupplyDropdown');
+         $router->get('/getServiceProviderDropdown', 'generalInformation\ConnectivityController@getServiceProviderDropdown');
+         $router->get('/getServiceProviderDropdown1', 'generalInformation\ConnectivityController@getServiceProviderDropdown1');
+         $router->get('/getContactTypeDropdown', 'generalInformation\ConnectivityController@getContactTypeDropdown');
 
-    });
+        });
 
     $router->group(['prefix' => 'organization/location'], function () use ($router) {
         // locations route
@@ -159,6 +193,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization/schoolFeeding'], function () use ($router) {
         $router->post('/saveKitchenStatus', 'structuralFacility\SchoolFeedingController@saveKitchenStatus');
         $router->get('/loadKitchenStatus/{user_id}', ['uses' => 'structuralFacility\SchoolFeedingController@loadKitchenStatus']);
+        $router->post('/saveFoodStoreStatus', 'structuralFacility\SchoolFeedingController@saveFoodStoreStatus');
+        $router->post('/saveUtensilKitchen', 'structuralFacility\SchoolFeedingController@saveUtensilKitchen');
+        $router->post('/saveDinningHall', 'structuralFacility\SchoolFeedingController@saveDinningHall');
+        $router->get('/loadFoodStoreStatus/{user_id}', ['uses' => 'structuralFacility\SchoolFeedingController@loadFoodStoreStatus']);
+        $router->get('/loadUtensilKitchenStatus/{user_id}', ['uses' => 'structuralFacility\SchoolFeedingController@loadUtensilKitchenStatus']);
 
     });
 
@@ -168,6 +207,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getSubCategoryInDropdown/{categoryId}', 'structuralFacility\InfrastructureController@getSubCategoryInDropdown');
         $router->get('/getStructureFacilityInDropdown', 'structuralFacility\InfrastructureController@getStructureFacilityInDropdown');
         $router->get('/loadInfrastructureList', 'structuralFacility\InfrastructureController@loadInfrastructureList');
+        $router->get('/getDesignerDropdown', 'structuralFacility\InfrastructureController@getDesignerDropdown');
     });
 
     $router->group(['prefix' => 'organization/establishment'], function () use ($router) {
@@ -180,6 +220,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
         $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
 
+    });
+
+    $router->group(['prefix' => 'organization/headQuater'], function () use ($router) {
+        $router->post('/saveContactDetails', 'establishment\HeadQuaterController@saveContactDetails');
+        $router->post('/saveBasicDetails', 'establishment\HeadQuaterController@saveBasicDetails');
+        $router->get('/loadBasicDetails/{user_id}', ['uses' => 'establishment\HeadQuaterController@loadBasicDetails']);
     });
 
     $router->group(['prefix' => 'organization/changeDetails'], function () use ($router) {

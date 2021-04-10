@@ -4,27 +4,31 @@
             <div class="card-body" >
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="col-md-5 ">Category:<span class="text-danger">*</span></label>
-                        <select name="category" id="category" class="form-control editable_fields " @change="show()">
-                                <option value="">--- Please Select ---</option>
-                                <option value="1">Public</option>
-                                <option value="2">Private</option>
-                                <option value="3">NGo</option>
-                                <option value="3">Coporate</option>
+                        <label class="col-md-5 ">Category:<span class="text-danger">*</span></label>
+                        <select name="category" id="category" class="form-control editable_fields" v-model="form.category" @change="show()">
+                            <option value="">--- Please Select ---</option>
+                            <option value="1">Public</option>
+                            <option value="2">Private</option>
+                            <option value="3">NGo</option>
+                            <option value="3">Coporate</option>
                         </select>
+                        <!-- <select name="category" id="category" class="form-control" v-model="form.category" @change="show()" :class="{ 'is-invalid': form.errors.has('spo_name') }">
+                            <option value="">--- Please Select ---</option>
+                            <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select> -->
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="col-md-10 ">Year of Establishment:</label>
-                            <input type="text" class="form-control editable_fields" id="yearOfEst"/>
-                        </div>                   
+                            <input type="text" class="form-control" v-model="form.yearOfEstablishment" id="yearOfEst"/>
+                    </div>                   
                 </div>
                 
                 <!-- for public category -->
-                <div class="hidden" id="publicCategory">
+                <div style="display:none" id="publicCategory">
                     <div class="form-group row" >  
                         <label class="col-md-7 ">ZEST Working Agency Code:<span class="text-danger">*</span></label>
                         <div class="input-group col-md-12 col-sm-12 col-xs-12">
-                            <input type="text" id="workingAgencyCode" class="col-md-4 form-control editable_fields" @change="removeerror('workingAgencyCode','workingAgencyCode_error')"/>
+                            <input type="text" id="workingAgencyCode" class="col-md-4 form-control" @change="removeerror('workingAgencyCode','workingAgencyCode_error')"/>
                             <div class="input-group-append">
                                 <span type="button" class="col-md-12 btn  btn-primary" @click="getSchoolDeails()"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div>
@@ -60,7 +64,6 @@
                                     <label>Gewog:</label>
                                     <span class="text-indigo-600" id="sdzongkhag">Thimthrom</span>
                                 </div>
-                                
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -75,7 +78,6 @@
                                     <label>Geopolitically Located:</label>
                                     <span class="text-indigo-600" id="sdzongkhag">No</span>
                                 </div>
-                                
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -90,43 +92,30 @@
                                     <label>Geopolitically Located:</label>
                                     <span class="text-indigo-600" id="sdzongkhag">No</span>
                                 </div>
-                                
                             </div>
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Classes and Streams</label>
+                                    <label class="mb-0">Select classes and streams</label>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <ul>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                    </ul>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <ul>
-                                        <li><input type="checkbox" checked id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                        <ul id="xlsection"   class="pl-4">
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                        </ul>
-                                    <li><input type="checkbox" checked id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                        <ul id="xlisection"  class="pl-4">
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                        </ul>
-                                    </ul>
-                                </div>
+                            </div><br>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classList" :key="index">
+                                    <br>
+                                    <input type="checkbox" v-model="form.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                    <span v-for="(stm, key, index) in streamList" :key="index" >
+                                        <span v-if="item.class=='XI' || item.class=='XII'">
+                                            <br>
+                                            <input type="checkbox" v-model="form.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                        </span>
+                                    </span>
+                                </span> 
                             </div>
                         </div>
                     </div>  
                 </div>
 
                 <!-- for private category -->
-                <div class="hidden" id="privateCategory">
+                <div style="display:none" id="privateCategory">
                     <div class="form-group row" >    
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
                             <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
@@ -136,7 +125,6 @@
                             </select>
                         </div> 
                     </div> 
-
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="privateSchoolDetails" style="display:none">
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -166,7 +154,6 @@
                                 <span class="text-indigo-600" id="sdzongkhag">Urban Grade 1</span>
                             </div>
                         </div>
-                                                    
                         <div class="row form-group">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Geopolitically Located:</label>
@@ -208,40 +195,29 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <ul>
-                                    <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                    <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                </ul>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Select classes and streams</label>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <ul>
-                                    <li><input type="checkbox" checked id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                    <ul id="xlsection"   class="pl-4">
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                    </ul>
-                                <li><input type="checkbox" checked id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                    <ul id="xlisection"  class="pl-4">
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                        <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                    </ul>
-                                </ul>
-                            </div>
+                        </div><br>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <span v-for="(item, key, index) in  classList1" :key="index">
+                                <br>
+                                <input type="checkbox" v-model="form.class1" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                <span v-for="(stm, key, index) in streamList1" :key="index" >
+                                    <span v-if="item.class=='XI' || item.class=='XII'">
+                                        <br>
+                                        <input type="checkbox" v-model="form.stream1"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                    </span>
+                                </span>
+                            </span> 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="row form-group fa-pull-right">
-                <div class="col-md-12">
-                    <!-- <button type="button" class="btn btn-flat btn-warning" id="reset" @click="reset()"><i class="fa fa-ban"></i> Reset</button> -->
-                    <button type="button" class="btn btn-flat btn-primary" @click="save()"> <i class="fa fa-save"></i> Save</button>                                                
-                </div>
-            </div> 
+        <div class="card-footer text-right">
+            <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+            <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
         </div>
     </div>
 </template>
@@ -250,15 +226,22 @@
 export default {
     data(){
         return{
-
+            categoryList:[],
+            classList:[],
+            streamList:[],
+            classList1:[],
+            streamList1:[],
+            form: new form({
+                id: '',category:'',yearOfEstablishment:'',class:[],stream:[],class1:[],stream1:[]
+            }),
         }
     },
 
     methods:{
+
         /** method to show div*/
         show: function(){
             let category = $("#category").val();
-
             if(category == 1 || category == 3 || category == 4){
                 $("#publicCategory").show();
                 $("#privateCategory").hide();
@@ -289,6 +272,65 @@ export default {
             $("#privateSchoolDetails").show();
             $("#classAndStream").show();
         },
+
+        /**
+         * method to get road type in dropdown
+         */
+        getCategoryDropdown(uri = '/organization/getCategoryInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.categoryList = data;
+            });
+        },
+
+        /**
+         * method to get class in checkbox
+         */
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                this.classList = response.data;
+            });
+        },
+
+        /**
+         * method to get stream in checkbox
+         */
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                this.streamList = response.data;
+            });
+        },
+
+        /**
+         * method to get class in checkbox
+         */
+        getClass1:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                this.classList1 = response.data;
+            });
+        },
+
+        /**
+         * method to get stream in checkbox
+         */
+        getStream1:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                this.streamList1 = response.data;
+            });
+        },
+    },
+
+    mounted(){
+        // this.getCategoryDropdown();
+        this.getClass();
+        this.getStream();
+        this.getClass1();
+        this.getStream1();
     }
 }
 </script>

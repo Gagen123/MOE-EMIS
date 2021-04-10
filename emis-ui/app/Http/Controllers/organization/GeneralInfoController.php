@@ -134,6 +134,36 @@ class GeneralInfoController extends Controller
         }
     }
 
+    public function getRoadTypeDropdown(){
+        $roadType = $this->apiService->listData('emis/organization/connectivity/getRoadTypeDropdown');
+        return $roadType;
+    }
+
+    public function getElectricitySourceDropdown(){
+        $electriSource = $this->apiService->listData('emis/organization/connectivity/getElectricitySourceDropdown');
+        return $electriSource;
+    }
+
+    public function getElectricitySupplyDropdown(){
+        $electriSupply = $this->apiService->listData('emis/organization/connectivity/getElectricitySupplyDropdown');
+        return $electriSupply;
+    }
+
+    public function getServiceProviderDropdown(){
+        $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown');
+        return $serviceProvider;
+    }
+    
+    public function getServiceProviderDropdown1(){
+        $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown1');
+        return $serviceProvider;
+    }
+
+    public function getContactTypeDropdown(){
+        $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getContactTypeDropdown');
+        return $serviceProvider;
+    }
+
     public function saveLocation(Request $request){
         $rules = [
             'landOwnership'         =>  'required',
@@ -177,5 +207,34 @@ class GeneralInfoController extends Controller
     public function getDisasterListInCheckbox(){
         $disasterList = $this->apiService->listData('emis/organization/location/getDisasterListInCheckbox');
         return $disasterList;
+    }
+
+    public function saveClassMapping(Request $request){
+        $rules = [
+            'school'         =>  'required',
+            'class'          =>  'required',
+        ];
+        $customMessages = [
+            'school.required'        => 'School is required',
+            'class.required'         => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $loc =[
+            'school'        =>  $request['school'],
+            'class'         =>  $request['class'],
+            'id'            =>  $request['id'],
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $loc);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function getClassByOrganizationId($orgId = ""){
+        $itemList = $this->apiService->listData('emis/organization/section/getClassByOrganizationId/'.$orgId);
+        return $itemList;
     }
 }

@@ -18,65 +18,66 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <input type="hidden" class="form-control" v-model="form.id"/>
                         <div class="card-body">
+                            <input type="hidden" class="form-control" v-model="form.id" id="id"/>
+                            <input type="hidden" class="form-control" v-model="form.organizationId"/>
                             <div class="form-group row" >  
                                 <label class="col-md-7 ">ZEST Working Agency Code:<span class="text-danger">*</span></label>
                                 <div class="input-group mb-3 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control editable_fields" @change="removeerror('workingAgencyCode','workingAgencyCode_error')"/>
-                                    <div class="input-group-append">
-                                        <span type="button" class="col-md-12 btn  btn-primary" @click="getOrgDetais()"><i class="fa fa-search">&nbsp;Search</i></span>
-                                    </div>
+                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control editable_fields"/>
+                                        <div class="input-group-append">
+                                            <span type="button" class="col-md-12 btn  btn-primary" @click="getOrgDetais()"><i class="fa fa-search">&nbsp;Search</i></span>
+                                        </div>
                                 </div>
                                 <span id="workingAgencyCode_error" class="text-danger"></span>
                             </div>
-
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="school1" style="display:none">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="showDetails" style="display:none">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Working Agency Code:</label>
-                                        <span class="text-indigo-600" id="scode">00020292</span>
+                                        <span class="text-indigo-600" id="agencyCode">{{form.agencyCode}}</span>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Agency Name:</label>
-                                        <span class="text-indigo-600" id="scode">SEN Department</span>
+                                        <span class="text-indigo-600" id="agencyName">{{form.agencyName}}</span>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Parent Agency:</label>
-                                        <span class="text-indigo-600" id="scode">MOE</span>
+                                        <span class="text-indigo-600" id="parentAgency">{{form.agencyName}}</span>
                                     </div>
                                 </div>
-
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Dzongkhag:</label>
-                                        <span class="text-indigo-600" id="scode">Thimphu</span>
+                                        <span class="text-indigo-600" id="dzongkhag">{{form.dzongkhag}}</span>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Gewog:</label>
-                                        <span class="text-indigo-600" id="scode">Thimphu throm</span>
+                                        <span class="text-indigo-600" id="gewog">{{form.gewog}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Chiwog:</label>
+                                        <span class="text-indigo-600" id="chiwog">{{form.chiwog}}</span>
                                     </div>
                                 </div>
-
-                                <div class="form-group" >    
+                                <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
                                         <label class="col-md-7 ">Agency Type:<span class="text-danger">*</span></label>
-                                        <select name="agencyType" id="agencyType" class="form-control editable_fields" @change="removeerror('agencyType','agencyType_error')">
-                                                <option value="">--- Please Select ---</option>
-                                                <option value="1">Agency in HQ</option>
-                                                <option value="2">Dzongkhag Education Office</option>
+                                        <select name="agencyType" id="agencyType" v-model="form.agencyType" class="form-control editable_fields" @change="remove_error('agencyType')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option value="1">Agency in HQ</option>
+                                            <option value="2">Dzongkhag Education Office</option>
                                         </select>
                                     </div> 
-                                    <span id="workingAgencyCode_error" class="text-danger"></span>
                                 </div>
                             </div>
+                        </div>    
+                    <hr>
+                    <div class="row form-group fa-pull-right">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
                         </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
+                    </div>
                     </div>
                     
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
@@ -92,12 +93,11 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="record1" v-for='(user, index) in users' :key="index">
+                                    <tr id="record1" v-for='(user, index) in form1.users' :key="index">
                                         <td>
-                                            <select name="names" id="names" class="form-control editable_fields" v-model="user.names">
+                                            <select name="name" id="name" class="form-control" v-model="user.names" :class="{ 'is-invalid': form1.errors.has('spo_name') }">
                                                 <option value="">--- Please Select ---</option>
-                                                <option value="principalOffice">Head Quater</option>
-                                                <option value="generalOffice">General Office</option>
+                                                <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </td>
                                         <td>                                
@@ -123,33 +123,36 @@
                                     </tr>                                          
                                 </tbody>
                             </table>
+                        </div>    
+                    <hr>
+                    <div class="row form-group fa-pull-right">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                            <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                         </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
-                            </div>
-                        </div>
+                    </div>
                     </div>
                 </div>
             </div>
         </div>
-        
     </div>
 </template>
 <script>
 export default {
     data(){
         return{ 
-             users:
-            [{
-                names:'',phone:'',fax:'',mobile:'',email:''
-            }] ,
+            contactTypeList:[],
             form: new form({
-                id: '',proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',locationType:'',
-                geopolicaticallyLocated:'0',senSchool:'0',parentSchool:'',coLocatedParent:'0',cid:'',name:'',
-                phoneNo:'',email:'',status:'pending'
+                id: '',organizationId:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
+                gewog:'',chiwog:'',agencyType:'',status:'pending'
+            }),
+
+            form1: new form({
+                id: '',organizationId:'',
+                users:
+                [{
+                    names:'',phone:'',fax:'',mobile:'',email:''
+                }] ,
             }),
         } 
     },
@@ -163,12 +166,13 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
+
         addMore: function(){
-            this.users.push({names:'',phone:'',fax:'',mobile:'',email:''})
+            this.form1.users.push({names:'',phone:'',fax:'',mobile:'',email:''})
         },
 
         remove(index){    
-             this.users.splice(index,1);             
+             this.form1.users.splice(index,1);             
         },
 
         /** method to get HQ and Dzongkhag Office based on code */
@@ -178,14 +182,25 @@ export default {
                 $('#workingAgencyCode').focus();
                 $('#workingAgencyCode').removeClass('is-invalid');
             }else{
-                $("#agencyCode").val(2222);
-                $("#workingAgencyCode").val(2222);
-                $("#agencyName").val("SEN Department");
-                $("#parentAgency").val("MOE");
-                $("#dzongkhag").val("Thimphu");
-                $("#gewog").val("Chang");
-                $("#school1").show();
+                this.form.agencyCode = '00001';
+                this.form.agencyName = 'SPPD';
+                this.form.parentAgency = 'MOE';
+                this.form.dzongkhag = 'Thimphu';
+                this.form.gewog = 'Chang';
+                this.form.chiwog = 'Chang';
+                $("#showDetails").show();
             }
+        },
+
+        /**
+         * method to get road type in dropdown
+         */
+        getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.contactTypeList = data;
+            });
         },
 
         /**
@@ -202,11 +217,11 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveClassStream')
+                        this.form1.post('organization/saveContactDetails')
                         .then(() => {
                             Toast.fire({
                                 icon: 'success',
-                                title: 'Establishment is saved successfully'
+                                title: 'Data is saved successfully'
                             })
                     })
                         .catch(() => {
@@ -217,10 +232,13 @@ export default {
             }
             else{
                 if(nextclass=="class-tab"){
-                     this.form.post('organization/saveEstablishment',this.form)
+                     this.form.post('organization/saveBasicDetails')
                      
                     .then(() => {
-                        
+                        Toast.fire({
+                                icon: 'success',
+                                title: 'Data is saved successfully'
+                            })
                     })
                     .catch(() => {
                         console.log("Error......")
@@ -243,15 +261,32 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
 
+        /**
+         * method to load organization details
+         */
+         loadBasicDetails(){
+            axios.get('organization/loadBasicDetails')
+            .then((response) => {  
+                let data=response.data.data;
+                if(data != null){
+                    $("#showDetails").show();
+                    this.form.id  =   data.id;
+                    this.form.agencyCode  =   data.zestAgencyCode;
+                    this.form.agencyName  =   data.agencyName;
+                    this.form.chiwog  =   data.chiwogId;
+                    this.form.agencyType  =   data.organizationType;
+                }
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
     },
 
-    created(){
-        
-    },
-    
+       
     mounted() {
-       
-       
+        this.getContactTypeDropdown();
+        this.loadBasicDetails();
     },
 }
 </script>
