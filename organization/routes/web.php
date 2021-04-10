@@ -224,6 +224,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
         $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
         $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
+        $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
         
     });
 

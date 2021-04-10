@@ -996,10 +996,9 @@ const routes = [
       { path: '/establishment',name:"establishment", component: require('./components/organization/establishment/establishment.vue').default },
       { path: '/acknowledgement', name:'acknowledgement', component: require('./components/organization/establishment/acknowledgement.vue').default },
       { path: '/register',name:'register', component: require('./components/organization/establishment/register.vue').default },
-
+      { path: '/school_list',name:"school_list", component: require('./components/organization/establishment/school_list.vue').default },
+      
       { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
-      { path: '/school_list', component: require('./components/organization/establishment/school_list.vue').default },
-
       { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
       { path: '/change_basic_details_verification', component: require('./components/organization/verification/change_basic_details_verification.vue').default },
       { path: '/merger_verification', component: require('./components/organization/verification/merger_verification.vue').default },

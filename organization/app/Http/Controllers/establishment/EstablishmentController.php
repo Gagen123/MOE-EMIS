@@ -381,4 +381,21 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
+    
+    public function getschoolDetials($param=""){
+        $access_level=explode('SSS',$param)[0];
+        if($access_level=="Ministry"){
+            $response_data=OrganizationDetails::all();
+        }
+        if($access_level=="Dzongkhag"){
+            $response_data=OrganizationDetails::where('dzongkhagId',explode('SSS',$param)[1])->get();
+        }
+        if($access_level=="Org"){
+            $response_data=OrganizationDetails::where('id',explode('SSS',$param)[2])->get();
+        }
+        // if($response_data->levelId!=null && $response_data->levelId!=""){
+        //     $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        // }
+        return $this->successResponse($response_data);
+    }
 }

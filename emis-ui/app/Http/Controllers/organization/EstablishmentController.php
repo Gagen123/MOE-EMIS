@@ -293,5 +293,11 @@ class EstablishmentController extends Controller
         $estd_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $response_data;
     }
+    
+    public function getschoolDetials(){  
+        $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        $response_data = $this->apiService->listData('emis/organization/establishment/getschoolDetials/'.$param);
+        return $response_data;
+    }
 
 }
