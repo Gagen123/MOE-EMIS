@@ -41,8 +41,9 @@
                     </span>           
                 </div>
                 <!-- for private category -->
-                <div class="hidden" id="org_details" style="display:none">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="privateSchoolDetails" style="display:none">
+                <div id="org_details" style="display:none">
+                    <div class="callout callout-success">
+                        <h4><u>Organization Details</u></h4>
                         <div class="form-group row"> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Proposed Name:</label>
@@ -81,7 +82,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Geopolitically Located:</label>
                                 <span class="text-blue text-bold">
-                                    {{ applicaitondetailsform.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
+                                    {{ applicaitondetailsform.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}
                                 </span>
                             </div> 
                         </div>
@@ -104,7 +105,7 @@
                                     <h4><u>Proprietor Details</u></h4>
                                 </div>
                             </div>
-                            <div v-for="(pro, index) in proprietorList" :key="index">
+                            <div v-for="(pro, index) in applicaitondetailsform.proprietorList" :key="index">
                                 <div class="form-group row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label class="mb-0">CID:</label>
@@ -128,13 +129,35 @@
                             </div>
                         </div>
                     </div>
+                    <div class="callout callout-success">
+                        <h4><u>Class Section Details</u></h4>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <span v-for="(item, index) in  applicaitondetailsform.class_section" :key="index">
+                                <br>
+                                <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
+                                <span v-for="(stm, key, index) in applicaitondetailsform.sectionList" :key="index" >
+                                    <span v-if="item.classId==stm.classId">
+                                        <br>
+                                        <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
+                                    </span>
+                                </span>
+                            </span> 
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks</label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="applicaitondetailsform.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="card-footer">
                 <div class="row form-group fa-pull-right">
-                    <div class="col-md-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <!-- <button type="button" class="btn btn-flat btn-danger" id="reset" @click="reset()"><i class="fa fa-ban"></i> Reset</button> -->
-                        <button type="button" class="btn btn-flat btn-primary" @click="save()"> <i class="fa fa-save"></i> Save</button>                                                
+                        <button type="button" class="btn btn-flat btn-primary" @click="savedetails()"> <i class="fa fa-save"></i> Save</button>                                                
                     </div>
                 </div> 
             </div>
@@ -147,14 +170,16 @@ export default {
     data(){
         return{
             orgList:[],
-            proprietorList:[],
-             applicaitondetailsform: new form({
-                id: '',category:'1',yearestb:'',zestcode:'',organizationid:'',applicationNo:'',application_date:'',service:'',proposedName:'',
-                level:'',category:'1',dzongkhag:'',gewog:'',village:'',locationType:'',
-                geopolicaticallyLocated:'0',senSchool:'0',parentSchool:'',coLocatedParent:'0',cid:'',name:'',
-                phoneNo:'',email:'',status:'',remarks:''
+            applicaitondetailsform: new form({
+                category:'1',yearestb:'',zestcode:'',organizationid:'',applicationNo:'',application_date:'',
+                service:'',proposedName:'',dzongkhagId:'',dzongkhag:'',gewogId:'',gewog:'',isColocated:'',
+                levelId:'',level:'',chiwogId:'',village:'',locationId:'',locationType:'',parentSchoolId:'',
+                isGeopoliticallyLocated:'',senSchool:'0',parentSchool:'',
+                coLocatedParent:'0',cid:'',name:'',phoneNo:'',email:'',status:'',remarks:'',isSenSchool:'',
+                proprietorList:[],
+                class_section:[],
+                sectionList:[],
             }),
-             
         }
     },
     methods:{
@@ -188,7 +213,7 @@ export default {
         async changefunction(id){
             if(id=="category"){
                 this.applicaitondetailsform.category=$('#category').val();
-                this.display_respective_section()();
+                this.display_respective_section();
             }
             if(id=="organizationid"){
                 this.applicaitondetailsform.organizationid=$('#organizationid').val();
@@ -201,12 +226,31 @@ export default {
                 key=this.applicaitondetailsform.zestcode;
             }
             if(type==0){
-                key=this.applicaitondetailsform.zestcode;
+                key=this.applicaitondetailsform.organizationid;
             }
-            axios.get('organization/getApprovedOrgDetails/'+type+'/')
+            axios.get('organization/getApprovedOrgDetails/'+type+'/'+key)
             .then((response) => {  
                 let data=response.data.data;
-                this.orgList   =   data;
+                // this.applicaitondetailsform.category                =data.category;
+                this.applicaitondetailsform.applicationNo           =data.applicationNo;
+                this.applicaitondetailsform.dzongkhagId             =data.dzongkhagId;
+                this.applicaitondetailsform.dzongkhag               =data.dzongkhag;
+                this.applicaitondetailsform.gewogId                 =data.gewogId;
+                this.applicaitondetailsform.gewog                   =data.gewog;
+                this.applicaitondetailsform.chiwogId                =data.chiwogId;
+                this.applicaitondetailsform.village                 =data.village;
+                this.applicaitondetailsform.locationId              =data.locationId;
+                this.applicaitondetailsform.locationType            =data.locationType;
+                this.applicaitondetailsform.levelId                 =data.levelId;
+                this.applicaitondetailsform.level                   =data.level;
+                this.applicaitondetailsform.proposedName            =data.proposedName;
+                this.applicaitondetailsform.parentSchoolId          =data.parentSchoolId;
+                this.applicaitondetailsform.isGeopoliticallyLocated =data.isGeopoliticallyLocated;
+                this.applicaitondetailsform.isColocated             =data.isColocated;
+                this.applicaitondetailsform.isSenSchool             =data.isSenSchool;
+                this.applicaitondetailsform.proprietorList          =data.proprietor;
+                this.applicaitondetailsform.class_section           =data.class_section;
+                this.applicaitondetailsform.sectionList             =data.sections;
                 $("#org_details").show();
             })
             .catch((error) =>{  
@@ -214,6 +258,33 @@ export default {
                 console.log("Error:"+error);
             });
         },
+        savedetails(){
+            Swal.fire({
+                text: "Are you sure you wish to register this organization ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    this.applicaitondetailsform.post('organization/registerOrganizationDetails')
+                    .then((response) => {
+                        if(response!=""){
+                            let message="You have registered New Organization for <b>"+this.applicaitondetailsform.proposedName+"</b>. <br>Thank You !";
+                            this.$router.push({name:'acknowledgement',params: {data:message}});
+                            Toast.fire({  
+                                icon: 'success',
+                                title: 'Establishment is saved successfully'
+                            });
+                        } 
+                    })
+                    .catch((err) => {
+                        console.log("Error:"+err)
+                    })
+                }
+            });
+        }
     },
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();

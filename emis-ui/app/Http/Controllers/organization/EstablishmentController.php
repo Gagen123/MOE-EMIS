@@ -245,5 +245,53 @@ class EstablishmentController extends Controller
         return $response_data;
     }
 
+    public function getApprovedOrgDetails($type="",$key=""){  
+        if($type=="1"){
+            //Invoke Zest for details
+        }else{
+            $response_data = $this->apiService->listData('emis/organization/establishment/getApprovedOrgDetails/'.$type.'/'.$key);
+        }
+        
+        return $response_data;
+    }
+    
+    public function registerOrganizationDetails(Request $request){
+        $estd=[
+            'category'                  =>$request->category,
+            'yearestb'                  =>$request->yearestb,
+            'zestcode'                  =>$request->zestcode,
+            'organizationid'            =>$request->organizationid,
+            'applicationNo'             =>$request->applicationNo,
+            'application_date'          =>$request->application_date,
+            'service'                   =>$request->service,
+            'proposedName'              =>$request->proposedName,
+            'dzongkhagId'               =>$request->dzongkhagId,
+            'gewogId'                   =>$request->gewogId,
+            'chiwogId'                  =>$request->chiwogId,
+            'isColocated'               =>$request->isColocated,
+            'levelId'                   =>$request->levelId,
+            'locationId'                =>$request->locationId,
+            'parentSchoolId'            =>$request->parentSchoolId,
+            'isGeopoliticallyLocated'   =>$request->isGeopoliticallyLocated,
+            'senSchool'                 =>$request->senSchool,
+            'parentSchool'              =>$request->parentSchool,
+            'coLocatedParent'           =>$request->coLocatedParent,
+            'isSenSchool'               =>$request->isSenSchool,
+            'remarks'                   =>$request->remarks,
+            'proprietorList'            =>$request->proprietorList,
+            'class_section'             =>$request->class_section,
+            'sectionList'               =>$request->sectionList,
+            'action_by'                 =>$this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/organization/establishment/registerOrganizationDetails', $estd);
+        $estd =[
+            'status'                       =>   'Registered',
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->remarks,
+            'user_id'                      =>   $this->userId() 
+        ];
+        $estd_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
+        return $response_data;
+    }
 
 }
