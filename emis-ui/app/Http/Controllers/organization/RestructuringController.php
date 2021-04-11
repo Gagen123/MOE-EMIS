@@ -30,6 +30,7 @@ class RestructuringController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $change =[
+            'organizationId'            =>  $request['organizationId'],
             'name'                      =>  $request['name'],
             'level'                     =>  $request['level'],
             'category'                  =>  $request['category'],
@@ -177,6 +178,10 @@ class RestructuringController extends Controller
             'senSchool'                =>  $request['senSchool'],
             'parentSchool'             =>  $request['parentSchool'],
             'coLocated'                =>  $request['coLocated'],
+            'cid'                      =>  $request['cid'],
+            'name'                     =>  $request['name'],
+            'phoneNo'                  =>  $request['phoneNo'],
+            'email'                    =>  $request['email'],
             'status'                   =>  $request['status'],
             'reason'                   =>  $request['reason'],
             'remark'                   =>  $request['remark'],

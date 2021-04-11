@@ -37,6 +37,7 @@ class ChangeBasicDetailsController extends Controller
         if($id != null){
             $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('status', 'submitted')->first();
             $change = [
+                'organizationId'                =>  $request['organizationId'],
                 'proposedName'                  =>      $request['name'],
                 'category'                      =>      $request['category'],
                 'levelId'                       =>      $request['level'],
@@ -101,6 +102,7 @@ class ChangeBasicDetailsController extends Controller
                 $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
             }
             $change = [
+            'organizationId'                =>      $request['organizationId'],
             'proposedName'                  =>      $request['name'],
             'category'                      =>      $request['category'],
             'levelId'                       =>      $request['level'],
@@ -119,7 +121,6 @@ class ChangeBasicDetailsController extends Controller
             'created_at'                    =>  date('Y-m-d h:i:s')
             ];
             $changeDetails = ApplicationDetails::create($change);
-
             if($request['category'] == 0){
                 $pvtDetails = [
                     'applicationId'            =>  $changeDetails->id,
