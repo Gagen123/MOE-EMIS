@@ -184,7 +184,7 @@ class ChangeBasicDetailsController extends Controller
      * method to get application No 
      */
     public function getApplicationNo($userId=''){
-        return ApplicationDetails::where('created_by',$userId)->where('status','Submitted')->get(['id']);
+        return ApplicationDetails::where('created_by',$userId)->where('status','Submitted')->where('service','Change Basic Details')->get(['id']);
     }
 
     /**
