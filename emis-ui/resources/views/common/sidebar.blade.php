@@ -48,7 +48,7 @@
                                         @foreach(session('User_Details')['screens'] as $scr)
                                         @if($scr['sub_mod_id']==$sub_mod['sub_mod_id'])
                                             <li class="nav-item" >
-                                                <router-link :to="{ name: '{{ $scr['route']}}', params: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                                                <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
                                                     <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
                                                     <p>{{$scr['screen_name']}}</p>
                                                 </router-link>
@@ -64,11 +64,7 @@
                     @foreach(session('User_Details')['screens'] as $i=> $scr)
                         @if($scr['sub_mod_id']=="" && $scr['mod_id']==$mod['mod_id'])
                         <li class="nav-item">
-                            <!-- <router-link to="{{$scr['route']}}" class="nav-link">
-                            <i class=" nav-icon fas {{ $scr['screen_icon']}}"></i>
-                            <p>{{$scr['screen_name']}}</p>
-                            </router-link> -->
-                            <router-link :to="{ name: '{{ $scr['route']}}', params: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                            <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
                                 <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
                                 <p>{{$scr['screen_name']}}</p>
                             </router-link>
@@ -79,7 +75,7 @@
                     @foreach(session('User_Details')['screens'] as $scr)
                         @if($mod['mod_id'] == $scr['mod_id'] && $scr['sub_mod_id']==null)
                         <li class="nav-item">
-                            <router-link :to="{ name: '{{ $scr['route']}}', params: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                            <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
                                 <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
                                 <p>{{$scr['screen_name']}} </p>
                             </router-link>
@@ -93,7 +89,7 @@
             @foreach(session('User_Details')['screens'] as $scr)
                 @if($scr['sub_mod_id']=="" && $scr['mod_id']=="")
                 <li class="nav-item">
-                    <router-link :to="{ name: '{{ $scr['route']}}', params: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                    <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
                     <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
                     <p>{{$scr['screen_name']}}</p>
                     </router-link>

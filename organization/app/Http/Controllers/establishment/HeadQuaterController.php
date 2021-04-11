@@ -9,6 +9,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\DB;
 use App\Models\ContactDetails;
 use App\Models\establishment\HeadQuaterDetails;
+use App\Models\Masters\ContactType;
 
 class HeadQuaterController extends Controller
 {
@@ -31,28 +32,32 @@ class HeadQuaterController extends Controller
                 'organizationId'         =>  1,
                 'zestAgencyCode'         =>  $request['agencyCode'],
                 'agencyName'             =>  $request['agencyName'],
+                'dzongkhagId'               =>  1,
+                'gewogId'               =>  1,
                 'chiwogId'               =>  1,
                 'organizationType'       =>  $request['agencyType'],
                 'status'                 =>  $request['status'],
                 'updated_by'             =>  $request->user_id,
                 'created_at'             =>  date('Y-m-d h:i:s')
                 ];
-
-                $basicDetails = HeadQuaterDetails::where('id', $id)->update($basic);
+                HeadQuaterDetails::where('id', $id)->update($basic);
+                $basicDetails = HeadQuaterDetails::where('id', $id)->first();
                 return $this->successResponse($basicDetails, Response::HTTP_CREATED);
         }else{
             $basic = [
                 'organizationId'         =>  1,
                 'zestAgencyCode'         =>  $request['agencyCode'],
                 'agencyName'             =>  $request['agencyName'],
+                'dzongkhagId'               =>  1,
+                'gewogId'               =>  1,
                 'chiwogId'               =>  1,
                 'organizationType'       =>  $request['agencyType'],
                 'status'                 =>  $request['status'],
                 'created_by'             =>  $request->user_id,
                 'created_at'             =>  date('Y-m-d h:i:s')
-                ];
-                $basicDetails = HeadQuaterDetails::create($basic);
-                return $this->successResponse($basicDetails, Response::HTTP_CREATED);
+            ];
+            $basicDetails = HeadQuaterDetails::create($basic);
+            return $this->successResponse($basicDetails, Response::HTTP_CREATED);
         }
     }
 
@@ -67,11 +72,10 @@ class HeadQuaterController extends Controller
      * method to save contact details
      */
     public function saveContactDetails(Request $request){
-        $contactDetails = $request->users;
-
+        $contactDetails = $request->contactdetails;
         foreach ($contactDetails as $con){
             $contact = array(
-                'organizationId'    =>  1,
+                'organizationId'    =>  $request->organizationId,
                 'contactTypeId'     =>  $con['names'],
                 'phone'             =>  $con['phone'],
                 'fax'               =>  $con['fax'],
@@ -80,10 +84,29 @@ class HeadQuaterController extends Controller
                 'type'              =>  1
             );            
             $conn = ContactDetails::create($contact);
-            
-            $array = ['status' => 'submitted'];
+            $array = ['status' => 'Active'];
             DB::table('head_quater_details')->where('created_by',$request->user_id)->update($array);
         }
         return $this->successResponse($conn, Response::HTTP_CREATED);
+    }
+    
+    public function getsAgencyList($param=""){
+        $access_level=explode('SSS',$param)[0];
+        if($access_level=="Ministry"){
+            $response_data=HeadQuaterDetails::all();
+        }
+        if($access_level=="Dzongkhag"){
+            $response_data=HeadQuaterDetails::where('dzongkhagId',explode('SSS',$param)[1])->get();
+        }
+        return $this->successResponse($response_data);
+    }
+    
+    public function getHeadQuarterDetails($id=""){
+        $response_data=HeadQuaterDetails::where('id',$id)->first();
+        $response_data->contactDetails=ContactDetails::where('organizationId',$id)->get();
+        foreach($response_data->contactDetails as $con){
+            $con->typename=ContactType::where('id',$con->contactTypeId)->first()->name;
+        }
+        return $this->successResponse($response_data); 
     }
 }

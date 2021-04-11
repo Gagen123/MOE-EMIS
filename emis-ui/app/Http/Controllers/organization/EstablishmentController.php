@@ -154,42 +154,25 @@ class EstablishmentController extends Controller
             'agencyType'        =>  $request['agencyType'],
             'status'            =>  $request['status'],
             'id'                =>  $request['id'],
-            'user_id'           =>  $this->user_id() ,
+            'user_id'           =>  $this->userId() ,
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/headQuater/saveBasicDetails', $basicDetails);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/headQuater/saveBasicDetails', $basicDetails);
+        return $response_data;
     }
 
     public function loadBasicDetails(){ 
-        $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/loadBasicDetails/'.$this->user_id() );
+        $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/loadBasicDetails/'.$this->userId() );
         return $loadBasicDetails;
     }
 
     public function saveContactDetails(Request $request){
-        // $rules = [
-        //     'users'          =>  'required',
-            
-        // ];
-        // $customMessages = [
-        //     'users.required'         => 'users is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
         $contactDetails =[
-            'users'        =>  $request['users'],
-            'user_id'      =>  $this->user_id() ,
+            'organizationId'   =>  $request['organizationId'],
+            'contactdetails'             =>  $request['contacts'],
+            'user_id'           =>  $this->userId() ,
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/headQuater/saveContactDetails', $contactDetails);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/headQuater/saveContactDetails', $contactDetails);
+        return $response_data;
     }
 
     public function loadEstbDetailsForVerification($appNo="",$type=""){
@@ -304,5 +287,15 @@ class EstablishmentController extends Controller
         return $response_data;
     }
     
+    public function getsAgencyList(){ 
+        $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/getsAgencyList/'.$param);
+        return $loadBasicDetails;
+    }
+    
+    public function getHeadQuarterDetails($id=""){ 
+        $response_data = $this->apiService->listData('emis/organization/headQuater/getHeadQuarterDetails/'.$id);
+        return $response_data;
+    }
 
 }

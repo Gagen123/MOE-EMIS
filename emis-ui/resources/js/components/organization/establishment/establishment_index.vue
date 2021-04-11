@@ -33,7 +33,13 @@
             <li class="nav-item pr-1" @click="activatelink('nomination')">
                 <router-link to="/head_quater_office" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
-                    HQ/Dzongkhag Office
+                    New HQ/Dzongkhag Office
+                </router-link>
+            </li>
+            <li class="nav-item pr-1" @click="activatelink('nomination')">
+                <router-link to="/list_head_quater_office" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    List HQ/Dzongkhag Office
                 </router-link>
             </li>
         </ul>

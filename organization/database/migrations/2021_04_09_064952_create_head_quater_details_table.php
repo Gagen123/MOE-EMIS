@@ -20,6 +20,8 @@ class CreateHeadQuaterDetailsTable extends Migration
             $table->string('agencyName');
             $table->tinyInteger('organizationType');
             $table->tinyInteger('chiwogId');
+            $table->tinyInteger('dzongkhagId');
+            $table->tinyInteger('gewogId');
             $table->string('status');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
