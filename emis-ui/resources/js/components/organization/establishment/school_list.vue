@@ -13,37 +13,19 @@
                                     <th>Level</th>    
                                     <th>Status</th> 
                                     <th width="10%"></th>
-                                    <th width="10%"></th> 
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td> 1</td>
-                                    <td> Yangchenphug</td>
-                                    <td> Public</td>
-                                    <td> HSS</td>
-                                    <td><span class="badge badge-info"> Open</span> </td>
-                                    <td><button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('structureFacility')"><i class="fa fa-eye"></i> View</button></td>
-                                    <td><button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('structureFacility')"><i class="fa fa-edit"></i> Edit</button></td>
-                                </tr> 
-                                 <tr>
-                                    <td> 2</td>
-                                    <td> Mothithang</td>
-                                    <td> Public</td>
-                                    <td> HSS</td>
-                                    <td><span class="badge badge-info"> Open</span> </td>
-                                    <td><button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('structureFacility')"><i class="fa fa-eye"></i> View</button></td>
-                                    <td><button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('structureFacility')"><i class="fa fa-edit"></i> Edit</button></td>
-                                </tr> 
-                                <tr>
-                                    <td> 3</td>
-                                    <td> Changzamtog</td>
-                                    <td> Public</td>
-                                    <td>MHSS</td>
-                                    <td><span class="badge badge-info"> Open</span> </td>
-                                    <td><button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('structureFacility')"><i class="fa fa-eye"></i> View</button></td>
-                                    <td><button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('structureFacility')"><i class="fa fa-edit"></i> Edit</button></td>
-                                </tr> 
+                               <tr v-for="(item, index) in schoolList" :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}}</td>
+                                    <td>{{ item.level}}</td>
+                                    <td>{{ item.status }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-eye"></i> View</button>                                                
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -57,12 +39,23 @@
 export default {
     data(){
         return{
-
+            schoolList:[],
         }
     },
-
     methods:{
-
+        loadSchool(){
+            axios.get('organization/getschoolDetials')
+            .then(response => {
+                let data = response;
+                this.schoolList = data.data.data;
+            });
+        },
+        showfulldetails(id){
+            this.$router.push({name:'school_details',query: {data:id}});
+        }
+    },
+    created(){
+        this.loadSchool();
     }
 }
 </script>

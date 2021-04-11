@@ -6,16 +6,11 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateOrganizationClassStreamsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('organization_class_streams', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->char('organization',36);
+            $table->char('organizationId',36);
             $table->char('classId',36);
             $table->char('streamId',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);
@@ -24,11 +19,6 @@ class CreateOrganizationClassStreamsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('organization_class_streams');

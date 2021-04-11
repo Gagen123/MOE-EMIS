@@ -15,6 +15,9 @@ use App\Models\establishment\ApplicationDetails;
 use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\ApplicationSequence;
+use App\Models\OrganizationDetails;
+use App\Models\OrganizationProprietorDetails;
+use App\Models\OrganizationClassStream;
 
 use Illuminate\Support\Facades\DB;
 
@@ -271,6 +274,146 @@ class EstablishmentController extends Controller
     }
     
     public function loadApprovedOrgs(){
-        return $this->successResponse(ApplicationDetails::where('status','Approved')->where('category','0')->get());
+        return $this->successResponse(ApplicationDetails::where('status','Approved')->where('service','New Establishment')->where('category','0')->get());
+    }
+
+    
+    public function getApprovedOrgDetails($type="",$key=""){
+        $response_data=ApplicationDetails::where('status','Approved')->where('category','0')->where('id',$key)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        $classSection=ApplicationClassStream::where('applicationNo',$response_data->applicationNo)->groupBy('classId')->get();
+        $sections=ApplicationClassStream::where('applicationNo',$response_data->applicationNo)->where('streamId','!=',null)->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        }
+        foreach($sections as $sec){
+            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        }
+        $response_data->class_section=$classSection;
+        $response_data->sections=$sections;
+        return $this->successResponse($response_data);
+    }
+    
+    public function registerOrganizationDetails(Request $request){
+        $last_seq=ApplicationSequence::where('service_name','Organization Code')->first();
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'Organization Code',
+                'last_sequence'                 =>  $last_seq,
+            ];  
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];  
+            ApplicationSequence::where('service_name', 'Organization Code')->update($app_details);
+        }
+        $org_code='';
+        if(strlen($last_seq)==1){
+            $org_code= $org_code.date('Y').'.'.date('m').'.000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $org_code= $org_code.date('Y').'.'.date('m').'.00'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $org_code= $org_code.date('Y').'.'.date('m').'.0'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $org_code= $org_code.date('Y').'.'.date('m').'.'.$last_seq;
+        }
+        $org_data = [
+            'category'                  =>$request->category,
+            'yearOfEstablishment'       =>$request->yearestb,
+            'zestAgencyCode'            =>$request->zestcode,
+            'code'                      =>$org_code,
+            'name'                      =>$request->proposedName,
+            'levelId'                   =>$request->levelId,
+            'dzongkhagId'               =>$request->dzongkhagId,
+            'gewogId'                   =>$request->gewogId,
+            'chiwogId'                  =>$request->chiwogId,
+            'isColocated'               =>$request->isColocated,
+            'locationId'                =>$request->locationId,
+            'parentSchoolId'            =>$request->parentSchoolId,
+            'isGeopoliticallyLocated'   =>$request->isGeopoliticallyLocated,
+            'isSenSchool'               =>$request->isSenSchool,
+            'status'                    => 'Active',
+            'remarks'                   =>$request->remarks,
+            'created_by'                =>$request->action_by,
+        ];
+        $establishment = OrganizationDetails::create($org_data);
+        if($request['category'] == 0){
+            foreach($request->proprietorList as $prop){
+                $prop_details = [
+                    'organizationId'           =>  $establishment->id,
+                    'cid'                      =>  $prop['cid'],
+                    'fullName'                 =>  $prop['fullName'],
+                    'phoneNo'                  =>  $prop['phoneNo'],
+                    'email'                    =>  $prop['email'],
+                    'created_by'               =>  $request->user_id,
+                    'created_at'               =>  date('Y-m-d h:i:s')
+                ];
+                $porp_response_data = OrganizationProprietorDetails::create($prop_details);
+            }
+        }
+        foreach($request->class_section as $cls){
+            $class_details = [
+                'organizationId'          =>  $establishment->id,
+                'classId'                 =>  $cls['classId'],
+                'created_by'              =>  $request->user_id,
+                'created_at'              =>  date('Y-m-d h:i:s')
+            ];
+            $class_data = OrganizationClassStream::create($class_details);
+        }
+        foreach($request->sectionList as $strm){
+            $strm_details = [
+                'organizationId'          =>  $establishment->id,
+                'classId'                 =>  $strm['classId'],
+                'streamId'                 =>  $strm['streamId'],
+                'created_by'              =>  $request->user_id,
+                'created_at'              =>  date('Y-m-d h:i:s')
+            ];
+            $stream_data = OrganizationClassStream::create($strm_details);
+        }
+        return $this->successResponse($establishment, Response::HTTP_CREATED);
+    }
+    
+    public function getschoolDetials($param=""){
+        $access_level=explode('SSS',$param)[0];
+        if($access_level=="Ministry"){
+            $response_data=OrganizationDetails::all();
+        }
+        if($access_level=="Dzongkhag"){
+            $response_data=OrganizationDetails::where('dzongkhagId',explode('SSS',$param)[1])->get();
+        }
+        if($access_level=="Org"){
+            $response_data=OrganizationDetails::where('id',explode('SSS',$param)[2])->get();
+        }
+        foreach($response_data as $det){
+            $det->level=Level::where('id',$det->levelId)->first()->name;
+        }
+        return $this->successResponse($response_data);
+    }
+    
+    public function getFullSchoolDetials($id=""){
+        $response_data=OrganizationDetails::where('id',$id)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->get();
+        $classSection=OrganizationClassStream::where('organizationId',$id)->groupBy('classId')->get();
+        $sections=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        }
+        foreach($sections as $sec){
+            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        }
+        $response_data->class_section=$classSection;
+        $response_data->sections=$sections;
+        return $this->successResponse($response_data); 
     }
 }
