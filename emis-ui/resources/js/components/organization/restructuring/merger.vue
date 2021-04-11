@@ -8,7 +8,7 @@
                             <label class="mb-0.5">School Details </label>                              
                         </a>
                     </li>
-                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
+                    <li class="nav-item merger-tab" @click="shownexttab('merger-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Merge the schools </label>
                         </a>
@@ -19,96 +19,97 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>1st School/ECR/ECCD:<span class="text-danger">*</span></label>
-                                <select name="organization1" id="organization1" v-model="form.orgId1" class="form-control" @change="getSchoolDetails()">
-                                    <option value="">--- Please Select ---</option>
-                                    <option value="1">YHSS</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>2nd School/ECR/ECCD:<span class="text-danger">*</span></label>
-                                <select name="organization2" id="organization2" v-model="form.orgId2" class="form-control" @change="getSchool2Details()">
-                                    <option value="">--- Please Select ---</option>
-                                    <option value="1">MHSS</option>
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Year of Merger:</label>
-                                <input type="text" class="form-control" id="yearOfMerger" v-model="form.year"/>
-                            </div>                                                                                          
+                                <span class="text-blue text-bold">{{form.year}}</span>
+                            </div> 
                         </div>
                         <div class="form-group row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school1" style="display:none">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>1st School/ECR/ECCD:<span class="text-danger">*</span></label>
+                                <select name="orgId1" id="orgId1" v-model="form.orgId1" :class="{ 'is-invalid': form.errors.has('orgId1') }" class="form-control select2">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>2nd School/ECR/ECCD:<span class="text-danger">*</span></label>
+                                <select name="orgId2" id="orgId2" v-model="form.orgId2" :class="{ 'is-invalid': form.errors.has('orgId2') }" class="form-control select2">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="card card-primary card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title">School/ECR/ECCD 1</h3>
-                                    </div>
                                     <div class="card-body">
+                                        <h3 class="card-title">School/ECR/ECCD 1</h3>
+                                        <hr>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Code:</label>
-                                                <span class="text-indigo-600" id="mergerCode1">00020292</span>
+                                                <span class="text-blue text-bold" id="mergerCode1">00020292</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Name:</label>
-                                                <span class="text-indigo-600" id="mergerName1">YangchenPhug HSS</span>
+                                                <span class="text-blue text-bold" id="mergerName1">YangchenPhug HSS</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:</label>
-                                                <span class="text-indigo-600" id="megerCategory1">Public</span>
+                                                <span class="text-blue text-bold" id="megerCategory1">Public</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Level:</label>
-                                                <span class="text-indigo-600" id="mergerLevel1">Higher Secondary School</span>
+                                                <span class="text-blue text-bold" id="mergerLevel1">Higher Secondary School</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag:</label>
-                                                <span class="text-indigo-600" id="mergerDzongkhag1">Thimphu</span>
+                                                <span class="text-blue text-bold" id="mergerDzongkhag1">Thimphu</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Gewog:</label>
-                                                <span class="text-indigo-600" id="mergerGewog1">Thimthrom</span>
+                                                <span class="text-blue text-bold" id="mergerGewog1">Thimthrom</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Chiwog:</label>
-                                                <span class="text-indigo-600" id="mergerChiwog1">Yangchenphug</span>
+                                                <span class="text-blue text-bold" id="mergerChiwog1">Yangchenphug</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Location Type:</label>
-                                                <span class="text-indigo-600" id="mergerLocationtype1">Urban grade 1</span>
+                                                <span class="text-blue text-bold" id="mergerLocationtype1">Urban grade 1</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Geopolitically Located:</label>
-                                                <span class="text-indigo-600" id="mergerGeoLocated1">No</span>
+                                                <span class="text-blue text-bold" id="mergerGeoLocated1">No</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>SEN School:</label>
-                                                <span class="text-indigo-600" id="mergerSen1">No</span>
+                                                <span class="text-blue text-bold" id="mergerSen1">No</span>
                                             </div>
                                         </div>
                                         <!-- <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Co-located with Parent School:</label>
-                                                <span class="text-indigo-600" id="ccolocated"></span>
+                                                <span class="text-blue text-bold" id="ccolocated"></span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Parent School:</label>
-                                                <span class="text-indigo-600" id="cparent"></span>
+                                                <span class="text-blue text-bold" id="cparent"></span>
                                             </div>
                                         </div> -->
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" style="display:none">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
                                         <h3 class="card-title">School/ECR/ECCD 2</h3>
@@ -117,61 +118,61 @@
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Code:</label>
-                                                <span class="text-indigo-600" id="mergerCode2">00020299</span>
+                                                <span class="text-blue text-bold" id="mergerCode2">00020299</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Name:</label>
-                                                <span class="text-indigo-600" id="mergerName2">Motithang HSS</span>
+                                                <span class="text-blue text-bold" id="mergerName2">Motithang HSS</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Level:</label>
-                                                <span class="text-indigo-600" id="mergerCategory2">Higher Secondary School</span>
+                                                <span class="text-blue text-bold" id="mergerCategory2">Higher Secondary School</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:</label>
-                                                <span class="text-indigo-600" id="mergerLevel2">Public</span>
+                                                <span class="text-blue text-bold" id="mergerLevel2">Public</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag:</label>
-                                                <span class="text-indigo-600" id="mergerDzongkhag2">Thimthrom</span>
+                                                <span class="text-blue text-bold" id="mergerDzongkhag2">Thimthrom</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Gewog:</label>
-                                                <span class="text-indigo-600" id="mergerGewog2">Thimthrom</span>
+                                                <span class="text-blue text-bold" id="mergerGewog2">Thimthrom</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Chiwog:</label>
-                                                <span class="text-indigo-600" id="mergerChiwog2">Mothithang</span>
+                                                <span class="text-blue text-bold" id="mergerChiwog2">Mothithang</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Location Type:</label>
-                                                <span class="text-indigo-600" id="mergerLocationType2">Urban grade 1</span>
+                                                <span class="text-blue text-bold" id="mergerLocationType2">Urban grade 1</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Geopolitically Located:</label>
-                                                <span class="text-indigo-600" id="mergerGeoLocated2">No</span>
+                                                <span class="text-blue text-bold" id="mergerGeoLocated2">No</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>SEN School:</label>
-                                                <span class="text-indigo-600" id="mergerSen2">No</span>
+                                                <span class="text-blue text-bold" id="mergerSen2">No</span>
                                             </div>
                                         </div>
                                         <!-- <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Co-located with Parent School:</label>
-                                                <span class="text-indigo-600" id="ccolocated"></span>
+                                                <span class="text-blue text-bold" id="ccolocated"></span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Parent School:</label>
-                                                <span class="text-indigo-600" id="cparent"></span>
+                                                <span class="text-blue text-bold" id="cparent"></span>
                                             </div>
                                         </div> -->
                                     </div>
@@ -181,11 +182,11 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('merger-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="merger-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Name:<span class="text-danger">*</span></label>
@@ -332,6 +333,16 @@
 export default {
     data(){
         return{ 
+            orgList:[],
+
+
+
+            form: new form({
+                id: '',orgId1:'',orgId2:'',year:'',name:'',level:'',category:'1',dzongkhag:'',gewog:'',
+                chiwog:'',location:'',geoLocated:'0',senSchool:'0',parentSchool:'',coLocated:'0',
+                cid:'',fullName:'',phoneNo:'',email:'',class:[], stream:[]
+            }),
+
             levelList:[],
             locationList:[],
             classList:[],
@@ -339,31 +350,27 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
-            form: new form({
-                id: '',orgId1:'',orgId2:'',year:'',name:'',level:'',category:'1',dzongkhag:'',gewog:'',
-                chiwog:'',location:'',geoLocated:'0',senSchool:'0',parentSchool:'',coLocated:'0',
-                cid:'',fullName:'',phoneNo:'',email:'',class:[], stream:[]
-            }),
+            
         } 
     },
     methods: {
         /**
-         * method to get school 1 details
+         * method to get current school unbder current user
          */
-        getSchoolDetails: function(){
-            $('#school1').show();
+        getOrgList(uri = '/organization/getOrgList'){
+            axios.get(uri)
+            .then(response => {
+                this.orgList = response.data.data;
+            });
+        },
+        getOrgDetails(id){
+            let uri = '/organization/getOrgDetails/'+id;
+            axios.get(uri)
+            .then(response => {
+                this.orgList = response.data.data;
+            });
         },
 
-        /**
-         * method to get school 2 details
-         */
-        getSchool2Details: function(){
-            $('#school2').show();
-        },
-
-        /**
-         * method to show private details
-         */
         showprivatedetails(type){
             if(type=='private'){
                 $('#privatedetails').show();
@@ -466,10 +473,11 @@ export default {
             });
         },
 
-        /**
-         * method to populate dropdown
-         */
         async changefunction(id){
+            if(id=="orgId1"){
+                this.form.orgId1 = $('#orgId1').val();
+                this.getOrgDetails(this.form.orgId1);
+            }
             if(id=="dzongkhag"){
                 this.form.dzongkhag = $('#dzongkhag').val();
                 this.getgewoglist();
@@ -527,6 +535,9 @@ export default {
     },
     
     mounted() {
+        let currentdate = new Date();
+        let current_year =(currentdate.getFullYear());
+        this.form.year=current_year;
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -539,6 +550,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.getOrgList();
 
         this.getLevel();
         this.getLocation();

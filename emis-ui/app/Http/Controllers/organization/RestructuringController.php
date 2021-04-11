@@ -274,7 +274,11 @@ class RestructuringController extends Controller
         $loadBifurcationDetails = $this->apiService->listData('emis/organization/bifurcation/loadBifurcation');
         return $loadBifurcationDetails;
     }
-
+    
+    public function getOrgList(){
+        $loadBifurcationDetails = $this->apiService->listData('emis/organization/getOrgList/'.$this->getUserDzoId());
+        return $loadBifurcationDetails;
+    }
     
     
 }

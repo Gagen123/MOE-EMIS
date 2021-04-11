@@ -1002,15 +1002,15 @@ const routes = [
     children:[
       { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index_list.vue').default },
       { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
-      { path: '/merger', component: require('./components/organization/restructuring/merger.vue').default },
-      { path: '/bifurcation_index', 
+      { path: '/merger',name:'merger', component: require('./components/organization/restructuring/merger.vue').default },
+      { path: '/bifurcation_index',  
       component: require('./components/organization/restructuring/bifurcation/bifurcation_index.vue').default ,
           children: [
               { path: '/', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
               { path: '/bifurcation_list', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
               { path: '/bifurcation', name:'BifurcationAdd', component: require('./components/organization/restructuring/bifurcation/bifurcation.vue').default },
           ]    
-      },
+      }, 
 
       { path: '/closure_index', 
         component: require('./components/organization/restructuring/closure/closure_index.vue').default ,

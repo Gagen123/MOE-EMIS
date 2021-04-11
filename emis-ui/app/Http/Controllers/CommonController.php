@@ -55,7 +55,6 @@ class CommonController extends Controller{
         $param="";
         foreach($work_status as $work){
             $param.=$work.'OUTSEP';
-            
         }
         // dd($param);
         $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param);
