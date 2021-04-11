@@ -4,50 +4,50 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Code:</label>
-                    <span class="text-indigo-600" id="code">{{form.code}}</span>
+                    <span class="text-blue text-bold" id="code">{{form.code}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Name:</label>
-                    <span class="text-indigo-600" id="name">{{form.name}}</span>
+                    <span class="text-blue text-bold" id="name">{{form.name}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Category:</label>
-                    <span class="text-indigo-600" id="name">{{form.category}}</span>
+                    <span class="text-blue text-bold" id="name">{{form.category == 1 ? "public" : "private"}}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Level:</label>
-                    <span class="text-indigo-600" id="level">{{form.level}}</span>
+                    <span class="text-blue text-bold" id="level">{{form.level}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Dzongkhag:</label>
-                    <span class="text-indigo-600" id="dzongkhag">{{form.dzongkhag}}</span>
+                    <span class="text-blue text-bold" id="dzongkhag">{{form.dzongkhag}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Gewog:</label>
-                    <span class="text-indigo-600" id="gewog">{{form.gewog}}</span>
+                    <span class="text-blue text-bold" id="gewog">{{form.gewog}}</span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Chiwog:</label>
-                    <span class="text-indigo-600" id="chiwog">{{form.chiwog}}</span>
+                    <span class="text-blue text-bold" id="chiwog">{{form.chiwog}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Location Type:</label>
-                    <span class="text-indigo-600" id="chiwog">{{form.location}}</span>
+                    <span class="text-blue text-bold" id="chiwog">{{form.location}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Geopolitically Located:</label>
-                    <span class="text-indigo-600" id="geoLocated">{{form.geoLocated}}</span>
+                    <span class="text-blue text-bold" id="geoLocated">{{form.geoLocated == 1 ? "Yes" : "No"}}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>SEN School:</label>
-                    <span class="text-indigo-600" id="geoLocated">{{form.senSchool}}</span>
+                    <span class="text-blue text-bold" id="geoLocated">{{form.senSchool == 1 ? "Yes" : "No"}}</span>
                 </div>
             </div>
             <div class="form-group row">
@@ -74,9 +74,8 @@ export default {
     data(){
         return{
             form: new form({
-                code:'',name:'',category:'1',level:'',dzongkhag:'',
-                gewog:'',chiwog:'',location:'',
-                geoLocated:'1',senSchool:'0',reason:'',remark:''
+                code:'',name:'',category:'1',level:'',dzongkhag:'',gewog:'',chiwog:'',location:'',
+                geoLocated:'1',senSchool:'0',reason:'',remark:'',status:'submitted'
             })
         }
     },

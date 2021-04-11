@@ -159,6 +159,11 @@ Route::prefix('organization')->group(function () {
     // Change Basic route
     Route::post('/saveChangeBasicDetails', [App\Http\Controllers\organization\RestructuringController::class, 'saveChangeBasicDetails'])->name('saveChangeBasicDetails');
     Route::post('/saveChangeClass', [App\Http\Controllers\organization\RestructuringController::class, 'saveChangeClass'])->name('saveChangeClass');
+    Route::get('/loadCurrentOrgDetails/{orgId}', [App\Http\Controllers\organization\RestructuringController::class, 'loadCurrentOrgDetails'])->name('loadCurrentOrgDetails');
+    Route::get('/loadCurrentProprietorDetails/{orgId}', [App\Http\Controllers\organization\RestructuringController::class, 'loadCurrentProprietorDetails'])->name('loadCurrentProprietorDetails');
+    Route::get('/getCurrentClass', [App\Http\Controllers\organization\RestructuringController::class, 'getCurrentClass'])->name('getCurrentClass');
+    Route::get('/getCurrentStream', [App\Http\Controllers\organization\RestructuringController::class, 'getCurrentStream'])->name('getCurrentStream');
+    Route::get('/getApplicationNo', [App\Http\Controllers\organization\RestructuringController::class, 'getApplicationNo'])->name('getApplicationNo');
 
     // merger route
     Route::post('/saveMerger', [App\Http\Controllers\organization\RestructuringController::class, 'saveMerger'])->name('saveMerger');

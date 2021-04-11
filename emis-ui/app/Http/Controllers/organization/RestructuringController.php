@@ -40,8 +40,15 @@ class RestructuringController extends Controller
             'geoLocated'                =>  $request['geoLocated'],
             'senSchool'                 =>  $request['senSchool'],
             'geoLocated'                =>  $request['geoLocated'],
-            'coLocated'                 =>  $request['coLocated'],  
+            'coLocatedParent'           =>  $request['coLocatedParent'],
+            'parentSchool'              =>  $request['parentSchool'],
+            'cid'                       =>  $request['cid'],
+            'fullName'                  =>  $request['fullName'],
+            'phoneNo'                   =>  $request['phoneNo'],
+            'email'                     =>  $request['email'],
+            'status'                    =>  $request['status'],   
             'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $change);
@@ -73,6 +80,30 @@ class RestructuringController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+
+    public function getCurrentClass(){
+        $classInCheckbox = $this->apiService->listData('emis/organization/changeDetails/getCurrentClass');
+        return $classInCheckbox;
+    }
+    public function getCurrentStream(){
+        $streamInCheckbox = $this->apiService->listData('emis/organization/changeDetails/getCurrentStream');
+        return $streamInCheckbox;
+    }
+
+    public function getApplicationNo(){
+        $applicationNo = $this->apiService->listData('emis/organization/changeDetails/getApplicationNo/'.$this->userId());
+        return $applicationNo;
+    }
+
+    public function loadCurrentOrgDetails($orgId=""){
+        $loadCurrentOrgDetails = $this->apiService->listData('emis/organization/changeDetails/loadCurrentOrgDetails/'.$orgId);
+        return $loadCurrentOrgDetails;
+    }
+
+    public function loadCurrentProprietorDetails($orgId=""){
+        $load = $this->apiService->listData('emis/organization/changeDetails/loadCurrentProprietorDetails/'.$orgId);
+        return $load;
     }
 
     public function saveMerger(Request $request){
@@ -144,9 +175,13 @@ class RestructuringController extends Controller
             'location'                 =>  $request['location'],
             'geoLocated'               =>  $request['geoLocated'],
             'senSchool'                =>  $request['senSchool'],
+            'parentSchool'             =>  $request['parentSchool'],
+            'coLocated'                =>  $request['coLocated'],
+            'status'                   =>  $request['status'],
             'reason'                   =>  $request['reason'],
             'remark'                   =>  $request['remark'],
             'id'                       =>  $request['id'],
+            'user_id'                  =>  $this->userId() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
@@ -239,4 +274,7 @@ class RestructuringController extends Controller
         $loadBifurcationDetails = $this->apiService->listData('emis/organization/bifurcation/loadBifurcation');
         return $loadBifurcationDetails;
     }
+
+    
+    
 }

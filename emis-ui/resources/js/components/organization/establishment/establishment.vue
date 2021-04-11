@@ -342,7 +342,7 @@ export default {
                         this.classStreamForm.post('organization/saveClassStream')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
