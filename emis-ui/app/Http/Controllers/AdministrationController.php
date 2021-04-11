@@ -607,7 +607,7 @@ class AdministrationController extends Controller{
             'roadType'    =>  $request['roadType'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
@@ -640,7 +640,7 @@ class AdministrationController extends Controller{
             'serviceName'    =>  $request['serviceName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
@@ -670,7 +670,7 @@ class AdministrationController extends Controller{
             'designerName'    =>  $request['designerName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
@@ -700,7 +700,7 @@ class AdministrationController extends Controller{
             'contactName'    =>  $request['contactName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);

@@ -202,20 +202,22 @@ class HomeController extends Controller{
         }
         if($role_riv!=null){
             foreach(json_decode($role_riv) as $i=> $priv){
-                if(strpos($screens_ids,$priv->Id)===false){  
-                    $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
-                    $screens_ids.=$priv->Id.',';
-                    $screen=[
-                        'mod_id'=> $priv->module_id,
-                        'sub_mod_id'=> $priv->sub_module_id,
-                        'screen_id' => $priv->Id,
-                        'screen_name' => $priv->screenName,
-                        'route' =>$priv->Route,
-                        'work_flow_status'=>'NA',
-                        'actions' => json_decode($actions)[0]->action_name,
-                        'screen_icon'=>$priv->screen_icon,
-                    ];
-                    array_push($screens,$screen);
+                if($priv->Organization == 1 || $priv->Dzongkhag == 1 || $priv->National == 1 ){
+                    if(strpos($screens_ids,$priv->Id)===false){  
+                        $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
+                        $screens_ids.=$priv->Id.',';
+                        $screen=[
+                            'mod_id'=> $priv->module_id,
+                            'sub_mod_id'=> $priv->sub_module_id,
+                            'screen_id' => $priv->Id,
+                            'screen_name' => $priv->screenName,
+                            'route' =>$priv->Route,
+                            'work_flow_status'=>'NA',
+                            'actions' => json_decode($actions)[0]->action_name,
+                            'screen_icon'=>$priv->screen_icon,
+                        ];
+                        array_push($screens,$screen);
+                    }
                 }
             }
         }

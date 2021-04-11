@@ -8,7 +8,7 @@
                             <label class="mb-0.5">Basic Details </label>                              
                         </a>
                     </li>
-                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
+                    <li class="nav-item contact-tab" @click="shownexttab('contact-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Contact Details </label>
                         </a>
@@ -76,12 +76,12 @@
                     <hr>
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                            <button class="btn btn-primary" @click="shownexttab('contact-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
                         </div>
                     </div>
                     </div>
                     
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="contact-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <table id="contactDetails" class="table table-sm table-bordered table-striped">
                                 <thead>
@@ -94,24 +94,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr id="record1" v-for='(user, index) in form1.users' :key="index">
+                                    <tr id="record1" v-for='(contact, index) in form1.contacts' :key="index">
                                         <td>
-                                            <select name="name" id="name" class="form-control" v-model="user.names" :class="{ 'is-invalid': form1.errors.has('spo_name') }">
+                                            <select name="name" id="name" class="form-control" v-model="contact.names" :class="{ 'is-invalid': form1.errors.has('spo_name') }">
                                                 <option value="">--- Please Select ---</option>
                                                 <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="phone" class="form-control" v-model="user.phone"/>
+                                            <input type="text" name="phone" class="form-control" v-model="contact.phone"/>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="fax" class="form-control" v-model="user.fax"/>
+                                            <input type="text" name="fax" class="form-control" v-model="contact.fax"/>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="mobile" class="form-control" v-model="user.mobile"/>
+                                            <input type="text" name="mobile" class="form-control" v-model="contact.mobile"/>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="email" class="form-control" v-model="user.email"/>
+                                            <input type="text" name="email" class="form-control" v-model="contact.email"/>
                                         </td>
                                     </tr> 
                                     <tr>
@@ -150,7 +150,7 @@ export default {
 
             form1: new form({
                 id: '',organizationId:'',
-                users:
+                contacts:
                 [{
                     names:'',phone:'',fax:'',mobile:'',email:''
                 }] ,
@@ -169,11 +169,11 @@ export default {
         }, 
 
         addMore: function(){
-            this.form1.users.push({names:'',phone:'',fax:'',mobile:'',email:''})
+            this.form1.contacts.push({names:'',phone:'',fax:'',mobile:'',email:''})
         },
 
         remove(index){    
-             this.form1.users.splice(index,1);             
+             this.form1.contacts.splice(index,1);             
         },
 
         /** method to get HQ and Dzongkhag Office based on code */
@@ -220,11 +220,13 @@ export default {
                     if (result.isConfirmed) {
                         this.form1.post('organization/saveContactDetails')
                         .then(() => {
+                            let message="Head Quater details has been added: <br><b>Thank You !</b>";
+                            this.$router.push({name:'acknowledgement',params: {data:message}});
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Data is saved successfully'
                             })
-                    })
+                        })
                         .catch(() => {
                             console.log("Error......")
                         })
@@ -232,15 +234,16 @@ export default {
                 });
             }
             else{
-                if(nextclass=="class-tab"){
-                     this.form.post('organization/saveBasicDetails')
-                     
-                    .then(() => {
+                if(nextclass=="contact-tab"){
+                    this.form.post('organization/saveBasicDetails')
+                    .then((response) => {
+                        alert(response.data);
+                        this.form1.organizationId=response.data.data.id;
                         Toast.fire({
-                                icon: 'success',
-                                title: 'Data is saved successfully'
-                            })
-                            this.change_tab(nextclass);
+                            icon: 'success',
+                            title: 'Data is saved successfully'
+                        })
+                        this.change_tab(nextclass);
                     })
                     .catch(() => {
                         this.change_tab('organization-tab');

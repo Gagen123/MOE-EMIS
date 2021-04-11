@@ -226,12 +226,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
         $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
         $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
+        $router->get('/loadorgs', 'establishment\EstablishmentController@loadorgs');
     });
 
     $router->group(['prefix' => 'organization/headQuater'], function () use ($router) {
         $router->post('/saveContactDetails', 'establishment\HeadQuaterController@saveContactDetails');
         $router->post('/saveBasicDetails', 'establishment\HeadQuaterController@saveBasicDetails');
         $router->get('/loadBasicDetails/{user_id}', ['uses' => 'establishment\HeadQuaterController@loadBasicDetails']);
+        $router->get('/getsAgencyList/{param}', ['uses' => 'establishment\HeadQuaterController@getsAgencyList']);
+        $router->get('/getHeadQuarterDetails/{id}', ['uses' => 'establishment\HeadQuaterController@getHeadQuarterDetails']);
+        
     });
 
     $router->group(['prefix' => 'organization/changeDetails'], function () use ($router) {

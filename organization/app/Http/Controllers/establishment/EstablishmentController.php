@@ -416,4 +416,10 @@ class EstablishmentController extends Controller
         $response_data->sections=$sections;
         return $this->successResponse($response_data); 
     }
+    
+    public function loadorgs(){
+        $response_data=OrganizationDetails::all();
+        return $this->successResponse($response_data);
+    }
+    
 }
