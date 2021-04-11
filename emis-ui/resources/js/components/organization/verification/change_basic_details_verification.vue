@@ -26,49 +26,49 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Name:</label>
-                                <span class="text-indigo-600">Yangchenphug HSS</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.name}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Level:</label>
-                                <span class="text-indigo-600">Middle Secondary School</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.level}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Category:</label>
-                                <span class="text-indigo-600">Public School</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.category == 1 ? "Private" : "Public"}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Dzongkhag:</label>
-                                <span class="text-indigo-600">Thimphu</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.dzongkhag}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Gewog:</label>
-                                <span class="text-indigo-600">Thimthrom</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.gewog}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Chiwog:</label>
-                                <span class="text-indigo-600">Thimthrom</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.chiwog}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Location Type:</label>
-                                <span class="text-indigo-600">Urban grade 1</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.locationType}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600">No</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.geoLocated == 1 ? "Yes" : "No"}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>SEN School:</label>
-                                <span class="text-indigo-600">No</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.senSchool == 1 ? "Yes" : "No"}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Co-located with Parent School:</label>
-                                <span class="text-indigo-600">No</span>
+                                <span class="text-indigo-600">{{previousDetailsForm.parentSchool}}</span>
                             </div>
                         </div>
                         <hr>
@@ -80,49 +80,84 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Name:</label>
-                                <span class="text-indigo-600">Yangchenphug HSS</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appName}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Level:</label>
-                                <span class="text-indigo-600">Higher Secondary School</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appLevel}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Category:</label>
-                                <span class="text-indigo-600">Public School</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appCategory}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Dzongkhag:</label>
-                                <span class="text-indigo-600">Thimphu</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appDzongkhag}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Gewog:</label>
-                                <span class="text-indigo-600">Thimthrom</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appGewog}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Chiwog:</label>
-                                <span class="text-indigo-600">Thimthrom</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appChiwog}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Location Type:</label>
-                                <span class="text-indigo-600">Urban grade 1</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appLocationType}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600">No</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appGeoLocated}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>SEN School:</label>
-                                <span class="text-indigo-600">No</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appSenSchool}}</span>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" v-if="appicationDetailsForm.appSenSchool==1">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                                <label class="mb-0">Parent School:</label>
+                                <span class="text-blue text-bold">{{appicationDetailsForm.parentSchool}}</span>
+                            </div>   
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Co-located with Parent School:</label>
-                                <span class="text-indigo-600">No</span>
+                                <label class="mb-0">Co-located with Parent School</label>
+                                <span class="text-blue text-bold">
+                                    {{ appicationDetailsForm.coLocated  == 1 ? "Yes" :  "No"}}
+                                </span>
+                            </div> 
+                        </div>
+                        <div v-if="appicationDetailsForm.category==0">
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4><u>Proprietor Details</u></h4>
+                                </div>
+                            </div>
+                            <div v-for="(pro, index) in proprietorList" :key="index">
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">CID:</label>
+                                        <span class="text-blue text-bold">{{pro.cid}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Full Name:</label>
+                                        <span class="text-blue text-bold">{{pro.fullName}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Phone No:</label>
+                                        <span class="text-blue text-bold">{{pro.phoneNo}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Email:</label>
+                                        <span class="text-blue text-bold">{{pro.email}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -252,57 +287,110 @@
 </template>
 
 <script>
+import Workflow from "../../common/view_workflow_details";
+
 export default {
+    components: {
+        Workflow,
+    },
     data(){
         return{
-
+            proprietorList:[],
+            previousDetailsForm:new form({
+                id:'',organizationId:'145f5a09-06b8-407a-8f33-deecc6a2b861',name:'',level:''
+                ,category:'',dzongkhag:'',gewog:'',chiwog:'',locationType:'',geoLocated:''
+                ,senSchool:'', parentSchool:'',coLocatedParent:'',cid:'',fullName:'',phoneNo:''
+                ,email:'',
+            }),
+            appicationDetailsForm:new form({
+                id:'',appOrganizationId:'',appName:'',appLevel:'',appCategory:'',appDzongkhag:'',appGewog:'',
+                appChiwog:'',appLocationType:'',appGeoLocated:'',appSenSchool:'', appParentSchool:'',
+                appCoLocatedParent:'',appCid:'',appFullName:'',appPhoneNo:'',appEmail:'',
+            })
         }
     },
 
     methods:{
+
         /**
-         * method to show next and previous tab
+         * method to load previous org details
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
-                Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.form.post('organization/saveBifurcation')
-                        .then(() => {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Bifurcation details is saved successfully'
+        loadCurrentOrgDetails(){
+            axios.get('organization/loadCurrentOrgDetails/'+this.form.organizationId)
+            .then((response) => {  
+                alert("m here");
+                let data=response.data.data;
+                this.previousDetailsForm.id              =   data.id;
+                this.previousDetailsForm.name            =   data.name;
+                this.previousDetailsForm.level           =   data.levelId;
+                this.previousDetailsForm.category        =   data.category;
+                this.previousDetailsForm.locationType    =   data.locationId;
+
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+
+        /**
+         * method to show next tab and update application accordingly
+         */
+        shownexttab(nextclass){
+            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
+                let action=true;
+                if(nextclass=="reject" && this.form.remarks==""){
+                    $('#remarks_err').html('Please mention remarks');
+                    $('#remarks').addClass('is-invalid');
+                    action=false;
+                }
+                if(action){
+                    Swal.fire({
+                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.form.applicationNo=this.applicaitondetailsform.applicationNo;
+                            this.form.actiontype=nextclass;
+                            this.form.post('organization/updateNewEstablishmentApplication')
+                            .then((response) => {
+                                if(response!=""){
+                                    Toast.fire({  
+                                        icon: 'success',
+                                        title: 'Application details has been updated.'
+                                    });
+                                    this.$router.push({path:'/tasklist'});
+                                } 
                             })
-                    })
-                        .catch(() => {
-                            console.log("Error......")
-                     })
-                    }
-                });
+                            .catch((err) => {
+                                Swal.fire(
+                                    'error!',
+                                    'Not able to update this application details. Please contact system administrator.Error: '+err,
+                                    'error',
+                                ); 
+                                console.log("Error:"+err)
+                            })
+                        }
+                    });
+                }
             }
             else{
-                this.change_tab(nextclass);
+                $('#tabhead >li >a').removeClass('active');
+                $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').addClass('active');
+                $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').removeClass('disabled');
+                $('.tab-content-details').hide();
+                $('#'+nextclass).show().removeClass('fade');
             }
         },
-        /**
-         * method to change tabs
-         */
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-        },
+    },
+
+    mounted(){
+        this.loadCurrentOrgDetails();
     }
 }
 </script>

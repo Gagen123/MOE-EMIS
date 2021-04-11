@@ -241,6 +241,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization/changeDetails'], function () use ($router) {
         $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
         $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
+        $router->get('/loadCurrentOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentOrgDetails']);
+        $router->get('/loadCurrentProprietorDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentProprietorDetails']);
+        $router->get('/getCurrentClass', ['uses' => 'establishment\ChangeBasicDetailsController@getCurrentClass']);
+        $router->get('/getCurrentStream', ['uses' => 'establishment\ChangeBasicDetailsController@getCurrentStream']);
+        $router->get('/getApplicationNo/{userId}', ['uses' => 'establishment\ChangeBasicDetailsController@getApplicationNo']);
+
     });
 
     $router->group(['prefix' => 'organization/bifurcation'], function () use ($router) {
