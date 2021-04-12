@@ -434,12 +434,11 @@ export default {
                 if(data.isSenSchool == 1){
                     this.show_parent_school_details(true);
                 }
-
-                $('#dzongkhag').val(JSON.parse(response.data.dzongkhag).data.id).trigger('change');
-                this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
-                this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
-                this.form.gewog = JSON.parse(response.data.gewog).data.id;
-                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+                $('#dzongkhag').val(data.dzongkhag.data.id).trigger('change');
+                this.form.dzongkhag = data.dzongkhag.data.id;
+                this.getgewoglist(data.dzongkhag.data.id);
+                this.form.gewog = data.gewog.data.id;
+                this.getvillagelist(data.gewog.data.id);
                 this.form.chiwog = data.chiwogId;
                 
                 this.form.geoLocated                =   data.isGeopoliticallyLocated;

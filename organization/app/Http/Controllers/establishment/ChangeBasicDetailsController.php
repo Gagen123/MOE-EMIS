@@ -15,11 +15,8 @@ use App\Models\OrganizationClassStream;
 use App\Models\ApplicationSequence;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
-<<<<<<< HEAD
 use App\Models\Masters\Classes;
 use App\Models\Masters\Stream;
-=======
->>>>>>> 52030dcfac69d7db3f80ec5ad237136022ec8a6e
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller

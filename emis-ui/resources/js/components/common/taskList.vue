@@ -94,16 +94,14 @@
             if(data.service_name.includes('New Establishment')){
                 this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
             }
-<<<<<<< HEAD
-            else if(data.service_name.includes('Change Basic Details')){
-                this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
-=======
             if(data.service_name.includes('Merge')){
                 this.$router.push({name:"merger_verification",params:{data:data,type:actiontype}});
             }
             if(data.service_name.includes('Bifur')){
                 this.$router.push({name:"bifurcation_verification",params:{data:data,type:actiontype}});
->>>>>>> 52030dcfac69d7db3f80ec5ad237136022ec8a6e
+            }
+            if(data.service_name.includes('Change Basic Details')){
+                this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
             }
         }
     },
