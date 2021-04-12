@@ -10,6 +10,9 @@ use App\Models\restructuring\Closure;
 use App\Models\establishment\ApplicationDetails;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\ApplicationSequence;
+use App\Models\Masters\Level;
+use App\Models\Masters\Location;
+
 
 class ClosureController extends Controller
 {
@@ -90,5 +93,15 @@ class ClosureController extends Controller
             $cls = ApplicationProprietorDetails::create($pvtDetails);
         }
         return $this->successResponse($cls, Response::HTTP_CREATED);
+    }
+
+    public function loadClosureApplicationDetails($appNo=""){
+        $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        if($response_data->id!=null && $response_data->id!=""){
+            $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        }
+        return $this->successResponse($response_data); 
     }
 }

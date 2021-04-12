@@ -265,6 +265,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
             $router->post('/saveClosure', 'restructuring\ClosureController@saveClosure');
+            $router->get('/loadClosureApplicationDetails/{appNo}', ['uses' => 'restructuring\ClosureController@loadClosureApplicationDetails']);
         });
     });
 });
