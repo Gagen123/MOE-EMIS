@@ -95,7 +95,7 @@
                                 <label class="mb-0">Parent School:</label>
                                 <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  editable_fields">
                                     <option value="">--- Please Select ---</option>
-                                    <option value="1">Kabisa</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
@@ -181,6 +181,7 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
+            orgList:[],
             classList:[],
             streamList:[],
             form: new form({
@@ -212,6 +213,12 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.levelList = data;
+            });
+        },
+        getOrgList(uri = '/organization/getOrgList'){
+            axios.get(uri)
+            .then(response => {
+                this.orgList = response.data.data;
             });
         },
 
@@ -346,7 +353,7 @@ export default {
                                 this.$router.push({name:'acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
-                                    title: 'Establishment is saved successfully'
+                                    title: 'Application for new establishment has been submitted for further action'
                                 });
                             } 
                         })
@@ -512,6 +519,7 @@ export default {
         this.getStream();
         this.loadactivedzongkhagList();
         this.loaddOrganizationDetails();
+        this.getOrgList();
     }, 
 }
 </script>

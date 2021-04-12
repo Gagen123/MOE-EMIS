@@ -94,6 +94,12 @@
             if(data.service_name.includes('New Establishment')){
                 this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
             }
+            if(data.service_name.includes('Merge')){
+                this.$router.push({name:"merger_verification",params:{data:data,type:actiontype}});
+            }
+            if(data.service_name.includes('Bifur')){
+                this.$router.push({name:"bifurcation_verification",params:{data:data,type:actiontype}});
+            }
         }
     },
     mounted(){

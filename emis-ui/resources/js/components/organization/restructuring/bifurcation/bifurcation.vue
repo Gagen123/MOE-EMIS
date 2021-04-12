@@ -21,80 +21,111 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Code:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.code}}</span>
+                                <span class="text-blue text-bold">{{data.code}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Name:</label>
-                                <span class="text-indigo-600" id="name">{{this.$route.params.data.name}}</span>
+                                <span class="text-blue text-bold" id="name">{{data.name}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Category:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.category}}</span>
+                                <span class="text-blue text-bold">{{ data.category == 1 ? "Public" :  "private & Other"}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Level:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.levelId}}</span>
+                                <span class="text-blue text-bold">{{data.level}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Dzongkhag:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.dzongkhagId}}</span>
+                                <span class="text-blue text-bold">{{data.dzongkhag}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Gewog:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.gewogId}}</span>
+                                <span class="text-blue text-bold">{{data.gewog}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Chiwog:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.chiwogId}}</span>
+                                <span class="text-blue text-bold">{{data.village}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Location Type:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.locationId}}</span>
+                                <span class="text-blue text-bold">{{data.locationType}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.isGeopoliticallyLocated}}</span>
+                                <span class="text-blue text-bold"> {{ data.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
                             </div>
-                        </div>
+                        </div> 
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>SEN School:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.isSenSchool}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Co-located with Parent School:</label>
-                                <span class="text-indigo-600">{{this.$route.params.data.isCoLocated}}</span>
+                                <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
                             </div>
                         </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <div class="row">
+                        <div class="form-group row" v-if="data.senSchool==1">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                                <label class="mb-0">Parent School:</label>
+                                <span class="text-blue text-bold">{{data.parentSchool}}</span>
+                            </div>   
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Co-located with Parent School</label>
+                                <span class="text-blue text-bold">
+                                    {{ data.coLocated  == 1 ? "Yes" :  "No"}}
+                                </span>
+                            </div> 
+                        </div>
+                       <div v-if="data.category==0">
+                            <div class="row pb-2">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Classes and Streams</label>
+                                    <h4><u>Proprietor Details</u></h4>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <span v-for="(item, key, index) in  classList" :key="index">
+                            <div v-for="(pro, index) in data.proprietor" :key="index">
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">CID:</label>
+                                        <span class="text-blue text-bold">{{pro.cid}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Full Name:</label>
+                                        <span class="text-blue text-bold">{{pro.fullName}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Phone No:</label>
+                                        <span class="text-blue text-bold">{{pro.phoneNo}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Email:</label>
+                                        <span class="text-blue text-bold">{{pro.email}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <h4><u>Class Section Details</u></h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, index) in  data.class_section" :key="index">
                                     <br>
-                                    <input type="checkbox" v-model="form.class2" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-for="(stm, key, index) in streamList" :key="index" >
-                                        <span v-if="item.class=='XI' || item.class=='XII'">
+                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
+                                    <span v-for="(stm, key, index) in data.sections" :key="index" >
+                                        <span v-if="item.classId==stm.classId">
                                             <br>
-                                            <input type="checkbox" v-model="form.stream2"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
                                         </span>
                                     </span>
                                 </span> 
-                            </div>
                             </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -126,8 +157,8 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:<span class="text-danger">*</span></label>
                                                 <br>
-                                                <label><input type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
-                                                <label><input type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
+                                                <label><input type="radio" v-model="form.category"  value="1" tabindex=""/> Public</label>
+                                                <label><input type="radio" v-model="form.category"  value="0"  tabindex=""/> Private</label>
                                                 <span id="othercategoryforeccd"></span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -192,7 +223,7 @@
                                                 <label>Parent School:</label>
                                                 <select name="category" id="cparentSchool" v-model="form.parentSchool" class="form-control currentDetails">
                                                     <option value="">--- Please Select ---</option>
-                                                    <option value="1">Kabisa</option>
+                                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                         </div> 
@@ -245,8 +276,8 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:<span class="text-danger">*</span></label>
                                                 <br>
-                                                <label><input type="radio" v-model="form.category1" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
-                                                <label><input type="radio" v-model="form.category1" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
+                                                <label><input type="radio" v-model="form.category1" value="1" tabindex=""/> Public</label>
+                                                <label><input type="radio" v-model="form.category1"  value="0"  tabindex=""/> Private</label>
                                                 <span id="othercategoryforeccd"></span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -310,7 +341,7 @@
                                                 <label>Parent School:</label>
                                                 <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
                                                     <option value="">--- Please Select ---</option>
-                                                    <option value="1">Kabisa</option>
+                                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                             </div>
                                         </div> 
@@ -357,6 +388,8 @@
 export default {
     data(){
         return{ 
+            data:'',
+            orgList:'',
             levelList:[],
             locationList:[],
             locationList1:[],
@@ -371,7 +404,7 @@ export default {
             streamList:[],
 
             form: new form({
-                id: '',name:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',location:'',
+                id: '',parent_id:'',name:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',location:'',
                 geoLocated:'0',senSchool:'0',coLocated:'0',parentSchool:''
                 ,name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
                 geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:''
@@ -600,14 +633,19 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.form.post('organization/saveBifurcation')
-                        .then(() => {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Bifurcation details is saved successfully'
-                            })
-                    })
-                        .catch(() => {
-                            console.log("Error......")
+                        .then((response) => {
+                            if(response!=""){
+                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'restr_acknowledgement',params: {data:message}});
+                                Toast.fire({  
+                                    icon: 'success',
+                                    title: 'Bifurcation details has been submitted for further action.'
+                                }); 
+                            } 
+                            
+                        })
+                        .catch((er) => {
+                            console.log("Error:"+er)
                      })
                     }
                 });
@@ -628,35 +666,52 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-    },
-        created(){
-            this.getLevel();
-            this.getLocation();
-            this.getLevel1();
-            this.getLocation1();
+        getOrgDetails(id){
+            axios.get('organization/getFullSchoolDetials/'+id)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.parent_id=data.id;
+                this.data=data;
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
+        getOrgList(uri = '/organization/getOrgList'){
+            axios.get(uri)
+            .then(response => {
+                this.orgList = response.data.data;
+            });
         },
 
-        mounted(){
-            $('[data-toggle="tooltip"]').tooltip();
-            $('.select2').select2();
-            $('.select2').select2({
-                theme: 'bootstrap4'
-            });
-            $('.select2').on('select2:select', function (el){
-                Fire.$emit('changefunction',$(this).attr('id')); 
-            });
-            
-            Fire.$on('changefunction',(id)=> {
-                this.changefunction(id);
-            });
+    },
+    created(){
+        this.getLevel();
+        this.getLocation();
+        this.getLevel1();
+        this.getLocation1();
+        this.getOrgDetails(this.$route.query.data);
+        this.getOrgList();
+    },
 
-            this.getClass();
-            this.getStream();
-            this.loadactivedzongkhagList();
-            this.loadactivedzongkhagList1();
+    mounted(){
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
 
-           
-
-        }
+        this.getClass();
+        this.getStream();
+        this.loadactivedzongkhagList();
+        this.loadactivedzongkhagList1();
+    }
 }
 </script>

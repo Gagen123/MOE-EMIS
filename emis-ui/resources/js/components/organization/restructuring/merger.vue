@@ -49,132 +49,111 @@
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Code:</label>
-                                                <span class="text-blue text-bold" id="mergerCode1">00020292</span>
+                                                <span class="text-blue text-bold" id="mergerCode1">{{org1_details.code}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Name:</label>
-                                                <span class="text-blue text-bold" id="mergerName1">YangchenPhug HSS</span>
+                                                <span class="text-blue text-bold" id="mergerName1">{{org1_details.name}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:</label>
-                                                <span class="text-blue text-bold" id="megerCategory1">Public</span>
+                                                <span class="text-blue text-bold" id="megerCategory1">{{org1_details.category  == 1 ? "public" :  "private"}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Level:</label>
-                                                <span class="text-blue text-bold" id="mergerLevel1">Higher Secondary School</span>
+                                                <span class="text-blue text-bold" id="mergerLevel1">{{org1_details.level}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag:</label>
-                                                <span class="text-blue text-bold" id="mergerDzongkhag1">Thimphu</span>
+                                                <span class="text-blue text-bold" id="mergerDzongkhag1">{{org1_details.dzongkhag}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Gewog:</label>
-                                                <span class="text-blue text-bold" id="mergerGewog1">Thimthrom</span>
+                                                <span class="text-blue text-bold" id="mergerGewog1">{{org1_details.gewog}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Chiwog:</label>
-                                                <span class="text-blue text-bold" id="mergerChiwog1">Yangchenphug</span>
+                                                <span class="text-blue text-bold" id="mergerChiwog1">{{org1_details.village}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Location Type:</label>
-                                                <span class="text-blue text-bold" id="mergerLocationtype1">Urban grade 1</span>
+                                                <span class="text-blue text-bold" id="mergerLocationtype1">{{org1_details.locationType}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Geopolitically Located:</label>
-                                                <span class="text-blue text-bold" id="mergerGeoLocated1">No</span>
+                                                <span class="text-blue text-bold" id="mergerGeoLocated1">{{org1_details.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>SEN School:</label>
-                                                <span class="text-blue text-bold" id="mergerSen1">No</span>
+                                                <span class="text-blue text-bold" id="mergerSen1">{{org1_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Co-located with Parent School:</label>
-                                                <span class="text-blue text-bold" id="ccolocated"></span>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Parent School:</label>
-                                                <span class="text-blue text-bold" id="cparent"></span>
-                                            </div>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="card card-primary card-outline">
-                                    <div class="card-header">
-                                        <h3 class="card-title">School/ECR/ECCD 2</h3>
-                                    </div>
                                     <div class="card-body">
+                                        <h3 class="card-title">School/ECR/ECCD 2</h3>
+                                        <hr>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Code:</label>
-                                                <span class="text-blue text-bold" id="mergerCode2">00020299</span>
+                                                <span class="text-blue text-bold" id="mergerCode1">{{org2_details.code}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Name:</label>
-                                                <span class="text-blue text-bold" id="mergerName2">Motithang HSS</span>
+                                                <span class="text-blue text-bold" id="mergerName1">{{org2_details.name}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Level:</label>
-                                                <span class="text-blue text-bold" id="mergerCategory2">Higher Secondary School</span>
+                                                <label>Category:</label>
+                                                <span class="text-blue text-bold" id="megerCategory1">{{org2_details.category  == 1 ? "public" :  "private"}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Category:</label>
-                                                <span class="text-blue text-bold" id="mergerLevel2">Public</span>
+                                                <label>Level:</label>
+                                                <span class="text-blue text-bold" id="mergerLevel1">{{org2_details.level}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag:</label>
-                                                <span class="text-blue text-bold" id="mergerDzongkhag2">Thimthrom</span>
+                                                <span class="text-blue text-bold" id="mergerDzongkhag1">{{org2_details.dzongkhag}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Gewog:</label>
-                                                <span class="text-blue text-bold" id="mergerGewog2">Thimthrom</span>
+                                                <span class="text-blue text-bold" id="mergerGewog1">{{org2_details.gewog}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Chiwog:</label>
-                                                <span class="text-blue text-bold" id="mergerChiwog2">Mothithang</span>
+                                                <span class="text-blue text-bold" id="mergerChiwog1">{{org2_details.village}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Location Type:</label>
-                                                <span class="text-blue text-bold" id="mergerLocationType2">Urban grade 1</span>
+                                                <span class="text-blue text-bold" id="mergerLocationtype1">{{org2_details.locationType}}</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Geopolitically Located:</label>
-                                                <span class="text-blue text-bold" id="mergerGeoLocated2">No</span>
+                                                <span class="text-blue text-bold" id="mergerGeoLocated1">{{org2_details.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>SEN School:</label>
-                                                <span class="text-blue text-bold" id="mergerSen2">No</span>
+                                                <span class="text-blue text-bold" id="mergerSen1">{{org2_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
                                             </div>
                                         </div>
-                                        <!-- <div class="form-group row">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Co-located with Parent School:</label>
-                                                <span class="text-blue text-bold" id="ccolocated"></span>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Parent School:</label>
-                                                <span class="text-blue text-bold" id="cparent"></span>
-                                            </div>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -182,43 +161,45 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('merger-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('merger-tab')"> Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade tab-content-details" id="merger-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
+                        <div class="form-group row"> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Name:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name" v-model="form.name"/>
-                            </div>
+                                <label class="mb-0">Proposed Name:<span class="text-danger">*</span></label>
+                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" />
+                                <has-error :form="form" field="proposedName"></has-error>
+                            </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Level:<span class="text-danger">*</span></label>
-                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control editable_fields" @change="getClassAndStream('level'),remove_err('level')">
+                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getClassAndStream('level'),remove_error('level')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="level"></has-error>
-                            </div>
+                            </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Category:<span class="text-danger">*</span></label>
+                                <label class="mb-0">Category:<span class="text-danger">*</span></label>
                                 <br> 
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
                                 <span id="othercategoryforeccd"></span>
+                                <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Dzongkhag:<span class="text-danger">*</span></label>
+                                <label class="mb-0">Dzongkhag:<span class="text-danger">*</span></label>
                                 <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
+                                </select> 
                                 <has-error :form="form" field="dzongkhag"></has-error>
-                            </div>
+                            </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Gewog:<span class="text-danger">*</span></label>
+                                <label class="mb-0">Gewog:<span class="text-danger">*</span></label>
                                 <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -226,51 +207,52 @@
                                 <has-error :form="form" field="gewog"></has-error>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Chiwog:<span class="text-danger">*</span></label>
+                                <label class="mb-0">Chiwog:<span class="text-danger">*</span></label>
                                 <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="chiwog"></has-error>
-                            </div>
+                            </div>                 
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Location Type:<span class="text-danger">*</span></label>
-                                <select name="locationCategory" v-model="form.location" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationCategory" class="form-control editable_fields" @change="remove_err('locationCategory')">
+                                <select name="locationType" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
-                                <has-error :form="form" field="proposedName"></has-error>
+                                <has-error :form="form" field="locationType"></has-error>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Geopolitically Located:</label>
-                                <br> 
-                                <label><input  type="radio" v-model="form.geoLocated" value="1" tabindex=""/> Yes</label>
-                                <label><input  type="radio" v-model="form.geoLocated" value="0"  tabindex=""/> No</label>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>SEN School:<span class="text-danger">*</span></label>
+                                <label class="mb-0">Geopolitically Located:</label>
                                 <br>
-                                <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
-                                <label><input  type="radio" v-model="form.senSchool" value="0"  tabindex=""/> No</label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
+                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
+                            </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Parent School:</label>
-                                <select name="category" id="parentSchool" class="form-control" v-model="form.parentSchool">
+                                <label class="mb-0">Sen School:<span class="text-danger">*</span></label>
+                                <br>
+                                <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                            </div>                  
+                        </div>
+                        <div class="form-group row" id="parentDetails" style="display:none">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
+                                <label class="mb-0">Parent School:</label>
+                                <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  select2">
                                     <option value="">--- Please Select ---</option>
-                                    <option value="1">Kabisa</option>
-                                </select>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select> 
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Co-located with Parent School:</label>
-                                <br> 
-                                <label><input type="radio" v-model="form.coLocated"  value="1" tabindex=""/> Yes</label>
-                                <label><input type="radio" v-model="form.coLocated"  value="0"  tabindex=""/> No</label>
-                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
+                                <label class="mb-0">Co-located with Parent School:</label>
+                                <br>
+                                <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
+                            </div>                   
                         </div>
+
                         <div id="privatedetails" style="display:none">
                             <div class="row pb-2">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -284,7 +266,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Full Name:<span class="text-danger">*</span></label>
-                                    <input type="text" v-model="form.fullName" class="form-control" id="fullName"/>
+                                    <input type="text" v-model="form.name" class="form-control" id="fullname"/>
                                 </div>
                             </div>
                             <div class="form-group row" >
@@ -294,10 +276,11 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Email:<span class="text-danger">*</span></label>
-                                    <input type="email" v-model="form.email" class="form-control" id="fullname"/>
+                                    <input type="email" v-model="form.email" class="form-control" id="email"/>
                                 </div>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Select classes and streams</label>
@@ -334,15 +317,32 @@ export default {
     data(){
         return{ 
             orgList:[],
-
-
-
+            org1_details:'',
+            org2_details:'',
+            next_tab:false,
             form: new form({
-                id: '',orgId1:'',orgId2:'',year:'',name:'',level:'',category:'1',dzongkhag:'',gewog:'',
-                chiwog:'',location:'',geoLocated:'0',senSchool:'0',parentSchool:'',coLocated:'0',
-                cid:'',fullName:'',phoneNo:'',email:'',class:[], stream:[]
+                id: '',
+                orgId1:'',
+                orgId2:'',
+                year:'',
+                proposedName:'',
+                level:'',
+                category:'1',
+                dzongkhag:'',
+                gewog:'',
+                chiwog:'',
+                locationType:'',
+                geoLocated:'0',
+                senSchool:'0',
+                parentSchool:'',
+                coLocated:'0',
+                cid:'',
+                name:'',
+                phoneNo:'',
+                email:'',
+                class:[],
+                stream:[]
             }),
-
             levelList:[],
             locationList:[],
             classList:[],
@@ -350,7 +350,6 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
-            
         } 
     },
     methods: {
@@ -363,14 +362,50 @@ export default {
                 this.orgList = response.data.data;
             });
         },
-        getOrgDetails(id){
-            let uri = '/organization/getOrgDetails/'+id;
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
+        getOrgDetails(id,fieldId){
+            let getdet=true;
+            if(fieldId=="orgId2" && id==this.form.orgId1){
+                Swal.fire({
+                    text: "You cannot select same school",
+                    icon: 'error',
+                    confirmButtonText: 'Ok!',
+                });
+                this.form.orgId2="";
+                this.next_tab=false;
+                this.org2_details='';
+                getdet=false;
+            }
+            if(fieldId=="orgId1" && id==this.form.orgId2){
+                Swal.fire({
+                    text: "Sorry! You cannot select same school",
+                    icon: 'error',
+                    confirmButtonText: 'OK!',
+                });
+                getdet=false;
+                this.next_tab=false;
+                this.org1_details='';
+                this.form.orgId1="";
+            }
+            if(getdet){
+                this.next_tab=true;
+                let uri = '/organization/loadCurrentOrgDetails/'+id;
+                axios.get(uri)
+                .then(response =>{
+                    if(fieldId=="orgId1"){
+                        this.org1_details=response.data.data;
+                        this.org1_details.village=response.data.data.village.data.name;
+                        this.org1_details.gewog=response.data.data.gewog.data.name; 
+                        this.org1_details.dzongkhag=response.data.data.dzongkhag.data.name;
+                    }
+                    if(fieldId=="orgId2"){
+                        this.org2_details=response.data.data;
+                        this.org2_details.village=response.data.data.village.data.name;
+                        this.org2_details.gewog=response.data.data.gewog.data.name; 
+                        this.org2_details.dzongkhag=response.data.data.dzongkhag.data.name;
+                    }
+                });
+            }
         },
-
         showprivatedetails(type){
             if(type=='private'){
                 $('#privatedetails').show();
@@ -378,6 +413,28 @@ export default {
             else{
                 $('#privatedetails').hide();
             }
+        },
+        show_parent_school_details(param){
+            if(param){
+                $('#parentDetails').show();
+            }
+            else{
+                $('#parentDetails').hide();
+            }
+        } ,
+        loadProprietorDetails(){
+            axios.get('organization/loadProprietorDetails')
+            .then((response) => {  
+
+                let data=response.data.data[0];
+                this.form.cid           =   data.cid;
+                this.form.name          =   data.fullName;
+                this.form.phoneNo       =   data.phoneNo;
+                this.form.email         =   data.email;
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
         },
 
         /**
@@ -435,6 +492,12 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        }, 
 
         /**
          * method to get gewog list
@@ -474,9 +537,21 @@ export default {
         },
 
         async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
             if(id=="orgId1"){
                 this.form.orgId1 = $('#orgId1').val();
-                this.getOrgDetails(this.form.orgId1);
+                this.getOrgDetails(this.form.orgId1,''+id);
+            }
+            if(id=="orgId2"){
+                this.form.orgId2 = $('#orgId2').val();
+                this.getOrgDetails(this.form.orgId2,''+id);
+            }
+            if(id=="level"){
+                this.form.level=$('#level').val();
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag = $('#dzongkhag').val();
@@ -489,6 +564,13 @@ export default {
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
             }
+            if(id=="locationType"){
+                this.form.locationType=$('#locationType').val();
+            }
+            if(id=="parentSchool"){
+                this.form.parentSchool=$('#parentSchool').val();
+            }
+            
         },
 
         /**
@@ -497,7 +579,7 @@ export default {
         shownexttab(nextclass){ 
             if(nextclass=="final-tab"){ 
                 Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
+                    text: "Are you sure you wish to submit this details for approval ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -506,31 +588,73 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.form.post('organization/saveMerger')
-                        .then(() => {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Establishment is saved successfully'
-                            })
-                    })
-                        .catch(() => {
-                            console.log("Error......")
-                     })
+                        .then((response) => {
+                            if(response!=""){
+                                let message="Applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'restr_acknowledgement',params: {data:message}});
+                                Toast.fire({  
+                                    icon: 'success',
+                                    title: 'Merger details has been submitted for further action.'
+                                }); 
+                            } 
+                        })
+                        .catch((err) => {
+                            console.log("Error:"+err);
+                            this.applyselect2();
+                        })
                     }
                 });
             }
             else{
-                
-                this.change_tab(nextclass);
+                if(this.form.orgId2!="" && this.form.orgId1!=""){
+                    this.change_tab(nextclass);
+                }
+                else{
+                    Swal.fire({
+                        text: "Form is not completely filled up. Please complete them all",
+                        icon: 'error',
+                        confirmButtonText: 'OK!',
+                    });
+                }
             }
         },
         change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
+            if(this.next_tab){
+                $('#tabhead >li >a').removeClass('active');
+                $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').addClass('active');
+                $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').removeClass('disabled');
+                $('.tab-content-details').hide();
+                $('#'+nextclass).show().removeClass('fade');
+            }
+            else{
+                Swal.fire({
+                    text: "Form is not completely filled up. Please complete them all",
+                    icon: 'error',
+                    confirmButtonText: 'OK!',
+                });
+            }
+        },
+        applyselect2(){
+            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
+                $('#level').addClass('select2-hidden-accessible');
+            }
+            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+                $('#dzongkhag').addClass('select2-hidden-accessible');
+            }
+            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
+                $('#gewog').addClass('select2-hidden-accessible');
+            }
+            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+                $('#chiwog').addClass('select2-hidden-accessible');
+            }
+            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+                $('#locationType').addClass('select2-hidden-accessible');
+            }
+            if(!$('#parentSchool').attr('class').includes('select2-hidden-accessible')){
+                $('#parentSchool').addClass('select2-hidden-accessible');
+            }
         },
     },
     

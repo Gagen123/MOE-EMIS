@@ -66,6 +66,7 @@ trait AuthUser
         $works=Session::get('role_workflow');
         $w_status="";
         foreach(json_decode($works) as $i=> $work){
+            //$w_status.=$work->screen_id.'; ';
             if($work->screen_id==$screenId){
                 $w_status=$work->workflow_status;
             }
@@ -79,8 +80,10 @@ trait AuthUser
         $screen_id=0;
         foreach(json_decode($works) as $i=> $work){
             if (strpos(strtolower($work->process_name), $param) !== false) {
-                $w_status= $work->Sequence;
-                $screen_id=$work->screen_id;
+                if($work->Sequence!=1){
+                    $w_status= $work->Sequence;
+                    $screen_id=$work->screen_id;
+                }
             }
         }
         return [

@@ -254,12 +254,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     
         $router->group(['prefix' => 'bifurcation'], function () use ($router) {
             $router->post('/saveBifurcation', 'restructuring\BifurcationController@saveBifurcation');
-            $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
+            $router->get('/loadbifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadbifurcationForVerification']);
+            // $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
     
         });
     
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
+            $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
     
         });
     
