@@ -134,10 +134,6 @@ class EstablishmentController extends Controller
                 'isSenSchool'                   =>  $request['senSchool'],
                 'parentSchoolId'                =>  $request['parentSchool'],
                 'isColocated'                   =>  $request['coLocatedParent'],
-                'cid'                           =>  $request['cid'],
-                'fullName'                      =>  $request['name'],
-                'phoneNo'                       =>  $request['phoneNo'],
-                'email'                         =>  $request['email'],
                 'status'                        =>  "Pending",
                 'applicationNo'                 =>  $application_no,
                 'service'                       =>  "New Establishment",
@@ -421,5 +417,10 @@ class EstablishmentController extends Controller
         $response_data=OrganizationDetails::all();
         return $this->successResponse($response_data);
     }
+    public function getOrgList($dzo_id=""){
+        $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
+        return $this->successResponse($response_data);
+    }
+    
     
 }

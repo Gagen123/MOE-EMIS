@@ -21,6 +21,12 @@ class RestructuringController extends Controller
     public $service_name="Change Basic Details";
     public $service_name_closure="Closure";
 
+    public $merge_database_name="organization_db";
+    public $merge_table_name="application_details";
+    public $merge_service_name="Merger";
+    public $bif_table_name="bifurcations";
+    public $bif_service_name="Bifurcation";
+
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
@@ -179,53 +185,119 @@ class RestructuringController extends Controller
 
     public function saveMerger(Request $request){
         $rules = [
-            'name'              =>  'required',
+            'proposedName'      =>  'required',
             'level'             =>  'required',
             'category'          =>  'required',
             'dzongkhag'         =>  'required',
             'gewog'             =>  'required',
             'chiwog'            =>  'required',
-            'location'          =>  'required',
+            'locationType'      =>  'required',
             'senSchool'         =>  'required',
         ];
         $customMessages = [
-            'name.required'         => 'Name is required',
+            'proposedName.required' =>  'Name is required',
             'level.required'        => 'Level is required',
             'category.required'     => 'Category is required',
             'dzongkhag.required'    => 'Dzongkhag is required',
             'gewog.required'        => 'Gewog is required',
             'chiwog.required'       => 'Chiwog is required',
-            'location.required'     => 'Location Type is required',
+            'locationType.required' => 'Location Type is required',
             'senSchool.required'    => 'SEN School is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $merger =[
+            'orgId1'                   =>       $request['orgId1'],
+            'orgId2'                   =>       $request['orgId2'],
+            'proposedName'             =>       $request['proposedName'],
+            'cid'                      =>       $request['cid'],
             'name'                     =>       $request['name'],
+            'phoneNo'                  =>       $request['phoneNo'],
+            'email'                    =>       $request['email'],
             'category'                 =>       $request['category'],
             'level'                    =>       $request['level'],
             'dzongkhag'                =>       $request['dzongkhag'],
             'gewog'                    =>       $request['gewog'],
             'chiwog'                   =>       $request['chiwog'],
-            'location'                 =>       $request['location'],
+            'location'                 =>       $request['locationType'],
             'geoLocated'               =>       $request['geoLocated'],
             'senSchool'                =>       $request['senSchool'],
             'parentSchool'             =>       $request['parentSchool'],
             'coLocated'                =>       $request['coLocated'],
-            'orgId1'                   =>       $request['orgId1'],
-            'orgId2'                   =>       $request['orgId2'],
             'year'                     =>       $request['year'],
             'class'                    =>       $request['class'],
             'stream'                   =>       $request['stream'],
             'id'                       =>       $request['id'],
+            'user_id'                  =>  $this->userId() 
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/merger/saveMerger', $merger);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/merger/saveMerger', $merger);
+        
+        $workflowdet=$this->getsubmitterStatus('merge');
+        $workflow_data=[
+            'db_name'           =>$this->merge_database_name,
+            'table_name'        =>$this->merge_table_name,
+            'service_name'      =>$this->merge_service_name,
+            'application_number'=>json_decode($response_data)->data->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$workflowdet['status'],
+            'remarks'           =>null,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $response_data;
     }
+
+    public function loadMergerForVerification($appNo="",$type=""){
+        $update_data=[
+            'applicationNo'     =>  $appNo,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        //d0bb3006-8940-4dbb-ae5f-497574388028
+        $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/merger/loadMergerForVerification/'.$appNo));
+        $loadOrganizationDetails->app_stage=$workflowstatus;
+        return json_encode($loadOrganizationDetails);
+    }
+    public function updateMergerApplication(Request $request){
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('merge');
+        $work_status=$workflowdet['status'];
+        $org_status='Under Process';
+        if($request->actiontype=="reject"){
+            $work_status=0;
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
+        }
+        $workflow_data=[
+            'db_name'           =>$this->merge_database_name,
+            'table_name'        =>$this->merge_table_name,
+            'service_name'      =>$this->merge_service_name,
+            'application_number'=>$request->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$work_status,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $estd =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->remarks,
+            'user_id'                      =>   $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
+        return $work_response_data;
+    }
+    
+    
 
     public function saveClosure(Request $request){
         $rules = [
@@ -328,39 +400,102 @@ class RestructuringController extends Controller
             'senSchool'                 =>  $request['senSchool'],
             'parentSchool'              =>  $request['parentSchool'],
             'coLocated'                 =>  $request['coLocated'],
-            'name1'                     =>  $request['name'],
-            'level1'                    =>  $request['level'],
-            'category1'                 =>  $request['category'],
-            'dzongkhag1'                =>  $request['dzongkhag'],
-            'gewog1'                    =>  $request['gewog'],
-            'chiwog1'                   =>  $request['chiwog'],
-            'location1'                 =>  $request['location'],
-            'geoLocated1'               =>  $request['geoLocated'],
-            'senSchool1'                =>  $request['senSchool'],
-            'parentSchool1'             =>  $request['parentSchool'],
-            'coLocated1'                =>  $request['coLocated'],
             'class'                     =>  $request['class'],
             'stream'                    =>  $request['stream'],
+
+            'name1'                     =>  $request['name1'],
+            'level1'                    =>  $request['level1'],
+            'category1'                 =>  $request['category1'],
+            'dzongkhag1'                =>  $request['dzongkhag1'],
+            'gewog1'                    =>  $request['gewog1'],
+            'chiwog1'                   =>  $request['chiwog1'],
+            'location1'                 =>  $request['location1'],
+            'geoLocated1'               =>  $request['geoLocated1'],
+            'senSchool1'                =>  $request['senSchool1'],
+            'parentSchool1'             =>  $request['parentSchool1'],
+            'coLocated1'                =>  $request['coLocated1'],
             'class1'                    =>  $request['class1'],
             'stream1'                   =>  $request['stream1'],
-            'class2'                    =>  $request['class2'],
-            'stream2'                   =>  $request['stream2'],
-            'id'                        =>  $request['id']
+
+            'parent_id'                 =>  $request['parent_id']
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/bifurcation/saveBifurcation', $bifurcation);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/bifurcation/saveBifurcation', $bifurcation);
+        // dd($response_data);
+        $workflowdet=$this->getsubmitterStatus('merge');
+        $workflow_data=[
+            'db_name'           =>$this->merge_database_name,
+            'table_name'        =>$this->bif_table_name,
+            'service_name'      =>$this->bif_service_name,
+            'application_number'=>json_decode($response_data)->data->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$workflowdet['status'],
+            'remarks'           =>null,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $response_data;
     }
 
+    public function loadbifurcationForVerification($appNo="",$type=""){
+        $update_data=[
+            'applicationNo'     =>  $appNo,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/bifurcation/loadbifurcationForVerification/'.$appNo));
+        // dd($loadOrganizationDetails);
+        $loadOrganizationDetails->app_stage=$workflowstatus;
+        return json_encode($loadOrganizationDetails);
+    }
+
+    public function updateBifurcationApplication(Request $request){
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('bifurca');
+        $work_status=$workflowdet['status'];
+        $org_status='Under Process';
+        if($request->actiontype=="reject"){
+            $work_status=0;
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
+        }
+        $workflow_data=[
+            'db_name'           =>$this->merge_database_name,
+            'table_name'        =>$this->bif_table_name,
+            'service_name'      =>$this->bif_service_name,
+            'application_number'=>$request->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$work_status,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $estd =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->remarks,
+            'user_id'                      =>   $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
+        return $work_response_data;
+    }
     public function loadOrganizationDetails(){
         $loadBifurcationDetails = $this->apiService->listData('emis/organization/bifurcation/loadBifurcation');
         return $loadBifurcationDetails;
     }
-
+    
+    public function getOrgList(){
+        $loadBifurcationDetails = $this->apiService->listData('emis/organization/getOrgList/'.$this->getUserDzoId());
+        return $loadBifurcationDetails;
+    }
     
     
 }

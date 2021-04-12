@@ -16,6 +16,7 @@ class CreateEstablishmentClassStreamsTable extends Migration
         Schema::create('application_class_streams', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('applicationNo');
+            $table->char('parent_for',36)->nullable(true)->comment('use for bifurcation');
             $table->char('classId',36);
             $table->char('streamId',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);

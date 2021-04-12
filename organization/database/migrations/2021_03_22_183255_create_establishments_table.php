@@ -29,9 +29,14 @@ class CreateEstablishmentsTable extends Migration
             $table->string('status')->nullable(true)->comment('Pending->Submitted->Under Process or Rejectd->Approved ->Registered');
             $table->string('applicationNo');
             $table->string('service');
+<<<<<<< HEAD
             $table->char('organizationId',36)->nullable(true);
             $table->string('reason')->nullable(true);
             $table->string('remark')->nullable(true);
+=======
+            $table->char('oldOrganizationId1',36)->nullable(true);
+            $table->char('oldOrganizationId2',36)->nullable(true);
+>>>>>>> 52030dcfac69d7db3f80ec5ad237136022ec8a6e
             $table->string('year')->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);

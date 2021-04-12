@@ -15,8 +15,11 @@ use App\Models\OrganizationClassStream;
 use App\Models\ApplicationSequence;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
+<<<<<<< HEAD
 use App\Models\Masters\Classes;
 use App\Models\Masters\Stream;
+=======
+>>>>>>> 52030dcfac69d7db3f80ec5ad237136022ec8a6e
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller
@@ -268,7 +271,10 @@ class ChangeBasicDetailsController extends Controller
      * method to load curent organization details
      */
     public function loadCurrentOrgDetails($orgId=""){
-        return $this->successResponse(OrganizationDetails::where('id',$orgId)->first());
+        $response_data=OrganizationDetails::where('id',$orgId)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        return $this->successResponse($response_data);
     }
 
     /**
