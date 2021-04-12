@@ -6,6 +6,12 @@
                 </div>
                 <div class="card-body" >
                     <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Application Number:</label>
+                                <span class="text-indigo-600">{{form.applicationNo}}</span>
+                            </div>
+                        </div>
+                    <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Code:</label>
                             <span class="text-indigo-600" id="scode">{{form.code}}</span>
@@ -133,12 +139,34 @@ export default {
             form: new form({
                 id: '',code:'',name:'',category:'1',level:'',dzongkhag:'',gewog:'',chiwog:'',
                 locationType:'',geoLocated:'',senSchool:'',reason:'',remark:'',yourRemark:'',
-                cid:'',name:'',phoneNo:'',email:'',parentSchool:'',coLocatedParent:'0',
+                cid:'',name:'',phoneNo:'',email:'',parentSchool:'',coLocatedParent:'0',applicationNo:''
             }), 
         }
     },
 
     methods:{
+
+        /**
+         * method to load previous org details
+         */
+        loadCClosureApplicationDetails(appId,type){
+            axios.get('organization/loadClosureApplicationDetails/'+appId+'/'+type)
+            .then((response) => {  
+                let data=response.data.data;
+                this.appicationDetailsForm.applicationNo        =   data.applicationNo;
+                
+                if(response.data.app_stage.toLowerCase().includes('verifi')){
+                    $('#verifyId').show();
+                }
+                if(response.data.app_stage.toLowerCase().includes('approve')){
+                    $('#approveId').show();
+                }
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+
         /**
          * method to show next tab and update application accordingly
          */
@@ -185,6 +213,11 @@ export default {
                 }
             }
         },
+    },
+
+    mounted(){
+        this.form.applicationNo=this.$route.params.data.application_number;
+        this.loadCClosureApplicationDetails(this.$route.params.data.application_number,this.$route.params.type);
     }
 }
 </script>

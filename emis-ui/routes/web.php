@@ -183,6 +183,7 @@ Route::prefix('organization')->group(function () {
     // closure route
     Route::post('/saveClosure', [App\Http\Controllers\organization\RestructuringController::class, 'saveClosure'])->name('saveClosure');
     Route::get('/loadClosureList', [App\Http\Controllers\organization\RestructuringController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
+    Route::get('/loadClosureApplicationDetails/{appNo}/{type}', [App\Http\Controllers\organization\RestructuringController::class, 'loadClosureApplicationDetails'])->name('loadClosureApplicationDetails');
 
     // bifurcation route
     Route::post('/saveBifurcation', [App\Http\Controllers\organization\RestructuringController::class, 'saveBifurcation'])->name('saveBifurcation');

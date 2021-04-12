@@ -350,6 +350,21 @@ class RestructuringController extends Controller
         return $work_response_data;
     }
 
+    public function loadClosureApplicationDetails($appNo="",$type=""){
+        $update_data=[
+            'applicationNo'     =>  $appNo,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+        
+        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        $loadOrganizationDetails = $this->apiService->listData('emis/organization/closure/loadClosureApplicationDetails/'.$appNo);
+        dd($loadOrganizationDetails);
+        $loadOrganizationDetails->app_stage=$workflowstatus;
+        return json_encode($loadOrganizationDetails);
+    }
+
     public function saveBifurcation(Request $request){
         $rules = [
             'name'              =>  'required',

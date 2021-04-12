@@ -2,6 +2,7 @@
     <div>
          <form class="bootbox-form" id="closureId">
             <div class="form-group row">
+                <input type="hidden" v-model="form.organizationId"/>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Code:</label>
                     <span class="text-blue text-bold" id="code">{{form.code}}</span>
@@ -74,7 +75,7 @@ export default {
     data(){
         return{
             form: new form({
-                code:'',name:'',category:'',level:'',dzongkhag:'',gewog:'',chiwog:'',location:'',
+                code:'',organizationId:'',name:'',category:'',level:'',dzongkhag:'',gewog:'',chiwog:'',location:'',
                 geoLocated:'',senSchool:'',reason:'',remark:'',status:'submitted'
             })
         }
@@ -120,13 +121,14 @@ export default {
         this.form.code=this.$route.params.data.code;
         this.form.name=this.$route.params.data.name;
         this.form.category=this.$route.params.data.category;
-        this.form.level=this.$route.params.data.levelId;
+        this.form.level=this.$route.params.data.level;
         this.form.dzongkhag=this.$route.params.data.dzongkhagId;
         this.form.gewog=this.$route.params.data.gewogId;
         this.form.chiwog=this.$route.params.data.chiwogId;
         this.form.location=this.$route.params.data.locationId;
         this.form.geoLocated=this.$route.params.data.isGeopoliticallyLocated;
         this.form.senSchool=this.$route.params.data.isSenSchool;
+        this.form.organizationId=this.$route.params.data.id;
     }
 }
 </script>

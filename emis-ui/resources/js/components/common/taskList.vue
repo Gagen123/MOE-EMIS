@@ -103,6 +103,10 @@
             if(data.service_name.includes('Change Basic Details')){
                 this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
             }
+            if(data.service_name.includes('Closure')){
+                this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
+            }
+        
         }
     },
     mounted(){
