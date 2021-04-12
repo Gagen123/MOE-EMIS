@@ -80,13 +80,13 @@ class StaffController extends Controller{
             'currier_stage'     =>  $request->currier_stage,
             'emp_file_code'     =>  $request->emp_file_code,
             'status'            =>  $request->status,
-            'user_id'           =>$this->user_id() 
+            'user_id'           =>$this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/staff/savePersonalDetails', $personal_details);
         return $response_data;
     }
     public function loaddraftpersonalDetails(Request $request,$type=""){
-        $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$type.'/'.$this->user_id());
+        $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$type.'/'.$this->userId());
         return $response_data;
     }
     public function loadpersonalDetails($id=""){
@@ -131,7 +131,7 @@ class StaffController extends Controller{
             'startdate'                         =>  $request->startdate,
             'enddate'                           =>  $request->enddate,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
         ];
         // dd($qualification_details);
         $response_data= $this->apiService->createData('emis/staff/savequalificationDetails', $qualification_details);
@@ -139,7 +139,7 @@ class StaffController extends Controller{
     }
     
     public function loadQualification($staff_id=""){
-        $response_data= $this->apiService->listData('emis/staff/loadQualification/'.$staff_id.'/'.$this->user_id());
+        $response_data= $this->apiService->listData('emis/staff/loadQualification/'.$staff_id.'/'.$this->userId());
         return $response_data;
     }
     public function loadStaffQualification($staff_id=""){
@@ -182,7 +182,7 @@ class StaffController extends Controller{
             'nomi_relation'                     =>  $request->nomi_relation,
             'nomi_percentage'                   =>  $request->nomi_percentage,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
         ];
         // dd($personal_details);
         $response_data= $this->apiService->createData('emis/staff/savenominationDetails', $nomination_details);
@@ -190,7 +190,7 @@ class StaffController extends Controller{
     }
     
     public function loadNominations($staff_id=""){
-        $response_data= $this->apiService->listData('emis/staff/loadNominations/'.$staff_id.'/'.$this->user_id());
+        $response_data= $this->apiService->listData('emis/staff/loadNominations/'.$staff_id.'/'.$this->userId());
         return $response_data;
     }
     public function loadStaffNomination($staff_id=""){
@@ -203,7 +203,7 @@ class StaffController extends Controller{
         $staff_details =[
             'personal_id'                       =>  $request->personal_id,
             'nomination_id'                     =>  $request->nomination_id,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/staff/updatefinalstaffDetails', $staff_details);
         return $response_data;
@@ -211,7 +211,7 @@ class StaffController extends Controller{
     public function updatefinalPrivatestaffDetails(Request $request){
         $staff_details =[
             'personal_id'                       =>  $request->personal_id,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/staff/updatefinalPrivatestaffDetails', $staff_details);
         return $response_data;
@@ -241,7 +241,7 @@ class StaffController extends Controller{
             'action_type'                       =>  $request->action_type,
             'remarks'                           =>  $request->remarks,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->user_id() 
+            'user_id'                           =>  $this->userId() 
         ];
         // dd($personal_details);
         $response_data= $this->apiService->createData('emis/staff/saveTransferWindow', $transfer_window_details);

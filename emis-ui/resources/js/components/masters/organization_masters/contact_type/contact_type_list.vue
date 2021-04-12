@@ -34,7 +34,7 @@ export default {
     },
 
     methods:{
-        loadContactList(uri = 'masters/loadDisaster'){
+        loadContactList(uri = 'masters/loadContactType'){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -36,7 +36,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <input type="hidden" v-model="form.type" class="form-control"/>
                                 <tr id="record1" v-for='(kit, index) in form.kitchen_status' :key="index">
                                     <td>
                                         <input type="text" class="form-control" v-model="kit.question" :id="'question'+(index+1)" readonly>
@@ -225,7 +224,7 @@ export default {
                     {question:'Proper roofing without leakages?',value:'1'},
                     {question:'Waste bins with proper lid is in place?',value:'1'},
                 ],
-                type: '',status:'pending'
+                type: '',status:'submitted'
             }),
         }
     },
@@ -242,7 +241,16 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-
+                        this.form3.post('organization/saveDinningHall')
+                        .then((response) => { 
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data saved Successfully'
+                            });
+                        })
+                        .catch((error) => {  
+                            console.log("Error: "+error)
+                        });
                     }
                 });
             }else {
@@ -255,13 +263,30 @@ export default {
                         });
                     })
                     .catch((error) => {  
-                        this.change_tab('application-tab');
                         console.log("Error: "+error)
                     });
                 }else if(nextclass=="service1-tab"){
-
+                    this.form1.post('organization/saveFoodStoreStatus')
+                    .then((response) => { 
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                    })
+                    .catch((error) => {  
+                        console.log("Error: "+error)
+                    });
                 }else if(nextclass=="undertaking-tab"){
-
+                    this.form2.post('organization/saveUtensilKitchen')
+                    .then((response) => { 
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                    })
+                    .catch((error) => {  
+                        console.log("Error: "+error)
+                    });
                 }   
                 this.change_tab(nextclass);
             }
@@ -281,30 +306,65 @@ export default {
         },
 
         /**
-         * method to load organization details
+         * method to load kitchen status details
          */
          loadKitchenStatus(){
             axios.get('organization/loadKitchenStatus')
             .then((response) => {  
                 let data=response.data.data;
+                if(data.length>0){
+                    this.form.kitchen_status=[];
+                    for(let i=0;i<data.length;i++){
+                        this.form.kitchen_status.push(
+                            {question:data[i].description,value:data[i].value},
+                        );
+                    }
+                }
                 
-                this.form.kitchen_status.push(
-                {question:'Safe water connecion inside the kitchen?',value:data.value[0]},
-                // {question:'Continuous water supply throughout the year in the kitchen?',value:'1'},
-                // {question:'Separate dish washing space in the kitchen?',value:'1'},
-                // {question:'wash basin with water connection for handwashing?',value:'1'},
-                // {question:'Proper functioning smoke outlet/chimney?',value:'1'},
-                // {question:'Adequate shelves in the kitchen to store utensils neatly?',value:'1'},
-                // {question:'Concrete floor?',value:'1'},
-                // {question:'Concrete walls?',value:'1'},
-                // {question:'Proper closed ceiling?',value:'1'},
-                // {question:'Windows with proper closures?',value:'1'},
-                // {question:'Doors with proper closures?',value:'1'},
-                // {question:'Adequate ventilations?',value:'1'},
-                // {question:'Functioning drainage system inside and outside of the kitchen?',value:'1'},
-                // {question:'Changing room?',value:'1'},
-        );
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
 
+        /**
+         * method to load food store status details
+         */
+         loadFoodStoreStatus(){
+            axios.get('organization/loadFoodStoreStatus')
+            .then((response) => {  
+                let data=response.data.data;
+                if(data.length>0){
+                    this.form1.food_status=[];
+                    for(let i=0;i<data.length;i++){
+                        this.form1.food_status.push(
+                            {question:data[i].description,value:data[i].value},
+                        );
+                    }
+                }
+                
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+
+        /**
+         * method to load utensil kitchen details
+         */
+         loadUtensilKitchenStatus(){
+            axios.get('organization/loadUtensilKitchenStatus')
+            .then((response) => {  
+                let data=response.data.data;
+                if(data.length>0){
+                    this.form2.equipment_kitchen=[];
+                    for(let i=0;i<data.length;i++){
+                        this.form2.equipment_kitchen.push(
+                            {question:data[i].description,value:data[i].value},
+                        );
+                    }
+                }
+                
             })
             .catch((error) => {  
                 console.log("Error......"+error);
@@ -314,6 +374,8 @@ export default {
     },
     mounted() {
         this.loadKitchenStatus();
+        this.loadFoodStoreStatus();
+        this.loadUtensilKitchenStatus();
     },
 }
 </script>

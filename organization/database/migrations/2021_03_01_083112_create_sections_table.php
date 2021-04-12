@@ -15,8 +15,8 @@ class CreateSectionsTable extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->tinyInteger('organizationId');
-            $table->tinyInteger('classId');
+            $table->char('organizationId',36);
+            $table->char('classId',36);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

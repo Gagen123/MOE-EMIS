@@ -33,7 +33,7 @@ class StudentMasterController extends Controller{
             'status'         =>  $request->status,
             'actiontype'     =>  $request->action_type,
             'recordtype'     =>  $request->record_type, 
-            'user_id'        => $this->user_id() 
+            'user_id'        => $this->userId() 
         ];
 
         if($request->record_type == 'student_awards'){

@@ -27,7 +27,7 @@
                                 </tr>
                             </thead>
                             <tbody id="table_data_populate">
-                                <tr id="record1" v-for='(user, index) in dewormingByClass' :key="index">
+                                <tr id="record1" v-for='(stdClass, index) in dewormingByClass' :key="index">
                                     <td>
                                         <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" class="form-control select2" name="std_class" id="std_class">
                                             <option v-for="(item, index) in classList" :key="index" v-bind:value="item.std_class">{{ item.class }}</option>

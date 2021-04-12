@@ -44,7 +44,8 @@ class LocationsController extends Controller
 
         $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');
 
-        foreach ($disasters as $dis){
+        if($disasters != null){
+            foreach ($disasters as $dis){
                 $disasterRisk = [
                     'locationId'        => $locationId[0],
                     'disasterTypeId'    => $dis,
@@ -53,8 +54,8 @@ class LocationsController extends Controller
                     
                 ];
                 $loc = LocationDisasterRisk::create($disasterRisk);
+            }
         }
-
         return $this->successResponse($loc, Response::HTTP_CREATED);
     }
 

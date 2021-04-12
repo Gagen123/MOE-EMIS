@@ -7,6 +7,7 @@ use App\Traits\ServiceHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\AuthUser;
+use Session;
 
 class CommonController extends Controller{
     use ServiceHelper;
@@ -44,4 +45,38 @@ class CommonController extends Controller{
         // dd($response_data);
         return $response_data;
     }
+    
+    public function getApplicationDetials($applicationId=""){
+        return $this->apiService->getListData('emis/common/getApplicationDetials/'.$applicationId);
+    }
+    public function getTaskList($type=""){
+        $work_status=$this->getVerificationApprovalWorkStatus();
+        // dd($work_status);
+        $param="";
+        foreach($work_status as $work){
+            $param.=$work.'OUTSEP';
+        }
+        // dd($param);
+        $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param);
+        // dd($response_data);
+        return $response_data;
+    }
+    
+    public function getSessionDetail($applicationId=""){
+        if(Session::get('User_Details')!=""){
+            return ['data' => Session::get('User_Details')];
+        }
+        else{
+            $redirection_url=config('services.login.base_uri').'logout';
+            return redirect()->away($redirection_url);
+        }
+    }
+
+    public function getDzoNameById($id=""){
+        return $this->apiService->getListData('emis/common/getDzoNameById/'.$id);
+    }
+    public function getGewogNameById($id=""){
+        return $this->apiService->getListData('emis/common/getGewogNameById/'.$id);
+    }
+    
 }

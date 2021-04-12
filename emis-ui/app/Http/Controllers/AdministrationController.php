@@ -57,7 +57,7 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'            =>  $request['id'],
             'record_type'   =>$request['record_type'],
-            'user_id'       =>$this->user_id() 
+            'user_id'       =>$this->userId() 
         ];
         // dd($data);
         try{
@@ -129,7 +129,7 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
             'record_type'=>$request['record_type'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($data);
         $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
@@ -163,7 +163,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/location/saveLocation', $loc);
@@ -194,7 +194,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($dis);
         try{
@@ -227,7 +227,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
@@ -255,7 +255,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
@@ -284,7 +284,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
         return $response_data;
@@ -311,7 +311,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
@@ -338,7 +338,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
@@ -365,7 +365,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
@@ -392,7 +392,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
         return $response_data;
@@ -423,7 +423,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
         return $response_data;
@@ -459,7 +459,7 @@ class AdministrationController extends Controller{
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
         return $response_data;
@@ -480,7 +480,7 @@ class AdministrationController extends Controller{
             'className'  =>  $request['className'],
             'status'  =>  $request['status'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->user_id()
+            'user_id'=>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
@@ -516,7 +516,7 @@ class AdministrationController extends Controller{
             'streamName'    =>  $request['streamName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/stream/saveStream', $stream);
         return $response_data;
@@ -546,7 +546,7 @@ class AdministrationController extends Controller{
             'sourceName'    =>  $request['sourceName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         // dd($dis);
         try{
@@ -577,7 +577,7 @@ class AdministrationController extends Controller{
             'supplyName'    =>  $request['supplyName'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->user_id()
+            'user_id'       =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/electricitySupply/saveElectricitySupply', $source);
@@ -591,6 +591,129 @@ class AdministrationController extends Controller{
     public function loadElectricitySupply(){
         $loadElectricitySupply = $this->apiService->listData('emis/masters/electricitySupply/loadElectricitySupply');
         return $loadElectricitySupply;
+    }
+
+    public function saveRoadType(Request $request){
+        $rules = [
+            'roadType'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'roadType.required' => 'Road Type is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $source =[
+            'roadType'    =>  $request['roadType'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->userId()
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadRoadType(){
+        $loadRoadType = $this->apiService->listData('emis/masters/roadType/loadRoadType');
+        return $loadRoadType;
+    }
+
+    public function saveServiceProvider(Request $request){
+        $rules = [
+            'serviceType'  =>  'required',
+            'serviceName'  =>  'required',
+            'status'        =>  'required',
+        ];
+        $customMessages = [
+            'serviceType.required' => 'Service Type is required',
+            'serviceName.required' => 'Service Name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $source =[
+            'serviceType'    =>  $request['serviceType'],
+            'serviceName'    =>  $request['serviceName'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->userId()
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadServiceProvider(){
+        $loadServiceProvider = $this->apiService->listData('emis/masters/serviceProvider/loadServiceProvider');
+        return $loadServiceProvider;
+    }
+
+    public function saveStructureDesigner(Request $request){
+        $rules = [
+            'designerName'  =>  'required',
+            'status'        =>  'required',
+        ];
+        $customMessages = [
+            'designerName.required' => 'Designer Name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $source =[
+            'designerName'    =>  $request['designerName'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->userId()
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadStructureDesigner(){
+        $loadStructureDesigner = $this->apiService->listData('emis/masters/structureDesigner/loadStructureDesigner');
+        return $loadStructureDesigner;
+    }
+
+    public function saveContactType(Request $request){
+        $rules = [
+            'contactName'  =>  'required',
+            'status'        =>  'required',
+        ];
+        $customMessages = [
+            'contactName.required' => 'Contact Name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $source =[
+            'contactName'    =>  $request['contactName'],
+            'status'        =>  $request['status'],
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->userId()
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadContactType(){
+        $loadContactType = $this->apiService->listData('emis/masters/contactType/loadContactType');
+        return $loadContactType;
     }
 
     public function saveStudentHealth(Request $request){

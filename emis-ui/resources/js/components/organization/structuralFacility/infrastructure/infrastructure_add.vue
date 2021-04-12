@@ -12,14 +12,14 @@
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Sub Category</label> 
+                        <label class="">Sub Category:<span class="text-danger">*</span></label> 
                         <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Structure No./Name:<span class="text-danger">*</span></label> 
+                        <label class="">Structure No:</label> 
                         <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
                     </div>
                 </div>
@@ -54,12 +54,9 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Designed by</label>
-                        <select name="design" id="design" class="form-control editable_fields" v-model="form.design">
+                        <select name="design" id="design" class="form-control" v-model="form.design">
                             <option value="">--- Please Select ---</option>
-                            <option value="1">SPPD</option>
-                            <option value="2">Dzongkhag</option>
-                            <option value="3">Thromde</option>
-                            <option value="4">Others</option>
+                            <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
                 </div>
@@ -79,7 +76,7 @@
                             <thead>
                                 <tr>
                                     <th>Facility</th>
-                                    <th>Type</th>
+                                    <!-- <th>Type</th> -->
                                     <th>Facility No./Name</th>
                                     <th>Capacity</th>
                                     <th>Total number of Facility</th>
@@ -95,13 +92,7 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    <td>                                
-                                        <select name="type" id="type" class="form-control editable_fields" v-model="user.type">
-                                            <option value="">--- Please Select ---</option>
-                                            <!-- <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option> -->
-                                            <option value="1">Type 1</option>
-                                        </select>
-                                    </td>
+                                    
                                     <td>                                
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
                                     </td>
@@ -149,6 +140,7 @@ export default {
             categoryList:[],
             subCategortList:[],
             facilityList:[],
+            designerList:[],
             users: [],
             form: new form({
                 id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '',
@@ -176,7 +168,7 @@ export default {
                 this.form.design='';
             }
             if(type=="save"){
-                this.form.post('/organization/saveInfrastructure',this.form)
+                    this.form.post('/organization/saveInfrastructure',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -224,13 +216,24 @@ export default {
         },
 
         /**
+         * method to get category in dropdown
+         */
+        getDesignerDropdown(uri = '/organization/getDesignerDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.designerList = data;
+            });
+        },
+
+        /**
          * method to add more fields
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',
-                                  noOfFacility:'',accessibleDisabled:'',
-                                  internetConnection:''})    
+            this.form.users.push({
+                facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',
+                accessibleDisabled:'',internetConnection:''})    
         }, 
         /**
          * method to remove fields
@@ -245,6 +248,7 @@ export default {
      mounted() { 
         this.getCategoryDropdown();
         this.getFacilityDropdown();
+        this.getDesignerDropdown();
     }
 }
 </script>

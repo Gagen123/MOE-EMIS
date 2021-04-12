@@ -4,63 +4,59 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Code:</label>
-                    <input type="text" id="name" class="form-control" v-model="form.code" readonly/>
+                    <span class="text-blue text-bold" id="code">{{form.code}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Name:</label>
-                    <input type="text" class="form-control" v-model="form.name" readonly/>
+                    <span class="text-blue text-bold" id="name">{{form.name}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Category:</label>
-                    <br>
-                    <label><input  type="radio" v-model="form.category" value="1" tabindex=""/> Public</label>
-                    <label><input  type="radio" v-model="form.category" value="0" tabindex=""/> Private</label>
+                    <span class="text-blue text-bold" id="name">{{form.category == 1 ? "public" : "private"}}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Level:</label>
-                    <input type="text" class="form-control" v-model="form.level" readonly/>
+                    <span class="text-blue text-bold" id="level">{{form.level}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Dzongkhag:</label>
-                    <input type="text" class="form-control" v-model="form.dzongkhag" readonly/>
+                    <span class="text-blue text-bold" id="dzongkhag">{{form.dzongkhag}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Gewog:</label>
-                    <input type="text" class="form-control" v-model="form.gewog" readonly/>
+                    <span class="text-blue text-bold" id="gewog">{{form.gewog}}</span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Chiwog:</label>
-                    <input type="text" class="form-control" v-model="form.chiwog" readonly/>
+                    <span class="text-blue text-bold" id="chiwog">{{form.chiwog}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Location Type:</label>
-                    <input type="text" class="form-control" v-model="form.location" readonly/>
+                    <span class="text-blue text-bold" id="chiwog">{{form.location}}</span>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Geopolitically Located:</label>
-                    <br>
-                    <label><input  type="radio" v-model="form.geoLocated" value="1" tabindex=""/> Yes</label>
-                    <label><input  type="radio" v-model="form.geoLocated" value="0" tabindex=""/> No</label>
+                    <span class="text-blue text-bold" id="geoLocated">{{form.geoLocated == 1 ? "Yes" : "No"}}</span>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>SEN School:</label>
-                    <br>
-                    <label><input  type="radio" v-model="form.senSchool" value="1" tabindex="" /> Yes</label>
-                    <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                    <span class="text-blue text-bold" id="geoLocated">{{form.senSchool == 1 ? "Yes" : "No"}}</span>
                 </div>
+            </div>
+            <div class="form-group row">
                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0">Reason:<span class="text-danger">*</span></label>
                     <textarea class="form-control" v-model="form.reason" :class="{ 'is-invalid': form.errors.has('reason') }" @change="remove_error('reason')"></textarea>
                     <has-error :form="form" field="reason"></has-error>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label>Remarks:</label>
                     <textarea class="form-control" v-model="form.remark"></textarea>
                 </div>
@@ -78,9 +74,8 @@ export default {
     data(){
         return{
             form: new form({
-                code:'',name:'YHSS',category:'1',level:'HSS',dzongkhag:'Thimphu',
-                gewog:'Babesa',chiwog:'Babesa',location:'Urban',
-                geoLocated:'1',senSchool:'0',reason:'',remark:''
+                code:'',name:'',category:'',level:'',dzongkhag:'',gewog:'',chiwog:'',location:'',
+                geoLocated:'',senSchool:'',reason:'',remark:'',status:'submitted'
             })
         }
     },
@@ -102,13 +97,17 @@ export default {
                 this.form.remark = '';
             }
             if(type=="save"){
-                this.form.post('/organization/saveClosure',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Application for School Closure has been submitted successfully.'
-                    })
-                    this.$router.push('/closure_list');
+                this.form.post('/organization/saveClosure')
+                    .then((response) => {
+                    if(response!=""){
+                        let message="Applicaiton for Closure details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                        this.$router.push({name:'acknowledgement',params: {data:message}});
+                        Toast.fire({  
+                            icon: 'success',
+                            title: 'Closure details is saved successfully'
+                        });
+                    }
+                    // this.$router.push('/closure_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -121,15 +120,13 @@ export default {
         this.form.code=this.$route.params.data.code;
         this.form.name=this.$route.params.data.name;
         this.form.category=this.$route.params.data.category;
-        this.form.level=this.$route.params.data.level;
-        this.form.dzongkhag=this.$route.params.data.dzongkhag;
-        this.form.gewog=this.$route.params.data.gewog;
-        this.form.chiwog=this.$route.params.data.chiwog;
-        this.form.location=this.$route.params.data.location;
-        this.form.geoLocated=this.$route.params.data.geoLocated;
-        this.form.senSchool=this.$route.params.data.senSchool;
-        this.form.reason=this.$route.params.data.reason;
-        this.form.remark=this.$route.params.data.remark;
+        this.form.level=this.$route.params.data.levelId;
+        this.form.dzongkhag=this.$route.params.data.dzongkhagId;
+        this.form.gewog=this.$route.params.data.gewogId;
+        this.form.chiwog=this.$route.params.data.chiwogId;
+        this.form.location=this.$route.params.data.locationId;
+        this.form.geoLocated=this.$route.params.data.isGeopoliticallyLocated;
+        this.form.senSchool=this.$route.params.data.isSenSchool;
     }
 }
 </script>

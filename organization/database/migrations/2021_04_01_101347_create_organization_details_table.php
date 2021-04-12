@@ -29,8 +29,9 @@ class CreateOrganizationDetailsTable extends Migration
             $table->tinyInteger('isColocated')->nullable(true);;
             $table->string('status')->nullable(true);
             $table->integer("yearOfEstablishment");
-            $table->string("organizationType");
-            $table->string("zestAgencyCode");
+            $table->string("organizationType")->nullable(true);
+            $table->string("zestAgencyCode")->nullable(true);
+            $table->string("remarks")->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();
