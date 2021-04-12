@@ -10,14 +10,29 @@
                     Health Screening  
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('studenthealth_index')">
-                    <router-link to="/studenthealth_index" id="studenthealth_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('screening_position_index')">
+                    <router-link to="screening_position_index" id="screening_position_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Health Screening Position
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('screening_endorser_index')">
+                    <router-link to="screening_endorser_index" id="screening_endorser_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Health Screening Endorsed By
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('vaccination_index')">
+                    <router-link to="/vaccination_index" id="vaccination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Vaccination  
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('term_index')">
                     <router-link to="/term_index" id="term_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Term 
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('award_type_list')">
+                    <router-link to="/award_type_list" id="award_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Award Type
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('student_award_list')">
@@ -63,6 +78,16 @@
                 <li class="nav-item active pr-1" @click="activatelink('project_type_list')">
                     <router-link to="/project_type_list" id="project_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Project Type 
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('training_type_list')">
+                    <router-link to="/training_type_list" id="project_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Training/Workshop Type 
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('training_list')">
+                    <router-link to="/training_list" id="project_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Training/Workshop 
                     </router-link>
                 </li>
             </ul>

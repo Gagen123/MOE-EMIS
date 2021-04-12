@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StudentAwards extends Model
 {
     use HasFactory, Uuid;
-    protected $table="cea_award_type";
+    protected $table="cea_award";
 
     protected $fillable = [
         'id',
-        'name', 
+        'CeaAwardTypeId',
+        'name',
+        'CeaAwardId',
+        'CeaProgrammeId',
         'description', 
         'status'
     ];

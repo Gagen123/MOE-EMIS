@@ -261,7 +261,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="studenthealth" @click="setclass('studentaffairs','','studenthealth')">
-                        <router-link to="/studenthealth_link" class="nav-link">
+                        <router-link to="/student_health" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Student Health

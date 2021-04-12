@@ -31,16 +31,10 @@ class StudentMasterController extends Controller
         $this->validate($request, $rules);
 
         $record_type = $request['recordtype'];
-        $data = [
-            'id'  =>  $request['id'],
-            'name'  =>  $request['name'],
-            'description'  =>  $request['description'],
-            'status'    =>  $request['status'],
-            'created_by'=>$request['user_id'],
-            'created_at'=>date('Y-m-d h:i:s'),
-        ];
+
+        $data = $this->extractRequestInformation($request, $record_type, $type='data');
         
-        $databaseModel=$this->getModelName($record_type);
+        $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
 
         if($request->actiontype=="add"){
             $response_data = $this->insertData($data, $databaseModel);
@@ -58,8 +52,8 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
-
-        $databaseModel=$this->getModelName($param);
+        
+        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
@@ -69,12 +63,28 @@ class StudentMasterController extends Controller
     }
 
     /**
+     * method to list students masters of active records for dropdown
+    */
+
+    public function loadActiveStudentMasters($param=""){
+
+        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+
+        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+        $model = new $modelName();
+        $status = '1';
+
+        return $this->successResponse($model::where('status',$status)->first());
+
+    }
+
+    /**
      * method to list students masters by id
     */
 
     public function allActiveStudentDropdowns($param="",$id=""){
         
-        $databaseModel = $this->getModelName($param);
+        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
@@ -88,14 +98,13 @@ class StudentMasterController extends Controller
      */
 
     private function insertData($data, $databaseModel){
-
+        
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
-
+        
         $response_data = $model::create($data);
         
         return $response_data;
-
     }
 
     /**
@@ -129,12 +138,34 @@ class StudentMasterController extends Controller
     * To get the model names based on parameters
     */
 
-    private function getModelName($parameter){
+    private function extractRequestInformation($request, $record_type, $type){
         $databaseModel='';
+        if($type=='data'){
+                $data = [
+                'id'  =>  $request['id'],
+                'name'  =>  $request['name'],
+                'description'  =>  $request['description'],
+                'status'    =>  $request['status'],
+                'created_by'=>$request['user_id'],
+                'created_at'=>date('Y-m-d h:i:s'),
+            ];
+        }
 
-        switch($parameter){
+        switch($record_type){
+            case "student_award_type" : {
+                    $databaseModel = "StudentAwardType";
+                    break;
+                }
             case "student_awards" : {
                     $databaseModel = "StudentAwards";
+                    if($type =='data'){
+                        $additional_data = [
+                            'CeaAwardTypeId'  =>  $request['award_type_id'],
+                            'CeaProgrammeId'  =>  $request['program_id'],
+                            'CeaAwardId'      => '1'
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "offence_type" : {
@@ -164,9 +195,41 @@ class StudentMasterController extends Controller
             case "project_type" : {
                     $databaseModel = "CeaProjectType";
                     break;
-                } 
+                }
+            case "training_type" : {
+                    $databaseModel = "CeaTrainingType";
+                    break;
+                }
+            case "training" : {
+                    $databaseModel = "CeaTraining";
+                    break;
+                }
+            case "vaccine_type" : {
+                    $databaseModel = "VaccineType";
+                    break;
+                }
+            case "term_type" : {
+                    $databaseModel = "HealthTerm";
+                    break;
+                }
+            case "health_screening" : {
+                    $databaseModel = "HealthScreening";
+                    break;
+                }
+            case "screening_position" : {
+                    $databaseModel = "ScreeningPositionTitle";
+                    break;
+                }
+            case "screening_endorser" : {
+                    $databaseModel = "ScreeningEndorsedBy";
+                    break;
+                }
         }
-        return $databaseModel;
+        if($type == 'Model'){
+            return $databaseModel;
+        } else{
+            return $data;
+        }
     }
     
 }

@@ -43,21 +43,26 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
     
     $router->group(['prefix' => 'masters/students'], function () use ($router) {
-        $router->post('/saveStudentAward', 'Masters\StudentMasterController@saveStudentAward');
-        $router->get('/loadStudentAwards', 'Masters\StudentMasterController@loadStudentAwards');
         $router->post('/saveStudentMasters', ['uses' => 'Masters\StudentMasterController@saveStudentMasters']);
         $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
+        $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         
     });
 
-    /*
-    $router->group(['prefix' => 'masters/student'], function () use ($router) {
-        // term  route
-        $router->post('/saveStudentAward', 'Masters\StudentMasterController@saveStudentAward');
-        $router->get('/loadStudentAwards', 'Masters\StudentMasterController@loadStudentAwards');
+    $router->group(['prefix' => 'students'], function () use ($router) {
+        $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
+
+        $router->post('/saveStudentAward',['uses' => 'Students\StudentAwardController@saveStudentAward']);
+        $router->get('/loadStudentAwards/{param}',['uses' => 'Students\StudentAwardController@loadStudentAwards']);
+
+        $router->post('/saveStudentResponsibility',['uses' => 'Students\StudentResponsibilityController@saveStudentResponsibility']);
+        $router->get('/loadStudentResponsibilities/{param}',['uses' => 'Students\StudentResponsibilityController@loadStudentResponsibilities']);
+
+        $router->post('/addStudentRecord',['uses' => 'Students\StudentDisciplinaryController@addStudentRecord']);
+        $router->get('/loadStudentRecords/{param}',['uses' => 'Students\StudentDisciplinaryController@loadStudentRecords']);
         
-    });
-    */
+        
+    }); 
 
 });
