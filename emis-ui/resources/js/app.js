@@ -987,51 +987,41 @@ const routes = [
       { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
       { path: '/list_head_quater_office', component: require('./components/organization/establishment/list_head_quater_office.vue').default },
       { path: '/org_details', name:'org_details', component: require('./components/organization/establishment/org_details.vue').default },
-      
-      { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
-      { path: '/merger_verification', component: require('./components/organization/verification/merger_verification.vue').default },
-      { path: '/closure_verification', component: require('./components/organization/verification/closure_verification.vue').default },
       ] 
     },
     { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
     { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
+    { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
+    { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
 
-
-  // organization restructuring route
-  { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
-    children:[
-      { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index_list.vue').default },
-      { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
-      { path: '/merger',name:'merger', component: require('./components/organization/restructuring/merger.vue').default },
-      { path: '/bifurcation_index',  
-      component: require('./components/organization/restructuring/bifurcation/bifurcation_index.vue').default ,
+    // organization restructuring route
+    { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
+      children:[
+        { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index_list.vue').default },
+        { path: '/change_basic_details', component: require('./components/organization/restructuring/change_basic_details.vue').default },
+        { path: '/merger',name:'merger', component: require('./components/organization/restructuring/merger.vue').default },
+        { path: '/bifurcation_index',  
+        component: require('./components/organization/restructuring/bifurcation/bifurcation_index.vue').default ,
           children: [
-              { path: '/',name:'bifurcation_index', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
-              { path: '/bifurcation_list', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
-              { path: '/bifurcation', name:'BifurcationAdd', component: require('./components/organization/restructuring/bifurcation/bifurcation.vue').default },
-              
+            { path: '/',name:'bifurcation_index', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
+            { path: '/bifurcation_list', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
+            { path: '/bifurcation', name:'BifurcationAdd', component: require('./components/organization/restructuring/bifurcation/bifurcation.vue').default },
           ]    
-      }, 
-      { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },
-      { path: '/closure_index', 
-        component: require('./components/organization/restructuring/closure/closure_index.vue').default ,
-        children: [
-          { path: '/', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
-          { path: '/closure_list', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
-          { path: '/closure', name:'ClosureAdd', component: require('./components/organization/restructuring/closure/closure.vue').default },
-        ]    
-      },
-    ] 
-  },
-  { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
-  { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
-  
-  
-  { path: '/profile', name:'profile', component: require('./components/common/profile.vue').default },
-  { path: '/tasklist', name:'tasklist', component: require('./components/common/taskList.vue').default },
-  { path: '/track_application',  name:'track_application',component: require('./components/common/track_application.vue').default },
-  
-  
+        }, 
+        { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },
+        { path: '/closure_index', 
+          component: require('./components/organization/restructuring/closure/closure_index.vue').default ,
+          children: [
+            { path: '/', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
+            { path: '/closure_list', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
+            { path: '/closure', name:'ClosureAdd', component: require('./components/organization/restructuring/closure/closure.vue').default },
+          ]    
+        },
+      ] 
+    },
+    { path: '/profile', name:'profile', component: require('./components/common/profile.vue').default },
+    { path: '/tasklist', name:'tasklist', component: require('./components/common/taskList.vue').default },
+    { path: '/track_application',  name:'track_application',component: require('./components/common/track_application.vue').default },
 ]
 const router = new VueRouter({
     routes 
