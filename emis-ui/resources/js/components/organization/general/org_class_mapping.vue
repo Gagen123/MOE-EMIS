@@ -6,9 +6,9 @@
                     <div class="row form-group">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>School:<span class="text-danger">*</span></label> 
-                            <select name="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="school" @change="remove_err('school')">
+                            <select name="class" id="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="remove_err('school')">
                                 <option value="">--- Please Select ---</option>
-                                <option value="1">Yangchenphug</option>
+                                <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="str_name"></has-error>
                         </div>
@@ -35,6 +35,7 @@ export default {
     data(){
         return{
             classList:[],
+            schoolList:[],
             form: new form({
                 id: '',school:'',class:[],
             })
@@ -43,6 +44,24 @@ export default {
 
     methods:{
 
+        getschoolDetials(uri = 'organization/getschoolDetials'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.schoolList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#closure-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 300);  
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -80,6 +99,7 @@ export default {
 
     mounted(){
         this.getClass();
+        this.getschoolDetials();
     }
 }
 </script>

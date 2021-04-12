@@ -24,6 +24,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <input type="hidden" class="form-control" v-model="appicationDetailsForm.organizationId"/>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Name:</label>
                                 <span class="text-indigo-600">{{previousDetailsForm.name}}</span>
@@ -65,16 +66,17 @@
                                 <span class="text-indigo-600">{{previousDetailsForm.senSchool == 1 ? "Yes" : "No"}}</span>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Co-located with Parent School:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.parentSchool}}</span>
-                            </div>
-                        </div>
+                        
                         <hr>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label><u>Application Details</u></label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Application Number:</label>
+                                <span class="text-indigo-600">{{appicationDetailsForm.applicationNo}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -88,7 +90,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Category:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appCategory}}</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appCategory == 1 ? "Public" : "Private"}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -112,11 +114,11 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appGeoLocated}}</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appGeoLocated = 1 ? "Yes" : "No"}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>SEN School:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appSenSchool}}</span>
+                                <span class="text-indigo-600">{{appicationDetailsForm.appSenSchool == 1 ? "Yes" : "No"}}</span>
                             </div>
                         </div>
                         <div class="form-group row" v-if="appicationDetailsForm.appSenSchool==1">
@@ -163,7 +165,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')"> Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -175,45 +177,17 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <ul>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;PP</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;I</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;II</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;III</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;IV</label></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <ul>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;V</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VI</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VII</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VIII</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                            
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <ul>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                            <li><input type="checkbox"  id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                            <ul id="xlsection" style="display:none"  class="pl-4">
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                            </ul>
-                                           <li><input type="checkbox"  id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                            <ul id="xlisection" style="display:none" class="pl-4">
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                            </ul>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, index) in  class_section1" :key="index">
+                                    <br>
+                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
+                                    <span v-for="(stm, key, index) in sectionList1" :key="index" >
+                                        <span v-if="item.classId==stm.classId">
+                                            <br>
+                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
+                                        </span>
+                                    </span>
+                                </span>
                             </div>
                         </div>
                         <hr>
@@ -223,51 +197,26 @@
                             </div>
                         </div>
                         <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <ul>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;PP</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;I</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;II</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;III</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;IV</label></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <ul>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;V</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VI</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VII</label></li>
-                                            <li><input type="checkbox"><label> &nbsp;&nbsp;&nbsp;VIII</label></li>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;IX</label></li>
-                                            
-                                        </ul>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <ul>
-                                            <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;X</label></li>
-                                            <li><input type="checkbox" checked id="xlsection_check" @click="showchild('xlsection')"><label> &nbsp;&nbsp;&nbsp;XI</label></li>
-                                            <ul id="xlsection"   class="pl-4">
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                            </ul>
-                                           <li><input type="checkbox" checked id="xlisection_check" @click="showchild('xlisection')"><label> &nbsp;&nbsp;&nbsp;XII</label></li>
-                                            <ul id="xlisection"  class="pl-4">
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Science</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Commerce</label></li>
-                                                <li><input type="checkbox" checked><label> &nbsp;&nbsp;&nbsp;Arts</label></li>
-                                            </ul>
-                                        </ul>
-                                    </div>
-                                </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, index) in  class_section" :key="index">
+                                    <br>
+                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
+                                    <span v-for="(stm, key, index) in sectionList" :key="index" >
+                                        <span v-if="item.classId==stm.classId">
+                                            <br>
+                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
+                                        </span>
+                                    </span>
+                                </span>
                             </div>
                         </div>
+                        <Workflow
+                            :appNo="appicationDetailsForm.applicationNo"
+                        />
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
-                                <textarea class="form-control" id="remarks"></textarea>
+                                <textarea class="form-control" v-model="form.remark" id="remarks"></textarea>
                             </div>
                         </div>
                         <hr>
@@ -275,8 +224,8 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                 <button class="btn btn-flat btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
-                                <button class="btn btn-flat btn-primary" @click="shownexttab('verify')"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-flat btn-dark" @click="shownexttab('approve')"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-flat btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
+                                <button class="btn btn-flat btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
                         </div>
                     </div>
@@ -296,17 +245,24 @@ export default {
     data(){
         return{
             proprietorList:[],
+            class_section:[],
+            sectionList:[],
+            class_section1:[],
+            sectionList1:[],
             previousDetailsForm:new form({
-                id:'',organizationId:'145f5a09-06b8-407a-8f33-deecc6a2b861',name:'',level:''
+                id:'',name:'',level:''
                 ,category:'',dzongkhag:'',gewog:'',chiwog:'',locationType:'',geoLocated:''
                 ,senSchool:'', parentSchool:'',coLocatedParent:'',cid:'',fullName:'',phoneNo:''
                 ,email:'',
             }),
             appicationDetailsForm:new form({
-                id:'',appOrganizationId:'',appName:'',appLevel:'',appCategory:'',appDzongkhag:'',appGewog:'',
+                id:'',organizationId:'',appName:'',appLevel:'',appCategory:'',appDzongkhag:'',appGewog:'',
                 appChiwog:'',appLocationType:'',appGeoLocated:'',appSenSchool:'', appParentSchool:'',
                 appCoLocatedParent:'',appCid:'',appFullName:'',appPhoneNo:'',appEmail:'',
-            })
+            }),
+            form: new form({
+                id: '',applicationNo:'',actiontype:'',remarks:''
+            }), 
         }
     },
 
@@ -315,22 +271,63 @@ export default {
         /**
          * method to load previous org details
          */
-        loadCurrentOrgDetails(){
-            axios.get('organization/loadCurrentOrgDetails/'+this.form.organizationId)
+        loadPriviousOrgDetails(){
+            axios.get('organization/loadPriviousOrgDetails/' +this.appicationDetailsForm.organizationId)
             .then((response) => {  
-                alert("m here");
                 let data=response.data.data;
-                this.previousDetailsForm.id              =   data.id;
                 this.previousDetailsForm.name            =   data.name;
-                this.previousDetailsForm.level           =   data.levelId;
+                this.previousDetailsForm.level           =   data.level;
                 this.previousDetailsForm.category        =   data.category;
-                this.previousDetailsForm.locationType    =   data.locationId;
+                this.previousDetailsForm.locationType    =   data.locationType;
+                this.previousDetailsForm.dzongkhag       =   response.data.dzongkhag;
+                this.previousDetailsForm.gewog           =   response.data.gewog;
+                this.previousDetailsForm.chiwog          =   response.data.village;
+                this.previousDetailsForm.geoLocated      =   response.data.isGeopoliticallyLocated;
+                this.previousDetailsForm.senSchool       =   response.data.isSenSchool;
+                this.class_section1                      =   data.class_section;
+                this.sectionList1                        =   data.stream;
 
             })
             .catch((error) => {  
                 console.log("Error......"+error);
             });
         },
+        /**
+         * method to load previous org details
+         */
+        loadChangeBasicApplicationDetails(appId,type){
+            axios.get('organization/loadChangeDetailForVerification/'+appId+'/'+type)
+            .then((response) => {  
+                let data=response.data.data;
+                this.appicationDetailsForm.organizationId       =   data.organizationId;
+                this.appicationDetailsForm.applicationNo        =   data.applicationNo;
+                this.appicationDetailsForm.appName              =   data.proposedName;
+                this.appicationDetailsForm.appLevel             =   data.level;
+                this.appicationDetailsForm.appCategory          =   data.category;
+                this.appicationDetailsForm.appCategory          =   data.category;
+                this.appicationDetailsForm.appDzongkhag         =   response.data.dzongkhag;
+                this.appicationDetailsForm.appGewog             =   response.data.gewog;
+                this.appicationDetailsForm.appChiwog            =   response.data.village;
+                this.appicationDetailsForm.appLocationType      =   data.locationType;
+                this.appicationDetailsForm.appGeoLocated        =   data.isGeopoliticallyLocated;
+                this.appicationDetailsForm.appSenSchool         =   data.isSenSchool;
+                this.appicationDetailsForm.appCoLocatedParent   =   data.isColocated;
+                this.class_section                              =   data.class_section;
+                this.sectionList                                =   data.sections;
+                this.loadPriviousOrgDetails();
+                if(response.data.app_stage.toLowerCase().includes('verifi')){
+                    $('#verifyId').show();
+                }
+                if(response.data.app_stage.toLowerCase().includes('approve')){
+                    $('#approveId').show();
+                }
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
+
+        
 
         /**
          * method to show next tab and update application accordingly
@@ -353,9 +350,9 @@ export default {
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
                         if (result.isConfirmed) {
-                            this.form.applicationNo=this.applicaitondetailsform.applicationNo;
+                            this.form.applicationNo = this.appicationDetailsForm.applicationNo;
                             this.form.actiontype=nextclass;
-                            this.form.post('organization/updateNewEstablishmentApplication')
+                            this.form.post('organization/updateChangeBasicDetailApplication')
                             .then((response) => {
                                 if(response!=""){
                                     Toast.fire({  
@@ -390,7 +387,9 @@ export default {
     },
 
     mounted(){
-        this.loadCurrentOrgDetails();
+        this.appicationDetailsForm.applicationNo=this.$route.params.data.application_number;
+        this.loadChangeBasicApplicationDetails(this.$route.params.data.application_number,this.$route.params.type);
+        
     }
 }
 </script>

@@ -94,6 +94,9 @@
             if(data.service_name.includes('New Establishment')){
                 this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
             }
+            else if(data.service_name.includes('Change Basic Details')){
+                this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
+            }
         }
     },
     mounted(){

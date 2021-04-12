@@ -13,6 +13,10 @@ use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\ApplicationSequence;
+use App\Models\Masters\Level;
+use App\Models\Masters\Location;
+use App\Models\Masters\Classes;
+use App\Models\Masters\Stream;
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller
@@ -179,6 +183,58 @@ class ChangeBasicDetailsController extends Controller
             }
         }
         return $this->successResponse($class, Response::HTTP_CREATED);
+    }
+
+    public function loadChangeDetailForVerification($appNo=""){
+        $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        if($response_data->id!=null && $response_data->id!=""){
+            $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        }
+        $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
+        $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        }
+        foreach($sections as $sec){
+            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        }
+        $response_data->class_section=$classSection;
+        $response_data->sections=$sections;
+        return $this->successResponse($response_data); 
+    }
+
+    public function loadPriviousOrgDetails($orgId=""){
+        $response_data=OrganizationDetails::where('id',$orgId)->first();
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
+        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        if($response_data->id!=null && $response_data->id!=""){
+            $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$response_data->id)->get();
+        }
+        $classSection=OrganizationClassStream::where('organizationId',$orgId)->groupBy('classId')->get();
+        $stream=OrganizationClassStream::where('organizationId',$orgId)->where('streamId','!=',null)->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        }
+        $response_data->class_section=$classSection;
+        if(!$stream){
+            foreach($stream as $sec){
+                $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+            }
+            $response_data->stream=$stream;
+        }
+        return $this->successResponse($response_data); 
+    }
+
+    public function updateChangeBasicDetails(Request $request){
+        $estd =[
+            'status'                       =>   $request->status,
+            'updated_remarks'              =>   $request->remarks,
+            'updated_by'                   =>   $request->user_id, 
+        ];
+        $establishment = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
+        return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
 
     /**

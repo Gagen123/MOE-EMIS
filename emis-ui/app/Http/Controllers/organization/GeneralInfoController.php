@@ -9,9 +9,11 @@ use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\AuthUser;
 
 class GeneralInfoController extends Controller
 {
+    use AuthUser;
     use ServiceHelper;
     public $apiService;
 
@@ -110,7 +112,7 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $connectivity =[
-            'organizationId'            =>  $request['organizationId'],
+            'organizationId'            =>  $this->getWrkingAgencyId(),
             'approachRoad'              =>  $request['approachRoad'],
             'electricitySource'         =>  $request['electricitySource'],
             'telephone'                 =>  $request['telephone'],
@@ -181,7 +183,7 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'organizationId'        =>  $request['organizationId'],
+            'organizationId'        =>  $this->getWrkingAgencyId(),
             'landOwnership'         =>  $request['landOwnership'],
             'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],

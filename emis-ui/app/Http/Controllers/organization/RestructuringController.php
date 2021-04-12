@@ -16,6 +16,10 @@ class RestructuringController extends Controller
     use AuthUser;
     use ServiceHelper;
     public $apiService;
+    public $database_name="organization_db";
+    public $table_name="application_details";
+    public $service_name="Change Basic Details";
+    public $service_name_closure="Closure";
 
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
@@ -30,7 +34,7 @@ class RestructuringController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $change =[
-            'organizationId'            =>  $request['organizationId'],
+            'organizationId'            =>  $this->getWrkingAgencyId(),
             'name'                      =>  $request['name'],
             'level'                     =>  $request['level'],
             'category'                  =>  $request['category'],
@@ -74,13 +78,79 @@ class RestructuringController extends Controller
             'stream'        =>  $request['stream'],
             'user_id'        =>  $this->userId() ,
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/changeDetails/saveChangeClass', $classStream);
-            return $response_data;
+        
+        $response_data= $this->apiService->createData('emis/organization/changeDetails/saveChangeClass', $classStream);
+        $workflowdet=$this->getsubmitterStatus('change basic details');
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,
+            'application_number'=>json_decode($response_data)->data->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$workflowdet['status'],
+            'remarks'           =>null,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
+        
+    }
+
+    public function loadChangeDetailForVerification($appNo="",$type=""){
+        $update_data=[
+            'applicationNo'     =>  $appNo,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+       
+        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
+        $loadOrganizationDetails->app_stage=$workflowstatus;
+        return json_encode($loadOrganizationDetails);
+    }
+
+    public function loadPriviousOrgDetails($orgId=""){
+        $loadPriviousOrgDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadPriviousOrgDetails/'.$orgId));
+        return json_encode($loadPriviousOrgDetails);
+    }
+
+    public function updateChangeBasicDetailApplication(Request $request){
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('change basic details');
+        $work_status=$workflowdet['status'];
+        $org_status='Under Process';
+        if($request->actiontype=="reject"){
+            $work_status=0;
+            $org_status="Rejected";
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
         }
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,
+            'application_number'=>$request->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$work_status,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $estd =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->remarks,
+            'user_id'                      =>   $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
+        return $work_response_data;
     }
 
     public function getCurrentClass(){
@@ -188,13 +258,24 @@ class RestructuringController extends Controller
             'id'                       =>  $request['id'],
             'user_id'                  =>  $this->userId() 
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
+        $workflowdet=$this->getsubmitterStatus('closure');
+        
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name_closure,
+            'application_number'=>json_decode($response_data)->data->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$workflowdet['status'],
+            'remarks'           =>null,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
     }
 
     public function saveBifurcation(Request $request){

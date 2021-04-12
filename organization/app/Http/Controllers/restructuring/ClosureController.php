@@ -71,8 +71,8 @@ class ClosureController extends Controller
             'service'                  =>  "Closure",
             'created_by'               =>  $request->user_id,
             'created_at'               =>  date('Y-m-d h:i:s'),
-            // 'reason'                   =>  $request['reason'],
-            // 'remark'                   =>  $request['remark'],
+            'reason'                   =>  $request['reason'],
+            'remark'                   =>  $request['remark'],
             'id'                       =>  $request['id'],
         ];
         $cls = ApplicationDetails::create($closure);

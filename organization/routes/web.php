@@ -246,6 +246,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getCurrentClass', ['uses' => 'establishment\ChangeBasicDetailsController@getCurrentClass']);
         $router->get('/getCurrentStream', ['uses' => 'establishment\ChangeBasicDetailsController@getCurrentStream']);
         $router->get('/getApplicationNo/{userId}', ['uses' => 'establishment\ChangeBasicDetailsController@getApplicationNo']);
+        $router->get('/loadChangeDetailForVerification/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@loadChangeDetailForVerification']);
+        $router->get('/loadPriviousOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadPriviousOrgDetails']);
+        $router->post('/updateChangeBasicDetails', 'establishment\ChangeBasicDetailsController@updateChangeBasicDetails');
 
     });
 

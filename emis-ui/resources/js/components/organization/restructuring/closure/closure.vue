@@ -74,8 +74,8 @@ export default {
     data(){
         return{
             form: new form({
-                code:'',name:'',category:'1',level:'',dzongkhag:'',gewog:'',chiwog:'',location:'',
-                geoLocated:'1',senSchool:'0',reason:'',remark:'',status:'submitted'
+                code:'',name:'',category:'',level:'',dzongkhag:'',gewog:'',chiwog:'',location:'',
+                geoLocated:'',senSchool:'',reason:'',remark:'',status:'submitted'
             })
         }
     },
@@ -97,13 +97,17 @@ export default {
                 this.form.remark = '';
             }
             if(type=="save"){
-                this.form.post('/organization/saveClosure',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Application for School Closure has been submitted successfully.'
-                    })
-                    this.$router.push('/closure_list');
+                this.form.post('/organization/saveClosure')
+                    .then((response) => {
+                    if(response!=""){
+                        let message="Applicaiton for Closure details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                        this.$router.push({name:'acknowledgement',params: {data:message}});
+                        Toast.fire({  
+                            icon: 'success',
+                            title: 'Closure details is saved successfully'
+                        });
+                    }
+                    // this.$router.push('/closure_list');
                 })
                 .catch(() => {
                     console.log("Error......")

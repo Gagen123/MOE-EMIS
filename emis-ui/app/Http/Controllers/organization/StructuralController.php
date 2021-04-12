@@ -35,7 +35,7 @@ class StructuralController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $sport =[
-            'organizationId'                        =>  $request['organizationId'],
+            'organizationId'                        =>  $this->getWrkingAgencyId(),
             'facility'                              =>  $request['facility'],
             'type'                                  =>  $request['type'],
             'yearOfEstablish'                       =>  $request['yearOfEstablish'],
@@ -84,7 +84,7 @@ class StructuralController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $infrastructure =[
-            'organizationId'            =>  $request['organizationId'],
+            'organizationId'            =>  $this->getWrkingAgencyId(),
             'category'                  =>  $request['category'],
             'subCategory'               =>  $request['subCategory'],
             'structureNo'               =>  $request['structureNo'],
@@ -134,7 +134,7 @@ class StructuralController extends Controller
 
     public function saveKitchenStatus(Request $request){
         $kitchenStatus =[
-            'organizationId'             =>  1,
+            'organizationId'             =>  $this->getWrkingAgencyId(),
             'kitchen_status'             =>  $request['kitchen_status'],
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
@@ -157,7 +157,7 @@ class StructuralController extends Controller
 
     public function saveFoodStoreStatus(Request $request){
         $foodStatus =[
-            'organizationId'             =>  1,
+            'organizationId'             =>  $this->getWrkingAgencyId(),
             'food_status'                =>  $request['food_status'],
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
@@ -175,7 +175,7 @@ class StructuralController extends Controller
 
     public function saveUtensilKitchen(Request $request){
         $equipmentKitchen =[
-            'organizationId'             =>  1,
+            'organizationId'             =>  $this->getWrkingAgencyId(),
             'equipment_kitchen'          =>  $request['equipment_kitchen'],
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
@@ -193,7 +193,7 @@ class StructuralController extends Controller
 
     public function saveDinningHall(Request $request){
         $dinningHall =[
-            'organizationId'             =>  1,
+            'organizationId'             =>  $this->getWrkingAgencyId(),
             'dinning_hall'               =>  $request['dinning_hall'],
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],

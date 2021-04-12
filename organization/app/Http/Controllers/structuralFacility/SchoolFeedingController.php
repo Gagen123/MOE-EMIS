@@ -35,7 +35,7 @@ class SchoolFeedingController extends Controller
 
             foreach ($kitchenStatus as $ks){
                 $kitchenStatus =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],
@@ -49,7 +49,7 @@ class SchoolFeedingController extends Controller
         }else{
             foreach ($kitchenStatus as $ks){
                 $kitchenStatus =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],
@@ -85,7 +85,7 @@ class SchoolFeedingController extends Controller
 
             foreach ($FoodStoreStatus as $ks){
                 $foodStatus =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],
@@ -99,7 +99,7 @@ class SchoolFeedingController extends Controller
         }else{
             foreach ($FoodStoreStatus as $ks){
                 $foodStatus =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],
@@ -128,7 +128,7 @@ class SchoolFeedingController extends Controller
 
             foreach ($utensilKitchen as $ks){
                 $utensil =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],
@@ -142,7 +142,7 @@ class SchoolFeedingController extends Controller
         }else{
             foreach ($utensilKitchen as $ks){
                 $utensil =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],
@@ -168,7 +168,7 @@ class SchoolFeedingController extends Controller
 
             foreach ($dinningHall as $ks){
                 $utensil =[
-                    'organizationId'    =>  1,
+                    'organizationId'    =>  $request['organizationId'],
                     'description'       =>  $ks['question'],
                     'value'             =>  $ks['value'],
                     'status'            =>  $request['status'],

@@ -989,13 +989,13 @@ const routes = [
       { path: '/org_details', name:'org_details', component: require('./components/organization/establishment/org_details.vue').default },
       
       { path: '/bifurcation_verification', component: require('./components/organization/verification/bifurcation_verification.vue').default },
-      { path: '/change_basic_details_verification', component: require('./components/organization/verification/change_basic_details_verification.vue').default },
       { path: '/merger_verification', component: require('./components/organization/verification/merger_verification.vue').default },
       { path: '/closure_verification', component: require('./components/organization/verification/closure_verification.vue').default },
       ] 
     },
     { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
-    
+    { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
+
 
   // organization restructuring route
   { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
