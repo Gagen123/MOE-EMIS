@@ -34,14 +34,11 @@ class ChangeBasicDetailsController extends Controller
 
     /**
      * method to save change basic details
-     */
+    */
     public function saveChangeBasicDetails(Request $request){
-        $id = $request->id;
-
-        if($id != null){
-            $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('status', 'submitted')->first();
+        $application_details=  ApplicationDetails::where('created_by', $request->user_id)->where('service', 'Change Basic Details')->where('status', 'pending')->first();
+        if($application_details != null && $application_details!=""){
             $change = [
-                'organizationId'                =>  $request['organizationId'],
                 'proposedName'                  =>      $request['name'],
                 'category'                      =>      $request['category'],
                 'levelId'                       =>      $request['level'],
@@ -54,26 +51,22 @@ class ChangeBasicDetailsController extends Controller
                 'parentSchoolId'                =>      $request['parentSchool'],
                 'isColocated'                   =>      $request['coLocatedParent'],
                 'status'                        =>      $request['status'],
-                'applicationNo'                 =>      $application_details->applicationNo,
-                'service'                       =>      "Change Basic Details",
-                'updated_by'                    =>      $request->user_id,
                 'created_at'                    =>      date('Y-m-d h:i:s')
+            ];
+            $changeDetails = ApplicationDetails::where('id', $application_details->id)->update($change);
+            if($request['category'] == 0){
+                $pvtDetails = [
+                    'applicationId'            =>  $application_details->id,
+                    'cid'                      =>  $request['cid'],
+                    'fullName'                 =>  $request['fullName'],
+                    'phoneNo'                  =>  $request['phoneNo'],
+                    'email'                    =>  $request['email'],
+                    'updated_by'               =>  $request->user_id,
+                    'created_at'               =>  date('Y-m-d h:i:s')
                 ];
-                $changeDetails = ApplicationDetails::where('id', $id)->update($change);
-
-                if($request['category'] == 0){
-                    $pvtDetails = [
-                        'applicationId'            =>  $application_details->id,
-                        'cid'                      =>  $request['cid'],
-                        'fullName'                 =>  $request['fullName'],
-                        'phoneNo'                  =>  $request['phoneNo'],
-                        'email'                    =>  $request['email'],
-                        'updated_by'               =>  $request->user_id,
-                        'created_at'               =>  date('Y-m-d h:i:s')
-                        ];
-                    $changeDetails = ApplicationProprietorDetails::where('applicationId', $application_details->id)->update($pvtDetails);
-                }
-                return $this->successResponse($changeDetails, Response::HTTP_CREATED);
+                $prop_det = ApplicationProprietorDetails::where('applicationId', $application_details->id)->update($pvtDetails);
+            }
+            return $this->successResponse($application_details, Response::HTTP_CREATED);
 
         }else{
             $last_seq=ApplicationSequence::where('service_name','Change Basic Details')->first();
@@ -92,7 +85,7 @@ class ChangeBasicDetailsController extends Controller
                 ];  
                 ApplicationSequence::where('service_name', 'Change Basic Details')->update($app_details);
             }
-            $application_no='Chn-';
+            $application_no='Ch-';
             if(strlen($last_seq)==1){
                 $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
             }
@@ -106,23 +99,23 @@ class ChangeBasicDetailsController extends Controller
                 $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
             }
             $change = [
-            'organizationId'                =>      $request['organizationId'],
-            'proposedName'                  =>      $request['name'],
-            'category'                      =>      $request['category'],
-            'levelId'                       =>      $request['level'],
-            'dzongkhagId'                   =>      $request['dzongkhag'],
-            'gewogId'                       =>      $request['gewog'],
-            'chiwogId'                      =>      $request['chiwog'],
-            'locationId'                    =>      $request['locationType'], 
-            'isGeopoliticallyLocated'       =>      $request['geoLocated'],
-            'isSenSchool'                   =>      $request['senSchool'],
-            'parentSchoolId'                =>      $request['parentSchool'],
-            'isColocated'                   =>      $request['coLocatedParent'],
-            'status'                        =>      $request['status'],
-            'applicationNo'                 =>      $application_no,
-            'service'                       =>      "Change Basic Details",
-            'created_by'                    =>  $request->user_id,
-            'created_at'                    =>  date('Y-m-d h:i:s')
+                'organizationId'                =>      $request['organizationId'],
+                'proposedName'                  =>      $request['name'],
+                'category'                      =>      $request['category'],
+                'levelId'                       =>      $request['level'],
+                'dzongkhagId'                   =>      $request['dzongkhag'],
+                'gewogId'                       =>      $request['gewog'],
+                'chiwogId'                      =>      $request['chiwog'],
+                'locationId'                    =>      $request['locationType'], 
+                'isGeopoliticallyLocated'       =>      $request['geoLocated'],
+                'isSenSchool'                   =>      $request['senSchool'],
+                'parentSchoolId'                =>      $request['parentSchool'],
+                'isColocated'                   =>      $request['coLocatedParent'],
+                'status'                        =>      $request['status'],
+                'applicationNo'                 =>      $application_no,
+                'service'                       =>      "Change Basic Details",
+                'created_by'                    =>      $request->user_id,
+                'created_at'                    =>      date('Y-m-d h:i:s')
             ];
             $changeDetails = ApplicationDetails::create($change);
             if($request['category'] == 0){
@@ -134,8 +127,8 @@ class ChangeBasicDetailsController extends Controller
                     'email'                    =>  $request['email'],
                     'created_by'               =>  $request->user_id,
                     'created_at'               =>  date('Y-m-d h:i:s')
-                    ];
-                $changeDetails = ApplicationProprietorDetails::create($pvtDetails);
+                ];
+                $prop_det = ApplicationProprietorDetails::create($pvtDetails);
             }
             return $this->successResponse($changeDetails, Response::HTTP_CREATED);
         }
@@ -148,7 +141,7 @@ class ChangeBasicDetailsController extends Controller
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
-        $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('status', 'submitted')->first();
+        $application_details=  ApplicationDetails::where('created_by', $request->user_id)->where('service', 'Change Basic Details')->where('status', 'pending')->first();
         if($request->stream!="" && sizeof($request->stream)>0){
             foreach ($request->stream as $stm){
                 foreach ($classes as $cls){
@@ -159,7 +152,6 @@ class ChangeBasicDetailsController extends Controller
                             'streamId'          =>explode('##',$stm)[1],
                             'created_by'           =>$request->user_id,
                             'created_at'        =>date('Y-m-d h:i:s'),
-                            
                         ];
                         if(strpos($inserted_class,$cls)===false){
                             $inserted_class.=$cls;
@@ -182,6 +174,8 @@ class ChangeBasicDetailsController extends Controller
                 }
             }
         }
+        $array = ['status' => $request->status];
+        DB::table('application_details')->where('applicationNo',$application_details->applicationNo)->update($array);
         return $this->successResponse($class, Response::HTTP_CREATED);
     }
 

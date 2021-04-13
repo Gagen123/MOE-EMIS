@@ -1,5 +1,8 @@
 <template>
     <div>
+        <ol class="mb-1 ml-xl-n3 mr-xl-n2 pl-3" style="background-color:#E5E5E5">
+            <li class="pl-2 form-inline "><h6 class="pt-1">Basic Change Application Verification/Approval</h6></li>
+        </ol>
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
@@ -18,146 +21,188 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label><u>Previous Details</u></label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <input type="hidden" class="form-control" v-model="appicationDetailsForm.organizationId"/>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Name:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.name}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Level:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.level}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Category:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.category == 1 ? "Private" : "Public"}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Dzongkhag:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.dzongkhag}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Gewog:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.gewog}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Chiwog:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.chiwog}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Location Type:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.locationType}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.geoLocated == 1 ? "Yes" : "No"}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>SEN School:</label>
-                                <span class="text-indigo-600">{{previousDetailsForm.senSchool == 1 ? "Yes" : "No"}}</span>
-                            </div>
-                        </div>
-                        
-                        <hr>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label><u>Application Details</u></label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Application Number:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.applicationNo}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Name:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appName}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Level:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appLevel}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Category:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appCategory == 1 ? "Public" : "Private"}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Dzongkhag:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appDzongkhag}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Gewog:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appGewog}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Chiwog:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appChiwog}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Location Type:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appLocationType}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Geopolitically Located:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appGeoLocated = 1 ? "Yes" : "No"}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>SEN School:</label>
-                                <span class="text-indigo-600">{{appicationDetailsForm.appSenSchool == 1 ? "Yes" : "No"}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row" v-if="appicationDetailsForm.appSenSchool==1">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
-                                <label class="mb-0">Parent School:</label>
-                                <span class="text-blue text-bold">{{appicationDetailsForm.parentSchool}}</span>
-                            </div>   
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0">Co-located with Parent School</label>
-                                <span class="text-blue text-bold">
-                                    {{ appicationDetailsForm.coLocated  == 1 ? "Yes" :  "No"}}
-                                </span>
-                            </div> 
-                        </div>
-                        <div v-if="appicationDetailsForm.category==0">
-                            <div class="row pb-2">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h4><u>Proprietor Details</u></h4>
+                        <div class="callout callout-success">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Previous Details</u></label>
                                 </div>
                             </div>
-                            <div v-for="(pro, index) in proprietorList" :key="index">
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">CID:</label>
-                                        <span class="text-blue text-bold">{{pro.cid}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{pro.fullName}}</span>
+                            <div class="form-group row">
+                                <input type="hidden" class="form-control" v-model="appicationDetailsForm.organizationId"/>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Name:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.name}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.level}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.category == 1 ? "Public" : "Private"}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.dzongkhag}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Gewog:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.gewog}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Chiwog:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.chiwog}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Location Type:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.locationType}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Geopolitically Located:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.geoLocated == 1 ? "Yes" : "No"}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>SEN School:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.isSenSchool == 1 ? "Yes" : "No"}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="previousDetailsForm.isSenSchool == 1">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Co-located with Parent School:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.isColocated == 1 ? "Yes" : "No"}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Parent School:</label>
+                                    <span class="text-blue text-bold">{{previousDetailsForm.parentSchoolId}}</span>
+                                </div>
+                            </div>
+                           
+                            <div v-if="previousDetailsForm.category==0">
+                                <div class="row pb-2">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <h4><u>Proprietor Details</u></h4>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Phone No:</label>
-                                        <span class="text-blue text-bold">{{pro.phoneNo}}</span>
+                                <div v-for="(prepro, index) in proprietorList1" :key="index">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">CID:</label>
+                                            <span class="text-blue text-bold">{{prepro.cid}}</span>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">Full Name:</label>
+                                            <span class="text-blue text-bold">{{prepro.fullName}}</span>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Email:</label>
-                                        <span class="text-blue text-bold">{{pro.email}}</span>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">Phone No:</label>
+                                            <span class="text-blue text-bold">{{prepro.phoneNo}}</span>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">Email:</label>
+                                            <span class="text-blue text-bold">{{prepro.email}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-info">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Application Details</u></label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Application Number:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.applicationNo}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Name:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appName}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appLevel}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appCategory == 1 ? "Public" : "Private"}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appDzongkhag}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Gewog:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appGewog}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Chiwog:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appChiwog}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Location Type:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appLocationType}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Geopolitically Located:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appGeoLocated = 1 ? "Yes" : "No"}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>SEN School:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.appSenSchool == 1 ? "Yes" : "No"}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="appicationDetailsForm.appSenSchool==1">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                                    <label class="mb-0">Parent School:</label>
+                                    <span class="text-blue text-bold">{{appicationDetailsForm.parentSchool}}</span>
+                                </div>   
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Co-located with Parent School</label>
+                                    <span class="text-blue text-bold">
+                                        {{ appicationDetailsForm.coLocated  == 1 ? "Yes" :  "No"}}
+                                    </span>
+                                </div> 
+                            </div>
+                            <div v-if="appicationDetailsForm.category==0">
+                                <div class="row pb-2">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <h4><u>Proprietor Details</u></h4>
+                                    </div>
+                                </div>
+                                <div v-for="(pro, index) in proprietorList" :key="index">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">CID:</label>
+                                            <span class="text-blue text-bold">{{pro.cid}}</span>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">Full Name:</label>
+                                            <span class="text-blue text-bold">{{pro.fullName}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">Phone No:</label>
+                                            <span class="text-blue text-bold">{{pro.phoneNo}}</span>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label class="mb-0">Email:</label>
+                                            <span class="text-blue text-bold">{{pro.email}}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -171,61 +216,64 @@
                     </div>
                     
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label><u>Previous Details</u></label>
+                        <div class="callout callout-success">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Previous Class Stream Details</u></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <span v-for="(item, index) in  class_section1" :key="index">
-                                    <br>
-                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                    <span v-for="(stm, key, index) in sectionList1" :key="index" >
-                                        <span v-if="item.classId==stm.classId">
-                                            <br>
-                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
+                            <div class="row form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
+                                    <span v-for="(item, index) in  class_section1" :key="index">
+                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
+                                        <span v-for="(stm, key, index) in sectionList1" :key="index" >
+                                            <span v-if="item.classId==stm.classId">
+                                                <br>
+                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
+                                            </span>
                                         </span>
                                     </span>
-                                </span>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label><u>Application Details</u></label>
+                        <div class="callout callout-info">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Application Details</u></label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <span v-for="(item, index) in  class_section" :key="index">
-                                    <br>
-                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                    <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                        <span v-if="item.classId==stm.classId">
-                                            <br>
-                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
+                            <div class="row form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
+                                    <span v-for="(item, index) in  class_section" :key="index">
+                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
+                                        <span v-for="(stm, key, index) in sectionList" :key="index" >
+                                            <span v-if="item.classId==stm.classId">
+                                                <br>
+                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
+                                            </span>
                                         </span>
                                     </span>
-                                </span>
+                                </div>
                             </div>
                         </div>
+                        
                         <Workflow
                             :appNo="appicationDetailsForm.applicationNo"
                         />
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
-                                <textarea class="form-control" v-model="form.remark" id="remarks"></textarea>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
                             </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-flat btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
-                                <button class="btn btn-flat btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-flat btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
+                                <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
+                                <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
                         </div>
                     </div>
@@ -244,6 +292,7 @@ export default {
     },
     data(){
         return{
+            proprietorList1:[],
             proprietorList:[],
             class_section:[],
             sectionList:[],
@@ -267,26 +316,31 @@ export default {
     },
 
     methods:{
-
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
         /**
          * method to load previous org details
          */
         loadPriviousOrgDetails(){
-            axios.get('organization/loadPriviousOrgDetails/' +this.appicationDetailsForm.organizationId)
+            axios.get('organization/getFullSchoolDetials/' +this.appicationDetailsForm.organizationId)
             .then((response) => {  
                 let data=response.data.data;
                 this.previousDetailsForm.name            =   data.name;
                 this.previousDetailsForm.level           =   data.level;
                 this.previousDetailsForm.category        =   data.category;
                 this.previousDetailsForm.locationType    =   data.locationType;
-                this.previousDetailsForm.dzongkhag       =   response.data.dzongkhag;
-                this.previousDetailsForm.gewog           =   response.data.gewog;
-                this.previousDetailsForm.chiwog          =   response.data.village;
-                this.previousDetailsForm.geoLocated      =   response.data.isGeopoliticallyLocated;
-                this.previousDetailsForm.senSchool       =   response.data.isSenSchool;
+                this.previousDetailsForm.dzongkhag       =   data.dzongkhag;
+                this.previousDetailsForm.gewog           =   data.gewog;
+                this.previousDetailsForm.chiwog          =   data.village;
+                this.previousDetailsForm.geoLocated      =   data.isGeopoliticallyLocated;
+                this.previousDetailsForm.senSchool       =   data.isSenSchool;
                 this.class_section1                      =   data.class_section;
-                this.sectionList1                        =   data.stream;
-
+                this.sectionList1                        =   data.sections;
+                this.proprietorList1                     =   data.proprietor;
             })
             .catch((error) => {  
                 console.log("Error......"+error);
@@ -389,7 +443,6 @@ export default {
     mounted(){
         this.appicationDetailsForm.applicationNo=this.$route.params.data.application_number;
         this.loadChangeBasicApplicationDetails(this.$route.params.data.application_number,this.$route.params.type);
-        
     }
 }
 </script>

@@ -155,6 +155,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/registerOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'registerOrganizationDetails'])->name('registerOrganizationDetails');
     Route::get('/getschoolDetials', [App\Http\Controllers\organization\EstablishmentController::class, 'getschoolDetials'])->name('getschoolDetials');
     Route::get('/getFullSchoolDetials/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getFullSchoolDetials'])->name('getFullSchoolDetials');
+    Route::get('/checkPendingApplication/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'checkPendingApplication'])->name('checkPendingApplication');
     
     // head quater office route
     Route::post('/saveBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveBasicDetails'])->name('saveBasicDetails');

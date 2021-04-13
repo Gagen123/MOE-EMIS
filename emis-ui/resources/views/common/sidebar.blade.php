@@ -267,6 +267,14 @@
                 </ul>
             </li>
             <li class="nav-item" id="track_application">
+                <router-link to="/question_answer_index" class="nav-link">
+                    <p>
+                        <i class="fa fa-search nav-icon"></i>
+                        Question & Answer set up
+                    </p>
+                </router-link>
+            </li>
+            <li class="nav-item" id="track_application">
                 <router-link to="/track_application" class="nav-link">
                     <p>
                         <i class="fa fa-search nav-icon"></i>

@@ -126,18 +126,18 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="row form-group">
+                        <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 fa-pull-right">
                                 <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </div> 
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Select classes and streams</label>
                             </div>
-                        </div>
+                        </div> 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <span v-for="(item, index) in  class_section" :key="index">
                                 <br>
