@@ -68,18 +68,20 @@ class EquipmentController extends Controller
         $id = $request->id;
         if( $id != null){
             $sec = [
-                'type'          => $request['type'],
-                'item'        => $request['item'],
-                'location'        => $request['location'],
-                'number'        => $request['number'],
+                'organizationId'        => $request['organizationId'],
+                'type'                  => $request['type'],
+                'item'                  => $request['item'],
+                'location'              => $request['location'],
+                'number'                => $request['number'],
             ];
             $section = EquipmentAndFurniture::where('id', $id)->update($sec);
         }else{
             $sec = [
-                'type'          => $request['type'],
-                'item'        => $request['item'],
-                'location'        => $request['location'],
-                'number'        => $request['number'],
+                'organizationId'        => $request['organizationId'],
+                'type'                  => $request['type'],
+                'item'                  => $request['item'],
+                'location'              => $request['location'],
+                'number'                => $request['number'],
             ];
             $section = EquipmentAndFurniture::create($sec);
 

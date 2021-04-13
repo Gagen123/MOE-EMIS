@@ -16,7 +16,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               <tr v-for="(item, index) in schoolList" :key="index">
+                                <tr v-for="(item, index) in schoolList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}}</td>
@@ -43,6 +43,9 @@ export default {
         }
     },
     methods:{
+        /**
+         * method to load organization/school list
+         */
         loadSchool(){
             axios.get('organization/getschoolDetials')
             .then(response => {

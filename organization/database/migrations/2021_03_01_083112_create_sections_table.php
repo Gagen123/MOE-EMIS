@@ -17,6 +17,7 @@ class CreateSectionsTable extends Migration
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
             $table->char('classId',36);
+            $table->char('streamId',36);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

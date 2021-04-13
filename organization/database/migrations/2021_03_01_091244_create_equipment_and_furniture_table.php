@@ -15,6 +15,7 @@ class CreateEquipmentAndFurnitureTable extends Migration
     {
         Schema::create('equipment_and_furniture', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('organizationId',36);
             $table->char('type',36);
             $table->char('item',36);
             $table->char('location',36);

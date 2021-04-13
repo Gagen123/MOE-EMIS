@@ -156,7 +156,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             // section route
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
-    
+            $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
         });
     
         $router->group(['prefix' => 'classMapping'], function () use ($router) {
@@ -266,6 +266,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'closure'], function () use ($router) {
             $router->post('/saveClosure', 'restructuring\ClosureController@saveClosure');
             $router->get('/loadClosureApplicationDetails/{appNo}', ['uses' => 'restructuring\ClosureController@loadClosureApplicationDetails']);
+            $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
+
         });
     });
 });

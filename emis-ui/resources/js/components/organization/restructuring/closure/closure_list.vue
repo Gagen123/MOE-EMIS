@@ -20,7 +20,7 @@
                     <td>{{ item.status }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewClosureList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="showfulldetails(item.id)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -63,9 +63,9 @@ export default {
         /**
          * method to view organization details for closure
          */
-        viewClosureList(data){
-            this.$router.push({name:'ClosureAdd',params: {data:data}});
-        },
+        showfulldetails(id){
+            this.$router.push({name:'ClosureAdd',query: {data:id}});
+        }
     },
 
     mounted(){

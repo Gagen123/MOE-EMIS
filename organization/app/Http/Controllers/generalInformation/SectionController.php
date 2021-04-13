@@ -31,6 +31,7 @@ class SectionController extends Controller
         $section = [
                 'organizationId'          => $request['school'],
                 'classId'                 => $request['classes'],
+                'streamId'                => $request['stream'],
             ];
         $sectionDetails = [
                 'users'        => $request['users'],
@@ -49,11 +50,23 @@ class SectionController extends Controller
         return $this->successResponse($sec, Response::HTTP_CREATED);
     }
 
-
+    /**
+     * method to get class by organization Id
+     */
     public function getClassByOrganizationId($orgId){
-        $class = DB::table('class_mappings as a')
+        $class = DB::table('organization_class_streams as a')
             ->join('classes as b', 'b.id', '=', 'a.classId')
             ->select('a.classId as id', 'b.class as class')->where('organizationId', $orgId)->get();
         return $class;
+    }
+
+    /**
+     * method to get stream by class Id
+     */
+    public function getStreamByClassId($classId){
+        $stream = DB::table('organization_class_streams as a')
+            ->join('streams as b', 'b.id', '=', 'a.streamId')
+            ->select('a.streamId as id', 'b.stream as stream')->where('a.classId', $classId)->get();
+        return $stream;
     }
 }
