@@ -33,10 +33,25 @@ class RestructuringController extends Controller
 
     public function saveChangeBasicDetails(Request $request){
         $rules = [
-
+            'name'          =>  'required',
+            'level'                 =>  'required',
+            'category'              =>  'required',
+            'dzongkhag'             =>  'required',
+            'gewog'                 =>  'required',
+            'chiwog'                =>  'required',
+            'locationType'          =>  'required',
+            'senSchool'             =>  'required',
         ];
         $customMessages = [
-
+            'proposedName.required'         => 'Proposed Name is required',
+            'level.required'                => 'Level is required',
+            'category.required'             => 'Category is required',
+            'dzongkhag.required'            => 'Dzongkhag is required',
+            'gewog.required'                => 'Gewog is required',
+            'chiwog.required'               => 'Chiwog is required',
+            'locationType.required'         => 'Location Type  is required',
+            'senSchool.required'            => 'Sen School is required',
+            
         ];
         $this->validate($request, $rules, $customMessages);
         $change =[
@@ -61,44 +76,42 @@ class RestructuringController extends Controller
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId() 
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $change);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $change);
+        return $response_data;
     }
 
     public function saveChangeClass(Request $request){
         $rules = [
             'class'          =>  'required',
-            
         ];
         $customMessages = [
             'class.required'         => 'Class is required',
         ];
         $this->validate($request, $rules, $customMessages);
+        $workflowdet=$this->getsubmitterStatus('change');
+        if($workflowdet['screen_id']=="0"){
+            return "No Screen";
+        }
         $classStream =[
-            'class'        =>  $request['class'],
-            'stream'        =>  $request['stream'],
-            'user_id'        =>  $this->userId() ,
+            'application_number'        =>  $request['application_number'],
+            'class'                     =>  $request['class'],
+            'stream'                    =>  $request['stream'],
+            'status'                    =>  $request['status'],  
+            'user_id'                   =>  $this->userId() ,
         ];
-        
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveChangeClass', $classStream);
-        $workflowdet=$this->getsubmitterStatus('change basic details');
         $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,
-            'application_number'=>json_decode($response_data)->data->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$workflowdet['status'],
-            'remarks'           =>null,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
+            'db_name'           =>  $this->database_name,
+            'table_name'        =>  $this->table_name,
+            'service_name'      =>  $this->service_name,
+            'application_number'=>  $request['application_number'],
+            'screen_id'         =>  $workflowdet['screen_id'],
+            'status_id'         =>  $workflowdet['status'],
+            'remarks'           =>  null,
+            'user_dzo_id'       =>  $this->getUserDzoId(),
+            'access_level'      =>  $this->getAccessLevel(),
+            'working_agency_id' =>  $this->getWrkingAgencyId(),
+            'action_by'         =>  $this->userId(),
         ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $work_response_data;
@@ -118,14 +131,13 @@ class RestructuringController extends Controller
         $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
     }
-
     public function loadPriviousOrgDetails($orgId=""){
         $loadPriviousOrgDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadPriviousOrgDetails/'.$orgId));
         return json_encode($loadPriviousOrgDetails);
     }
 
     public function updateChangeBasicDetailApplication(Request $request){
-        $workflowdet=$this->getcurrentworkflowStatusForUpdate('change basic details');
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('change');
         $work_status=$workflowdet['status'];
         $org_status='Under Process';
         if($request->actiontype=="reject"){
@@ -257,7 +269,6 @@ class RestructuringController extends Controller
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
         $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
-        //d0bb3006-8940-4dbb-ae5f-497574388028
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/merger/loadMergerForVerification/'.$appNo));
         $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
@@ -296,8 +307,6 @@ class RestructuringController extends Controller
         $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $work_response_data;
     }
-    
-    
 
     public function saveClosure(Request $request){
         $rules = [

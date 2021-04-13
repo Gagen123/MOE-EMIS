@@ -47,6 +47,8 @@ class WorkflowController extends Controller{
                 'access_level'          =>$request->access_level,
                 'user_dzo_id'           =>$request->user_dzo_id,
                 'working_agency_id'     =>$request->working_agency_id,
+                'created_by'            =>$request->action_by,
+                'applied_on'            =>date('Y-m-d h:i:s'),
                 'last_action_by'        =>$request->action_by,
                 'last_action_date'      =>date('Y-m-d h:i:s'),
             ];

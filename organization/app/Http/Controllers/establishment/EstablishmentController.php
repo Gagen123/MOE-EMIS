@@ -25,11 +25,6 @@ use Illuminate\Support\Facades\DB;
 class EstablishmentController extends Controller
 {
     use ApiResponser;
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
@@ -65,10 +60,6 @@ class EstablishmentController extends Controller
                 'isSenSchool'                   =>  $request['senSchool'],
                 'parentSchoolId'                =>  $request['parentSchool'],
                 'isColocated'                   =>  $request['design'],
-                // 'cid'                           =>  $request['cid'],
-                // 'fullName'                      =>  $request['name'],
-                // 'phoneNo'                       =>  $request['phoneNo'],
-                // 'email'                         =>  $request['email'],
                 'status'                        =>  $request['status'],
                 'service'                       =>  "New Establishment",
                 'updated_by'                    =>  $request->user_id,
@@ -89,7 +80,6 @@ class EstablishmentController extends Controller
                 
                 $establishment = ApplicationProprietorDetails::where('applicationId', 1)->update($pvtDetails);
             }
-
             $establishment = ApplicationDetails::where('id', $id)->update($estd);
             return $this->successResponse($establishment, Response::HTTP_CREATED);
         }else{
@@ -151,7 +141,7 @@ class EstablishmentController extends Controller
                     'email'                    =>  $request['email'],
                     'created_by'               =>  $request->user_id,
                     'created_at'               =>  date('Y-m-d h:i:s')
-                    ];
+                ];
                 $establishment = ApplicationProprietorDetails::create($pvtDetails);
             }
             return $this->successResponse($establishment, Response::HTTP_CREATED);
@@ -165,13 +155,7 @@ class EstablishmentController extends Controller
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
-
-        // $applicationNo = DB::table('application_details as a')
-        //     ->select('a.applicationNo')
-        //     ->where('created_by',$request->user_id)
-        //     ->where('status', 'pending')
-        //     ->get();
-        $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('status', 'pending')->first();
+        $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('service', 'New Establishment')->where('status', 'pending')->first();
         // return $application_details;     
         if($request->stream!="" && sizeof($request->stream)>0){
             foreach ($request->stream as $stm){
@@ -207,7 +191,6 @@ class EstablishmentController extends Controller
         }
         $array = ['status' => $request->status];
         DB::table('application_details')->where('applicationNo',$application_details->applicationNo)->update($array);
-
         return $this->successResponse($application_details, Response::HTTP_CREATED);
     }
 

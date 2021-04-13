@@ -34,7 +34,6 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
-       
         $rules = [
             'proposedName'          =>  'required',
             'level'                 =>  'required',
@@ -89,6 +88,12 @@ class EstablishmentController extends Controller
             'class.required'         => 'Class is required',
         ];
         $this->validate($request, $rules, $customMessages);
+        $workflowdet=$this->getsubmitterStatus('new establishment');
+        // dd($workflowdet['screen_id']);
+        if($workflowdet['screen_id']=="0"){
+            return "No Screen";
+        }
+
         $classStream =[
             'class'        =>  $request['class'],
             'stream'       =>  $request['stream'],
@@ -97,7 +102,6 @@ class EstablishmentController extends Controller
         ];
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
         // dd($response_data->data->applicationNo);
-        $workflowdet=$this->getsubmitterStatus('new establishment');
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -111,6 +115,7 @@ class EstablishmentController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
+        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $work_response_data;
     }
@@ -283,7 +288,15 @@ class EstablishmentController extends Controller
         return $response_data;
     }
     public function getFullSchoolDetials($id=""){  
+        if($id=="sessionDet"){
+            $id=$this->getWrkingAgencyId();
+        }
         $response_data = $this->apiService->listData('emis/organization/establishment/getFullSchoolDetials/'.$id);
+        return $response_data;
+    }
+    
+    public function checkPendingApplication($type=""){  
+        $response_data = $this->apiService->listData('emis/common/checkPendingApplication/'.$type.'/'.$this->userId());
         return $response_data;
     }
     

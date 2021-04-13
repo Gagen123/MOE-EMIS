@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
@@ -143,7 +147,7 @@
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams</label>
+                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
@@ -348,8 +352,14 @@ export default {
                     if (result.isConfirmed) {
                         this.classStreamForm.post('organization/saveClassStream')
                         .then((response) => {
-                            if(response!=""){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            if(response.data=="No Screen"){
+                                Toast.fire({  
+                                    icon: 'error',
+                                    title: 'Technical Errors: please contact system admimnistrator for further details'
+                                });
+                            }
+                            if(response!="" && response!="No Screen"){
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -493,14 +503,27 @@ export default {
                 console.log("Error......"+error);
             });
         },
-
-        
+        checkPendingApplication(){
+            axios.get('organization/checkPendingApplication/establishment')
+            .then((response) => {  
+                let data=response.data;
+                if(data!=""){
+                    $('#mainform').hide();
+                    $('#applicaitonUnderProcess').show();
+                    $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
+                }
+            })
+            .catch((error) => {  
+                console.log("Error: "+error);
+            });
+        },
     },
+    
     created(){
         this.getLevel();
         this.getLocation();
+        this.checkPendingApplication();
     },
-    
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
