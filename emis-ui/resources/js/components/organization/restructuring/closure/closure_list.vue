@@ -37,6 +37,10 @@ export default {
         }
     },
     methods:{
+
+        /**
+         * method to get organization list
+         */
         loadClosureList(uri = 'organization/getschoolDetials'){
             axios.get(uri)
             .then(response => {
@@ -56,6 +60,9 @@ export default {
             }, 300);  
         },
 
+        /**
+         * method to view organization details for closure
+         */
         viewClosureList(data){
             this.$router.push({name:'ClosureAdd',params: {data:data}});
         },

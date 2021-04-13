@@ -54,6 +54,7 @@ export default {
             locationUse:[],
             form: new form({
                 id: '',
+                organizationId:'',
                 type: '',
                 item: '',
                 location: '',

@@ -6,10 +6,6 @@
                     <div class="row form-group">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>School:<span class="text-danger">*</span></label> 
-                            <!-- <select name="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="school" @change="remove_err('school'),getClassByOrganizationId()">
-                                <option value="">--- Please Select ---</option>
-                                <option value="1">Yangchenphug</option>
-                            </select> -->
                             <select name="class" id="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="remove_err('school'),getClassByOrganizationId()">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -18,11 +14,18 @@
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Class:<span class="text-danger">*</span></label> 
-                            <select name="class" id="class" class="form-control editable_fields" v-model="form.classes">
+                            <select name="class" id="class" class="form-control editable_fields" v-model="form.classes" @change="getStreamByClassId()">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
                             </select>
                             <has-error :form="form" field="str_name"></has-error>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Stream:<span class="text-danger"></span></label> 
+                            <select name="stream" id="stream" class="form-control editable_fields" v-model="form.stream">
+                                <option value="">--- Please Select ---</option>
+                                <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{ item.stream }}</option>
+                            </select>
                         </div>
                     </div>  
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -57,10 +60,12 @@ export default {
             users: [],
             classList:[],
             schoolList:[],
+            streamList:[],
             form: new form({
                 id: '',
                 school: '',
                 classes: '',
+                stream:'',
                 action_type:'add',
                 users:
                 [{
@@ -72,7 +77,10 @@ export default {
     },
 
     methods:{
-
+        
+        /**
+         * method to get current user organization
+         */
         getschoolDetials(uri = 'organization/getschoolDetials'){
             axios.get(uri)
             .then(response => {
@@ -92,11 +100,18 @@ export default {
             }, 300);  
         },
 
+        /**
+         * method to remove error
+         */
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
+
+        /**
+         * method to save data
+         */
         formaction: function(type){
             if(type=="reset"){
                 this.form.school= '';
@@ -128,11 +143,23 @@ export default {
             });
         },
 
+        /**
+         * method to get class by classId
+         */
+        getStreamByClassId:function(){
+            axios.get('/organization/getStreamByClassId/'+this.form.classes)
+              .then(response => {
+                  let data = response.data;
+                  this.streamList = data;
+            });
+        },
+
         /**method to add more field */
         addMore: function(){
             this.count++;
             this.form.users.push({section:''})
         },
+        
         /** method to remove field */
         remove(index){    
              if(this.form.users.length>1){
@@ -143,7 +170,7 @@ export default {
     },
 
     mounted(){
-        this.getschoolDetials();
+        this.getschoolDetials();        
     }
 }
 </script>

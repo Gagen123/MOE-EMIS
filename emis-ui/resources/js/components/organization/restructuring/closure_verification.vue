@@ -13,23 +13,19 @@
                         </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Code:</label>
-                            <span class="text-indigo-600" id="scode">{{form.code}}</span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Name:</label>
                             <span class="text-indigo-600" id="sname">{{form.name}}</span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Category:</label>
-                        <span class="text-indigo-600" id="scategory">{{form.category}}</span>
+                        <span class="text-indigo-600" id="scategory">{{form.category == 1 ? "Public" : "Private"}}</span>
                         </div>
-                    </div>
-                    <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Level:</label>
                             <span class="text-indigo-600" id="slevel">{{form.level}}</span>
                         </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Dzongkhag:</label>
                             <span class="text-indigo-600" id="sdzongkhag">{{form.dzongkhag}}</span>
@@ -38,26 +34,24 @@
                             <label>Gewog:</label>
                             <span class="text-indigo-600" id="sgewog">{{form.gewog}}</span>
                         </div>
-                    </div>
-                    
-                    <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Chiwog:</label>
                             <span class="text-indigo-600" id="schiwog">{{form.chiwog}}</span>
                         </div>
+                    </div>
+                    
+                    <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Location Type:</label>
                             <span class="text-indigo-600" id="slocationtype">{{form.locationType}}</span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Geopolitically Located:</label>
-                            <span class="text-indigo-600" id="sgeo">{{form.geoLocated}}</span>
+                            <span class="text-indigo-600" id="sgeo">{{form.geoLocated == 1 ? "Yes" : "No"}}</span>
                         </div>
-                    </div>
-                    <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>SEN School:</label>
-                            <span class="text-indigo-600" id="ssen">{{form.senSchoo}}</span>
+                            <span class="text-indigo-600" id="ssen">{{form.senSchoo == 1 ? "Yes" : "No"}}</span>
                         </div>
                     </div>
                     <div class="form-group row" v-if="form.senSchool==1">
@@ -104,20 +98,20 @@
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Reason:</label>
-                            <select class="form-control" v-model="form.reason" readonly>
-                                <option value="1">Closing for reason 1</option>
-                                <option value="2">Closing for reason 2</option>
-                            </select>
+                            <textarea class="form-control" v-model="form.reason" readonly></textarea>
                         </div>
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <label>Remarks:</label>
-                            <textarea class="form-control" v-model="form.remark" readonly> Explanation of the school closing</textarea>
+                            <textarea class="form-control" v-model="form.remark" readonly></textarea>
                         </div>
                     </div>
+                    <Workflow
+                            :appNo="form.applicationNo"
+                    />
                     <div class="form-group row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label>Your Remarks:</label>
-                            <textarea class="form-control" v-model="form.yourRemark" id="remarks"></textarea>
+                            <textarea class="form-control" v-model="form1.yourRemark" id="remarks"></textarea>
                         </div>
                     </div>
                     <div class="row form-group fa-pull-right">
@@ -133,7 +127,12 @@
 </template>
 
 <script>
+import Workflow from "../../common/view_workflow_details";
+
 export default {
+    components: {
+        Workflow,
+    },
     data(){
         return{
             form: new form({
@@ -141,6 +140,9 @@ export default {
                 locationType:'',geoLocated:'',senSchool:'',reason:'',remark:'',yourRemark:'',
                 cid:'',name:'',phoneNo:'',email:'',parentSchool:'',coLocatedParent:'0',applicationNo:''
             }), 
+            form1: new form({
+                id: '',applicationNo:'',actiontype:'',yourRemark:''
+            }),
         }
     },
 
@@ -153,7 +155,18 @@ export default {
             axios.get('organization/loadClosureApplicationDetails/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
-                this.appicationDetailsForm.applicationNo        =   data.applicationNo;
+                this.form.applicationNo        =   data.applicationNo;
+                this.form.name                 =   data.proposedName;
+                this.form.category             =   data.category;
+                this.form.level                =   data.level;
+                this.form.dzongkhag            =   data.dzongkhag;
+                this.form.gewog                =   data.gewog;
+                this.form.chiwog               =   data.village;
+                this.form.locationType         =   data.locationType;
+                this.form.geoLocated           =   data.isGeopoliticallyLocated;
+                this.form.senSchool            =   data.isSenSchool;
+                this.form.reason               =   data.reason;
+                this.form.remark               =   data.remark;
                 
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
@@ -173,7 +186,7 @@ export default {
         shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
                 let action=true;
-                if(nextclass=="reject" && this.form.remarks==""){
+                if(nextclass=="reject" && this.form.yourRemark==""){
                     $('#remarks_err').html('Please mention remarks');
                     $('#remarks').addClass('is-invalid');
                     action=false;
@@ -188,9 +201,9 @@ export default {
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
                         if (result.isConfirmed) {
-                            this.form.applicationNo=this.applicaitondetailsform.applicationNo;
-                            this.form.actiontype=nextclass;
-                            this.form.post('organization/updateNewEstablishmentApplication')
+                            this.form1.applicationNo=this.form.applicationNo;
+                            this.form1.actiontype=nextclass;
+                            this.form1.post('organization/updateClosureApplication')
                             .then((response) => {
                                 if(response!=""){
                                     Toast.fire({  

@@ -53,6 +53,7 @@ export default {
             locationUse:[],
             form: new form({
                 id: '',
+                organizationId:'',
                 type: '',
                 item: '',
                 location: '',
@@ -63,11 +64,18 @@ export default {
     },
 
     methods:{
+        /**
+         * method to remove error
+         */
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
+
+        /**
+         * method to save data
+         */
         formaction: function(type){
             if(type=="reset"){
                 this.form.type= '';
@@ -89,6 +97,10 @@ export default {
                 })
             }
 		},
+
+        /**
+         * method to get equipment type
+         */
         getType(uri = '/organization/getType'){
             axios.get(uri)
             .then(response => {
@@ -96,6 +108,10 @@ export default {
                 this.typeList = data;
             });
         },
+
+        /**
+         * method to get item by type
+         */
         getItem(uri = '/organization/getItem/'+this.form.type){
             axios.get(uri)
             .then(response => {
@@ -103,6 +119,10 @@ export default {
                 this.itemList = data;
             });
         },
+
+        /**
+         * method to get equipment usage location
+         */
         getLocationUse(uri = '/organization/getLocationUse'){
             axios.get(uri)
             .then(response => {

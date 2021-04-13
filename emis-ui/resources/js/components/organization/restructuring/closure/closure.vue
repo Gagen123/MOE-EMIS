@@ -121,7 +121,7 @@ export default {
         this.form.code=this.$route.params.data.code;
         this.form.name=this.$route.params.data.name;
         this.form.category=this.$route.params.data.category;
-        this.form.level=this.$route.params.data.level;
+        this.form.level=this.$route.params.data.levelId;
         this.form.dzongkhag=this.$route.params.data.dzongkhagId;
         this.form.gewog=this.$route.params.data.gewogId;
         this.form.chiwog=this.$route.params.data.chiwogId;

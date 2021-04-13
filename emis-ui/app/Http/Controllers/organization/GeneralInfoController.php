@@ -36,12 +36,13 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'type'          =>  $request['type'],
-            'item'          =>  $request['item'],
-            'location'      =>  $request['location'],
-            'number'        =>  $request['number'],
-            'actiontype'    =>  $request['action_type'],
-            'id'            =>  $request['id'],
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'type'                      =>  $request['type'],
+            'item'                      =>  $request['item'],
+            'location'                  =>  $request['location'],
+            'number'                    =>  $request['number'],
+            'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipmentAndFurniture', $loc);
@@ -82,11 +83,12 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'school'        =>  $request['school'],
-            'classes'       =>  $request['classes'],
-            'users'         =>  $request['users'],
-            'actiontype'    =>  $request['action_type'],
-            'id'            =>  $request['id'],
+            'school'                    =>  $request['school'],
+            'classes'                   =>  $request['classes'],
+            'stream'                    =>  $request['stream'],
+            'users'                     =>  $request['users'],
+            'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/section/saveSection', $loc);
@@ -237,6 +239,11 @@ class GeneralInfoController extends Controller
 
     public function getClassByOrganizationId($orgId = ""){
         $itemList = $this->apiService->listData('emis/organization/section/getClassByOrganizationId/'.$orgId);
+        return $itemList;
+    }
+
+    public function getStreamByClassId($classId = ""){
+        $itemList = $this->apiService->listData('emis/organization/section/getStreamByClassId/'.$classId);
         return $itemList;
     }
 }
