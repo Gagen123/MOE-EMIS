@@ -966,12 +966,22 @@ const routes = [
       { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
       { path: '/list_head_quater_office', component: require('./components/organization/establishment/list_head_quater_office.vue').default },
       { path: '/org_details', name:'org_details', component: require('./components/organization/establishment/org_details.vue').default },
+<<<<<<< HEAD
     ] 
   },
   { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
   { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
   { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
   { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
+=======
+      ] 
+    },
+    { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
+    { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
+    { path: '/closure_verification',name:'closure_verification', component: require('./components/organization/restructuring/closure_verification.vue').default },
+    { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
+    { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
+>>>>>>> db8b2d13a7029bae933d33d2a70e758e749e092d
 
   // organization structural facility route
   { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
