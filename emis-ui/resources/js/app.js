@@ -135,7 +135,6 @@ const routes = [
           ],
         },
 
-<<<<<<< HEAD
   //STAFF Masters
   { path: '/staff_link',
     component: require('./components/masters/staff_masters/staff_master_index.vue').default,
@@ -168,7 +167,6 @@ const routes = [
           { path: '/edit_transfer_undertaking', name:'edit_transfer_undertaking', component: require('./components/masters/staff_masters/transfer_undertaking/edit_transfer_undertaking.vue').default },
         ],
       },
-=======
         { path: '/major_group_master',
           component: require('./components/masters/staff_masters/major_group/major_group_index.vue').default,
           children:[
@@ -198,7 +196,6 @@ const routes = [
             { path: '/edit_position_title', name:'edit_position_title', component: require('./components/masters/staff_masters/position_title/edit_position_title.vue').default },
           ],
         },
->>>>>>> 67159ef177bcc5ce1891d85c809e19524ed46240
 
         { path: '/position_level_master',
           component: require('./components/masters/staff_masters/position_level/position_level_index.vue').default,
@@ -844,7 +841,6 @@ const routes = [
           */
         ] 
       },
-<<<<<<< HEAD
       { path: '/road_type_index', 
         component: require('./components/masters/organization_masters/road_type/road_type_index.vue').default ,
         children: 
@@ -1619,8 +1615,6 @@ const routes = [
     },
   ] 
  },
-=======
->>>>>>> 67159ef177bcc5ce1891d85c809e19524ed46240
 
       //Student Services Routes
       { path: '/student_services', component: require('./components/students/StudentServices/index.vue').default,
@@ -1778,22 +1772,13 @@ const routes = [
       { path: '/head_quater_office', component: require('./components/organization/establishment/head_quater_office.vue').default },
       { path: '/list_head_quater_office', component: require('./components/organization/establishment/list_head_quater_office.vue').default },
       { path: '/org_details', name:'org_details', component: require('./components/organization/establishment/org_details.vue').default },
-<<<<<<< HEAD
     ] 
   },
-  { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
-  { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
-  { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
-  { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
-=======
-      ] 
-    },
     { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
     { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
     { path: '/closure_verification',name:'closure_verification', component: require('./components/organization/restructuring/closure_verification.vue').default },
     { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
     { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
->>>>>>> db8b2d13a7029bae933d33d2a70e758e749e092d
 
   // organization structural facility route
   { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
@@ -1847,9 +1832,6 @@ const routes = [
       },
     ] 
   },
-<<<<<<< HEAD
-] 
-},
 // { path: '/subject_assestment', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
 //     children: 
 //     [
@@ -1865,11 +1847,9 @@ const routes = [
      
 //     ] 
 //   },
-=======
   { path: '/profile', name:'profile', component: require('./components/common/profile.vue').default },
   { path: '/tasklist', name:'tasklist', component: require('./components/common/taskList.vue').default },
   { path: '/track_application',  name:'track_application',component: require('./components/common/track_application.vue').default },
->>>>>>> 67159ef177bcc5ce1891d85c809e19524ed46240
 ]
 const router = new VueRouter({
     routes 
