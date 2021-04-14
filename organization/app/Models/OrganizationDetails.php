@@ -10,15 +10,26 @@ class OrganizationDetails extends Model
 {
     use HasFactory, Uuid;
     protected $table="organization_details";
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
-        'id','name','code','category','levelId','dzongkhagId','gewogId','chiwogId',
-        'locationId','isGeopoliticallyLocated','isSenSchool','parentSchoolId','isColocated',
-        'cid', 'fullName','phoneNo','email','status', 'created_by','updated_by'
+        'id',
+        'name',
+        'code',
+        'organizationType',
+        'zestAgencyCode',
+        'category',
+        'levelId',
+        'dzongkhagId',
+        'gewogId',
+        'chiwogId',
+        'locationId',
+        'isGeopoliticallyLocated',
+        'isSenSchool',
+        'parentSchoolId',
+        'isColocated',
+        'status',
+        'yearOfEstablishment',
+        'created_by',
+        'updated_by',
+        'remarks'
     ];
 }

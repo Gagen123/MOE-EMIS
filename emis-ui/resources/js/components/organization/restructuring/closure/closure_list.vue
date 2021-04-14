@@ -15,9 +15,9 @@
                 <tr v-for="(item, index) in closureList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
-                    <td>{{ item.category}}</td>
-                    <td>{{ item.levelId}}</td>
-                    <td><span class="badge badge-info"> Open</span> </td>
+                    <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}}</td>
+                    <td>{{ item.level}}</td>
+                    <td>{{ item.status }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewClosureList(item)"><i class="fas fa-edit"></i ></a>
@@ -37,11 +37,11 @@ export default {
         }
     },
     methods:{
-        loadClosureList(uri = 'organization/loadClosureList'){
+        loadClosureList(uri = 'organization/getschoolDetials'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.closureList =  data.data;
+                this.closureList =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

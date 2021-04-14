@@ -9,9 +9,11 @@ use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\AuthUser;
 
 class GeneralInfoController extends Controller
 {
+    use AuthUser;
     use ServiceHelper;
     public $apiService;
 
@@ -110,7 +112,7 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $connectivity =[
-            'organizationId'            =>  $request['organizationId'],
+            'organizationId'            =>  $this->getWrkingAgencyId(),
             'approachRoad'              =>  $request['approachRoad'],
             'electricitySource'         =>  $request['electricitySource'],
             'telephone'                 =>  $request['telephone'],
@@ -134,6 +136,36 @@ class GeneralInfoController extends Controller
         }
     }
 
+    public function getRoadTypeDropdown(){
+        $roadType = $this->apiService->listData('emis/organization/connectivity/getRoadTypeDropdown');
+        return $roadType;
+    }
+
+    public function getElectricitySourceDropdown(){
+        $electriSource = $this->apiService->listData('emis/organization/connectivity/getElectricitySourceDropdown');
+        return $electriSource;
+    }
+
+    public function getElectricitySupplyDropdown(){
+        $electriSupply = $this->apiService->listData('emis/organization/connectivity/getElectricitySupplyDropdown');
+        return $electriSupply;
+    }
+
+    public function getServiceProviderDropdown(){
+        $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown');
+        return $serviceProvider;
+    }
+    
+    public function getServiceProviderDropdown1(){
+        $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown1');
+        return $serviceProvider;
+    }
+
+    public function getContactTypeDropdown(){
+        $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getContactTypeDropdown');
+        return $serviceProvider;
+    }
+
     public function saveLocation(Request $request){
         $rules = [
             'landOwnership'         =>  'required',
@@ -151,7 +183,7 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'organizationId'        =>  $request['organizationId'],
+            'organizationId'        =>  $this->getWrkingAgencyId(),
             'landOwnership'         =>  $request['landOwnership'],
             'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
@@ -177,5 +209,34 @@ class GeneralInfoController extends Controller
     public function getDisasterListInCheckbox(){
         $disasterList = $this->apiService->listData('emis/organization/location/getDisasterListInCheckbox');
         return $disasterList;
+    }
+
+    public function saveClassMapping(Request $request){
+        $rules = [
+            'school'         =>  'required',
+            'class'          =>  'required',
+        ];
+        $customMessages = [
+            'school.required'        => 'School is required',
+            'class.required'         => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $loc =[
+            'school'        =>  $request['school'],
+            'class'         =>  $request['class'],
+            'id'            =>  $request['id'],
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $loc);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function getClassByOrganizationId($orgId = ""){
+        $itemList = $this->apiService->listData('emis/organization/section/getClassByOrganizationId/'.$orgId);
+        return $itemList;
     }
 }

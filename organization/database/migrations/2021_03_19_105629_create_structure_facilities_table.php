@@ -17,7 +17,6 @@ class CreateStructureFacilitiesTable extends Migration
             $table->uuid('id')->primary();
             $table->char('infrastructureId',36);
             $table->char('facilityTypeId',36);
-            $table->char('typeId',36);
             $table->string('facilityName');
             $table->string('capacity');
             $table->integer('noOfFacility');

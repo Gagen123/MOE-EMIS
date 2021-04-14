@@ -45,7 +45,7 @@ class HrDevelopmentMastersController extends Controller{
             'code'                          =>  $request['code'],
             'actiontype'                    =>  $request['action_type'],
             'record_type'                   =>  $request['record_type'],
-            'user_id'                       =>  $this->user_id()
+            'user_id'                       =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/saveHrDevelopmentMasters', $data);
         return $response_data;

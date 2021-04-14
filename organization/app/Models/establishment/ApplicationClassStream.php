@@ -17,6 +17,6 @@ class ApplicationClassStream extends Model
      * @var array
      */
     protected $fillable = [
-        'id','applicationNo','classId','streamId','created_by','updated_by'
+        'id','applicationNo','parent_for','classId','streamId','created_by','updated_by'
     ];
 }

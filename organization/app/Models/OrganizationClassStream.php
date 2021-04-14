@@ -17,6 +17,11 @@ class OrganizationClassStream extends Model
      * @var array
      */
     protected $fillable = [
-        'id','classId','streamId','created_by','updated_by'
+        'id',
+        'organizationId',
+        'classId',
+        'streamId',
+        'created_by',
+        'updated_by'
     ];
 }

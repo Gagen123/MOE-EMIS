@@ -15,12 +15,12 @@
                 <tr v-for="(item, index) in bifurcationList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
-                    <td>{{ item.category}}</td>
-                    <td>{{ item.levelId}}</td>
-                    <td><span class="badge badge-info"> Open</span> </td>
+                    <td>{{item.category  == 1 ? "public" :  "private"}}</td>
+                    <td>{{ item.level}}</td>
+                    <td>{{ item.status}} </td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewBifurcationList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewBifurcationList(item.id)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -37,11 +37,11 @@ export default {
         }
     },
     methods:{
-        loadBifurcationList(uri = 'organization/loadBifurcation'){
+        loadBifurcationList(uri = 'organization/getschoolDetials'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.bifurcationList =  data.data;
+                this.bifurcationList =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -53,16 +53,12 @@ export default {
                     "responsive": true,
                     "autoWidth": true,
                 }); 
-            }, 300);  
+            }, 3000);  
         },
-
         viewBifurcationList(data){
-            this.$router.push({name:'BifurcationAdd',params: {data:data}});
+            this.$router.push({name:'BifurcationAdd',query: {data:data}});
         },
     },
-
-    
-
     mounted(){
         this.loadBifurcationList();
     },

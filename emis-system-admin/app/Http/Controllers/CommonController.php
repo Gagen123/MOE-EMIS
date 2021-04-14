@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Traits\ApiResponser;
+use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\Workflow;
+use App\Models\TaskDetails;
+use App\Models\global_masters\Dzongkhag;
+use App\Models\global_masters\Gewog;
+
+class CommonController extends Controller{
+    use ApiResponser;
+    public $database="emis_system_admin";
+    public function __construct() {
+        date_default_timezone_set('Asia/Dhaka');
+    }
+    public function getApplicationDetials($applicationId=""){
+        return Workflow::where('application_number',$applicationId)->get();
+    }
+    public function getTaskList($type="",$user_id="",$param="",$param2=""){
+        $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
+        $param=explode('OUTSEP',$param);
+        $access_level=explode('SSS',$param2)[0];
+        if($type=="common"){
+            if(strtolower($access_level)=="dzongkhag"){
+                $result_data.=' t.user_dzo_id='.explode('SSS',$param2)[1].' AND ';
+            }
+            $result_data.=' t.claimed_by IS NULL AND ('; 
+            for($i=0;$i<sizeof($param)-1;$i++){
+                if(sizeof($param)-2==$i){
+                    $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))'; 
+                } 
+                else{ 
+                    $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
+                }  
+            }
+            // return $result_data;
+            return DB::select($result_data);
+        }
+        if($type=="own"){
+            $result_data.='t.claimed_by="'.$user_id.'"'; 
+            if(strtolower($access_level)=="dzongkhag"){
+                $result_data.=' AND t.user_dzo_id="'.explode('SSS',$param2)[1].'"';
+            }
+            return DB::select($result_data);
+        }
+    }
+
+    public function getDzoNameById($id=""){
+        return Dzongkhag::where('id',$id)->first();
+    }
+    public function getGewogNameById($id=""){
+        return Gewog::where('id',$id)->first();
+    }
+    
+    public function checkPendingApplication($type="",$user_id=""){
+        $response_data="";
+        if($type=="establishment"){
+            $response_data=TaskDetails::where('service_name', 'New Establishment')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->first();
+        }
+        if($type=="change"){
+            $response_data=TaskDetails::where('service_name', 'Change Basic Details')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->where('created_by', $user_id)->first();
+        }
+       
+        return $response_data;
+    }
+    
+    
+}

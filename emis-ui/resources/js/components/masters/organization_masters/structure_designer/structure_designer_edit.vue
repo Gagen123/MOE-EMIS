@@ -6,8 +6,8 @@
                 <input type="hidden" class="form-control" v-model="form.id"/>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Designer Name:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.disgnerName" :class="{ 'is-invalid': form.errors.has('disgnerName') }" id="disgnerName" @change="remove_err('disgnerName')" type="text" tabindex="1" autofocus="true">
-                    <has-error :form="form" field="disgnerName"></has-error>
+                    <input class="form-control" v-model="form.designerName" :class="{ 'is-invalid': form.errors.has('designerName') }" id="designerName" @change="remove_err('designerName')" type="text" tabindex="1" autofocus="true">
+                    <has-error :form="form" field="designerName"></has-error>
                 </div>
                 
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -33,14 +33,44 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                disgnerName: '',
+                designerName: '',
                 status: 1,
             })    
         }
     },
 
     methods:{
-        
-    }
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+        formaction: function(type){
+            if(type=="reset"){
+                this.form.designerName= '';
+                this.form.status= 1;
+            }
+            if(type=="save"){
+                this.form.post('masters/saveStructureDesigner',this.form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Structure Designer is updated successfully'
+                    })
+                    this.$router.push('/structure_designer_list');
+                })
+                .catch(() => {
+                    console.log("Error......")
+                })
+            }
+		},
+    },
+
+    created() {
+        this.form.designerName=this.$route.params.data.name;
+        this.form.status=this.$route.params.data.status;
+        this.form.id=this.$route.params.data.id;
+        // this.form.action_type=this.$route.params.data.action;
+    },
 }
 </script>

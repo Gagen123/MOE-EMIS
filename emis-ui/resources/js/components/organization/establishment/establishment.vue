@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
@@ -27,7 +31,7 @@
                             </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Level:<span class="text-danger">*</span></label>
-                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control editable_fields" @change="getClassAndStream('level'),remove_error('level')">
+                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getClassAndStream('level'),remove_error('level')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
@@ -48,7 +52,7 @@
                                 <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
+                                </select> 
                                 <has-error :form="form" field="dzongkhag"></has-error>
                             </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -71,7 +75,7 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Location Type:<span class="text-danger">*</span></label>
-                                <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationCategory" class="form-control editable_fields" @change="remove_error('locationCategory')">
+                                <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2" @change="remove_error('locationType')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
@@ -86,16 +90,16 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Sen School:<span class="text-danger">*</span></label>
                                 <br>
-                                <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
-                                <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                                <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.senSchool" value="0" tabindex=""/> No</label>
                             </div>                  
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" id="parentDetails" style="display:none">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
                                 <label class="mb-0">Parent School:</label>
                                 <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  editable_fields">
                                     <option value="">--- Please Select ---</option>
-                                    <option value="1">Kabisa</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
@@ -128,7 +132,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Email:<span class="text-danger">*</span></label>
-                                    <input type="email" v-model="form.email" class="form-control" id="fullname"/>
+                                    <input type="email" v-model="form.email" class="form-control" id="email"/>
                                 </div>
                             </div>
                         </div>
@@ -143,7 +147,7 @@
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams</label>
+                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
@@ -181,6 +185,7 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
+            orgList:[],
             classList:[],
             streamList:[],
             form: new form({
@@ -214,6 +219,12 @@ export default {
                 this.levelList = data;
             });
         },
+        getOrgList(uri = '/organization/getOrgList'){
+            axios.get(uri)
+            .then(response => {
+                this.orgList = response.data.data;
+            });
+        },
 
         /**
          * method to get location in dropdown
@@ -245,7 +256,7 @@ export default {
          */
         async getgewoglist(id){
             let dzoId=$('#dzongkhag').val();
-            if(id!="" && dzoId==null){
+            if(id!="" && (dzoId==null || dzoId=="")){
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
@@ -263,7 +274,7 @@ export default {
          */
         async getvillagelist(id){
             let gewogId=$('#gewog').val();
-            if(id!="" && gewogId==null){
+            if(id!="" && (gewogId==null || gewogId=="")){
                 gewogId=id;
             }
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
@@ -281,6 +292,14 @@ export default {
          * method to populate dropdown
          */
         async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="level"){
+                this.form.level=$('#level').val();
+            }
             if(id=="dzongkhag"){
                 this.form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
@@ -291,6 +310,9 @@ export default {
             }
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
+            }
+            if(id=="locationType"){
+                this.form.locationType=$('#locationType').val();
             }
         },
 
@@ -329,30 +351,58 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.classStreamForm.post('organization/saveClassStream')
-                        .then(() => {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Establishment is saved successfully'
-                            })
-                    })
-                        .catch(() => {
-                            console.log("Error......")
+                        .then((response) => {
+                            if(response.data=="No Screen"){
+                                Toast.fire({  
+                                    icon: 'error',
+                                    title: 'Technical Errors: please contact system admimnistrator for further details'
+                                });
+                            }
+                            if(response!="" && response!="No Screen"){
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'acknowledgement',params: {data:message}});
+                                Toast.fire({  
+                                    icon: 'success',
+                                    title: 'Application for new establishment has been submitted for further action'
+                                });
+                            } 
+                        })
+                        .catch((err) => {
+                            console.log("Error:"+err)
                         })
                     }
                 });
             }
             else{
                 if(nextclass=="class-tab"){
-                     this.form.post('organization/saveEstablishment',this.form)
-                     
-                    .then(() => {
-                        
+                    this.form.post('organization/saveEstablishment',this.form)
+                    .then((response) => {
+                       this.change_tab(nextclass);
                     })
-                    .catch(() => {
-                        console.log("Error......")
+                    .catch((error) => {
+                       this.applyselect2();
+                        this.change_tab('organization-tab');
+                        console.log("Error:"+error)
                     })
                 }
-                this.change_tab(nextclass);
+            }
+        },
+
+        applyselect2(){
+            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
+                $('#level').addClass('select2-hidden-accessible');
+            }
+            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+                $('#dzongkhag').addClass('select2-hidden-accessible');
+            }
+            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
+                $('#gewog').addClass('select2-hidden-accessible');
+            }
+            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+                $('#chiwog').addClass('select2-hidden-accessible');
+            }
+            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+                $('#locationType').addClass('select2-hidden-accessible');
             }
         },
 
@@ -367,6 +417,7 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
+            this.applyselect2();
         },
 
         /**
@@ -392,7 +443,14 @@ export default {
                 $('#privatedetails').hide();
             }
         },
-
+        show_parent_school_details(param){
+            if(param){
+                $('#parentDetails').show();
+            }
+            else{
+                $('#parentDetails').hide();
+            }
+        } ,
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {  
@@ -418,15 +476,17 @@ export default {
                 this.form.id  =   data.id;
                 this.form.proposedName  =   data.proposedName;
                 this.form.level         =   data.levelId;
+                $('#level').val(data.levelId).trigger('change');
                 this.form.category      =   data.category;
                 this.form.locationType  =   data.locationId;
+                $('#locationType').val(data.locationId).trigger('change');
                 
                 //to populate proprietor details if category is private
                 if(data.category == 0){
                     this.showprivatedetails('private');
                     this.loadProprietorDetails();
                 }
-                
+                $('#dzongkhag').val(JSON.parse(response.data.dzongkhag).data.id).trigger('change');
                 this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
                 this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
                 this.form.gewog = JSON.parse(response.data.gewog).data.id;
@@ -437,22 +497,33 @@ export default {
                 this.form.senSchool                 =   data.isSenSchool;
                 this.form.parentSchool              =   data.parentSchoolId;
                 this.form.coLocated                 =   data.isColocated;
-
                 
             })
             .catch((error) => {  
                 console.log("Error......"+error);
             });
         },
-
-        
+        checkPendingApplication(){
+            axios.get('organization/checkPendingApplication/establishment')
+            .then((response) => {  
+                let data=response.data;
+                if(data!=""){
+                    $('#mainform').hide();
+                    $('#applicaitonUnderProcess').show();
+                    $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
+                }
+            })
+            .catch((error) => {  
+                console.log("Error: "+error);
+            });
+        },
     },
-
+    
     created(){
         this.getLevel();
         this.getLocation();
+        this.checkPendingApplication();
     },
-    
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -471,6 +542,7 @@ export default {
         this.getStream();
         this.loadactivedzongkhagList();
         this.loaddOrganizationDetails();
-    },
+        this.getOrgList();
+    }, 
 }
 </script>

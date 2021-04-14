@@ -142,7 +142,7 @@ class HomeController extends Controller{
                     'modules'  => $module,
                     'sub_modules' =>$sub_modules,
                     'screens'=>$screens,
-                    'ministry_user'=>$user->ministry_user,
+                    'acess_level'=>$user->ministry_user,
                     'roles' => $roles,//roles will be multiple
                     'system_id' =>json_decode($user_Det)->system_id,
                 ];
@@ -179,26 +179,45 @@ class HomeController extends Controller{
         $headers['Authorization'] = 'bearer '. $token;
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
         $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
-        $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.Session::get('User_Details')['system_id'], [], $headers);
-        // dd($role_workflow_submitter);
+        $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
         $screens=[];
         $screens_ids="";
-        if($role_riv!=null){
-            foreach(json_decode($role_riv) as $i=> $priv){
-                if(strpos($screens_ids,$priv->Id)===false){  
-                    $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
-                    $screens_ids.=$priv->Id.',';
+        if(($role_workflow_submitter!=null || $role_workflow_submitter!="") && $role_workflow_submitter!="Unauthorized."){
+            foreach(json_decode($role_workflow_submitter) as $i=> $work){
+                if(strpos($screens_ids,$work->screen_id)===false){  
+                    $screens_ids.=$work->screen_id.',';
                     $screen=[
-                        'mod_id'=> $priv->module_id,
-                        'sub_mod_id'=> $priv->sub_module_id,
-                        'screen_id' => $priv->Id,
-                        'screen_name' => $priv->screenName,
-                        'route' =>$priv->Route,
-                        'work_flow_status'=>'NA',
-                        'actions' => json_decode($actions)[0]->action_name,
-                        'screen_icon'=>$priv->screen_icon,
+                        'mod_id'=> $work->mod_id,
+                        'sub_mod_id'=> $work->sub_mod_id,
+                        'screen_id' => $work->screen_id,
+                        'screen_name' => $work->screen_name,
+                        'route' =>$work->Route,
+                        'work_flow_status'=>$work->workflow_status,
+                        'actions' => 'NA',
+                        'screen_icon'=>$work->screen_icon,
                     ];
                     array_push($screens,$screen);
+                }
+            }
+        }
+        if($role_riv!=null){
+            foreach(json_decode($role_riv) as $i=> $priv){
+                if($priv->Organization == 1 || $priv->Dzongkhag == 1 || $priv->National == 1 ){
+                    if(strpos($screens_ids,$priv->Id)===false){  
+                        $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
+                        $screens_ids.=$priv->Id.',';
+                        $screen=[
+                            'mod_id'=> $priv->module_id,
+                            'sub_mod_id'=> $priv->sub_module_id,
+                            'screen_id' => $priv->Id,
+                            'screen_name' => $priv->screenName,
+                            'route' =>$priv->Route,
+                            'work_flow_status'=>'NA',
+                            'actions' => json_decode($actions)[0]->action_name,
+                            'screen_icon'=>$priv->screen_icon,
+                        ];
+                        array_push($screens,$screen);
+                    }
                 }
             }
         }

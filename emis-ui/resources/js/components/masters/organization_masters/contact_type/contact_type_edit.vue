@@ -34,13 +34,41 @@ export default {
                 id: '',
                 contactName: '',
                 status: 1,
-                // action_type:'add',
             })
         }
     },
 
     methods:{
-        
-    }
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+        formaction: function(type){
+            if(type=="reset"){
+                this.form.contactName= '';
+                this.form.status= 1;
+            }
+            if(type=="save"){
+                this.form.post('masters/saveContactType',this.form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Contact type is updated successfully'
+                    })
+                    this.$router.push('/contact_type_list');
+                })
+                .catch(() => {
+                    console.log("Error......")
+                })
+            }
+		},
+    },
+
+    created() {
+        this.form.contactName=this.$route.params.data.name;
+        this.form.status=this.$route.params.data.status;
+        this.form.id=this.$route.params.data.id;
+    },
 }
 </script>

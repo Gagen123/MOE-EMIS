@@ -9,38 +9,30 @@
                             <div class="form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-8 ">Approach Road:<span class="text-danger"> *</span></label>
-                                    <select name="approachRoad" id="approachRoad" v-model="form.approachRoad" class="form-control editable_fields " @change="approachRoadIsNoRoad()">
+                                    <select name="approachRoad" id="approachRoad" class="form-control" v-model="form.approachRoad" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="approachRoadIsNoRoad()">
                                         <option value="">--- Please Select ---</option>
-                                        <option value="1">Paved</option>
-                                        <option value="2">Unpaved</option>
-                                        <option value="3">No Road</option>
+                                        <option v-for="(item, index) in roadTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div> 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-8 ">Electricity Source:<span class="text-danger"> *</span></label>
-                                    <select name="electricitySource" v-model="form.electricitySource" id="electricitySource" class="form-control editable_fields " @change="electricitySourceIsGrid()">
+                                    <select name="electricitySource" id="electricitySource" class="form-control" v-model="form.electricitySource" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="electricitySourceIsGrid()">
                                         <option value="">--- Please Select ---</option>
-                                        <option value="1">Grid</option>
-                                        <option value="2">Solar</option>
-                                        <option value="3">No electricity</option>
+                                        <option v-for="(item, index) in electricitySourceList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div> 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-12 ">Telephone Service Provider:<span class="text-danger"> *</span></label>
-                                    <select name="telephone" v-model="form.telephone" id="telephone" class="form-control editable_fields ">
+                                    <select name="telephone" id="telephone" class="form-control" v-model="form.telephone" :class="{ 'is-invalid': form.errors.has('spo_name') }">
                                         <option value="">--- Please Select ---</option>
-                                        <option value="1">No telephone connection</option>
-                                        <option value="2">BT</option>
-                                        <option value="3">TCell</option>
+                                        <option v-for="(item, index) in serviceProviderList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div> 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-10 ">Internet Service Provider:<span class="text-danger"> *</span></label>
-                                    <select name="internet" v-model="form.internet" id="internet" class="form-control editable_fields " @change="internet()">
+                                    <select name="internet" id="internet" class="form-control" v-model="form.internet" @change="internet()" :class="{ 'is-invalid': form.errors.has('spo_name') }">
                                         <option value="">--- Please Select ---</option>
-                                        <option value="1">No internet connection</option>
-                                        <option value="2">BT</option>
-                                        <option value="3">TCell</option>
+                                        <option v-for="(item, index) in serviceProviderList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div> 
                             </div>
@@ -68,10 +60,9 @@
                             <div class="form-group row">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12  grid" style="display:none">
                                     <label class="col-md-12 ">Electricity Main Line Supply:</label>
-                                    <select name="electricitySupply" v-model="form.electricitySupply" id="electricitySupply" class="form-control editable_fields ">
+                                    <select name="electricitySupply" id="electricitySupply" class="form-control" v-model="form.electricitySupply">
                                         <option value="">--- Please Select ---</option>
-                                        <option value="1">Underground cable</option>
-                                        <option value="2">Overhead cable</option>
+                                        <option v-for="(item, index) in electricitySupplyList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div> 
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12  grid" style="display:none">
@@ -118,7 +109,11 @@
                             <tbody>
                                 <tr id="record1" v-for='(user, index) in form.users' :key="index">
                                     <td>
-                                        <input type="text" name="fax" class="form-control" v-model="user.contactName"/>
+                                        <!-- <input type="text" name="fax" class="form-control" v-model="user.contactName"/> -->
+                                        <select name="name" id="name" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('spo_name') }">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
                                     </td>
                                     <td>                                
                                         <input type="text" name="phone" class="form-control" v-model="user.phone"/>
@@ -159,6 +154,12 @@ export default {
     data(){
         return{
             count:1,
+            roadTypeList:[],
+            electricitySourceList:[],
+            electricitySupplyList:[],
+            serviceProviderList:[],
+            serviceProviderList1:[],
+            contactTypeList:[],
             users: [],
             form: new form({
                 id: '',organizationId:'1',approachRoad: '',electricitySource: '',telephone:'',internet:'',distanceFromRoad:'',
@@ -199,6 +200,71 @@ export default {
 		},
 
         /**
+         * method to get road type in dropdown
+         */
+        getRoadTypeDropdown(uri = '/organization/getRoadTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.roadTypeList = data;
+            });
+        },
+        /**
+         * method to get service provider in dropdown
+         */
+        getServiceProviderDropdown(uri = '/organization/getServiceProviderDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.serviceProviderList = data;
+            });
+        },
+
+        /**
+         * method to get service provider in dropdown
+         */
+        getServiceProviderDropdown1(uri = '/organization/getServiceProviderDropdown1'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.serviceProviderList1 = data;
+            });
+        },
+
+        /**
+         * method to get road type in dropdown
+         */
+        getElectricitySourceDropdown(uri = '/organization/getElectricitySourceDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.electricitySourceList = data;
+            });
+        },
+
+        /**
+         * method to get road type in dropdown
+         */
+        getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.contactTypeList = data;
+            });
+        },
+
+        /**
+         * method to get electricity supply in dropdown
+         */
+        getElectricitySupplyDropdown(uri = '/organization/getElectricitySupplyDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.electricitySupplyList = data;
+            });
+        },
+
+        /**
          * method to add more fields
          */
         addMore: function(){
@@ -220,7 +286,7 @@ export default {
         */
         electricitySourceIsGrid: function(){
             let electricitySource = $("#electricitySource").val();
-            if(electricitySource == 1){
+            if(electricitySource == "6e63faeb-24bb-4ec2-ab93-088611422ee7"){
                 $(".grid").show();
             }else{
                 $(".grid").hide();
@@ -250,6 +316,15 @@ export default {
                 $(".showDiv").hide();
             }
         },
+    },
+     mounted() { 
+        this.getRoadTypeDropdown();
+        this.getElectricitySourceDropdown();
+        this.getElectricitySupplyDropdown();
+        this.getServiceProviderDropdown();
+        this.getServiceProviderDropdown1();
+        this.getContactTypeDropdown();
+
     }
 }
 </script>

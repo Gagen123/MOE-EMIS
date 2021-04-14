@@ -4,7 +4,8 @@
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Service Name</th>
+                    <th>Service Type</th>
+                    <th>Service Provider</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -12,6 +13,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in serviceList" :key="index">
                     <td>{{ index + 1 }}</td>
+                    <td>{{ item.serviceType == 1 ? "Internet" : "Telephone"}}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
@@ -34,7 +36,7 @@ export default {
     },
 
     methods:{
-        loadServiceList(uri = 'masters/loadDisaster'){
+        loadServiceList(uri = 'masters/loadServiceProvider'){
             axios.get(uri)
             .then(response => {
                 let data = response;
