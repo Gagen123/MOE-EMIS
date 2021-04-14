@@ -15,7 +15,7 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
-$router->group(['prefix' => 'staff_api/v1'], function () use ($router) {
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters'], function () use ($router) {
         $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
         $router->get('/loadStaffMasters/{param}','masters\StaffMastersController@loadStaffMasters');
