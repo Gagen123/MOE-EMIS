@@ -318,17 +318,17 @@ class RestructuringController extends Controller
             'code'                     =>  $request['code'],
             'name'                     =>  $request['name'],
             'category'                 =>  $request['category'],
-            'level'                    =>  $request['level'],
-            'dzongkhag'                =>  $request['dzongkhag'],
-            'gewog'                    =>  $request['gewog'],
-            'chiwog'                   =>  $request['chiwog'],
-            'location'                 =>  $request['location'],
+            'level'                    =>  $request['levelId'],
+            'dzongkhag'                =>  $request['dzongkhagId'],
+            'gewog'                    =>  $request['gewogId'],
+            'chiwog'                   =>  $request['chiwogId'],
+            'location'                 =>  $request['locationId'],
             'geoLocated'               =>  $request['geoLocated'],
             'senSchool'                =>  $request['senSchool'],
             'parentSchool'             =>  $request['parentSchool'],
-            'coLocated'                =>  $request['coLocated'],
+            'coLocatedParent'          =>  $request['coLocatedParent'],
             'cid'                      =>  $request['cid'],
-            'name'                     =>  $request['name'],
+            'fullName'                 =>  $request['fullName'],
             'phoneNo'                  =>  $request['phoneNo'],
             'email'                    =>  $request['email'],
             'status'                   =>  $request['status'],
@@ -338,8 +338,11 @@ class RestructuringController extends Controller
             'user_id'                  =>  $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
+        // dd($response_data);
         $workflowdet=$this->getsubmitterStatus('closure');
-        
+        if($workflowdet['screen_id']=="0"){
+            return "No Screen";
+        }
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -353,6 +356,7 @@ class RestructuringController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
+        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $work_response_data;
     }

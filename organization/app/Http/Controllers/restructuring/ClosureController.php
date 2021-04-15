@@ -71,7 +71,7 @@ class ClosureController extends Controller
             'isGeopoliticallyLocated'  =>  $request['geoLocated'],
             'isSenSchool'              =>  $request['senSchool'],
             'parentSchoolId'           =>  $request['parentSchool'],
-            'isColocated'              =>  $request['coLocated'],
+            'coLocatedParent'          =>  $request['coLocatedParent'],
             'status'                   =>  $request['status'],
             'applicationNo'            =>  $application_no,
             'service'                  =>  "Closure",
@@ -87,7 +87,7 @@ class ClosureController extends Controller
             $pvtDetails = [
                 'applicationId'            =>  $cls->id,
                 'cid'                      =>  $request['cid'],
-                'fullName'                 =>  $request['name'],
+                'fullName'                 =>  $request['fullName'],
                 'phoneNo'                  =>  $request['phoneNo'],
                 'email'                    =>  $request['email'],
                 'created_by'               =>  $request->user_id,

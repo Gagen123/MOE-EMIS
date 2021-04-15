@@ -18,6 +18,6 @@ class Locations extends Model
      */
     protected $fillable = [
         'id','organizationId','landOwnership','compoundFencing','entranceGate','longitude','latitude','altitude',
-        'thramNo','cid','name','compoundArea'
+        'thramNo','cid','name','compoundArea','created_by','updated_by'
     ];
 }

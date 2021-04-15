@@ -26,40 +26,84 @@ class ConnectivityController extends Controller
      */
     public function __construct()
     {
-        //
+        date_default_timezone_set('Asia/Dhaka');
     }
 
     public function saveConnectivity(Request $request){
-        $connectivity = [
-            'roadTypeId'                         =>  $request['approachRoad'],
-            'organizationId'                     =>  $request['organizationId'],
-            'electricitySourceId'                =>  $request['electricitySource'],
-            'telephoneServiceProvoderId'         =>  $request['telephone'],
-            'internetServiceProviderId'          =>  $request['internet'],
-            'distanceFromRoad'                   =>  $request['distanceFromRoad'],
-            'daysFromRoad'                       =>  $request['daysFromRoad'],
-            'hoursFromRoad'                      =>  $request['hoursFromRoad'],
-            'electricitySupplyId'                =>  $request['electricitySupply'],
-            'hasElectricalSubstation'            =>  $request['electricalSubstation'],
-            'mbps'                               =>  $request['bandwidth'],
-            'drukRenConnection'                  =>  $request['drukRen'],
-        ];
-        $conn = Connectivity::create($connectivity);
+        $id = $request->id;
 
-        foreach ($request->input('users') as $i=> $user){
-            $contact_details = array(
-                'organizationId'    =>$request['organizationId'],
-                'contactTypeId'     =>$user['contactName'],
-                'phone'             =>$user['phone'],
-                'fax'               =>$user['fax'],
-                'mobile'            =>$user['mobile'],
-                'email'             =>$user['email'],
-                'type'              =>2
-        );
-             $conn = ContactDetails::create($contact_details);
+        if($id != null){
+            $connectivity = [
+                'roadTypeId'                         =>  $request['approachRoad'],
+                'organizationId'                     =>  $request['organizationId'],
+                'electricitySourceId'                =>  $request['electricitySource'],
+                'telephoneServiceProvoderId'         =>  $request['telephone'],
+                'internetServiceProviderId'          =>  $request['internet'],
+                'distanceFromRoad'                   =>  $request['distanceFromRoad'],
+                'daysFromRoad'                       =>  $request['daysFromRoad'],
+                'hoursFromRoad'                      =>  $request['hoursFromRoad'],
+                'electricitySupplyId'                =>  $request['electricitySupply'],
+                'hasElectricalSubstation'            =>  $request['electricalSubstation'],
+                'mbps'                               =>  $request['bandwidth'],
+                'drukRenConnection'                  =>  $request['drukRen'],
+                'updated_by'                         =>  $request->user_id,
+                'created_at'                         =>  date('Y-m-d h:i:s')
+            ];
+
+            $conn = Connectivity::where('id', $id)->update($connectivity);
+            
+            DB::table('contact_details')->where('organizationId', $request->organizationId)->delete();
+
+            foreach ($request->input('users') as $i=> $user){
+                $contact_details = array(
+                    'organizationId'    =>  $request['organizationId'],
+                    'contactTypeId'     =>  $user['contactName'],
+                    'phone'             =>  $user['phone'],
+                    'mobile'            =>  $user['mobile'],
+                    'email'             =>  $user['email'],
+                    'type'              =>  2,
+                    'updated_by'        =>  $request->user_id,
+                    'created_at'        =>  date('Y-m-d h:i:s')
+            );
+                 $conn = ContactDetails::create($contact_details);
+            }
+            return $this->successResponse($conn, Response::HTTP_CREATED);
+
+        }else{
+            $connectivity = [
+                'roadTypeId'                         =>  $request['approachRoad'],
+                'organizationId'                     =>  $request['organizationId'],
+                'electricitySourceId'                =>  $request['electricitySource'],
+                'telephoneServiceProvoderId'         =>  $request['telephone'],
+                'internetServiceProviderId'          =>  $request['internet'],
+                'distanceFromRoad'                   =>  $request['distanceFromRoad'],
+                'daysFromRoad'                       =>  $request['daysFromRoad'],
+                'hoursFromRoad'                      =>  $request['hoursFromRoad'],
+                'electricitySupplyId'                =>  $request['electricitySupply'],
+                'hasElectricalSubstation'            =>  $request['electricalSubstation'],
+                'mbps'                               =>  $request['bandwidth'],
+                'drukRenConnection'                  =>  $request['drukRen'],
+                'created_by'                         =>  $request->user_id,
+                'created_at'                         =>  date('Y-m-d h:i:s')
+            ];
+            $conn = Connectivity::create($connectivity);
+    
+            foreach ($request->input('users') as $i=> $user){
+                $contact_details = array(
+                    'organizationId'    =>  $request['organizationId'],
+                    'contactTypeId'     =>  $user['contactName'],
+                    'phone'             =>  $user['phone'],
+                    'mobile'            =>  $user['mobile'],
+                    'email'             =>  $user['email'],
+                    'type'              =>  2,
+                    'created_by'        =>  $request->user_id,
+                    'created_at'        =>  date('Y-m-d h:i:s')
+            );
+                 $conn = ContactDetails::create($contact_details);
+            }
+    
+            return $this->successResponse($conn, Response::HTTP_CREATED);
         }
-
-        return $this->successResponse($conn, Response::HTTP_CREATED);
     }
 
     /**

@@ -17,6 +17,6 @@ class EquipmentAndFurniture extends Model
      * @var array
      */
     protected $fillable = [
-        'id','organizationId','type', 'item', 'location', 'number'
+        'id','organizationId','type', 'item', 'location', 'number','created_by','updated_by'
     ];
 }

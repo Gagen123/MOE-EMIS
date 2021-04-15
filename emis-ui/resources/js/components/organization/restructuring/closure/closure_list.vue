@@ -20,7 +20,7 @@
                     <td>{{ item.status }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="showfulldetails(item.id)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewClosureList(item.id)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -37,10 +37,6 @@ export default {
         }
     },
     methods:{
-
-        /**
-         * method to get organization list
-         */
         loadClosureList(uri = 'organization/getschoolDetials'){
             axios.get(uri)
             .then(response => {
@@ -60,12 +56,9 @@ export default {
             }, 300);  
         },
 
-        /**
-         * method to view organization details for closure
-         */
-        showfulldetails(id){
-            this.$router.push({name:'ClosureAdd',query: {data:id}});
-        }
+         viewClosureList(data){
+            this.$router.push({name:'ClosureAdd',query: {data:data}});
+        },
     },
 
     mounted(){

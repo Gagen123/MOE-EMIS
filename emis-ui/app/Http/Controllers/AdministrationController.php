@@ -716,6 +716,32 @@ class AdministrationController extends Controller{
         return $loadContactType;
     }
 
+    public function saveAttachment(Request $request){
+        $rules = [
+            'attachmentName'  =>  'required',
+            'status'          =>  'required',
+        ];
+        $customMessages = [
+            'attachmentName.required'     => 'Attachment name is required',
+            'status.required'             => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $attachment =[
+            'attachmentName'    =>  $request['attachmentName'],
+            'status'            =>  $request['status'],
+            'id'                =>  $request['id'],
+            'user_id'           =>$this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/attachment/saveAttachment', $attachment);
+        return $response_data;
+        
+    }
+    
+    public function loadAttachment(){
+        $loadAttachment = $this->apiService->listData('emis/masters/attachment/loadAttachment');
+        return $loadAttachment;
+    }
+
     public function saveStudentHealth(Request $request){
         $rules = [
             'studenthealthName'  =>  'required',

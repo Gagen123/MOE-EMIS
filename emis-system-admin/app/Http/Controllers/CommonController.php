@@ -63,6 +63,15 @@ class CommonController extends Controller{
         if($type=="change"){
             $response_data=TaskDetails::where('service_name', 'Change Basic Details')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->where('created_by', $user_id)->first();
         }
+        if($type=="closure"){
+            $response_data=TaskDetails::where('service_name', 'Closure')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->where('created_by', $user_id)->first();
+        }
+        if($type=="bifurcation"){
+            $response_data=TaskDetails::where('service_name', 'Bifurcation')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->where('created_by', $user_id)->first();
+        }
+        if($type=="merger"){
+            $response_data=TaskDetails::where('service_name', 'Merger')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->where('created_by', $user_id)->first();
+        }
        
         return $response_data;
     }

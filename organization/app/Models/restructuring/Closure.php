@@ -18,6 +18,6 @@ class Closure extends Model
      */
     protected $fillable = [
         'id','code','name','category','level','dzongkhag','gewog','chiwog',
-        'location','geoPoliticallyLocated','senSchool','reason','remark',
+        'location','geoPoliticallyLocated','senSchool','reason','remark','created_by','updated_by'
     ];
 }

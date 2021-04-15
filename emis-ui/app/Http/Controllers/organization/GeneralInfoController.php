@@ -43,6 +43,7 @@ class GeneralInfoController extends Controller
             'number'                    =>  $request['number'],
             'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipmentAndFurniture', $loc);
@@ -54,7 +55,7 @@ class GeneralInfoController extends Controller
     }
 
     public function loadEquipment(Request $request){
-        $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment');
+        $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$this->getWrkingAgencyId());
         return $dis;
     }
 
@@ -89,6 +90,7 @@ class GeneralInfoController extends Controller
             'users'                     =>  $request['users'],
             'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/section/saveSection', $loc);
@@ -100,6 +102,12 @@ class GeneralInfoController extends Controller
     }
 
     public function saveConnectivity(Request $request){
+        $orgId = $request->organizationId;
+        if($orgId != null){
+            $orgId = $orgId;
+        }else{
+            $orgId = $this->getWrkingAgencyId();
+        }
         $rules = [
             'approachRoad'          =>  'required',
             'electricitySource'     =>  'required',
@@ -114,7 +122,7 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $connectivity =[
-            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'organizationId'            =>  $orgId,
             'approachRoad'              =>  $request['approachRoad'],
             'electricitySource'         =>  $request['electricitySource'],
             'telephone'                 =>  $request['telephone'],
@@ -128,6 +136,7 @@ class GeneralInfoController extends Controller
             'drukRen'                   =>  $request['drukRen'],
             'id'                        =>  $request['id'],
             'users'                     =>  $request['users'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivity', $connectivity);
@@ -169,6 +178,12 @@ class GeneralInfoController extends Controller
     }
 
     public function saveLocation(Request $request){
+        $orgId = $request->organizationId;
+        if($orgId != null){
+            $orgId = $orgId;
+        }else{
+            $orgId = $this->getWrkingAgencyId();
+        }
         $rules = [
             'landOwnership'         =>  'required',
             'compoundFencing'       =>  'required',
@@ -185,7 +200,7 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'organizationId'        =>  $this->getWrkingAgencyId(),
+            'organizationId'        =>  $orgId,
             'landOwnership'         =>  $request['landOwnership'],
             'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
@@ -198,6 +213,7 @@ class GeneralInfoController extends Controller
             'compoundArea'          =>  $request['compoundArea'],
             'id'                    =>  $request['id'],
             'disaster'              =>  $request['disaster'],
+            'user_id'               =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);

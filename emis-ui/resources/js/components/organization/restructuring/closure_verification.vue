@@ -1,128 +1,130 @@
 <template>
     <div>
-        <div class="card card-success card-outline">
-                <div class="card-header">
-                    <h3 class="card-title">Details of School</h3>
+        <ol class="mb-1 ml-xl-n3 mr-xl-n2 pl-3" style="background-color:#E5E5E5">
+            <li class="pl-2 form-inline "><h6 class="pt-1">Closure Application Verification/Approval</h6></li>
+        </ol>
+        <div class="callout callout-success">
+            <h4><u>Application Details</u></h4>
+            <div class="form-group row"> 
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0">Application Number:</label>
+                    <span class="text-blue text-bold">{{form.applicationNo}}</span>
+                </div> 
+            </div>
+        </div>
+        <div class="callout callout-success">
+            <h4><u>Closing Organization Details</u></h4>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Name:</label>
+                    <span class="text-blue text-bold" id="sname">{{form.name}}</span>
                 </div>
-                <div class="card-body" >
-                    <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Application Number:</label>
-                                <span class="text-indigo-600">{{form.applicationNo}}</span>
-                            </div>
-                        </div>
-                    <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Name:</label>
-                            <span class="text-indigo-600" id="sname">{{form.name}}</span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Category:</label>
-                        <span class="text-indigo-600" id="scategory">{{form.category == 1 ? "Public" : "Private"}}</span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Level:</label>
-                            <span class="text-indigo-600" id="slevel">{{form.level}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Dzongkhag:</label>
-                            <span class="text-indigo-600" id="sdzongkhag">{{form.dzongkhag}}</span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Gewog:</label>
-                            <span class="text-indigo-600" id="sgewog">{{form.gewog}}</span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Chiwog:</label>
-                            <span class="text-indigo-600" id="schiwog">{{form.chiwog}}</span>
-                        </div>
-                    </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Category:</label>
+                    <span class="text-blue text-bold" id="scategory">{{form.category == 1 ? "Public" : "Private"}}</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Level:</label>
+                    <span class="text-blue text-bold" id="slevel">{{form.level}}</span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Dzongkhag:</label>
+                    <span class="text-blue text-bold" id="sdzongkhag">{{form.dzongkhag}}</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Gewog:</label>
+                    <span class="text-blue text-bold" id="sgewog">{{form.gewog}}</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Chiwog:</label>
+                    <span class="text-blue text-bold" id="schiwog">{{form.chiwog}}</span>
+                </div>
+            </div>
                     
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Location Type:</label>
+                    <span class="text-blue text-bold" id="slocationtype">{{form.locationType}}</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Geopolitically Located:</label>
+                    <span class="text-blue text-bold" id="sgeo">{{form.geoLocated == 1 ? "Yes" : "No"}}</span>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>SEN School:</label>
+                    <span class="text-blue text-bold" id="ssen">{{form.senSchoo == 1 ? "Yes" : "No"}}</span>
+                </div>
+            </div>
+            <div class="form-group row" v-if="form.senSchool==1">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                    <label class="mb-0">Parent School:</label>
+                    <span class="text-blue text-bold">{{form.parentSchool}}</span>
+                </div>   
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0">Co-located with Parent School</label>
+                    <span class="text-blue text-bold">
+                        {{ form.coLocated  == 1 ? "Yes" :  "No"}}
+                    </span>
+                </div> 
+            </div>
+            <div v-if="form.category==0">
+                <div class="row pb-2">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <h4><u>Proprietor Details</u></h4>
+                    </div>
+                </div>
+                <div v-for="(pro, index) in proprietorList" :key="index">
                     <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Location Type:</label>
-                            <span class="text-indigo-600" id="slocationtype">{{form.locationType}}</span>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label class="mb-0">CID:</label>
+                            <span class="text-blue text-bold">{{pro.cid}}</span>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Geopolitically Located:</label>
-                            <span class="text-indigo-600" id="sgeo">{{form.geoLocated == 1 ? "Yes" : "No"}}</span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>SEN School:</label>
-                            <span class="text-indigo-600" id="ssen">{{form.senSchoo == 1 ? "Yes" : "No"}}</span>
-                        </div>
-                    </div>
-                    <div class="form-group row" v-if="form.senSchool==1">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
-                            <label class="mb-0">Parent School:</label>
-                            <span class="text-blue text-bold">{{form.parentSchool}}</span>
-                        </div>   
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Co-located with Parent School</label>
-                            <span class="text-blue text-bold">
-                                {{ form.coLocated  == 1 ? "Yes" :  "No"}}
-                            </span>
-                        </div> 
-                    </div>
-                    <div v-if="form.category==0">
-                        <div class="row pb-2">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <h4><u>Proprietor Details</u></h4>
-                            </div>
-                        </div>
-                        <div v-for="(pro, index) in proprietorList" :key="index">
-                            <div class="form-group row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label class="mb-0">CID:</label>
-                                    <span class="text-blue text-bold">{{pro.cid}}</span>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label class="mb-0">Full Name:</label>
-                                    <span class="text-blue text-bold">{{pro.fullName}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label class="mb-0">Phone No:</label>
-                                    <span class="text-blue text-bold">{{pro.phoneNo}}</span>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label class="mb-0">Email:</label>
-                                    <span class="text-blue text-bold">{{pro.email}}</span>
-                                </div>
-                            </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label class="mb-0">Full Name:</label>
+                            <span class="text-blue text-bold">{{pro.fullName}}</span>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Reason:</label>
-                            <textarea class="form-control" v-model="form.reason" readonly></textarea>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label class="mb-0">Phone No:</label>
+                            <span class="text-blue text-bold">{{pro.phoneNo}}</span>
                         </div>
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <label>Remarks:</label>
-                            <textarea class="form-control" v-model="form.remark" readonly></textarea>
-                        </div>
-                    </div>
-                    <Workflow
-                            :appNo="form.applicationNo"
-                    />
-                    <div class="form-group row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label>Your Remarks:</label>
-                            <textarea class="form-control" v-model="form1.yourRemark" id="remarks"></textarea>
-                        </div>
-                    </div>
-                    <div class="row form-group fa-pull-right">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-flat btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
-                            <button class="btn btn-flat btn-primary" @click="shownexttab('verify')"> <i class="fa fa-forward"></i>Verify </button>
-                            <button class="btn btn-flat btn-dark" @click="shownexttab('approve')"> <i class="fa fa-check"></i>Approve </button>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label class="mb-0">Email:</label>
+                            <span class="text-blue text-bold">{{pro.email}}</span>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Reason:</label>
+                    <textarea class="form-control" v-model="form.reason" readonly></textarea>
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label>Remarks:</label>
+                    <textarea class="form-control" v-model="form.remark" readonly></textarea>
+                </div>
+            </div>
+            <Workflow
+                    :appNo="form.applicationNo"
+            />
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label>Your Remarks:</label>
+                    <textarea class="form-control" v-model="form1.yourRemark" id="remarks"></textarea>
+                </div>
+            </div>
+            <div class="row form-group fa-pull-right">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-flat btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
+                    <button class="btn btn-flat btn-primary" @click="shownexttab('verify')"> <i class="fa fa-forward"></i>Verify </button>
+                    <button class="btn btn-flat btn-dark" @click="shownexttab('approve')"> <i class="fa fa-check"></i>Approve </button>
+                </div>
+            </div>                
+        </div>
     </div>
 </template>
 

@@ -88,7 +88,6 @@
                                     <tr>
                                         <th>Name/Description</th>
                                         <th>Phone</th>
-                                        <th>Fax</th>
                                         <th>Mobile</th>
                                         <th>Email</th>                            
                                     </tr>
@@ -104,9 +103,9 @@
                                         <td>                                
                                             <input type="text" name="phone" class="form-control" v-model="contact.phone"/>
                                         </td>
-                                        <td>                                
+                                        <!-- <td>                                
                                             <input type="text" name="fax" class="form-control" v-model="contact.fax"/>
-                                        </td>
+                                        </td> -->
                                         <td>                                
                                             <input type="text" name="mobile" class="form-control" v-model="contact.mobile"/>
                                         </td>
@@ -152,7 +151,7 @@ export default {
                 id: '',organizationId:'',
                 contacts:
                 [{
-                    names:'',phone:'',fax:'',mobile:'',email:''
+                    names:'',phone:'',mobile:'',email:''
                 }] ,
             }),
         } 

@@ -4,7 +4,8 @@
             <div class="card card-primary card-outline">
                 <div class="card-body">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                    <div class="form-group row">
+                    <input type="hidden" class="form-control" v-model="form.id"/>
+                    <!-- <div class="form-group row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label>School:</label>
                                 <span class="text-indigo-600" id="scode">&nbsp; YangchenPhug</span>
@@ -17,7 +18,7 @@
                             <label>Gewog:</label>
                                 <span class="text-indigo-600" id="scode">&nbsp;Thimphu throm</span>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label class="required">Land Ownership:<span class="text-danger">*</span></label>
@@ -88,7 +89,7 @@
                     </div>
 
                     <div class="form-group row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><b>&nbsp;&nbsp; Attachment</b><br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><b>&nbsp;&nbsp; Attachments</b><br><br>
                         <table id="attachmentTable" class="table table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -98,29 +99,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1">
-                                    <td>
-                                        <label >&nbsp;&nbsp;Lagthram</label>
-                                    </td>
-                                    <td>                                
-                                        <input type="file"  id="attachment">
-                                    </td>
-                                    <td>       
-                                        <input type="text" name="remark" class="form-control"/>
-                                    </td>
-                                </tr>
-                                <tr id="record2">
-                                    <td>
-                                        <label >&nbsp;&nbsp;Document1</label>
-                                    </td>
-                                    <td>                                
-                                        <input type="file"  id="attachment1">
-                                    </td>
-                                    <td>                                
-                                        <input type="text" name="remark" class="form-control"/>
-                                    </td>
+                                <tr v-for="(item, index) in attachmentList" :key="index">
+                                    <td>{{ item.name}}</td>
+                                    <td><input type="file"  id="attachment1"></td>
+                                    <td><input type="text" name="remark" class="form-control" v-model="form.remark"/></td>
                                 </tr> 
-                                                                        
                             </tbody>
                         </table>
                     </div>
@@ -140,10 +123,22 @@ export default {
     data(){
         return{
             disasterList:[],
+            attachmentList:[],
             form: new form({
-                id: '', organizationId:'1',landOwnership: '1',compoundFencing: '1',entranceGate: '1',longitude: '',
-                latitude: '',altitude: '',thramNo: '', cid:'', name: '',compoundArea: '',
-                action_type:'add', disaster:[]
+                id: '', 
+                organizationId:'',
+                landOwnership: '1',
+                compoundFencing: '1',
+                entranceGate: '1',
+                longitude: '',
+                latitude: '',
+                altitude: '',
+                thramNo: '', 
+                cid:'', 
+                name: '',
+                compoundArea: '',
+                action_type:'add', 
+                disaster:[]
             }),
         }
     },
@@ -169,6 +164,9 @@ export default {
                         icon: 'success',
                         title: 'Location is added successfully'
                     })
+                    // if(this.form.organizationId != null || this.form.organizationId != ""){
+                    //     this.$router.push("/school_list")
+                    // }
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -185,10 +183,56 @@ export default {
                 this.disasterList = response.data;
             });
         },
+
+        /**
+         * method to load attachments
+         */
+        loadAttachmentList(uri = 'masters/loadAttachment'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.attachmentList =  data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+
+         /**
+         * method to get organization details by id
+         */
+        getLocationDetails(id){
+            axios.get('organization/getLocationDetails/'+id)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.landOwnership     = data.landOwnership;
+                this.form.compoundFencing   = data.compoundFencing;
+                this.form.entranceGate      = data.entranceGate;
+                this.form.longitude         = data.longitude;
+                this.form.latitude          = data.latitude;
+                this.form.altitude          = data.altitude;
+                this.form.cid               = data.cid;
+                this.form.name              = data.name;
+                this.form.thramNo           = data.thramNo;
+                this.form.compoundArea      = data.compoundArea;
+                this.form.id                = data.id;
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
+    },
+
+    created(){
+        this.getLocationDetails(this.$route.query.orgId);
     },
 
     mounted(){
         this.getDisasterList();
+        this.loadAttachmentList();
+        this.form.organizationId = this.$route.query.orgId;
     }
 }
 </script>

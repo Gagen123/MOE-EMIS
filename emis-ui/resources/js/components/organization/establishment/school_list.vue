@@ -13,6 +13,7 @@
                                     <th>Level</th>    
                                     <th>Status</th> 
                                     <th width="10%"></th>
+                                    <th width="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -23,7 +24,10 @@
                                     <td>{{ item.level}}</td>
                                     <td>{{ item.status }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-eye"></i> View</button>                                                
+                                        <button type="button" class="btn btn-flat btn-primary" @click="showbasicdetails(item.id)"> <i class="fa fa-eye"></i> View</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-edit"></i> Edit Details</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -53,8 +57,11 @@ export default {
                 this.schoolList = data.data.data;
             });
         },
-        showfulldetails(id){
+        showbasicdetails(id){
             this.$router.push({name:'school_details',query: {data:id}});
+        },
+        showfulldetails(id){
+            this.$router.push({name:'school_full_details',query: {data:id}});
         }
     },
     created(){

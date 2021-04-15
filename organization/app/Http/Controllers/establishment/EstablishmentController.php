@@ -9,11 +9,17 @@ use Illuminate\Support\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
+use App\Models\Masters\RoadType;
 use App\Models\Masters\Classes;
 use App\Models\Masters\Stream;
+use App\Models\Masters\ElectricitySource;
+use App\Models\Masters\ServiceProvider;
+use App\Models\ContactDetails;
 use App\Models\establishment\ApplicationDetails;
 use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
+use App\Models\generalInformation\Connectivity;
+use App\Models\generalInformation\Locations;
 use App\Models\ApplicationSequence;
 use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
@@ -404,6 +410,19 @@ class EstablishmentController extends Controller
         $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
         return $this->successResponse($response_data);
     }
-    
-    
+
+    public function getLocationDetails($id=""){
+        $response_data=Locations::where('organizationId',$id)->first();
+        return $this->successResponse($response_data); 
+    }
+
+    public function getConnectivityDetails($id=""){
+        $response_data=Connectivity::where('organizationId',$id)->first();
+        $response_data->roadType=RoadType::where('id',$response_data->roadTypeId)->first()->name;
+        $response_data->electricitySource=ElectricitySource::where('id',$response_data->electricitySourceId)->first()->name;
+        $response_data->telephone=ServiceProvider::where('id',$response_data->telephoneServiceProvoderId)->first()->name;
+        $response_data->internet=ServiceProvider::where('id',$response_data->internetServiceProviderId)->first()->name;
+        $response_data->contact=ContactDetails::where('organizationId',$id)->get();
+        return $this->successResponse($response_data); 
+    }
 }
