@@ -126,8 +126,7 @@
                             <i class="fa fa-users nav-icon"></i>
                             Staff Masters
                         </router-link>
-                    </li>  
-                   
+                    </li>
                     <li class="nav-item has-treeview" id="staff_master">
                         <router-link to="/traing_master" class="nav-link pt-1 pb-1">
                             <i class="fa fa-users nav-icon"></i>
@@ -158,6 +157,12 @@
                                 </router-link>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item has-treeview" id="academicmaster">
+                        <router-link to="/academic-link" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-book nav-icon"></i>
+                            Academic Masters
+                        </router-link>
                     </li>
                 
 
