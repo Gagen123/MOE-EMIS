@@ -41,7 +41,7 @@ class AdministrationController extends Controller{
             if($request->actiontype=="edit"){
                 $data = Country::find($request['id']);
                 $messs_det='country name:'.$data->country_name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL emis_audit_proc('".$this->database."','country_master','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL emis_audit_proc('".$this->database."','country_master','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
                 $data->country_name = $request['name'];
                 $data->nationality = $request['nationality'];
                 $data->status = $request['status'];
@@ -131,7 +131,7 @@ class AdministrationController extends Controller{
                 }
                 //storing audit trials
                 $messs_det='name:'.$data->name.$aditionla_param.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
                 
                 $data->name         = $request['name'];
                 if($request->record_type=="gewog"){
