@@ -127,6 +127,7 @@ class GeneralInfoController extends Controller
             'telephone.required'            => 'Telephone Service Provider field is required',
             'internet.required'             => 'Internet Service Provider field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
         $connectivity =[
             'organizationId'            =>  $orgId,
