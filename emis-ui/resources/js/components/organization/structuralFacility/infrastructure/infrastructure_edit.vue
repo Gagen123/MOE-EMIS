@@ -47,19 +47,15 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Present Condition of Structure<span class="text-danger">*</span> </label> 
-                        <select name="presentCondition" id="presentCondition" class="form-control editable_fields" v-model="form.presentCondition" >
-                            <option value="">--- Please Select ---</option>
-                            <option value="1">Usable</option>
-                        </select>
+                        <br>
+                        <label><input v-model="form.presentCondition"  type="radio" value="1"/> Usable</label>
+                        <label><input v-model="form.presentCondition"  type="radio" value="0" /> Not Usable</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Designed by</label>
-                        <select name="design" id="design" class="form-control editable_fields" v-model="form.design">
+                        <select name="design" id="design" class="form-control" v-model="form.design">
                             <option value="">--- Please Select ---</option>
-                            <option value="1">SPPD</option>
-                            <option value="2">Dzongkhag</option>
-                            <option value="3">Thromde</option>
-                            <option value="4">Others</option>
+                            <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
                 </div>
@@ -147,6 +143,7 @@ export default {
             categoryList:[],
             subCategortList:[],
             facilityList:[],
+            designerList:[],
             users: [],
             form: new form({
                 id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '',
@@ -211,6 +208,17 @@ export default {
         },
 
         /**
+         * method to get category in dropdown
+         */
+        getDesignerDropdown(uri = '/organization/getDesignerDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.designerList = data;
+            });
+        },
+
+        /**
          * method to get facility in dropdown
          */
         getFacilityDropdown(uri = '/organization/getStructureFacilityInDropdown'){
@@ -226,7 +234,7 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})    
+            this.form.users.push({facility:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})    
         }, 
         /**
          * method to remove fields
@@ -237,27 +245,56 @@ export default {
                 this.form.users.splice(index,1); 
             }
         },
+
+        /**
+         * method to get infrasture details
+         */
+        getInfrastructureDetails(infraId){
+            axios.get('organization/getInfrastructureDetails/'+infraId)
+            .then((response) => {  
+                let data=response.data.data;
+
+                this.form.category              =    data.categoryId;
+                this.getSubCategoryDropdown();
+                this.form.subCategory           =    data.subCategoryId;
+                this.form.structureNo           =    data.structureNo;
+                this.form.organizationId        =    data.organizationId;
+                this.form.yearOfConstruction    =    data.yearOfConstruction;
+                this.form.plintchArea           =    data.plintchArea;
+                this.form.noOfFloor             =    data.noOfFloor;
+                this.form.totalCapacity         =    data.totalCapacity;
+                this.form.rampAccess            =    data.rampAccess;
+                this.form.presentCondition      =    data.presentCondition;
+                this.form.design                =    data.design;
+                this.form.id                    =    data.id;
+
+                let prop=data.facility;
+                let facilityDetails=[];
+                for(let i=0;i<prop.length;i++){
+                    facilityDetails.push({facility:prop[i].facilityTypeId,facilityNo:prop[i].facilityName,
+                    capacity:prop[i].capacity,noOfFacility:prop[i].noOfFacility,
+                    accessibleDisabled:prop[i].noAccessibleToDisabled,
+                    internetConnection:prop[i].noWithInternetConnection});
+                }
+                this.count=data.length;
+                this.form.users=facilityDetails;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
     },
 
     created(){
         this.getCategoryDropdown();
         this.getFacilityDropdown();
+        this.getDesignerDropdown();
+        this.getInfrastructureDetails(this.$route.params.data.id);
     },
 
      mounted() { 
-        this.form.category=this.$route.params.data.categoryId;
-        this.form.subCategory=this.$route.params.data.subCategoryId;
-        this.form.structureNo=this.$route.params.data.structureNo;
-        this.form.organizationId=this.$route.params.data.organizationId;
-        this.form.yearOfConstruction=this.$route.params.data.yearOfConstruction;
-        this.form.plintchArea=this.$route.params.data.plintchArea;
-        this.form.noOfFloor=this.$route.params.data.noOfFloor;
-        this.form.totalCapacity=this.$route.params.data.totalCapacity;
-        this.form.rampAccess=this.$route.params.data.rampAccess;
-        this.form.presentCondition=this.$route.params.data.presentCondition;
-        this.form.design=this.$route.params.data.design;
-        this.form.id=this.$route.params.data.id;
-        this.form.action_type=this.$route.params.data.action;
+
     }
 }
 </script>

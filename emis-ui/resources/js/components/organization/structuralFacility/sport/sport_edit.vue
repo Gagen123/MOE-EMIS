@@ -132,7 +132,7 @@ export default {
         this.form.numberOfFacility=this.$route.params.data.noOfFacility;
         this.form.facilityAccessibleToDisabled=this.$route.params.data.accessibleToDisabled;
         this.form.id=this.$route.params.data.id;
-        this.form.id=this.$route.params.data.organizationId;
+        this.form.organizationId=this.$route.params.data.organizationId;
     }
 }
 </script>

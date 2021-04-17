@@ -6,7 +6,7 @@
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Type:<span class="text-danger">*</span></label> 
-                            <select name="type" class="form-control" v-model="form.type" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="type" @change="remove_err('type')">
+                            <select name="type" class="form-control" v-model="form.type" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="type" @change="remove_err('type'),getItem()">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
@@ -54,6 +54,7 @@ export default {
             locationUse:[],
             form: new form({
                 id: '',
+                organizationId:'',
                 type: '',
                 item: '',
                 location: '',
@@ -77,7 +78,7 @@ export default {
                 this.form.number= '';
             }
             if(type=="save"){
-                this.form.post('/masters/saveEquipment',this.form)
+                this.form.post('/organization/saveEquipment',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -123,6 +124,7 @@ export default {
 
     mounted(){
         this.form.type=this.$route.params.data.typeId;
+        this.getItem();
         this.form.item=this.$route.params.data.itemId;
         this.form.location=this.$route.params.data.locationUsageId;
         this.form.number=this.$route.params.data.number;

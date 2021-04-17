@@ -19,11 +19,13 @@ class CreateBifurcationsTable extends Migration
             $table->char('parentOrgId', 36);
             $table->string('new1Name');
             $table->char('new1Level', 36);
+            $table->foreign('new1Level')->references('id')->on('level');
             $table->tinyInteger('new1Category');
             $table->char('new1Dzongkhag', 36);
             $table->char('new1Gewog', 36);
             $table->char('new1Chiwog', 36);
             $table->char('new1Location', 36);
+            $table->foreign('new1Location')->references('id')->on('location');
             $table->tinyInteger('new1IsGeoLocated')->nullable(true);
             $table->tinyInteger('new1IsSenSchool');
             $table->tinyInteger('new1IsCoLocated')->nullable(true);
@@ -31,11 +33,13 @@ class CreateBifurcationsTable extends Migration
 
             $table->string('new2Name');
             $table->char('new2Level', 36);
+            $table->foreign('new2Level')->references('id')->on('level');
             $table->tinyInteger('new2Category');
             $table->char('new2Dzongkhag', 36);
             $table->char('new2Gewog', 36);
             $table->char('new2Chiwog', 36);
             $table->char('new2Location', 36);
+            $table->foreign('new2Location')->references('id')->on('location');
             $table->tinyInteger('new2IsGeoLocated')->nullable(true);
             $table->tinyInteger('new2IsSenSchool');
             $table->tinyInteger('new2IsCoLocated')->nullable(true);

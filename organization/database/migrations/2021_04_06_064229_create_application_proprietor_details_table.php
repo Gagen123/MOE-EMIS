@@ -16,6 +16,7 @@ class CreateApplicationProprietorDetailsTable extends Migration
         Schema::create('application_proprietor_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('applicationId',36);
+            $table->foreign('applicationId')->references('id')->on('application_details');
             $table->integer('cid');
             $table->string('fullName');
             $table->integer('phoneNo');

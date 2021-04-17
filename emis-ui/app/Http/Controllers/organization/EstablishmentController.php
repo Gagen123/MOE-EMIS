@@ -292,6 +292,7 @@ class EstablishmentController extends Controller
             $id=$this->getWrkingAgencyId();
         }
         $response_data = $this->apiService->listData('emis/organization/establishment/getFullSchoolDetials/'.$id);
+        // dd($response_data);
         return $response_data;
     }
     
@@ -308,6 +309,22 @@ class EstablishmentController extends Controller
     
     public function getHeadQuarterDetails($id=""){ 
         $response_data = $this->apiService->listData('emis/organization/headQuater/getHeadQuarterDetails/'.$id);
+        return $response_data;
+    }
+
+    public function getLocationDetails($id=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/getLocationDetails/'.$id);
+        // dd($response_data);
+        return $response_data;
+    }
+
+    public function getConnectivityDetails($id=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/getConnectivityDetails/'.$id);
+        return $response_data;
+    } 
+
+    public function getSectionDetails($id=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/getSectionDetails/'.$id);
         return $response_data;
     }
 

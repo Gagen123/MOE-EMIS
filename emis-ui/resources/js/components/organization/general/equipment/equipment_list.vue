@@ -44,7 +44,7 @@ export default {
         /**
          * method ti load equipment list
          */
-        loadEquipmentList(uri = 'organization/loadEquipment'){
+        loadEquipmentList(uri = 'organization/loadEquipment/null'){
             axios.get(uri)
             .then(response => {
                 let data = response;

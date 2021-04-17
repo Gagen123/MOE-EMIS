@@ -13,17 +13,21 @@
                                     <th>Level</th>    
                                     <th>Status</th> 
                                     <th width="10%"></th>
+                                    <th width="15%"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                               <tr v-for="(item, index) in schoolList" :key="index">
+                                <tr v-for="(item, index) in schoolList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}}</td>
                                     <td>{{ item.level}}</td>
                                     <td>{{ item.status }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-eye"></i> View</button>                                                
+                                        <button type="button" class="btn btn-flat btn-primary" @click="showbasicdetails(item.id)"> <i class="fa fa-eye"></i> View</button>
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-edit"></i> Edit Details</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -43,6 +47,9 @@ export default {
         }
     },
     methods:{
+        /**
+         * method to load organization/school list
+         */
         loadSchool(){
             axios.get('organization/getschoolDetials')
             .then(response => {
@@ -50,8 +57,11 @@ export default {
                 this.schoolList = data.data.data;
             });
         },
-        showfulldetails(id){
+        showbasicdetails(id){
             this.$router.push({name:'school_details',query: {data:id}});
+        },
+        showfulldetails(id){
+            this.$router.push({name:'school_full_details',query: {data:id}});
         }
     },
     created(){

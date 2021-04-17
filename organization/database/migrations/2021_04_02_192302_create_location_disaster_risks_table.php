@@ -16,7 +16,9 @@ class CreateLocationDisasterRisksTable extends Migration
         Schema::create('location_disaster_risks', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('locationId',36);
+            $table->foreign('locationId')->references('id')->on('locations');
             $table->char('disasterTypeId',36);
+            $table->foreign('disasterTypeId')->references('id')->on('disaster');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

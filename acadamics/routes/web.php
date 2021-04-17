@@ -16,3 +16,9 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
+    $router->group(['prefix' => 'masters'], function () use ($router) {
+        $router->post('/saveAcademicMasters', ['uses' => 'masters\AcademicMastersController@saveAcademicMasters']);
+        $router->get('/loadAcademicMasters/{param}','masters\AcademicMastersController@loadAcademicMasters');
+    });
+});

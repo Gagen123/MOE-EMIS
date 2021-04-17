@@ -18,10 +18,12 @@ class CreateEstablishmentsTable extends Migration
             $table->string('proposedName');
             $table->tinyInteger('category');
             $table->char('levelId',36);
+            $table->foreign('levelId')->references('id')->on('level');
             $table->char('dzongkhagId',36);
             $table->char('gewogId',36);
             $table->char('chiwogId',36);
             $table->char('locationId',36);
+            $table->foreign('locationId')->references('id')->on('location');
             $table->tinyInteger('isGeopoliticallyLocated');
             $table->tinyInteger('isSenSchool');
             $table->char('parentSchoolId',36)->nullable(true);
@@ -30,6 +32,7 @@ class CreateEstablishmentsTable extends Migration
             $table->string('applicationNo');
             $table->string('service');
             $table->char('organizationId',36)->nullable(true);
+            $table->foreign('organizationId')->references('id')->on('organization_details');
             $table->string('reason')->nullable(true);
             $table->string('remark')->nullable(true);
             $table->char('oldOrganizationId1',36)->nullable(true);

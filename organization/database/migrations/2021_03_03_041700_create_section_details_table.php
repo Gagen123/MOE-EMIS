@@ -15,7 +15,8 @@ class CreateSectionDetailsTable extends Migration
     {
         Schema::create('section_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->char('sectionId',36);
+            $table->char('classSectionId',36);
+            $table->foreign('classSectionId')->references('id')->on('organization_class_streams');
             $table->string('section');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);

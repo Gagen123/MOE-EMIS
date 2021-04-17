@@ -16,7 +16,9 @@ class CreateStructureFacilitiesTable extends Migration
         Schema::create('infrastructure_facilities', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('infrastructureId',36);
+            $table->foreign('infrastructureId')->references('id')->on('infrastructures');
             $table->char('facilityTypeId',36);
+            $table->foreign('facilityTypeId')->references('id')->on('structure_facility');
             $table->string('facilityName');
             $table->string('capacity');
             $table->integer('noOfFacility');

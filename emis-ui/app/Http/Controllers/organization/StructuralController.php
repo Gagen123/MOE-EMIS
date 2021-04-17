@@ -44,6 +44,7 @@ class StructuralController extends Controller
             'numberOfFacility'                      =>  $request['numberOfFacility'], 
             'facilityAccessibleToDisabled'          =>  $request['facilityAccessibleToDisabled'],
             'id'                                    =>  $request['id'],
+            'user_id'                               =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
@@ -54,8 +55,11 @@ class StructuralController extends Controller
         }
     }
     
-    public function loadSport(Request $request){
-        $loadSport = $this->apiService->listData('emis/organization/sport/loadSport');
+    public function loadSport($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
         return $loadSport;
     }
 
@@ -97,6 +101,7 @@ class StructuralController extends Controller
             'design'                    =>  $request['design'],
             'id'                        =>  $request['id'],
             'users'                     =>  $request['users'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
@@ -107,8 +112,11 @@ class StructuralController extends Controller
         }
     }
 
-    public function loadInfrastructureList(){
-        $list = $this->apiService->listData('emis/organization/infrastructure/loadInfrastructureList');
+    public function loadInfrastructureList($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $list = $this->apiService->listData('emis/organization/infrastructure/loadInfrastructureList/'.$orgId);
         return $list;
     }
                             
@@ -130,6 +138,11 @@ class StructuralController extends Controller
     public function getDesignerDropdown(){
         $serviceProvider = $this->apiService->listData('emis/organization/infrastructure/getDesignerDropdown');
         return $serviceProvider;
+    }
+
+    public function getInfrastructureDetails($infraId=""){
+        $infraDetails = $this->apiService->listData('emis/organization/infrastructure/getInfrastructureDetails/'.$infraId);
+        return $infraDetails;
     }
 
     public function saveKitchenStatus(Request $request){
@@ -162,7 +175,7 @@ class StructuralController extends Controller
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
             'id'                         =>  $request['id'],
-            'user_id'                    =>  $this->user_id() 
+            'user_id'                    =>  $this->userId() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveFoodStoreStatus', $foodStatus);
@@ -180,7 +193,7 @@ class StructuralController extends Controller
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
             'id'                         =>  $request['id'],
-            'user_id'                    =>  $this->user_id() 
+            'user_id'                    =>  $this->userId() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveUtensilKitchen', $equipmentKitchen);
@@ -198,7 +211,7 @@ class StructuralController extends Controller
             'status'                     =>  $request['status'],
             'type'                       =>  $request['type'],
             'id'                         =>  $request['id'],
-            'user_id'                    =>  $this->user_id() 
+            'user_id'                    =>  $this->userId() 
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveDinningHall', $dinningHall);
@@ -210,12 +223,12 @@ class StructuralController extends Controller
     }
 
     public function loadFoodStoreStatus(){
-        $loadFoodStoreStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadFoodStoreStatus/'.$this->user_id() );
+        $loadFoodStoreStatus = $this->apiService->listData('emis/organization/schoolFeeding/loadFoodStoreStatus/'.$this->userId() );
         return $loadFoodStoreStatus;
     }
 
     public function loadUtensilKitchenStatus(){
-        $utensil = $this->apiService->listData('emis/organization/schoolFeeding/loadUtensilKitchenStatus/'.$this->user_id() );
+        $utensil = $this->apiService->listData('emis/organization/schoolFeeding/loadUtensilKitchenStatus/'.$this->userId() );
         return $utensil;
     }
 }

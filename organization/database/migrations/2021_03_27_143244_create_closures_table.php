@@ -18,11 +18,13 @@ class CreateClosuresTable extends Migration
             $table->string('code');
             $table->string('name');
             $table->string('category');
-            $table->string('level');
+            $table->char('level',36);
+            $table->foreign('level')->references('id')->on('level');
             $table->string('dzongkhag');
             $table->string('gewog');
             $table->string('chiwog');
-            $table->string('location');
+            $table->char('location',36);
+            $table->foreign('location')->references('id')->on('location');
             $table->tinyInteger('geoPoliticallyLocated');
             $table->tinyInteger('senSchool');
             $table->string('reason');

@@ -26,6 +26,9 @@ class ClosureController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
     
+    /**
+     * method to submit school for closure 
+     */
     public function saveClosure(Request $request){
 
         $last_seq=ApplicationSequence::where('service_name','Closure')->first();
@@ -68,7 +71,7 @@ class ClosureController extends Controller
             'isGeopoliticallyLocated'  =>  $request['geoLocated'],
             'isSenSchool'              =>  $request['senSchool'],
             'parentSchoolId'           =>  $request['parentSchool'],
-            'isColocated'              =>  $request['coLocated'],
+            'coLocatedParent'          =>  $request['coLocatedParent'],
             'status'                   =>  $request['status'],
             'applicationNo'            =>  $application_no,
             'service'                  =>  "Closure",
@@ -84,7 +87,7 @@ class ClosureController extends Controller
             $pvtDetails = [
                 'applicationId'            =>  $cls->id,
                 'cid'                      =>  $request['cid'],
-                'fullName'                 =>  $request['name'],
+                'fullName'                 =>  $request['fullName'],
                 'phoneNo'                  =>  $request['phoneNo'],
                 'email'                    =>  $request['email'],
                 'created_by'               =>  $request->user_id,
@@ -95,6 +98,9 @@ class ClosureController extends Controller
         return $this->successResponse($cls, Response::HTTP_CREATED);
     }
 
+    /**
+     * method to load closure application for verification process
+     */
     public function loadClosureApplicationDetails($appNo=""){
         $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
         $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
@@ -103,5 +109,18 @@ class ClosureController extends Controller
             $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
         }
         return $this->successResponse($response_data); 
+    }
+
+    /**
+     * method to update closure status in application table
+     */
+    public function updateClosure(Request $request){
+        $estd =[
+            'status'                       =>   $request->status,
+            'updated_remarks'              =>   $request->yourRemark,
+            'updated_by'                   =>   $request->user_id, 
+        ];
+        $close = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
+        return $this->successResponse($close, Response::HTTP_CREATED);
     }
 }

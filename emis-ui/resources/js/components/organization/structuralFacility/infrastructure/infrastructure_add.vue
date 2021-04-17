@@ -46,11 +46,9 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Present Condition of Structure<span class="text-danger">*</span> </label> 
-                        <select name="presentCondition" id="presentCondition" class="form-control editable_fields" v-model="form.presentCondition" >
-                            <option value="">--- Please Select ---</option>
-                            <option value="1">Usable</option>
-                            <option value="2">Not Usable</option>
-                        </select>
+                        <br>
+                        <label><input v-model="form.presentCondition"  type="radio" value="1"/> Usable</label>
+                        <label><input v-model="form.presentCondition"  type="radio" value="0" /> Not Usable</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Designed by</label>
@@ -144,7 +142,7 @@ export default {
             users: [],
             form: new form({
                 id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '',
-                plintchArea: '',noOfFloor: '',totalCapacity: '',rampAccess: '1',presentCondition: '',design: '',
+                plintchArea: '',noOfFloor: '',totalCapacity: '',rampAccess: '1',presentCondition: '1',design: '',
                 users:
                 [{
                     facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''

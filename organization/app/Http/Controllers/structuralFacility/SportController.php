@@ -21,19 +21,20 @@ class SportController extends Controller
      */
     public function __construct()
     {
-        //
+        date_default_timezone_set('Asia/Dhaka');
     }
 
     /**
      * method to load sport lists
      */
-    public function loadSport(){
+    public function loadSport($orgId=""){
         $loadSport = DB::table('sports as a')
             ->join('sport_facility_type as b', 'a.facility', '=', 'b.id')
             ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facilityName',
              'a.type as type', 'a.yearOfEstablishment as yearOfEstablishment','a.status as status',
              'a.noOfFacility as noOfFacility','a.accessibleToDisabled as accessibleToDisabled',
-            'a.facility as facility', 'a.supportedBy as supportedBy')->get();
+            'a.facility as facility', 'a.supportedBy as supportedBy')
+            ->where('organizationId',$orgId)->get();
         return $loadSport;
     }
 
@@ -52,8 +53,11 @@ class SportController extends Controller
                 'supportedBy'                           =>  $request['supportedBy'],
                 'noOfFacility'                          =>  $request['numberOfFacility'], 
                 'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
+                'updated_by'                            =>  $request->user_id,
+                'created_at'                            =>  date('Y-m-d h:i:s')
             ];
             $spo = Sport::where('id', $id)->update($sport);
+            return $this->successResponse($spo, Response::HTTP_CREATED);
         }else{
             $sport = [
                 'organizationId'                        =>  $request['organizationId'],
@@ -64,10 +68,13 @@ class SportController extends Controller
                 'supportedBy'                           =>  $request['supportedBy'],
                 'noOfFacility'                          =>  $request['numberOfFacility'], 
                 'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
+                'created_by'                            =>  $request->user_id,
+                'created_at'                            =>  date('Y-m-d h:i:s')
             ];
             $spo = Sport::create($sport);
+            return $this->successResponse($spo, Response::HTTP_CREATED);
         }
-        return $this->successResponse($spo, Response::HTTP_CREATED);
+        
     }
     
     /**

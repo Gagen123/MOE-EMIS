@@ -18,13 +18,11 @@ class RestructuringController extends Controller
     public $apiService;
     public $database_name="organization_db";
     public $table_name="application_details";
+    public $bif_table_name="bifurcations";
+
     public $service_name="Change Basic Details";
     public $service_name_closure="Closure";
-
-    public $merge_database_name="organization_db";
-    public $merge_table_name="application_details";
     public $merge_service_name="Merger";
-    public $bif_table_name="bifurcations";
     public $bif_service_name="Bifurcation";
 
     public function __construct(EmisService $apiService){
@@ -245,8 +243,8 @@ class RestructuringController extends Controller
         
         $workflowdet=$this->getsubmitterStatus('merge');
         $workflow_data=[
-            'db_name'           =>$this->merge_database_name,
-            'table_name'        =>$this->merge_table_name,
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
             'service_name'      =>$this->merge_service_name,
             'application_number'=>json_decode($response_data)->data->applicationNo,
             'screen_id'         =>$workflowdet['screen_id'],
@@ -285,8 +283,8 @@ class RestructuringController extends Controller
             $org_status="Approved";
         }
         $workflow_data=[
-            'db_name'           =>$this->merge_database_name,
-            'table_name'        =>$this->merge_table_name,
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
             'service_name'      =>$this->merge_service_name,
             'application_number'=>$request->applicationNo,
             'screen_id'         =>$workflowdet['screen_id'],
@@ -320,17 +318,17 @@ class RestructuringController extends Controller
             'code'                     =>  $request['code'],
             'name'                     =>  $request['name'],
             'category'                 =>  $request['category'],
-            'level'                    =>  $request['level'],
-            'dzongkhag'                =>  $request['dzongkhag'],
-            'gewog'                    =>  $request['gewog'],
-            'chiwog'                   =>  $request['chiwog'],
-            'location'                 =>  $request['location'],
+            'level'                    =>  $request['levelId'],
+            'dzongkhag'                =>  $request['dzongkhagId'],
+            'gewog'                    =>  $request['gewogId'],
+            'chiwog'                   =>  $request['chiwogId'],
+            'location'                 =>  $request['locationId'],
             'geoLocated'               =>  $request['geoLocated'],
             'senSchool'                =>  $request['senSchool'],
             'parentSchool'             =>  $request['parentSchool'],
-            'coLocated'                =>  $request['coLocated'],
+            'coLocatedParent'          =>  $request['coLocatedParent'],
             'cid'                      =>  $request['cid'],
-            'name'                     =>  $request['name'],
+            'fullName'                 =>  $request['fullName'],
             'phoneNo'                  =>  $request['phoneNo'],
             'email'                    =>  $request['email'],
             'status'                   =>  $request['status'],
@@ -340,8 +338,11 @@ class RestructuringController extends Controller
             'user_id'                  =>  $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
+        // dd($response_data);
         $workflowdet=$this->getsubmitterStatus('closure');
-        
+        if($workflowdet['screen_id']=="0"){
+            return "No Screen";
+        }
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -355,6 +356,7 @@ class RestructuringController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
+        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $work_response_data;
     }
@@ -368,10 +370,47 @@ class RestructuringController extends Controller
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
         
         $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
-        $loadOrganizationDetails = $this->apiService->listData('emis/organization/closure/loadClosureApplicationDetails/'.$appNo);
-        dd($loadOrganizationDetails);
+        $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/closure/loadClosureApplicationDetails/'.$appNo));
+        // dd($loadOrganizationDetails);
         $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
+    }
+
+    public function updateClosureApplication(Request $request){
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('closure');
+        $work_status=$workflowdet['status'];
+        $org_status='Under Process';
+        if($request->actiontype=="reject"){
+            $work_status=0;
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
+        }
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name_closure,
+            'application_number'=>$request->applicationNo,
+            'screen_id'         =>$workflowdet['screen_id'],
+            'status_id'         =>$work_status,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $closure =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->yourRemark,
+            'user_id'                      =>   $this->userId() 
+        ];
+        // dd($closure);
+        $response_data= $this->apiService->createData('emis/organization/closure/updateClosure', $closure);
+        return $work_response_data;
     }
 
     public function saveBifurcation(Request $request){
@@ -447,7 +486,7 @@ class RestructuringController extends Controller
         // dd($response_data);
         $workflowdet=$this->getsubmitterStatus('merge');
         $workflow_data=[
-            'db_name'           =>$this->merge_database_name,
+            'db_name'           =>$this->database_name,
             'table_name'        =>$this->bif_table_name,
             'service_name'      =>$this->bif_service_name,
             'application_number'=>json_decode($response_data)->data->applicationNo,
@@ -489,7 +528,7 @@ class RestructuringController extends Controller
             $org_status="Approved";
         }
         $workflow_data=[
-            'db_name'           =>$this->merge_database_name,
+            'db_name'           =>$this->database_name,
             'table_name'        =>$this->bif_table_name,
             'service_name'      =>$this->bif_service_name,
             'application_number'=>$request->applicationNo,

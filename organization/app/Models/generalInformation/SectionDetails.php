@@ -17,6 +17,10 @@ class SectionDetails extends Model
      * @var array
      */
     protected $fillable = [
-        'id','sectionId', 'section'
+        'id','classSectionId', 'section','created_by','updated_by'
     ];
+
+    public function class_stream() {
+        return $this->belongsTo(OrganizationClassStream::class, 'sectionId');
+    }
 }
