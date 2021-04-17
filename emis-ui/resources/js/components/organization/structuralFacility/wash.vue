@@ -31,6 +31,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr v-for="(item, index) in questionList" :key="index">
+                                    <td>{{ item.name}}</td>
+                                    <td v-if="item.answer_type=='TextArea'">
+                                        <textarea class="form-control"></textarea>
+                                    </td>
+                                    <td v-if="item.answer_type=='Text'">
+                                        <textarea class="form-control"></textarea>
+                                    </td>
+                                </tr>
                                 <tr id="record1">
                                         <td>Does the school have Independent water source? </td>
                                         <td>
@@ -1103,6 +1112,7 @@
 export default {
     data(){
         return{
+            questionList:[],
         }
     },
 
@@ -1136,16 +1146,14 @@ export default {
                 });
             }
         },
-        loadQuestionList(uri = 'questionAnswers/loadQuestionaries/withwhere_wash_Question'){
+        loadQuestionList(uri = 'questionAnswers/loadQuestionaries/withwhere_Wash_Question'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.questionListt =  data.data.data;
+                this.questionList =  data.data.data;
             })
             .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="9" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error.toString());
             });
         },
     },
