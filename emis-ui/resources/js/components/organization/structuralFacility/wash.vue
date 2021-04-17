@@ -13,7 +13,7 @@
                             <label> Sanitation </label>
                         </a>
                     </li>
-                <li class="nav-item nomination-tab">
+                    <li class="nav-item nomination-tab">
                         <a class="nav-link" data-toggle="pill" @click="shownexttab('appointment-tab','nomination-tab')" role="tab">
                             <label> Hygience</label>
                         </a>
@@ -1103,7 +1103,6 @@
 export default {
     data(){
         return{
-
         }
     },
 
@@ -1137,6 +1136,25 @@ export default {
                 });
             }
         },
-    }
+        loadQuestionList(uri = 'questionAnswers/loadQuestionaries/withwhere_wash_Question'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.questionListt =  data.data.data;
+            })
+            .catch(function (error){
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="9" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+    },
+    mounted(){ 
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        }); 
+        this.loadQuestionList();
+    },
 }
 </script>

@@ -213,6 +213,13 @@ Route::prefix('organization')->group(function () {
     Route::post('/updateBifurcationApplication', [App\Http\Controllers\organization\RestructuringController::class, 'updateBifurcationApplication'])->name('updateBifurcationApplication');
     
 });
+Route::prefix('questionAnswers')->group(function () {
+    Route::post('/saveQuestionaries', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'saveQuestionaries'])->name('saveQuestionaries');
+    Route::get('/loadQuestionaries/{type}', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'loadQuestionaries'])->name('loadQuestionaries');
+    Route::post('/saveAnswers', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'saveAnswers'])->name('saveAnswers');
+    Route::get('/getAnswers/{question_id}', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'getAnswers'])->name('getAnswers');
+    Route::delete('/deleteAns/{id}', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'deleteAns'])->name('deleteAns');
+}); 
 
 Route::prefix('staff')->group(function () {
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');

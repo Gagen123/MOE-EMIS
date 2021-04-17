@@ -5,8 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Course Mode</th>
-                    <th >Status</th>
                     <th >Code</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th> 
                 </tr>

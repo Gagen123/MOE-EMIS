@@ -45,5 +45,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/checkPendingApplication/{type}/{user_id}', ['uses' => 'CommonController@checkPendingApplication']);
         
     });
+    
+    $router->group(['prefix' => 'questionAnswers'], function () use ($router){
+        $router->post('/saveQuestionaries', ['uses' => 'QuestionAnswerController@saveQuestionaries']);
+        $router->get('/loadQuestionaries/{type}', ['uses' => 'QuestionAnswerController@loadQuestionaries']);
+        $router->post('/saveAnswers', ['uses' => 'QuestionAnswerController@saveAnswers']);
+        $router->delete('/deleteAns/{id}/{user_id}', ['uses' => 'QuestionAnswerController@deleteAns']);
+    });
 });
 
