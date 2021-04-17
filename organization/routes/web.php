@@ -162,6 +162,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
+            $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
+            $router->get('/getExistingSectionByStream/{classId}/{streamId}', 'generalInformation\SectionController@getExistingSectionByStream');
+
         });
     
         $router->group(['prefix' => 'classMapping'], function () use ($router) {
@@ -235,7 +238,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadorgs', 'establishment\EstablishmentController@loadorgs');
             $router->get('/getLocationDetails/{id}', ['uses' => 'establishment\EstablishmentController@getLocationDetails']);
             $router->get('/getConnectivityDetails/{id}', ['uses' => 'establishment\EstablishmentController@getConnectivityDetails']);
-
+            $router->get('/getSectionDetails/{id}', ['uses' => 'establishment\EstablishmentController@getSectionDetails']);
         });
         
         $router->group(['prefix' => 'headQuater'], function () use ($router) {

@@ -27,27 +27,33 @@ class SectionController extends Controller
      * method to save section
     */
     public function saveSection(Request $request){
+        $id = $request->id;
 
-        $section = [
-                'organizationId'          => $request['school'],
-                'classId'                 => $request['classes'],
-                'streamId'                => $request['stream'],
-            ];
-        $sectionDetails = [
-                'users'        => $request['users'],
-            ];
+        if($id != null){
+            foreach ($request->input('users') as $i => $user){
+                $section_details = array(
+                'classSectionId'    =>  $request['class_stream_id'],
+                'section'           =>  $user['section'],
+            );
 
-        $sec = Section::create($section);
-        $sectionId = DB::table('sections')->orderBy('id','desc')->limit(1)->pluck('id');
+                DB::table('section_details')->where('classSectionId', $request['class_stream_id'])->delete();
+                // $sec = SectionDetails::create($section_details);
+                $sec = SectionDetails::create($section_details);
 
-        foreach ($request->input('users') as $i => $user){
-            $section_details = array(
-                'sectionId'=>$sectionId[0],
-                'section'=>$user['section'],
-        );
-            $sec = SectionDetails::create($section_details);
+            }
+            return $this->successResponse($sec, Response::HTTP_CREATED);
+
+        }else{
+            foreach ($request->input('users') as $i => $user){
+                $section_details = array(
+                'classSectionId'    =>  $request['class_stream_id'],
+                'section'           =>  $user['section'],
+            );
+                $sec = SectionDetails::create($section_details);
+            }
+            return $this->successResponse($sec, Response::HTTP_CREATED);
         }
-        return $this->successResponse($sec, Response::HTTP_CREATED);
+        
     }
 
     /**
@@ -56,7 +62,7 @@ class SectionController extends Controller
     public function getClassByOrganizationId($orgId){
         $class = DB::table('organization_class_streams as a')
             ->join('classes as b', 'b.id', '=', 'a.classId')
-            ->select('a.classId as id', 'b.class as class')->where('organizationId', $orgId)->get();
+            ->select('a.id as record_id','a.classId as id', 'b.class as class')->where('organizationId', $orgId)->groupby('a.classId')->get();
         return $class;
     }
 
@@ -66,7 +72,31 @@ class SectionController extends Controller
     public function getStreamByClassId($classId){
         $stream = DB::table('organization_class_streams as a')
             ->join('streams as b', 'b.id', '=', 'a.streamId')
-            ->select('a.streamId as id', 'b.stream as stream')->where('a.classId', $classId)->get();
+            ->select('a.id as record_id','a.streamId as id', 'b.stream as stream')->where('a.classId', $classId)->get();
         return $stream;
+    }
+
+    /**
+     * method to get existing section by class Id
+     */
+    public function getExistingSectionByClass($classId){
+        $section = DB::table('section_details as a')
+            ->join('organization_class_streams as b', 'b.id', '=', 'a.classSectionId')
+            ->select('a.id','a.section')
+            ->where('b.classId', $classId)->get();
+        return $section;
+    }
+
+    /**
+     * method to get existing section by class Id and stream id
+     */
+    public function getExistingSectionByStream($classId,$streamId){
+        $section = DB::table('section_details as a')
+            ->join('organization_class_streams as b', 'b.id', '=', 'a.classSectionId')
+            ->select('a.section')
+            ->where('b.classId', $classId)
+            ->where('a.classSectionId', $streamId)
+            ->get();
+        return $section;
     }
 }

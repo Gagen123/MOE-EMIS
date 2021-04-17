@@ -20,6 +20,8 @@ use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\generalInformation\Connectivity;
 use App\Models\generalInformation\Locations;
+use App\Models\generalInformation\Section;
+use App\Models\generalInformation\SectionDetails;
 use App\Models\ApplicationSequence;
 use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
@@ -423,6 +425,13 @@ class EstablishmentController extends Controller
         $response_data->telephone=ServiceProvider::where('id',$response_data->telephoneServiceProvoderId)->first()->name;
         $response_data->internet=ServiceProvider::where('id',$response_data->internetServiceProviderId)->first()->name;
         $response_data->contact=ContactDetails::where('organizationId',$id)->get();
+        return $this->successResponse($response_data); 
+    }
+
+    public function getSectionDetails($id=""){
+        $response_data = DB::table('section_details as s')
+        ->join('organization_class_streams as o', 'o.id', '=', 's.classSectionId')
+        ->select('o.organizationId','s.section', 'o.classId','o.streamId')->where('o.organizationId', $id)->orderby('o.classId')->get();
         return $this->successResponse($response_data); 
     }
 }

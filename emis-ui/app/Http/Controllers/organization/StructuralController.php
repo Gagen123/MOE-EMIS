@@ -55,8 +55,11 @@ class StructuralController extends Controller
         }
     }
     
-    public function loadSport(Request $request){
-        $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$this->getWrkingAgencyId());
+    public function loadSport($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
         return $loadSport;
     }
 
@@ -109,8 +112,11 @@ class StructuralController extends Controller
         }
     }
 
-    public function loadInfrastructureList(){
-        $list = $this->apiService->listData('emis/organization/infrastructure/loadInfrastructureList/'.$this->getWrkingAgencyId());
+    public function loadInfrastructureList($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $list = $this->apiService->listData('emis/organization/infrastructure/loadInfrastructureList/'.$orgId);
         return $list;
     }
                             

@@ -179,6 +179,39 @@
                     </div>
                 </div>
             </div>
+            <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Section</h3>
+                    <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus" ></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm fa-pull-right" type="button" @click="editSection()"> Edit &nbsp;&nbsp; </button>
+                    </div>
+                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="structure-table" class="table text-center table-sm table-bordered table-striped">
+                            <thead>
+                                <tr>  
+                                    <th>Sl No.</th>
+                                    <th>Class</th>
+                                    <th>Stream</th>
+                                    <th>Section</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item, index) in sectionList" :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ class_array[item.classId] }}</td>
+                                    <td>{{ stream_array[item.streamId]}}</td>
+                                    <td>{{ item.section}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -188,9 +221,12 @@ export default {
     data(){
         return{
             data:'',
+            stream_array:{},
+            class_array:{},
             equipmentList:[],
             sportList:[],
             infrastructureList:[],
+            sectionList:[],
             form: new form({
                 organizationId:'',
                 landOwnership:'',
@@ -208,9 +244,9 @@ export default {
 
     methods:{
         /**
-         * method ti load equipment list
+         * method to load equipment list
          */
-        loadEquipmentList(uri = 'organization/loadEquipment'){
+        loadEquipmentList(uri = 'organization/loadEquipment/'+this.form.organizationId){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -226,7 +262,7 @@ export default {
         /**
          * method to load sport facility
          */
-        loadSportList(uri = 'organization/loadSport'){
+        loadSportList(uri = 'organization/loadSport/'+this.form.organizationId){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -242,7 +278,7 @@ export default {
         /**
          * method to get infrastructure lists
          */
-        loadInfrastructureList(uri = 'organization/loadInfrastructureList'){
+        loadInfrastructureList(uri = 'organization/loadInfrastructureList/'+this.form.organizationId){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -290,6 +326,44 @@ export default {
             }); 
         },
 
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                for(let i=0;i<response.data.length;i++){
+                    this.class_array[response.data[i].id] = response.data[i].class; 
+                }
+            });
+        },
+
+        /**
+         * method to get stream in checkbox
+         */
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                for(let i=0;i<response.data.length;i++){
+                    this.stream_array[response.data[i].id] = response.data[i].stream; 
+                }
+                
+            });
+        },
+
+        /**
+         * method to get section details by id
+         */
+        getSectionDetails(id){
+            axios.get('organization/getSectionDetails/'+id)
+            .then((response) => {  
+                let data = response;
+                this.sectionList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+
         /**
          * method to redirect to location page
          */
@@ -303,8 +377,15 @@ export default {
          */
         editConnectivity:function(){
             let orgId = $("#organizationId").val();
-            // this.$router.push("/connectivity")
             this.$router.push({name:'connectivity',query: {orgId:orgId}});
+        },
+
+        /**
+         * method to edit section
+         */
+        editSection:function(){
+            let orgId = $("#organizationId").val();
+            this.$router.push({name:'sections_add',query: {orgId:orgId}});
         },
 
         /**
@@ -330,6 +411,8 @@ export default {
     },
 
     created(){
+        this.getClass();
+        this.getStream();
         this.getLocationDetails(this.$route.query.data);
         this.getConnectivityDetails(this.$route.query.data);
         this.form.organizationId = this.$route.query.data;
@@ -339,6 +422,7 @@ export default {
         this.loadEquipmentList();
         this.loadSportList();
         this.loadInfrastructureList();
+        // this.getSectionDetails(this.$route.query.data);
     },
 }
 </script>

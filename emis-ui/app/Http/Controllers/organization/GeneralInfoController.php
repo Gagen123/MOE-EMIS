@@ -54,8 +54,12 @@ class GeneralInfoController extends Controller
         }
     }
 
-    public function loadEquipment(Request $request){
-        $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$this->getWrkingAgencyId());
+    public function loadEquipment($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+            
+        }
+        $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$orgId);
         return $dis;
     }
 
@@ -86,6 +90,7 @@ class GeneralInfoController extends Controller
         $loc =[
             'school'                    =>  $request['school'],
             'classes'                   =>  $request['classes'],
+            'class_stream_id'           =>  $request['class_stream_id'],
             'stream'                    =>  $request['stream'],
             'users'                     =>  $request['users'],
             'actiontype'                =>  $request['action_type'],
@@ -100,6 +105,8 @@ class GeneralInfoController extends Controller
             return $e;
         }
     }
+
+
 
     public function saveConnectivity(Request $request){
         $orgId = $request->organizationId;
@@ -261,5 +268,15 @@ class GeneralInfoController extends Controller
     public function getStreamByClassId($classId = ""){
         $itemList = $this->apiService->listData('emis/organization/section/getStreamByClassId/'.$classId);
         return $itemList;
+    }
+
+    public function getExistingSectionByClass($classId = ""){
+        $sectionList = $this->apiService->listData('emis/organization/section/getExistingSectionByClass/'.$classId);
+        return $sectionList;
+    }
+
+    public function getExistingSectionByStream($classId = "",$streamId=""){
+        $sectionList = $this->apiService->listData('emis/organization/section/getExistingSectionByStream/'.$classId. '/'.$streamId);
+        return $sectionList;
     }
 }

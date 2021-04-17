@@ -321,6 +321,11 @@ class EstablishmentController extends Controller
     public function getConnectivityDetails($id=""){  
         $response_data = $this->apiService->listData('emis/organization/establishment/getConnectivityDetails/'.$id);
         return $response_data;
+    } 
+
+    public function getSectionDetails($id=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/getSectionDetails/'.$id);
+        return $response_data;
     }
 
 }

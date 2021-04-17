@@ -36,7 +36,7 @@ export default {
     },
 
     methods:{
-        loadInfrastructureList(uri = 'organization/loadInfrastructureList'){
+        loadInfrastructureList(uri = 'organization/loadInfrastructureList/null'){
             axios.get(uri)
             .then(response => {
                 let data = response;

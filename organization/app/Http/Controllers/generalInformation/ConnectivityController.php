@@ -99,9 +99,9 @@ class ConnectivityController extends Controller
                     'created_by'        =>  $request->user_id,
                     'created_at'        =>  date('Y-m-d h:i:s')
             );
-                 $conn = ContactDetails::create($contact_details);
+                $conn = ContactDetails::create($contact_details);
             }
-    
+            
             return $this->successResponse($conn, Response::HTTP_CREATED);
         }
     }

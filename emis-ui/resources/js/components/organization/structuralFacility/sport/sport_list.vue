@@ -37,7 +37,7 @@ export default {
         /**
          * method to load sport facility
          */
-        loadSportList(uri = 'organization/loadSport'){
+        loadSportList(uri = 'organization/loadSport/null'){
             axios.get(uri)
             .then(response => {
                 let data = response;

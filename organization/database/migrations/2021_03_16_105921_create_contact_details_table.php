@@ -16,7 +16,9 @@ class CreateContactDetailsTable extends Migration
         Schema::create('contact_details', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
-            $table->char('contactTypeId', 36);
+            $table->foreign('organizationId')->references('id')->on('organization_details');
+            $table->char('contactTypeId',36);
+            $table->foreign('contactTypeId')->references('id')->on('contact_types');
             $table->string('phone');
             $table->string('mobile');
             $table->string('email');
