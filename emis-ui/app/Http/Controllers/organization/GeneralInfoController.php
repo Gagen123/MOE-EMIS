@@ -221,8 +221,10 @@ class GeneralInfoController extends Controller
             'compoundArea'          =>  $request['compoundArea'],
             'id'                    =>  $request['id'],
             'disaster'              =>  $request['disaster'],
+            'attachment_details'    =>  $request['attachment_details'],
             'user_id'               =>  $this->userId()
         ];
+        dd($loc);
         try{
             $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
             return $response_data;

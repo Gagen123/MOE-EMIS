@@ -103,7 +103,7 @@
                                 <tr v-for="(item, index) in form.attachment_details" :key="index">
                                     <td><input type="text" class="form-control" v-model="item.name" readonly/></td>
                                     <td><input type="file"  id="filePath"></td>
-                                    <td><input type="text" name="remark" class="form-control" v-model="item.remark"/></td>
+                                    <td><input type="text" name="remark" class="form-control" v-model="item.remarks"/></td>
                                 </tr> 
                             </tbody>
                         </table>
@@ -141,7 +141,6 @@ export default {
                 compoundArea: '',
                 action_type:'add', 
                 disaster:[],
-                remark:[],
                 attachment_details:[{name:'',attach:'',remarks:''}],
             }),
         }
