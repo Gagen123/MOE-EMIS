@@ -226,10 +226,16 @@
                 </ul>
             </li>
             <li class="nav-item has-treeview" id="stafflink">
-                <router-link to="/staff_registration" class="nav-link pt-1 pb-1" onclick="afterclick()">
+                <router-link to="/staff_registration" class="nav-link pt-1 pb-1">
                     <p>
                     <i class="nav-icon fas fa-users-cog"></i>
                         Staff
+                    </p>
+                </router-link>
+                <router-link to="/create_inset" class="nav-link pt-1 pb-1">
+                    <p>
+                    <i class="nav-icon fas fa-list"></i>
+                        Inset
                     </p>
                 </router-link>
             </li>

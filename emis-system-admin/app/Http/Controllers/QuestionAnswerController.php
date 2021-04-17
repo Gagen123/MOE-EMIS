@@ -172,6 +172,14 @@ class QuestionAnswerController extends Controller{
             $model = new $modelName();
             return $this->successResponse($model::where("parent_id",explode("_",$type)[2])->where('status',1)->get());
         }
+
+        if(strpos($type,"withwhere_wash_Question")!==false){
+            //withwhere_water_Question
+            $databaseModel=explode("_",$type)[2];
+            $modelName = "App\\Models\\question_answer\\"."$databaseModel"; 
+            $model = new $modelName();
+            return $this->successResponse($model::where('status','1')->where('status','water')->get());
+        }
     }
     
     public function saveAnswers(Request $request){
