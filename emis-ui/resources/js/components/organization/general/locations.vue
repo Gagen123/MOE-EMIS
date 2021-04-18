@@ -93,16 +93,17 @@
                         <table id="attachmentTable" class="table table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <!-- <th></th> -->
                                     <th>Title</th>
                                     <th>File</th>
                                     <th>Remark</th>                            
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, index) in attachmentList" :key="index">
-                                    <td>{{ item.name}}</td>
-                                    <td><input type="file"  id="attachment1"></td>
-                                    <td><input type="text" name="remark" class="form-control" v-model="form.remark"/></td>
+                                <tr v-for="(item, index) in form.attachment_details" :key="index">
+                                    <td><input type="text" class="form-control" v-model="item.name" readonly/></td>
+                                    <td><input type="file"  id="filePath"></td>
+                                    <td><input type="text" name="remark" class="form-control" v-model="item.remarks"/></td>
                                 </tr> 
                             </tbody>
                         </table>
@@ -124,6 +125,7 @@ export default {
         return{
             disasterList:[],
             attachmentList:[],
+            
             form: new form({
                 id: '', 
                 organizationId:'',
@@ -138,21 +140,34 @@ export default {
                 name: '',
                 compoundArea: '',
                 action_type:'add', 
-                disaster:[]
+                disaster:[],
+                attachment_details:[{name:'',attach:'',remarks:''}],
             }),
         }
     },
 
     methods:{
+
+        /**
+         * method to current get lat and longitude 
+         */
         getLat: function(){
             this.form.latitude = 27.514162;
             this.form.longitude = 90.433601;
         },
+
+        /**
+         * method to remove error
+         */
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
+
+        /**
+         * method to save or update data
+         */
         formaction: function(type){
             if(type=="reset"){
                 $(".editable_fields").val('');
@@ -190,8 +205,11 @@ export default {
         loadAttachmentList(uri = 'masters/loadAttachment'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.attachmentList =  data.data;
+                let data = response.data;
+                this.form.attachment_details=[];
+                for(let i=0;i<data.length;i++){
+                    this.form.attachment_details.push({name:data[i].name,attach:'',remarks:''});
+                }
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

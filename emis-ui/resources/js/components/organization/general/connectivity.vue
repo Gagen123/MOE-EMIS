@@ -106,7 +106,6 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Phone</th>
-                                    <!-- <th>Fax</th> -->
                                     <th>Mobile</th>
                                     <th>Email</th>                            
                                 </tr>
@@ -114,23 +113,23 @@
                             <tbody>
                                 <tr id="record1" v-for='(user, index) in form.users' :key="index">
                                     <td>
-                                        <!-- <input type="text" name="fax" class="form-control" v-model="user.contactName"/> -->
-                                        <select name="name" id="name" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('spo_name') }">
+                                        <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_err('contactName')">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
+                                        <has-error :form="form" field="user.contactName"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="phone" class="form-control" v-model="user.phone"/>
-                                    </td>
-                                    <!-- <td>                                
-                                        <input type="text" name="fax" class="form-control" v-model="user.fax"/>
-                                    </td> -->
-                                    <td>                                
-                                        <input type="text" name="mobile" class="form-control" v-model="user.mobile"/>
+                                        <input type="text" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
+                                        <has-error :form="form" field="phone"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="email" class="form-control" v-model="user.email"/>
+                                        <input type="text" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/>
+                                        <has-error :form="form" field="mobile"></has-error>
+                                    </td>
+                                    <td>                                
+                                        <input type="text" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
+                                        <has-error :form="form" field="email"></has-error>
                                     </td>
                                 </tr> 
                                 <tr>
