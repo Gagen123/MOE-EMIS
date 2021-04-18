@@ -61,7 +61,7 @@
                     <div class="form-group row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label>Thram No:<span class="text-danger">*</span></label>
-                            <input type="text" v-model="form.thramNo" :class="{ 'is-invalid': form.errors.has('thramNo') }" class="form-control editable_fields" @change="remove_err('thramNo')" id="thramNo"/>
+                            <input type="text" name="thramNo" v-model="form.thramNo" :class="{ 'is-invalid': form.errors.has('thramNo') }" class="form-control editable_fields" @change="remove_err('thramNo')" id="thramNo"/>
                             <has-error :form="form" field="thramNo"></has-error>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -82,8 +82,8 @@
                         </div> 
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <label >Disaster risks:</label><br>
-                            <span v-for="(item, key, index) in  disasterList" :key="index">
-                                <input type="checkbox" v-model="form.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                            <span v-for="(item, key, index) in  form.disasterList" :key="index">
+                                <input type="checkbox" v-model="item.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
                             </span>
                         </div>
                     </div>
@@ -101,9 +101,9 @@
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in form.attachment_details" :key="index">
-                                    <td><input type="text" class="form-control" v-model="item.name" readonly/></td>
-                                    <td><input type="file"  id="filePath"></td>
-                                    <td><input type="text" name="remark" class="form-control" v-model="item.remarks"/></td>
+                                    <td><input type="text" :id="'fileName'+(index+1)" class="form-control" v-model="item.name" readonly/></td>
+                                    <td><input type="file"  :id="'attach'+(index+1)" v-on:change="onChangeFileUpload"></td>
+                                    <td><input type="text" :id="'remarks'+(index+1)" name="remark" class="form-control" v-model="item.remarks"/></td>
                                 </tr> 
                             </tbody>
                         </table>
@@ -123,9 +123,6 @@
 export default {
     data(){
         return{
-            disasterList:[],
-            attachmentList:[],
-            
             form: new form({
                 id: '', 
                 organizationId:'',
@@ -141,15 +138,29 @@ export default {
                 compoundArea: '',
                 action_type:'add', 
                 disaster:[],
+                ref_docs:[],
+                disasterList:[],
                 attachment_details:[{name:'',attach:'',remarks:''}],
             }),
         }
     },
 
     methods:{
+        
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#fileName'+currentcount).val(), attach: e.target.files[0],remarks:$('#remarks'+currentcount).val()});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            } 
+        },
 
         /**
-         * method to current get lat and longitude 
+         * method to current get latitude and longitude 
          */
         getLat: function(){
             this.form.latitude = 27.514162;
@@ -173,12 +184,43 @@ export default {
                 $(".editable_fields").val('');
             }
             if(type=="save"){
-                this.form.post('/organization/saveLocation',this.form)
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('id', this.form.id);
+                formData.append('organizationId', this.form.organizationId);
+                formData.append('landOwnership', this.form.landOwnership);
+                formData.append('compoundFencing', this.form.compoundFencing);
+                formData.append('entranceGate', this.form.entranceGate);
+                formData.append('longitude', this.form.longitude);
+                formData.append('latitude', this.form.latitude);
+                formData.append('altitude', this.form.altitude);
+                formData.append('thramNo', this.form.thramNo);
+                formData.append('cid', this.form.cid);
+                formData.append('name', this.form.name);
+                formData.append('compoundArea', this.form.compoundArea);
+                formData.append('disaster', this.form.disasterList);
+
+                formData.append('ref_docs[]', this.form.ref_docs);
+                for(let i=0;i<this.form.ref_docs.length;i++){
+                    formData.append('attachments[]', this.form.ref_docs[i].attach);
+                    formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    formData.append('remarks[]', this.form.ref_docs[i].remarks);
+                }
+
+                axios.post('/organization/saveLocation', formData, config)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Location is added successfully'
                     })
+                    
+                    setTimeout(function(){
+                        window.location.reload();
+                    }, 500);
                     // if(this.form.organizationId != null || this.form.organizationId != ""){
                     //     this.$router.push("/school_list")
                     // }
@@ -195,7 +237,7 @@ export default {
         getDisasterList:function(){
             axios.get('/organization/getDisasterListInCheckbox')
               .then(response => {
-                this.disasterList = response.data;
+                this.form.disasterList = response.data;
             });
         },
 

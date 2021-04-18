@@ -6,19 +6,21 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Facility:<span class="text-danger">*</span></label> 
-                        <select name="facility" id="facility" class="form-control editable_fields" v-model="form.facility">
+                        <select name="facility" id="facility" class="form-control editable_fields" @change="remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
+                        <has-error :form="form" field="facility"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Type:<span class="text-danger">*</span></label> 
-                        <select name="type" id="type" class="form-control editable_fields" v-model="form.type">
+                        <select name="type" id="type" class="form-control editable_fields" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type')">
                             <option value="">--- Please Select ---</option>
                             <option value="1">Standard</option>
                             <option value="2">Indoor</option>
                             <option value="3">Outdoor</option>
                         </select>
+                        <has-error :form="form" field="type"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Year of Establishment:</label> 
@@ -77,6 +79,16 @@ export default {
     },
 
     methods:{
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+
         formaction: function(type){
             if(type=="reset"){
                 this.form.facility= '';

@@ -76,15 +76,15 @@ class StructuralController extends Controller
     public function saveInfrastructure(Request $request){
         $rules = [
             'category'                   =>  'required',
-            'structureNo'                =>  'required',
+            'subCategory'                =>  'required',
             'yearOfConstruction'         =>  'required',
-            'presentCondition'           =>  'required',
+            // 'presentCondition'           =>  'required',
         ];
         $customMessages = [
             'category.required'                 => 'Category is required',
-            'structureNo.required'              => 'Structure No./Name is required',
+            'subCategory.required'              => 'Sub Category is required',
             'yearOfConstruction.required'       => 'Year of Construction is required',
-            'presentCondition.required'         => 'Present Condition of Structure is required',
+            // 'presentCondition.required'         => 'Present Condition of Structure is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $infrastructure =[
