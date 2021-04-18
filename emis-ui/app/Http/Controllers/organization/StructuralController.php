@@ -231,4 +231,9 @@ class StructuralController extends Controller
         $utensil = $this->apiService->listData('emis/organization/schoolFeeding/loadUtensilKitchenStatus/'.$this->userId() );
         return $utensil;
     }
+    
+    public function saveWashDetails(Request $request){
+        dd($request->all_answers);
+        
+    }
 }
