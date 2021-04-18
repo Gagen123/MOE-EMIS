@@ -93,7 +93,6 @@
                         <table id="attachmentTable" class="table table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <!-- <th></th> -->
                                     <th>Title</th>
                                     <th>File</th>
                                     <th>Remark</th>                            
@@ -147,6 +146,19 @@ export default {
 
     methods:{
         
+        /**
+         * method to reset form
+         */
+        resetForm(){
+            this.form.longitude = '',
+            this.form.latitude = '',
+            this.form.altitude = ''
+            this.form.thramNo = '',
+            this.form.cid = '',
+            this.form.name = '',
+            this.form.compoundArea = ''
+        },
+
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
@@ -181,7 +193,7 @@ export default {
          */
         formaction: function(type){
             if(type=="reset"){
-                $(".editable_fields").val('');
+                this.resetForm();
             }
             if(type=="save"){
                 const config = {
@@ -202,8 +214,15 @@ export default {
                 formData.append('cid', this.form.cid);
                 formData.append('name', this.form.name);
                 formData.append('compoundArea', this.form.compoundArea);
-                formData.append('disaster', this.form.disasterList);
-
+                
+                for(let i=0;i<this.form.disasterList.length;i++){
+                    console.log(this.form.disasterList[i].id);
+                    if(this.form.disasterList[i].disaster){
+                        // alert(this.form.disasterList[i].id);
+                        formData.append('disaster[]', this.form.disasterList[i].id);
+                    }
+                }
+                
                 formData.append('ref_docs[]', this.form.ref_docs);
                 for(let i=0;i<this.form.ref_docs.length;i++){
                     formData.append('attachments[]', this.form.ref_docs[i].attach);
@@ -217,10 +236,7 @@ export default {
                         icon: 'success',
                         title: 'Location is added successfully'
                     })
-                    
-                    setTimeout(function(){
-                        window.location.reload();
-                    }, 500);
+                    this.resetForm();
                     // if(this.form.organizationId != null || this.form.organizationId != ""){
                     //     this.$router.push("/school_list")
                     // }

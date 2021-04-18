@@ -128,7 +128,7 @@
                                         <has-error :form="form" field="mobile"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
+                                        <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
                                         <has-error :form="form" field="email"></has-error>
                                     </td>
                                 </tr> 
@@ -406,6 +406,7 @@ export default {
                 console.log("Error:"+error);
             }); 
         },
+
     },
     created(){
         this.getConnectivityDetails(this.$route.query.orgId);

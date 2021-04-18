@@ -186,7 +186,6 @@ class GeneralInfoController extends Controller
     }
 
     public function saveLocation(Request $request){
-        // dd($request->disaster);
         $orgId = $request->organizationId;
         if($orgId != "undefined" && $orgId != null){
             $orgId = $orgId;
@@ -224,15 +223,14 @@ class GeneralInfoController extends Controller
                     move_uploaded_file($file,$file_store_path.'/'.$file_name);
                     array_push($attachment_details,
                         array(
-                            'path'                    =>  $file_store_path,
-                            'original_name'           =>  $file_name,
-                            'user_defined_name'       =>  $filenames[$index],
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
                         )
                     );
                 }
             }
         }   
-
         $loc =[
             'organizationId'        =>  $orgId,
             'landOwnership'         =>  $request['landOwnership'],
@@ -247,12 +245,11 @@ class GeneralInfoController extends Controller
             'compoundArea'          =>  $request['compoundArea'],
             'id'                    =>  $request['id'],
             'disaster'              =>  $request['disaster'],
-            'attachment_details'    =>  $request['attachment_details'],
+            'attachment_details'    =>  $attachment_details,
             'user_id'               =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
         return $response_data;
-        
     }
 
     public function getDisasterListInCheckbox(){

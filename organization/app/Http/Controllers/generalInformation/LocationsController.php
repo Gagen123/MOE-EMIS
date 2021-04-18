@@ -81,20 +81,20 @@ class LocationsController extends Controller
             // dd($location);
             $loc = Locations::create($location);
     
-            // $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');
+            $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');
     
-            // if($disasters != null){
-            //     foreach ($disasters as $dis){
-            //         $disasterRisk = [
-            //             'locationId'        => $locationId[0],
-            //             'disasterTypeId'    => $dis,
-            //             'created_by'        => $request->user_id,
-            //             'created_at'        => date('Y-m-d h:i:s'),
+            if($disasters != null){
+                foreach ($disasters as $dis){
+                    $disasterRisk = [
+                        'locationId'        => $locationId[0],
+                        'disasterTypeId'    => $dis,
+                        'created_by'        => $request->user_id,
+                        'created_at'        => date('Y-m-d h:i:s'),
                         
-            //         ];
-            //         $loc = LocationDisasterRisk::create($disasterRisk);
-            //     }
-            // }
+                    ];
+                    $loc = LocationDisasterRisk::create($disasterRisk);
+                }
+            }
             return $this->successResponse($loc, Response::HTTP_CREATED);
         }
         

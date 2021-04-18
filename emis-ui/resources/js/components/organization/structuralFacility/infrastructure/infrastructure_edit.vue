@@ -79,7 +79,6 @@
                             <thead>
                                 <tr>
                                     <th>Facility</th>
-                                    <!-- <th>Type</th> -->
                                     <th>Facility No./Name</th>
                                     <th>Capacity</th>
                                     <th>Total number of Facility</th>
@@ -95,12 +94,6 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    <!-- <td>                                
-                                        <select name="type" id="type" class="form-control editable_fields" v-model="user.type">
-                                            <option value="">--- Please Select ---</option>
-                                            <option value="1">Type 1</option>
-                                        </select>
-                                    </td> -->
                                     <td>                                
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
                                     </td>

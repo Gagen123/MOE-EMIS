@@ -89,7 +89,6 @@ class EstablishmentController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $workflowdet=$this->getsubmitterStatus('new establishment');
-        // dd($workflowdet['screen_id']);
         if($workflowdet['screen_id']=="0"){
             return "No Screen";
         }
@@ -101,7 +100,7 @@ class EstablishmentController extends Controller
             'user_id'      =>  $this->userId() ,
         ];
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-        // dd($response_data->data->applicationNo);
+        //dd($response_data->data->applicationNo);
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
