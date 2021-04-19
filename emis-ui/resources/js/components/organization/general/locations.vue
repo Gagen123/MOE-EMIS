@@ -3,7 +3,7 @@
         <form class="bootbox-form" id="locationsId">
             <div class="card card-primary card-outline">
                 <div class="card-body">
-                    <input type="text" class="form-control" v-model="form.organizationId"/>
+                    <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <!-- <div class="form-group row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
