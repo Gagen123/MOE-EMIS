@@ -3,18 +3,18 @@
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead" role="tablist">
-                    <li class="nav-item personal-details-tabs" @click="shownexttab('','personal-details-tabs')">
+                    <li class="nav-item wash-tabs" @click="shownexttab('wash-tabs')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
                             <label> Wash </label>                              
                         </a>
                     </li>
-                    <li class="nav-item appointment-tab">
-                        <a class="nav-link" data-toggle="pill" @click="shownexttab('personal-details-tabs','appointment-tab')" role="tab">
+                    <li class="nav-item sanitation-tab">
+                        <a class="nav-link" data-toggle="pill" @click="shownexttab('sanitation-tab')" role="tab">
                             <label> Sanitation </label>
                         </a>
                     </li>
-                    <li class="nav-item nomination-tab">
-                        <a class="nav-link" data-toggle="pill" @click="shownexttab('appointment-tab','nomination-tab')" role="tab">
+                    <li class="nav-item hygience-tab">
+                        <a class="nav-link" data-toggle="pill" @click="shownexttab('hygience-tab')" role="tab">
                             <label> Hygience</label>
                         </a>
                     </li>
@@ -22,7 +22,7 @@
             </div>
             <div class="card-body">
                 <div class="tab-content">
-                    <div class="tab-pane fade active show tab-content-details" id="personal-details-tabs" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade active show tab-content-details" id="wash-tabs" role="tabpanel" aria-labelledby="basicdetails">
                         <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <thead>
                                 <tr>
@@ -31,195 +31,43 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(item, index) in questionList" :key="index">
+                                <tr v-for="(item, index) in wash_form.questionList" :key="index">
                                     <td>{{ item.name}}</td>
                                     <td v-if="item.answer_type=='TextArea'">
-                                        <textarea class="form-control"></textarea>
+                                        <textarea class="form-control" v-model="item.answered"></textarea>
                                     </td>
+                                    
                                     <td v-if="item.answer_type=='Text'">
-                                        <textarea class="form-control"></textarea>
+                                        <input type="text" v-model="item.answered" class="form-control">
                                     </td>
-                                </tr>
-                                <tr id="record1">
-                                        <td>Does the school have Independent water source? </td>
-                                        <td>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="radio" name="independent"  value="1"> Yes
-                                                <input type="radio" name="independent"  value="2"> No
-                                            </div>
-                                        </td>
-                                </tr>
-                                <tr id="record2">
-                                        <td>What is the main source* of water provided at the school?</td>
-                                        <td>
-                                            <div class=" row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="pipe" name="pipe" value="1">
-                                                <label for="pipe" > Piped water supply </label>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="source" name="source" value="2">
-                                                <label for="source"> No water supply/source </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="river" name="river" value="3">
-                                                <label for="river"> Surface water(Lake, river, stream) </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="stored" name="stored" value="4">
-                                                <label for="stored"> Stored water </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="well" name="well" value="5">
-                                                <label for="well"> Tube well /Borehole water </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="rainWater" name="rainWater" value="6">
-                                                <label for="rainWater"> Rainwater </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="spring" name="spring" value="7">
-                                                <label for="spring"> Unprotected spring </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="protected" name="protected" value="8">
-                                                <label for="protected"> Protected spring </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="dug" name="dug" value="9">
-                                                <label for="dug"> Protected dug well </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="oth" name="v" value="10">
-                                                <label for="oth"> Others(Please Specify) </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="text" class="form-control" id="specify" name="specify" >
-                                            </div>
-                                        </td>
-                                </tr>
-                                <tr id="record3">
-                                    <td>Availability of Water from main supply/source in the school?</td>
-                                    <td>
+
+                                    <td v-if="item.answer_type=='Number'">
+                                        <input type="number" v-model="item.answered" class="form-control">
+                                    </td>
+
+                                    <td v-if="item.answer_type=='Radio'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <select name="category" id="category" class="form-control editable_fields " @change="show()">
+                                            <span v-for="(ans, index1) in item.ans_list" :key="index1">
+                                                <input type="radio" v-model="ans.answered" class="ml-4" :value="ans.id"> <label for="pipe" >  {{ans.name}} </label>
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td v-if="item.answer_type=='Dropdown'">
+                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <select name="category" id="category" v-model="item.answered" class="form-control">
                                                 <option value="">--- Please Select ---</option>
-                                                <option value="1">Yes(Always)</option>
-                                                <option value="2">Mostly(Unavailable >= 30 days total)</option>
-                                                <option value="3">No(Unavailable > 30 days total)</option>
+                                                <option v-for="(item, index) in item.ans_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </div>
                                     </td>
-                                </tr>
-                                <tr id="record4">
-                                        <td>The school have enough water for</td>
-                                        <td>
-                                            <div class=" row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="drinking" name="drinking" value="1">
-                                                <label for="drinking"> Drinking </label>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="handWashing" name="handWashing" value="2">
-                                                <label for="handWashing"> Hand Washing</label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="bathing" name="bathing" value="3">
-                                                <label for="bathing"> Bathing </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="sanitatio" name="sanitatio" value="4">
-                                                <label for="sanitatio"> Sanitation need </label><br>
-                                            </div>
-                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <input type="checkbox" id="cooking" name="cooking" value="5">
-                                                <label for="cooking"> Cooking </label><br>
-                                            </div>
-                                        </td>
-                                </tr>
-                                <tr id="record5">
-                                    <td>Does the school have functional water supply liname?</td>
-                                    <td>
+
+                                    <td v-if="item.answer_type=='Checkbox'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="funWater"  value="1"> Yes
-                                                <input type="radio" name="funWater" value="2"> No
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record6">
-                                    <td>Number of functional Tap Heads</td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" name="funTape" class="form-control" id="funTape" > 
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record7">
-                                    <td>Number of Non-functional Tap Heads</td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" name="nonFunTape" class="form-control" id="nonFunTape" > 
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record8">
-                                    <td>Is drinking water accessible to those with limited mobility or vision?</td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="limi"  value="1"> Yes
-                                            <input type="radio" name="limi"  value="2"> No
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record9">
-                                    <td>Is drinking water accessible to the smallest children?</td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="small"  value="1"> Yes
-                                            <input type="radio" name="small"  value="2"> No
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record10">
-                                    <td>Treatment Method(s)</td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="filtration" name="filtration" value="1">
-                                            <label for="filtration"> Filtration </label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="boiling" name="boiling" value="2">
-                                            <label for="boiling"> Boiling </label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="chlorination" name="chlorination" value="3">
-                                            <label for="chlorination"> Chlorination </label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="solDisinfection" name="solDisinfection" value="4">
-                                            <label for="solDisinfection"> Solar disinfection  </label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="ulDisinfection" name="ulDisinfection" value="5">
-                                            <label for="ulDisinfection"> Untraviolet(UV) disinfection</label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="noTreatment" name="noTreatment" value="6">
-                                            <label for="noTreatment">No Treatment</label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="checkbox" id="other" name="other" value="7">
-                                            <label for="other">Other treatment method (Please specify)</label><br>
-                                        </div>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" id="" name="" class="form-control">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="record11">
-                                    <td>Has the main water source been tested for drinking in the past 12 months?</td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="tested"  value="1"> Yes
-                                            <input type="radio" name="tested"  value="2"> No
+                                            <span v-for="(ans, index1) in item.ans_list" :key="index1">
+                                                <input type="checkbox" v-model="ans.answered" class="ml-4" id="pipe" name="pipe" :value="ans.id">
+                                                <label>{{ans.name}} </label>
+                                            </span>
                                         </div>
                                     </td>
                                 </tr>
@@ -228,11 +76,11 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('personal-details-tabs','appointment-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('wash-tabs')">Save & Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="appointment-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="sanitation-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <table id="dynamic-table1" class="table w-100  table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -819,12 +667,12 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('','personal-details-tabs')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('appointment-tab','nomination-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
+                                <button class="btn btn-success" @click="shownexttab('wash-tabs')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('hygience-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="nomination-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="hygience-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <table id="dynamic-table2" class="table w-100  table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -1097,8 +945,8 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('personal-details-tabs','appointment-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('appointment-tab','final-tab')"> <i class="fa fa-save"></i>Save </button>
+                                <button class="btn btn-success" @click="shownexttab('sanitation-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save </button>
                             </div>
                         </div>
                     </div>
@@ -1112,20 +960,21 @@
 export default {
     data(){
         return{
-            questionList:[],
+            wash_counter:0,
+            wash_form: new form({
+                type:'wash',
+                questionList:[],
+            })
         }
     },
 
     methods:{
-        shownexttab(presentclass,nextclass){  
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            //body
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
+        increment(num){
+            if(num<10){
+                return this.wash_counter+=1;
+            }
+        },
+        shownexttab(nextclass){  
             if(nextclass=="final-tab"){ 
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
@@ -1145,24 +994,50 @@ export default {
                     }
                 });
             }
+            else{
+                this.wash_form.post('organization/structural/saveWashFeeding')
+                .then((response) => { 
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved Successfully'
+                    });
+                })
+                .catch((error) => {  
+                    console.log("Error: "+error)
+                });
+            }
         },
         loadQuestionList(uri = 'questionAnswers/loadQuestionaries/withwhere_Wash_Question'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.questionList =  data.data.data;
-            })
+                let data = response.data.data;
+                this.wash_form.questionList =  data;
+            }) 
+            .catch(function (error){
+                console.log(error.toString());
+            });
+        },
+        loadWashDetialsList(uri = 'organization/structural/getWashFeeding/wash'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=o;i<data.length;i++){
+                    
+                }
+            }) 
             .catch(function (error){
                 console.log(error.toString());
             });
         },
     },
+  
     mounted(){ 
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         }); 
         this.loadQuestionList();
+        this.loadWashDetialsList();
     },
 }
 </script>

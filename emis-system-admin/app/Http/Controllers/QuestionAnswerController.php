@@ -182,7 +182,7 @@ class QuestionAnswerController extends Controller{
                 ->where('c.name', '=',explode("_",$type)[1])
                 ->groupby('q.id')->get();
             foreach($questionlist as $ques){
-                $ques->ans_list=Answer::where('parent_id',$ques->id)->first();
+                $ques->ans_list=Answer::where('parent_id',$ques->id)->get();
             }
             return $this->successResponse($questionlist);
         }

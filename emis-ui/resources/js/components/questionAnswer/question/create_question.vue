@@ -44,6 +44,7 @@
                             <option value="Radio">Radio</option>
                             <option value="Checkbox">Checkbox</option>
                             <option value="Text">Text</option>
+                            <option value="Number">Number</option>
                             <option value="TextArea">TextArea</option>
                         </select> 
                         <has-error :form="form" field="answer_type"></has-error>
