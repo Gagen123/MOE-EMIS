@@ -408,8 +408,13 @@ class EstablishmentController extends Controller
         $response_data=OrganizationDetails::all();
         return $this->successResponse($response_data);
     }
-    public function loadorgbyId($org_id=""){
-        $response_data=OrganizationDetails::where('id',$org_id)-first();
+    public function loadorgbyId($type="",$org_id=""){
+        if($type=="org"){
+            $response_data=OrganizationDetails::where('id',$org_id)-first();
+        }
+        if($type=="gewog"){
+            $response_data=OrganizationDetails::where('id',$org_id)->get();
+        }
         return $this->successResponse($response_data);
     }
     public function getOrgList($dzo_id=""){

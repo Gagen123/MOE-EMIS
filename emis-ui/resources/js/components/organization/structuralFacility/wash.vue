@@ -34,32 +34,38 @@
                                 <tr v-for="(item, index) in wash_form.questionList" :key="index">
                                     <td>{{ item.name}}</td>
                                     <td v-if="item.answer_type=='TextArea'">
-                                        <textarea class="form-control" v-model="wash_form.all_answers"></textarea>
-                                    </td>
-                                    <td v-if="item.answer_type=='Text'">
-                                        <input type="text" v-model="wash_form.all_answers" class="form-control">
+                                        <textarea class="form-control" v-model="item.answered"></textarea>
                                     </td>
                                     
-                                   
+                                    <td v-if="item.answer_type=='Text'">
+                                        <input type="text" v-model="item.answered" class="form-control">
+                                    </td>
+
+                                    <td v-if="item.answer_type=='Number'">
+                                        <input type="number" v-model="item.answered" class="form-control">
+                                    </td>
+
                                     <td v-if="item.answer_type=='Radio'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
-                                                <input type="radio" v-model="wash_form.all_answers" class="ml-4" :value="ans.id"> <label for="pipe" >  {{ans.name}} </label>
+                                                <input type="radio" v-model="ans.answered" class="ml-4" :value="ans.id"> <label for="pipe" >  {{ans.name}} </label>
                                             </span>
                                         </div>
                                     </td>
+
                                     <td v-if="item.answer_type=='Dropdown'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <select name="category" id="category" v-model="wash_form.all_answers" class="form-control">
+                                            <select name="category" id="category" v-model="item.answered" class="form-control">
                                                 <option value="">--- Please Select ---</option>
                                                 <option v-for="(item, index) in item.ans_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                             </select>
                                         </div>
                                     </td>
+
                                     <td v-if="item.answer_type=='Checkbox'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
-                                                <input type="checkbox" v-model="wash_form.all_answers" class="ml-4" id="pipe" name="pipe" :value="ans.id">
+                                                <input type="checkbox" v-model="ans.answered" class="ml-4" id="pipe" name="pipe" :value="ans.id">
                                                 <label>{{ans.name}} </label>
                                             </span>
                                         </div>
@@ -954,15 +960,20 @@
 export default {
     data(){
         return{
+            wash_counter:0,
             wash_form: new form({
+                type:'wash',
                 questionList:[],
-                all_answers:[],
             })
-           
         }
     },
 
     methods:{
+        increment(num){
+            if(num<10){
+                return this.wash_counter+=1;
+            }
+        },
         shownexttab(nextclass){  
             if(nextclass=="final-tab"){ 
                 Swal.fire({
@@ -984,7 +995,7 @@ export default {
                 });
             }
             else{
-                this.wash_form.post('organization/structural/saveWashDetails')
+                this.wash_form.post('organization/structural/saveWashFeeding')
                 .then((response) => { 
                     Toast.fire({
                         icon: 'success',
@@ -1006,13 +1017,27 @@ export default {
                 console.log(error.toString());
             });
         },
+        loadWashDetialsList(uri = 'organization/structural/getWashFeeding/wash'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=o;i<data.length;i++){
+                    
+                }
+            }) 
+            .catch(function (error){
+                console.log(error.toString());
+            });
+        },
     },
+  
     mounted(){ 
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         }); 
         this.loadQuestionList();
+        this.loadWashDetialsList();
     },
 }
 </script>

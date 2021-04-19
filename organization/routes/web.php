@@ -217,6 +217,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadInfrastructureList/{orgId}', 'structuralFacility\InfrastructureController@loadInfrastructureList');
             $router->get('/getDesignerDropdown', 'structuralFacility\InfrastructureController@getDesignerDropdown');
             $router->get('/getInfrastructureDetails/{infraId}', 'structuralFacility\InfrastructureController@getInfrastructureDetails');
+            $router->post('/saveWashFeeding', 'structuralFacility\InfrastructureController@saveWashFeeding');
+            $router->get('/getWashFeeding/{type}', ['uses' => 'structuralFacility\InfrastructureController@getWashFeeding']);
+            
         });
         
         $router->group(['prefix' => 'establishment'], function () use ($router) {
@@ -236,7 +239,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
             $router->get('/loadorgs', 'establishment\EstablishmentController@loadorgs');
-            $router->get('/loadorgbyId/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
+            $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
             $router->get('/getLocationDetails/{id}', ['uses' => 'establishment\EstablishmentController@getLocationDetails']);
             $router->get('/getConnectivityDetails/{id}', ['uses' => 'establishment\EstablishmentController@getConnectivityDetails']);
             $router->get('/getSectionDetails/{id}', ['uses' => 'establishment\EstablishmentController@getSectionDetails']);

@@ -144,6 +144,22 @@ class StructuralController extends Controller
         $infraDetails = $this->apiService->listData('emis/organization/infrastructure/getInfrastructureDetails/'.$infraId);
         return $infraDetails;
     }
+    public function saveWashFeeding(Request $request){
+        $infra_data =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'questionList'              =>  $request->questionList,
+            'type'                      =>  $request->type,
+            'user_id'                   =>  $this->userId() 
+        ];
+        // dd($request->questionList);
+        $response_data= $this->apiService->createData('emis/organization/infrastructure/saveWashFeeding', $infra_data);
+        return $response_data;
+    }
+    public function getWashFeeding($type=""){
+        $wash_feeding_detials = $this->apiService->listData('emis/organization/infrastructure/getWashFeeding/'.$type.'SSS'.$this->getWrkingAgencyId());
+        return $wash_feeding_detials;
+    }
+    
 
     public function saveKitchenStatus(Request $request){
         $kitchenStatus =[
@@ -232,8 +248,5 @@ class StructuralController extends Controller
         return $utensil;
     }
     
-    public function saveWashDetails(Request $request){
-        dd($request->all_answers);
-        
-    }
+    
 }

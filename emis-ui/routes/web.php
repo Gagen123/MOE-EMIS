@@ -151,7 +151,9 @@ Route::prefix('organization')->group(function () {
     Route::get('/getDesignerDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getDesignerDropdown'])->name('getDesignerDropdown');
     Route::get('/getInfrastructureDetails/{infraId}', [App\Http\Controllers\organization\StructuralController::class, 'getInfrastructureDetails'])->name('getInfrastructureDetails');
     Route::prefix('structural')->group(function () {
-        Route::post('/saveWashDetails', [App\Http\Controllers\organization\StructuralController::class, 'saveWashDetails'])->name('saveWashDetails');
+        Route::post('/saveWashFeeding', [App\Http\Controllers\organization\StructuralController::class, 'saveWashFeeding'])->name('saveWashFeeding');
+        Route::get('/getWashFeeding/{type}', [App\Http\Controllers\organization\StructuralController::class, 'getWashFeeding'])->name('getWashFeeding');
+        
     });
     // establishment route
     Route::get('/getLevelInDropdown', [App\Http\Controllers\organization\EstablishmentController::class, 'getLevelInDropdown'])->name('getLeveInDropdown');

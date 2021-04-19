@@ -12,6 +12,7 @@ use App\Models\Masters\StructureSubCategory;
 use App\Models\Masters\StructureFacility;
 use App\Models\Masters\StructureDesigner;
 use App\Models\structuralFacility\FacilityInStructure;
+use App\Models\structuralFacility\WashFeeding;
 use Illuminate\Support\Facades\DB;
 
 
@@ -82,9 +83,7 @@ class InfrastructureController extends Controller
                 'created_at'                =>  date('Y-m-d h:i:s')
                 ];
                 $infra = Infrastructure::where('id', $id)->update($infrastructure);
-
                 DB::table('infrastructure_facilities')->where('infrastructureId', $request->id)->delete();
-
                 foreach ($request->input('users') as $i=> $user){
                     $facilityInStructure = array(
                         'infrastructureId'              =>  $request->id,
@@ -96,7 +95,7 @@ class InfrastructureController extends Controller
                         'noWithInternetConnection'      =>  $user['internetConnection'],
                         'updated_by'                    =>  $request->user_id,
                         'created_at'                    =>  date('Y-m-d h:i:s')
-                );
+                    );
                     $infra = FacilityInStructure::create($facilityInStructure);
                 }
             return $this->successResponse($infra, Response::HTTP_CREATED);
@@ -157,5 +156,46 @@ class InfrastructureController extends Controller
         $response_data=Infrastructure::where('id',$infraId)->first();
         $response_data->facility=FacilityInStructure::where('infrastructureId',$response_data->id)->get();
         return $this->successResponse($response_data); 
+    }
+
+    
+    public function saveWashFeeding(Request $request){
+        // dd($request->questionList);
+        $inserted_data ="";
+        foreach ($request->questionList as $i=> $question){
+            $q_ans = array(
+                'orgId'                         =>  $request->organizationId,
+                'questionId'                    =>  $question['id'],
+                'type'                          =>  $request->type,
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s')
+            );
+            if($question['answer_type']=="Checkbox" || $question['answer_type']=="Radio"){
+                foreach ($question['ans_list'] as $i=> $subquest){
+                    if(isset($subquest['answered'])==true){
+                        if($subquest['answered']!=null && $subquest['answered']!=""){
+                            $q_ans=array_merge($q_ans,
+                                array( 'answer'   =>  $subquest['id'],)
+                            );
+                           $inserted_data = WashFeeding::create($q_ans);
+                        }
+                    }
+                }
+            }
+            else if($question['answer_type']=="Text" || $question['answer_type']=="Number" || $question['answer_type']=="TextArea" || $question['answer_type']=="Dropdown"){
+                if($question['answered']!=""){
+                    $q_ans=array_merge($q_ans,
+                        array( 'answer'   =>  $question['answered'],)
+                    );
+                    $inserted_data = WashFeeding::create($q_ans);
+                }
+            }
+        }
+        return $this->successResponse($inserted_data, Response::HTTP_CREATED);
+    }
+
+    public function getWashFeeding($type=""){
+        $wash_feeding_detials=WashFeeding::where('type',explode('SSS',$type)[0])->where('orgId',explode('SSS',$type)[1])->get();
+        return $this->successResponse($wash_feeding_detials); 
     }
 }
