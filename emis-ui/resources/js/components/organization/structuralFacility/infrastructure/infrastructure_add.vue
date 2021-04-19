@@ -6,17 +6,19 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Category:<span class="text-danger">*</span></label> 
-                        <select name="category" id="category" class="form-control editable_fields" v-model="form.category" @change="getSubCategoryDropdown()">
+                        <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
+                        <has-error :form="form" field="category"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Sub Category:<span class="text-danger">*</span></label> 
-                        <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory">
+                        <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
                         </select>
+                        <has-error :form="form" field="subCategory"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Structure No:</label> 
@@ -27,7 +29,9 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Year of Construction:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields " id="yearOfConst" type="text" v-model="form.yearOfConstruction">
+                        <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text" 
+                        v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
+                        <has-error :form="form" field="yearOfConstruction"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Plinth Area (sq. m):</label>
@@ -152,18 +156,32 @@ export default {
     },
 
     methods:{
+
+        /**
+         * method to reset form
+         */
+        restForm(){
+            this.form.category= '';
+            this.form.subCategory= '';
+            this.form.structureNo= '';
+            this.form.yearOfConstruction= '';
+            this.form.plintchArea= '';
+            this.form.noOfFloor='';
+            this.form.totalCapacity='';
+            this.form.rampAccess='1';
+            this.form.presentCondition='1';
+            this.form.design='';
+            let formReset =this.form.users;
+            formReset.splice(0, formReset.length);
+            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
+        },
+
+        /**
+         * method to save data
+         */
         formaction: function(type){
             if(type=="reset"){
-                this.form.category= '';
-                this.form.subCategory= '';
-                this.form.structureNo= '';
-                this.form.yearOfConstruction= '';
-                this.form.plintchArea= '';
-                this.form.noOfFloor='';
-                this.form.totalCapacity='';
-                this.form.rampAccess='1';
-                this.form.presentCondition='';
-                this.form.design='';
+                this.restForm();
             }
             if(type=="save"){
                     this.form.post('/organization/saveInfrastructure',this.form)
@@ -179,6 +197,15 @@ export default {
                 })
             }
 		},
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
 
         /**
          * method to get category in dropdown

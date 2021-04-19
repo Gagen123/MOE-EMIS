@@ -128,7 +128,7 @@
                                         <has-error :form="form" field="mobile"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
+                                        <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
                                         <has-error :form="form" field="email"></has-error>
                                     </td>
                                 </tr> 
@@ -189,6 +189,32 @@ export default {
 
     methods:{
 
+        /**
+         * method to reset form
+         */
+        restForm(){
+            this.form.approachRoad= '';
+            this.form.electricitySource= '';
+            this.form.telephone= '';
+            this.form.internet= '';
+            this.form.distanceFromRoad= '';
+            this.form.daysFromRoad= '';
+            this.form.hoursFromRoad= ''; 
+            this.form.electricitySupply= '';  
+            this.form.electricalSubstation= '0';  
+            this.form.bandwidth= ''; 
+            this.form.drukRen= '0'; 
+            $(".grid").hide();
+            $(".noRoad").hide();
+            $(".showDiv").hide();
+            let formReset =this.form.users;
+            formReset.splice(0, formReset.length);
+            this.form.users.push({contactName:'',phone:'',mobile:'',email:''}) 
+        },
+
+        /**
+         * method to remove error
+         */
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -200,10 +226,7 @@ export default {
          */
         formaction: function(type){
             if(type=="reset"){
-                this.form.approachRoad = '';
-                this.form.electricitySource = '';
-                this.form.telephone = '';
-                this.form.internet = '';
+                this.restForm();
             }
             if(type=="save"){
                 this.form.post('/organization/saveConnectivity',this.form)
@@ -212,6 +235,8 @@ export default {
                         icon: 'success',
                         title: 'Connectivity is added successfully'
                     })
+
+                   this.restForm();
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -381,6 +406,7 @@ export default {
                 console.log("Error:"+error);
             }); 
         },
+
     },
     created(){
         this.getConnectivityDetails(this.$route.query.orgId);

@@ -74,6 +74,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadSportFacility', 'Masters\SportFacilityTypeController@loadSportFacility');
         
     });
+
+    $router->group(['prefix' => 'masters/sportFacilitySubtype'], function () use ($router) {
+        // sport facility subtype route
+        $router->post('/saveSportFacilitySubtype', 'Masters\SportFacilitySubTypeController@saveSportFacilitySubtype');
+        $router->get('/loadSportFacilitySubtype', 'Masters\SportFacilitySubTypeController@loadSportFacilitySubtype');
+        
+    });
     $router->group(['prefix' => 'masters/sportSupporter'], function () use ($router) {
         // sport supporter route
         $router->post('/saveSportSupporter', 'Masters\SportSupporterController@saveSportSupporter');
@@ -197,6 +204,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadSport/{orgId}', 'structuralFacility\SportController@loadSport');
             $router->get('/getFacilityInDropdown', 'structuralFacility\SportController@getFacilityInDropdown');
             $router->get('/getSupportInDropdown', 'structuralFacility\SportController@getSupportInDropdown');
+            $router->get('/getSubFacilityDropdown/{id}', 'structuralFacility\SportController@getSubFacilityDropdown');
+
         });
         $router->group(['prefix' => 'schoolFeeding'], function () use ($router) {
             $router->post('/saveKitchenStatus', 'structuralFacility\SchoolFeedingController@saveKitchenStatus');

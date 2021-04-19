@@ -458,6 +458,33 @@ class AdministrationController extends Controller{
         return $strCategory;
     }
 
+    public function loadSportFacilitySubtype(){
+        $load = $this->apiService->listData('emis/masters/sportFacilitySubtype/loadSportFacilitySubtype');
+        return $load;
+    }
+
+    public function saveSportFacilitySubtype(Request $request){
+        $rules = [
+            'sportFacility'  =>  'required',
+            'subtypeName'    =>  'required',
+        ];
+        $customMessages = [
+            'sportFacility.required' => 'Sport facility is required',
+            'subtypeName.required' => 'Name is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $cat =[
+            'sportFacility'  =>  $request['sportFacility'],
+            'subtypeName'  =>  $request['subtypeName'],
+            'status'    =>  $request['status'],
+            'id'    =>  $request['id'],
+            'user_id'=>$this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
+        return $response_data;
+        
+    }
+
     public function saveStrSubCategory(Request $request){
         $rules = [
             'structureCategory'  =>  'required',

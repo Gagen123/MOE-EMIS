@@ -533,6 +533,18 @@ const routes = [
                     
           ]    
         },
+
+        { path: '/sport_facility_subtype_index', 
+          component: require('./components/masters/organization_masters/sport_facility_subtype/sport_facility_subtype_index.vue').default ,
+          children: 
+          [
+            { path: '', component: require('./components/masters/organization_masters/sport_facility_subtype/sport_facility_subtype_list.vue').default },
+            { path: '/sport_facility_subtype_add', name:'SportFacilitySubtypeAdd', component: require('./components/masters/organization_masters/sport_facility_subtype/sport_facility_subtype_add.vue').default },
+            { path: '/sport_facility_subtype_edit', name:'SportFacilitySubtypeEdit', component: require('./components/masters/organization_masters/sport_facility_subtype/sport_facility_subtype_edit.vue').default },
+            { path: '/sport_facility_subtype_list', name:'SportFacilitySubtypeList', component: require('./components/masters/organization_masters/sport_facility_subtype/sport_facility_subtype_list.vue').default },
+                    
+          ]    
+      },
         { path: '/sport_supporter_index', 
           component: require('./components/masters/organization_masters/sport_supporter/sport_supporter_index.vue').default ,
           children: 

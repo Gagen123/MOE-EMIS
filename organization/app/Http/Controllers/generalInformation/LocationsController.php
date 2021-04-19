@@ -78,6 +78,7 @@ class LocationsController extends Controller
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];
+            // dd($location);
             $loc = Locations::create($location);
     
             $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');
