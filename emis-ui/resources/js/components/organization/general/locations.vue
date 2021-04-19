@@ -313,13 +313,10 @@ export default {
     },
 
     created(){
+        this.getDisasterList();
+        this.loadAttachmentList();
         this.getLocationDetails(this.$route.query.orgId);
         this.form.organizationId = this.$route.query.orgId;
     },
-
-    mounted(){
-        this.getDisasterList();
-        this.loadAttachmentList();
-    }
 }
 </script>
