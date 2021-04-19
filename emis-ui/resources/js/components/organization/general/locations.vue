@@ -3,7 +3,7 @@
         <form class="bootbox-form" id="locationsId">
             <div class="card card-primary card-outline">
                 <div class="card-body">
-                    <input type="hidden" class="form-control" v-model="form.organizationId"/>
+                    <input type="text" class="form-control" v-model="form.organizationId"/>
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <!-- <div class="form-group row">
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -237,13 +237,13 @@ export default {
                         title: 'Location is added successfully'
                     })
                     
-                    // if(this.form.organizationId != null || this.form.organizationId != ""){
-                    //     this.$router.push("/school_list")
-                    // }else{
-                    //     setTimeout(function(){
-                    //     window.location.reload();
-                    // }, 500);
-                    // }
+                    if(this.form.organizationId != null || this.form.organizationId != ""){
+                        this.$router.push("/school_list")
+                    }else{
+                        setTimeout(function(){
+                        window.location.reload();
+                        }, 500);
+                    }
                 })
                 .catch(() => {
                     console.log("Error......")
