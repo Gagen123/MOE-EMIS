@@ -6,7 +6,7 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Facility:<span class="text-danger">*</span></label> 
-                        <select name="facility" id="facility" class="form-control editable_fields" @change="remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
+                        <select name="facility" id="facility" class="form-control editable_fields" @change="getSubFacilityDropdown(),remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
@@ -16,9 +16,7 @@
                         <label class="">Type:<span class="text-danger">*</span></label> 
                         <select name="type" id="type" class="form-control editable_fields" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type')">
                             <option value="">--- Please Select ---</option>
-                            <option value="1">Standard</option>
-                            <option value="2">Indoor</option>
-                            <option value="3">Outdoor</option>
+                            <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                         </select>
                         <has-error :form="form" field="type"></has-error>
                     </div>
@@ -71,9 +69,17 @@ export default {
         return{
             facilityList:[],
             supportList:[],
+            facilitySubList:[],
             form: new form({
-                id: '', organizationId:'1', facility: '',type: '',yearOfEstablish: '',supportedBy: '',status: '1',
-                numberOfFacility: '',facilityAccessibleToDisabled: '',
+                id: '', 
+                organizationId:'', 
+                facility: '',
+                type: '',
+                yearOfEstablish: '',
+                supportedBy: '',
+                status: '1',
+                numberOfFacility: '',
+                facilityAccessibleToDisabled: '',
             })
         }
     },
@@ -121,6 +127,15 @@ export default {
                 this.facilityList = data;
             });
         },
+
+        getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/'+this.form.facility){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.facilitySubList = data;
+            });
+        },
+
         getSupportDropdown(uri = '/organization/getSupportInDropdown'){
             axios.get(uri)
             .then(response => {

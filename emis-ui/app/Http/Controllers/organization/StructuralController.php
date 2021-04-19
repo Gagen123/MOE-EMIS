@@ -135,6 +135,11 @@ class StructuralController extends Controller
         return $dropdown;
     }
 
+    public function getSubFacilityDropdown($facilityId=""){
+        $dropdown = $this->apiService->listData('emis/organization/sport/getSubFacilityDropdown/'.$facilityId);
+        return $dropdown;
+    }
+
     public function getDesignerDropdown(){
         $serviceProvider = $this->apiService->listData('emis/organization/infrastructure/getDesignerDropdown');
         return $serviceProvider;

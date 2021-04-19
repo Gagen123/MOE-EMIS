@@ -179,7 +179,7 @@ export default {
          * method to get existing section by class
          */
         getExistingSectionByClass(){
-            let classText = $('#class option:selected').text();
+            let classText = $('#classes option:selected').text();
             let classid=this.form.classes.split('_')[1];
             axios.get('/organization/getExistingSectionByClass/'+classid)
               .then(response => {
