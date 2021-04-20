@@ -410,7 +410,7 @@ class EstablishmentController extends Controller
     }
     public function loadorgbyId($type="",$org_id=""){
         if($type=="org"){
-            $response_data=OrganizationDetails::where('id',$org_id)-first();
+            $response_data=OrganizationDetails::where('id',$org_id)->first();
         }
         if($type=="gewog"){
             $response_data=OrganizationDetails::where('id',$org_id)->get();

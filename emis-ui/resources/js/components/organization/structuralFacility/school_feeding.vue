@@ -36,18 +36,52 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(kit, index) in form.kitchen_status' :key="index">
-                                    <td>
-                                        <input type="text" class="form-control" v-model="kit.question" :id="'question'+(index+1)" readonly>
-                                        <span class="text-danger" :id="'question'+(index+1)"></span>
+                                <tr v-for="(item, index) in questionList" :key="index">
+                                    <td>{{ item.name}}</td>
+                                    <td v-if="item.answer_type=='TextArea'">
+                                        <textarea class="form-control" :name="'wash_textarea'+index" v-model="item.answered" :id="item.id" @change="remove_err(item.id)"></textarea>
+                                        <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
-                                    <td>
+                                    
+                                    <td v-if="item.answer_type=='Text'">
+                                        <input class="form-control" :name="'wash_text'+index" type="text" v-model="item.answered" :id="item.id" @change="remove_err(item.id)">
+                                        <label class="text-danger" :id="item.id+'err'"></label>
+                                    </td>
+
+                                    <td v-if="item.answer_type=='Number'">
+                                        <input class="form-control" :name="'wash_number'+index" type="number" v-model="item.answered" :id="item.id" @change="remove_err(item.id)">
+                                        <label class="text-danger" :id="item.id+'err'"></label>
+                                    </td>
+
+                                    <td v-if="item.answer_type=='Radio'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="kit.value" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="kit.value" value="0" tabindex=""/> No</label>
+                                            <span v-for="(ans, index1) in item.ans_list" :key="index1">
+                                                <input type="radio" :name="'wash_radio'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" @change="remove_err(item.id+'_'+ans.id)" class="ml-4" :value="ans.id"> <label>  {{ans.name}} </label>
+                                            </span>
+                                        </div>
+                                        <label class="ml-4 text-danger" :id="item.id+'err'"></label>
+                                    </td>
+
+                                    <td v-if="item.answer_type=='Dropdown'">
+                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <select name="category" v-model="item.answered" :id="item.id" @change="remove_err(item.id)" class="form-control">
+                                                <option value="">--- Please Select ---</option>
+                                                <option v-for="(item, index) in item.ans_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            </select>
+                                            <label class="text-danger" :id="item.id+'err'"></label>
                                         </div>
                                     </td>
-                                </tr> 
+
+                                    <td v-if="item.answer_type=='Checkbox'">
+                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <span v-for="(ans, index1) in item.ans_list" :key="index1">
+                                                <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id" @change="remove_err(item.id+'_'+ans.id)">
+                                                <label>{{ans.name}} </label>  
+                                            </span>
+                                        </div>
+                                        <label class="ml-4 text-danger" :id="item.id+'err'"></label>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <hr>
@@ -159,142 +193,43 @@
 export default {
     data(){
         return {
-            form: new form({
-                kitchen_status:[
-                    {question:'Adequate size of the kitchen for the number of students?',value:'1'},
-                    {question:'Safe water connecion inside the kitchen?',value:'1'},
-                    {question:'Continuous water supply throughout the year in the kitchen?',value:'1'},
-                    {question:'Separate dish washing space in the kitchen?',value:'1'},
-                    {question:'wash basin with water connection for handwashing?',value:'1'},
-                    {question:'Proper functioning smoke outlet/chimney?',value:'1'},
-                    {question:'Adequate shelves in the kitchen to store utensils neatly?',value:'1'},
-                    {question:'Concrete floor?',value:'1'},
-                    {question:'Concrete walls?',value:'1'},
-                    {question:'Proper closed ceiling?',value:'1'},
-                    {question:'Windows with proper closures?',value:'1'},
-                    {question:'Doors with proper closures?',value:'1'},
-                    {question:'Adequate ventilations?',value:'1'},
-                    {question:'Functioning drainage system inside and outside of the kitchen?',value:'1'},
-                    {question:'Changing room?',value:'1'},
-                ],
-                type: '',status:'pending'
+            questionList:[],
+            ketchen_form: new form({
+            }),
+            foodstore_form: new form({
                 
             }),
-            form1: new form({
-                food_status:[
-                    {question:'Separate store exist for perishable and non-perisable items?',value:'1'},
-                    {question:'Adequate space is available to store food comodities?',value:'1'},
-                    {question:'Proper pallets are in place to store all non-perishable food items?',value:'1'},
-                    {question:'Proper containers are in place to store perishable food items?',value:'1'},
-                    {question:'Functioning weighing balance is in place?',value:'1'},
-                    {question:'Windows in proper closures?',value:'1'},
-                    {question:'Doors in proper closure?',value:'1'},
-                    {question:'Proper containers are in place to store opened non-perishable items to prevent contamination and spoilage?',value:'1'},
-                    {question:'Working tables and space is available with store?',value:'1'},
-                    {question:'Concrete floor?',value:'1'},
-                    {question:'Concrete walls?',value:'1'},
-                    {question:'Proper closed ceilings?',value:'1'},
-                    {question:'Adequate ventilations?',value:'1'},
-                    {question:'Proper roofing without leakages?',value:'1'},
-                ],
-                type: '',status:'pending'
+            equipment_form: new form({
+              
             }),
-            form2: new form({
-                equipment_kitchen:[
-                    {question:'Adequate number of functioning cooking stoves?',value:'1'},
-                    {question:'Adequate number of pots existing for serving?',value:'1'},
-                    {question:'Adequate number of pots/bowls/buckets exist for washing vegetables?',value:'1'},
-                    {question:'Adequate number of ladles exist?',value:'1'},
-                    {question:'Adequate separate cutlery for vegetables and meat items exist?',value:'1'},
-                    {question:'Working tables are in place with clean surface for cutting vegetables/meats etc?',value:'1'},
-                    {question:'Waste bins with proper lid is in place?',value:'1'},
-                ],
-                type: '',status:'pending'
-            }),
-            form3: new form({
-                dinning_hall:[
-                    {question:'Does the school have a dinning hall?',value:'1'},
-                    {question:'Adequate space is available to accommodate all students?',value:'1'},
-                    {question:'Adequate furniture to accommodate all students?',value:'1'},
-                    {question:'Windows with proper closures?',value:'1'},
-                    {question:'Concrete floor?',value:'1'},
-                    {question:'Concrete walls?',value:'1'},
-                    {question:'Proper closed ceilings?',value:'1'},
-                    {question:'Adequate ventilations?',value:'1'},
-                    {question:'Proper roofing without leakages?',value:'1'},
-                    {question:'Waste bins with proper lid is in place?',value:'1'},
-                ],
-                type: '',status:'submitted'
+            dinning_form: new form({
+                
             }),
         }
     },
 
     methods: {
         shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
-                Swal.fire({
-                    text: "Are you sure you wish to save this detials?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.form3.post('organization/saveDinningHall')
-                        .then((response) => { 
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Data saved Successfully'
-                            });
-                        })
-                        .catch((error) => {  
-                            console.log("Error: "+error)
-                        });
-                    }
-                });
-            }else {
-                if(nextclass=="service-tab"){
-                    this.form.post('organization/saveKitchenStatus')
-                    .then((response) => { 
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                    })
-                    .catch((error) => {  
-                        console.log("Error: "+error)
-                    });
-                }else if(nextclass=="service1-tab"){
-                    this.form1.post('organization/saveFoodStoreStatus')
-                    .then((response) => { 
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                    })
-                    .catch((error) => {  
-                        console.log("Error: "+error)
-                    });
-                }else if(nextclass=="undertaking-tab"){
-                    this.form2.post('organization/saveUtensilKitchen')
-                    .then((response) => { 
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                    })
-                    .catch((error) => {  
-                        console.log("Error: "+error)
-                    });
-                }   
-                this.change_tab(nextclass);
-            }
-            
         },
-        /**
-         * method to change tabs
-         */
+        loadQuestionList(param){
+            axios.get('questionAnswers/loadQuestionaries/withwhere_'+param+'_Question')
+            .then(response => {
+                let data = response.data.data;
+                if(param=="Wash"){
+                    this.wash_form.questionList =  data;
+                }
+                if(param=="Sanitation"){
+                    this.sanitation_form.questionList =  data;
+                }
+                if(param=="Hygiene"){ 
+                    this.hygiene_form.questionList =  data;
+                }
+            }) 
+            .catch(function (error){
+                console.log(error.toString());
+            });
+        },
+        
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -304,73 +239,6 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-
-        /**
-         * method to load kitchen status details
-         */
-         loadKitchenStatus(){
-            axios.get('organization/loadKitchenStatus')
-            .then((response) => {  
-                let data=response.data.data;
-                if(data.length>0){
-                    this.form.kitchen_status=[];
-                    for(let i=0;i<data.length;i++){
-                        this.form.kitchen_status.push(
-                            {question:data[i].description,value:data[i].value},
-                        );
-                    }
-                }
-                
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
-
-        /**
-         * method to load food store status details
-         */
-         loadFoodStoreStatus(){
-            axios.get('organization/loadFoodStoreStatus')
-            .then((response) => {  
-                let data=response.data.data;
-                if(data.length>0){
-                    this.form1.food_status=[];
-                    for(let i=0;i<data.length;i++){
-                        this.form1.food_status.push(
-                            {question:data[i].description,value:data[i].value},
-                        );
-                    }
-                }
-                
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
-
-        /**
-         * method to load utensil kitchen details
-         */
-         loadUtensilKitchenStatus(){
-            axios.get('organization/loadUtensilKitchenStatus')
-            .then((response) => {  
-                let data=response.data.data;
-                if(data.length>0){
-                    this.form2.equipment_kitchen=[];
-                    for(let i=0;i<data.length;i++){
-                        this.form2.equipment_kitchen.push(
-                            {question:data[i].description,value:data[i].value},
-                        );
-                    }
-                }
-                
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
-
     },
     mounted() {
         this.loadKitchenStatus();
