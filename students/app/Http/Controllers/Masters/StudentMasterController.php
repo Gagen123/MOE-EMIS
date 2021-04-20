@@ -101,7 +101,7 @@ class StudentMasterController extends Controller
         
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
-        
+
         $response_data = $model::create($data);
         
         return $response_data;
@@ -186,6 +186,17 @@ class StudentMasterController extends Controller
                 }
             case "program_name" : {
                     $databaseModel = "CeaProgram";
+                    if($type =='data'){
+                        $additional_data = [
+                            'CeaProgrammeTypeId'  =>  $request['program_type'],
+                            //'CeaProgrammeId'  =>  $request['program_id']
+                        ];
+                        $data = $data + $additional_data;
+                    }
+                    break;
+                }
+            case "program_type" : {
+                    $databaseModel = "CeaProgramType";
                     break;
                 }
             case "program_support" : {
@@ -202,6 +213,19 @@ class StudentMasterController extends Controller
                 }
             case "training" : {
                     $databaseModel = "CeaTraining";
+                    break;
+                }
+            case "program_role" : {
+                    $databaseModel = "CeaRole";
+                    if($type =='data'){
+                        $additional_data = [
+                            'CeaProgrammeId' => $request->program,
+                            'assigned_to'=> $request->assigned_to,
+                            'remarks'=> $request->remarks
+                        ];
+                        $data = $data + $additional_data;
+                        unset($data['description']);
+                    }
                     break;
                 }
             case "vaccine_type" : {
@@ -222,6 +246,14 @@ class StudentMasterController extends Controller
                 }
             case "screening_endorser" : {
                     $databaseModel = "ScreeningEndorsedBy";
+                    break;
+                }
+            case "program_item" : {
+                    $databaseModel = "CeaProgramItem";
+                    break;
+                }
+            case "program_measurement" : {
+                    $databaseModel = "CeaProgramMeasurement";
                     break;
                 }
         }

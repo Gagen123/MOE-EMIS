@@ -2,49 +2,31 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="training-table" class="table table-sm table-bordered table-striped">
+                <table id="list-deworming" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
                             <th>Term</th>
                             <th>Date</th>
                             <th>Total Issued (Boys)</th>
-                             <th>Total Issued (Girls)</th>
+                            <th>Total Issued (Girls)</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td> 1</td>
-                            <td>Term I</td>
-                            <td>2020-03-04</td>
-                            <td>236</td>
-                            <td>456</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stddeworm')"><i class="fa fa-edit"></i> Edit</button> 
+                    <tbody id="tbody">
+                        <tr v-for="(item, index) in dataList" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.project_type}}</td>
+                            <td>{{ item.program_name}}</td>
+                            <td>{{ item.FromDate}} - {{ item.ToDate}}</td>
+                            <td>{{ item.place}}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                                </div>
                             </td>
-                        </tr> 
-                            <tr>
-                            <td> 2</td>
-                            <td>Term 2</td>
-                            <td>2020-05-25</td>
-                            <td>456</td>
-                            <td>560</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stdhealth')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td>3</td>
-                            <td>Term 3</td>
-                            <td>2020-08-13</td>
-                            <td>456</td>
-                            <td>478</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stdhealth')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                         
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -53,24 +35,39 @@
 </template>
 <script>
 export default {
-    data(){
-        return{ 
-            totle:0,
-        } 
+    components: {
     },
-    methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
-		},
+    data() {
+        return {
+            id:'2',
+            dataList:[], 
+        }
     },
-    mounted() {
-        $("#training-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        }); 
+    methods:{
+        loadDataList(uri='students/listStudentProjects/'+this.id){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#list-deworming").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 3000);  
+        },
+        showedit(data){
+            this.$router.push({name:'student_projects_edit',params: {data:data}});
+        },
     },
-    
+    mounted(){
+        this.loadDataList();
+    },
 }
 </script>
-
-

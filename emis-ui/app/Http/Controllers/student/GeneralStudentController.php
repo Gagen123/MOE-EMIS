@@ -51,6 +51,11 @@ class GeneralStudentController extends Controller{
         return $student_list;
     }
 
+    public function loadStudentBySection($param1="", $param2="", $param3="" ){
+        $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1."/".$param2."/".$param3);
+        return $student_list;
+    }
+
     public function loadActiveStudentMasters($param=""){
         $student_masters = $this->apiService->listData('emis/students/loadActiveStudentMasters/'.$param);
         return $student_masters;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Students\Student;
@@ -56,9 +57,23 @@ class GeneralStudentController extends Controller
 
     public function loadStudentList($id=""){
         $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->get(['id', 'Name']));
+        
+        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(5)
+                            ->get(['id', 'Name', 'DateOfBirth']));
     }
 
+    public function loadStudentBySection($param1, $param2, $param3){
+        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+        
+        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(5)
+                            ->get(['id', 'Name']));
+        // $results = Student::where('OrgOrganizationId',$id)->take(5)
+        //             ->get(['id', 'Name', 'DateOfBirth']);
+        // $age = Carbon::parse($results->DateOfBirth);
+        // dd($age);
+        
+        // return $this->successResponse(Carbon::parse($results->DateOfBirth));
+    }
     /**
      * method to list students masters
     */

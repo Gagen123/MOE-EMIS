@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="training-table" class="table table-sm table-bordered table-striped">
+                <table id="bmi-list-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
@@ -14,60 +14,18 @@
                             <th>Action</th>                     
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td> 1</td>
-                            <td>First Term</td>
-                            <td>PP</td>
-                            <td>A</td>
-                            <td></td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_bmi')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td>2</td>
-                            <td>First Term</td>
-                            <td>I</td>
-                            <td>B</td>
-                            <td></td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_bmi')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td> 3</td>
-                            <td>First Term</td>
-                            <td>II</td>
-                            <td>B</td>
-                            <td></td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_bmi')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td>4</td>
-                            <td>First Term</td>
-                            <td>IX</td>
-                            <td>A</td>
-                            <td></td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_bmi')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>First Term</td>
-                            <td>XI</td>
-                            <td>A</td>
-                            <td>Science</td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_bmi')"> <i class="fa fa-edit"></i> Edit</button>
+                    <tbody id="tbody">
+                        <tr v-for="(item, index) in dataList" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.project_type}}</td>
+                            <td>{{ item.program_name}}</td>
+                            <td>{{ item.FromDate}} - {{ item.ToDate}}</td>
+                            <td>{{ item.place}}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -78,23 +36,40 @@
 </template>
 <script>
 export default {
-    data(){
-        return{ 
-            totle:0,
-        } 
+    components: {
     },
-    methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
-		},
+    data() {
+        return {
+            id:'2',
+            dataList:[], 
+        }
     },
-    mounted() {
-        $("#training-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        }); 
+    methods:{
+        loadDataList(uri='students/loadBmiSummary/'+this.id){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#bmi-list-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 3000);  
+        },
+        showedit(data){
+            this.$router.push({name:'std_bmi_edit',params: {data:data}});
+        },
     },
-    
+    mounted(){
+        this.loadDataList();
+    },
 }
 </script>
 

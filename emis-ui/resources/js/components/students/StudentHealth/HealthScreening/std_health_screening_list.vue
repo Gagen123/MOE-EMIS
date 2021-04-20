@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="training-table" class="table table-sm table-bordered table-striped">
+                <table id="list-screening" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
@@ -11,39 +11,20 @@
                             <th>Action</th>                     
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td> 1</td>
-                            <td>Eye Screening</td>
-                            <td>2020-03-04</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stdhealth')"><i class="fa fa-edit"></i> Edit</button>
+                    <tbody id="tbody">
+                        <tr v-for="(item, index) in dataList" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.project_type}}</td>
+                            <td>{{ item.program_name}}</td>
+                            <td>{{ item.FromDate}} - {{ item.ToDate}}</td>
+                            <td>{{ item.place}}</td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                                </div>
                             </td>
-                        </tr> 
-                            <tr>
-                            <td> 2</td>
-                            <td>Dental Screening</td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stdhealth')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td> 3</td>
-                            <td>Ear Screening</td>
-                            <td>2020-04-13</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stdhealth')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td> 3</td>
-                            <td>General Examination</td>
-                            <td>2020-04-13</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stdhealth')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -52,24 +33,39 @@
 </template>
 <script>
 export default {
-    data(){
-        return{ 
-            totle:0,
-        } 
+    components: {
     },
-    methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
-		},
+    data() {
+        return {
+            id:'2',
+            dataList:[], 
+        }
     },
-    mounted() {
-        $("#training-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        }); 
+    methods:{
+        loadDataList(uri='students/listScreeningSummary/'+this.id){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#list-screening").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 3000);  
+        },
+        showedit(data){
+            this.$router.push({name:'student_projects_edit',params: {data:data}});
+        },
     },
-    
+    mounted(){
+        this.loadDataList();
+    },
 }
 </script>
-
-

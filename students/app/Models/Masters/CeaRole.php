@@ -1,18 +1,22 @@
 <?php
 
-namespace App\Models\Students;
+namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class StudentHealthBmi extends Model
+class CeaRole extends Model
 {
     use HasFactory, Uuid;
-    protected $table="std_health_screening";
+    protected $table="cea_role";
 
     protected $fillable = [
         'id',
-        'StdHealthScreeningId', 
+        'CeaProgrammeId',
+        'name',
+        'assigned_to',
+        'description', 
+        'status'
     ];
 }

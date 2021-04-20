@@ -44,6 +44,21 @@ class StudentMasterController extends Controller{
             $data = $data + $additional_data;
         }
 
+        if($request->record_type == 'program_role'){
+            $additional_data = [
+                'program' => $request->program,
+                'assigned_to' => $request->assigned_to
+            ];
+            $data = $data + $additional_data;
+        }
+
+        if($request->record_type == 'program_name'){
+            $additional_data = [
+                'program_type' => $request->program_type
+            ];
+            $data = $data + $additional_data;
+        }
+        
         try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
             return $response_data;

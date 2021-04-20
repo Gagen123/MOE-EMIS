@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table id="roles-list-table" class="table table-bordered text-sm table-striped">
+        <table id="disciplinary-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -51,7 +51,7 @@ export default {
                 }
             });
             setTimeout(function(){
-                $("#roles-list-table").DataTable({
+                $("#disciplinary-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
                 }); 

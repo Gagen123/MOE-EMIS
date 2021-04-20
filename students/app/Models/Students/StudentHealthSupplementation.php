@@ -15,8 +15,7 @@ class StudentHealthSupplementation extends Model
         'id',
         'StdHealthTermId',
         'date',
-        'class',
-        'boys_given',
-        'girls_given'
+        'StdStudentId',
+        'status',
     ];
 }

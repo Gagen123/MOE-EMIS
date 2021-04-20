@@ -13,13 +13,12 @@ class StudentHealthScreening extends Model
 
     protected $fillable = [
         'id',
-        'StdHealthScreeningId', 
+        'StdHealthScreeningTypeId', 
         'StdScreeningPositionTitleId',
         'StdScreeningEndorsedById',
         'date',
-        'boys_screened',
-        'girls_screened',
-        'boys_referred',
-        'girls_referred'
+        'class',
+        'section',
+        'stream'
     ];
 }
