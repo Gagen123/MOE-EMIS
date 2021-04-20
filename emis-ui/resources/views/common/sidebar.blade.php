@@ -135,25 +135,33 @@
                     </li>               
                     <li class="nav-item has-treeview" id="studentmaster">
                         <a href="#" class="nav-link pt-1 pb-1">
-                            <i class="nav-icon fas fa-database"></i>
+                            <i class="nav-icon fas fa-user-graduate"></i>
                             <p>
                                 Student Masters
                                 <i class="fas fa-angle-left right"></i>
                             </p>
-                        </a> 
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentServices" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                                <router-link to="/StudentServicesMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Non-Academics Master
+                                </router-link>
+                            </li>
+                        </ul>
                         <ul class="nav nav-treeview">
                             <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
-                                <router-link to="/StudentMasterIndex" class="nav-link pt-1 pb-1">
+                                <router-link to="/StudentHealthMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
                                     Health Master
                                 </router-link>
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
-                                <router-link to="/StudentMasterIndex" class="nav-link pt-1 pb-1">
+                            <li class="nav-item" id="studentCea" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                                <router-link to="/StudentCeaMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Non-Academics Master
+                                    Programs & Clubs
                                 </router-link>
                             </li>
                         </ul>
@@ -249,8 +257,17 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                   <!-- student admission side menu  -->
+                   <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
+                        <router-link to="/student_admission" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Admission Services 
+                            </p>
+                        </router-link>
+                    </li>
                    <!-- student services side menu -->
-                   <li class="nav-item" id="studentservices" @click="setclass('studentaffairs','','studentservices')">
+                   <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
                         <router-link to="/student_services" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -258,20 +275,46 @@
                             </p>
                         </router-link>
                     </li>
-                    <!-- student extracurricular side menu  -->
-                    <li class="nav-item" id="extracurricular" @click="setclass('studentaffairs','','extracurricular')">
-                        <router-link to="/student_extracurricular" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Extra-Curricular 
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="studenthealth" @click="setclass('studentaffairs','','studenthealth')">
-                        <router-link to="/studenthealth_link" class="nav-link">
+                    <li class="nav-item" id="studenthealth" @click="setclass('studenthealth','','studenthealth')">
+                        <router-link to="/student_health" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Student Health
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item has-treeview" id="studentlink">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-user-graduate"></i>
+                    <p>
+                        Non-Academic Activities
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                   <li class="nav-item" id="programs" @click="setclass('program','','programsclubs')">
+                        <router-link to="/student_programs_clubs" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Programs & Clubs
+                            </p>
+                        </router-link>
+                    </li>
+                   <li class="nav-item" id="scouts" @click="setclass('scouts','','scouts')">
+                        <router-link to="/student_scouts_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Scouts 
+                            </p>
+                        </router-link>
+                    </li>
+                   <li class="nav-item" id="clubs" @click="setclass('clubs','','studenttrainings')">
+                        <router-link to="/student_trainings_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Trainings & Workshop 
                             </p>
                         </router-link>
                     </li>

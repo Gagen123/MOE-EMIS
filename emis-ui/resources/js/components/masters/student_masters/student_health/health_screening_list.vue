@@ -1,0 +1,63 @@
+<template>
+    <div>
+        <table id="health-screening-table" class="table table-bordered text-sm table-striped">
+            <thead>
+                <tr>
+                    <th >SL#</th>
+                    <th >Health Screening</th>
+                    <th >Status</th>
+                    <th >Created At</th>
+                    <th >Action</th> 
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <tr v-for="(item, index) in dataList" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ item.name}}</td>
+                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.created_at }}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>      
+</template>
+<script>
+export default {
+    data(){
+        return{
+            dataList:[], 
+        }
+    },
+    methods:{
+        loadDataList(uri = 'masters/loadStudentMasters/health_screening'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#health-screening-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 3000);  
+        },
+        showedit(data){
+            this.$router.push({name:'HealthScreeningEdit',params: {data:data}});
+        },
+    },
+    mounted(){
+        this.loadDataList();
+    },
+}
+</script>

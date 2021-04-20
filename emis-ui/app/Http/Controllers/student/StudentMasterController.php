@@ -36,6 +36,29 @@ class StudentMasterController extends Controller{
             'user_id'        => $this->userId() 
         ];
 
+        if($request->record_type == 'student_awards'){
+            $additional_data = [
+                'award_type_id' => $request->award_type_id,
+                'program_id' => $request->program_id
+            ];
+            $data = $data + $additional_data;
+        }
+
+        if($request->record_type == 'program_role'){
+            $additional_data = [
+                'program' => $request->program,
+                'assigned_to' => $request->assigned_to
+            ];
+            $data = $data + $additional_data;
+        }
+
+        if($request->record_type == 'program_name'){
+            $additional_data = [
+                'program_type' => $request->program_type
+            ];
+            $data = $data + $additional_data;
+        }
+        
         try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
             return $response_data;
@@ -48,6 +71,11 @@ class StudentMasterController extends Controller{
 
     public function loadStudentMasters($param=""){
         $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
+        return $student_masters;
+    }
+
+    public function loadActiveStudentMasters($param=""){
+        $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }
 
