@@ -7,19 +7,19 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Facility:<span class="text-danger">*</span></label> 
-                        <select name="facility" id="facility" class="form-control editable_fields" v-model="form.facility">
+                        <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility" @change="getSubFacilityDropdown(),remove_err('facility')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
+                        <has-error :form="form" field="facility"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Type:<span class="text-danger">*</span></label> 
-                        <select name="type" id="type" class="form-control editable_fields" v-model="form.type">
+                        <select name="type" id="type" class="form-control editable_fields" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type')">
                             <option value="">--- Please Select ---</option>
-                            <option value="1">Standard</option>
-                            <option value="2">Indoor</option>
-                            <option value="3">Outdoor</option>
+                            <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                         </select>
+                        <has-error :form="form" field="type"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Year of Establishment:</label> 
@@ -70,13 +70,23 @@ export default {
         return{
             facilityList:[],
             supportList:[],
+            facilitySubList:[],
             form: new form({
-                id: '', organizationId:'1', facility: '',type: '',yearOfEstablish: '',supportedBy: '',status: '1',
+                id: '', organizationId:'', facility: '',type: '',yearOfEstablish: '',supportedBy: '',status: '1',
                 numberOfFacility: '',facilityAccessibleToDisabled: '',
             })
         }
     },
     methods:{
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
         formaction: function(type){
             if(type=="reset"){
                 this.form.facility= '';
@@ -109,6 +119,14 @@ export default {
                 this.facilityList = data;
             });
         },
+
+         getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/'+this.form.facility){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.facilitySubList = data;
+            });
+        },
         getSupportDropdown(uri = '/organization/getSupportInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -125,14 +143,15 @@ export default {
 
     mounted(){
         this.form.facility=this.$route.params.data.facility;
-        this.form.type=this.$route.params.data.type;
+        this.getSubFacilityDropdown();
+        this.form.type=this.$route.params.data.typeId;
         this.form.yearOfEstablish=this.$route.params.data.yearOfEstablishment;
         this.form.supportedBy=this.$route.params.data.supportedBy;
         this.form.status=this.$route.params.data.status;
         this.form.numberOfFacility=this.$route.params.data.noOfFacility;
         this.form.facilityAccessibleToDisabled=this.$route.params.data.accessibleToDisabled;
         this.form.id=this.$route.params.data.id;
-        this.form.id=this.$route.params.data.organizationId;
+        this.form.organizationId=this.$route.params.data.organizationId;
     }
 }
 </script>

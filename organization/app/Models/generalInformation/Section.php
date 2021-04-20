@@ -17,6 +17,6 @@ class Section extends Model
      * @var array
      */
     protected $fillable = [
-        'id','organizationId', 'classId'
+        'id','organizationId', 'classId','streamId','created_by','updated_by'
     ];
 }

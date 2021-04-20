@@ -64,7 +64,7 @@ class AdministrationController extends Controller{
             $response_data= $this->apiService->createData('emis/masters/saveGlobalMasters', $data);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -143,11 +143,65 @@ class AdministrationController extends Controller{
         return $global_masters;
     }
 
+    public function saveAcademicMasters(Request $request){
+        $rules=[];
+        $customMessages =[];
+
+        if($request['record_type'] == 'subject_group') {
+            $rules = [
+                'name'  =>  'required',
+                'status'    =>  'required',
+            ];
+            $customMessages = [
+                'name.required' => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
+        }
+        if($request['record_type'] == 'subject') {
+            $rules = [
+                'aca_sub_category_id' => 'required',
+                'aca_sub_group_id' => 'required',
+                'name'  =>  'required',
+                'status'    =>  'required',
+            ];
+            $customMessages = [
+                'aca_sub_category_id.required' => 'This field is required',
+                'aca_sub_group_id.required' => 'This field is required',
+                'name.required' => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
+        }
+        if($request['record_type'] == 'assessment_area') {
+            $rules = [
+                'aca_sub_id' => 'required',
+                'aca_rating_type_id' => 'required',
+                'name'  =>  'required',
+                'display_order' => 'required',
+                'status'    =>  'required',
+            ];
+            $customMessages = [
+                'aca_sub_id.required' => 'This field is required',
+                'aca_rating_type_id.required' => 'This field is required',
+                'display_order.required' => 'This field is required',
+                'name.required' => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
+        }
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->user_id(); 
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
+        return $response_data;
+    }
+    public function loadAcademicMasters($param=""){
+        $global_masters = $this->apiService->listData('emis/masters/loadAcademicMasters/'.$param);
+        return $global_masters;
+    }
+
     public function loaddzongkhagDetails($id){
         $dzo = $this->apiService->listData('emis/masters/dzongkhag/getallDzongkhag');
         return $dzo;
     }
-
     public function saveLocation(Request $request){
         $rules = [
             'locationName'  =>  'required',
@@ -169,7 +223,7 @@ class AdministrationController extends Controller{
             $response_data= $this->apiService->createData('emis/masters/location/saveLocation', $loc);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -201,7 +255,7 @@ class AdministrationController extends Controller{
             $response_data= $this->apiService->createData('emis/masters/disaster/saveDisaster', $dis);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -404,6 +458,33 @@ class AdministrationController extends Controller{
         return $strCategory;
     }
 
+    public function loadSportFacilitySubtype(){
+        $load = $this->apiService->listData('emis/masters/sportFacilitySubtype/loadSportFacilitySubtype');
+        return $load;
+    }
+
+    public function saveSportFacilitySubtype(Request $request){
+        $rules = [
+            'sportFacility'  =>  'required',
+            'subtypeName'    =>  'required',
+        ];
+        $customMessages = [
+            'sportFacility.required' => 'Sport facility is required',
+            'subtypeName.required' => 'Name is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $cat =[
+            'sportFacility'  =>  $request['sportFacility'],
+            'subtypeName'  =>  $request['subtypeName'],
+            'status'    =>  $request['status'],
+            'id'    =>  $request['id'],
+            'user_id'=>$this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
+        return $response_data;
+        
+    }
+
     public function saveStrSubCategory(Request $request){
         $rules = [
             'structureCategory'  =>  'required',
@@ -553,7 +634,7 @@ class AdministrationController extends Controller{
             $response_data= $this->apiService->createData('emis/masters/electricitySource/saveElectricitySource', $source);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -583,7 +664,7 @@ class AdministrationController extends Controller{
             $response_data= $this->apiService->createData('emis/masters/electricitySupply/saveElectricitySupply', $source);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -716,6 +797,32 @@ class AdministrationController extends Controller{
         return $loadContactType;
     }
 
+    public function saveAttachment(Request $request){
+        $rules = [
+            'attachmentName'  =>  'required',
+            'status'          =>  'required',
+        ];
+        $customMessages = [
+            'attachmentName.required'     => 'Attachment name is required',
+            'status.required'             => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $attachment =[
+            'attachmentName'    =>  $request['attachmentName'],
+            'status'            =>  $request['status'],
+            'id'                =>  $request['id'],
+            'user_id'           =>$this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/attachment/saveAttachment', $attachment);
+        return $response_data;
+        
+    }
+    
+    public function loadAttachment(){
+        $loadAttachment = $this->apiService->listData('emis/masters/attachment/loadAttachment');
+        return $loadAttachment;
+    }
+
     public function saveStudentHealth(Request $request){
         $rules = [
             'studenthealthName'  =>  'required',
@@ -779,7 +886,7 @@ class AdministrationController extends Controller{
             $response_data= $this->apiService->createData('masters/term/saveTerm', $dis);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -797,5 +904,6 @@ class AdministrationController extends Controller{
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
     }
+
     
 }

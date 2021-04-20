@@ -16,6 +16,7 @@ class CreateLocationsTable extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
+            $table->foreign('organizationId')->references('id')->on('organization_details');
             $table->integer('landOwnership');
             $table->integer('compoundFencing');
             $table->integer('entranceGate');

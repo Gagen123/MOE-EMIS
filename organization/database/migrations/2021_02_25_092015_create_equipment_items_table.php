@@ -17,6 +17,7 @@ class CreateEquipmentItemsTable extends Migration
             $table->uuid('id')->primary();
             $table->string('equipmentItem');
             $table->char('equipmentType',36);
+            $table->foreign('equipmentType')->references('id')->on('equipment_type');
             $table->string('description')->nullable(true);
             $table->tinyInteger('status');
             $table->char('created_by',36)->nullable(true);

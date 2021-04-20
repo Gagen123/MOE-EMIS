@@ -16,6 +16,7 @@ class CreateSchoolFeedingsTable extends Migration
         Schema::create('school_feedings', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
+            $table->foreign('organizationId')->references('id')->on('organization_details');
             $table->string('description');
             $table->tinyInteger('value');
             $table->string('status');

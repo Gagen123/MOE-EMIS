@@ -17,6 +17,6 @@ class LocationDisasterRisk extends Model
      * @var array
      */
     protected $fillable = [
-        'id','locationId','disasterTypeId'
+        'id','locationId','disasterTypeId','created_by','updated_by'
     ];
 }

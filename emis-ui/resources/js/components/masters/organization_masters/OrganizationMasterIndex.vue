@@ -46,6 +46,11 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/sport_facility_subtype_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Sport Facility Subtype
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/sport_supporter_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Sport Supporter
                     </router-link>
@@ -98,6 +103,11 @@
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/structure_designer_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Structure Designer
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/attachment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Attachment
                     </router-link>
                 </li>
             </ul>

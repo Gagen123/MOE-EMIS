@@ -18,6 +18,6 @@ class Sport extends Model
      */
     protected $fillable = [
         'id','organizationId','facility','type','yearOfEstablishment','status','supportedBy','noOfFacility',
-        'accessibleToDisabled'
+        'accessibleToDisabled','created_by','updated_by'
     ];
 }

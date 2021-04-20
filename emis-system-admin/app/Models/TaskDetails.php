@@ -20,6 +20,8 @@ class TaskDetails extends Model
         'access_level',
         'user_dzo_id',
         'working_agency_id',
+        'created_by',
+        'applied_on',
         'claimed_by',
         'claimed_date',
         'last_action_by',

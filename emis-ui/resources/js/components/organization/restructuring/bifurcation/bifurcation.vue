@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
@@ -684,6 +688,24 @@ export default {
             });
         },
 
+        /**
+         * method to check pending status
+         */
+        checkPendingApplication(){
+            axios.get('organization/checkPendingApplication/bifurcation')
+            .then((response) => {  
+                let data=response.data;
+                if(data!=""){
+                    $('#mainform').hide();
+                    $('#applicaitonUnderProcess').show();
+                    $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
+                }
+            })
+            .catch((error) => {  
+                console.log("Error: "+error);
+            });
+        },
+
     },
     created(){
         this.getLevel();
@@ -712,6 +734,7 @@ export default {
         this.getStream();
         this.loadactivedzongkhagList();
         this.loadactivedzongkhagList1();
+        this.checkPendingApplication();
     }
 }
 </script>

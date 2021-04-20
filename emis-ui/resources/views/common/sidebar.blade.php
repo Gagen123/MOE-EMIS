@@ -126,8 +126,7 @@
                             <i class="fa fa-users nav-icon"></i>
                             Staff Masters
                         </router-link>
-                    </li>  
-                   
+                    </li>
                     <li class="nav-item has-treeview" id="staff_master">
                         <router-link to="/traing_master" class="nav-link pt-1 pb-1">
                             <i class="fa fa-users nav-icon"></i>
@@ -166,6 +165,12 @@
                                 </router-link>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item has-treeview" id="academicmaster">
+                        <router-link to="/academic-link" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-book nav-icon"></i>
+                            Academic Masters
+                        </router-link>
                     </li>
                 
 
@@ -229,10 +234,16 @@
                 </ul>
             </li>
             <li class="nav-item has-treeview" id="stafflink">
-                <router-link to="/staff_registration" class="nav-link pt-1 pb-1" onclick="afterclick()">
+                <router-link to="/staff_registration" class="nav-link pt-1 pb-1">
                     <p>
                     <i class="nav-icon fas fa-users-cog"></i>
                         Staff
+                    </p>
+                </router-link>
+                <router-link to="/create_inset" class="nav-link pt-1 pb-1">
+                    <p>
+                    <i class="nav-icon fas fa-list"></i>
+                        Inset
                     </p>
                 </router-link>
             </li>
@@ -308,6 +319,14 @@
                         </router-link>
                     </li>
                 </ul>
+            </li>
+            <li class="nav-item" id="track_application">
+                <router-link to="/question_answer_index" class="nav-link">
+                    <p>
+                        <i class="fa fa-question nav-icon"></i>
+                        Question & Answer set up
+                    </p>
+                </router-link>
             </li>
             <li class="nav-item" id="track_application">
                 <router-link to="/track_application" class="nav-link">

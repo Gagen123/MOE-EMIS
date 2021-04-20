@@ -22,20 +22,20 @@ class EquipmentController extends Controller
      */
     public function __construct()
     {
-        //
+        date_default_timezone_set('Asia/Dhaka');
     }
 
     /**
      * method to list equipment and furniture
     */
     
-    public function loadEquipment(){
+    public function loadEquipment($orgId=""){
         $equi = DB::table('equipment_and_furniture as a')
             ->join('equipment_type as b', 'a.type', '=', 'b.id')
             ->join('equipment_items as c', 'a.item', '=', 'c.id')
             ->join('equipment_usage as d', 'a.location', '=', 'd.id')
-            ->select('b.name as type', 'c.equipmentItem as item','d.name as location','a.number as number',
-            'b.id AS typeId', 'c.id AS itemId', 'd.id AS locationUsageId')->get();
+            ->select('a.id as id','b.name as type', 'c.equipmentItem as item','d.name as location','a.number as number',
+            'b.id AS typeId', 'c.id AS itemId', 'd.id AS locationUsageId')->where('organizationId',$orgId)->get();
         return $equi;
     }
 
@@ -43,7 +43,7 @@ class EquipmentController extends Controller
      * method to get type in dropdown
      */
     public function getType(){
-        return EquipmentType::get(['id','name']);
+        return EquipmentType::where('status',1)->get();
     }
 
     /**
@@ -58,7 +58,7 @@ class EquipmentController extends Controller
      * method to get location use in dropdown
      */
     public function getLocationUse(){
-        return EquipmentUsage::get(['id','name']);
+        return EquipmentUsage::where('status',1)->get();
     }
 
     /** 
@@ -68,18 +68,24 @@ class EquipmentController extends Controller
         $id = $request->id;
         if( $id != null){
             $sec = [
-                'type'          => $request['type'],
-                'item'        => $request['item'],
-                'location'        => $request['location'],
-                'number'        => $request['number'],
+                'organizationId'        => $request['organizationId'],
+                'type'                  => $request['type'],
+                'item'                  => $request['item'],
+                'location'              => $request['location'],
+                'number'                => $request['number'],
+                'updated_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
             ];
             $section = EquipmentAndFurniture::where('id', $id)->update($sec);
         }else{
             $sec = [
-                'type'          => $request['type'],
-                'item'        => $request['item'],
-                'location'        => $request['location'],
-                'number'        => $request['number'],
+                'organizationId'        => $request['organizationId'],
+                'type'                  => $request['type'],
+                'item'                  => $request['item'],
+                'location'              => $request['location'],
+                'number'                => $request['number'],
+                'created_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
             ];
             $section = EquipmentAndFurniture::create($sec);
 

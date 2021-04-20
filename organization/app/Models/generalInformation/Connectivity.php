@@ -19,6 +19,6 @@ class Connectivity extends Model
     protected $fillable = [
         'id','organizationId','roadTypeId','distanceFromRoad','daysFromRoad','hoursFromRoad','electricitySourceId',
         'electricitySupplyId','hasElectricalSubstation','telephoneServiceProvoderId','internetServiceProviderId',
-        'mbps','drukRenConnection'
+        'mbps','drukRenConnection','created_by','updated_by'
     ];
 }

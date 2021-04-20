@@ -36,12 +36,14 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'type'          =>  $request['type'],
-            'item'          =>  $request['item'],
-            'location'      =>  $request['location'],
-            'number'        =>  $request['number'],
-            'actiontype'    =>  $request['action_type'],
-            'id'            =>  $request['id'],
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'type'                      =>  $request['type'],
+            'item'                      =>  $request['item'],
+            'location'                  =>  $request['location'],
+            'number'                    =>  $request['number'],
+            'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipmentAndFurniture', $loc);
@@ -52,8 +54,12 @@ class GeneralInfoController extends Controller
         }
     }
 
-    public function loadEquipment(Request $request){
-        $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment');
+    public function loadEquipment($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+            
+        }
+        $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$orgId);
         return $dis;
     }
 
@@ -82,11 +88,14 @@ class GeneralInfoController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'school'        =>  $request['school'],
-            'classes'       =>  $request['classes'],
-            'users'         =>  $request['users'],
-            'actiontype'    =>  $request['action_type'],
-            'id'            =>  $request['id'],
+            'school'                    =>  $request['school'],
+            'classes'                   =>  $request['classes'],
+            'class_stream_id'           =>  $request['class_stream_id'],
+            'stream'                    =>  $request['stream'],
+            'users'                     =>  $request['users'],
+            'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/section/saveSection', $loc);
@@ -97,7 +106,15 @@ class GeneralInfoController extends Controller
         }
     }
 
+
+
     public function saveConnectivity(Request $request){
+        $orgId = $request->organizationId;
+        if($orgId != null){
+            $orgId = $orgId;
+        }else{
+            $orgId = $this->getWrkingAgencyId();
+        }
         $rules = [
             'approachRoad'          =>  'required',
             'electricitySource'     =>  'required',
@@ -110,9 +127,10 @@ class GeneralInfoController extends Controller
             'telephone.required'            => 'Telephone Service Provider field is required',
             'internet.required'             => 'Internet Service Provider field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
         $connectivity =[
-            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'organizationId'            =>  $orgId,
             'approachRoad'              =>  $request['approachRoad'],
             'electricitySource'         =>  $request['electricitySource'],
             'telephone'                 =>  $request['telephone'],
@@ -126,6 +144,7 @@ class GeneralInfoController extends Controller
             'drukRen'                   =>  $request['drukRen'],
             'id'                        =>  $request['id'],
             'users'                     =>  $request['users'],
+            'user_id'                   =>  $this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivity', $connectivity);
@@ -167,6 +186,12 @@ class GeneralInfoController extends Controller
     }
 
     public function saveLocation(Request $request){
+        $orgId = $request->organizationId;
+        if($orgId != "undefined" && $orgId != null){
+            $orgId = $orgId;
+        }else{
+            $orgId = $this->getWrkingAgencyId();
+        }
         $rules = [
             'landOwnership'         =>  'required',
             'compoundFencing'       =>  'required',
@@ -182,8 +207,33 @@ class GeneralInfoController extends Controller
             'compoundArea.required'         => 'Compound Area is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'Organization';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }   
         $loc =[
-            'organizationId'        =>  $this->getWrkingAgencyId(),
+            'organizationId'        =>  $orgId,
             'landOwnership'         =>  $request['landOwnership'],
             'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
@@ -196,14 +246,12 @@ class GeneralInfoController extends Controller
             'compoundArea'          =>  $request['compoundArea'],
             'id'                    =>  $request['id'],
             'disaster'              =>  $request['disaster'],
+            'attachment_details'    =>  $attachment_details,
+            'user_id'               =>  $this->userId()
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // dd($loc);
+        $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
+        return $response_data;
     }
 
     public function getDisasterListInCheckbox(){
@@ -238,5 +286,20 @@ class GeneralInfoController extends Controller
     public function getClassByOrganizationId($orgId = ""){
         $itemList = $this->apiService->listData('emis/organization/section/getClassByOrganizationId/'.$orgId);
         return $itemList;
+    }
+
+    public function getStreamByClassId($classId = ""){
+        $itemList = $this->apiService->listData('emis/organization/section/getStreamByClassId/'.$classId);
+        return $itemList;
+    }
+
+    public function getExistingSectionByClass($classId = ""){
+        $sectionList = $this->apiService->listData('emis/organization/section/getExistingSectionByClass/'.$classId);
+        return $sectionList;
+    }
+
+    public function getExistingSectionByStream($classId = "",$streamId=""){
+        $sectionList = $this->apiService->listData('emis/organization/section/getExistingSectionByStream/'.$classId. '/'.$streamId);
+        return $sectionList;
     }
 }

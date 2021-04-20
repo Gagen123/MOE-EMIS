@@ -7,17 +7,19 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Category:<span class="text-danger">*</span></label> 
-                        <select name="category" id="category" class="form-control editable_fields" v-model="form.category" @change="getSubCategoryDropdown()">
+                        <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
+                        <has-error :form="form" field="category"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Sub Category:<span class="text-danger">*</span></label> 
-                        <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory">
+                        <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
                         </select>
+                        <has-error :form="form" field="subCategory"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Structure No:</label> 
@@ -28,7 +30,9 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Year of Construction:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields " id="yearOfConst" type="text" v-model="form.yearOfConstruction">
+                        <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text" 
+                        v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
+                        <has-error :form="form" field="yearOfConstruction"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Plinth Area (sq. m):</label>
@@ -47,19 +51,15 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Present Condition of Structure<span class="text-danger">*</span> </label> 
-                        <select name="presentCondition" id="presentCondition" class="form-control editable_fields" v-model="form.presentCondition" >
-                            <option value="">--- Please Select ---</option>
-                            <option value="1">Usable</option>
-                        </select>
+                        <br>
+                        <label><input v-model="form.presentCondition"  type="radio" value="1"/> Usable</label>
+                        <label><input v-model="form.presentCondition"  type="radio" value="0" /> Not Usable</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Designed by</label>
-                        <select name="design" id="design" class="form-control editable_fields" v-model="form.design">
+                        <select name="design" id="design" class="form-control" v-model="form.design">
                             <option value="">--- Please Select ---</option>
-                            <option value="1">SPPD</option>
-                            <option value="2">Dzongkhag</option>
-                            <option value="3">Thromde</option>
-                            <option value="4">Others</option>
+                            <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                     </div>
                 </div>
@@ -79,7 +79,6 @@
                             <thead>
                                 <tr>
                                     <th>Facility</th>
-                                    <!-- <th>Type</th> -->
                                     <th>Facility No./Name</th>
                                     <th>Capacity</th>
                                     <th>Total number of Facility</th>
@@ -95,12 +94,6 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    <!-- <td>                                
-                                        <select name="type" id="type" class="form-control editable_fields" v-model="user.type">
-                                            <option value="">--- Please Select ---</option>
-                                            <option value="1">Type 1</option>
-                                        </select>
-                                    </td> -->
                                     <td>                                
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
                                     </td>
@@ -147,6 +140,7 @@ export default {
             categoryList:[],
             subCategortList:[],
             facilityList:[],
+            designerList:[],
             users: [],
             form: new form({
                 id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '',
@@ -160,25 +154,39 @@ export default {
     },
 
     methods:{
+
+        /**
+         * method to reset form
+         */
+        restForm(){
+            this.form.category= '';
+            this.form.subCategory= '';
+            this.form.structureNo= '';
+            this.form.yearOfConstruction= '';
+            this.form.plintchArea= '';
+            this.form.noOfFloor='';
+            this.form.totalCapacity='';
+            this.form.rampAccess='1';
+            this.form.presentCondition='1';
+            this.form.design='';
+            let formReset =this.form.users;
+            formReset.splice(0, formReset.length);
+            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
+        },
+
+        /**
+         * method to save data
+         */
         formaction: function(type){
             if(type=="reset"){
-                this.form.category= '';
-                this.form.subCategory= '';
-                this.form.structureNo= '';
-                this.form.yearOfConstruction= '';
-                this.form.plintchArea= '';
-                this.form.noOfFloor='';
-                this.form.totalCapacity='';
-                this.form.rampAccess='1';
-                this.form.presentCondition='';
-                this.form.design='';
+                this.restForm();
             }
             if(type=="save"){
                 this.form.post('/organization/saveInfrastructure',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Infrastructure is added successfully'
+                        title: 'Infrastructure details is updated successfully'
                     })
                     this.$router.push('/infrastructure_list');
                 })
@@ -187,6 +195,15 @@ export default {
                 })
             }
 		},
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
 
         /**
          * method to get category in dropdown
@@ -211,6 +228,17 @@ export default {
         },
 
         /**
+         * method to get category in dropdown
+         */
+        getDesignerDropdown(uri = '/organization/getDesignerDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.designerList = data;
+            });
+        },
+
+        /**
          * method to get facility in dropdown
          */
         getFacilityDropdown(uri = '/organization/getStructureFacilityInDropdown'){
@@ -226,7 +254,7 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})    
+            this.form.users.push({facility:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})    
         }, 
         /**
          * method to remove fields
@@ -237,27 +265,56 @@ export default {
                 this.form.users.splice(index,1); 
             }
         },
+
+        /**
+         * method to get infrasture details
+         */
+        getInfrastructureDetails(infraId){
+            axios.get('organization/getInfrastructureDetails/'+infraId)
+            .then((response) => {  
+                let data=response.data.data;
+
+                this.form.category              =    data.categoryId;
+                this.getSubCategoryDropdown();
+                this.form.subCategory           =    data.subCategoryId;
+                this.form.structureNo           =    data.structureNo;
+                this.form.organizationId        =    data.organizationId;
+                this.form.yearOfConstruction    =    data.yearOfConstruction;
+                this.form.plintchArea           =    data.plintchArea;
+                this.form.noOfFloor             =    data.noOfFloor;
+                this.form.totalCapacity         =    data.totalCapacity;
+                this.form.rampAccess            =    data.rampAccess;
+                this.form.presentCondition      =    data.presentCondition;
+                this.form.design                =    data.design;
+                this.form.id                    =    data.id;
+
+                let prop=data.facility;
+                let facilityDetails=[];
+                for(let i=0;i<prop.length;i++){
+                    facilityDetails.push({facility:prop[i].facilityTypeId,facilityNo:prop[i].facilityName,
+                    capacity:prop[i].capacity,noOfFacility:prop[i].noOfFacility,
+                    accessibleDisabled:prop[i].noAccessibleToDisabled,
+                    internetConnection:prop[i].noWithInternetConnection});
+                }
+                this.count=data.length;
+                this.form.users=facilityDetails;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
     },
 
     created(){
         this.getCategoryDropdown();
         this.getFacilityDropdown();
+        this.getDesignerDropdown();
+        this.getInfrastructureDetails(this.$route.params.data.id);
     },
 
      mounted() { 
-        this.form.category=this.$route.params.data.categoryId;
-        this.form.subCategory=this.$route.params.data.subCategoryId;
-        this.form.structureNo=this.$route.params.data.structureNo;
-        this.form.organizationId=this.$route.params.data.organizationId;
-        this.form.yearOfConstruction=this.$route.params.data.yearOfConstruction;
-        this.form.plintchArea=this.$route.params.data.plintchArea;
-        this.form.noOfFloor=this.$route.params.data.noOfFloor;
-        this.form.totalCapacity=this.$route.params.data.totalCapacity;
-        this.form.rampAccess=this.$route.params.data.rampAccess;
-        this.form.presentCondition=this.$route.params.data.presentCondition;
-        this.form.design=this.$route.params.data.design;
-        this.form.id=this.$route.params.data.id;
-        this.form.action_type=this.$route.params.data.action;
+
     }
 }
 </script>

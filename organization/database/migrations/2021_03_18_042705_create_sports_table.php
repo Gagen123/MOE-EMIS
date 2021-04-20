@@ -16,10 +16,14 @@ class CreateSportsTable extends Migration
         Schema::create('sports', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
+            $table->foreign('organizationId')->references('id')->on('organization_details');
             $table->char('facility',36);
-            $table->integer('type');
+            $table->foreign('facility')->references('id')->on('sport_facility_type');
+            $table->char('type',36);
+            $table->foreign('type')->references('id')->on('sport_facility_subtypes');
             $table->integer('yearOfEstablishment');
             $table->char('supportedBy',36);
+            $table->foreign('supportedBy')->references('id')->on('sport_supporter');
             $table->tinyInteger('status');
             $table->integer('noOfFacility');
             $table->integer('accessibleToDisabled');

@@ -18,6 +18,6 @@ class FacilityInStructure extends Model
      */
     protected $fillable = [
         'id','infrastructureId','facilityTypeId','facilityName','capacity',
-        'noOfFacility','noAccessibleToDisabled','noWithInternetConnection'
+        'noOfFacility','noAccessibleToDisabled','noWithInternetConnection','created_by','updated_by'
     ];
 }

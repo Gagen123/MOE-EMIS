@@ -3,37 +3,42 @@
         <form class="bootbox-form" id="connectivityId">
             <div class="form-group row">
                 <input type="hidden" class="form-control" v-model="form.organizationId"/>
+                <input type="hidden" class="form-control" v-model="form.id"/>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="card card-primary card-outline">
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-8 ">Approach Road:<span class="text-danger"> *</span></label>
-                                    <select name="approachRoad" id="approachRoad" class="form-control" v-model="form.approachRoad" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="approachRoadIsNoRoad()">
+                                    <select name="approachRoad" id="approachRoad" class="form-control" v-model="form.approachRoad" :class="{ 'is-invalid': form.errors.has('approachRoad') }"  @change="approachRoadIsNoRoad(),remove_err('approachRoad')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in roadTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
+                                    <has-error :form="form" field="approachRoad"></has-error>
                                 </div> 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-8 ">Electricity Source:<span class="text-danger"> *</span></label>
-                                    <select name="electricitySource" id="electricitySource" class="form-control" v-model="form.electricitySource" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="electricitySourceIsGrid()">
+                                    <select name="electricitySource" id="electricitySource" class="form-control" v-model="form.electricitySource" :class="{ 'is-invalid': form.errors.has('electricitySource') }"  @change="electricitySourceIsGrid(),remove_err('electricitySource')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in electricitySourceList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
+                                    <has-error :form="form" field="electricitySource"></has-error>
                                 </div> 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-12 ">Telephone Service Provider:<span class="text-danger"> *</span></label>
-                                    <select name="telephone" id="telephone" class="form-control" v-model="form.telephone" :class="{ 'is-invalid': form.errors.has('spo_name') }">
+                                    <select name="telephone" id="telephone" class="form-control" v-model="form.telephone" :class="{ 'is-invalid': form.errors.has('telephone') }" @change="remove_err('telephone')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in serviceProviderList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
+                                    <has-error :form="form" field="telephone"></has-error>
                                 </div> 
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="col-md-10 ">Internet Service Provider:<span class="text-danger"> *</span></label>
-                                    <select name="internet" id="internet" class="form-control" v-model="form.internet" @change="internet()" :class="{ 'is-invalid': form.errors.has('spo_name') }">
+                                    <select name="internet" id="internet" class="form-control" v-model="form.internet" @change="internet(),remove_err('internet')" :class="{ 'is-invalid': form.errors.has('internet') }" >
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in serviceProviderList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
+                                    <has-error :form="form" field="internet"></has-error>
                                 </div> 
                             </div>
                         </div>
@@ -101,7 +106,6 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Phone</th>
-                                    <th>Fax</th>
                                     <th>Mobile</th>
                                     <th>Email</th>                            
                                 </tr>
@@ -109,23 +113,23 @@
                             <tbody>
                                 <tr id="record1" v-for='(user, index) in form.users' :key="index">
                                     <td>
-                                        <!-- <input type="text" name="fax" class="form-control" v-model="user.contactName"/> -->
-                                        <select name="name" id="name" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('spo_name') }">
+                                        <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_err('contactName')">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
+                                        <has-error :form="form" field="user.contactName"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="phone" class="form-control" v-model="user.phone"/>
+                                        <input type="text" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
+                                        <has-error :form="form" field="phone"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="fax" class="form-control" v-model="user.fax"/>
+                                        <input type="text" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/>
+                                        <has-error :form="form" field="mobile"></has-error>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="mobile" class="form-control" v-model="user.mobile"/>
-                                    </td>
-                                    <td>                                
-                                        <input type="text" name="email" class="form-control" v-model="user.email"/>
+                                        <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
+                                        <has-error :form="form" field="email"></has-error>
                                     </td>
                                 </tr> 
                                 <tr>
@@ -162,12 +166,22 @@ export default {
             contactTypeList:[],
             users: [],
             form: new form({
-                id: '',organizationId:'1',approachRoad: '',electricitySource: '',telephone:'',internet:'',distanceFromRoad:'',
-                daysFromRoad:'',hoursFromRoad:'',electricitySupply:'',electricalSubstation:'0',bandwidth:'',
+                id: '',
+                organizationId:'',
+                approachRoad: '',
+                electricitySource: '',
+                telephone:'',
+                internet:'',
+                distanceFromRoad:'',
+                daysFromRoad:'',
+                hoursFromRoad:'',
+                electricitySupply:'',
+                electricalSubstation:'0',
+                bandwidth:'',
                 drukRen:'0',
                 users:
                 [{
-                    contactName:'',phone:'',fax:'',mobile:'',email:''
+                    contactName:'',phone:'', mobile:'',email:''
                 }],
             }),
         }
@@ -176,14 +190,43 @@ export default {
     methods:{
 
         /**
+         * method to reset form
+         */
+        restForm(){
+            this.form.approachRoad= '';
+            this.form.electricitySource= '';
+            this.form.telephone= '';
+            this.form.internet= '';
+            this.form.distanceFromRoad= '';
+            this.form.daysFromRoad= '';
+            this.form.hoursFromRoad= ''; 
+            this.form.electricitySupply= '';  
+            this.form.electricalSubstation= '0';  
+            this.form.bandwidth= ''; 
+            this.form.drukRen= '0'; 
+            $(".grid").hide();
+            $(".noRoad").hide();
+            $(".showDiv").hide();
+            let formReset =this.form.users;
+            formReset.splice(0, formReset.length);
+            this.form.users.push({contactName:'',phone:'',mobile:'',email:''}) 
+        },
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+
+        /**
          * method to save data
          */
         formaction: function(type){
             if(type=="reset"){
-                this.form.approachRoad = '';
-                this.form.electricitySource = '';
-                this.form.telephone = '';
-                this.form.internet = '';
+                this.restForm();
             }
             if(type=="save"){
                 this.form.post('/organization/saveConnectivity',this.form)
@@ -192,6 +235,14 @@ export default {
                         icon: 'success',
                         title: 'Connectivity is added successfully'
                     })
+
+                    if(this.form.organizationId != null || this.form.organizationId != ""){
+                        this.$router.push("/school_list")
+                    }else{
+                        this.restForm();
+                    }
+
+                   
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -269,7 +320,7 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({names:'',phone:'',fax:'',mobile:'',email:''})    
+            this.form.users.push({contactName:'',phone:'',mobile:'',email:''})    
         }, 
         /**
          * method to remove fields
@@ -285,8 +336,8 @@ export default {
         * method to show hidden field if electricity source is grid
         */
         electricitySourceIsGrid: function(){
-            let electricitySource = $("#electricitySource").val();
-            if(electricitySource == "6e63faeb-24bb-4ec2-ab93-088611422ee7"){
+            let electricitySource = $('#electricitySource option:selected').text();
+            if(electricitySource == "Grid"){
                 $(".grid").show();
             }else{
                 $(".grid").hide();
@@ -297,8 +348,8 @@ export default {
          * method to show hidden fields if approach road is no road
          */
         approachRoadIsNoRoad: function(){
-            let approachRoad = $("#approachRoad").val();
-            if(approachRoad == 3){
+            let approachRoad = $('#approachRoad option:selected').text();
+            if(approachRoad == "No Road"){
                 $(".noRoad").show();
             }else{
                 $(".noRoad").hide();
@@ -309,13 +360,62 @@ export default {
          * method to show hidden fields if internet is BT or TCell
          */
         internet: function(){
-            let service = $("#internet").val();
-            if(service == 2 || service == 3){
+            let service = $('#internet option:selected').text();
+            if(service != "No telephone connection"){
                 $(".showDiv").show();
             }else{
                 $(".showDiv").hide();
             }
         },
+
+        /**
+         * method to get connectivity details by id
+        */
+        getConnectivityDetails(orgId){
+            axios.get('organization/getConnectivityDetails/'+orgId)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.id                    = data.id;
+                this.form.approachRoad          = data.roadTypeId;
+                this.form.electricitySource     = data.electricitySourceId;
+                this.form.telephone             = data.telephoneServiceProvoderId;
+                this.form.internet              = data.internetServiceProviderId;
+
+                if(data.roadType == "No Road"){
+                    $(".noRoad").show();
+                    this.form.distanceFromRoad   = data.distanceFromRoad;
+                    this.form.daysFromRoad       = data.daysFromRoad;
+                    this.form.hoursFromRoad      = data.hoursFromRoad;
+                }
+
+                if(data.electricitySource == "Grid"){
+                    $(".grid").show();
+                    this.form.electricitySupply     = data.electricitySupplyId;
+                    this.form.electricalSubstation  = data.hasElectricalSubstation;
+                }
+
+                if(data.internet != "No telephone connection"){
+                    $(".showDiv").show();
+                    this.form.bandwidth   = data.mbps;
+                    this.form.drukRen     = data.drukRenConnection;
+                }
+
+                let prop=data.contact;
+                let contactDetails=[];
+                for(let i=0;i<prop.length;i++){
+                    contactDetails.push({contactName:prop[i].contactTypeId,phone:prop[i].phone,mobile:prop[i].mobile,email:prop[i].email,});
+                }
+                this.count=data.length;
+                this.form.users=contactDetails;
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
+
+    },
+    created(){
+        this.getConnectivityDetails(this.$route.query.orgId);
     },
      mounted() { 
         this.getRoadTypeDropdown();
@@ -324,6 +424,7 @@ export default {
         this.getServiceProviderDropdown();
         this.getServiceProviderDropdown1();
         this.getContactTypeDropdown();
+        this.form.organizationId = this.$route.query.orgId;
 
     }
 }

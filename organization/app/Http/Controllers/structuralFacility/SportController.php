@@ -21,19 +21,21 @@ class SportController extends Controller
      */
     public function __construct()
     {
-        //
+        date_default_timezone_set('Asia/Dhaka');
     }
 
     /**
      * method to load sport lists
      */
-    public function loadSport(){
+    public function loadSport($orgId=""){
         $loadSport = DB::table('sports as a')
             ->join('sport_facility_type as b', 'a.facility', '=', 'b.id')
+            ->join('sport_facility_subtypes as c', 'b.id', '=', 'c.sportFacilityId')
             ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facilityName',
-             'a.type as type', 'a.yearOfEstablishment as yearOfEstablishment','a.status as status',
+             'a.type as typeId','c.name as type', 'a.yearOfEstablishment as yearOfEstablishment','a.status as status',
              'a.noOfFacility as noOfFacility','a.accessibleToDisabled as accessibleToDisabled',
-            'a.facility as facility', 'a.supportedBy as supportedBy')->get();
+            'a.facility as facility', 'a.supportedBy as supportedBy')
+            ->where('organizationId',$orgId)->get();
         return $loadSport;
     }
 
@@ -52,8 +54,11 @@ class SportController extends Controller
                 'supportedBy'                           =>  $request['supportedBy'],
                 'noOfFacility'                          =>  $request['numberOfFacility'], 
                 'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
+                'updated_by'                            =>  $request->user_id,
+                'created_at'                            =>  date('Y-m-d h:i:s')
             ];
             $spo = Sport::where('id', $id)->update($sport);
+            return $this->successResponse($spo, Response::HTTP_CREATED);
         }else{
             $sport = [
                 'organizationId'                        =>  $request['organizationId'],
@@ -64,23 +69,37 @@ class SportController extends Controller
                 'supportedBy'                           =>  $request['supportedBy'],
                 'noOfFacility'                          =>  $request['numberOfFacility'], 
                 'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
+                'created_by'                            =>  $request->user_id,
+                'created_at'                            =>  date('Y-m-d h:i:s')
             ];
             $spo = Sport::create($sport);
+            return $this->successResponse($spo, Response::HTTP_CREATED);
         }
-        return $this->successResponse($spo, Response::HTTP_CREATED);
+        
     }
     
     /**
      * method to load facility in dropdown
      */
     public function getFacilityInDropdown(){
-        return SportFacilityType::get(['id','name']);
+        return SportFacilityType::where('status',1)->get();
     }
 
     /**
      * method ot get support in dropdown
      */
     public function getSupportInDropdown(){
-        return SportSupporter::get(['id','name']);
+        return SportSupporter::where('status',1)->get();
+    }
+
+    /**
+     * method to get sport subtype in dropdown by category
+     */
+    public function getSubFacilityDropdown($id){
+        $equi = DB::table('sport_facility_subtypes as a')
+            ->select('a.id as id', 'a.name as typeName')
+            ->where('sportFacilityId','=',$id)
+            ->get();
+        return $equi;
     }
 }
