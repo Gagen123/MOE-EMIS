@@ -42,17 +42,14 @@
                                         <textarea class="form-control" :name="'wash_textarea'+index" v-model="item.answered" :id="item.id" @change="remove_err(item.id)"></textarea>
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
-                                    
                                     <td v-if="item.answer_type=='Text'">
                                         <input class="form-control" :name="'wash_text'+index" type="text" v-model="item.answered" :id="item.id" @change="remove_err(item.id)">
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
-
                                     <td v-if="item.answer_type=='Number'">
                                         <input class="form-control" :name="'wash_number'+index" type="number" v-model="item.answered" :id="item.id" @change="remove_err(item.id)">
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
-
                                     <td v-if="item.answer_type=='Radio'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
@@ -61,7 +58,6 @@
                                         </div>
                                         <label class="ml-4 text-danger" :id="item.id+'err'"></label>
                                     </td>
-
                                     <td v-if="item.answer_type=='Dropdown'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <select name="category" v-model="item.answered" :id="item.id" @change="remove_err(item.id)" class="form-control">
@@ -71,7 +67,6 @@
                                             <label class="text-danger" :id="item.id+'err'"></label>
                                         </div>
                                     </td>
-
                                     <td v-if="item.answer_type=='Checkbox'">
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
@@ -100,18 +95,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(food, index) in form1.food_status' :key="index">
-                                    <td>
-                                        <input type="text" class="form-control" v-model="food.question" :id="'question'+(index+1)" readonly>
-                                        <span class="text-danger" :id="'question'+(index+1)"></span>
-                                    </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="food.value" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="food.value" value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
+                                
                             </tbody>
                         </table>
                         <hr>
@@ -131,18 +115,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(equi, index) in form2.equipment_kitchen' :key="index">
-                                    <td>
-                                        <input type="text" class="form-control" v-model="equi.question" :id="'question'+(index+1)" readonly>
-                                        <span class="text-danger" :id="'question'+(index+1)"></span>
-                                    </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="equi.value" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="equi.value" value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
+                               
                             </tbody>
                         </table>
                         <hr>
@@ -162,18 +135,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(din, index) in form3.dinning_hall' :key="index">
-                                    <td>
-                                        <input type="text" class="form-control" v-model="din.question" :id="'question'+(index+1)" readonly>
-                                        <span class="text-danger" :id="'question'+(index+1)"></span>
-                                    </td>
-                                    <td>
-                                        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label><input  type="radio" v-model="din.value" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="din.value" value="0" tabindex=""/> No</label>
-                                        </div>
-                                    </td>
-                                </tr>
+                               
                             </tbody>
                         </table>
                         <hr>
@@ -215,21 +177,13 @@ export default {
             axios.get('questionAnswers/loadQuestionaries/withwhere_'+param+'_Question')
             .then(response => {
                 let data = response.data.data;
-                if(param=="Wash"){
-                    this.wash_form.questionList =  data;
-                }
-                if(param=="Sanitation"){
-                    this.sanitation_form.questionList =  data;
-                }
-                if(param=="Hygiene"){ 
-                    this.hygiene_form.questionList =  data;
-                }
+                this.questionList =  data;
             }) 
             .catch(function (error){
                 console.log(error.toString());
             });
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -240,10 +194,8 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
     },
-    mounted() {
-        this.loadKitchenStatus();
-        this.loadFoodStoreStatus();
-        this.loadUtensilKitchenStatus();
+    mounted(){
+        this.loadQuestionList('Kitchen');  
     },
 }
 </script>
