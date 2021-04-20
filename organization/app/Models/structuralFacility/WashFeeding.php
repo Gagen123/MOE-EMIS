@@ -9,6 +9,6 @@ class WashFeeding extends Model{
     use HasFactory, Uuid;
     protected $table="wash_feeding";
     protected $fillable = [
-        'id','orgId','questionId','answer','type','created_by','updated_by'
+        'id','orgId','questionId','answer','type','ans_type','created_by','updated_by'
     ];
 }

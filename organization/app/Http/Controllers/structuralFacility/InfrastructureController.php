@@ -162,11 +162,13 @@ class InfrastructureController extends Controller
     public function saveWashFeeding(Request $request){
         // dd($request->questionList);
         $inserted_data ="";
+        WashFeeding::where('orgId',$request->organizationId)->where('type',$request->type)->delete();
         foreach ($request->questionList as $i=> $question){
             $q_ans = array(
                 'orgId'                         =>  $request->organizationId,
                 'questionId'                    =>  $question['id'],
                 'type'                          =>  $request->type,
+                'ans_type'                      =>  $question['answer_type'],
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s')
             );

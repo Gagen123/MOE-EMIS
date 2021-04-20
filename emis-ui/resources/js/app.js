@@ -672,36 +672,9 @@ const routes = [
     },
 
     //STUDENT MASTER
-    { path: '/StudentMasterIndex', component: require('./components/masters/student_masters/StudentMasterIndex.vue').default,
+    { path: '/StudentServicesMasterIndex', component: require('./components/masters/student_masters/StudentServicesIndex.vue').default,
       children: 
       [
-        { path: '/studenthealth_index', 
-        component: require('./components/masters/student_masters/studenthealth_index.vue').default ,
-          children: [
-            { path: '', component: require('./components/masters/student_masters/studenthealth_list.vue').default },
-            { path: '/studenthealth_add', name:'StudentHealthAdd', component: require('./components/masters/student_masters/studenthealth_add.vue').default },
-            { path: '/studenthealth_edit', name:'StudentHealthEdit', component: require('./components/masters/student_masters/studenthealth_edit.vue').default },
-            { path: '/studenthealth_list', name:'StudentHealthList', component: require('./components/masters/student_masters/studenthealth_list.vue').default },
-          ]    
-        },
-        { path: '/health_screening_index', 
-        component: require('./components/masters/student_masters/health_screening_index.vue').default ,
-          children: [
-            { path: '', component: require('./components/masters/student_masters/health_screening_list.vue').default },
-            { path: '/health_screening_add', name:'ScreeningAdd', component: require('./components/masters/student_masters/health_screening_add.vue').default },
-            { path: '/health_screening_edit', name:'ScreeningEdit', component: require('./components/masters/student_masters/health_screening_edit.vue').default },
-            { path: '/health_screening_list', name:'ScreeningList', component: require('./components/masters/student_masters/health_screening_list.vue').default },
-          ]    
-        },
-        { path: '/term_index', 
-        component: require('./components/masters/student_masters/term_index.vue').default ,
-        children:  [
-          { path: '', component: require('./components/masters/student_masters/term_list.vue').default },
-          { path: '/term_add', name:'TermAdd', component: require('./components/masters/student_masters/term_add.vue').default },
-          { path: '/term_edit', name:'TermEdit', component: require('./components/masters/student_masters/term_edit.vue').default },
-          { path: '/term_list', name:'TermList', component: require('./components/masters/student_masters/term_list.vue').default },
-          ]    
-        },
         { path: '/student_award_index', 
         component: require('./components/masters/student_masters/awards/student_award_index.vue').default ,
           children: [

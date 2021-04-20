@@ -12,6 +12,7 @@ class WashFeeding extends Migration{
             $table->string('questionId');
             $table->string('answer');
             $table->char('type',36);
+            $table->char('ans_type',36);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();
