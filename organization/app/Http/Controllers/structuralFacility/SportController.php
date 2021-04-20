@@ -82,14 +82,14 @@ class SportController extends Controller
      * method to load facility in dropdown
      */
     public function getFacilityInDropdown(){
-        return SportFacilityType::get(['id','name']);
+        return SportFacilityType::where('status',1)->get();
     }
 
     /**
      * method ot get support in dropdown
      */
     public function getSupportInDropdown(){
-        return SportSupporter::get(['id','name']);
+        return SportSupporter::where('status',1)->get();
     }
 
     /**

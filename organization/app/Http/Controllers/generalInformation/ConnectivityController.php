@@ -110,21 +110,21 @@ class ConnectivityController extends Controller
      * method to get road type use in dropdown
      */
     public function getRoadTypeDropdown(){
-        return RoadType::get(['id','name']);
+        return RoadType::where('status',1)->get();
     }
 
     /**
      * method to get electricity source use in dropdown
      */
     public function getElectricitySourceDropdown(){
-        return ElectricitySource::get(['id','name']);
+        return ElectricitySource::where('status',1)->get();
     }
 
     /**
      * method to get electricity supply use in dropdown
      */
     public function getElectricitySupplyDropdown(){
-        return ElectricitySupply::get(['id','name']);
+        return ElectricitySupply::where('status',1)->get();
     }
 
     /**
@@ -145,7 +145,7 @@ class ConnectivityController extends Controller
      * method to get contact type  in dropdown
      */
     public function getContactTypeDropdown(){
-        return ContactType::get(['id','name']);
+        return ContactType::where('status',1)->get();
     }
 
     

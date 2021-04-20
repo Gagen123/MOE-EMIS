@@ -32,15 +32,15 @@ class InfrastructureController extends Controller
     /**
      * method to get category in dropdown
      */
-    public function getCategoryInDropdown(){
-        return StructureCategory::get(['id','name']);
+    public function getCategoryInDropdown(){  
+        return StructureCategory::where('status',1)->get();
     }
 
     /**
      * method to get structure Designer in dropdown
      */
     public function getDesignerDropdown(){
-        return StructureDesigner::get(['id','name']);
+        return StructureDesigner::where('status',1)->get();
     }
 
     /**
@@ -58,7 +58,7 @@ class InfrastructureController extends Controller
      * method to get category in dropdown
      */
     public function getStructureFacilityInDropdown(){
-        return StructureFacility::get(['id','name']);
+        return StructureFacility::where('status',1)->get();
     }
     /**
      * method to save sport details

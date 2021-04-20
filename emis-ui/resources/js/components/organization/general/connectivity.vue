@@ -236,7 +236,13 @@ export default {
                         title: 'Connectivity is added successfully'
                     })
 
-                   this.restForm();
+                    if(this.form.organizationId != null || this.form.organizationId != ""){
+                        this.$router.push("/school_list")
+                    }else{
+                        this.restForm();
+                    }
+
+                   
                 })
                 .catch(() => {
                     console.log("Error......")

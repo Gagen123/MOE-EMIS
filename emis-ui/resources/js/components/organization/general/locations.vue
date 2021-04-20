@@ -82,8 +82,8 @@
                         </div> 
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <label >Disaster risks:</label><br>
-                            <span v-for="(item, key, index) in  form.disasterList" :key="index">
-                                <input type="checkbox" v-model="item.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                            <span v-for="(item, index) in  form.disasterList" :key="index">
+                                <input type="checkbox" :id="'disasterRisk'+(index)" v-model="item.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
                             </span>
                         </div>
                     </div>
@@ -102,7 +102,7 @@
                                 <tr v-for="(item, index) in form.attachment_details" :key="index">
                                     <td><input type="text" :id="'fileName'+(index+1)" class="form-control" v-model="item.name" readonly/></td>
                                     <td><input type="file"  :id="'attach'+(index+1)" v-on:change="onChangeFileUpload"></td>
-                                    <td><input type="text" :id="'remarks'+(index+1)" name="remark" class="form-control" v-model="item.remarks"/></td>
+                                    <td><input type="text" :id="'remarks'+(index+1)" name="remarks" class="form-control" v-model="item.remarks"/></td>
                                 </tr> 
                             </tbody>
                         </table>
@@ -236,10 +236,14 @@ export default {
                         icon: 'success',
                         title: 'Location is added successfully'
                     })
-                    this.resetForm();
-                    // if(this.form.organizationId != null || this.form.organizationId != ""){
-                    //     this.$router.push("/school_list")
-                    // }
+                    
+                    if(this.form.organizationId != null || this.form.organizationId != ""){
+                        this.$router.push("/school_list")
+                    }else{
+                        setTimeout(function(){
+                        window.location.reload();
+                        }, 500);
+                    }
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -294,6 +298,13 @@ export default {
                 this.form.thramNo           = data.thramNo;
                 this.form.compoundArea      = data.compoundArea;
                 this.form.id                = data.id;
+
+                let disasterRisk            = data.disasterRisk;
+                this.disasterList           = disasterRisk;
+
+                for(let i=0;i<disasterRisk.length;i++){
+                    $('#disasterRisk'+i).prop('checked',true);
+                }
             })
             .catch((error) =>{  
                 console.log("Error:"+error);
@@ -302,13 +313,10 @@ export default {
     },
 
     created(){
-        this.getLocationDetails(this.$route.query.orgId);
-    },
-
-    mounted(){
         this.getDisasterList();
         this.loadAttachmentList();
+        this.getLocationDetails(this.$route.query.orgId);
         this.form.organizationId = this.$route.query.orgId;
-    }
+    },
 }
 </script>
