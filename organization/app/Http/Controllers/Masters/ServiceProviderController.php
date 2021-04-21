@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class ServiceProviderController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
     /**
      * Create a new controller instance.
      *
@@ -20,6 +21,7 @@ class ServiceProviderController extends Controller
     public function __construct()
     {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     /** 
@@ -40,7 +42,7 @@ class ServiceProviderController extends Controller
             $data = ServiceProvider::find($request['id']);
 
             $messs_det='serviceType:'.$data->serviceType.'; name:'.$data->serviceName.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','service_providers','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','service_providers','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
             
             $location = ServiceProvider::where('id', $id)->update($loc);
             return $this->successResponse($location, Response::HTTP_CREATED);

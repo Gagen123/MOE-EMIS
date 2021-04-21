@@ -75,7 +75,6 @@ export default {
     },
 
     created() {
-        alert("m here");
         this.form.serviceType=this.$route.params.data.serviceType;
         this.form.serviceName=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
