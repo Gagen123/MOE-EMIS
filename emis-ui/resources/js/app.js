@@ -40,7 +40,7 @@ allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,org
 const routes = allRoutes;
 const router = new VueRouter({
     routes
-})
+});
  
 router.beforeEach((to, from, next) => {
   if ($("body").hasClass("request_loading"))
