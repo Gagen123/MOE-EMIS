@@ -1,6 +1,7 @@
 require('./bootstrap');
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
+import VueCharts from 'vue-chartjs';
 import VTooltip from 'v-tooltip';
 import vDatepicker from 'vuejs-datepicker';
 Vue.use(VueRouter);
