@@ -42,7 +42,6 @@ class LocationsController extends Controller
                 'compoundArea'          =>  $request['compoundArea'],
                 'updated_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
-                // 'disaster'              =>  $request['disaster'],
             ];
             $loc = Locations::where('id', $id)->update($location);
 
@@ -78,8 +77,8 @@ class LocationsController extends Controller
                 'compoundArea'          =>  $request['compoundArea'],
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
-                // 'disaster'              =>  $request['disaster'],
             ];
+            // dd($location);
             $loc = Locations::create($location);
     
             $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');

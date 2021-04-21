@@ -28,15 +28,15 @@ class SectionController extends Controller
     */
     public function saveSection(Request $request){
         $id = $request->id;
-
         if($id != null){
+            DB::table('section_details')->where('classSectionId', $request['class_stream_id'])->delete();
+
             foreach ($request->input('users') as $i => $user){
                 $section_details = array(
                 'classSectionId'    =>  $request['class_stream_id'],
                 'section'           =>  $user['section'],
             );
 
-                DB::table('section_details')->where('classSectionId', $request['class_stream_id'])->delete();
                 // $sec = SectionDetails::create($section_details);
                 $sec = SectionDetails::create($section_details);
 
@@ -93,7 +93,7 @@ class SectionController extends Controller
     public function getExistingSectionByStream($classId,$streamId){
         $section = DB::table('section_details as a')
             ->join('organization_class_streams as b', 'b.id', '=', 'a.classSectionId')
-            ->select('a.section')
+            ->select('a.id','a.section')
             ->where('b.classId', $classId)
             ->where('a.classSectionId', $streamId)
             ->get();

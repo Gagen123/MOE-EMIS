@@ -8,19 +8,19 @@
                         <input type="hidden" class="form-control" v-model="form.id"/>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>School:<span class="text-danger">*</span></label> 
-                            <select name="school" id="school" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="remove_err('school'),getClassByOrganizationId()">
+                            <select name="school" id="school" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }"  @change="remove_err('school'),getClassByOrganizationId()">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
-                            <has-error :form="form" field="str_name"></has-error>
+                            <has-error :form="form" field="school"></has-error>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Class:<span class="text-danger">*</span></label> 
-                            <select name="class" id="class" class="form-control editable_fields" v-model="form.classes" @change="getStreamByClassId(),getExistingSectionByClass()">
+                            <select name="classes" id="classes" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('classes') }" v-model="form.classes" @change="remove_err('classes'),getStreamByClassId(),getExistingSectionByClass()">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in classList" :key="index" v-bind:value="item.record_id+'_'+item.id">{{ item.class }}</option>
                             </select>
-                            <has-error :form="form" field="str_name"></has-error>
+                            <has-error :form="form" field="classes"></has-error>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="stream_section">
                             <label>Stream:<span class="text-danger"></span></label> 
@@ -33,7 +33,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Sections:<span class="text-danger">*</span></label>
                         <div class="form-group row" v-for='(user, index) in form.users' :key="index" > 
-                            <input type="text" class="form-control" id="section" v-model="user.section"/>
+                            <input type="text" class="form-control section" id="section" v-model="user.section"/>
                         </div>    
                     </div>  
                     <div class="form-group row">
@@ -113,13 +113,22 @@ export default {
         },
 
         /**
+         * method to reset form
+         */
+        resetForm(){
+            this.form.school= '';
+            this.form.classes= '';
+            let formReset =this.form.users;
+            formReset.splice(0, formReset.length);
+            this.form.users.push({section:''})
+        },
+
+        /**
          * method to save data
          */
         formaction: function(type){
             if(type=="reset"){
-                this.form.school= '';
-                this.form.classes= '';
-                // this.form.section= '';
+                this.resetForm();  
             }
             if(type=="save"){
                 this.form.post('/organization/saveSection',this.form)
@@ -128,6 +137,7 @@ export default {
                         icon: 'success',
                         title: 'Section is added successfully'
                     })
+                    this.resetForm();
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -169,11 +179,14 @@ export default {
          * method to get existing section by class
          */
         getExistingSectionByClass(){
-            let classText = $('#class option:selected').text();
+            let classText = $('#classes option:selected').text();
             let classid=this.form.classes.split('_')[1];
             axios.get('/organization/getExistingSectionByClass/'+classid)
               .then(response => {
                 if(classText == "XI" || classText == "XII"){
+                    let formReset =this.form.users;
+                    formReset.splice(0, formReset.length);
+                    this.form.users.push({section:''});
                 }else{
                     let data = response.data;
                     if(data == ""){
@@ -200,7 +213,9 @@ export default {
               .then(response => {
                   let data = response.data;
                   if(data == ""){
-                      
+                    let formReset =this.form.users;
+                    formReset.splice(0, formReset.length);
+                    this.form.users.push({section:''})
                   }else{
                     let sections=[];
                     for(let i=0;i<data.length;i++){
@@ -208,6 +223,7 @@ export default {
                     }
                     this.count=data.length;
                     this.form.users=sections;
+                    this.form.id = data[0].id;
                   }
                     
             });

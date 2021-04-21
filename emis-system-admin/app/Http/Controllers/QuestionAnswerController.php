@@ -172,6 +172,20 @@ class QuestionAnswerController extends Controller{
             $model = new $modelName();
             return $this->successResponse($model::where("parent_id",explode("_",$type)[2])->where('status',1)->get());
         }
+
+        if(strpos($type,"withwhere_")!==false){
+            $questionlist = DB::table('question_details as q')
+                ->join('question_category as c', 'q.parent_id', '=', 'c.id')
+                ->select('q.name', 'q.id', 'q.code','q.answer_type')
+                ->where('q.status', '=', 1)
+                // ->where('c.name', '=', '%' . Input::get('name') . '%')
+                ->where('c.name', '=',explode("_",$type)[1])
+                ->groupby('q.id')->get();
+            foreach($questionlist as $ques){
+                $ques->ans_list=Answer::where('parent_id',$ques->id)->first();
+            }
+            return $this->successResponse($questionlist);
+        }
     }
     
     public function saveAnswers(Request $request){

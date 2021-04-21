@@ -81,6 +81,7 @@ class ClosureController extends Controller
             'remark'                   =>  $request['remark'],
             'id'                       =>  $request['id'],
         ];
+        // dd($closure);
         $cls = ApplicationDetails::create($closure);
         // save proprietor details if category is private
         if($request['category'] == 0){

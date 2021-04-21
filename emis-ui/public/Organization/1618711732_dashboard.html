@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="img/new_logo.png" type="image/x-icon" />
+  <title>EMIS</title>
+  <link href="http://127.0.0.1:9000/css/app.css" rel="stylesheet">
+</head>
+<body class="hold-transition sidebar-mini text-sm">
+    <div class="wrapper" id="app">
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="background-image: url('img/bg_2.jpg')">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+    <!-- <div class="form-inline ml-3">
+        <div class="input-group input-group-sm">
+          <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+              <button class="btn btn-navbar">
+                <i class="fas fa-search"></i>
+              </button>
+          </div>
+        </div>
+    </div> -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+            <div class="user-panel d-flex">
+                <div class="image">
+                    <img src="img/user.png" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info text-white">
+                                      Administrator
+                                  </div>    
+            </div>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <div class="dropdown-divider"></div>
+            <router-link to="/profile" class="nav-link nav-sidebar">
+              <i class="fas fa-user pr-4"></i>
+              Profile
+            </router-link>
+          <div class="dropdown-divider"></div>
+            <router-link to="/chage_passwprd" class="nav-link nav-sidebar">
+              <i class="fa fa-lock-open pr-4"></i>Change Password
+            </router-link>
+          <div class="dropdown-divider"></div>
+          <a href="#" onclick="logout()" class="dropdown-item nav-sidebar">
+              <i class="fa fa-sign-out-alt pr-4"></i>Sign out
+          </a>
+        </div>
+    </li>
+  </ul>
+  </nav>
+          <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color:#E5E5E5">
+            <a href="dashboard" class="brand-link" style="background-image: url('img/bg_2.jpg')">
+    <img src="img/MoE_Logo.png" alt="example logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light"><b>MOE</b>- EMIS</span>
+</a>             <div class="sidebar">
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" id="mainmenu" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+                <a href="dashboard" class="nav-link pt-1 pb-1">
+                    <i class=" nav-icon fas fa-tachometer-alt"></i>
+                    <p>Dashboard</p> 
+                </a>
+            </li>
+                                                            <hr>
+
+            <li class="nav-item has-treeview" id="mastermanagment">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-database"></i>
+                    <p>
+                        Master Management
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="dzongkhagmaster">
+                        <router-link to="/global_master" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-globe nav-icon"></i>
+                            Common Masters
+                        </router-link>
+                    </li>
+                    <li class="nav-item has-treeview" id="org_master">
+                        <router-link to="/OrganizationMasterIndex" class="nav-link">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p> 
+                                Organization Masters
+                            </p>
+                        </router-link> 
+                    </li>
+                    <li class="nav-item has-treeview" id="staff_master">
+                        <router-link to="/staff_link" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-users nav-icon"></i>
+                            Staff Masters
+                        </router-link>
+                    </li>                
+                    <li class="nav-item has-treeview" id="studentmaster">
+                        <a href="#" class="nav-link pt-1 pb-1">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p>
+                                Student Masters
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a> 
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
+                                <router-link to="/StudentMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Student Health Master
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                
+
+                  <!--  <li class="nav-item has-treeview" id="org_master" @click="setclass('mastersmanagement','','std_master')">
+                        <router-link to="/StudentMasterIndex" class="nav-link">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p> 
+                                Studnet Masters
+                            </p>
+                        </router-link> 
+                    </li>-->
+                </ul>
+
+                <li class="nav-item has-treeview" id="organizationlink">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>
+                        Organization
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
+                        <router-link to="/establishment_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Establishment 
+                            </p>
+                        </router-link>
+                    </li>
+                    <!-- <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/restructuring_link" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Restructuring 
+                            </p>
+                        </router-link>
+                    </li> -->
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/structural_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Structural Facilities 
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
+                        <router-link to="/general_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                General Information 
+                            </p>
+                        </router-link>
+                    </li>
+                    <!-- <li class="nav-item" id="annualUpdate" @click="setclass('organizationlink','','annualUpdate')">
+                        <router-link to="/annualUpdate" class="nav-link">
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                            Data Submission
+                        </router-link> 
+                    </li> -->
+                </ul>
+            </li>
+            <li class="nav-item has-treeview" id="stafflink">
+                <router-link to="/staff_registration" class="nav-link pt-1 pb-1" onclick="afterclick()">
+                    <p>
+                    <i class="nav-icon fas fa-users-cog"></i>
+                        Staff
+                    </p>
+                </router-link>
+            </li>
+            
+            <li class="nav-item has-treeview" id="studentlink">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-user-graduate"></i>
+                    <p>
+                        Student
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                   <li class="nav-item" id="student_health" onclick="setclass('studentlink','','student_health')">
+                       <router-link to="/student_health" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                            Student Health 
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item" id="select_system">
+                <a href="http://127.0.0.1:9000/select_system" class="nav-link text-white">
+                    <i class="nav-icon fa fa-sign-out-alt pr-4"></i>
+                    <p>Select System</p> 
+                </a> 
+            </li>
+        </ul>
+    </nav>
+</div>
+         </aside>
+        <div class="content-wrapper">
+            <section class="content">
+              <router-view></router-view>
+              
+            </section>
+        </div>
+        <footer class="main-footer">
+    <strong>Copyright &copy; <a href="http://www.education.gov.bt/" target="_blank">Ministry of Education</a></strong> All rights reserved.
+</footer>    </div>
+    
+    <script src="js/app.js"></script>  
+</body>
+<script>
+    $('#mainmenu >li >a').addClass('border-bot');
+    $('#mainmenu >li >ul >li >a').addClass('border-bot');
+    $('#mainmenu >li >ul >li >ul >li >a').addClass('border-bot');
+    $('#mainmenu >li >a').addClass('text-body');
+    $('#mainmenu >li >ul >li >a').addClass('text-body');
+    $('#mainmenu >li >ul >li >ul >li >a').addClass('text-body');
+    function afterclick(){
+     // $(this).prop("a").addClass('active');
+      $('#mainmenu >li >a').addClass('border-bot');
+      $('#mainmenu >li >ul >li >a').addClass('border-bot');
+      $('#mainmenu >li >ul >li >ul >li >a').addClass('border-bot');
+      $('#mainmenu >li >a').addClass('text-body');
+      $('#mainmenu >li >ul >li >a').addClass('text-body');
+      $('#mainmenu >li >ul >li >ul >li >a').addClass('text-body');
+    }
+    function logout(){
+      Swal.fire({
+        title: 'Are you sure you wish to signout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location="http://127.0.0.1:9000/logout";
+          }
+      });
+    }
+    </script>
+</html>
+

@@ -127,6 +127,7 @@ class GeneralInfoController extends Controller
             'telephone.required'            => 'Telephone Service Provider field is required',
             'internet.required'             => 'Internet Service Provider field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
         $connectivity =[
             'organizationId'            =>  $orgId,
@@ -186,7 +187,7 @@ class GeneralInfoController extends Controller
 
     public function saveLocation(Request $request){
         $orgId = $request->organizationId;
-        if($orgId != null){
+        if($orgId != "undefined" && $orgId != null){
             $orgId = $orgId;
         }else{
             $orgId = $this->getWrkingAgencyId();
@@ -206,6 +207,30 @@ class GeneralInfoController extends Controller
             'compoundArea.required'         => 'Compound Area is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'Organization';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }   
         $loc =[
             'organizationId'        =>  $orgId,
             'landOwnership'         =>  $request['landOwnership'],
@@ -220,15 +245,11 @@ class GeneralInfoController extends Controller
             'compoundArea'          =>  $request['compoundArea'],
             'id'                    =>  $request['id'],
             'disaster'              =>  $request['disaster'],
+            'attachment_details'    =>  $attachment_details,
             'user_id'               =>  $this->userId()
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
+        return $response_data;
     }
 
     public function getDisasterListInCheckbox(){

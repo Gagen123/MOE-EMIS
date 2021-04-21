@@ -13,7 +13,7 @@
                             <label> Sanitation </label>
                         </a>
                     </li>
-                <li class="nav-item nomination-tab">
+                    <li class="nav-item nomination-tab">
                         <a class="nav-link" data-toggle="pill" @click="shownexttab('appointment-tab','nomination-tab')" role="tab">
                             <label> Hygience</label>
                         </a>
@@ -31,6 +31,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr v-for="(item, index) in questionList" :key="index">
+                                    <td>{{ item.name}}</td>
+                                    <td v-if="item.answer_type=='TextArea'">
+                                        <textarea class="form-control"></textarea>
+                                    </td>
+                                    <td v-if="item.answer_type=='Text'">
+                                        <textarea class="form-control"></textarea>
+                                    </td>
+                                </tr>
                                 <tr id="record1">
                                         <td>Does the school have Independent water source? </td>
                                         <td>
@@ -1103,7 +1112,7 @@
 export default {
     data(){
         return{
-
+            questionList:[],
         }
     },
 
@@ -1137,6 +1146,23 @@ export default {
                 });
             }
         },
-    }
+        loadQuestionList(uri = 'questionAnswers/loadQuestionaries/withwhere_Wash_Question'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.questionList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log(error.toString());
+            });
+        },
+    },
+    mounted(){ 
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        }); 
+        this.loadQuestionList();
+    },
 }
 </script>
