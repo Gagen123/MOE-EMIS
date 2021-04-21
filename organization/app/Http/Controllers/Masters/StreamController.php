@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\DB;
 class StreamController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
 
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
     
 
@@ -49,7 +51,7 @@ class StreamController extends Controller
             ];
             $data = Stream::find($request['id']);
             $messs_det='streamName:'.$data->stream.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','stream','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','stream','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $class = Stream::where('id', $id)->update($cla);
             return $this->successResponse($class, Response::HTTP_CREATED);

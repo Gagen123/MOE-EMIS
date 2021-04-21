@@ -68,21 +68,21 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
-        dd('UI');
 
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
 
-            return $this->successResponse(CeaRole::select('*')
-                                                    ->where('status','=', $status)
-                                                    ->where('assigned','=', $assigned_to)
-                                                    ->first());
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->first());
+            
         } else if($param == 'program_student_roles'){
+
             $status = '1';
             $assigned_to = '2';
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned', $assigned_to)->first());
-        }else {
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->first());
+
+        } else {
+
             $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
             $modelName = "App\\Models\\Masters\\"."$databaseModel"; 

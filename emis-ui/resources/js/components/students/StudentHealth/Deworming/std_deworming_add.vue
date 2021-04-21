@@ -109,7 +109,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.termList =  data.data.data;
+                this.termList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

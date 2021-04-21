@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 class StructureFacilityController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
     /**
      * Create a new controller instance.
      *
@@ -20,6 +21,7 @@ class StructureFacilityController extends Controller
     public function __construct()
     {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     /**
@@ -49,7 +51,7 @@ class StructureFacilityController extends Controller
             $data = StructureFacility::find($request['id']);
 
             $messs_det='structureFacilityName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','structure_facility','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','structure_facility','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $strFacility = StructureFacility::where('id', $id)->update($str);
             return $this->successResponse($strFacility, Response::HTTP_CREATED);

@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 class EquipmentUsageController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
+
     /**
      * Create a new controller instance.
      *
@@ -21,6 +23,7 @@ class EquipmentUsageController extends Controller
     public function __construct()
     {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     /**
@@ -49,7 +52,7 @@ class EquipmentUsageController extends Controller
             $data = EquipmentUsage::find($request['id']);
 
             $messs_det='equipmentUsageName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $equipment = EquipmentUsage::where('id', $id)->update($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);

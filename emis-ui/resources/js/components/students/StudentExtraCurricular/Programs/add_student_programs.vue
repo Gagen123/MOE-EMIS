@@ -78,9 +78,9 @@ export default {
     data(){
         return {
             teacherList:[],
-            teacherRoles:[],
             programList:[],
             supportList:[],
+            teacherRoles:[],
             users: [],
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
@@ -112,7 +112,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.programList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -122,7 +122,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.supportList =  data.data.data;
+                this.supportList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

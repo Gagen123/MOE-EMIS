@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 class ClassController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
 
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
     
     /**
@@ -42,7 +44,7 @@ class ClassController extends Controller
             ];
             $data = Classes::find($request['id']);
             $messs_det='className:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','class','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','class','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $class = Classes::where('id', $id)->update($cla);
             return $this->successResponse($class, Response::HTTP_CREATED);
