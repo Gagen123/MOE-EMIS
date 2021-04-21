@@ -196,6 +196,14 @@ class AdministrationController extends Controller{
             return $this->successResponse(Village::where('gewog_id',$parent_id)->get());
         }
     }
+    public function loadDzoGeoVilByVilId($id=""){
+        $response_data = DB::table('dzongkhag_master as d')
+            ->join('gewog_master as g', 'g.dzongkhag_id', '=', 'd.id')
+            ->join('village_master as v', 'v.gewog_id', '=', 'g.id')
+            ->select('d.id as dzo_id','d.name as dzo_name', 'g.id as gewog_id', 'g.name gewog_name', 'v.id as village_id', 'v.name village_name')
+            ->where('v.id', '=', $id)->first();
+        return $this->successResponse($response_data);
+    }
     public function load_village_details_by_village_id($id=""){
         return $this->successResponse(Village::where('id',$id)->first());
     }

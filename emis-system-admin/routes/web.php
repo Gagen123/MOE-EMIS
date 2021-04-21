@@ -23,13 +23,14 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveGlobalMasters', ['uses' => 'AdministrationController@saveGlobalMasters']);
         $router->get('/loadGlobalMasters/{param}','AdministrationController@loadGlobalMasters');
         $router->get('/load_dropdown/{model}/{parent_id}','AdministrationController@load_dropdown');
-
+        $router->get('/load_dzo_geo_village_by_village_id/{model}/{parent_id}','AdministrationController@load_dropdown');
+        
         $router->get('/load_gewog_details_by_village_id/{id}','AdministrationController@load_gewog_details_by_village_id');
         $router->get('/load_dzongkhag_details_by_id/{id}','AdministrationController@load_dzongkhag_details_by_id');
         $router->get('/load_country_details_by_id/{id}','AdministrationController@load_country_details_by_id');
         $router->get('/load_Gender_details_by_id/{id}','AdministrationController@load_Gender_details_by_id');
         $router->get('/load_village_details_by_village_id/{id}','AdministrationController@load_village_details_by_village_id');
-        $router->get('/load_gewog_details_by_id/{id}','AdministrationController@load_gewog_details_by_id');
+        $router->get('/loadDzoGeoVilByVilId/{id}','AdministrationController@loadDzoGeoVilByVilId');
         
     });
 

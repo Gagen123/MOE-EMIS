@@ -22,9 +22,11 @@ use App\Models\hr_development_masters\TargetGroup;
 class HrDevelopmentMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
-    public $audit_database="system_db";
+    // public $audit_database="system_db";
+    public $audit_database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     public function saveHrDevelopmentMasters(Request $request){
@@ -185,6 +187,7 @@ class HrDevelopmentMastersController extends Controller{
             if($request['record_type']=="target_group"){
                 $update_data = TargetGroup::find($request->id); 
             }
+            dd($this->audit_database);
             $messs_det='name:'.$update_data->name.'; Status:'.$update_data->status.'; updated_by:'.$update_data->updated_by.'; updated_date:'.$update_data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$table_name."','".$request->id."','".$messs_det."','".$request->user_id."','Edit')");
 
