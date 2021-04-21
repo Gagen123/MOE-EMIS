@@ -41,7 +41,7 @@ const routes = allRoutes;
 const router = new VueRouter({
     routes
 })
-
+ 
 router.beforeEach((to, from, next) => {
   if ($("body").hasClass("request_loading"))
       $("body").removeClass("request_loading");
