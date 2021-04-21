@@ -76,6 +76,7 @@ class StudentMasterController extends Controller{
 
     public function loadActiveStudentMasters($param=""){
         $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
+        dd($student_masters);
         return $student_masters;
     }
 
