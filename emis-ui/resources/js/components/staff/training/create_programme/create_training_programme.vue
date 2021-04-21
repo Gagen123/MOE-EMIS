@@ -16,348 +16,350 @@
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
-                <div class="tab-content">
-                    <div class="tab-pane fade active show tab-content-details" id="programme-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Trainig Type:<i class="text-danger">*</i></label>
-                                <select v-model="form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
-                                    <option value="">--Select--</option>
-                                    <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="training_type"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Course Title:<i class="text-danger">*</i></label>
-                                <input type="text" class="form-control" @change="remove_err('course_title')" :class="{ 'is-invalid' :form.errors.has('course_title') }" v-model="form.course_title" id="course_title"/>
-                                <has-error :form="form" field="course_title"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
-                                <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="organizer"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Related Programme:</label>
-                                <select v-model="form.related_programme" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('related_programme') }" class="form-control select2" name="related_programme" id="related_programme">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in relatedProgrammeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="related_programme"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Start Date:<i class="text-danger">*</i></label>
-                                <input type="date" class="form-control" @change="remove_err('start_date')" :class="{ 'is-invalid' :form.errors.has('start_date') }" v-model="form.start_date" id="start_date"/>
-                                <has-error :form="form" field="start_date"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">End Date:<i class="text-danger">*</i></label>
-                                <input type="date" class="form-control" @change="remove_err('end_date')" :class="{ 'is-invalid' :form.errors.has('end_date') }" v-model="form.end_date" id="end_date"/>
-                                <has-error :form="form" field="end_date"></has-error>
-                            </div>
-                        </div>
-                        
-                        <span id="professional_development_section" style="display:none">
-                            <hr/>
+                <form id="training_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="post">
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show tab-content-details" id="programme-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Programme Level:<i class="text-danger">*</i></label>
-                                    <select v-model="form.programme_level" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('programme_level') }" class="form-control select2" name="programme_level" id="programme_level">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in programmeLevelList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    <label class="mb-0.5">Trainig Type:<i class="text-danger">*</i></label>
+                                    <select v-model="form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
+                                        <option value="">--Select--</option>
+                                        <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                     </select>
-                                    <has-error :form="form" field="programme_level"></has-error>
+                                    <has-error :form="form" field="training_type"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Programme Type:<i class="text-danger">*</i></label>
-                                    <select v-model="form.programme_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('programme_type') }" class="form-control select2" name="programme_type" id="programme_type">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in programmeTypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="programme_type"></has-error>
+                                    <label class="mb-0.5">Course Title:<i class="text-danger">*</i></label>
+                                    <input type="text" class="form-control" @change="remove_err('course_title')" :class="{ 'is-invalid' :form.errors.has('course_title') }" v-model="form.course_title" id="course_title"/>
+                                    <has-error :form="form" field="course_title"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Course Type:<i class="text-danger">*</i></label>
-                                    <select v-model="form.course_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('course_type') }" class="form-control select2" name="course_type" id="course_type">
+                                    <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
+                                    <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                         <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in courseTypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                     </select>
-                                    <has-error :form="form" field="course_type"></has-error>
+                                    <has-error :form="form" field="organizer"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Course Provider:<i class="text-danger">*</i></label>
-                                    <input type="text" class="form-control" @change="remove_err('course_provider')" :class="{ 'is-invalid' :form.errors.has('course_provider') }" v-model="form.course_provider" id="course_provider"/>
-                                    <has-error :form="form" field="course_provider"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Institute/Vanue:<i class="text-danger">*</i></label>
-                                    <input type="text" class="form-control" @change="remove_err('vanue')" :class="{ 'is-invalid' :form.errors.has('vanue') }" v-model="form.vanue" id="vanue"/>
-                                    <has-error :form="form" field="vanue"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Financial Source:<i class="text-danger">*</i></label>
-                                    <select v-model="form.financial_source" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('financial_source') }" class="form-control select2" name="financial_source" id="financial_source">
+                                    <label class="mb-0.5">Related Programme:</label>
+                                    <select v-model="form.related_programme" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('related_programme') }" class="form-control select2" name="related_programme" id="related_programme">
                                         <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in financialSourceList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        <option v-for="(item, index) in relatedProgrammeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                     </select>
-                                    <has-error :form="form" field="financial_source"></has-error>
+                                    <has-error :form="form" field="related_programme"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Start Date:<i class="text-danger">*</i></label>
+                                    <input type="date" class="form-control" @change="remove_err('start_date')" :class="{ 'is-invalid' :form.errors.has('start_date') }" v-model="form.start_date" id="start_date"/>
+                                    <has-error :form="form" field="start_date"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">End Date:<i class="text-danger">*</i></label>
+                                    <input type="date" class="form-control" @change="remove_err('end_date')" :class="{ 'is-invalid' :form.errors.has('end_date') }" v-model="form.end_date" id="end_date"/>
+                                    <has-error :form="form" field="end_date"></has-error>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Total Budget:</label>
-                                    <input type="text" class="form-control" @change="remove_err('total_budget')" :class="{ 'is-invalid' :form.errors.has('total_budget') }" v-model="form.total_budget" id="total_budget"/>
-                                    <has-error :form="form" field="total_budget"></has-error>
+                            
+                            <span id="professional_development_section" style="display:none">
+                                <hr/>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Programme Level:<i class="text-danger">*</i></label>
+                                        <select v-model="form.programme_level" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('programme_level') }" class="form-control select2" name="programme_level" id="programme_level">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in programmeLevelList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="programme_level"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Programme Type:<i class="text-danger">*</i></label>
+                                        <select v-model="form.programme_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('programme_type') }" class="form-control select2" name="programme_type" id="programme_type">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in programmeTypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="programme_type"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Course Type:<i class="text-danger">*</i></label>
+                                        <select v-model="form.course_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('course_type') }" class="form-control select2" name="course_type" id="course_type">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in courseTypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="course_type"></has-error>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Total Hours:<i class="text-danger">*</i></label>
-                                    <input type="number" class="form-control" @change="remove_err('total_hrs')" :class="{ 'is-invalid' :form.errors.has('total_hrs') }" v-model="form.total_hrs" id="total_hrs"/>
-                                    <has-error :form="form" field="total_hrs"></has-error>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Course Provider:<i class="text-danger">*</i></label>
+                                        <input type="text" class="form-control" @change="remove_err('course_provider')" :class="{ 'is-invalid' :form.errors.has('course_provider') }" v-model="form.course_provider" id="course_provider"/>
+                                        <has-error :form="form" field="course_provider"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Institute/Vanue:<i class="text-danger">*</i></label>
+                                        <input type="text" class="form-control" @change="remove_err('vanue')" :class="{ 'is-invalid' :form.errors.has('vanue') }" v-model="form.vanue" id="vanue"/>
+                                        <has-error :form="form" field="vanue"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Financial Source:<i class="text-danger">*</i></label>
+                                        <select v-model="form.financial_source" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('financial_source') }" class="form-control select2" name="financial_source" id="financial_source">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in financialSourceList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="financial_source"></has-error>
+                                    </div>
                                 </div>
-                            </div>
-                        </span>
-                        <span id="qualification_upgradation_section" style="display:none">
-                            <hr/>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Category:<i class="text-danger">*</i></label>
-                                    <select v-model="form.category" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('category') }" class="form-control select2" name="category" id="category">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="category"></has-error>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Total Budget:</label>
+                                        <input type="text" class="form-control" @change="remove_err('total_budget')" :class="{ 'is-invalid' :form.errors.has('total_budget') }" v-model="form.total_budget" id="total_budget"/>
+                                        <has-error :form="form" field="total_budget"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Total Hours:<i class="text-danger">*</i></label>
+                                        <input type="number" class="form-control" @change="remove_err('total_hrs')" :class="{ 'is-invalid' :form.errors.has('total_hrs') }" v-model="form.total_hrs" id="total_hrs"/>
+                                        <has-error :form="form" field="total_hrs"></has-error>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Donor Agency:</label>
-                                    <select v-model="form.donor_agency" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('donor_agency') }" class="form-control select2" name="donor_agency" id="donor_agency">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in donor_agencyList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="donor_agency"></has-error>
+                            </span>
+                            <span id="qualification_upgradation_section" style="display:none">
+                                <hr/>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Category:<i class="text-danger">*</i></label>
+                                        <select v-model="form.category" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('category') }" class="form-control select2" name="category" id="category">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="category"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Donor Agency:</label>
+                                        <select v-model="form.donor_agency" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('donor_agency') }" class="form-control select2" name="donor_agency" id="donor_agency">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in donor_agencyList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="donor_agency"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Project of Donor Angency:</label>
+                                        <select v-model="form.projectofdonor" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('projectofdonor') }" class="form-control select2" name="projectofdonor" id="projectofdonor">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in projectofdonorList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="projectofdonor"></has-error>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Project of Donor Angency:</label>
-                                    <select v-model="form.projectofdonor" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('projectofdonor') }" class="form-control select2" name="projectofdonor" id="projectofdonor">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in projectofdonorList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="projectofdonor"></has-error>
-                                </div>
-                            </div>
 
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Country of Study:<i class="text-danger">*</i></label>
+                                        <select v-model="form.study_country" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('study_country') }" class="form-control select2" name="study_country" id="study_country">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in study_countryList" :key="index" v-bind:value="item.id"> {{ item.country_name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="study_country"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Course Mode/Area/Type:<i class="text-danger">*</i></label>
+                                        <select v-model="form.coursemode" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('coursemode') }" class="form-control select2" name="coursemode" id="coursemode">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in coursemodeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="coursemode"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Degree:<i class="text-danger">*</i></label>
+                                        <select v-model="form.degree" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('degree') }" class="form-control select2" name="degree" id="degree">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in degreeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="degree"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Subject 1:<i class="text-danger">*</i></label>
+                                        <select v-model="form.subject1" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('subject1') }" class="form-control select2" name="subject1" id="subject1">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="subject1"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Subject 2:</label>
+                                        <select v-model="form.subject2" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('subject2') }" class="form-control select2" name="subject2" id="subject2">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="subject2"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0.5">Thesis Title:<i class="text-danger">*</i></label>
+                                        <input type="text" class="form-control" @change="remove_err('thesis_title')" :class="{ 'is-invalid' :form.errors.has('thesis_title') }" v-model="form.thesis_title" id="thesis_title"/>
+                                        <has-error :form="form" field="thesis_title"></has-error>
+                                    </div>
+                                </div>
+                            </span>
                             <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Country of Study:<i class="text-danger">*</i></label>
-                                    <select v-model="form.study_country" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('study_country') }" class="form-control select2" name="study_country" id="study_country">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in study_countryList" :key="index" v-bind:value="item.id"> {{ item.country_name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="study_country"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Course Mode/Area/Type:<i class="text-danger">*</i></label>
-                                    <select v-model="form.coursemode" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('coursemode') }" class="form-control select2" name="coursemode" id="coursemode">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in coursemodeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="coursemode"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Degree:<i class="text-danger">*</i></label>
-                                    <select v-model="form.degree" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('degree') }" class="form-control select2" name="degree" id="degree">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in degreeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="degree"></has-error>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Attachment Name</th>
+                                                <th>File(Image,Doc,Excel,Pdf)</th>                           
+                                            </tr>
+                                        </thead>
+                                        <tbody> 
+                                            <tr v-for='(attach,count) in draft_attachments' :key="count+1">
+                                                <td> 
+                                                    <input type="text" class="form-control" readonly :value="attach.user_defined_name">
+                                                </td>
+                                                <td>    
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
+                                                </td>
+                                            </tr>
+                                            <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                <td>
+                                                    <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                </td>
+                                                <td>                                
+                                                    <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                </td>
+                                            </tr> 
+                                            <tr>
+                                                <td colspan="3"> 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                    @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                    @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                            </tr>                                          
+                                        </tbody>
+                                    </table> 
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Subject 1:<i class="text-danger">*</i></label>
-                                    <select v-model="form.subject1" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('subject1') }" class="form-control select2" name="subject1" id="subject1">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="subject1"></has-error>
+                            <hr>
+                            <div class="row form-group fa-pull-right">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Subject 2:</label>
-                                    <select v-model="form.subject2" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('subject2') }" class="form-control select2" name="subject2" id="subject2">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="subject2"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Thesis Title:<i class="text-danger">*</i></label>
-                                    <input type="text" class="form-control" @change="remove_err('thesis_title')" :class="{ 'is-invalid' :form.errors.has('thesis_title') }" v-model="form.thesis_title" id="thesis_title"/>
-                                    <has-error :form="form" field="thesis_title"></has-error>
-                                </div>
-                            </div>
-                        </span>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="dynamic-table" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>File(Image,Doc,Excel,Pdf)</th>                           
-                                        </tr>
-                                    </thead>
-                                    <tbody> 
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td> 
-                                                <input type="text" class="form-control" readonly :value="attach.user_defined_name">
-                                            </td>
-                                            <td>    
-                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
-                                            </td>
-                                        </tr>
-                                        <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                            <td>
-                                                <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                            </td>
-                                            <td>                                
-                                                <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                            </td>
-                                        </tr> 
-                                        <tr>
-                                            <td colspan="3"> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                                @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
-                                                @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
-                                            </td>
-                                        </tr>                                          
-                                    </tbody>
-                                </table> 
                             </div>
                         </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                        <div class="tab-pane fade tab-content-details" id="eligibility-tab" role="tabpanel" aria-labelledby="basicdetails">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Nomination Start Date:<i class="text-danger">*</i></label>
+                                    <input type="date" class="form-control" @change="remove_err('nomination_start_date')" :class="{ 'is-invalid' :form.errors.has('nomination_start_date') }" v-model="form.nomination_start_date" id="nomination_start_date"/>
+                                    <has-error :form="form" field="nomination_start_date"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Nomination End Date:<i class="text-danger">*</i></label>
+                                    <input type="date" class="form-control" @change="remove_err('nomination_end_date')" :class="{ 'is-invalid' :form.errors.has('nomination_end_date') }" v-model="form.nomination_end_date" id="nomination_end_date"/>
+                                    <has-error :form="form" field="nomination_end_date"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Nature of participation:<i class="text-danger">*</i></label><br/>
+                                    <span v-for="(nature, index) in nature_of_participantList" :key="index" >
+                                        <input type="checkbox" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature.id"> 
+                                        <label class="pr-3"> {{ nature.name  }}</label>
+                                    </span>
+                                    <!-- <select v-model="form.nature_of_participant" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('nature_of_participant') }" class="form-control select2" name="nature_of_participant" id="nature_of_participant">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in nature_of_participantList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    </select> -->
+                                    <has-error :form="form" field="nature_of_participant"></has-error>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Target Group:</label><br/>
+                                    <span v-for="(tar, index) in target_groupList" :key="index" >
+                                        <input type="checkbox" v-model="form.target_group" :class="{ 'is-invalid' :form.errors.has('target_group') }" name="target_group" id="target_group" :value="tar.id"> 
+                                        <label class="pr-3"> {{ tar.name  }}</label>
+                                    </span>
+                                    <!-- <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in target_groupList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    </select> -->
+                                    <has-error :form="form" field="target_group"></has-error>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
+                                    <span v-for="(level, index) in org_levelList" :key="index" >
+                                        <input type="checkbox" v-model="form.org_level" :class="{ 'is-invalid' :form.errors.has('org_level') }" name="org_level" id="org_level" :value="level.id"> 
+                                        <label class="pr-3"> {{ level.name  }}</label>
+                                    </span>
+                                    <has-error :form="form" field="org_level"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sequence</th>
+                                                <th>Authority Type</th>
+                                                <th>Role</th>                           
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="record1" v-for='(user, index) in form.role_action_mapp' :key="index">
+                                                <td>
+                                                    <input type="hidden" v-model="user.sequence">
+                                                    {{user.sequence}}
+                                                </td>
+                                                <td>
+                                                    <select class="form-control" v-model="user.authority">
+                                                        <option value="1">Nomination</option>
+                                                        <option value="2">Shortlisting</option>
+                                                        <option value="3">Final Selection</option>
+                                                    </select>
+                                                    <span class="text-danger" :id="'authority_err'+(index+1)"></span>
+                                                </td>
+                                                <td>                          
+                                                    <select :id="'role'+(index+1)" class="form-control" v-model="user.role">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
+                                                    </select>
+                                                    <span class="text-danger" :id="'role_err'+(index+1)"></span>
+                                                </td>
+                                            </tr> 
+                                            <tr>
+                                                <td colspan="3"> 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                            </tr>                                          
+                                        </tbody>
+                                    </table> 
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Remarks:</label>
+                                    <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
+                                    <has-error :form="form" field="remarks"></has-error>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row form-group fa-pull-right">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <button class="btn btn-success" @click="shownexttab('programme-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save & Apply </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="eligibility-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Nomination Start Date:<i class="text-danger">*</i></label>
-                                <input type="date" class="form-control" @change="remove_err('nomination_start_date')" :class="{ 'is-invalid' :form.errors.has('nomination_start_date') }" v-model="form.nomination_start_date" id="nomination_start_date"/>
-                                <has-error :form="form" field="nomination_start_date"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Nomination End Date:<i class="text-danger">*</i></label>
-                                <input type="date" class="form-control" @change="remove_err('nomination_end_date')" :class="{ 'is-invalid' :form.errors.has('nomination_end_date') }" v-model="form.nomination_end_date" id="nomination_end_date"/>
-                                <has-error :form="form" field="nomination_end_date"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Nature of participation:<i class="text-danger">*</i></label><br/>
-                                <span v-for="(nature, index) in nature_of_participantList" :key="index" >
-                                    <input type="checkbox" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature.id"> 
-                                    <label class="pr-3"> {{ nature.name  }}</label>
-                                </span>
-                                <!-- <select v-model="form.nature_of_participant" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('nature_of_participant') }" class="form-control select2" name="nature_of_participant" id="nature_of_participant">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in nature_of_participantList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select> -->
-                                <has-error :form="form" field="nature_of_participant"></has-error>
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Target Group:</label><br/>
-                                <span v-for="(tar, index) in target_groupList" :key="index" >
-                                    <input type="checkbox" v-model="form.target_group" :class="{ 'is-invalid' :form.errors.has('target_group') }" name="target_group" id="target_group" :value="tar.id"> 
-                                    <label class="pr-3"> {{ tar.name  }}</label>
-                                </span>
-                                <!-- <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in target_groupList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select> -->
-                                <has-error :form="form" field="target_group"></has-error>
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
-                                <span v-for="(level, index) in org_levelList" :key="index" >
-                                    <input type="checkbox" v-model="form.org_level" :class="{ 'is-invalid' :form.errors.has('org_level') }" name="org_level" id="org_level" :value="level.id"> 
-                                    <label class="pr-3"> {{ level.name  }}</label>
-                                </span>
-                                <has-error :form="form" field="org_level"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="dynamic-table" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Sequence</th>
-                                            <th>Authority Type</th>
-                                            <th>Role</th>                           
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr id="record1" v-for='(user, index) in form.role_action_mapp' :key="index">
-                                            <td>
-                                                <input type="hidden" v-model="user.sequence">
-                                                {{user.sequence}}
-                                            </td>
-                                            <td>
-                                                <select class="form-control" v-model="user.authority">
-                                                    <option value="1">Nomination</option>
-                                                    <option value="2">Shortlisting</option>
-                                                    <option value="3">Final Selection</option>
-                                                </select>
-                                                <span class="text-danger" :id="'authority_err'+(index+1)"></span>
-                                            </td>
-                                            <td>                          
-                                                <select :id="'role'+(index+1)" class="form-control" v-model="user.role">
-                                                    <option value="">--- Please Select ---</option>
-                                                    <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                                                </select>
-                                                <span class="text-danger" :id="'role_err'+(index+1)"></span>
-                                            </td>
-                                        </tr> 
-                                        <tr>
-                                            <td colspan="3"> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
-                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                            </td>
-                                        </tr>                                          
-                                    </tbody>
-                                </table> 
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Remarks:</label>
-                                <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
-                                <has-error :form="form" field="remarks"></has-error>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('programme-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save & Apply </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>     
@@ -431,7 +433,6 @@ export default {
                     sequence:1,authority:'',role:''
                 }],
                 remarks:'',
-                
             })
         }
     },
@@ -703,7 +704,6 @@ export default {
                 // this.form.post('/staff/saveprogramDetails', formData, config)
                 axios.post('/staff/saveprogramDetails', formData, config)
                 .then((response) => {  
-                    alert(response.data);
                     this.form.id=response.data.data.id;//need to check the id
                     Toast.fire({
                         icon: 'success',
@@ -715,7 +715,6 @@ export default {
                     });
                 })
                 .catch((error) => { 
-                    alert(error);
                     this.change_tab('programme-tab');
                     if(!$('#training_type').attr('class').includes('select2-hidden-accessible')){
                         $('#training_type').addClass('select2-hidden-accessible');

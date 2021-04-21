@@ -56,9 +56,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(user, index) in inventory_form.inventory_details' :key="index">
+                                            <tr id="record" v-for='(user, index) in inventory_form.inventory_details' :key="index">
                                                 <td>
-                                                    <select name="facility" id="facility" class="form-control editable_fields" v-model="inventory_details.item_id">
+                                                    <select name="inventory" id="inventory" class="form-control editable_fields" v-model="inventory_details.item_id">
                                                         <option value="">--- Please Select ---</option>
                                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                     </select>
@@ -105,33 +105,36 @@
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Facility</th>
-                                                <th>Facility No./Name</th>
-                                                <th>Capacity</th>
-                                                <th>Total number of Facility</th>
-                                                <th>Facility accessible to disabled</th>                        
+                                                <th>Item</th>
+                                                <th>Quantity Produced</th>
+                                                <th>Quantity Unit</th>
+                                                <th>No. of Varieties</th>
+                                                <th>Amount Generated from Sales</th>
+                                                <th>Remarks</th>                         
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(user, index) in inventory_form.inventory_details' :key="index">
+                                            <tr id="record1" v-for='(user, index) in production_form.production_details' :key="index">
                                                 <td>
-                                                    <select name="facility" id="facility" class="form-control editable_fields" v-model="inventory_details.item_id">
+                                                    <select name="item_produced" id="item_produced" class="form-control editable_fields" v-model="production_details.item_produced">
                                                         <option value="">--- Please Select ---</option>
                                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                     </select>
                                                 </td>
-                                                
                                                 <td>                                
-                                                    <input type="text" name="previous_balance" class="form-control" v-model="inventory_details.previous_balance"/>
+                                                    <input type="text" name="quantity_produced" class="form-control" v-model="production_details.quantity_produced"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="text" name="increase_quantity" class="form-control" v-model="inventory_details.increase_quantity"/>
+                                                    <input type="text" name="quantity_unit" class="form-control" v-model="production_details.quantity_produced"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="number" name="decrease_quantity" class="form-control" v-model="inventory_details.decrease_quantity"/>
+                                                    <input type="text" name="no_varieties" class="form-control" v-model="production_details.no_varieties"/>
+                                                </td>
+                                                <td>                                
+                                                    <input type="number" name="amount_generated" class="form-control" v-model="production_details.amount_generated"/>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="remarks" class="form-control" v-model="inventory_details.remarks"/>
+                                                    <input type="number" name="production_remarks" class="form-control" v-model="production_details.production_remarks"/>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -162,34 +165,21 @@
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Facility</th>
-                                                <th>Facility No./Name</th>
-                                                <th>Capacity</th>
-                                                <th>Total number of Facility</th>
-                                                <th>Facility accessible to disabled</th>
-                                                <th>Facility with internet connection</th>                            
+                                                <th>Details of Expenditure</th>
+                                                <th>Amount</th>
+                                                <th>Remarks</th>                         
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(user, index) in expenditure_form.users' :key="index">
-                                                <td>
-                                                    <select name="facility" id="facility" class="form-control editable_fields" v-model="user.facility">
-                                                        <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                    </select>
-                                                </td>
-                                                
+                                            <tr id="record2" v-for='(user, index) in expenditure_form.expenditure_details' :key="index">
                                                 <td>                                
-                                                    <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
+                                                    <input type="text" name="expenditure_details" class="form-control" v-model="expenditure_details.expenditure_details"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="text" name="capacity" class="form-control" v-model="user.capacity"/>
+                                                    <input type="number" name="expenditure_amount" class="form-control" v-model="expenditure_details.expenditure_amount"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="number" name="noOfFacility" class="form-control" v-model="user.noOfFacility"/>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="accessibleDisabled" class="form-control" v-model="user.accessibleDisabled"/>
+                                                    <input type="text" name="expenditure_remarks" class="form-control" v-model="expenditure_details.expenditure_remarks"/>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -287,12 +277,12 @@ export default {
         addMoreProduction: function(){
             this.prodcutionCount++;
             this.production_form.production_details.push({
-                previous_balance:'', increase_quantity:'',decrease_quantity:'',remarks:'',})
+                item_produced:'', quantity_produced:'', quantity_unit:'', no_varieties:'',amount_generated:'',production_remarks:''})
         },
         addMoreExpenditure: function(){
             this.expenditureCount++;
             this.expenditure_form.expenditure_details.push({
-                previous_balance:'', increase_quantity:'',decrease_quantity:'',remarks:'',})    
+                expenditure_details:'', expenditure_amount:'',expenditure_remarks:''})    
         }, 
         /**
          * method to remove fields

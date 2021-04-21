@@ -83,6 +83,7 @@ class HrDevelopmentController extends Controller{
         $this->validate($request, $rules,$customMessages);
 
         $files = $request->attachments;
+        // dd($files);
         $filenames = $request->attachmentname;
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopment';
