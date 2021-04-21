@@ -49,7 +49,7 @@ $app->singleton(
 );
 
 $app->configure('auth');
-
+$app->configure('services');
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
