@@ -22,9 +22,11 @@ use App\Models\hr_development_masters\TargetGroup;
 class HrDevelopmentMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
-    public $audit_database="system_db";
+    // public $audit_database="system_db";
+    public $audit_database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     public function saveHrDevelopmentMasters(Request $request){

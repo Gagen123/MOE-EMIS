@@ -703,6 +703,7 @@ export default {
                 // this.form.post('/staff/saveprogramDetails', formData, config)
                 axios.post('/staff/saveprogramDetails', formData, config)
                 .then((response) => {  
+                    alert(response.data);
                     this.form.id=response.data.data.id;//need to check the id
                     Toast.fire({
                         icon: 'success',
@@ -714,6 +715,7 @@ export default {
                     });
                 })
                 .catch((error) => { 
+                    alert(error);
                     this.change_tab('programme-tab');
                     if(!$('#training_type').attr('class').includes('select2-hidden-accessible')){
                         $('#training_type').addClass('select2-hidden-accessible');
@@ -760,7 +762,7 @@ export default {
                     if(!$('#subject2').attr('class').includes('select2-hidden-accessible')){
                         $('#subject2').addClass('select2-hidden-accessible');
                     }
-                    console.log("Error:"+error)
+                    console.log("Errorss:"+error)
                 });
                 this.change_tab(nextclass);
             }
@@ -787,8 +789,6 @@ export default {
             this.loadcoursemode();
             this.loadHrDevelopmentMasters('active_degree_list');
             this.loadsubjectList();
-           
-           
         },
         pullPDPData(){
             this.loadHrDevelopmentMasters('active_programme_level_list');
