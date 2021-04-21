@@ -45,7 +45,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters/students'], function () use ($router) {
         $router->post('/saveStudentMasters', ['uses' => 'Masters\StudentMasterController@saveStudentMasters']);
         $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
-        $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
+        $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadActiveStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         
     });

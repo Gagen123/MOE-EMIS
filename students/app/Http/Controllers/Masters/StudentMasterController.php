@@ -68,6 +68,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
+        dd('UI');
 
         if($param == 'program_teacher_roles'){
             $status = '1';

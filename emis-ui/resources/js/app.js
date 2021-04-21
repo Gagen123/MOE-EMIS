@@ -895,6 +895,64 @@ const routes = [
   ] 
  },
 
+ //Student Admission Related Routes
+ { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
+ children: [
+     { path: '/student_admission', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
+         children: [
+             { path: '/', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+             { path: '/student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+             { path: '/new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
+             { path: '/edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
+         ]    
+     },
+     { path: '/student_admission_request', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
+         children: [
+             { path: '/', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+             { path: '/student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+             { path: '/new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
+             { path: '/edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
+         ]    
+     }, 
+     { path: '/student_admission_apply', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
+         children: [
+             { path: '/', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+             { path: '/student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+             { path: '/new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
+             { path: '/edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
+         ]    
+     }, 
+     // Student => Reporting
+     { path: '/student_reporting', 
+     component: require('./components/students/StudentAdmission/Reporting/student_reporting.vue').default,
+         children: [
+             { path: '/', component: require('./components/students/StudentAdmission/Reporting/reported_student_list.vue').default },
+             { path: '/reported_student_list', component: require('./components/students/StudentAdmission/Reporting/reported_student_list.vue').default },
+             { path: '/report_student', component: require('./components/students/StudentAdmission/Reporting/report_student.vue').default },
+             { path: '/edit_reported_student', component: require('./components/students/StudentAdmission/Reporting/edit_reported_student.vue').default },
+         ]    
+     },
+     //Student => Leaving
+     { path: '/student_leaving', component: require('./components/students/StudentAdmission/Leaving/school_leaving.vue').default,
+         children: [
+             { path: '/', component: require('./components/students/StudentAdmission/Leaving/school_leaving_list.vue').default },
+             { path: '/school_leaving_list', component: require('./components/students/StudentAdmission/Leaving/school_leaving_list.vue').default },
+             { path: '/transfer_student', component: require('./components/students/StudentAdmission/Leaving/transfer_student.vue').default },
+             { path: '/edit_transfer_student', component: require('./components/students/StudentAdmission/Leaving/edit_transfer_student.vue').default },
+         ] 
+     },
+     //Student => Updates
+     { path: '/student_updates', component: require('./components/students/StudentAdmission/Updates/student_updates.vue').default,
+         children: [
+             { path: '/', component: require('./components/students/StudentAdmission/Updates/student_update_list.vue').default },
+             { path: '/student_update_list', component: require('./components/students/StudentAdmission/Updates/student_update_list.vue').default },
+             { path: '/update_student_whereabouts', component: require('./components/students/StudentAdmission/Updates/update_student_whereabouts.vue').default },
+             { path: '/edit_student_whereabouts', component: require('./components/students/StudentAdmission/Updates/edit_student_whereabouts.vue').default },
+         ] 
+     },
+ ] 
+},
+
   //Student Services Routes
   { path: '/student_services', component: require('./components/students/StudentServices/index.vue').default,
   children: [
