@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
+use App\Models\Masters\CeaRole;
 
 class StudentMasterController extends Controller
 {
@@ -67,14 +68,30 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
+        dd('UI');
 
-        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+        if($param == 'program_teacher_roles'){
+            $status = '1';
+            $assigned_to = '1';
 
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-        $status = '1';
+            return $this->successResponse(CeaRole::select('*')
+                                                    ->where('status','=', $status)
+                                                    ->where('assigned','=', $assigned_to)
+                                                    ->first());
+        } else if($param == 'program_student_roles'){
+            $status = '1';
+            $assigned_to = '2';
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned', $assigned_to)->first());
+        }else {
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
-        return $this->successResponse($model::where('status',$status)->first());
+            $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+            $model = new $modelName();
+            $status = '1';
+
+            return $this->successResponse($model::where('status',$status)->first());
+        }
+        
 
     }
 

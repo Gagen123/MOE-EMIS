@@ -78,6 +78,7 @@ export default {
     data(){
         return {
             teacherList:[],
+            teacherRoles:[],
             programList:[],
             supportList:[],
             users: [],
@@ -122,6 +123,16 @@ export default {
             .then(response => {
                 let data = response;
                 this.supportList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveRolesList(uri="masters/loadActiveStudentMasters/program_teacher_roles"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.teacherRoles =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -200,6 +211,7 @@ export default {
         this.loadTeacherList();
         this.loadActiveProgramList();
         this.loadActiveSupportList();
+        this.loadActiveRolesList();
     },
     
 }
