@@ -13,7 +13,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in programRolesList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.program_role}}</td>
+                    <td>{{ item.name}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -34,7 +34,7 @@ export default {
         }
     },
     methods:{
-        loadProgramRolesList(uri = 'masters/student/loadProgramRoles'){
+        loadProgramRolesList(uri = 'masters/loadStudentMasters/program_role'){
             axios.get(uri)
             .then(response => {
                 let data = response;

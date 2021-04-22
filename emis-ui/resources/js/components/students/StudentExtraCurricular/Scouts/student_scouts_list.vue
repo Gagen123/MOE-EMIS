@@ -24,9 +24,9 @@
                     <td>Thimphu</td>
                     <td>Bhutan</td>
                     <td>
-                        <button class="btn btn-primary btn-xs" @click="viewtrainings('1')" type="button"><i class="fa fa-search"></i> View</button>
-                        <button class="btn btn-secondary btn-xs" @click="edittrainings('1')" type="button"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger btn-xs" @click="showdelete('1')" type="button"><i class="fa fa-trash"></i> Delete</button>
+                        <i class="fa fa-search text-primary" @click="viewtrainings('1')"> View </i> |
+                        <i class="fa fa-edit text-secondary"> Edit | </i>
+                        <i class="fa fa-trash text-danger"> Delete </i>
                     </td>
                 </tr>
                 <tr>
@@ -38,9 +38,9 @@
                     <td>Thimphu</td>
                     <td>Bhutan</td>
                     <td>
-                        <button class="btn btn-primary btn-xs" @click="viewtrainings('1')" type="button"><i class="fa fa-search"></i> View</button>
-                        <button class="btn btn-secondary btn-xs" @click="edittrainings('1')" type="button"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger btn-xs" @click="showdelete('1')" type="button"><i class="fa fa-trash"></i> Delete</button>
+                        <i class="fa fa-search text-primary" @click="viewtrainings('1')"> View </i> |
+                        <i class="fa fa-edit text-secondary"> Edit | </i>
+                        <i class="fa fa-trash text-danger"> Delete </i>
                     </td>
                 </tr>
                 <tr>
@@ -52,9 +52,9 @@
                     <td>Thimphu</td>
                     <td>Bhutan</td>
                     <td>
-                        <button class="btn btn-primary btn-xs" @click="viewtrainings('1')" type="button"><i class="fa fa-search"></i> View</button>
-                        <button class="btn btn-secondary btn-xs" @click="edittrainings('1')" type="button"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger btn-xs" @click="showdelete('1')" type="button"><i class="fa fa-trash"></i> Delete</button>
+                        <i class="fa fa-search text-primary" @click="viewtrainings('1')"> View </i> |
+                        <i class="fa fa-edit text-secondary"> Edit | </i>
+                        <i class="fa fa-trash text-danger"> Delete </i>
                     </td>
                 </tr>
                 <tr>
@@ -66,9 +66,9 @@
                     <td>Thimphu</td>
                     <td>Bhutan</td>
                     <td>
-                        <button class="btn btn-primary btn-xs" @click="viewtrainings('1')" type="button"><i class="fa fa-search"></i> View</button>
-                        <button class="btn btn-secondary btn-xs" @click="edittrainings('1')" type="button"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger btn-xs" @click="showdelete('1')" type="button"><i class="fa fa-trash"></i> Delete</button>
+                        <i class="fa fa-search text-primary" @click="viewtrainings('1')"> View </i> |
+                        <i class="fa fa-edit text-secondary"> Edit | </i>
+                        <i class="fa fa-trash text-danger"> Delete </i>
                     </td>
                 </tr>
                 <tr>
@@ -80,9 +80,9 @@
                     <td>Thimphu</td>
                     <td>Bhutan</td>
                     <td>
-                        <button class="btn btn-primary btn-xs" @click="viewtrainings('1')" type="button"><i class="fa fa-search"></i> View</button>
-                        <button class="btn btn-secondary btn-xs" @click="edittrainings('1')" type="button"><i class="fa fa-edit"></i> Edit</button>
-                        <button class="btn btn-danger btn-xs" @click="showdelete('1')" type="button"><i class="fa fa-trash"></i> Delete</button>
+                        <i class="fa fa-search text-primary" @click="viewtrainings('1')"> View </i> |
+                        <i class="fa fa-edit text-secondary"> Edit | </i>
+                        <i class="fa fa-trash text-danger"> Delete </i>
                     </td>
                 </tr>
             </tbody>

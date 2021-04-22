@@ -226,6 +226,7 @@ class GeneralInfoController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
+                            // 'remark'                 =>  $remarks[$index]
                         )
                     );
                 }
@@ -248,6 +249,7 @@ class GeneralInfoController extends Controller
             'attachment_details'    =>  $attachment_details,
             'user_id'               =>  $this->userId()
         ];
+        // dd($loc);
         $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
         return $response_data;
     }

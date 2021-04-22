@@ -43,7 +43,7 @@ class EquipmentController extends Controller
      * method to get type in dropdown
      */
     public function getType(){
-        return EquipmentType::get(['id','name']);
+        return EquipmentType::where('status',1)->get();
     }
 
     /**
@@ -58,7 +58,7 @@ class EquipmentController extends Controller
      * method to get location use in dropdown
      */
     public function getLocationUse(){
-        return EquipmentUsage::get(['id','name']);
+        return EquipmentUsage::where('status',1)->get();
     }
 
     /** 

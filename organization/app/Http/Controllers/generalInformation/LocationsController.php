@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
 use App\Models\generalInformation\Locations;
 use App\Models\generalInformation\LocationDisasterRisk;
+use App\Models\generalInformation\AttachmentFile;
 use App\Models\Masters\Disaster;
 use Illuminate\Support\Facades\DB;
 
@@ -45,10 +46,10 @@ class LocationsController extends Controller
             ];
             $loc = Locations::where('id', $id)->update($location);
 
-            $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');
-
+            $locationId = DB::table('locations')->orderBy('updated_at','desc')->limit(1)->pluck('id');
+            
             if($disasters != null){
-            DB::table('location_disaster_risks')->where('id', $locationId[0])->delete();
+            DB::table('location_disaster_risks')->where('locationId', $locationId[0])->delete();
                 foreach ($disasters as $dis){
                     $disasterRisk = [
                         'locationId'        => $locationId[0],
@@ -80,9 +81,7 @@ class LocationsController extends Controller
             ];
             // dd($location);
             $loc = Locations::create($location);
-    
-            $locationId = DB::table('locations')->orderBy('id','desc')->limit(1)->pluck('id');
-    
+            $locationId = DB::table('locations')->orderBy('updated_at','desc')->limit(1)->pluck('id');
             if($disasters != null){
                 foreach ($disasters as $dis){
                     $disasterRisk = [
@@ -95,6 +94,18 @@ class LocationsController extends Controller
                     $loc = LocationDisasterRisk::create($disasterRisk);
                 }
             }
+
+            if($request->attachment_details!=null && $request->attachment_details!=""){
+                foreach($request->attachment_details as $att){
+                    $loc =[
+                        'orgRecordId'                =>  $locationId[0],
+                        'filePath'                   =>  $att['path'],
+                        'title'                      =>  $att['user_defined_name'],
+                        // 'remark'                     =>  $att['remark'],
+                    ];
+                    $doc = AttachmentFile::create($loc);
+                }
+            }
             return $this->successResponse($loc, Response::HTTP_CREATED);
         }
         
@@ -104,6 +115,6 @@ class LocationsController extends Controller
      * method to get disaster in checkbox
      */
     public function getDisasterListInCheckbox(){
-        return Disaster::get(['id','name']);
+        return Disaster::where('status',1)->get();
     }
 }

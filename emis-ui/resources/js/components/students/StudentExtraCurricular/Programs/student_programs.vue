@@ -5,7 +5,6 @@
                 <span class="fa-pull-right pr-2">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('student_programs_list')"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('add_student_programs')"><i class="fa fa-plus"></i> Add Program/Club</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('register_student_programs')"><i class="fa fa-plus"></i> Register Student to Program</button>
                 </span>
             </div>
             <div class="card-body pb-1 mb-0 pt-1 mt-0">  

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card card-primary card-outline" id="adv_serach_ection">
-            <div class="card-body">
+            <div class="card-body" style="display:none">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Module:<span class="text-danger">*</span></label> 

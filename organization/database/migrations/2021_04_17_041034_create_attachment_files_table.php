@@ -18,7 +18,7 @@ class CreateAttachmentFilesTable extends Migration
             $table->char('orgRecordId',36);
             $table->string('filePath');
             $table->string('title');
-            $table->string('remark');
+            $table->string('remark')->nullable(true);;
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

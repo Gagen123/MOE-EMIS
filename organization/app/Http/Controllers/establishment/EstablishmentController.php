@@ -22,6 +22,7 @@ use App\Models\generalInformation\Connectivity;
 use App\Models\generalInformation\Locations;
 use App\Models\generalInformation\Section;
 use App\Models\generalInformation\SectionDetails;
+use App\Models\generalInformation\LocationDisasterRisk;
 use App\Models\ApplicationSequence;
 use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
@@ -40,14 +41,14 @@ class EstablishmentController extends Controller
      * method to get level in dropdown
      */
     public function getLevelInDropdown(){
-        return Level::get(['id','name']);
+        return Level::where('status',1)->get();
     }
 
     /**
      * method to get location in dropdown
      */
     public function getLocationInDropdown(){
-        return Location::get(['id','name']);
+        return Location::where('status',1)->get();
     }
 
     /**
@@ -206,14 +207,14 @@ class EstablishmentController extends Controller
      * method to get class in checkbox
      */
     public function getClass(){
-        return Classes::get(['id','class']);
+        return Classes::where('status',1)->get();
     }
 
     /**
      * method to get stream in checkbox
      */
     public function getStream(){
-        return Stream::get(['id','stream']);
+        return Stream::where('status',1)->get();
     }
 
     /**
@@ -408,8 +409,13 @@ class EstablishmentController extends Controller
         $response_data=OrganizationDetails::all();
         return $this->successResponse($response_data);
     }
-    public function loadorgbyId($org_id=""){
-        $response_data=OrganizationDetails::where('id',$org_id)-first();
+    public function loadorgbyId($type="",$org_id=""){
+        if($type=="org"){
+            $response_data=OrganizationDetails::where('id',$org_id)->first();
+        }
+        if($type=="gewog"){
+            $response_data=OrganizationDetails::where('id',$org_id)->get();
+        }
         return $this->successResponse($response_data);
     }
     public function getOrgList($dzo_id=""){
@@ -419,6 +425,7 @@ class EstablishmentController extends Controller
 
     public function getLocationDetails($id=""){
         $response_data=Locations::where('organizationId',$id)->first();
+        $response_data->disasterRisk=LocationDisasterRisk::where('locationId',$response_data->id)->get();
         return $this->successResponse($response_data); 
     }
 

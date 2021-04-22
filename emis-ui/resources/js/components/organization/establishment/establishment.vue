@@ -352,6 +352,7 @@ export default {
                     if (result.isConfirmed) {
                         this.classStreamForm.post('organization/saveClassStream')
                         .then((response) => {
+                            alert(response.data);
                             if(response.data=="No Screen"){
                                 Toast.fire({  
                                     icon: 'error',
@@ -359,7 +360,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -377,7 +378,9 @@ export default {
                 if(nextclass=="class-tab"){
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
-                       this.change_tab(nextclass);
+                        if(response.data!=""){
+                            this.change_tab(nextclass);
+                        }
                     })
                     .catch((error) => {
                        this.applyselect2();
