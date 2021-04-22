@@ -51,6 +51,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
+        $router->group(['prefix' => 'admission'], function () use ($router) {
+            $router->post('/saveStudentDetails', ['uses' => 'emis\student\StudentAdmissionController@saveStudentDetails']);
+        });  
+
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 
