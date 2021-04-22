@@ -107,14 +107,11 @@ class StudentHealthController extends Controller
 
         $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
 
-        $records = DB::table('std_student_disciplinary')
-                ->join('std_student', 'std_student_disciplinary.StdStudentId', '=', 'std_student.id')
-                ->join('std_disciplinary_action_type', 'std_student_disciplinary.StdDisciplinaryActionTypeId', '=', 'std_disciplinary_action_type.id')
-                ->join('std_disciplinary_offence_type', 'std_student_disciplinary.StdDisciplinaryOffenceTypeId', '=', 'std_disciplinary_offence_type.id')
-                ->join('std_disciplinary_severity', 'std_student_disciplinary.StdDisciplinarySeverityId', '=', 'std_disciplinary_severity.id')
-                ->select('std_student_disciplinary.*', 'std_student.Name','std_disciplinary_action_type.name AS action_type', 
-                            'std_disciplinary_offence_type.name AS offence_type', 'std_disciplinary_severity.name AS severity')
-                ->get();
+        $records = DB::table('std_health_deworming')
+                    ->join('std_health_term', 'std_health_deworming.StdHealthTermId', '=', 'std_health_term.id')
+                    ->select('std_health_deworming.*', 'std_health_term.name AS term')
+                    ->groupBy('std_health_deworming.StdHealthTermId', 'std_health_deworming.date')
+                    ->get();
         
         return $this->successResponse($records);
 
@@ -186,14 +183,11 @@ class StudentHealthController extends Controller
 
         $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
 
-        $records = DB::table('std_student_disciplinary')
-                ->join('std_student', 'std_student_disciplinary.StdStudentId', '=', 'std_student.id')
-                ->join('std_disciplinary_action_type', 'std_student_disciplinary.StdDisciplinaryActionTypeId', '=', 'std_disciplinary_action_type.id')
-                ->join('std_disciplinary_offence_type', 'std_student_disciplinary.StdDisciplinaryOffenceTypeId', '=', 'std_disciplinary_offence_type.id')
-                ->join('std_disciplinary_severity', 'std_student_disciplinary.StdDisciplinarySeverityId', '=', 'std_disciplinary_severity.id')
-                ->select('std_student_disciplinary.*', 'std_student.Name','std_disciplinary_action_type.name AS action_type', 
-                            'std_disciplinary_offence_type.name AS offence_type', 'std_disciplinary_severity.name AS severity')
-                ->get();
+        $records = DB::table('std_health_supplementation')
+                    ->join('std_health_term', 'std_health_supplementation.StdHealthTermId', '=', 'std_health_term.id')
+                    ->select('std_health_supplementation.*', 'std_health_term.name AS term')
+                    ->groupBy('std_health_supplementation.StdHealthTermId', 'std_health_supplementation.date')
+                    ->get();
         
         return $this->successResponse($records);
 
@@ -309,14 +303,11 @@ class StudentHealthController extends Controller
 
         $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
 
-        $records = DB::table('std_student_disciplinary')
-                ->join('std_student', 'std_student_disciplinary.StdStudentId', '=', 'std_student.id')
-                ->join('std_disciplinary_action_type', 'std_student_disciplinary.StdDisciplinaryActionTypeId', '=', 'std_disciplinary_action_type.id')
-                ->join('std_disciplinary_offence_type', 'std_student_disciplinary.StdDisciplinaryOffenceTypeId', '=', 'std_disciplinary_offence_type.id')
-                ->join('std_disciplinary_severity', 'std_student_disciplinary.StdDisciplinarySeverityId', '=', 'std_disciplinary_severity.id')
-                ->select('std_student_disciplinary.*', 'std_student.Name','std_disciplinary_action_type.name AS action_type', 
-                            'std_disciplinary_offence_type.name AS offence_type', 'std_disciplinary_severity.name AS severity')
-                ->get();
+        $records = DB::table('std_health_screening')
+                    ->join('std_health_screening_type', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
+                    ->select('std_health_screening.*', 'std_health_screening_type.name AS screening_type')
+                    ->groupBy('std_health_screening.StdHealthScreeningTypeId', 'std_health_screening.date')
+                    ->get();
         
         return $this->successResponse($records);
 
@@ -327,13 +318,10 @@ class StudentHealthController extends Controller
         $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
 
         $records = DB::table('std_health_screening')
-                ->join('std_health_screening_type', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
-                ->join('std_disciplinary_action_type', 'std_student_disciplinary.StdDisciplinaryActionTypeId', '=', 'std_disciplinary_action_type.id')
-                ->join('std_disciplinary_offence_type', 'std_student_disciplinary.StdDisciplinaryOffenceTypeId', '=', 'std_disciplinary_offence_type.id')
-                ->join('std_disciplinary_severity', 'std_student_disciplinary.StdDisciplinarySeverityId', '=', 'std_disciplinary_severity.id')
-                ->select('std_student_disciplinary.*', 'std_student.Name','std_disciplinary_action_type.name AS action_type', 
-                            'std_disciplinary_offence_type.name AS offence_type', 'std_disciplinary_severity.name AS severity')
-                ->get();
+                    ->join('std_health_screening_type', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
+                    ->select('std_health_screening.*', 'std_health_screening_type.name AS screening_type')
+                    ->groupBy('std_health_screening.StdHealthScreeningTypeId', 'std_health_screening.date')
+                    ->get();
         
         return $this->successResponse($records);
 
@@ -401,8 +389,10 @@ class StudentHealthController extends Controller
 
         $records = DB::table('std_health_bmi')
                 ->join('std_health_term', 'std_health_bmi.StdHealthTermId', '=', 'std_health_term.id')
-                ->select('std_health_bmi.*', 'std_health_term.name')
-                ->groupBy('std_health_bmi.StdHealthTermId', 'std_health_bmi.StdHealthTermId')
+                ->join('std_student', 'std_health_bmi.StdStudentId', '=', 'std_student.id')
+                ->join('std_student_school_detail', 'std_student.id', '=', 'std_student_school_detail.StdStudentId')
+                ->select('std_health_bmi.*', 'std_health_term.name AS term', 'std_student_school_detail.OrgClassId AS class', 'std_student_school_detail.OrgClassSectionId AS section')
+                ->groupBy('std_health_bmi.StdHealthTermId', 'std_student_school_detail.OrgClassId', 'std_student_school_detail.OrgClassSectionId')
                 ->get();
         
         return $this->successResponse($records);

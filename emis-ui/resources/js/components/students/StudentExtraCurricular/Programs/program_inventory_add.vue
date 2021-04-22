@@ -26,17 +26,17 @@
                         <div class="form-group row" id="bhutanese_address">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Program:</label>
-                                <select v-model="inventory_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': inventory_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
-                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <select v-model="inventory_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': inventory_form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                                    <option v-for="(item, index) in programList" :key="index" v-bind:value="item.program">{{ item.program }}</option>
                                 </select>
-                                <has-error :form="inventory_form" field="dzongkhag"></has-error>
+                                <has-error :form="inventory_form" field="program"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Month:</label>
-                                <select v-model="inventory_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': inventory_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
-                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <select v-model="inventory_form.month" :class="{ 'is-invalid select2 select2-hidden-accessible': inventory_form.errors.has('month') }" class="form-control select2" name="month" id="month">
+                                    <option v-for="(item, index) in monthList" :key="index" v-bind:value="item.month">{{ item.month }}</option>
                                 </select>
-                                <has-error :form="inventory_form" field="gewog"></has-error>
+                                <has-error :form="inventory_form" field="month"></has-error>
                             </div>
                         </div> 
                         <div class="form-group row">
@@ -47,34 +47,48 @@
                                             <tr>
                                                 <th rowspan="2" width="20%">Item</th>
                                                 <th rowspan="2" width="20%">Previous Month Balance</th>
-                                                <th colspan="2" width="35%">For the Month</th>
+                                                <th colspan="4" width="35%">For the Month</th>
                                                 <th rowspan="2" width="25%">Remarks</th>                       
                                             </tr>
                                             <tr>
                                                 <th>Increase in Quantity</th>
-                                                <th>Decrease in Quantity</th>                
+                                                <th>Unit</th>
+                                                <th>Decrease in Quantity</th>     
+                                                <th>Unit</th>           
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(user, index) in inventory_form.inventory_details' :key="index">
+                                            <tr id="record" v-for='(user, index) in inventory_form.inventory_details' :key="index">
                                                 <td>
-                                                    <select name="facility" id="facility" class="form-control editable_fields" v-model="inventory_details.item_id">
+                                                    <select name="inventory" id="inventory" class="form-control editable_fields" v-model="inventory_details.item_id">
                                                         <option value="">--- Please Select ---</option>
                                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                     </select>
                                                 </td>
                                                 
                                                 <td>                                
-                                                    <input type="text" name="previous_balance" class="form-control" v-model="inventory_details.previous_balance"/>
+                                                    <input type="number" name="previous_balance" class="form-control" v-model="inventory_details.previous_balance"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="text" name="increase_quantity" class="form-control" v-model="inventory_details.increase_quantity"/>
+                                                    <input type="number" name="increase_quantity" class="form-control" v-model="inventory_details.increase_quantity"/>
+                                                </td>
+                                                <td>
+                                                    <select name="increase_unit" id="increase_unit" class="form-control editable_fields" v-model="inventory_details.increase_unit">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 </td>
                                                 <td>                                
                                                     <input type="number" name="decrease_quantity" class="form-control" v-model="inventory_details.decrease_quantity"/>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="remarks" class="form-control" v-model="inventory_details.remarks"/>
+                                                    <select name="decrease_unit" id="decrease_unit" class="form-control editable_fields" v-model="inventory_details.decrease_unit">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="remarks" class="form-control" v-model="inventory_details.remarks"/>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -105,33 +119,36 @@
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Facility</th>
-                                                <th>Facility No./Name</th>
-                                                <th>Capacity</th>
-                                                <th>Total number of Facility</th>
-                                                <th>Facility accessible to disabled</th>                        
+                                                <th>Item</th>
+                                                <th>Quantity Produced</th>
+                                                <th>Quantity Unit</th>
+                                                <th>No. of Varieties</th>
+                                                <th>Amount Generated from Sales</th>
+                                                <th>Remarks</th>                         
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(user, index) in inventory_form.inventory_details' :key="index">
+                                            <tr id="record1" v-for='(user, index) in production_form.production_details' :key="index">
                                                 <td>
-                                                    <select name="facility" id="facility" class="form-control editable_fields" v-model="inventory_details.item_id">
+                                                    <select name="item_produced" id="item_produced" class="form-control editable_fields" v-model="production_details.item_produced">
                                                         <option value="">--- Please Select ---</option>
                                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                     </select>
                                                 </td>
-                                                
                                                 <td>                                
-                                                    <input type="text" name="previous_balance" class="form-control" v-model="inventory_details.previous_balance"/>
+                                                    <input type="text" name="quantity_produced" class="form-control" v-model="production_details.quantity_produced"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="text" name="increase_quantity" class="form-control" v-model="inventory_details.increase_quantity"/>
+                                                    <input type="text" name="quantity_unit" class="form-control" v-model="production_details.quantity_produced"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="number" name="decrease_quantity" class="form-control" v-model="inventory_details.decrease_quantity"/>
+                                                    <input type="text" name="no_varieties" class="form-control" v-model="production_details.no_varieties"/>
+                                                </td>
+                                                <td>                                
+                                                    <input type="number" name="amount_generated" class="form-control" v-model="production_details.amount_generated"/>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="remarks" class="form-control" v-model="inventory_details.remarks"/>
+                                                    <input type="number" name="production_remarks" class="form-control" v-model="production_details.production_remarks"/>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -162,34 +179,21 @@
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Facility</th>
-                                                <th>Facility No./Name</th>
-                                                <th>Capacity</th>
-                                                <th>Total number of Facility</th>
-                                                <th>Facility accessible to disabled</th>
-                                                <th>Facility with internet connection</th>                            
+                                                <th>Details of Expenditure</th>
+                                                <th>Amount</th>
+                                                <th>Remarks</th>                         
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(user, index) in expenditure_form.users' :key="index">
-                                                <td>
-                                                    <select name="facility" id="facility" class="form-control editable_fields" v-model="user.facility">
-                                                        <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                    </select>
-                                                </td>
-                                                
+                                            <tr id="record2" v-for='(user, index) in expenditure_form.expenditure_details' :key="index">
                                                 <td>                                
-                                                    <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
+                                                    <input type="text" name="expenditure_details" class="form-control" v-model="expenditure_details.expenditure_details"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="text" name="capacity" class="form-control" v-model="user.capacity"/>
+                                                    <input type="number" name="expenditure_amount" class="form-control" v-model="expenditure_details.expenditure_amount"/>
                                                 </td>
                                                 <td>                                
-                                                    <input type="number" name="noOfFacility" class="form-control" v-model="user.noOfFacility"/>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="accessibleDisabled" class="form-control" v-model="user.accessibleDisabled"/>
+                                                    <input type="text" name="expenditure_remarks" class="form-control" v-model="expenditure_details.expenditure_remarks"/>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -223,22 +227,14 @@
 export default {
     data(){
         return{ 
-            grand_total:0,
-            qualification_tbl_row_count:0,
-            sex_idList:[],
-            marital_statusList:[],
-            positiontitleList:[],
-            countryList:[],
-            dzongkhagList:[],
-            gewog_list:[],
-            villageList:[],
-            subjectList:[],
-            cureerstageList:[],
-            qualificationDescription:[],
-            staffqualificationlist:[],
-            coursemodeList:[],
-            repationshipList:[],
-            staff_nomination_list:[],
+            monthList:[
+                {month:"Jan"}, {month:"Feb"}, {month:"Mar"}, {month:"Apr"},
+                {month:"May"}, {month:"Jun"}, {month:"Jul"}, {month:"Aug"},
+                {month:"Sep"}, {month:"Oct"}, {month:"Nov"}, {month:"Dec"},],
+            //this is just for testing
+            programList:[{program:"Program 1"}, {program:"Program 2"}],
+            itemList:[],
+            unitList:[],
             inventory_details: [],
             production_details: [],
             expenditure_details: [],
@@ -282,17 +278,17 @@ export default {
         addMoreInventory: function(){
             this.inventoryCount++;
             this.inventory_form.inventory_details.push({
-                previous_balance:'', increase_quantity:'',decrease_quantity:'',remarks:'',}) 
+                previous_balance:'', increase_quantity:'',increase_unit:'', decrease_quantity:'',decrease_unit:'', remarks:'',}) 
         },
         addMoreProduction: function(){
             this.prodcutionCount++;
             this.production_form.production_details.push({
-                previous_balance:'', increase_quantity:'',decrease_quantity:'',remarks:'',})
+                item_produced:'', quantity_produced:'', quantity_unit:'', no_varieties:'',amount_generated:'',production_remarks:''})
         },
         addMoreExpenditure: function(){
             this.expenditureCount++;
             this.expenditure_form.expenditure_details.push({
-                previous_balance:'', increase_quantity:'',decrease_quantity:'',remarks:'',})    
+                expenditure_details:'', expenditure_amount:'',expenditure_remarks:''})    
         }, 
         /**
          * method to remove fields
@@ -303,18 +299,25 @@ export default {
                 this.inventory_form.inventory_details.splice(index,1); 
             }
         },
-        loadqualication(staff_id){
-            if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/loadQualification/'+staff_id;
-                axios.get(uri)
-                .then(response =>{
-                    let data = response;
-                    this.staff_qualification_list = data.data.data;
-                })
-                .catch(function (error){
-                    console.log("Error:"+error)
-                });
-            }
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.itemList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
         shownexttab(nextclass){ 
             this.change_tab(nextclass);
@@ -379,15 +382,11 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadactivemaritalList();
-        this.loaddraftpersonalDetails();
-        this.loadactivesex_idList();
-        this.loadpositiontitleList();
-        this.loadactivecountryList();
-        this.loadactivedzongkhagList();
-        this.loadactivesubjectList();
-        this.loadactivecureerstageList();
-        this.loadrelationshipList();
+        // this.loadStudentList();
+        // this.loadTeacherList();
+        //this.loadActiveProgramList();
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
         
     },
 }

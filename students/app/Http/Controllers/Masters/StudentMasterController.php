@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
+use App\Models\Masters\CeaRole;
 
 class StudentMasterController extends Controller
 {
@@ -68,13 +69,29 @@ class StudentMasterController extends Controller
 
     public function loadActiveStudentMasters($param=""){
 
-        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+        if($param == 'program_teacher_roles'){
+            $status = '1';
+            $assigned_to = '1';
 
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-        $status = '1';
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+            
+        } else if($param == 'program_student_roles'){
 
-        return $this->successResponse($model::where('status',$status)->first());
+            $status = '1';
+            $assigned_to = '2';
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+
+        } else {
+
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+
+            $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+            $model = new $modelName();
+            $status = '1';
+
+            return $this->successResponse($model::where('status',$status)->get());
+        }
+        
 
     }
 

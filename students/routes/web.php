@@ -45,7 +45,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters/students'], function () use ($router) {
         $router->post('/saveStudentMasters', ['uses' => 'Masters\StudentMasterController@saveStudentMasters']);
         $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
-        $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
+        $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadActiveStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         
     });
@@ -80,11 +80,17 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentProjects/{param}', ['uses' => 'Students\StudentProjectController@loadStudentProjects']);
         $router->get('/listStudentProjects/{param}', ['uses' => 'Students\StudentProjectController@listStudentProjects']);
         $router->post('/saveProjectMembers', ['uses' => 'Students\StudentProjectController@saveProjectMembers']);
+        $router->get('/listProjectMembers/{param}', ['uses' => 'Students\StudentProjectController@listProjectMembers']);
 
         $router->post('/saveStudentTraining', ['uses' => 'Students\StudentTrainingController@saveStudentTraining']);
         $router->get('/loadStudentTrainings/{param}', ['uses' => 'Students\StudentTrainingController@loadStudentTrainings']);
         $router->get('/listStudentTrainings/{param}', ['uses' => 'Students\StudentTrainingController@listStudentTrainings']);
         $router->post('/saveTrainingParticipants', ['uses' => 'Students\StudentTrainingController@saveTrainingParticipants']);
+
+        $router->post('/saveStudentProgram', ['uses' => 'Students\StudentProgramController@saveStudentProgram']);
+        $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
+        $router->get('/listStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@listStudentPrograms']);
+        $router->post('/saveProgramParticipants', ['uses' => 'Students\StudentProgramController@saveProgramParticipants']);
     }); 
 
 });

@@ -13,9 +13,11 @@ class DisasterController extends Controller
 {
 
     use ApiResponser;
+    public $audit_database;
 
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
     
     // region public method
@@ -33,7 +35,6 @@ class DisasterController extends Controller
      * method to save or update disaster type
     */
     public function saveDisaster(Request $request){
-
         //return($request['disasterName']);
         $id = $request->id;
         if( $id != null){
@@ -45,9 +46,9 @@ class DisasterController extends Controller
             ];
 
             $data = Disaster::find($request['id']);
-
-            $messs_det='className:'.$data->class.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','disaster','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            
+            $messs_det='disasterName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','disaster','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $disaster = Disaster::where('id', $id)->update($dis);
             return $this->successResponse($disaster, Response::HTTP_CREATED);
