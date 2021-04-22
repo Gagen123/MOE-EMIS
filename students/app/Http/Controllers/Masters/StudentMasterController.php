@@ -73,13 +73,13 @@ class StudentMasterController extends Controller
             $status = '1';
             $assigned_to = '1';
 
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->first());
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
             
         } else if($param == 'program_student_roles'){
 
             $status = '1';
             $assigned_to = '2';
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->first());
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
 
         } else {
 
@@ -89,7 +89,7 @@ class StudentMasterController extends Controller
             $model = new $modelName();
             $status = '1';
 
-            return $this->successResponse($model::where('status',$status)->first());
+            return $this->successResponse($model::where('status',$status)->get());
         }
         
 

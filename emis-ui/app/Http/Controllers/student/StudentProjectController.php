@@ -109,4 +109,9 @@ class StudentProjectController extends Controller
             return $e;
         }
     }
+
+    public function listProjectMembers($param=""){
+        $student_records = $this->apiService->listData('emis/students/listProjectMembers/'.$param);
+        return $student_records;
+    }
 }
