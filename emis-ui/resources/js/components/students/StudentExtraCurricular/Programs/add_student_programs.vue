@@ -39,7 +39,8 @@
                             <thead>
                                 <tr>
                                     <th>Teacher</th>
-                                    <th>Role</th>                          
+                                    <th>Role</th>
+                                    <th>Remarks</th>                     
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,6 +56,10 @@
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
+                                    </td>
+                                    <td>                                
+                                        <input type="text" name="remarks" id="remarks" class="form-control" v-model="role.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" @change="remove_err('remarks')"/>
+                                        <has-error :student_form="form" field="remarks"></has-error>
                                     </td>
                                 </tr> 
                                 <tr>
@@ -78,7 +83,8 @@
                             <thead>
                                 <tr>
                                     <th>Student</th>
-                                    <th>Role</th>                          
+                                    <th>Role</th>
+                                    <th>Remarks</th>                  
                                 </tr>
                             </thead>
                             <tbody>
@@ -95,7 +101,11 @@
                                             <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                </tr> 
+                                    <td>                                
+                                        <input type="text" name="remarks" id="remarks" class="form-control" v-model="role.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" @change="remove_err('remarks')"/>
+                                        <has-error :form="student_form" field="remarks"></has-error>
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td colspan="5"> 
                                         <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
@@ -204,11 +214,11 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.student_form.assigned_staff.push({teacher:'',role:''})
+            this.student_form.assigned_staff.push({teacher:'',role:'', remarks:''})
         },
         addMoreStudents: function(){
             this.count++;
-            this.student_form.assigned_student.push({student:'',std_role:''})   
+            this.student_form.assigned_student.push({student:'',std_role:'', remarks:''})   
         }, 
         /**
          * method to remove fields

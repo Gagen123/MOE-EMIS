@@ -109,33 +109,32 @@ class StudentProgramController extends Controller
 
     public function saveProgramInventory(Request $request){
 
-        dd($request);
-
         $rules = [
-            'student'            => 'required',
             'program'            => 'required',
-            'task'            => 'required',
+            'month'            => 'required',
         ];
 
         $customMessages = [
-            'student.required'  => 'This field is required',
             'program.required'     => 'This field is required',
-            'task.required'  => 'This field is required',
+            'month.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'student'          => $request->student,
-            'program'             => $request->program,
-            'task'             => $request->task
+            'id'                    => $request->id,
+            'organisation_id'       => $request->organisation_id,
+            'program'               => $request->program,
+            'month'                 => $request->month,
+            'inventoryDetails'      => $request->inventoryDetails,
+            'productionDetails'     => $request->productionDetails,
+            'expenditureDetails'    => $request->expenditureDetails,
 
             //'user_id'        => $this->user_id() 
         ];
 
 
         try{
-            $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
+            $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
             return $response_data;
         }
         catch(GuzzleHttp\Exception\ClientException $e){

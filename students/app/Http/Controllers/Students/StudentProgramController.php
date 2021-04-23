@@ -8,6 +8,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\Student;
+use App\Models\Students\CeaProgramInventory;
+use App\Models\Students\CeaProgramInventoryDetail;
+use App\Models\Students\CeaProgramInventoryExpenditure;
+use App\Models\Students\CeaProgramInventoryProduction;
 
 class StudentProgramController extends Controller
 {
@@ -116,5 +120,82 @@ class StudentProgramController extends Controller
                 ->get();
 
         return $this->successResponse($records);
+    }
+
+    /*
+    * Save Program Inventory
+    */
+
+    public function saveProgramInventory(Request $request){
+
+        $rules = [
+            'program'            => 'required',
+            'month'            => 'required',
+        ];
+
+        $customMessages = [
+            'program.required'     => 'This field is required',
+            'month.required'  => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $data =[
+            'id'                    => $request->id,
+            'OrgOrganizationId'     => $request->organisation_id,
+            'CeaProgrammeId'        => '17b2b454-6f86-49c1-b763-8f02202d3071',
+            // 'CeaProgrammeId'        => $request->program,
+            'ForMonth'              => $request->month,
+            'Remarks'               => $request->remarks,
+            'inventoryDetails'      => $request->inventoryDetails,
+            'productionDetails'     => $request->productionDetails,
+            'expenditureDetails'    => $request->expenditureDetails,
+
+            //'user_id'        => $this->user_id() 
+        ];
+
+        $inventory_details = $data['inventoryDetails'];
+        $production_details = $data['productionDetails'];
+        $expenditure_details = $data['expenditureDetails'];
+
+        unset($data['inventoryDetails']);
+        unset($data['productionDetails']);
+        unset($data['expenditureDetails']);
+
+        $response = CeaProgramInventory::create($data);
+        $lastInsertId = $response->id;
+
+        foreach($inventory_details as $key => $value){
+            $inventory_data['CeaProgrammeInventoryId'] = $lastInsertId;
+            $inventory_data['CeaProgrammeInventoryItemId'] = 1;
+            // $inventory_data['CeaProgrammeInventoryItemId'] = $value['item_id'];
+            $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
+            $inventory_data['DecreaseInQuantity'] = $value['decrease_quantity'];
+            $inventory_data['Remarks'] = $value['remarks'];
+            
+            $inventory_response = CeaProgramInventoryDetail::create($inventory_data);
+        }
+
+        foreach($production_details as $key => $value){
+            $production_data['CeaProgrammeInventoryId'] = $lastInsertId;
+            $production_data['CeaProgrammeInventoryItemId'] = 1;
+            // $production_data['CeaProgrammeInventoryItemId'] = $value['item_produced'];
+            $production_data['QuantityProduced'] = $value['quantity_produced'];
+            $production_data['NoOfVariety'] = $value['no_varieties'];
+            $production_data['AmountGenerated'] = $value['amount_generated'];
+            $production_data['Remarks'] = $value['production_remarks'];
+            
+            $production_response = CeaProgramInventoryProduction::create($production_data);
+        }
+
+        foreach($expenditure_details as $key => $value){
+            $expenditure_data['CeaProgrammeInventoryId'] = $lastInsertId;
+            $expenditure_data['Particular'] = $value['expenditure_details'];
+            $expenditure_data['Amount'] = $value['expenditure_amount'];
+            $expenditure_data['Remarks'] = $value['expenditure_remarks'];
+            
+            $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
+        }
+
+        return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
     }
 }
