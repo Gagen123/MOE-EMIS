@@ -95,6 +95,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
         $router->get('/listStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@listStudentPrograms']);
         $router->post('/saveProgramParticipants', ['uses' => 'Students\StudentProgramController@saveProgramParticipants']);
+        $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);
+        $router->get('/loadProgramInventory/{param}', ['uses' => 'Students\StudentProgramController@loadProgramInventory']);
     }); 
 
 });
