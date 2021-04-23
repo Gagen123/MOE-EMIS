@@ -904,6 +904,34 @@ class AdministrationController extends Controller{
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
     }
-
-    
+    public function loadQuater(Request $request){
+        $dis = $this->apiService->listData('emis/masters/mess_manage/loadQuater');
+        return $dis;
+    }
+    public function saveQuater(Request $request){
+        $rules = [
+            'quaterName'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'quaterName.required' => 'Quater Name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $dis =[
+            'quaterName'  =>  $request['quaterName'],
+            'status'    =>  $request['status'],
+            'actiontype'    =>  $request['action_type'],
+            'id'    =>  $request['id'],
+            'user_id'=>$this->userId()
+        ];
+        // dd($dis);
+        try{
+            $response_data= $this->apiService->createData('emis/masters/mess_manage/saveQuater', $dis);
+            return $response_data;
+        }
+        catch(\GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
 }
