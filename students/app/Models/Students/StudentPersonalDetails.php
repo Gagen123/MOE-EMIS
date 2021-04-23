@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StudentPersonalDetails extends Model
 {
     use HasFactory, Uuid;
+    public $timestamps = false;
     protected $table="std_personal_detils";
     protected $fillable = [
         'id',

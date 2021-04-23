@@ -268,6 +268,7 @@ class EstablishmentController extends Controller
     
     public function getApprovedOrgDetails($type="",$key=""){
         $response_data=ApplicationDetails::where('status','Approved')->where('category','0')->where('id',$key)->first();
+        // dd($response_data);
         $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
         $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
         $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
@@ -334,7 +335,7 @@ class EstablishmentController extends Controller
             'created_by'                =>$request->action_by,
         ];
         $establishment = OrganizationDetails::create($org_data);
-        if($request['category'] == 0){
+        if($request['category'] == 0 && sizeof($request->proprietorList)>0){
             foreach($request->proprietorList as $prop){
                 $prop_details = [
                     'organizationId'           =>  $establishment->id,
@@ -389,19 +390,22 @@ class EstablishmentController extends Controller
     
     public function getFullSchoolDetials($id=""){
         $response_data=OrganizationDetails::where('id',$id)->first();
-        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
-        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
-        $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->get();
-        $classSection=OrganizationClassStream::where('organizationId',$id)->groupBy('classId')->get();
-        $sections=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
-        foreach($classSection as $cls){
-            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        if($response_data!=null || $response_data!=""){
+            $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+            $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+            $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->get();
+            $classSection=OrganizationClassStream::where('organizationId',$id)->groupBy('classId')->get();
+            $sections=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
+            foreach($classSection as $cls){
+                $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+            }
+            foreach($sections as $sec){
+                $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+            }
+            $response_data->class_section=$classSection;
+            $response_data->sections=$sections;
         }
-        foreach($sections as $sec){
-            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        }
-        $response_data->class_section=$classSection;
-        $response_data->sections=$sections;
+        
         return $this->successResponse($response_data); 
     }
     

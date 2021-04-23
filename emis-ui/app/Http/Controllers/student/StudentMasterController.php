@@ -35,7 +35,6 @@ class StudentMasterController extends Controller{
             'recordtype'     =>  $request->record_type, 
             'user_id'        => $this->userId() 
         ];
-
         if($request->record_type == 'student_awards'){
             $additional_data = [
                 'award_type_id' => $request->award_type_id,

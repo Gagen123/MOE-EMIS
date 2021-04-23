@@ -31,6 +31,7 @@
                     <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
+            <label>Roles Assigned to Staff </label>
             <div class="card">
                 <div class="form-group row">
                     <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -42,15 +43,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(user, index) in student_form.users' :key="index">
+                                <tr id="record1" v-for='(role, index) in student_form.assigned_staff' :key="index">
                                     <td>
-                                        <select name="teacher" id="teacher" class="form-control" v-model="user.name" :class="{ 'is-invalid': student_form.errors.has('teacher') }">
+                                        <select name="teacher" id="teacher" class="form-control" v-model="role.teacher" :class="{ 'is-invalid': student_form.errors.has('teacher') }">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in teacherList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                         </select>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="role" class="form-control" v-model="user.role"/>
+                                        <select name="role" id="role" class="form-control" v-model="role.role" :class="{ 'is-invalid': student_form.errors.has('role') }">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
                                     </td>
                                 </tr> 
                                 <tr>
@@ -59,6 +63,45 @@
                                         @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                         <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
                                         @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                    </td>
+                                </tr>                                          
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <label>Roles Assigned to Students </label>
+            <div class="card">
+                <div class="form-group row">
+                    <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Role</th>                          
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="record2" v-for='(role, index) in student_form.assigned_student' :key="index">
+                                    <td>
+                                        <select name="student" id="student" class="form-control" v-model="role.student" :class="{ 'is-invalid': student_form.errors.has('student') }">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                        </select>
+                                    </td>
+                                    <td>                                
+                                        <select name="std_role" id="std_role" class="form-control" v-model="role.std_role" :class="{ 'is-invalid': student_form.errors.has('std_role') }">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td colspan="5"> 
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                        @click="addMoreStudents()"><i class="fa fa-plus"></i> Add More</button>
+                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                        @click="removeStudents()"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
                                 </tr>                                          
                             </tbody>
@@ -77,26 +120,38 @@
 export default {
     data(){
         return {
+            studentList:[],
             teacherList:[],
             programList:[],
             supportList:[],
             teacherRoles:[],
-            users: [],
+            assigned_staff: [],
+            assigned_student: [],
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
-                student: '',
-                award_given_by: '',
-                award_type_id: '',
-                place: '',
-                date: '',
+                program: '',
+                year: '',
+                supporter:'',
                 remarks:'',
-                users: [],
+                assigned_staff: [],
+                assigned_student: [],
             }),
         }
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
+        loadStudentList(uri='students/loadStudentList/'+this.id){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                console.log(data);
+                this.studentList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         loadTeacherList(uri='students/loadStudentList/'+this.id){
             axios.get(uri)
             .then(response => {
@@ -112,7 +167,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data;
+                this.programList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -122,7 +177,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.supportList =  data.data;
+                this.supportList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -149,15 +204,25 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.student_form.users.push({teacher:'',role:''})    
+            this.student_form.assigned_staff.push({teacher:'',role:''})
+        },
+        addMoreStudents: function(){
+            this.count++;
+            this.student_form.assigned_student.push({student:'',std_role:''})   
         }, 
         /**
          * method to remove fields
          */
         remove(index){    
-             if(this.student_form.users.length>1){
+             if(this.student_form.roles.length>1){
                 this.count--;
-                this.student_form.users.splice(index,1); 
+                this.student_form.roles.splice(index,1); 
+            }
+        },
+        removeStudents(index){    
+             if(this.student_form.assigned_student.length>1){
+                this.count--;
+                this.student_form.assigned_student.splice(index,1); 
             }
         },
         formaction: function(type){
@@ -186,7 +251,7 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="student"){
+            if(id=="program"){
                 this.student_form.program=$('#program').val();
             }
             if(id=="supporter"){
@@ -208,6 +273,7 @@ export default {
             this.changefunction(id);
         });
 
+        this.loadStudentList();
         this.loadTeacherList();
         this.loadActiveProgramList();
         this.loadActiveSupportList();

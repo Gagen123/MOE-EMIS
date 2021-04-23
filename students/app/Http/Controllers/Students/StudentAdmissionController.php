@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
-use App\Models\Students\CeaStudentAward;
-use App\Models\Students\Student;
+use App\Models\Students\StudentPersonalDetails;
 
 
 class StudentAdmissionController extends Controller
@@ -40,24 +39,42 @@ class StudentAdmissionController extends Controller
             'attachments.required'              => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $data =[
-            'snationality'              =>  $request->snationality,
-            'cid_passport'              =>  $request->cid_passport,
-            'first_name'                =>  $request->first_name,
-            'middle_name'               =>  $request->middle_name,
-            'last_name'                 =>  $request->last_name,
-            'dob'                       =>  $request->dob,
-            'sex_id'                    =>  $request->sex_id,
-            'village_id'                =>  $request->village_id, 
-            'address'               =>  $request->fulladdress,
-            'mother_tongue'             =>  $request->mother_tongue, 
-            'attachments'               =>  $request->attachments, 
-            'created_by'                =>  $request->user_id,
-            'created_at'                =>  date('Y-m-d h:i:s'),
-            'status'                    =>  1,
-        ];
-        
-        $response_data = StudentPersonalDetails::create($data);
+        $data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+        if($data==""){
+            $data =[
+                'snationality'              =>  $request->snationality,
+                'cid_passport'              =>  $request->cid_passport,
+                'first_name'                =>  $request->first_name,
+                'middle_name'               =>  $request->middle_name,
+                'last_name'                 =>  $request->last_name,
+                'dob'                       =>  $request->dob,
+                'sex_id'                    =>  $request->sex_id,
+                'village_id'                =>  $request->village_id, 
+                'address'               =>  $request->fulladdress,
+                'mother_tongue'             =>  $request->mother_tongue, 
+                'attachments'               =>  $request->attachments, 
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = StudentPersonalDetails::create($data);
+        }
+        else{
+            $data =[
+                'snationality'              =>  $request->snationality,
+                'cid_passport'              =>  $request->cid_passport,
+                'first_name'                =>  $request->first_name,
+                'middle_name'               =>  $request->middle_name,
+                'last_name'                 =>  $request->last_name,
+                'dob'                       =>  $request->dob,
+                'sex_id'                    =>  $request->sex_id,
+                'village_id'                =>  $request->village_id, 
+                'address'                   =>  $request->fulladdress,
+                'mother_tongue'             =>  $request->mother_tongue, 
+                'attachments'               =>  $request->attachments, 
+            ];
+            $establishment = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->update($data);
+            $response_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+        }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 }
