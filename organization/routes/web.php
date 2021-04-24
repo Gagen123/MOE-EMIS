@@ -170,7 +170,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
-            $router->get('/getExistingSectionByStream/{classId}/{streamId}', 'generalInformation\SectionController@getExistingSectionByStream');
 
         });
     

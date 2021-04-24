@@ -83,20 +83,8 @@ class SectionController extends Controller
         $section = DB::table('section_details as a')
             ->join('organization_class_streams as b', 'b.id', '=', 'a.classSectionId')
             ->select('a.id','a.section')
-            ->where('b.classId', $classId)->get();
+            ->where('a.classSectionId', $classId)->get();
         return $section;
     }
 
-    /**
-     * method to get existing section by class Id and stream id
-     */
-    public function getExistingSectionByStream($classId,$streamId){
-        $section = DB::table('section_details as a')
-            ->join('organization_class_streams as b', 'b.id', '=', 'a.classSectionId')
-            ->select('a.id','a.section')
-            ->where('b.classId', $classId)
-            ->where('a.classSectionId', $streamId)
-            ->get();
-        return $section;
-    }
 }

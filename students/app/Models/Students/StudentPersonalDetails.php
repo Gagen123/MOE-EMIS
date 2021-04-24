@@ -18,6 +18,8 @@ class StudentPersonalDetails extends Model
         'village_id','address',
         'mother_tongue',
         'attachments',
+        'parent_marital_status',
+        'primary_contact',
         'status',
         'created_by',
         'created_at',

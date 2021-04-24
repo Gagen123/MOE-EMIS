@@ -81,10 +81,13 @@ class GeneralInfoController extends Controller
         $rules = [
             'school'     =>  'required',
             'classes'    =>  'required',
+            'users'      =>  'required',"array","min:2",
         ];
         $customMessages = [
             'school.required'       => 'School is required',
             'classes.required'      => 'Class field is required',
+            'users.required'        => 'Please mention section',
+            'users.min'             => 'Atleast 2 section is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
@@ -97,13 +100,8 @@ class GeneralInfoController extends Controller
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/section/saveSection', $loc);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/section/saveSection', $loc);
+        return $response_data;
     }
 
 
@@ -298,8 +296,4 @@ class GeneralInfoController extends Controller
         return $sectionList;
     }
 
-    public function getExistingSectionByStream($classId = "",$streamId=""){
-        $sectionList = $this->apiService->listData('emis/organization/section/getExistingSectionByStream/'.$classId. '/'.$streamId);
-        return $sectionList;
-    }
 }

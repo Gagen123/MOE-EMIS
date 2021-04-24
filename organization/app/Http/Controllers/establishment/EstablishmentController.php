@@ -357,16 +357,18 @@ class EstablishmentController extends Controller
                 'created_at'              =>  date('Y-m-d h:i:s')
             ];
             $class_data = OrganizationClassStream::create($class_details);
-        }
-        foreach($request->sectionList as $strm){
-            $strm_details = [
-                'organizationId'          =>  $establishment->id,
-                'classId'                 =>  $strm['classId'],
-                'streamId'                 =>  $strm['streamId'],
-                'created_by'              =>  $request->user_id,
-                'created_at'              =>  date('Y-m-d h:i:s')
-            ];
-            $stream_data = OrganizationClassStream::create($strm_details);
+            foreach($request->sectionList as $strm){
+                if($strm['classId']==$cls['classId']){
+                    $strm_details = [
+                        'organizationId'          =>  $establishment->id,
+                        'classId'                 =>  $class_data->id,
+                        'streamId'                 =>  $strm['streamId'],
+                        'created_by'              =>  $request->user_id,
+                        'created_at'              =>  date('Y-m-d h:i:s')
+                    ];
+                    $stream_data = OrganizationClassStream::create($strm_details);
+                }
+            }
         }
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
@@ -394,7 +396,7 @@ class EstablishmentController extends Controller
             $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
             $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
             $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->get();
-            $classSection=OrganizationClassStream::where('organizationId',$id)->groupBy('classId')->get();
+            $classSection=OrganizationClassStream::where('organizationId',$id)->where('streamId',null)->groupBy('classId')->get();
             $sections=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
             foreach($classSection as $cls){
                 $cls->class_name=Classes::where('id',$cls->classId)->first()->class;

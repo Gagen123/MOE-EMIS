@@ -20,6 +20,8 @@ class StudentPersonalDetils extends Migration{
             $table->string('address')->nullable();
             $table->char('mother_tongue',36)->nullable();
             $table->string('attachments')->nullable();
+            $table->char('parent_marital_status',36)->nullable();
+            $table->char('primary_contact',20)->nullable();
             $table->char('status',20)->default('pending');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
