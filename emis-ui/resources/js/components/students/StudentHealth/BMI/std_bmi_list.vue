@@ -9,7 +9,6 @@
                             <th>Term </th>
                             <th>Class</th>
                             <th>Section</th>
-                            <th>Stream</th>
                             <th>Date of Measurement</th>
                             <th>Action</th>                     
                         </tr>
@@ -17,11 +16,10 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.name}}</td>
-                            <td>{{ item.project_type}}</td>
-                            <td>{{ item.program_name}}</td>
-                            <td>{{ item.FromDate}} - {{ item.ToDate}}</td>
-                            <td>{{ item.place}}</td>
+                            <td>{{ item.term}}</td>
+                            <td>{{ item.class}}</td>
+                            <td>{{ item.section}}</td>
+                            <td>{{ item.date}}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

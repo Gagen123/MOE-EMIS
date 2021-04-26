@@ -35,7 +35,6 @@ class StudentMasterController extends Controller{
             'recordtype'     =>  $request->record_type, 
             'user_id'        => $this->userId() 
         ];
-
         if($request->record_type == 'student_awards'){
             $additional_data = [
                 'award_type_id' => $request->award_type_id,
@@ -75,7 +74,7 @@ class StudentMasterController extends Controller{
     }
 
     public function loadActiveStudentMasters($param=""){
-        $student_masters = $this->apiService->listData('emis/mmasters/students/loadActiveStudentMasters/'.$param);
+        $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }
 

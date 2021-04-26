@@ -220,9 +220,9 @@ const routes = [
     },
 
     // organization general information route
-    { path: '/general_index', component: require('./components/organization/general/general_index.vue').default,
+    { path: '/general_index', name:'general_index', component: require('./components/organization/general/general_index.vue').default,
       children:[
-        { path: '/equipment_index', 
+        { path: '/equipment_index',
         component: require('./components/organization/general/equipment/equipment_index.vue').default ,
           children: [
             { path: '', component: require('./components/organization/general/equipment/equipment_list.vue').default },

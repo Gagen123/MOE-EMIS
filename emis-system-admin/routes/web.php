@@ -31,6 +31,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/load_country_details_by_id/{id}','AdministrationController@load_country_details_by_id');
         $router->get('/load_Gender_details_by_id/{id}','AdministrationController@load_Gender_details_by_id');
         $router->get('/load_village_details_by_village_id/{id}','AdministrationController@load_village_details_by_village_id');
+        $router->get('/load_gewog_details_by_id/{id}','AdministrationController@load_gewog_details_by_id');
         $router->get('/loadDzoGeoVilByVilId/{id}','AdministrationController@loadDzoGeoVilByVilId');
         
     });
