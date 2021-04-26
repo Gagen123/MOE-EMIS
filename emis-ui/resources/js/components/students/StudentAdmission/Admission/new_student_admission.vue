@@ -66,7 +66,7 @@
                                                     <has-error :form="personal_form" field="dob"></has-error>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Gender:<span class="text-danger">*</span></label>
+                                                    <label>Genter:<span class="text-danger">*</span></label>
                                                     <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
                                                         <option value=""> --Select--</option>
                                                         <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -816,7 +816,7 @@ export default {
             if(selectedVal.includes('Bhutan')){
                 if ($('#'+fieldId).val().length != 11){
                     Swal.fire({
-                        html: "Please ender 11 digit CID",
+                        html: "Please enter 11 digit CID",
                         icon: 'error'
                     });
                 }
@@ -845,17 +845,17 @@ export default {
                                 this.personal_form.dob = year+ "-"+month + "-" + day;
                                 $('#dob').val(year+ "-"+month + "-" + day);
                                 $('#dob').prop('readonly',true);
-                                if(personal_detail.gender=="M"){
-                                    personal_detail.gender="male";
+                                if(personal_detail.genter=="M"){
+                                    personal_detail.genter="male";
                                 }
-                                else if(personal_detail.gender=="F"){
-                                    personal_detail.gender="female";
+                                else if(personal_detail.genter=="F"){
+                                    personal_detail.genter="female";
                                 }
                                 else{
-                                    personal_detail.gender="others";
+                                    personal_detail.genter="others";
                                 }
                                 for(let i=0; i<this.sex_idList.length;i++){
-                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
+                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.genter){
                                         $('#sex_id').val(this.sex_idList[i].id).trigger('change');
                                         this.personal_form.sex_id =  this.sex_idList[i].id;
                                         $('#sex_id').prop('disabled',true);
@@ -874,9 +874,9 @@ export default {
                             }
                             
                             if(type=="father"){
-                                if(personal_detail.gender=="F"){
+                                if(personal_detail.genter=="F"){
                                     Swal.fire({
-                                        html: "Gender of this person Female. Please provide correct CID",
+                                        html: "Genter of this person Female. Please provide correct CID",
                                         icon: 'error'
                                     });
                                     this.guardian_form.father_first_name = "";
@@ -906,9 +906,9 @@ export default {
                                 }
                             }
                             if(type=="mother"){
-                                if(personal_detail.gender=="M"){
+                                if(personal_detail.genter=="M"){
                                     Swal.fire({
-                                        html: "Gender of this person is Male. Please provide correct CID",
+                                        html: "Genter of this person is Male. Please provide correct CID",
                                         icon: 'error'
                                     });
                                     this.guardian_form.mother_first_name = "";
@@ -986,7 +986,7 @@ export default {
                 if(type=="all_active_dzongkhag"){
                     this.dzongkhagList = data.data.data;
                 }
-                if(type=="all_active_gender"){
+                if(type=="all_active_genter"){
                     this.sex_idList = data.data.data;
                 }
             })
@@ -1544,7 +1544,7 @@ export default {
     },
 
     mounted() {
-        this.loadAllActiveMasters('all_active_gender');
+        this.loadAllActiveMasters('all_active_genter');
         this.loadAllActiveMasters('all_active_dzongkhag');
         this.loadAllActiveMasters('active_mother_tongue');
         this.loadAllStudentMasters('StudentType_Active');

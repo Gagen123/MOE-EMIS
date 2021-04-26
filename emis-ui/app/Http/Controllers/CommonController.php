@@ -40,7 +40,7 @@ class CommonController extends Controller{
         $response_data="";
         if (file_exists($full_path)){
             unlink($full_path);
-            $response_data = $this->apiService->deleteData("emis/staff/deleteFile", $id);
+            $response_data = $this->apiService->deleteData("emis/staff/hrdevelopment/deleteFile", $id);
         }
         // dd($response_data);
         return $response_data;
