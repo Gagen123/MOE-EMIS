@@ -38,26 +38,9 @@ class StudentAdmissionController extends Controller
             'mother_tongue.required'            => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
-        if($data==""){
-            $data =[
-                'snationality'              =>  $request->snationality,
-                'cid_passport'              =>  $request->cid_passport,
-                'first_name'                =>  $request->first_name,
-                'middle_name'               =>  $request->middle_name,
-                'last_name'                 =>  $request->last_name,
-                'dob'                       =>  $request->dob,
-                'sex_id'                    =>  $request->sex_id,
-                'village_id'                =>  $request->village_id, 
-                'address'               =>  $request->fulladdress,
-                'mother_tongue'             =>  $request->mother_tongue, 
-                'attachments'               =>  $request->attachments, 
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = StudentPersonalDetails::create($data);
-        }
-        else{
+        if( $request->type=="edit"){
+            //caling procedure to insert in audit
+            $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','personal')");
             $data =[
                 'snationality'              =>  $request->snationality,
                 'cid_passport'              =>  $request->cid_passport,
@@ -71,9 +54,48 @@ class StudentAdmissionController extends Controller
                 'mother_tongue'             =>  $request->mother_tongue, 
                 'attachments'               =>  $request->attachments, 
             ];
-            $updated_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->update($data);
-            $response_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+            $response_data = StudentPersonalDetails::where('id',$request->student_id)->update($data);
+        } 
+        else{
+            $data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+            if($data==""){
+                $data =[
+                    'snationality'              =>  $request->snationality,
+                    'cid_passport'              =>  $request->cid_passport,
+                    'first_name'                =>  $request->first_name,
+                    'middle_name'               =>  $request->middle_name,
+                    'last_name'                 =>  $request->last_name,
+                    'dob'                       =>  $request->dob,
+                    'sex_id'                    =>  $request->sex_id,
+                    'village_id'                =>  $request->village_id, 
+                    'village_id'                =>  $request->village_id, 
+                    'address'                   =>  $request->fulladdress,
+                    'mother_tongue'             =>  $request->mother_tongue, 
+                    'attachments'               =>  $request->attachments, 
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s'),
+                ];
+                $response_data = StudentPersonalDetails::create($data);
+            }
+            else{
+                $data =[
+                    'snationality'              =>  $request->snationality,
+                    'cid_passport'              =>  $request->cid_passport,
+                    'first_name'                =>  $request->first_name,
+                    'middle_name'               =>  $request->middle_name,
+                    'last_name'                 =>  $request->last_name,
+                    'dob'                       =>  $request->dob,
+                    'sex_id'                    =>  $request->sex_id,
+                    'village_id'                =>  $request->village_id, 
+                    'address'                   =>  $request->fulladdress,
+                    'mother_tongue'             =>  $request->mother_tongue, 
+                    'attachments'               =>  $request->attachments, 
+                ];
+                $updated_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->update($data);
+                $response_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+            }
         }
+        
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
@@ -237,6 +259,10 @@ class StudentAdmissionController extends Controller
             'parent_marital_status'     =>  $request->merital_status,
             'primary_contact'           =>  $request->primary_contact,
         ];
+        if( $request->type=="edit"){
+            
+            $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','guardain')");
+        }
         $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
         $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
@@ -304,7 +330,6 @@ class StudentAdmissionController extends Controller
     
     public function saveStudentClassDetails(Request $request){
         $rules = [
-            'class'                             => 'required',
             'student_type'                      => 'required',
             'no_meals'                          => 'required',
             'disability'                        => 'required',
@@ -317,18 +342,28 @@ class StudentAdmissionController extends Controller
         ];
         
         $this->validate($request, $rules, $customMessages);
+        if( $request->type=="edit"){
+            $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','classes')");
+            $data = StudentClassDetails::where('student_id',$request->student_id)->delete();
+        }
         $scholar="";
         $special_benifit="";
-        foreach($request->scholarship as $scho){
-            $scholar.=$scho.', ';
+        if($request->scholarship!=null && !sizeof($request->scholarship)>0){
+            foreach($request->scholarship as $scho){
+                $scholar.=$scho.', ';
+            }
         }
-        foreach($request->special_benifit as $bn){
-            $special_benifit.=$bn.', ';
+        
+        if($request->special_benifit!=null && !sizeof($request->special_benifit)>0){
+            foreach($request->special_benifit as $bn){
+                $special_benifit.=$bn.', ';
+            }
         }
+        
         $data =[
             'student_id'                =>  $request->student_id,
-            'class'                     =>  $request->class,
-            'stream'                    =>  $request->stream,
+            'dzo_id'                    =>  $request->dzo_id,
+            'org_id'                    =>  $request->org_id,
             'class_stream_id'           =>  $request->class_stream_id,
             'section'                   =>  $request->section,
             'student_type'              =>  $request->student_type,
@@ -345,4 +380,63 @@ class StudentAdmissionController extends Controller
         $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    
+    public function loadStudentList($param=""){
+        if(strpos($param,'SSS')){
+            $access_level=explode('SSS',$param)[0];
+            if($access_level=="Ministry"){
+                $response_data=StudentPersonalDetails::all();
+            }
+            if($access_level=="Dzongkhag"){
+                $response_data = DB::table('std_class_detils as c')
+                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
+                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
+                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
+                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
+                )->where('c.dzo_id', explode('SSS',$param)[1])->get();
+            }
+            if($access_level=="Org"){
+                $response_data = DB::table('std_class_detils as c')
+                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
+                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
+                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
+                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','c.updated_by', 'c.updated_at'
+                )->where('c.org_id', explode('SSS',$param)[2])->get();
+            }
+        }
+        else{
+            parse_str($param,$output); //revert query string to array and stored to $output
+            $response_data = DB::table('std_class_detils as c')
+                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
+                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
+                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
+                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
+                );
+            if($output['section']!=""){
+                $response_data=$response_data->where('c.section', $output['section'])->get();
+            }
+            else if($output['class']!=""){
+                $response_data=$response_data->where('c.class_stream_id', $output['class'])->get();
+            }
+            else{
+                $response_data=$response_data->where('c.org_id', $output['org'])->get();
+            }
+        }
+        return $this->successResponse($response_data);
+    }
+    
+    public function getStudentDetails($std_id=""){
+        $response_data=StudentPersonalDetails::where('id',$std_id)->first();
+        return $this->successResponse($response_data);
+    }
+    public function getstudentGuardainClassDetails($std_id="",$type=""){
+        if($type=="guardian"){
+            $response_data=StudentGuardainDetails::where('student_id',$std_id)->get();
+        }  
+        if($type=="class"){
+            $response_data=StudentClassDetails::where('student_id',$std_id)->first();
+        }  
+        return $this->successResponse($response_data);
+    }
+    
 }

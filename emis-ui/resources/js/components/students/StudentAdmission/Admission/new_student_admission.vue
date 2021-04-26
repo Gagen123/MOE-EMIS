@@ -26,7 +26,7 @@
                         <form id="admission_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="POST">
                             <div class="row form-group">
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                    <label> Student Nationality:</label><br>
+                                    <label> Student Nationality:<span class="text-danger">*</span></label><br>
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Bhutanese Under Process" id="s-bhutanese-underprocess" @click="showstdidentity('Student-Bhutanese-underprocess')" checked> Bhutanese (under process)<br>
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
@@ -119,7 +119,7 @@
                                     <has-error :form="personal_form" field="studentcode"></has-error>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Mother Tongue</label>
+                                    <label>Mother Tongue:<span class="text-danger">*</span></label>
                                     <select v-model="personal_form.mother_tongue" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('mother_tongue') }" class="form-control select2" name="mother_tongue" id="mother_tongue">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in motherTongueList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -157,10 +157,11 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label> Student Primary Contact:</label><br>
-                                <input type="radio" value="Father" v-model="guardian_form.pcontact" name="pcontact" id="pcontact" @click="showidentity('primary-contact-father')" checked> Father
-                                <input type="radio" value="Mother" v-model="guardian_form.pcontact" name="pcontact" id="pcontact1" @click="showidentity('primary-contact-mother')" > Mother
-                                <input type="radio" value="Others" v-model="guardian_form.pcontact" name="pcontact" id="pcontact2" @click="showidentity('primary-contact-guardian')"> Guardian 
-                            </div>
+                                <input type="radio" value="Father" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact" @click="showidentity('primary-contact-father')" checked> Father
+                                <input type="radio" value="Mother" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact1" @click="showidentity('primary-contact-mother')" > Mother
+                                <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian 
+                                <has-error :form="guardian_form" field="primary_contact"></has-error>
+                            </div> 
                         </div>
 
                         <div class="row form-group">
@@ -691,6 +692,7 @@ export default {
             studentbenefitList:[],
             sectionList:[],
             personal_form: new form({
+                student_id:'',
                 snationality:'',
                 cid_passport:'',
                 first_name:'',
@@ -710,6 +712,7 @@ export default {
                 student_id:'',
                 merital_status:'',
                 primary_contact:'',
+                type:'add',
                 
                 father_nationality:'Bhutanese',
                 father_cid_passport:'',
@@ -768,6 +771,7 @@ export default {
             }),
             class_form: new form({
                 student_id:'',
+                type:'add',
                 class:'',
                 stream:'',
                 class_stream_id:'',
@@ -1135,7 +1139,9 @@ export default {
         },
         
         shownexttab(nextclass){
-            this.changetab(nextclass);
+            if(nextclass=="basic-tabs"){
+                this.changetab('basic-tabs');
+            }
             if(nextclass=="guardians-tab"){
                 const config = {
                     headers: {
@@ -1144,6 +1150,7 @@ export default {
                 } 
                 let formData = new FormData();
                 formData.append('snationality', this.personal_form.snationality);
+                formData.append('student_id', this.personal_form.student_id);
                 formData.append('cid_passport', this.personal_form.cid_passport);
                 formData.append('first_name', this.personal_form.first_name);
                 formData.append('middle_name', this.personal_form.middle_name);
@@ -1156,6 +1163,7 @@ export default {
                 formData.append('mother_tongue', this.personal_form.mother_tongue);
                 formData.append('fulladdress', this.personal_form.fulladdress);
                 formData.append('attachments', this.personal_form.attachments);
+                formData.append('type','add');
                 //this.personal_form.post('students/admission/saveStudentDetials',formData.serialize(), config)
                 axios.post('students/admission/saveStudentDetails',formData, config)
                 .then((response) => {
@@ -1170,14 +1178,15 @@ export default {
                 .catch((error) => {
                     Toast.fire({
                         icon: 'error',
-                        title: 'Unexpected error occured. Try again.'
+                        title: 'Unexpected error occured. Please provide all fields marked with *.'
                     });
                     this.applyselect('std');
                     console.log("Error:"+error);
+                    this.changetab('basic-tabs');
                 })
             }
             if(nextclass=="details-tab"){
-                this.guardian_form.primary_contact=$("input[type='radio'][name='pcontact']:checked").val();
+                this.guardian_form.primary_contact=$("input[type='radio'][name='primary_contact']:checked").val();
                 this.guardian_form.post('students/admission/saveStudentGardianDetails')
                 .then((response) => {
                     Toast.fire({
@@ -1196,7 +1205,7 @@ export default {
                     console.log("Error:"+error);
                 })
             }
-             this.changetab(nextclass);
+            
         },
         submitfinalform(){
             Swal.fire({
@@ -1212,7 +1221,7 @@ export default {
                     .then((response) => {
                         Swal.fire(
                             'Submitted!',
-                            'Student details has beed added successfully.',
+                            'Student details has been added successfully.',
                             'success',
                             this.$router.push('/student_new_admission')
                         );

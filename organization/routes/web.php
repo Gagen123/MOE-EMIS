@@ -156,6 +156,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //Organization Transactions Routes
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
+        $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
             $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');

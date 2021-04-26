@@ -397,15 +397,15 @@ class EstablishmentController extends Controller
             $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
             $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->get();
             $classSection=OrganizationClassStream::where('organizationId',$id)->where('streamId',null)->groupBy('classId')->get();
-            $sections=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
+            $stream=OrganizationClassStream::where('organizationId',$id)->where('streamId','!=',null)->get();
             foreach($classSection as $cls){
                 $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
             }
-            foreach($sections as $sec){
+            foreach($stream as $sec){
                 $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
             }
             $response_data->class_section=$classSection;
-            $response_data->sections=$sections;
+            $response_data->sections=$stream;
         }
         
         return $this->successResponse($response_data); 
@@ -427,6 +427,14 @@ class EstablishmentController extends Controller
     public function getOrgList($dzo_id=""){
         $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
         return $this->successResponse($response_data);
+    }
+    public function getClassByOrg($id=""){
+        $classSection=OrganizationClassStream::where('organizationId',$id)->where('streamId',null)->groupBy('classId')->get();
+        foreach($classSection as $cls){
+            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        }
+        $classSection->class_section=$classSection;
+        return $this->successResponse($classSection);
     }
 
     public function getLocationDetails($id=""){

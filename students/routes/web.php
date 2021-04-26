@@ -55,6 +55,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/saveStudentDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentDetails']);
             $router->post('/saveStudentGardianDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentGardianDetails']);
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
+            $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
+            $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+            $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
         });  
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);

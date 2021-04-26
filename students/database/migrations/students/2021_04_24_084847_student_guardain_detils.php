@@ -27,8 +27,35 @@ class StudentGuardainDetils extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
+
+        Schema::create('std_guardain_detils_audit', function (Blueprint $table) {
+            $table->increments('id');
+            $table->char('student_guardain_id',36)->nullable();
+            $table->char('student_id',36)->nullable();
+            $table->char('contact_type',36)->nullable();
+            $table->char('nationality',36)->nullable();
+            $table->char('cid_passport',60)->nullable();
+            $table->string('name');
+            $table->char('village_id',36)->nullable();
+            $table->string('address')->nullable();
+            $table->char('present_village_id',36)->nullable();
+            $table->string('work_address')->nullable();
+            $table->string('residence_address')->nullable();
+            $table->char('occupation',36)->nullable();
+            $table->string('email')->nullable();
+            $table->string('cntct_no')->nullable();
+            $table->char('created_by',36)->nullable();
+            $table->char('updated_by',36)->nullable();
+            $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->char('audited_by',36)->nullable();
+            $table->timestamp('audited_at')->nullable();
+        });
+
+        
     }
     public function down(){
         Schema::dropIfExists('std_guardain_detils');
+        Schema::dropIfExists('std_guardain_detils_audit');
     }
 }

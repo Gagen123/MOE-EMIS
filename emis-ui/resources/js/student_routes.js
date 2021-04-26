@@ -261,9 +261,9 @@ const routes = [
             { path: '/student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
                 children: [ 
                     { path: '/', name:'student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
-                    { path: '/student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
-                    { path: '/new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
-                    { path: '/edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
+                    { path: '/student_admission_list',name:'student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+                    { path: '/new_student_admission',name:'new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
+                    { path: '/edit_student_admission', name:'edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
                 ]    
             },
             { path: '/student_admission_request', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,

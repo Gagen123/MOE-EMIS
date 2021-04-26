@@ -295,5 +295,19 @@ class GeneralInfoController extends Controller
         $sectionList = $this->apiService->listData('emis/organization/section/getExistingSectionByClass/'.$classId);
         return $sectionList;
     }
+    public function loadOrganizationByDzoId($dzo_id = ""){
+        if($dzo_id == ""){
+            $dzo_id=$this->getUserDzoId();
+        }
+        $orgList = $this->apiService->listData('emis/organization/getOrgList/'.$dzo_id);
+        return $orgList;
+    }
+    public function getClassByOrg($id=""){  
+        if($id=="sessionDet"){
+            $id=$this->getWrkingAgencyId();
+        }
+        $response_data = $this->apiService->listData('emis/organization/getClassByOrg/'.$id);
+        return $response_data;
+    }
 
 }

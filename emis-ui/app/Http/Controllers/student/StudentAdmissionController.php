@@ -50,6 +50,7 @@ class StudentAdmissionController extends Controller{
         
         $data =[
             'snationality'              =>  $request->snationality,
+            'student_id'                =>  $request->student_id,
             'cid_passport'              =>  $request->cid_passport,
             'first_name'                =>  $request->first_name,
             'middle_name'               =>  $request->middle_name,
@@ -61,6 +62,7 @@ class StudentAdmissionController extends Controller{
             'village_id'                =>  $request->village_id, 
             'fulladdress'               =>  $request->fulladdress, 
             'mother_tongue'             =>  $request->mother_tongue, 
+            'type'                      =>  $request->type, 
             'attachments'               =>  $path, 
             'user_id'                   =>  $this->userId() 
         ];
@@ -226,7 +228,7 @@ class StudentAdmissionController extends Controller{
             'merital_status'            =>  $request->merital_status,
             'primary_contact'           =>  $request->primary_contact,
             'student_id'                =>  $request->student_id,
-
+            'type'                      =>  $request->type, 
             'father_nationality'               =>  $request->father_nationality,
             'father_cid_passport'              =>  $request->father_cid_passport,
             'father_first_name'                =>  $request->father_first_name,
@@ -297,8 +299,10 @@ class StudentAdmissionController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $data =[
             'student_id'                =>  $request->student_id,
-            'class'                     =>  $request->class,
-            'stream'                    =>  $request->stream,
+            'type'                      =>  $request->type, 
+            //org id and dzo id is pulled form the user who is currently loged in. cannot add record other then org user.
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
             'class_stream_id'           =>  $request->class_stream_id,
             'section'                   =>  $request->section,
             'student_type'              =>  $request->student_type,
@@ -311,4 +315,56 @@ class StudentAdmissionController extends Controller{
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentClassDetails', $data);
         return $response_data;
     }
+    
+    public function loadStudentList($param=""){
+        if($param=="session"){
+            $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        }
+        $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$param);
+        return $student_list;
+    }
+    
+    public function loadStudentListwithsearch(Request $request){
+        $rules = [
+            'dzongkhag'                 => 'required',
+            'org'                       => 'required',
+            'class'                     => 'required',
+        ];
+        $customMessages = [
+            'dzongkhag.required'                => 'Please select dzongkhag',
+            'org.required'                      => 'Please select school',
+            'class.required'                    => 'Please select class',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $section="";
+        $clas="";
+        if($request->section!=""){
+            $section=$request->section;
+        }
+        if($request->stream!=""){
+            $clas=$request->stream;
+        }
+        else{
+            $clas=$request->class;
+        }
+        $data =[
+            'dzongkhag'             =>  $request->dzongkhag,
+            'org'                   =>  $request->org,
+            'class'                 =>  $clas,
+            'section'               =>  $section,
+        ];
+        $query = http_build_query($data);
+        $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$query);
+        return $student_list;
+    }
+    
+    public function getStudentDetails($std_id=""){
+        $student_list = $this->apiService->listData('emis/students/admission/getStudentDetails/'.$std_id);
+        return $student_list;
+    }
+    public function getstudentGuardainClassDetails($std_id="",$type=""){
+        $student_list = $this->apiService->listData('emis/students/admission/getstudentGuardainClassDetails/'.$std_id.'/'.$type);
+        return $student_list;
+    }
+
 }

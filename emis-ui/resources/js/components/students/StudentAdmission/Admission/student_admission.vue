@@ -7,7 +7,7 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('new_student_admission')"><i class="fa fa-plus"></i> New Admission</button>
                 </span>
             </div>
-            <div class="card-body pt-1 pl-0 pr-0 pb-0">  
+            <div class="card-body pt-1 pb-0">  
                 <router-view></router-view> 
             </div>
         </div>

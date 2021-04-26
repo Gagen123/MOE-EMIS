@@ -12,6 +12,8 @@ class StudentClassDetails extends Model
     protected $fillable = [
         'id',
         'student_id',
+        'dzo_id',
+        'org_id',
         'class_stream_id',
         'section',
         'student_type',
