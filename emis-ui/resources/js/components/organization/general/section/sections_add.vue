@@ -6,7 +6,7 @@
                     <div class="row form-group">
                         <input type="hidden" class="form-control" v-model="form.organizationId"/>
                         <input type="hidden" class="form-control" v-model="form.id"/>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label>School:<span class="text-danger">*</span></label> 
                             <select name="school" id="school" class="form-control select2" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }">
                                 <option value="">--- Please Select ---</option>
@@ -14,7 +14,7 @@
                             </select>
                             <has-error :form="form" field="school"></has-error>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label>Class:<span class="text-danger">*</span></label> 
                             <select name="classes" id="classes" class="form-control select2" :class="{ 'is-invalid': form.errors.has('classes') }" v-model="form.classes">
                                 <option value="">--- Please Select ---</option>
@@ -22,28 +22,36 @@
                             </select>
                             <has-error :form="form" field="classes"></has-error>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="stream_section">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="stream_section">
                             <label>Stream:<span class="text-danger"></span></label> 
                             <select name="stream" id="stream" class="form-control select2" v-model="form.stream">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.record_id">{{ item.stream }}</option>
                             </select>
                         </div>
-                    </div>  
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Sections:<span class="text-danger">*</span></label>
-                        <div class="form-group row" v-for='(user, index) in form.users' :key="index" > 
-                            <input type="text" class="form-control section" id="section" v-model="user.section"/>
-                        </div>    
-                    </div>  
-                    <div class="form-group row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <label>No. of Sections:<span class="text-danger">*</span></label> 
+                            <input type="number" class="form-control" @keyup.enter="secSections()" @blur="secSections()" id="nosec" name="nosec"/>
+                        </div> 
+                    </div> 
+                    <div class="row form-group mb-0">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <label>Sections:<span class="text-danger">*</span></label>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 pt-2" v-for='(user, index) in form.users' :key="index">
+                            <input type="text" readonly class="form-control section" id="section" v-model="user.section"/>
+                        </div> 
+                    </div> 
+                    <!-- <div class="form-group row">
                         <div class="col-4">
                             <button type="button" class=" btn btn-flat btn-sm btn-primary"
                             @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                             <button type="button" class=" btn btn-flat btn-sm btn-danger" value="Remove"
                             @click="remove()" ><i class="fa fa-trash"></i> Remove</button>
                         </div>
-                    </div>        
+                    </div> -->
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -58,6 +66,7 @@
 export default {
     data(){
         return{
+            secval:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             count:1,
             users: [],
             classList:[],
@@ -75,12 +84,26 @@ export default {
                     section:''
                 }]  
             }),
-            
         }
     },
 
     methods:{
-        
+        secSections(){
+            this.form.users=[];
+            let sections=[];
+            if($('#nosec').val()<2){
+                Swal.fire({
+                    html: "You cannot create single or less section",
+                    icon: 'error'
+                });
+            }
+            else{
+                for(let i=0;i<$('#nosec').val();i++){
+                    sections.push({section:this.secval[i]});
+                }
+                this.form.users=sections;
+            }
+        },
         /**
          * method to get current user organization
          */
@@ -143,6 +166,10 @@ export default {
                     this.resetForm();
                     this.applyselect();
                     this.resetForm(); 
+                    this.form.school= '';
+                    this.form.classes= '';
+                    this.form.class_stream_id='';
+                    this.form.stream='';
                 })
                 .catch(() => {
                     console.log("Error......");
@@ -150,7 +177,7 @@ export default {
                 });
             }
 		},
-         applyselect(){
+        applyselect(){
             if(!$('#school').attr('class').includes('select2-hidden-accessible')){
                 $('#school').addClass('select2-hidden-accessible');
             }
@@ -172,7 +199,6 @@ export default {
                 this.getClassByOrganizationId();
             }
             if(id=="classes"){
-                this.form.classes=$('#classes').val();
                 let classText = $('#classes option:selected').text();
                 if(classText == "XI" || classText == "XII"){
                     this.getStreamByClassId($('#classes').val());
@@ -181,6 +207,7 @@ export default {
                     this.getExistingSection($('#classes').val());
                     $('#stream_section').hide();
                 }
+                this.form.classes=$('#classes').val();
             }
             if(id=="stream"){
                 this.form.stream=$('#stream').val();
@@ -253,7 +280,6 @@ export default {
                 this.getClassByOrganizationId();
                 this.form.classes = data[0].classId;
                 this.form.stream  = data[0].streamId;
-
                 let sections=[];
                 for(let i=0;i<data.length;i++){
                     sections.push({section:data[i].section});
