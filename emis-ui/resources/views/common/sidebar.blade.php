@@ -326,6 +326,14 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item" id="messlink">
+                <router-link to="/messManage_index" class="nav-link">
+                    <p> 
+                      <i class="nav-icon fa fa-carrot"></i>
+                        Mess Management
+                    </p>
+                </router-link>
+            </li>
             <li class="nav-item" id="track_application">
                 <router-link to="/question_answer_index" class="nav-link">
                     <p>

@@ -1,13 +1,13 @@
 <template>
 <div>
-    <form class="bootbox-form" id="quaterId">
+    <form class="bootbox-form" id="itemId">
             <div class="card-body">
                 <div class="row form-group">
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Quater Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.quaterName" :class="{ 'is-invalid': form.errors.has('quaterName') }" id="quaterName" @change="remove_err('quaterName')" type="text">
-                        <has-error :form="form" field="quaterName"></has-error>
+                        <label>Item Name:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.itemName" :class="{ 'is-invalid': form.errors.has('itemName') }" id="itemName" @change="remove_err('itemName')" type="text">
+                        <has-error :form="form" field="itemName"></has-error>
                     </div>
                     
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -34,7 +34,7 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                quaterName: '',
+                itemName: '',
                 status: '',
                 // action_type:'edit',
             })
@@ -49,17 +49,17 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.quaterName= '';
+                this.form.itemName= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveQuater',this.form)
+                this.form.post('/masters/saveItem',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Quater Type details updated successfully'
+                        title: 'Item Type details updated successfully'
                     })
-                    this.$router.push('/quater_list');
+                    this.$router.push('/item_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -69,7 +69,7 @@ export default {
     },
 
     created() {
-        this.form.quaterName=this.$route.params.data.name;
+        this.form.itemName=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
         // this.form.action_type=this.$route.params.data.action;

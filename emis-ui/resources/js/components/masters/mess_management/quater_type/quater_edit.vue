@@ -9,7 +9,11 @@
                         <input class="form-control" v-model="form.quaterName" :class="{ 'is-invalid': form.errors.has('quaterName') }" id="quaterName" @change="remove_err('quaterName')" type="text">
                         <has-error :form="form" field="quaterName"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                      <label>Display Order Code:</label> 
+                      <input class="form-control" v-model="form.code"  id="Displaycode" type="number">
+                      <has-error :form="form" field="code" ></has-error>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>

@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Quater Type</th>
+                    <th>Item Type</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
                     <th>Action</th> 
