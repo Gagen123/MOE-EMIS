@@ -111,10 +111,9 @@ Route::prefix('organization')->group(function () {
     Route::get('/getClassByOrganizationId/{orgId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getClassByOrganizationId'])->name('getClassByOrganizationId');
     Route::get('/getStreamByClassId/{classId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getStreamByClassId'])->name('getStreamByClassId');
     Route::get('/getExistingSectionByClass/{classId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getExistingSectionByClass'])->name('getExistingSectionByClass');
-    Route::get('/getExistingSectionByStream/{classId}/{streamId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getExistingSectionByStream'])->name('getExistingSectionByStream');
 
     Route::post('/saveClassMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveClassMapping'])->name('saveClassMapping');
-
+    Route::get('/loadOrganizationByDzoId/{dzo_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrganizationByDzoId'])->name('loadOrganizationByDzoId');
     //connectivity
     Route::post('/saveConnectivity', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveConnectivity'])->name('saveConnectivity');
     Route::get('/getRoadTypeDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getRoadTypeDropdown'])->name('getRoadTypeDropdown');
@@ -179,6 +178,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/registerOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'registerOrganizationDetails'])->name('registerOrganizationDetails');
     Route::get('/getschoolDetials', [App\Http\Controllers\organization\EstablishmentController::class, 'getschoolDetials'])->name('getschoolDetials');
     Route::get('/getFullSchoolDetials/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getFullSchoolDetials'])->name('getFullSchoolDetials');
+    Route::get('/getClassByOrg/{id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getClassByOrg'])->name('getClassByOrg');
     Route::get('/checkPendingApplication/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'checkPendingApplication'])->name('checkPendingApplication');
     /** used to populate and edit data in school list and Location page */
     Route::get('/getLocationDetails/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getLocationDetails'])->name('getLocationDetails');
@@ -256,12 +256,13 @@ Route::prefix('staff')->group(function () {
 
     Route::post('/saveTransferWindow', [App\Http\Controllers\staff\StaffController::class, 'saveTransferWindow'])->name('saveTransferWindow');
     Route::get('/loadTransferWindow', [App\Http\Controllers\staff\StaffController::class, 'loadTransferWindow'])->name('loadTransferWindow');
-    
-    Route::get('/getRoles/{param}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
-    Route::post('/saveprogramDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramDetails'])->name('saveprogramDetails');
-    Route::get('/loadDraftDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadDraftDetails'])->name('loadDraftDetails');
-    Route::post('/saveprogramFinalDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramFinalDetails'])->name('saveprogramFinalDetails');
-    
+    Route::prefix('hrdevelopment')->group(function (){
+        Route::get('/getRoles/{param}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
+        Route::post('/saveprogramDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramDetails'])->name('saveprogramDetails');
+        Route::get('/loadDraftDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadDraftDetails'])->name('loadDraftDetails');
+        Route::post('/saveprogramFinalDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramFinalDetails'])->name('saveprogramFinalDetails');
+        Route::get('/loadprogramDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadprogramDetails'])->name('loadprogramDetails');
+    });   
 });
 Route::prefix('common')->group(function () {
     Route::get('/viewFiles/{full_path}', [App\Http\Controllers\CommonController::class, 'viewFiles'])->name('viewFiles');
@@ -274,6 +275,17 @@ Route::prefix('common')->group(function () {
 });
 
 Route::prefix('students')->group(function () {
+    Route::prefix('admission')->group(function (){
+        Route::post('/saveStudentDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentDetails'])->name('saveStudentDetails');
+        Route::post('/saveStudentGardianDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
+        Route::post('/saveStudentClassDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentClassDetails'])->name('saveStudentClassDetails');
+        Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentList'])->name('loadStudentList');
+        Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
+        Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
+        Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
+        
+    });
+    
     Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\GeneralStudentController::class, 'loadStudentList'])->name('loadStudentList');
     Route::get('/loadStudentBySection/{param1}/{param2}/{param3}', [App\Http\Controllers\student\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
 

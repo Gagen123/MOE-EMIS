@@ -135,7 +135,7 @@ class HrDevelopmentController extends Controller{
             }
         }
         else{
-            $act_det = HrDevelopment::where ('id', $request->id)->firstOrFail();
+            $act_det = HrDevelopment::where ('id', $request->id)->first();
             $act_det->fill($request_data);
             $response_data=$act_det->save();
             if($request->attachment_details!=null && $request->attachment_details!=""){
@@ -150,7 +150,7 @@ class HrDevelopmentController extends Controller{
                     $doc = DocumentDetails::create($doc_data);
                 }
             }
-            
+            $response_data = HrDevelopment::where ('id', $request->id)->first();
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -206,9 +206,9 @@ class HrDevelopmentController extends Controller{
             'published_date'                   =>  date('Y-m-d h:i:s'),
             'remarks'                          =>  $request->remarks,
             'status'                           =>  'Created',
-            
         ];
-        $act_det = HrDevelopment::where ('id', $request->id)->firstOrFail();
+        $act_det = HrDevelopment::where ('id', $request->id)->first();
+
         $act_det->fill($request_data);
         $response_data=$act_det->save();
 
@@ -222,5 +222,31 @@ class HrDevelopmentController extends Controller{
             $action_Id= HrWorkflow::create($work_details);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function loadprogramDetails($param=""){
+        if(strpos($param,'SSS')){
+            $access_level=explode('SSS',$param)[0];
+            if($access_level=="Ministry"){
+                $response_data=HrDevelopment::all();
+            }
+            if($access_level=="Dzongkhag"){
+                $response_data = DB::table('std_class_detils as c')
+                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
+                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
+                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
+                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
+                )->where('c.dzo_id', explode('SSS',$param)[1])->get();
+            }
+            if($access_level=="Org"){
+                $response_data = DB::table('std_class_detils as c')
+                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
+                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
+                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
+                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','c.updated_by', 'c.updated_at'
+                )->where('c.org_id', explode('SSS',$param)[2])->get();
+            }
+        }
+        return $this->successResponse(HrDevelopment::where('parent_id',$id)->get());
     }
 }

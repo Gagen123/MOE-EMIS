@@ -2,39 +2,23 @@
     <div> 
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="training-table" class="table table-sm table-bordered table-striped">
+                <table id="foodrelease-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Issue Ref</th>
-                            <th>Date</th>
+                            <th>Date of Food Release</th>
+                            <th>School Name</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td> 1</td>
-                            <td>Issue#001</td>
-                            <td>2020-03-04</td>
+                         <tr v-for="(item, index) in foodrelease_list" :key="index">
+                            <td> {{index + 1}}</td>
+                            <td> {{item.date}}</td>
+                            <td>{{item.schoolName}}</td>
                             <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stockissue')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                            <tr>
-                            <td> 2</td>
-                            <td>Issue#002</td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stockissue')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                        <tr>
-                            <td> 3</td>
-                            <td>Issue#003</td>
-                            <td>2020-04-13</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_stockissue')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                            </td>=""
                         </tr> 
                     </tbody>
                 </table>
@@ -47,18 +31,32 @@ export default {
     data(){
         return{ 
             totle:0,
+            foodrelease_list:[]
         } 
     },
     methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
-		},
-    },
-    mounted() {
-        $("#training-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        }); 
+        loadScreeningList(uri = 'student/loadScreeningList'){
+            axios.get(uri)
+            .then(response => { 
+                let data = response;
+                this.healthScreen_list =  data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#screening-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 300);  
+        },
+        viewScreeningList(data){
+            data.action='edit';
+            this.$router.push({name:'HScreeningEdit',params: {data:data}});
+        },
     },
     
 }

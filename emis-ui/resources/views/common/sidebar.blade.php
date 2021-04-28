@@ -150,6 +150,14 @@
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentadmission">
+                                <router-link to="/studentAdmissionMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Admission Master
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
                             <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
                                 <router-link to="/StudentHealthMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>

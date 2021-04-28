@@ -16,7 +16,7 @@
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
-                <form id="training_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="post">
+                <!-- <form id="training_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="post"> -->
                     <div class="tab-content">
                         <div class="tab-pane fade active show tab-content-details" id="programme-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <div class="form-group row">
@@ -359,7 +359,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </div>
     </div>     
@@ -609,7 +609,7 @@ export default {
             });
         },
         
-        loadroleList(uri = 'staff/getRoles/active'){
+        loadroleList(uri = 'staff/getRoles/getRoles/active'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -631,7 +631,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('/staff/saveprogramFinalDetails')
+                        this.form.post('/staff/hrdevelopment/saveprogramFinalDetails')
                         .then((response) => {  
                             if(response!=null && response!=""){
                                 Swal.fire(
@@ -702,8 +702,9 @@ export default {
                 formData.append('remarks', this.form.remarks);
                 
                 // this.form.post('/staff/saveprogramDetails', formData, config)
-                axios.post('/staff/saveprogramDetails', formData, config)
+                axios.post('/staff/hrdevelopment/saveprogramDetails', formData, config)
                 .then((response) => {  
+                    alert(response.data.data.id);
                     this.form.id=response.data.data.id;//need to check the id
                     Toast.fire({
                         icon: 'success',
@@ -878,7 +879,7 @@ export default {
             }
         },
         loaddraftDetails(){
-             axios.get('staff/loadDraftDetails')
+             axios.get('staff/hrdevelopment/loadDraftDetails')
             .then((response) => {   
                 let data=response.data.data;
                 this.form.id=data.id;

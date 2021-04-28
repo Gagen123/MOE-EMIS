@@ -110,21 +110,4 @@ class StudentProjectController extends Controller
 
         
     }
-
-    /*
-    * Function is to list projects members
-    */
-
-    public function listProjectMembers($param=""){
-        $id ="1";
-
-        $records = DB::table('cea_project_membership')
-                ->join('std_student', 'cea_project_membership.StdStudentId', '=', 'std_student.id')
-                ->join('cea_project', 'cea_project_membership.CeaProjectId', '=', 'cea_project.id')
-                ->join('cea_programme', 'cea_project.CeaProgrammeId', '=', 'cea_programme.id')
-                ->select('cea_project_membership.*', 'cea_project.name AS project_name', 'std_student.Name AS student_name', 'cea_programme.name AS program_name')
-                ->get();
-
-        return $this->successResponse($records);
-    }
 }

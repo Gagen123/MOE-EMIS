@@ -50,11 +50,14 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
         $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);
 
-        $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
-        $router->get('/loadDraftDetails/{user_id}', ['uses' => 'staff\HrDevelopmentController@loadDraftDetails']);
-        $router->get('/loadDocuments/{id}', ['uses' => 'staff\HrDevelopmentController@loadDocuments']);
-        $router->delete('/deleteFile/{id}', ['uses' => 'staff\HrDevelopmentController@deleteFile']);
-        $router->post('/saveprogramFinalDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramFinalDetails']);
-        
+        $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
+            $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
+            $router->get('/loadDraftDetails/{user_id}', ['uses' => 'staff\HrDevelopmentController@loadDraftDetails']);
+            $router->get('/loadDocuments/{id}', ['uses' => 'staff\HrDevelopmentController@loadDocuments']);
+            $router->delete('/deleteFile/{id}', ['uses' => 'staff\HrDevelopmentController@deleteFile']);
+            $router->post('/saveprogramFinalDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramFinalDetails']);
+            $router->get('/loadprogramDetails/{param}', ['uses' => 'staff\HrDevelopmentController@loadprogramDetails']);
+            
+        });   
     });
 });

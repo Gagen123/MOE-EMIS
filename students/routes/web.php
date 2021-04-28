@@ -51,6 +51,15 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
+        $router->group(['prefix' => 'admission'], function () use ($router) {
+            $router->post('/saveStudentDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentDetails']);
+            $router->post('/saveStudentGardianDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentGardianDetails']);
+            $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
+            $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
+            $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+            $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
+        });  
+
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 
@@ -91,6 +100,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
         $router->get('/listStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@listStudentPrograms']);
         $router->post('/saveProgramParticipants', ['uses' => 'Students\StudentProgramController@saveProgramParticipants']);
+        $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);
+        $router->get('/loadProgramInventory/{param}', ['uses' => 'Students\StudentProgramController@loadProgramInventory']);
     }); 
 
 });
