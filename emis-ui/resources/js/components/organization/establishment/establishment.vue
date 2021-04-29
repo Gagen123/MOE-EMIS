@@ -352,7 +352,6 @@ export default {
                     if (result.isConfirmed) {
                         this.classStreamForm.post('organization/saveClassStream')
                         .then((response) => {
-                            alert(response.data);
                             if(response.data=="No Screen"){
                                 Toast.fire({  
                                     icon: 'error',
@@ -369,7 +368,7 @@ export default {
                             } 
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            console.log("Error:"+err);
                         })
                     }
                 });
