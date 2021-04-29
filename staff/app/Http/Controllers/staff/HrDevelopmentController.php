@@ -265,4 +265,35 @@ class HrDevelopmentController extends Controller{
         // }
         return $this->successResponse($work_details);
     }
+    
+    public function saveParticipant(Request $request){
+        $rules = [
+            'programId'             =>  'required',
+            'participant'           =>  'required',
+            'contact'               =>  'required',
+            'email'                 =>  'required',
+            'nature_of_participant' =>  'required',
+        ];
+        $customMessages = [
+            'programId.required'              => 'Please select nomination start date',
+            'participant.required'            => 'Please select nomination end date',
+            'contact.required'                => 'Please select this field',
+            'email.required'                  => 'This field is required',
+            'nature_of_participant.required'  => 'This field is required',
+        ];
+
+        $this->validate($request, $rules,$customMessages);
+        $request_data =[
+            'program_id'                =>  $request->programId,
+            'participant_id'            =>  $request->participant,
+            'contact'                   =>  $request->contact,
+            'email'                     =>  $request->email,
+            'nature_of_participant'     =>  $request->nature_of_participant,
+            'attachment_details'        =>  $request->attachment_details,
+            'created_by'                =>  $request->user_id,
+            'created_at'                =>  date('Y-m-d h:i:s')
+        ];
+        $action_Id= Participant::create($request_data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
 }

@@ -387,6 +387,9 @@ export default {
                         console.log("Error:"+error)
                     })
                 }
+                else{
+                    this.change_tab(nextclass); 
+                }
             }
         },
 
@@ -456,7 +459,6 @@ export default {
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {  
-
                 let data=response.data.data[0];
                 this.form.cid           =   data.cid;
                 this.form.name          =   data.fullName;
@@ -464,7 +466,7 @@ export default {
                 this.form.email         =   data.email;
             })
             .catch((error) => {  
-                console.log("Error......"+error);
+                console.log("Error:"+error);
             });
         },
         

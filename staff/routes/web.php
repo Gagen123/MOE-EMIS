@@ -59,6 +59,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadprogramDetails/{param}', ['uses' => 'staff\HrDevelopmentController@loadprogramDetails']);
             $router->get('/loadDetails/{id}', ['uses' => 'staff\HrDevelopmentController@loadDetails']);
             $router->get('/loadProgramDetailsForNomination/{param}', ['uses' => 'staff\HrDevelopmentController@loadProgramDetailsForNomination']);
+            $router->post('/saveParticipant', ['uses' => 'staff\HrDevelopmentController@saveParticipant']);
         });   
     });
 });

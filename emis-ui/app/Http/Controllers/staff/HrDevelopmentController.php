@@ -196,4 +196,53 @@ class HrDevelopmentController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadProgramDetailsForNomination/'.$roleIds);
         return $response_data;
     }
+    
+    public function saveParticipant(Request $request){
+        $rules = [
+            'programId'             =>  'required',
+            'participant'           =>  'required',
+            'contact'               =>  'required',
+            'email'                 =>  'required',
+            'nature_of_participant' =>  'required',
+        ];
+        $customMessages = [
+            'programId.required'              => 'Please select nomination start date',
+            'participant.required'            => 'Please select nomination end date',
+            'contact.required'                => 'Please select this field',
+            'email.required'                  => 'This field is required',
+            'nature_of_participant.required'  => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+
+        $files = $request->attachment;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopmentParticipant';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                $file_name = time().'_' .$file->getClientOriginalName();
+                move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                array_push($attachment_details,
+                    array(
+                        'path'              =>  $file_store_path,
+                        'name'     =>  $file_name,
+                    )
+                );
+            }
+        }
+        $request_data =[
+            'programId'                 =>  $request->programId,
+            'participant'               =>  $request->participant,
+            'contact'                   =>  $request->contact,
+            'email'                     =>  $request->email,
+            'nature_of_participant'     =>  $request->nature_of_participant,
+            'attachment_details'        =>  $attachment_details,
+            'user_id'                   =>  $this->userId() 
+        ];
+        // dd($request_data);
+        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveParticipant', $request_data);
+        return $response_data;
+    }
 }
