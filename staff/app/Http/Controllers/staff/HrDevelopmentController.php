@@ -115,6 +115,7 @@ class HrDevelopmentController extends Controller{
             );
         }
         if($request->status=="Created"){
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','program_details')"); 
             $request_data=array_merge($request_data,
                 array('updated_by'            =>  $request->user_id,
                       'updated_at'            =>  date('Y-m-d h:i:s')
@@ -135,7 +136,7 @@ class HrDevelopmentController extends Controller{
             }
         }
         else{
-            $act_det = HrDevelopment::where ('id', $request->id)->firstOrFail();
+            $act_det = HrDevelopment::where ('id', $request->id)->first();
             $act_det->fill($request_data);
             $response_data=$act_det->save();
             if($request->attachment_details!=null && $request->attachment_details!=""){
@@ -150,7 +151,7 @@ class HrDevelopmentController extends Controller{
                     $doc = DocumentDetails::create($doc_data);
                 }
             }
-            
+            $response_data = HrDevelopment::where ('id', $request->id)->first();
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -206,12 +207,16 @@ class HrDevelopmentController extends Controller{
             'published_date'                   =>  date('Y-m-d h:i:s'),
             'remarks'                          =>  $request->remarks,
             'status'                           =>  'Created',
-            
         ];
-        $act_det = HrDevelopment::where ('id', $request->id)->firstOrFail();
+        $act_det = HrDevelopment::where ('id', $request->id)->first();
+
         $act_det->fill($request_data);
         $response_data=$act_det->save();
-
+        $workflow=HrWorkflow::where('program_id',$request->id)->get();
+        if(sizeof($workflow)>0){
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')"); 
+            HrWorkflow::where('program_id',$request->id)->delete();
+        }
         foreach ($request->role_action_mapp as $i=> $rol){
             $work_details = array(
                 'program_id'=>$request->id,
@@ -222,5 +227,42 @@ class HrDevelopmentController extends Controller{
             $action_Id= HrWorkflow::create($work_details);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function loadprogramDetails($param=""){
+        // $response_data="";
+        // if(strpos($param,'SSS')){
+        //     $access_level=explode('SSS',$param)[0];
+        //     // if($access_level=="Ministry"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        //     // if($access_level=="Dzongkhag"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        //     // if($access_level=="Org"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        // }
+        $response_data=HrDevelopment::all();
+        return $this->successResponse($response_data);
+    }
+    
+    public function loadDetails($id=""){
+        $hrdev=HrDevelopment::where('id',$id)->where('status','Created')->first();
+        if($hrdev!="" && $hrdev!=null){
+            $hrdev->workflow=HrWorkflow::where('program_id',$id)->orderBy('sequence')->get();
+        }
+        return $this->successResponse($hrdev);
+    }
+    
+    public function loadProgramDetailsForNomination($param=""){
+        $param = rtrim($param, ", ");
+        $param=explode(',',$param);
+        $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->where('sequence',1)->get();
+        // $work_details=HrWorkflow::wherein('sys_role_id',$param)->where('sequence',1)->get();
+        // foreach($work_details as $work){
+        //     $work=HrDevelopment::where('id',$work->program_id)->where('status','created')->first();
+        // }
+        return $this->successResponse($work_details);
     }
 }

@@ -156,6 +156,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     //Organization Transactions Routes
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
+        $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
             $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
@@ -170,7 +171,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
-            $router->get('/getExistingSectionByStream/{classId}/{streamId}', 'generalInformation\SectionController@getExistingSectionByStream');
 
         });
     
@@ -247,7 +247,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
-            $router->get('/loadorgs', 'establishment\EstablishmentController@loadorgs');
+            $router->get('/loadorgs/{type}', 'establishment\EstablishmentController@loadorgs');
             $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
             $router->get('/getLocationDetails/{id}', ['uses' => 'establishment\EstablishmentController@getLocationDetails']);
             $router->get('/getConnectivityDetails/{id}', ['uses' => 'establishment\EstablishmentController@getConnectivityDetails']);

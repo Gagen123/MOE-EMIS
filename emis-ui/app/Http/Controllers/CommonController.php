@@ -16,7 +16,10 @@ class CommonController extends Controller{
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-
+    public function getRoles($param=""){
+        $system = $this->apiService->listData('system/get_roles/'.$param);
+        return $system;
+    }
     public function viewFiles($full_path=""){
         $full_path=str_replace('SSS','/',$full_path);
         $headers = ['Content-Type: application/pdf'];
@@ -40,7 +43,7 @@ class CommonController extends Controller{
         $response_data="";
         if (file_exists($full_path)){
             unlink($full_path);
-            $response_data = $this->apiService->deleteData("emis/staff/deleteFile", $id);
+            $response_data = $this->apiService->deleteData("emis/staff/hrdevelopment/deleteFile", $id);
         }
         // dd($response_data);
         return $response_data;
@@ -79,5 +82,5 @@ class CommonController extends Controller{
     public function getGewogNameById($id=""){
         return $this->apiService->getListData('emis/common/getGewogNameById/'.$id);
     }
-    
+   
 }

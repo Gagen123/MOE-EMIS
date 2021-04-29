@@ -97,42 +97,9 @@ const routes = [
         { path: '/program_type_list', name:'ProgramTypeList', component: require('./components/masters/student_masters/programs_clubs/program_type_list.vue').default },
       ]    
     },
-    { path: '/program_name_index', 
-    component: require('./components/masters/student_masters/programs_clubs/program_name_index.vue').default ,
-      children: [
-        { path: '', component: require('./components/masters/student_masters/programs_clubs/program_name_index.vue').default },
-        { path: '/program_name_add', name:'ProgramNameAdd', component: require('./components/masters/student_masters/programs_clubs/program_name_add.vue').default },
-        { path: '/program_name_edit', name:'ProgramNameEdit', component: require('./components/masters/student_masters/programs_clubs/program_name_edit.vue').default },
-        { path: '/program_name_list', name:'ProgramNameList', component: require('./components/masters/student_masters/programs_clubs/program_name_list.vue').default },
-      ]    
-    },
-    { path: '/program_support_index', 
-    component: require('./components/masters/student_masters/programs_clubs/program_support_index.vue').default ,
-      children: [
-        { path: '', component: require('./components/masters/student_masters/programs_clubs/program_support_index.vue').default },
-        { path: '/program_support_add', name:'ProgramSupportAdd', component: require('./components/masters/student_masters/programs_clubs/program_support_add.vue').default },
-        { path: '/program_support_edit', name:'ProgramSupportEdit', component: require('./components/masters/student_masters/programs_clubs/program_support_edit.vue').default },
-        { path: '/program_support_list', name:'ProgramSupportList', component: require('./components/masters/student_masters/programs_clubs/program_support_list.vue').default },
-      ]    
-    },
-    { path: '/program_roles_index', 
-    component: require('./components/masters/student_masters/programs_clubs/program_roles_index.vue').default ,
-      children: [
-        { path: '', component: require('./components/masters/student_masters/programs_clubs/program_roles_index.vue').default },
-        { path: '/program_roles_add', name:'ProgramRolesAdd', component: require('./components/masters/student_masters/programs_clubs/program_roles_add.vue').default },
-        { path: '/program_roles_edit', name:'ProgramRolesEdit', component: require('./components/masters/student_masters/programs_clubs/program_roles_edit.vue').default },
-        { path: '/program_roles_list', name:'ProgramRolesList', component: require('./components/masters/student_masters/programs_clubs/program_roles_list.vue').default },
-      ]    
-    },
-    { path: '/project_type_index', 
-    component: require('./components/masters/student_masters/projects_initiatives/project_type_index.vue').default ,
-      children: [
-        { path: '', component: require('./components/masters/student_masters/projects_initiatives/project_type_index.vue').default },
-        { path: '/project_type_add', name:'ProjectTypeAdd', component: require('./components/masters/student_masters/projects_initiatives/project_type_add.vue').default },
-        { path: '/project_type_edit', name:'ProjectTypeEdit', component: require('./components/masters/student_masters/projects_initiatives/project_type_edit.vue').default },
-        { path: '/project_type_list', name:'ProjectTypeList', component: require('./components/masters/student_masters/projects_initiatives/project_type_list.vue').default },
-      ]    
-    },
+    
+   
+    
     { path: '/training_type_index', 
     component: require('./components/masters/student_masters/trainings/training_type_index.vue').default ,
       children: [
@@ -221,6 +188,37 @@ const routes = [
     },
   ] 
 },
+{ path: '/studentAdmissionMasterIndex', component: require('./components/masters/student_masters/student_admission_master_index.vue').default,
+  children: 
+  [
+    { path: '/', name:'studentAdmissionMasterIndex', component: require('./components/masters/student_masters/student_admission_master_list.vue').default },
+    { path: '/student_type', component: require('./components/masters/student_masters/student_type/student_type_index.vue').default ,
+      children: [
+        { path: '', name:'student_type', component: require('./components/masters/student_masters/student_type/student_type_list.vue').default },
+        { path: '/student_type_list', name:'student_type_list', component: require('./components/masters/student_masters/student_type/student_type_list.vue').default },
+        { path: '/student_type_add', name:'student_type_add', component: require('./components/masters/student_masters/student_type/student_type_add.vue').default },
+        { path: '/student_type_edit', name:'student_type_edit', component: require('./components/masters/student_masters/student_type/student_type_edit.vue').default },
+      ]    
+    },
+    { path: '/scholar', component: require('./components/masters/student_masters/scholar/scholar_index.vue').default ,
+      children: [
+        { path: '', name:'scholar', component: require('./components/masters/student_masters/scholar/scholar_list.vue').default },
+        { path: '/scholar_list', name:'scholar_list', component: require('./components/masters/student_masters/scholar/scholar_list.vue').default },
+        { path: '/scholar_add', name:'scholar_add', component: require('./components/masters/student_masters/scholar/scholar_add.vue').default },
+        { path: '/scholar_edit', name:'scholar_edit', component: require('./components/masters/student_masters/scholar/scholar_edit.vue').default },
+      ]    
+    },
+    { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
+      children: [
+        { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+        { path: '/spbenefit_list', name:'spbenefit_list', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+        { path: '/spbenefit_add', name:'spbenefit_add', component: require('./components/masters/student_masters/spbenefit/spbenefit_add.vue').default },
+        { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
+      ]    
+    },
+  ] 
+},
+
 
     //ACADEMIC MASTER
     { path: '/academic-link', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
@@ -259,11 +257,12 @@ const routes = [
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
         children: [
-            { path: '/student_admission', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
-                children: [
-                    { path: '/', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
-                    { path: '/student_admission_list', name:'student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
-                    { path: '/new_student_admission', name:'new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
+            { path: '/',name:'student_admission', component: require('./components/students/StudentAdmission/student_admission_list.vue').default },
+            { path: '/student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
+                children: [ 
+                    { path: '/', name:'student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+                    { path: '/student_admission_list',name:'student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
+                    { path: '/new_student_admission',name:'new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
                     { path: '/edit_student_admission', name:'edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
                 ]    
             },

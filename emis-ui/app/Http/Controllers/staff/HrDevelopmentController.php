@@ -15,11 +15,6 @@ class HrDevelopmentController extends Controller{
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-    public function getRoles($param=""){
-        $system = $this->apiService->listData('system/get_roles/'.$param);
-        return $system;
-    }
-    
     public function saveprogramDetails(Request $request){
         $rules = [
             'training_type'             =>  'required  ',
@@ -138,13 +133,12 @@ class HrDevelopmentController extends Controller{
             'status'                            =>  $request->status,
             'user_id'                           =>  $this->userId() 
         ];
-        // dd($request_data);
-        $response_data= $this->apiService->createData('emis/staff/saveprogramDetails', $request_data);
+        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveprogramDetails', $request_data);
         return $response_data;
     }
     
     public function loadDraftDetails(){
-        $response_data= $this->apiService->listData('emis/staff/loadDraftDetails/'.$this->userId());
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadDraftDetails/'.$this->userId());
         return $response_data;
     }
     public function saveprogramFinalDetails(Request $request){
@@ -174,10 +168,32 @@ class HrDevelopmentController extends Controller{
             'role_action_mapp'                 =>  $request->role_action_mapp,
             'remarks'                          =>  $request->remarks,
             'user_id'                           =>  $this->userId() 
-            
         ];
         // dd($request_data);
-        $response_data= $this->apiService->createData('emis/staff/saveprogramFinalDetails', $request_data);
+        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveprogramFinalDetails', $request_data);
+        return $response_data;
+    }
+    
+    public function loadprogramDetails(){
+        $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadprogramDetails/'.$param);
+        return $response_data;
+    }
+    
+    public function loadDetails($id=""){
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadDetails/'.$id);
+        return $response_data;
+    }
+    
+    public function loadProgramDetailsForNomination(){
+        $roles=$this->currentUser()['roles'];
+        $roleIds="";
+        if($roles!="" && $roles!=null){
+            foreach($roles as $role){
+                $roleIds.=$role->Id.',';
+            }
+        }
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadProgramDetailsForNomination/'.$roleIds);
         return $response_data;
     }
 }

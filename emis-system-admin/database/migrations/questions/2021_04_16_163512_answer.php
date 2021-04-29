@@ -18,7 +18,7 @@ class Answer extends Migration{
             $table->timestamp('updated_at')->nullable();
         });
         Schema::create('question_answers_audit', function (Blueprint $table){
-            $table->char('id',36);
+            $table->increments('id');
             $table->char('record_id',36)->nullable(false);
             $table->char('parent_id',36)->nullable(false);
             $table->text('name')->nullable(false);
@@ -50,10 +50,8 @@ class Answer extends Migration{
                     INSERT INTO question_answers_audit(record_id,parent_id,name,status,created_by,updated_by,created_at,updated_at,audited_by,audited_on,action_type)
                     SELECT id,parent_id,name,status,created_by,updated_by,created_at,updated_at,userId,CURRENT_TIMESTAMP,"edit" FROM question_answers WHERE id=record_id;
                 END IF;
-                
             END;
         ');
-
     }
     public function down(){
         Schema::dropIfExists('question_answers');

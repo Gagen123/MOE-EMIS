@@ -33,9 +33,8 @@ class GeneralStudentController extends Controller{
             'status'         =>  $request->status,
             'actiontype'     =>  $request->action_type,
             'recordtype'     =>  $request->record_type, 
-            'user_id'        => $this->user_id() 
+            'user_id'        => $this->userId() 
         ];
-
         try{
             $response_data= $this->apiService->createData('emis/students/saveStudentMasters', $data);
             return $response_data;

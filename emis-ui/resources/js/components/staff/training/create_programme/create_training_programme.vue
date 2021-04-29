@@ -16,7 +16,7 @@
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
-                <form id="training_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="post">
+                <!-- <form id="training_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="post"> -->
                     <div class="tab-content">
                         <div class="tab-pane fade active show tab-content-details" id="programme-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <div class="form-group row">
@@ -359,7 +359,7 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </div>
     </div>     
@@ -451,31 +451,42 @@ export default {
             // });
         },
         deletefile(file){
-            let file_path=file.path+'/'+file.original_name;
-            file_path=file_path.replaceAll('/', 'SSS');
-            let uri = 'common/deleteFile/'+file_path+'/'+file.id;
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                if(data.data){
-                    Swal.fire(
-                        'Success!',
-                        'File has been deleted successfully.',
-                        'success',
-                    );
-                    this.loaddraftDetails();
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            this.loadDetails();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            ); 
+                        }
+                        
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
                 }
-                else{
-                   Swal.fire(
-                        'error!',
-                        'Not able to delete this file. Please contact system adminstrator.',
-                        'error',
-                    ); 
-                }
-                
-            })
-            .catch(function (error) {
-                console.log("Error:"+error);
             });
         },
         addMore: function(){
@@ -609,7 +620,7 @@ export default {
             });
         },
         
-        loadroleList(uri = 'staff/getRoles/active'){
+        loadroleList(uri = 'common/getRoles/active'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -631,7 +642,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('/staff/saveprogramFinalDetails')
+                        this.form.post('/staff/hrdevelopment/saveprogramFinalDetails')
                         .then((response) => {  
                             if(response!=null && response!=""){
                                 Swal.fire(
@@ -702,7 +713,7 @@ export default {
                 formData.append('remarks', this.form.remarks);
                 
                 // this.form.post('/staff/saveprogramDetails', formData, config)
-                axios.post('/staff/saveprogramDetails', formData, config)
+                axios.post('/staff/hrdevelopment/saveprogramDetails', formData, config)
                 .then((response) => {  
                     this.form.id=response.data.data.id;//need to check the id
                     Toast.fire({
@@ -878,7 +889,7 @@ export default {
             }
         },
         loaddraftDetails(){
-             axios.get('staff/loadDraftDetails')
+             axios.get('staff/hrdevelopment/loadDraftDetails')
             .then((response) => {   
                 let data=response.data.data;
                 this.form.id=data.id;
