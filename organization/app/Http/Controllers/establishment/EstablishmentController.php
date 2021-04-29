@@ -27,6 +27,7 @@ use App\Models\ApplicationSequence;
 use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
+use App\Models\establishment\HeadQuaterDetails;
 
 use Illuminate\Support\Facades\DB;
 
@@ -411,8 +412,17 @@ class EstablishmentController extends Controller
         return $this->successResponse($response_data); 
     }
     
-    public function loadorgs(){
-        $response_data=OrganizationDetails::all();
+    public function loadorgs($type=""){
+        $response_data="";
+        if($type=="Org"){
+            $response_data=OrganizationDetails::all();
+        }
+        if($type=="Dzongkhag"){
+            $response_data=HeadQuaterDetails::where('organizationType',2)->select('agencyName AS name','id')->get();
+        }
+        if($type=="Ministry"){
+            $response_data=HeadQuaterDetails::where('organizationType',1)->select('agencyName AS name','id')->get();
+        }
         return $this->successResponse($response_data);
     }
     public function loadorgbyId($type="",$org_id=""){

@@ -115,6 +115,7 @@ class HrDevelopmentController extends Controller{
             );
         }
         if($request->status=="Created"){
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','program_details')"); 
             $request_data=array_merge($request_data,
                 array('updated_by'            =>  $request->user_id,
                       'updated_at'            =>  date('Y-m-d h:i:s')
@@ -211,7 +212,11 @@ class HrDevelopmentController extends Controller{
 
         $act_det->fill($request_data);
         $response_data=$act_det->save();
-
+        $workflow=HrWorkflow::where('program_id',$request->id)->get();
+        if(sizeof($workflow)>0){
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')"); 
+            HrWorkflow::where('program_id',$request->id)->delete();
+        }
         foreach ($request->role_action_mapp as $i=> $rol){
             $work_details = array(
                 'program_id'=>$request->id,
@@ -225,28 +230,39 @@ class HrDevelopmentController extends Controller{
     }
     
     public function loadprogramDetails($param=""){
-        if(strpos($param,'SSS')){
-            $access_level=explode('SSS',$param)[0];
-            if($access_level=="Ministry"){
-                $response_data=HrDevelopment::all();
-            }
-            if($access_level=="Dzongkhag"){
-                $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
-                )->where('c.dzo_id', explode('SSS',$param)[1])->get();
-            }
-            if($access_level=="Org"){
-                $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','c.updated_by', 'c.updated_at'
-                )->where('c.org_id', explode('SSS',$param)[2])->get();
-            }
+        // $response_data="";
+        // if(strpos($param,'SSS')){
+        //     $access_level=explode('SSS',$param)[0];
+        //     // if($access_level=="Ministry"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        //     // if($access_level=="Dzongkhag"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        //     // if($access_level=="Org"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        // }
+        $response_data=HrDevelopment::all();
+        return $this->successResponse($response_data);
+    }
+    
+    public function loadDetails($id=""){
+        $hrdev=HrDevelopment::where('id',$id)->where('status','Created')->first();
+        if($hrdev!="" && $hrdev!=null){
+            $hrdev->workflow=HrWorkflow::where('program_id',$id)->orderBy('sequence')->get();
         }
-        return $this->successResponse(HrDevelopment::where('parent_id',$id)->get());
+        return $this->successResponse($hrdev);
+    }
+    
+    public function loadProgramDetailsForNomination($param=""){
+        $param = rtrim($param, ", ");
+        $param=explode(',',$param);
+        $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->where('sequence',1)->get();
+        // $work_details=HrWorkflow::wherein('sys_role_id',$param)->where('sequence',1)->get();
+        // foreach($work_details as $work){
+        //     $work=HrDevelopment::where('id',$work->program_id)->where('status','created')->first();
+        // }
+        return $this->successResponse($work_details);
     }
 }

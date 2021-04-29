@@ -252,11 +252,13 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loadTransferWindow');
         return $response_data;
     }
-    public function loadStaff(){
-        $response_data= $this->apiService->listData('emis/staff/loadStaff');
+    public function loadStaff($type=""){
+        $param="";
+        if($type=="workingagency"){
+            $param=$this->getWrkingAgencyId();
+        }
+        $response_data= $this->apiService->listData('emis/staff/loadStaff/'.$type.'/'.$param);
         return $response_data;
     }
-    
-    
     
 }

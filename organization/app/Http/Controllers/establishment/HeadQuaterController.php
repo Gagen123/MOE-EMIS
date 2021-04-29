@@ -78,7 +78,6 @@ class HeadQuaterController extends Controller
                 'organizationId'    =>  $request->organizationId,
                 'contactTypeId'     =>  $con['names'],
                 'phone'             =>  $con['phone'],
-                'fax'               =>  $con['fax'],
                 'mobile'            =>  $con['mobile'],
                 'email'             =>  $con['email'],
                 'type'              =>  1
@@ -92,6 +91,7 @@ class HeadQuaterController extends Controller
     
     public function getsAgencyList($param=""){
         $access_level=explode('SSS',$param)[0];
+        $response_data="";
         if($access_level=="Ministry"){
             $response_data=HeadQuaterDetails::all();
         }

@@ -451,31 +451,42 @@ export default {
             // });
         },
         deletefile(file){
-            let file_path=file.path+'/'+file.original_name;
-            file_path=file_path.replaceAll('/', 'SSS');
-            let uri = 'common/deleteFile/'+file_path+'/'+file.id;
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                if(data.data){
-                    Swal.fire(
-                        'Success!',
-                        'File has been deleted successfully.',
-                        'success',
-                    );
-                    this.loaddraftDetails();
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            this.loadDetails();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            ); 
+                        }
+                        
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
                 }
-                else{
-                   Swal.fire(
-                        'error!',
-                        'Not able to delete this file. Please contact system adminstrator.',
-                        'error',
-                    ); 
-                }
-                
-            })
-            .catch(function (error) {
-                console.log("Error:"+error);
             });
         },
         addMore: function(){
@@ -609,7 +620,7 @@ export default {
             });
         },
         
-        loadroleList(uri = 'staff/getRoles/getRoles/active'){
+        loadroleList(uri = 'common/getRoles/active'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -704,7 +715,6 @@ export default {
                 // this.form.post('/staff/saveprogramDetails', formData, config)
                 axios.post('/staff/hrdevelopment/saveprogramDetails', formData, config)
                 .then((response) => {  
-                    alert(response.data.data.id);
                     this.form.id=response.data.data.id;//need to check the id
                     Toast.fire({
                         icon: 'success',

@@ -346,7 +346,17 @@ const routes = [
                     { path: '/',name:'programme_index',  component: require('./components/staff/training/create_programme/list_programme.vue').default },
                     { path: '/list_programme',name:'list_programme',  component: require('./components/staff/training/create_programme/list_programme.vue').default },
                     { path: '/create_training_programme',name:'create_training_programme',  component: require('./components/staff/training/create_programme/create_training_programme.vue').default },
-                    // { path: '/edit_civil_staff',name:'edit_civil_staff',  component: require('./components/staff/civil/edit_civil_staff.vue').default },
+                    { path: '/edit_training_programme',name:'edit_training_programme',  component: require('./components/staff/training/create_programme/edit_training_programme.vue').default },
+                ],
+            },
+            
+            { path: '/nomination_selection', 
+                component: require('./components/staff/training/nomination_selection/nomination_selection_index.vue').default, 
+                children:[
+                    { path: '/',name:'nomination_selection',  component: require('./components/staff/training/nomination_selection/list_nomination_selection.vue').default },
+                    { path: '/list_nomination_selection',name:'list_nomination_selection',  component: require('./components/staff/training/nomination_selection/list_nomination_selection.vue').default },
+                    { path: '/create_nomination_selection',name:'create_nomination_selection',  component: require('./components/staff/training/nomination_selection/create_nomination_selection.vue').default },
+                    { path: '/edit_nomination_selection',name:'edit_nomination_selection',  component: require('./components/staff/training/nomination_selection/edit_nomination_selection.vue').default },
                 ],
             },
         ]
