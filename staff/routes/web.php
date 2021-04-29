@@ -43,7 +43,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/updatefinalPrivatestaffDetails', ['uses' => 'staff\StaffController@updatefinalPrivatestaffDetails']);
         
         $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
-        $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
+        $router->get('/loadStaff/{type}/{param}', ['uses' => 'staff\StaffController@loadStaff']);
         
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
@@ -57,7 +57,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->delete('/deleteFile/{id}', ['uses' => 'staff\HrDevelopmentController@deleteFile']);
             $router->post('/saveprogramFinalDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramFinalDetails']);
             $router->get('/loadprogramDetails/{param}', ['uses' => 'staff\HrDevelopmentController@loadprogramDetails']);
-            
+            $router->get('/loadDetails/{id}', ['uses' => 'staff\HrDevelopmentController@loadDetails']);
+            $router->get('/loadProgramDetailsForNomination/{param}', ['uses' => 'staff\HrDevelopmentController@loadProgramDetailsForNomination']);
         });   
     });
 });

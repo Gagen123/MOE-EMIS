@@ -353,8 +353,13 @@ class StaffController extends Controller{
         return $this->successResponse(TransferWindow::all());
     }
     
-    public function loadStaff(){
-        return $this->successResponse(PersonalDetails::all());
+    public function loadStaff($type="",$param=""){
+        if($type=="workingagency"){
+            return $this->successResponse(PersonalDetails::where('working_agency_id',$param)->get());
+        }
+        else{
+            return $this->successResponse(PersonalDetails::all());
+        }
     }
     
 }

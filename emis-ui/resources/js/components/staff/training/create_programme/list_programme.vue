@@ -8,10 +8,22 @@
                     <th>Institute/Vanue</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Duration</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
+                
+                <tr v-for="(training, index) in staffList" :key="index">
+                    <td>{{ index + 1 }} </td>
+                    <td>{{ training.course_title }}</td>
+                    <td>{{ training.vanue }}</td>
+                    <td>{{ training.start_date }}</td>
+                    <td>{{ training.end_date }}</td>
+                    <td>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'view')"><span class="fa fa-eye"></span>Veiw</a>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'edit')"><span class="fa fa-edit"></span>Edit</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>      
@@ -24,11 +36,11 @@ export default {
         }
     },
     methods: {
-        loadeditpage(id){
-            this.$router.push({name:'ddddd',params: {data:id}});
+        loadeditpage(id,type){
+            this.$router.push({name:'edit_training_programme',params: {data:id,type:type}});
         },
         loadStaffList(){
-            uri='/staff/hrdevelopment/loadprogramDetails';
+            let uri='/staff/hrdevelopment/loadprogramDetails';
             axios.get(uri)
             .then(response => {
                 let data = response.data;

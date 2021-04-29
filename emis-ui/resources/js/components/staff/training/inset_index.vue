@@ -11,14 +11,15 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li> 
+
                 <li class="nav-item active pr-1">
                     <router-link id="service" to="/programme_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Programme
                     </router-link>
                 </li>
                  <li class="nav-item active pr-1">
-                    <router-link id="service" to="/" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Transfer Apply
+                    <router-link id="service" to="/nomination_selection" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Selection & Nomination
                     </router-link>
                 </li>
             </ul>
