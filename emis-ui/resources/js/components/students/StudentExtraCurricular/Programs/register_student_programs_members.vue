@@ -11,11 +11,11 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label> Project</label>
-                        <select v-model="student_form.project" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('project') }" class="form-control select2" name="project" id="project">
-                        <option v-for="(item, index) in projectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <label> Program</label>
+                        <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="student_form" field="project"></has-error>
+                    <has-error :form="student_form" field="program"></has-error>
                     </div>
                 </div>
             </div>
@@ -34,21 +34,24 @@
                     <!-- textarea -->
                     <div class="form-group">
                         <label>Responsibilities:</label>
-                        <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="student_form" field="remarks"></has-error>
+                        <textarea @change="remove_error('responsibilities')" class="form-control" v-model="student_form.responsibilities" :class="{ 'is-invalid': student_form.errors.has('responsibilities') }" name="responsibilities" id="responsibilities"></textarea>
+                    <has-error :form="student_form" field="responsibilities"></has-error>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <!-- textarea -->
-                    <div class="form-group">
-                        <label> Roles:</label>
-                        <ul v-for="(item, index) in studentList" :key="index">
-                        <input type="checkbox" :name="role" :id="role" :value="index"  @click="showidentity(index)"> {{item.Name}}<br />
-                        </ul>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label >Roles:</label><br>
+                        <span v-for="(item, index) in  roleList" :key="index">
+                            <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                        </span>
                     </div>
                 </div>
+            </div>
+            <div class="card-footer text-right">
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -60,17 +63,16 @@ export default {
             studentList:[],
             roleList:[],
             programList:[],
-            users: [],
+            roles: [],
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 student: '',
-                award_given_by: '',
-                award_type_id: '',
-                place: '',
+                program: '',
                 date: '',
-                remarks:'',
-                users: [],
+                role: [],
+                date: '',
+                responsibilities:'',
             }),
         }
     },
@@ -87,7 +89,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri='students/listStudentPrograms/'+this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -97,7 +99,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveRoleList(uri="masters/loadActiveStudentMasters/program_role"){
+        loadActiveRolesList(uri="masters/loadActiveStudentMasters/program_student_roles"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -136,13 +138,13 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveStudentProgram',this.student_form)
+                this.student_form.post('/students/saveProgramMembers',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_programs_list');
+                    this.$router.push('/student_programs_members_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -156,6 +158,9 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="student"){
+                this.student_form.student=$('#student').val();
+            }
+            if(id=="program"){
                 this.student_form.program=$('#program').val();
             }
         },
@@ -176,7 +181,7 @@ export default {
 
         this.loadStudentList();
         this.loadActiveProgramList();
-        this.loadActiveRoleList();
+        this.loadActiveRolesList();
     },
     
 }
