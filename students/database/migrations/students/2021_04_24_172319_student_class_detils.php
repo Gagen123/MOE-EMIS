@@ -53,9 +53,9 @@ class StudentClassDetils extends Migration
             )
             BEGIN
                 IF type ="personal" THEN 
-                    INSERT INTO std_personal_detils_audit(std_personal_id,snationality,cid_passport,first_name,middle_name,last_name,dob,sex_id,
+                    INSERT INTO std_personal_detils_audit(std_personal_id,snationality,student_code,cid_passport,first_name,middle_name,last_name,dob,sex_id,
                     village_id,address,mother_tongue,attachments,status,created_by,updated_by,created_at,updated_at,audited_by,audited_at)
-                    SELECT id,snationality,cid_passport,first_name,middle_name,last_name,dob,sex_id,
+                    SELECT id,snationality,student_code,cid_passport,first_name,middle_name,last_name,dob,sex_id,
                     village_id,address,mother_tongue,attachments,status,created_by,updated_by,created_at,updated_at,userId,CURRENT_TIMESTAMP FROM std_personal_detils WHERE id=record_id;
                 ELSEIF type ="guardain" THEN 
                     INSERT INTO std_guardain_detils_audit(student_guardain_id,student_id,contact_type,nationality,cid_passport,name,village_id,address,present_village_id,

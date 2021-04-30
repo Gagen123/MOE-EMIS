@@ -4,15 +4,6 @@ const routes = [
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
         children:[
             {path: '/',name:'staff_link', component: require('./components/masters/staff_masters/staff_master_list.vue').default },
-            { path: '/working_agency_master',
-                component: require('./components/masters/staff_masters/working_agency/working_agency.vue').default,
-                children:[
-                { path: '',name:'working_agency_master', component: require('./components/masters/staff_masters/working_agency/working_agency_list.vue').default },
-                { path: '/List_working_agency', name:'List_working_agency', component: require('./components/masters/staff_masters/working_agency/working_agency_list.vue').default },
-                { path: '/create_working_agency',name:'create_working_agency', component: require('./components/masters/staff_masters/working_agency/create_working_agency.vue').default },
-                { path: '/edit_workingagency', name:'edit_workingagency', component: require('./components/masters/staff_masters/working_agency/edit_working_agency.vue').default },
-                ],
-            },
             { path: '/transfer_reason',
                 component: require('./components/masters/staff_masters/transfer_reason/transfer_reason.vue').default,
                 children:[
@@ -359,6 +350,7 @@ const routes = [
                     { path: '/edit_nomination_selection',name:'edit_nomination_selection',  component: require('./components/staff/training/nomination_selection/edit_nomination_selection.vue').default },
                 ],
             },
+            { path: '/acknowledgement', name:'acknowledgement', component: require('./components/staff/acknowledgement.vue').default },
         ]
     },
 ];

@@ -12,10 +12,10 @@ class Participant extends Migration
             $table->char('program_id',36)->nullable(false);
             $table->char('org_id',36)->nullable(false);
             $table->char('dzo_id',36)->nullable(false);
+            $table->char('participant_id',36)->nullable(false);
             $table->string('contact',50)->nullable(false);
             $table->string('email',100)->nullable(false);
             $table->string('nature_of_participant',100)->nullable(false);
-            $table->string('attachment_details',250)->nullable();
             $table->date('dob',20)->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
