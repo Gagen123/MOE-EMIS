@@ -8,14 +8,17 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
+use App\Models\Masters\CeaRole;
 
 class StudentMasterController extends Controller
 {
     //
     use ApiResponser;
-    public $database="emis_student_db";
+    public $audit_database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
+        $this->database = config('services.constant.studentdb');
     }
 
     /** 
@@ -40,7 +43,7 @@ class StudentMasterController extends Controller
             $response_data = $this->insertData($data, $databaseModel);
 
         } else if($request->actiontype=="edit"){
-            $response_data = $this->updateData($data, $databaseModel);
+            $response_data = $this->updateData($request,$data, $databaseModel);
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -52,14 +55,17 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
-        
+        if(strpos($param,'_Active')){
+            $param=explode('_',$param)[0];
+        }
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
-
+        if(strpos($param,'_Active')){
+            return $this->successResponse($model::where('status',1)->get());
+        }
         return $this->successResponse($model::all());
-
     }
 
     /**
@@ -68,13 +74,29 @@ class StudentMasterController extends Controller
 
     public function loadActiveStudentMasters($param=""){
 
-        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+        if($param == 'program_teacher_roles'){
+            $status = '1';
+            $assigned_to = '1';
 
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-        $status = '1';
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+            
+        } else if($param == 'program_student_roles'){
 
-        return $this->successResponse($model::where('status',$status)->first());
+            $status = '1';
+            $assigned_to = '2';
+            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+
+        } else {
+
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+
+            $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+            $model = new $modelName();
+            $status = '1';
+
+            return $this->successResponse($model::where('status',$status)->get());
+        }
+        
 
     }
 
@@ -111,27 +133,24 @@ class StudentMasterController extends Controller
      * Function to insert data into the respective tables
      */
 
-    private function updateData($dataRequest, $databaseModel){
-
+    private function updateData($request,$dataRequest, $databaseModel){
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
-
-        $data = $model::find($dataRequest['id']);
-
+        $data = $model::find($request->id);
         //Audit Trails
-        // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-        // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
+        $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+        $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
         
         //data to be updated
         $data->name = $dataRequest['name'];
-        $data->description = $dataRequest['description'];
+        if($request['recordtype']!="StudentType" && $request['recordtype']!="ScholarType" && $request['recordtype']!="SpBenefit"){
+            $data->description = $dataRequest['description'];
+        }
         $data->status = $dataRequest['status'];
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
         $data->update();
-        
         return $data;
-
     }
 
     /*
@@ -141,14 +160,19 @@ class StudentMasterController extends Controller
     private function extractRequestInformation($request, $record_type, $type){
         $databaseModel='';
         if($type=='data'){
-                $data = [
+            $data = [
                 'id'  =>  $request['id'],
                 'name'  =>  $request['name'],
-                'description'  =>  $request['description'],
                 'status'    =>  $request['status'],
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
             ];
+            if($record_type!="StudentType" || $record_type!="ScholarType" || $record_type!="SpBenefit"){
+                $additional_data = [
+                    'description'  =>  $request['description'],
+                ];
+                $data = $data + $additional_data; 
+            }
         }
 
         switch($record_type){
@@ -256,6 +280,10 @@ class StudentMasterController extends Controller
                     $databaseModel = "CeaProgramMeasurement";
                     break;
                 }
+            default : {
+                $databaseModel =$record_type;
+                break;
+            }
         }
         if($type == 'Model'){
             return $databaseModel;
@@ -263,5 +291,4 @@ class StudentMasterController extends Controller
             return $data;
         }
     }
-    
 }

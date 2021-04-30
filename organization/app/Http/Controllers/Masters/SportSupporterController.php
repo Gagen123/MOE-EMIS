@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 class SportSupporterController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
     /**
      * Create a new controller instance.
      *
@@ -22,6 +23,7 @@ class SportSupporterController extends Controller
     public function __construct()
     {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     /**
@@ -49,7 +51,7 @@ class SportSupporterController extends Controller
             $data = SportSupporter::find($request['id']);
 
             $messs_det='sportSupporterName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','sport_supporter','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','sport_supporter','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $equipment = SportSupporter::where('id', $id)->update($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);

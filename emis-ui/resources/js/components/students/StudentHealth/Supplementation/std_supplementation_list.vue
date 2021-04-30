@@ -8,19 +8,20 @@
                             <th>Sl#</th>
                             <th>Term</th>
                             <th>Date</th>
+                            <th>Class</th>
                             <th>Total Issued (Boys)</th>
-                             <th>Total Issued (Girls)</th>
+                            <th>Total Issued (Girls)</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.name}}</td>
-                            <td>{{ item.project_type}}</td>
-                            <td>{{ item.program_name}}</td>
-                            <td>{{ item.FromDate}} - {{ item.ToDate}}</td>
-                            <td>{{ item.place}}</td>
+                            <td>{{ item.term}}</td>
+                            <td>{{ item.date}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -44,7 +45,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/listStudentProjects/'+this.id){
+        loadDataList(uri='students/loadSupplementationRecords/'+this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;

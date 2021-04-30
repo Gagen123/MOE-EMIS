@@ -6,7 +6,7 @@
                     <b>Create Training Programme (HR Development)</b>
                 </span>
                 <span class="fa-pull-right pt-1">
-                    <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_training_programme')"><i class="fa fa-list"></i> List</button>
+                    <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_programme')"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_training_programme')"><i class="fa fa-plus"></i> Add New</button>
                 </span>
             </div>

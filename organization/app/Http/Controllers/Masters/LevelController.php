@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\DB;
 class LevelController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
+
     /**
      * Create a new controller instance.
      *
@@ -19,7 +21,7 @@ class LevelController extends Controller
      */
     public function __construct()
     {
-        //
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     /**
@@ -50,7 +52,7 @@ class LevelController extends Controller
 
             //audit trail
             $messs_det='levelName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','level','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','level','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $level = Level::where('id', $id)->update($lev);
             return $this->successResponse($level, Response::HTTP_CREATED);

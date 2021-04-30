@@ -12,7 +12,7 @@ class Documents extends Migration{
             $table->string('attachment_for',200)->nullable(true);
             $table->string('path',200)->nullable(false);
             $table->string('original_name',200)->nullable(false);
-            $table->string('user_defined_name',200)->nullable(false);
+            $table->string('user_defined_name',200)->nullable(true);
         });
     }
 

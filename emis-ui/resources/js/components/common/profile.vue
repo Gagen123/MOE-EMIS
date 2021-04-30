@@ -154,10 +154,10 @@
                 this.roles=roleName;
                 this.getdzongkhag(data['Dzo_Id']);
                 this.getgewog(data['Geo_Id']);
-          })    
-          .catch(errors => { 
-             console.log(errors)
-          });
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
         }
     }
 </script>

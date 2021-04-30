@@ -15,4 +15,7 @@ class HrWorkflow extends Model{
         'authority_type',
         'sys_role_id',
     ];
+    public function with_program() {
+        return $this->belongsTo(HrDevelopment::class, 'program_id');
+    }
 }

@@ -28,6 +28,12 @@
                     Project Members
                 </router-link>
             </li>
+            <li class="nav-item pr-1" @click="activatelink('program_action_plan')">
+                <router-link to ="/program_action_plan" id="programs" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class="fa fa-user-edit"></span>
+                    Action Plan
+                </router-link>
+            </li>
             <li class="nav-item pr-1" @click="activatelink('program_inventory')">
                 <router-link to ="/program_inventory_index" id="programs" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fa fa-user-edit"></span>

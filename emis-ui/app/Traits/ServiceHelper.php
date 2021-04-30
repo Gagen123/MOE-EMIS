@@ -21,7 +21,6 @@ trait ServiceHelper
         }catch(\Exception $e){
             return $e->getResponse()->getBody()->getContents();
         }
-            
     }
     
 }

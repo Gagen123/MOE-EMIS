@@ -12,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 class StructureDesignerController extends Controller
 {
     use ApiResponser;
+    public $audit_database;
 
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        $this->audit_database = config('services.constant.auditdb');
     }
 
     /** 
@@ -34,7 +36,7 @@ class StructureDesignerController extends Controller
 
             $data = StructureDesigner::find($request['id']);
             $messs_det='designerName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            $procid=DB::select("CALL system_admin.emis_audit_proc('organization_db','structure_designers','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','structure_designers','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $source = StructureDesigner::where('id', $id)->update($src);
             return $this->successResponse($source, Response::HTTP_CREATED);

@@ -60,7 +60,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'student_projects_edit',params: {data:data}});
+            this.$router.push({name:'edit_student_projects',params: {data:data}});
         },
     },
     mounted(){

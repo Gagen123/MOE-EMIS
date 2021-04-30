@@ -179,7 +179,7 @@ class QuestionAnswerController extends Controller{
                 ->select('q.name', 'q.id', 'q.code','q.answer_type')
                 ->where('q.status', '=', 1)
                 // ->where('c.name', '=', '%' . Input::get('name') . '%')
-                ->where('c.name', '=',explode("_",$type)[1])
+                ->where('c.name', 'LIKE',explode("_",$type)[1]. '%')
                 ->groupby('q.id')->get();
             foreach($questionlist as $ques){
                 $ques->ans_list=Answer::where('parent_id',$ques->id)->get();
