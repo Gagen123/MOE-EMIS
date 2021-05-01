@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline" id="mainform">
             <div class="card-body" >
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -284,6 +288,22 @@ export default {
                     })
                 }
             });
+        },
+
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Ministry"){
+                    $('#mainform').hide();
+                    $('#screenPermission').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
         }
     },
     mounted() {
@@ -300,6 +320,7 @@ export default {
         });
     },
     created(){
+        this.getScreenAccess();
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
         // let month =(currentdate.getMonth() + 1);

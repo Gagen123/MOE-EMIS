@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead" role="tablist">
                     <li class="nav-item wash-tabs" @click="shownexttab('wash-tabs')">
@@ -462,6 +466,22 @@ export default {
                 console.log(error.toString());
             });
         },
+
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Org"){
+                    $('#mainform').hide();
+                    $('#screenPermission').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        }
     },
   
     mounted(){ 
@@ -469,12 +489,16 @@ export default {
         $('.select2').select2({
             theme: 'bootstrap4'
         }); 
+        this.getScreenAccess();
         this.loadQuestionList('Wash');
         this.loadQuestionList('Sanitation');
         this.loadQuestionList('Hygiene');
         
         this.loadWashDetialsList('wash');
         //this.loadWashDetialsList('sanitation');
+        
+
+        
         
     },
 }

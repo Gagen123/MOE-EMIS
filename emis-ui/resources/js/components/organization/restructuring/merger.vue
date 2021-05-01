@@ -661,26 +661,43 @@ export default {
             }
         },
 
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data == "Org" || data == "Ministry"){
+                    $('#mainform').hide();
+                    $('#applicaitonUnderProcess').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        }
+
         /**
          * method to check pending status
          */
-        checkPendingApplication(){
-            axios.get('organization/checkPendingApplication/merger')
-            .then((response) => {  
-                let data=response.data;
-                if(data!=""){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-                }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
-            });
-        },
+        // checkPendingApplication(){
+        //     axios.get('organization/checkPendingApplication/merger')
+        //     .then((response) => {  
+        //         let data=response.data;
+        //         if(data!=""){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
+        //         }
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
     },
     
     mounted() {
+        this.getScreenAccess();
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
         this.form.year=current_year;
@@ -703,7 +720,7 @@ export default {
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();
-        this.checkPendingApplication();
+        // this.checkPendingApplication();
 
     },
 }

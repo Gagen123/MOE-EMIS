@@ -193,20 +193,20 @@ export default {
         /**
          * method to check pending status
          */
-        checkPendingApplication(){
-            axios.get('organization/checkPendingApplication/closure')
-            .then((response) => {  
-                let data=response.data;
-                if(data!=""){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-                }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
-            });
-        },
+        // checkPendingApplication(){
+        //     axios.get('organization/checkPendingApplication/closure')
+        //     .then((response) => {  
+        //         let data=response.data;
+        //         if(data!=""){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
+        //         }
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
 
 
         /**
@@ -261,7 +261,7 @@ export default {
         this.getOrgDetails(this.$route.query.data);
     },
     mounted(){
-        this.checkPendingApplication();
+        // this.checkPendingApplication();
     }
 }
 </script>
