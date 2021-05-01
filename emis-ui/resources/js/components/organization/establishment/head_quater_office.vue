@@ -28,7 +28,7 @@
                             <div class="form-group row" >  
                                 <label class="col-md-7 ">ZEST Working Agency Code:<span class="text-danger">*</span></label>
                                 <div class="input-group mb-3 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control"/>
+                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control" v-model="form.workingAgencyCode"/>
                                         <div class="input-group-append">
                                             <span type="button" class="col-md-12 btn btn-primary" @click="getOrgDetais(),remove_error('workingAgencyCode')"><i class="fa fa-search">&nbsp;Search</i></span>
                                         </div>
@@ -159,7 +159,7 @@ export default {
             gewog_list:[],
             villageList:[],
             form: new form({
-                id: '',organizationId:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
+                id: '',organizationId:'',workingAgencyCode:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
                 gewog:'',chiwog:'',agencyType:'',status:'pending'
             }),
 
@@ -285,12 +285,15 @@ export default {
                 $('#workingAgencyCode').focus();
                 $('#workingAgencyCode').removeClass('is-invalid');
             }else{
-                this.form.agencyCode     = '00001';
-                this.form.agencyName     = 'SPPD';
-                this.form.parentAgency   = 'MOE';
-                this.form.dzongkhag      = $('#dzongkhag').val(1);
-                this.form.gewog          = $('#gewog').val(1);
-                this.form.chiwog         = $('#chiwog').val(1);
+                this.form.agencyCode                = '00001';
+                this.form.agencyName                = 'SPPD';
+                this.form.parentAgency              = 'MOE';
+                this.form.dzongkhag                 =  1;
+                $('#dzongkhag').val(1).trigger('change');
+                this.getgewoglist(1);
+                this.form.gewog                     = 1;
+                this.getvillagelist(1);
+                this.form.chiwog                    = 1;
             }
         },
 
@@ -345,9 +348,9 @@ export default {
                         })
                         this.change_tab(nextclass);
                     })
-                    .catch(() => {
+                    .catch((ex) => {
                         this.change_tab('organization-tab');
-                        console.log("Error......")
+                        console.log("Error......" + ex)
                     })
                 }
                 this.change_tab(nextclass);
@@ -381,7 +384,32 @@ export default {
             .catch(errors => { 
                 console.log(errors)
             });
-        }
+        },
+
+        /**
+         * method to load organization details
+         */
+         loadBasicDetails(){
+            axios.get('organization/loadBasicDetails')
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.id  =   data.id;
+                this.form.agencyCode = data.zestAgencyCode;
+                this.form.agencyName = data.agencyName;
+                this.form.agencyType = data.organizationType;
+                this.form.workingAgencyCode = data.zestAgencyCode;
+                
+                $('#dzongkhag').val(response.data.data.dzongkhagId).trigger('change');
+                this.form.dzongkhag = response.data.data.dzongkhagId;
+                this.getgewoglist(response.data.data.dzongkhagId);
+                this.form.gewog = response.data.data.gewogId;
+                this.getvillagelist(response.data.data.gewogId);
+                this.form.chiwog = response.data.data.chiwogId;
+            })
+            .catch((error) => {  
+                console.log("Error......"+error);
+            });
+        },
 
     },
 
@@ -402,6 +430,7 @@ export default {
         });
         this.loadactivedzongkhagList();
         this.getContactTypeDropdown();
+        this.loadBasicDetails();
     },
 }
 </script>
