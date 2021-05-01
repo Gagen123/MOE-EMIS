@@ -424,6 +424,7 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
+
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -441,6 +442,23 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
+
+         getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Org"){
+                    $('#mainform').hide();
+                    $('#applicaitonUnderProcess').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        },
+
         checkPendingApplication(){
             axios.get('organization/checkPendingApplication/change')
             .then((response) => {  
@@ -455,6 +473,8 @@ export default {
                 console.log("Error: "+error);
             });
         },
+
+
         /**
          * method to get class in checkbox
          */
@@ -476,7 +496,7 @@ export default {
         },
 
         /**
-         * method to proprietor details
+         * method to current details
         */        
         loadCurrentOrgDetails(){
             axios.get('organization/getFullSchoolDetials/sessionDet')
@@ -542,6 +562,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.getScreenAccess();
         this.getClass();
         this.getStream();  
         this.checkPendingApplication();

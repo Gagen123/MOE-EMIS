@@ -233,6 +233,7 @@ class EstablishmentController extends Controller
     }
 
     public function getApprovedOrgDetails($type="",$key=""){  
+        $response_data ="";
         if($type=="1"){
             //Invoke Zest for details
         }else{
