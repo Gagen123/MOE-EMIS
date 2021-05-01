@@ -63,7 +63,13 @@ class WorkflowController extends Controller{
                 'claimed_by'            =>null,
                 'claimed_date'          =>null,
             ];
-            TaskDetails::where('application_number', $request->application_number)->update($task_data);
+            if($request->service_name=="Hr Development"){
+                TaskDetails::where('screen_id', $request->screen_id)->update($task_data);
+            }
+            else{
+                TaskDetails::where('application_number', $request->application_number)->update($task_data);
+            }
+            
             $workflowdetails = TaskDetails::where('application_number', $request->application_number)->first();;
         }   
         return $this->successResponse($workflowdetails, Response::HTTP_CREATED);

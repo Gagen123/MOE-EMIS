@@ -181,7 +181,13 @@ class HrDevelopmentController extends Controller{
     }
     
     public function loadDetails($id=""){
-        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadDetails/'.$id);
+        $data =[
+            'org'                   =>  $this->getWrkingAgencyId(),
+            'dzongkhag'             =>  $this->getUserDzoId(),
+            'id'                    =>  $id,
+        ];
+        $query = http_build_query($data);
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadDetails/'.$query);
         return $response_data;
     }
     
@@ -214,7 +220,7 @@ class HrDevelopmentController extends Controller{
         ];
         $this->validate($request, $rules,$customMessages);
 
-        $files = $request->attachment;
+        $files = $request->attachments;
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopmentParticipant';
         if($files!=null && $files!=""){
@@ -222,27 +228,124 @@ class HrDevelopmentController extends Controller{
                 mkdir($file_store_path,0777,TRUE);
             }
             if(sizeof($files)>0){
-                $file_name = time().'_' .$file->getClientOriginalName();
-                move_uploaded_file($file,$file_store_path.'/'.$file_name);
-                array_push($attachment_details,
-                    array(
-                        'path'              =>  $file_store_path,
-                        'name'     =>  $file_name,
-                    )
-                );
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'          =>  $file_store_path,
+                            'name'          =>  $file_name,
+                        )
+                    );
+                }
             }
         }
         $request_data =[
+            'id'                        =>  $request->id,
             'programId'                 =>  $request->programId,
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
             'participant'               =>  $request->participant,
             'contact'                   =>  $request->contact,
             'email'                     =>  $request->email,
             'nature_of_participant'     =>  $request->nature_of_participant,
             'attachment_details'        =>  $attachment_details,
+            'action_type'               =>  $request->action_type,
             'user_id'                   =>  $this->userId() 
         ];
         // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveParticipant', $request_data);
+        return $response_data;
+    }
+    
+    public function getParticipantDetails($action_type="",$id=""){
+        $data =[
+            'org'                 =>  $this->getWrkingAgencyId(),
+            'dzongkhag'           =>  $this->getUserDzoId(),
+            'program_id'          =>  $id,
+            'action_type'         =>  $action_type,
+            'accessLevel'         =>  $this->getAccessLevel()
+        ];
+        $query = http_build_query($data);
+        // dd($query);
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/getParticipantDetails/'.$query);
+        return $response_data;
+    }
+    public function deleteParticipant($id=""){
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/getParticipantDetailsById/'.$id);
+        $docs=json_decode($response_data)->data->document;
+        if(sizeof($docs)>0){
+            foreach($docs as $doc){
+                $full_path=$doc->path.'/'.$doc->original_name;
+                if (file_exists($doc->path.'/'.$doc->original_name)){
+                    unlink($full_path);
+                    $response_data = $this->apiService->deleteData("emis/staff/hrdevelopment/deleteFile", $doc->id);
+                }
+            }
+        }
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/deleteParticipant/'.$id);
+        return $response_data;
+    }
+    
+    public function submitParticipants(Request $request){
+        $request_data =[
+            'programId'                 =>  $request->programId,
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
+            'remarks'                   =>  $request->remarks,
+            'user_id'                   =>  $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/submitParticipants', $request_data);
+        $workflow_data=[
+            'db_name'           =>'staff_db',
+            'table_name'        =>'program_application',
+            'service_name'      => 'Hr Development',
+            'application_number'=>json_decode($response_data)->data->app_no,
+            'screen_id'         =>$request->programId,
+            'status_id'         =>$request->statusId,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        // dd($work_response_data);
+        return $work_response_data;
+    }
+    
+    public function updateParticipant(Request $request){
+        $request_data =[
+            'updatedata'                 =>  $request->participant_list,
+            'user_id'                   =>  $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/updateParticipant', $request_data);
+        return $response_data;
+    }
+    
+    public function updateapplication(Request $request){
+        $request_data =[
+            'programId'                 =>  $request->programId,
+            'remarks'                   =>  $request->remarks,
+            'status'                    =>$request->statusId,
+            'user_id'                   =>  $this->userId() 
+        ];
+        $response_data = $this->apiService->createData('emis/staff/hrdevelopment/updateapplication', $request_data);
+        $workflow_data=[
+            'db_name'           =>'staff_db',
+            'table_name'        =>'program_application',
+            'service_name'      => 'Hr Development',
+            'application_number'=>'NA',
+            'screen_id'         =>$request->programId,
+            'status_id'         =>$request->statusId,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $response_data;
     }
 }
