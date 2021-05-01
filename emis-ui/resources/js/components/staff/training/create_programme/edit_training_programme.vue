@@ -36,7 +36,7 @@
                                 <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
                                 <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                     <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="organizer"></has-error>
                             </div>
@@ -290,14 +290,14 @@
                                 </select> -->
                                 <has-error :form="form" field="target_group"></has-error>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
                                 <span v-for="(level, index) in org_levelList" :key="index" >
                                     <input type="checkbox" v-model="form.org_level" :class="{ 'is-invalid' :form.errors.has('org_level') }" name="org_level" id="org_level" :value="level.id"> 
                                     <label class="pr-3"> {{ level.name  }}</label>
                                 </span>
                                 <has-error :form="form" field="org_level"></has-error>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -371,6 +371,7 @@ export default {
             action_param_type:'',
             dis_status:true,
             filecount:1,
+            organizerList:[],
             trainingtypeList:[],
             relatedProgrammeList:[],
             programmeLevelList:[],
@@ -997,7 +998,17 @@ export default {
             .catch((error) => {  
                 console.log("Error......"+error);
             });
-        }
+        },
+        loadorganizerList(uri = 'organization/getsAgencyList/allSSS'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.organizerList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
     },
     
     mounted() {
@@ -1010,7 +1021,7 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
-        
+        this.loadorganizerList();
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

@@ -17,11 +17,12 @@ class Participant extends Migration
             $table->string('email',100)->nullable(false);
             $table->string('nature_of_participant',100)->nullable(false);
             $table->date('dob',20)->nullable(true);
+            $table->string('remarks',500)->nullable();
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable(true);
             $table->timestamp('updated_at')->nullable(true);
-            $table->enum('status', ['Pending', 'Created'])->default('Pending')->nullable(false);
+            $table->string('status',50)->default('Pending')->nullable(false);
         });
     }
     public function down(){

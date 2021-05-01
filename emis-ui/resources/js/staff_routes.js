@@ -348,9 +348,11 @@ const routes = [
                     { path: '/list_nomination_selection',name:'list_nomination_selection',  component: require('./components/staff/training/nomination_selection/list_nomination_selection.vue').default },
                     { path: '/create_nomination_selection',name:'create_nomination_selection',  component: require('./components/staff/training/nomination_selection/create_nomination_selection.vue').default },
                     { path: '/edit_nomination_selection',name:'edit_nomination_selection',  component: require('./components/staff/training/nomination_selection/edit_nomination_selection.vue').default },
+                    { path: '/verify_nomination_selection',name:'verify_nomination_selection',  component: require('./components/staff/training/nomination_selection/verify_nomination_selection.vue').default },
                 ],
             },
             { path: '/acknowledgement', name:'acknowledgement', component: require('./components/staff/acknowledgement.vue').default },
+            { path: '/acknowledgement_for_errors', name:'acknowledgement_for_errors', component: require('./components/staff/acknowledgement_for_errors.vue').default },
         ]
     },
 ];

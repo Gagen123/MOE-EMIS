@@ -1,193 +1,207 @@
 <template>
     <div>
-        <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
-            <div class="card-body pb-0 mb-0" style="display:none">
-                <div class="callout callout-success">
+        <div class="card card-danger card-outline" id="error_section" style="display:none">
+            <div class="card-body pb-0 mb-0">
+                <div class="callout callout-danger">
                     <div class="form-group row"> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Trainig Type:</label><br>
-                            <span class="text-blue text-bold">{{ trainingtypeList[form.training_type]}}</span>
-                        </div> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Course Title:</label><br>
-                            <span class="text-blue text-bold">{{form.course_title}}</span>
-                        </div> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Organized By (Department/Division):</label><br>
-                            <span class="text-blue text-bold">{{trainingtypeList[form.organizer]}}</span>
-                        </div> 
-                    </div>
-                    <div class="form-group row"> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Related Programme:</label><br>
-                            <span class="text-blue text-bold">{{ relatedProgrammeList[form.related_programme]}}</span>
-                        </div> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Start Date:</label><br>
-                            <span class="text-blue text-bold">{{form.start_date}}</span>
-                        </div> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">End Date:</label><br>
-                            <span class="text-blue text-bold">{{form.end_date}}</span>
-                        </div> 
-                    </div>
-                    <div class="form-group row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <table id="dynamic-table" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Attachment Name</th>
-                                        <th>File(Image,Doc,Excel,Pdf)</th>                           
-                                    </tr>
-                                </thead>
-                                <tbody> 
-                                    <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                        <td> 
-                                            {{attach.user_defined_name}}
-                                        </td>
-                                        <td>    
-                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                        </td> 
-                                    </tr>
-                                </tbody>
-                            </table> 
+                            <label class="mb-0" id="err_message"></label><br>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="maindiv">
+            <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
+                <div class="card-body pb-0 mb-0" style="display:none">
+                    <div class="callout callout-success">
+                        <div class="form-group row"> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Trainig Type:</label><br>
+                                <span class="text-blue text-bold">{{ trainingtypeList[form.training_type]}}</span>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Course Title:</label><br>
+                                <span class="text-blue text-bold">{{form.course_title}}</span>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Organized By (Department/Division):</label><br>
+                                <span class="text-blue text-bold">{{trainingtypeList[form.organizer]}}</span>
+                            </div> 
+                        </div>
+                        <div class="form-group row"> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Related Programme:</label><br>
+                                <span class="text-blue text-bold">{{ relatedProgrammeList[form.related_programme]}}</span>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Start Date:</label><br>
+                                <span class="text-blue text-bold">{{form.start_date}}</span>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">End Date:</label><br>
+                                <span class="text-blue text-bold">{{form.end_date}}</span>
+                            </div> 
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table id="dynamic-table" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>File(Image,Doc,Excel,Pdf)</th>                           
+                                        </tr>
+                                    </thead>
+                                    <tbody> 
+                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
+                                            <td> 
+                                                {{attach.user_defined_name}}
+                                            </td>
+                                            <td>    
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            </td> 
+                                        </tr>
+                                    </tbody>
+                                </table> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-header pb-0 pt-2">
+                    <h3 class="card-title">Program Details</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-plus" ></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade show" id="add_modal" aria-modal="true" style="padding-right: 17px;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Participant</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="bootbox-form">
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Nominee:<span class="text-danger">*</span></label>
+                                        <select class="form-control select2" @change="remove_error('participant'),getdetails()" name="participant" id="participant" v-model="form.participant">
+                                            <option value="">- Please Select -</option>
+                                            <option v-for="(item, index) in staff_list" :key="index" v-bind:value="item.id+'_'+item.contact_no+'_'+item.email"> {{ item.cid_work_permit }}, {{ item.name }},{{ item.position_title.name }}</option>
+                                        </select>
+                                        <span class="text-danger" id="participant_err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Contact Number:<span class="text-danger">*</span></label>
+                                        <input type="text" @change="remove_error('contact')" v-model="form.contact" class="form-control" id="contact">
+                                        <span class="text-danger" id="contact_err"></span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Email:<span class="text-danger">*</span></label>
+                                        <input type="text" @change="remove_error('email')" v-model="form.email" class="form-control" id="email">
+                                        <span class="text-danger" id="email_err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Participating as:<span class="text-danger">*</span></label>
+                                        <br>
+                                        <span v-for="(nature, index) in nature_of_participantList" :key="index" >
+                                            <input type="radio" @change="remove_error('nature_of_participant')" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature"> 
+                                            <label class="pr-3"> {{ nature_of_participantListname[nature]  }} </label>
+                                        </span><br>
+                                        <span class="text-danger" id="nature_of_participant_err"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Attachment:</label>
+                                        <input type="file"  v-on:change="onChangeFileUpload" class="form-control" id="file">
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <span v-for="(doc, index) in editdocument" :key="index">
+                                            <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="#" @click="deletefile(doc)" class="fa fa-times text-danger"> Delete </a><br>
+                                        </span> 
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer text-right">
+                            <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                            <button data-bb-handler="confirm" @click="addrecords()" type="button" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-header pb-0 pt-2">
-                <h3 class="card-title">Program Details</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                        <i class="fas fa-plus" ></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade show" id="add_modal" aria-modal="true" style="padding-right: 17px;">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add Participant</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+            <div class="card card-success card-outline">
+                <div class="card-header pb-0 pt-2">
+                    <h3 class="card-title">Nominee Details</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-dark  text-white btn-sm" @click="showadprocess()">
+                            <i class="fa fa-user-plus"></i> Add Nomination
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <form class="bootbox-form">
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label>Nominee:<span class="text-danger">*</span></label>
-                                     <select class="form-control select2" @change="remove_error('participant'),getdetails()" name="participant" id="participant" v-model="form.participant">
-                                        <option value="">- Please Select -</option>
-                                        <option v-for="(item, index) in staff_list" :key="index" v-bind:value="item.id+'_'+item.contact_no+'_'+item.email"> {{ item.cid_work_permit }}, {{ item.name }},{{ item.position_title.name }}</option>
-                                    </select>
-                                    <span class="text-danger" id="participant_err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Contact Number:<span class="text-danger">*</span></label>
-                                    <input type="text" @change="remove_error('contact')" v-model="form.contact" class="form-control" id="contact">
-                                    <span class="text-danger" id="contact_err"></span>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Email:<span class="text-danger">*</span></label>
-                                    <input type="text" @change="remove_error('email')" v-model="form.email" class="form-control" id="email">
-                                    <span class="text-danger" id="email_err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label>Participating as:<span class="text-danger">*</span></label>
-                                    <br>
-                                    <span v-for="(nature, index) in nature_of_participantList" :key="index" >
-                                        <input type="radio" @change="remove_error('nature_of_participant')" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature"> 
-                                        <label class="pr-3"> {{ nature_of_participantListname[nature]  }} </label>
-                                    </span><br>
-                                    <span class="text-danger" id="nature_of_participant_err"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Attachment:</label>
-                                    <input type="file"  v-on:change="onChangeFileUpload" class="form-control" id="file">
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <span v-for="(doc, index) in editdocument" :key="index">
+                </div>
+                <div class="card-body pb-0 mb-0">
+                    <table id="dynamic-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sl#</th>
+                                <th>CID/Work Permit No</th>   
+                                <th>Name</th>   
+                                <th>Contact</th> 
+                                <th>Email</th>
+                                <th>participation</th>
+                                <th>Attachments</th> 
+                                <th class="pl-5 pr-5"> Action </th>                                 
+                            </tr>
+                        </thead>
+                        <tbody> 
+                            <tr v-for="(item, index) in participant_list" :key="index">
+                                <td>{{ index+1}}</td>
+                                <td>{{ item.staff_details.cid_work_permit}}</td>
+                                <td>{{ item.staff_details.name}}</td> 
+                                <td>{{ item.contact}}</td>
+                                <td>{{ item.email }}</td> 
+                                <td>{{ nature_of_participantListname[item.nature_of_participant]}}</td>
+                                <td>
+                                    <span v-for="(doc, index) in item.document" :key="index">
                                         <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        <a href="#" @click="deletefile(doc)" class="fa fa-times text-danger"> Delete </a><br>
                                     </span> 
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer text-right">
-                        <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
-                        <button data-bb-handler="confirm" @click="addrecords()" type="button" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card card-success card-outline">
-            <div class="card-header pb-0 pt-2">
-                <h3 class="card-title">Nominee Details</h3>
-                <div class="card-tools">
-                    <button type="button" class="btn btn-dark  text-white btn-sm" @click="showadprocess()">
-                        <i class="fa fa-user-plus"></i> Add Nomination
-                    </button>
-                </div>
-            </div>
-            <div class="card-body pb-0 mb-0">
-                <table id="dynamic-table" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Sl#</th>
-                            <th>CID/Work Permit No</th>   
-                            <th>Name</th>   
-                            <th>Contact</th> 
-                            <th>Email</th>
-                            <th>participation</th>
-                            <th>Attachments</th> 
-                            <th class="pl-5 pr-5"> Action </th>                                 
-                        </tr>
-                    </thead>
-                    <tbody> 
-                        <tr v-for="(item, index) in participant_list" :key="index">
-                            <td>{{ index+1}}</td>
-                            <td>{{ item.staff_details.cid_work_permit}}</td>
-                            <td>{{ item.staff_details.name}}</td> 
-                            <td>{{ item.contact}}</td>
-                            <td>{{ item.email }}</td> 
-                            <td>{{ nature_of_participantListname[item.nature_of_participant]}}</td>
-                            <td>
-                                <span v-for="(doc, index) in item.document" :key="index">
-                                    <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
-                                </span> 
-                            </td>
-                            <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat pl-2 pr-2 text-white" @click="loadeditpage(item,'edit')">Edit</a>
-                                <a href="#" class="btn btn-danger btn-sm btn-flat text-white" @click="loadeditpage(item,'delete')">Delete</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="form-group row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0.5">Remarks:</label>
-                        <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
-                        <has-error :form="form" field="remarks"></has-error>
-                    </div>
-                </div> 
-                <hr>
-                <div class="row form-group fa-pull-right">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-primary" @click="submitforapproval()"> <i class="fa fa-save"></i>Submit</button>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat pl-2 pr-2 text-white" @click="loadeditpage(item,'edit')">Edit</a>
+                                    <a href="#" class="btn btn-danger btn-sm btn-flat text-white" @click="loadeditpage(item,'delete')">Delete</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-group row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0.5">Remarks:</label>
+                            <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
+                            <has-error :form="form" field="remarks"></has-error>
+                        </div>
+                    </div> 
+                    <hr>
+                    <div class="row form-group fa-pull-right">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-primary" @click="submitforapproval()"> <i class="fa fa-save"></i>Submit</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
     </div>     
 </template>
 <script>
@@ -219,7 +233,8 @@ export default {
                 email:'',
                 nature_of_participant:'',
                 action_type:'add',
-                remarks:''
+                remarks:'',
+                statusId:''
             })
         }
     },
@@ -348,29 +363,46 @@ export default {
                 $('#add_modal').modal('show'); 
             }
         },
-        loadDetails(id,type){
-            this.action_param_type=type;
+        loadDetails(id,statusId){
+            this.form.statusId=statusId;
+            this.form.programId=id; 
             axios.get('staff/hrdevelopment/loadDetails/'+id)
             .then((response) => {   
                 let data=response.data.data;
                 if(data.app_no!=undefined && data.app_no!=""){
                     let message="Your organization has already submitted Nominations for approval with applicaiton number: <b>"+data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                    this.$router.push({name:'acknowledgement',params: {data:message}});
+                    this.$router.push({name:'acknowledgement_for_errors',params: {data:message}});
                 }
                 else{
-                    this.form.programId=data.id;
-                    this.getParticipantDetails(data.id);
-                    this.form.training_type=data.training_type;
-                    $('#training_type').val(data.training_type).trigger('change');
-                    this.form.course_title=data.course_title;
-                    this.form.organizer=data.organizer;
-                    $('#organizer').val(data.organizer).trigger('change');
-                    this.form.related_programme=data.related_programme;
-                    $('#related_programme').val(data.related_programme).trigger('change');
-                    this.form.start_date=data.start_date;
-                    this.form.end_date=data.end_date;
-                    this.draft_attachments=JSON.parse(response.data.documents).data;
-                    this.nature_of_participantList=data.nature_of_participant.split(', ');
+                    let from = new Date(data.nomination_start_date);  
+                    let to   = new Date(data.nomination_end_date);
+                    let currentfulldate = new Date();
+                    let check = new Date(currentfulldate.getFullYear(),(currentfulldate.getMonth() + 1), currentfulldate.getDate());
+                    if(check < from){
+                        $('#err_message').html('The nomination date is not yet approached');
+                        $('#error_section').show();
+                        $('#maindiv').hide();
+                    }
+                    // else if(check > to){
+                    //     $('#err_message').html('Sorry! Nomination date is over');
+                    //     $('#error_section').show();
+                    //     $('#maindiv').hide();
+                    // } 
+                    else{
+                        this.getParticipantDetails(data.id);
+                        this.form.training_type=data.training_type;
+                        $('#training_type').val(data.training_type).trigger('change');
+                        this.form.course_title=data.course_title;
+                        this.form.organizer=data.organizer;
+                        $('#organizer').val(data.organizer).trigger('change');
+                        this.form.related_programme=data.related_programme;
+                        $('#related_programme').val(data.related_programme).trigger('change');
+                        this.form.start_date=data.start_date;
+                        this.form.end_date=data.end_date;
+                        this.draft_attachments=JSON.parse(response.data.documents).data;
+                        this.nature_of_participantList=data.nature_of_participant.split(', ');
+                    }
+                    
                 }
             })
             .catch((error) =>{  
@@ -444,7 +476,7 @@ export default {
             }
         },
         getParticipantDetails(program_id){
-            axios.get('staff/hrdevelopment/getParticipantDetails/'+program_id)
+            axios.get('staff/hrdevelopment/getParticipantDetails/nomination/'+program_id)
             .then((response) => {   
                 let data=response.data.data;
                 this.participant_list=data;
@@ -502,14 +534,13 @@ export default {
                     this.form.post('/staff/hrdevelopment/submitParticipants')
                     .then((response) => {  
                         if(response!=null && response!=""){
-                            let message="Applicaiton for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            let message="Applicaiton for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                             this.$router.push({name:'acknowledgement',params: {data:message}});
                             Swal.fire(
                                 'Success!',
                                 'Nomination details has beed submitted',
                                 'success',
                             )
-                            // this.$router.push('/list_nomination_selection');
                         }
                     })
                     .catch((error) => {  
@@ -536,7 +567,7 @@ export default {
         this.loadHrDevelopmentMasters('active_training_type_list');
         this.loadHrDevelopmentMasters('active_related_programme_list');
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
-        this.loadDetails(this.$route.params.data,this.$route.params.type);
+        this.loadDetails(this.$route.params.data,this.$route.params.statusId);
         this.loadStaffList();
     },
 }

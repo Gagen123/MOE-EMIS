@@ -188,7 +188,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveBasicDetails'])->name('saveBasicDetails');
     Route::post('/saveContactDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveContactDetails'])->name('saveContactDetails');
     Route::get('/loadBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadBasicDetails'])->name('loadBasicDetails');
-    Route::get('/getsAgencyList', [App\Http\Controllers\organization\EstablishmentController::class, 'getsAgencyList'])->name('getsAgencyList');
+    Route::get('/getsAgencyList/{param}', [App\Http\Controllers\organization\EstablishmentController::class, 'getsAgencyList'])->name('getsAgencyList');
     Route::get('/getHeadQuarterDetails/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getHeadQuarterDetails'])->name('getHeadQuarterDetails');
     
     // Change Basic route
@@ -262,9 +262,12 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadDetails/{id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadDetails'])->name('loadDetails');
         Route::get('/loadProgramDetailsForNomination', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadProgramDetailsForNomination'])->name('loadProgramDetailsForNomination');
         Route::post('/saveParticipant', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveParticipant'])->name('saveParticipant');
-        Route::get('/getParticipantDetails/{program_id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getParticipantDetails'])->name('getParticipantDetails');
+        Route::get('/getParticipantDetails/{action_type}/{program_id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getParticipantDetails'])->name('getParticipantDetails');
         Route::get('/deleteParticipant/{id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'deleteParticipant'])->name('deleteParticipant');
         Route::post('/submitParticipants', [App\Http\Controllers\staff\HrDevelopmentController::class, 'submitParticipants'])->name('submitParticipants');
+        Route::post('/updateParticipant', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateParticipant'])->name('updateParticipant');
+        Route::post('/updateapplication', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateapplication'])->name('updateapplication');
+        
     });   
 });
 Route::prefix('common')->group(function () {

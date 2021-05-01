@@ -42,7 +42,7 @@ export default {
     },
     methods:{
         loadSchool(){
-            axios.get('organization/getsAgencyList')
+            axios.get('organization/getsAgencyList/session')
             .then(response => {
                 let data = response;
                 this.orgList = data.data.data;

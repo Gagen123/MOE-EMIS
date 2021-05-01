@@ -300,8 +300,11 @@ class EstablishmentController extends Controller
         return $response_data;
     }
     
-    public function getsAgencyList(){ 
-        $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+    public function getsAgencyList($param=""){ 
+        if($param=="session"){
+            $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        }
+        
         $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/getsAgencyList/'.$param);
         return $loadBasicDetails;
     }

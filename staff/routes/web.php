@@ -65,6 +65,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getParticipantDetailsById/{id}', ['uses' => 'staff\HrDevelopmentController@getParticipantDetailsById']);
             $router->get('/deleteParticipant/{id}', ['uses' => 'staff\HrDevelopmentController@deleteParticipant']);
             $router->post('/submitParticipants', ['uses' => 'staff\HrDevelopmentController@submitParticipants']);
+            $router->post('/updateapplication', ['uses' => 'staff\HrDevelopmentController@updateapplication']);
+            $router->post('/updateParticipant', ['uses' => 'staff\HrDevelopmentController@updateParticipant']);
+            
         });   
     });
 });

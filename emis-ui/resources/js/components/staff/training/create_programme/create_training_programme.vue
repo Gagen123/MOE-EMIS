@@ -37,7 +37,7 @@
                                     <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
                                     <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                         <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.agencyName }}</option>
                                     </select>
                                     <has-error :form="form" field="organizer"></has-error>
                                 </div>
@@ -290,14 +290,14 @@
                                     </select> -->
                                     <has-error :form="form" field="target_group"></has-error>
                                 </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
                                     <span v-for="(level, index) in org_levelList" :key="index" >
                                         <input type="checkbox" v-model="form.org_level" :class="{ 'is-invalid' :form.errors.has('org_level') }" name="org_level" id="org_level" :value="level.id"> 
                                         <label class="pr-3"> {{ level.name  }}</label>
                                     </span>
                                     <has-error :form="form" field="org_level"></has-error>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -371,6 +371,7 @@ export default {
             count:1,
             filecount:1,
             trainingtypeList:[],
+            organizerList:[],
             relatedProgrammeList:[],
             programmeLevelList:[],
             programmeTypeList :[],
@@ -539,6 +540,7 @@ export default {
                 if(type=="active_training_type_list"){
                     this.trainingtypeList=data;
                 }
+                
                 if(type=="active_related_programme_list"){
                     this.relatedProgrammeList=data;
                 }
@@ -614,6 +616,17 @@ export default {
             .then(response =>{
                 let data = response;
                 this.subjectList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        loadorganizerList(uri = 'organization/getsAgencyList/allSSS'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.organizerList = data.data.data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -964,7 +977,7 @@ export default {
         });
         this.loadHrDevelopmentMasters('active_training_type_list');
         this.loadHrDevelopmentMasters('active_related_programme_list');
-
+        this.loadorganizerList();
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
         this.loadHrDevelopmentMasters('active_target_group_list');
         this.loadroleList();

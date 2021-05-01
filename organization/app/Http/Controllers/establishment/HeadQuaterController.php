@@ -92,7 +92,7 @@ class HeadQuaterController extends Controller
     public function getsAgencyList($param=""){
         $access_level=explode('SSS',$param)[0];
         $response_data="";
-        if($access_level=="Ministry"){
+        if($access_level=="Ministry" || $access_level=='all'){
             $response_data=HeadQuaterDetails::all();
         }
         if($access_level=="Dzongkhag"){
