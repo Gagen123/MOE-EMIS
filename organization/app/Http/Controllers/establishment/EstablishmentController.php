@@ -408,15 +408,9 @@ class EstablishmentController extends Controller
             $response_data->class_section=$classSection;
             $response_data->sections=$stream;
         }
-<<<<<<< HEAD
-        
-        return $this->successResponse($response_data); 
-    }
-=======
         return $this->successResponse($response_data);
     }
 
->>>>>>> 3cb2058d75b0d94edab6becdcb6473ef39d608df
     public function loadorgs($type=""){
         $response_data="";
         if($type=="Org"){
