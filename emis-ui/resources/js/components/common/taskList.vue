@@ -60,7 +60,9 @@
                         </thead>
                         <tbody>
                         <tr v-for="(mytask, index) in myTaskList" :key="index">
-                                <td>{{ index + 1 }}</td>
+                                <td>{{ index + 1 }}
+                                    <a href="#" class="text-danger" data-toggle="tooltip" title="Click here to release this application" @click="loadApplicationDetals(mytask,'release')"> <span class="fa fa-times"></span></a>
+                                </td>
                                 <td>
                                     <a href="#" data-toggle="tooltip" title="Click here to open application" @click="loadApplicationDetals(mytask,'open')"> {{ mytask.application_number }}</a>
                                 </td> 
@@ -105,22 +107,51 @@
             });
         },
         loadApplicationDetals(data,actiontype){
-            if(data.service_name.includes('New Establishment')){
-                this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
+            if(actiontype=="release"){
+                Swal.fire({
+                    text: "Are you sure you wish to release this application back to group?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.get('common/releaseApplication/'+data.application_number)
+                        .then((response) =>{ 
+                            Toast.fire({  
+                                icon: 'success',
+                                title: 'Application has been release to group task'
+                            }); 
+                            this.loadcommontask();
+                            this.loadowntask();
+                        })
+                        .catch((error) =>{ 
+                            console.log("Errors:"+error)
+                        });
+                    }
+                });
             }
-            if(data.service_name.includes('Merge')){
-                this.$router.push({name:"merger_verification",params:{data:data,type:actiontype}});
-            }
-            if(data.service_name.includes('Bifur')){
-                this.$router.push({name:"bifurcation_verification",params:{data:data,type:actiontype}});
-            }
-            if(data.service_name.includes('Change Basic Details')){
-                this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
-            }
-            if(data.service_name.includes('Closure')){
-                this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
-            }
-        
+            else{
+                if(data.service_name.includes('New Establishment')){
+                    this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Merge')){
+                    this.$router.push({name:"merger_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Bifur')){
+                    this.$router.push({name:"bifurcation_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Change Basic Details')){
+                    this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Closure')){
+                    this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Transfer')){
+                    this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
+                }
+            }   
         }
     },
     mounted(){

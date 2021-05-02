@@ -323,6 +323,8 @@ const routes = [
                     { path: '/edit_transfer', name:'edit_transfer', component: require('./components/staff/transfer/edit_transfer.vue').default },
                 ],
             },
+            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
+            component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
     },
 
@@ -355,5 +357,7 @@ const routes = [
             { path: '/acknowledgement_for_errors', name:'acknowledgement_for_errors', component: require('./components/staff/acknowledgement_for_errors.vue').default },
         ]
     },
+
+    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
 ];
 export default routes

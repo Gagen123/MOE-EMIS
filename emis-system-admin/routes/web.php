@@ -43,6 +43,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'common'], function () use ($router){
         $router->get('/getApplicationDetials/{applicationId}', ['uses' => 'CommonController@getApplicationDetials']);
         $router->get('/getTaskList/{type}/{user_id}/{param}/{param2}', ['uses' => 'CommonController@getTaskList']);
+        $router->get('/releaseApplication/{application_number}', ['uses' => 'CommonController@releaseApplication']);
         $router->get('/getDzoNameById/{id}', ['uses' => 'CommonController@getDzoNameById']);
         $router->get('/getGewogNameById/{id}', ['uses' => 'CommonController@getGewogNameById']);
         $router->get('/checkPendingApplication/{type}/{user_id}', ['uses' => 'CommonController@checkPendingApplication']);
