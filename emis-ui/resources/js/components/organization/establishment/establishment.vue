@@ -40,9 +40,10 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Category:<span class="text-danger">*</span></label>
                                 <br> 
-                                <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
-                                <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
-                                <span id="othercategoryforeccd"></span>
+                                <label><input  type="radio" name="category" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
+                                <label><input  type="radio" name="category" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
@@ -299,6 +300,7 @@ export default {
             }
             if(id=="level"){
                 this.form.level=$('#level').val();
+                this.getCategory();
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag=$('#dzongkhag').val();
@@ -429,12 +431,11 @@ export default {
          */
         getCategory(){
             let level = $('#level option:selected').text();
-            alert(level);
             if(level == "ECCD"){
-                $('#othercategoryforeccd').html('<input type="radio" name="category" value="NGO" @change="showprivatedetails("ngo")" > NGO <input type="radio"  @change="showprivatedetails("public")"  name="category" value="Coporate"> Coporate');
+                $(".eccd").show();
             }
             else{
-                $('#othercategoryforeccd').html('');
+                $(".eccd").hide();
             }
         },
 

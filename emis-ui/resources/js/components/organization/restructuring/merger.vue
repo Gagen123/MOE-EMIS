@@ -189,7 +189,8 @@
                                 <br> 
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
-                                <span id="othercategoryforeccd"></span>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
@@ -410,6 +411,20 @@ export default {
                 });
             }
         },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getCategory(){
+            let level = $('#level option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd").show();
+            }
+            else{
+                $(".eccd").hide();
+            }
+        },
+
         showprivatedetails(type){
             if(type=='private'){
                 $('#privatedetails').show();
@@ -556,6 +571,7 @@ export default {
             }
             if(id=="level"){
                 this.form.level=$('#level').val();
+                this.getCategory();
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag = $('#dzongkhag').val();
