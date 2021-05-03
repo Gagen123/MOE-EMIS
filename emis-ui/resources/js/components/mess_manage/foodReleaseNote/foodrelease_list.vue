@@ -7,6 +7,7 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Date of Food Release</th>
+                            <th>Dzongkhag</th>
                             <th>School Name</th>
                             <th>Action</th>                     
                         </tr>
@@ -14,11 +15,14 @@
                     <tbody>
                          <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
+                             <td> {{item.dzongkhag}}</td>
                             <td> {{item.date}}</td>
-                            <td>{{item.schoolName}}</td>
+                            <td>{{item.school}}</td>
                             <td> 
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
-                            </td>=""
+                              <div class="btn-group btn-group-sm">
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                               </div>
+                            </td>
                         </tr> 
                     </tbody>
                 </table>
@@ -35,11 +39,11 @@ export default {
         } 
     },
     methods: {
-        loadScreeningList(uri = 'student/loadScreeningList'){
+        loadFoodReleaseList(uri = 'mess_manage/loadFoodReleaseList'){
             axios.get(uri)
             .then(response => { 
                 let data = response;
-                this.healthScreen_list =  data.data;
+                this.foodrelease_list =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -47,16 +51,19 @@ export default {
                 }
             });
             setTimeout(function(){
-                $("#screening-table").DataTable({
+                $("#foodrelease-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
                 }); 
             }, 300);  
         },
-        viewScreeningList(data){
+        viewFoodReleaseList(data){
             data.action='edit';
-            this.$router.push({name:'HScreeningEdit',params: {data:data}});
+            this.$router.push({name:'FoodReleaseEdit',params: {data:data}});
         },
+    },
+    mounted(){
+        this.loadFoodReleaseList();
     },
     
 }

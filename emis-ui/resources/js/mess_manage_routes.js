@@ -39,24 +39,34 @@ const routes = [
     { path: '/messManage_index', 
         component: require('./components/mess_manage/messManage_Index.vue').default,
         children:[
-            { path: '/stock_received_index', 
-                component: require('./components/mess_manage/stockReceived/stock_received_index.vue').default ,
+            { path: '/stockreceived_index',  
+                component: require('./components/mess_manage/stockReceived/stockreceived_index.vue').default ,
                 children: 
                 [
-                    { path: '', component: require('./components/mess_manage/stockReceived/stock_received_list.vue').default },
-                    { path: '/stock_received_add', name:'StockReceivedAdd', component: require('./components/mess_manage/stockReceived/stock_received_add.vue').default },
-                    { path: '/stock_received_edit', name:'StockReceivedEdit', component: require('./components/mess_manage/stockReceived/stock_received_edit.vue').default },
-                    { path: '/stock_received_list', name:'StockReceivedList', component: require('./components/mess_manage/stockReceived/stock_received_list.vue').default },
+                    { path: '', component: require('./components/mess_manage/stockReceived/stockreceived_list.vue').default },
+                    { path: '/stockreceived_add', name:'StockReceivedAdd', component: require('./components/mess_manage/stockReceived/stockreceived_add.vue').default },
+                    { path: '/stockreceived_edit', name:'StockReceivedEdit', component: require('./components/mess_manage/stockReceived/stockreceived_edit.vue').default },
+                    { path: '/stockreceived_list', name:'StockReceivedList', component: require('./components/mess_manage/stockReceived/stockreceived_list.vue').default },
                 ]    
             },
-            { path: '/stock_issued_index', 
-                component: require('./components/mess_manage/stockIssue/stock_issued_index.vue').default ,
+            { path: '/stockissued_index', 
+                component: require('./components/mess_manage/stockIssue/stockissued_index.vue').default ,
                 children: 
                 [
-                    { path: '', component: require('./components/mess_manage/stockIssue/stock_issued_list.vue').default },
-                    { path: '/stock_issued_add', name:'UnitAdd', component: require('./components/mess_manage/stockIssue/stock_issued_add.vue').default },
-                    { path: '/stock_issued_edit', name:'UnitEdit', component: require('./components/mess_manage/stockIssue/stock_issued_edit.vue').default },
-                    { path: '/stock_issued_list', name:'UnitList', component: require('./components/mess_manage/stockIssue/stock_issued_list.vue').default },
+                    { path: '', component: require('./components/mess_manage/stockIssue/stockissued_list.vue').default },
+                    { path: '/stockissued_add', name:'StockIssuedAdd', component: require('./components/mess_manage/stockIssue/stockissued_add.vue').default },
+                    { path: '/stockissued_edit', name:'StockIssuedEdit', component: require('./components/mess_manage/stockIssue/stockissued_edit.vue').default },
+                    { path: '/stockissued_list', name:'StockIssuedList', component: require('./components/mess_manage/stockIssue/stockissued_list.vue').default },
+                ]    
+            },
+            { path: '/localprocure_index', 
+                component: require('./components/mess_manage/localProcurement/localprocure_index.vue').default ,
+                children: 
+                [
+                    { path: '', component: require('./components/mess_manage/localProcurement/localprocure_list.vue').default },
+                    { path: '/localprocure_add', name:'LocalProcureAdd', component: require('./components/mess_manage/localProcurement/localprocure_add.vue').default },
+                    { path: '/localprocure_edit', name:'LocalProcureEdit', component: require('./components/mess_manage/localProcurement/localprocure_edit.vue').default },
+                    { path: '/localprocure_list', name:'LocalProcureList', component: require('./components/mess_manage/localProcurement/localprocure_list.vue').default },
                 ]    
             },
             { path: '/foodrelease_index', 
