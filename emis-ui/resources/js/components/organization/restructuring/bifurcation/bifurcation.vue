@@ -150,7 +150,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Level:<span class="text-danger">*</span></label>
-                                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control" @change="getClassAndStream('level'),remove_error('level')">
+                                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control" @change="getCategory(),remove_error('level')">
                                                     <option value="">--- Please Select ---</option>
                                                     <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -161,9 +161,10 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:<span class="text-danger">*</span></label>
                                                 <br>
-                                                <label><input type="radio" v-model="form.category"  value="1" tabindex=""/> Public</label>
-                                                <label><input type="radio" v-model="form.category"  value="0"  tabindex=""/> Private</label>
-                                                <span id="othercategoryforeccd"></span>
+                                                <label><input type="radio" v-model="form.category"  value="1" tabindex="" @change="showprivatedetails('public')"/> Public</label>
+                                                <label><input type="radio" v-model="form.category"  value="0"  tabindex="" @change="showprivatedetails('private')"/> Private</label>
+                                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag:<span class="text-danger">*</span></label>
@@ -269,7 +270,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Level:<span class="text-danger">*</span></label>
-                                                <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getClassAndStream('level1'),remove_error('level1')">
+                                                <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
                                                     <option value="">--- Please Select ---</option>
                                                     <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -280,9 +281,10 @@
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Category:<span class="text-danger">*</span></label>
                                                 <br>
-                                                <label><input type="radio" v-model="form.category1" value="1" tabindex=""/> Public</label>
-                                                <label><input type="radio" v-model="form.category1"  value="0"  tabindex=""/> Private</label>
-                                                <span id="othercategoryforeccd"></span>
+                                                <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
+                                                <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
+                                                <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                                <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag:<span class="text-danger">*</span></label>
@@ -448,6 +450,32 @@ export default {
                 let data = response.data;
                 this.locationList = data;
             });
+        },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getCategory(){
+            let level = $('#level option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd").show();
+            }
+            else{
+                $(".eccd").hide();
+            }
+        },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getCategory1(){
+            let level = $('#level1 option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd1").show();
+            }
+            else{
+                $(".eccd1").hide();
+            }
         },
 
         /**
@@ -691,20 +719,22 @@ export default {
         /**
          * method to check pending status
          */
-        checkPendingApplication(){
-            axios.get('organization/checkPendingApplication/bifurcation')
-            .then((response) => {  
-                let data=response.data;
-                if(data!=""){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-                }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
-            });
-        },
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+
+        // checkPendingApplication(){
+        //     axios.get('organization/checkPendingApplication/bifurcation')
+        //     .then((response) => {  
+        //         let data=response.data;
+        //         if(data!=""){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
+        //         }
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
 
     },
     created(){
@@ -734,7 +764,7 @@ export default {
         this.getStream();
         this.loadactivedzongkhagList();
         this.loadactivedzongkhagList1();
-        this.checkPendingApplication();
+        // this.checkPendingApplication();
     }
 }
 </script>

@@ -12,6 +12,7 @@ class StudentPersonalDetails extends Model
     protected $fillable = [
         'id',
         'snationality',
+        'student_code',
         'cid_passport',
         'first_name','middle_name','last_name',
         'dob','sex_id',

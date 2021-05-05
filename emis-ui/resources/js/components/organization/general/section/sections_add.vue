@@ -1,6 +1,10 @@
 <template>
     <div>
-        <form class="bootbox-form" id="equipmentId">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <form class="bootbox-form" id="mainform">
             <div class="card card-primary card-outline">
                 <div class="card-body">
                     <div class="row form-group">
@@ -104,6 +108,7 @@ export default {
                 this.form.users=sections;
             }
         },
+        
         /**
          * method to get current user organization
          */
@@ -305,9 +310,26 @@ export default {
                 this.form.users.splice(index,1); 
             }
         },
+
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Org"){
+                    $('#mainform').hide();
+                    $('#screenPermission').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        }
     },
 
     mounted(){
+        this.getScreenAccess();
         this.form.organizationId = this.$route.query.orgId; 
         this.getschoolDetials();
         $('.select2').select2();

@@ -75,50 +75,6 @@
                     </div>
                 </div>
             </div>
-            <label>Roles Assigned to Students </label>
-            <div class="card">
-                <div class="form-group row">
-                    <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Student</th>
-                                    <th>Role</th>
-                                    <th>Remarks</th>                  
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="record2" v-for='(role, index) in student_form.assigned_student' :key="index">
-                                    <td>
-                                        <select name="student" id="student" class="form-control" v-model="role.student" :class="{ 'is-invalid': student_form.errors.has('student') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <select name="std_role" id="std_role" class="form-control" v-model="role.std_role" :class="{ 'is-invalid': student_form.errors.has('std_role') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <input type="text" name="remarks" id="remarks" class="form-control" v-model="role.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" @change="remove_err('remarks')"/>
-                                        <has-error :form="student_form" field="remarks"></has-error>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMoreStudents()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                        @click="removeStudents()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                                </tr>                                          
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -136,7 +92,6 @@ export default {
             supportList:[],
             teacherRoles:[],
             assigned_staff: [],
-            assigned_student: [],
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
@@ -145,7 +100,6 @@ export default {
                 supporter:'',
                 remarks:'',
                 assigned_staff: [],
-                assigned_student: [],
             }),
         }
     },
@@ -283,7 +237,6 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
         this.loadTeacherList();
         this.loadActiveProgramList();
         this.loadActiveSupportList();

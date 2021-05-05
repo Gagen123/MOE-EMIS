@@ -11,20 +11,22 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Term(quater):<span class="text-danger">*</span></label> 
-                        <select name="term" id="term" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school')">
+                        <select name="term" id="term" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school'),getreleaseddetial()">
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
                         <has-error :form="form" field="term"></has-error>
                     </div>
                 </div>
-            
+            <div class="card">
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
                                   <th>Item</th>
+                                  <th>Released Quantity</th>
                                   <th>Quantity Received</th>
+                                  <th>Pending</th>
                                   <th>Unit</th>
                                   <th>Remarks</th>
                               </tr>
@@ -36,16 +38,22 @@
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                       </select>
                                   </td>
+                                  <td>                          
+                                     <input type="number" name="releasedquantity" class="form-control" v-model="user.releasedquantity"/>
+                                  </td>
                                   <td>                                
-                                     <input type="number" name="quantity" class="form-control" v-model="user.quantity"/>
-                                 </td>
-                                 <td>
+                                     <input type="number" name="receivedquantity" class="form-control" v-model="user.receivedquantity"/>
+                                  </td>
+                                  <td>                                
+                                     <input type="number" name="pendingquantity" class="form-control" v-model="user.pendingquantity"/>
+                                  </td>
+                                  <td>
                                      <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                      </select>
                                   </td>
                                   <td>                                
-                                      <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
+                                       <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
                                   </td>
                               </tr> 
                               <tr>
@@ -60,7 +68,7 @@
                      </table>
                   </div>
               </div>
-            
+            </div>
              <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                  <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
@@ -78,12 +86,13 @@ export default {
             termList:[],
             itemList:[],
             unitList:[],
+
             users: [],
             form: new form({
                 id: '', date: '', term: '',
                 users:
                 [{
-                    item:'',quantity:'',unit:'', remark:'',
+                    item:'',releasedquantity:'',receivedquantity:'',pendingquantity:'',unit:'', remarks:'',
                 }],
             })
         }
@@ -99,7 +108,7 @@ export default {
             this.form.term= '';
             let formReset =this.form.users;
             formReset.splice(0, formReset.length);
-            this.form.users.push({item:'',quantity:'',unit:'',remark:''})
+            this.form.users.push({item:'',releasedquantity:'',receivedquantity:'',pendingquantity:'', unit:'',remark:''})
         },
 
         /**
@@ -188,6 +197,11 @@ export default {
                 this.count--;
                 this.form.users.splice(index,1); 
             }
+        },
+       
+        getAge(pending){
+           
+            var difference = function (releasedquantity, receivedquantity) { return Math.abs(releasedquantity - receivedquantity); }
         },
     },
      mounted() { 

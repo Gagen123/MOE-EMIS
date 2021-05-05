@@ -7,7 +7,6 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\staff_masters\WorkingAgency;
 use App\Models\staff_masters\TransferReason;
 use App\Models\staff_masters\MgmnDesignation;
 use App\Models\staff_masters\StaffMajorGrop;
@@ -33,35 +32,6 @@ class StaffMastersController extends Controller{
     }
     public function saveStaffMasters(Request $request){
         $response_data=[];
-        
-        if($request['record_type']=="working_agency"){
-            $rules = [
-                'name'  =>  'required|unique:master_working_agency',
-                'status'    =>  'required',
-            ];
-
-            $this->validate($request, $rules);
-            if($request->actiontype=="add"){
-                $data = [
-                    'name'  =>  $request['name'],
-                    'status'    =>  $request['status'],
-                    'created_by'=>$request['user_id'],
-                    'created_at'=>date('Y-m-d h:i:s'),
-                ];
-                $response_data = WorkingAgency::create($data);
-            }
-            if($request->actiontype=="edit"){
-                $data = WorkingAgency::find($request['id']);
-                $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
-                $data->name = $request['name'];
-                $data->status = $request['status'];
-                $data->updated_by = $request['user_id'];
-                $data->updated_at = date('Y-m-d h:i:s');
-                $data->update();
-                $response_data = $data;
-            }
-        }
         if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"){
             if($request->actiontype=="add"){
                 $table="";
@@ -377,9 +347,6 @@ class StaffMastersController extends Controller{
     }
     
     public function loadStaffMasters($param=""){
-        if($param=="all_workingagency"){
-            return $this->successResponse(WorkingAgency::all());
-        }
         if($param=="all_transfer"){
             return $this->successResponse(TransferReason::all());
         }

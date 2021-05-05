@@ -10,6 +10,7 @@ use App\Traits\ApiResponser;
 use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
+use App\Models\Students\ApplicationSequence;
 
 class StudentAdmissionController extends Controller
 {
@@ -374,7 +375,46 @@ class StudentAdmissionController extends Controller
             'user_id'                   =>  $request->user_id,
         ];
         $response_data = StudentClassDetails::create($data);
+        $last_seq=ApplicationSequence::where('service_name','Student Admission')->first();
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'Student Admission',
+                'last_sequence'                 =>  $last_seq,
+            ];  
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];  
+            ApplicationSequence::where('service_name', 'Student Admission')->update($app_details);
+        }
+        $appNo='201.00005.11.';
+        if(strlen($last_seq)==1){
+            $appNo= $appNo.'000000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $appNo= $appNo.'00000'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $appNo= $appNo.'0000'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $appNo= $appNo.'000'.$last_seq;
+        }
+        else if(strlen($last_seq)==5){
+            $appNo= $appNo.'00'.$last_seq;
+        }
+        else if(strlen($last_seq)==6){
+            $appNo= $appNo.'0'.$last_seq;
+        }
+        else if(strlen($last_seq)==7){
+            $appNo= $appNo.$last_seq;
+        }
         $update_data =[
+            'student_code'=>$appNo,
             'status'     =>  'created',
         ];
         $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
