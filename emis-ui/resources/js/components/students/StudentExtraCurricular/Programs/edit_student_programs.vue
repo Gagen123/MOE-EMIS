@@ -92,20 +92,22 @@ export default {
             supportList:[],
             teacherRoles:[],
             assigned_staff: [],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
+                id:'',
                 program: '',
                 year: '',
                 supporter:'',
                 remarks:'',
                 assigned_staff: [],
+                record_type:'edit'
             }),
         }
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+        loadStudentList(uri='students/loadStudentList/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -116,7 +118,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadTeacherList(uri='students/loadStudentList/'+this.id){
+        loadTeacherList(uri='students/loadTeacherList/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -222,6 +224,27 @@ export default {
                 this.student_form.supporter=$('#supporter').val();
             }
         },
+        /**
+         * method to pre populate add more data
+         */
+        getTeacherRoles(progId){
+            axios.get('students/getAssignedTeacherRoles/'+progId)
+            .then((response) => {  
+                let data=response.data.data;
+
+                let prop=data.facility;
+                let facilityDetails=[];
+                for(let i=0;i<prop.length;i++){
+                    facilityDetails.push({teacher:prop[i].StfStaffId,role:prop[i].CeaRoleId,remarks:prop[i].Remarks});
+                }
+                this.count=data.length;
+                this.student_form.assigned_staff=facilityDetails;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
     },
      mounted() {
         $('[data-toggle="tooltip"]').tooltip();
@@ -248,7 +271,8 @@ export default {
         this.student_form.year=this.$route.params.data.EstablishmentYear;
         this.student_form.supporter=this.$route.params.data.CeaProgrammeSupporterId;
         this.student_form.remarks=this.$route.params.data.Remarks;
-        this.student_form.id=this.$route.params.data.id;
+        this.student_form.id=this.$route.params.data.Id;
+        this.getTeacherRoles(this.$route.params.data.Id);
     },
 }
 </script>

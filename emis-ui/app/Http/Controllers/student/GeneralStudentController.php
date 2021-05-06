@@ -33,7 +33,8 @@ class GeneralStudentController extends Controller{
             'status'         =>  $request->status,
             'actiontype'     =>  $request->action_type,
             'recordtype'     =>  $request->record_type, 
-            'user_id'        => $this->userId() 
+            'user_id'        => $this->userId(),
+            'working_agency_id' => $this->getWrkingAgencyId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/students/saveStudentMasters', $data);
@@ -46,12 +47,14 @@ class GeneralStudentController extends Controller{
     }
 
     public function loadStudentList($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/loadStudentList/'.$param);
         return $student_list;
     }
 
-    public function loadStudentBySection($param1="", $param2="", $param3="" ){
-        $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1."/".$param2."/".$param3);
+    public function loadStudentBySection($param1=""){
+        $param1 = $this->getWrkingAgencyId();
+        $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1);
         return $student_list;
     }
 

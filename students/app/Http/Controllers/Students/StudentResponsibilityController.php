@@ -33,6 +33,8 @@ class StudentResponsibilityController extends Controller
             'role_id.required'          => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
+
+        $record_type = $request['record_type'];
         
         $data =[
             'id'                => $request->id,
@@ -41,8 +43,24 @@ class StudentResponsibilityController extends Controller
             'Remarks'           =>  $request->remarks,
             //'user_id'           => $this->user_id() 
         ];
-        
-        $response_data = StudentRole::create($data);
+
+        if($request->action_type=="add"){
+            $response_data = StudentRole::create($data);
+
+        } else if($request->action_type=="edit"){
+
+            //Audit Trails
+            // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
+
+            $app_data = [
+                'StdStudentId' => $request['student'],
+                'StdRoleId' => $request['role_id'],
+                'Remarks' => $request['remarks']
+            ];
+
+            StudentRole::where('Id', $request['id'])->update($app_data);
+        }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
         
@@ -66,30 +84,11 @@ class StudentResponsibilityController extends Controller
 
     }
 
-    /**
-     * Function to insert data into the respective tables
-     */
-
-    private function updateData($dataRequest, $databaseModel){
-
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-
-        $data = $model::find($dataRequest['id']);
-
-        //Audit Trails
-        // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-        // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
+    public function getAssignedTeacherRoles($param=""){
         
-        //data to be updated
-        $data->name = $dataRequest['name'];
-        $data->description = $dataRequest['description'];
-        $data->status = $dataRequest['status'];
-        $data->updated_by = $dataRequest['created_by'];
-        $data->updated_at = date('Y-m-d h:i:s');
-        $data->update();
+        $roles = DB::table('std_role_staff')->where('CeaSchoolProgrammeId', $param)->get();
         
-        return $data;
-
-    }    
+        return $this->successResponse($roles);
+    }
+    
 }

@@ -42,19 +42,21 @@ export default {
         return {
             studentList:[],
             roleList:[],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
+                id:'',
                 student: '',
                 role_id: '',
                 remarks:'',
+                action_type:'edit',
             }),
         }
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
         
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+        loadStudentList(uri='students/loadStudentList/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -129,15 +131,16 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
+        this.student_form.student=this.$route.params.data.StdStudentId;
+        $('#student').val(this.$route.params.data.StdStudentId).trigger('change');
         this.loadActiveRoleList();
     },
     
     created() {
-        this.student_form.name=this.$route.params.data.StdStudentId;
+        this.loadStudentList();
+        this.student_form.id = this.$route.params.data.Id;
         this.student_form.role_id=this.$route.params.data.StdRoleId;
         this.student_form.remarks=this.$route.params.data.remarks;
-        this.student_form.id=this.$route.params.data.id;
     },
     
 }

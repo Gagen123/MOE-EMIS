@@ -239,6 +239,20 @@ class StudentMasterController extends Controller
                     $databaseModel = "CeaTraining";
                     break;
                 }
+            case "scout_type" : {
+                    $databaseModel = "CeaScoutType";
+                    break;
+                }
+            case "scout" : {
+                    $databaseModel = "CeaScout";
+                    if($type =='data'){
+                        $additional_data = [
+                            'CeaScoutTypeId'  =>  $request['scout_type'],
+                        ];
+                        $data = $data + $additional_data;
+                    }
+                    break;
+                }
             case "program_role" : {
                     $databaseModel = "CeaRole";
                     if($type =='data'){

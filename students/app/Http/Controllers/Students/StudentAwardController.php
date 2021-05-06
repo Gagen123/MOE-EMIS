@@ -52,8 +52,27 @@ class StudentAwardController extends Controller
             'recordtype'        =>  $request->recordtype, 
             //'user_id'           => $this->user_id() 
         ];
-        
-        $response_data = CeaStudentAward::create($data);
+
+        if($request->actiontype=="add"){
+            $response_data = CeaStudentAward::create($data);
+
+        } else if($request->actiontype=="edit"){
+
+            //Audit Trails
+            // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
+
+            $app_data = [
+                'StdStudentId' => $request['student'],
+                'awarded_by'    =>  $request['award_given_by'],
+                'CeaAwardId'     =>  $request['award_type_id'],
+                'Place'             =>  $request['place'],
+                'AwardDate'              =>  $request['date'],
+                'Remarks'           =>  $request['remarks'],
+            ];
+
+            CeaStudentAward::where('id', $request['id'])->update($app_data);
+        }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
         
@@ -65,7 +84,7 @@ class StudentAwardController extends Controller
 
     public function loadStudentAwards($param=""){
 
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+        $id =$param;
 
         $awards = DB::table('cea_student_award')
                 ->join('std_student', 'cea_student_award.StdStudentId', '=', 'std_student.id')

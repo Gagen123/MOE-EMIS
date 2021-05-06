@@ -64,12 +64,14 @@ export default {
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_award_form: new form({
+                id:'',
                 student: '',
                 award_given_by: '',
                 award_type_id: '',
                 place: '',
                 date: '',
                 remarks:'',
+                action_type:'edit'
             }),
         }
     },
@@ -151,11 +153,15 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
+        this.student_award_form.student=this.$route.params.data.StdStudentId;
+        $('#student').val(this.$route.params.data.StdStudentId).trigger('change');
+
+        
         this.loadActiveAwardList();
     },
     created() {
-        this.student_award_form.name=this.$route.params.data.StdStudentId;
+        this.loadStudentList();
+        
         this.student_award_form.award_type_id=this.$route.params.data.CeaAwardId;
         this.student_award_form.award_given_by=this.$route.params.data.awarded_by;
         this.student_award_form.place=this.$route.params.data.Place;

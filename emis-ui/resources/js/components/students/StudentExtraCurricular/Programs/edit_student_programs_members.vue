@@ -178,11 +178,15 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
+        this.student_form.student=this.$route.params.data.StdStudentId;
+        $('#student').val(this.$route.params.data.StdStudentId).trigger('change');
+
         this.loadActiveProgramList();
         this.loadActiveRolesList();
     },
     created() {
+        this.loadStudentList();
+        
         this.student_form.name=this.$route.params.data.StdStudentId;
         this.student_form.program=this.$route.params.data.CeaSchoolProgrammeId;
         this.student_form.date=this.$route.params.data.JoiningDate;

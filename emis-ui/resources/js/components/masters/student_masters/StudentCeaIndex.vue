@@ -30,6 +30,16 @@
                     Project Type 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('scout_type_list')">
+                    <router-link to="/scout_type_list" id="scout_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Scout Type 
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('scout_list')">
+                    <router-link to="/scout_list" id="scout_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Scout 
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('training_type_list')">
                     <router-link to="/training_type_list" id="project_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Training/Workshop Type 
