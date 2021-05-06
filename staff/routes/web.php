@@ -49,7 +49,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
         $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);
-
+        $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
+        
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
             $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
             $router->get('/loadDraftDetails/{user_id}', ['uses' => 'staff\HrDevelopmentController@loadDraftDetails']);
@@ -59,6 +60,21 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadprogramDetails/{param}', ['uses' => 'staff\HrDevelopmentController@loadprogramDetails']);
             $router->get('/loadDetails/{id}', ['uses' => 'staff\HrDevelopmentController@loadDetails']);
             $router->get('/loadProgramDetailsForNomination/{param}', ['uses' => 'staff\HrDevelopmentController@loadProgramDetailsForNomination']);
-        });   
+            $router->post('/saveParticipant', ['uses' => 'staff\HrDevelopmentController@saveParticipant']);
+            $router->get('/getParticipantDetails/{param}', ['uses' => 'staff\HrDevelopmentController@getParticipantDetails']);
+            $router->get('/getParticipantDetailsById/{id}', ['uses' => 'staff\HrDevelopmentController@getParticipantDetailsById']);
+            $router->get('/deleteParticipant/{id}', ['uses' => 'staff\HrDevelopmentController@deleteParticipant']);
+            $router->post('/submitParticipants', ['uses' => 'staff\HrDevelopmentController@submitParticipants']);
+            $router->post('/updateapplication', ['uses' => 'staff\HrDevelopmentController@updateapplication']);
+            $router->post('/updateParticipant', ['uses' => 'staff\HrDevelopmentController@updateParticipant']);
+        });  
+        $router->group(['prefix' => 'transfer'], function () use ($router) {
+            $router->get('/getcurrentTransferWindowDetails/{id}', ['uses' => 'staff\TransferController@getcurrentTransferWindowDetails']); 
+            $router->post('/submitapplicantDetails', ['uses' => 'staff\TransferController@submitapplicantDetails']);
+            $router->get('/getDraftDetails/{user_id}', ['uses' => 'staff\TransferController@getDraftDetails']); 
+            $router->post('/submitFinalapplicantDetails', ['uses' => 'staff\TransferController@submitFinalapplicantDetails']);
+            $router->get('/loadtrainsferDetails/{appNo}', ['uses' => 'staff\TransferController@loadtrainsferDetails']); 
+            $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
+        }); 
     });
 });

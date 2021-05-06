@@ -362,4 +362,8 @@ class StaffController extends Controller{
         }
     }
     
+    public function load_staff_details_by_id($id=""){
+        return $this->successResponse(PersonalDetails::where('id',$id)->first());
+    }
+    
 }

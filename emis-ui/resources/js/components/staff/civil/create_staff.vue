@@ -729,7 +729,7 @@ export default {
                 this.personal_form.remarks=data.remarks;
             })
             .catch((error) => {  
-                console.log("Error......"+error);
+                console.log("Error:"+error);
             });
         },
         

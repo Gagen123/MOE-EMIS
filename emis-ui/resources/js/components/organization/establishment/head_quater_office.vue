@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
@@ -24,40 +28,52 @@
                             <div class="form-group row" >  
                                 <label class="col-md-7 ">ZEST Working Agency Code:<span class="text-danger">*</span></label>
                                 <div class="input-group mb-3 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control"/>
+                                    <input type="text" id="workingAgencyCode" class="col-md-4 form-control" v-model="form.workingAgencyCode"/>
                                         <div class="input-group-append">
                                             <span type="button" class="col-md-12 btn btn-primary" @click="getOrgDetais(),remove_error('workingAgencyCode')"><i class="fa fa-search">&nbsp;Search</i></span>
                                         </div>
                                 </div>
                                 <has-error :form="form" field="workingAgencyCode"></has-error>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="showDetails" style="display:none">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="showDetails">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Working Agency Code:</label>
-                                        <span class="text-indigo-600" id="agencyCode">{{form.agencyCode}}</span>
+                                        <input type="text" class="form-control" v-model="form.agencyCode"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Agency Name:</label>
-                                        <span class="text-indigo-600" id="agencyName">{{form.agencyName}}</span>
+                                        <input type="text" class="form-control" v-model="form.agencyName"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Parent Agency:</label>
-                                        <span class="text-indigo-600" id="parentAgency">{{form.agencyName}}</span>
+                                        <input type="text" class="form-control" v-model="form.parentAgency"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Dzongkhag:</label>
-                                        <span class="text-indigo-600" id="dzongkhag">{{form.dzongkhag}}</span>
+                                        <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select> 
+                                        <has-error :form="form" field="dzongkhag"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Gewog:</label>
-                                        <span class="text-indigo-600" id="gewog">{{form.gewog}}</span>
+                                        <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="gewog"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Chiwog:</label>
-                                        <span class="text-indigo-600" id="chiwog">{{form.chiwog}}</span>
+                                        <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="chiwog"></has-error>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -103,9 +119,6 @@
                                         <td>                                
                                             <input type="text" name="phone" class="form-control" v-model="contact.phone"/>
                                         </td>
-                                        <!-- <td>                                
-                                            <input type="text" name="fax" class="form-control" v-model="contact.fax"/>
-                                        </td> -->
                                         <td>                                
                                             <input type="text" name="mobile" class="form-control" v-model="contact.mobile"/>
                                         </td>
@@ -142,8 +155,11 @@ export default {
     data(){
         return{ 
             contactTypeList:[],
+            dzongkhagList:[],
+            gewog_list:[],
+            villageList:[],
             form: new form({
-                id: '',organizationId:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
+                id: '',organizationId:'',workingAgencyCode:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
                 gewog:'',chiwog:'',agencyType:'',status:'pending'
             }),
 
@@ -175,6 +191,93 @@ export default {
              this.form1.contacts.splice(index,1);             
         },
 
+        /**
+         * method to get active dzongkhag list
+         */
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.dzongkhagList =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get gewog list
+         */
+        async getgewoglist(id){
+            let dzoId=$('#dzongkhag').val();
+            if(id!="" && (dzoId==null || dzoId=="")){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        /**
+         * method to get gewog list
+         */
+        async getvillagelist(id){
+            let gewogId=$('#gewog').val();
+            if(id!="" && (gewogId==null || gewogId=="")){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            
+            if(id=="dzongkhag"){
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.getgewoglist();
+            }
+            if(id=="gewog"){
+                this.form.gewog=$('#gewog').val();
+                this.getvillagelist();
+            }
+            if(id=="chiwog"){
+                this.form.chiwog=$('#chiwog').val();
+            }
+        },
+
+        applyselect2(){
+            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+                $('#dzongkhag').addClass('select2-hidden-accessible');
+            }
+            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
+                $('#gewog').addClass('select2-hidden-accessible');
+            }
+            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+                $('#chiwog').addClass('select2-hidden-accessible');
+            }
+        },
+
+
         /** method to get HQ and Dzongkhag Office based on code */
         getOrgDetais: function(){
             if($('#workingAgencyCode').val()==""){
@@ -182,13 +285,15 @@ export default {
                 $('#workingAgencyCode').focus();
                 $('#workingAgencyCode').removeClass('is-invalid');
             }else{
-                this.form.agencyCode = '00001';
-                this.form.agencyName = 'SPPD';
-                this.form.parentAgency = 'MOE';
-                this.form.dzongkhag = 'Thimphu';
-                this.form.gewog = 'Chang';
-                this.form.chiwog = 'Chang';
-                $("#showDetails").show();
+                this.form.agencyCode                = '00001';
+                this.form.agencyName                = 'SPPD';
+                this.form.parentAgency              = 'MOE';
+                this.form.dzongkhag                 =  1;
+                $('#dzongkhag').val(1).trigger('change');
+                this.getgewoglist(1);
+                this.form.gewog                     = 1;
+                this.getvillagelist(1);
+                this.form.chiwog                    = 1;
             }
         },
 
@@ -236,7 +341,6 @@ export default {
                 if(nextclass=="contact-tab"){
                     this.form.post('organization/saveBasicDetails')
                     .then((response) => {
-                        alert(response.data);
                         this.form1.organizationId=response.data.data.id;
                         Toast.fire({
                             icon: 'success',
@@ -244,9 +348,9 @@ export default {
                         })
                         this.change_tab(nextclass);
                     })
-                    .catch(() => {
+                    .catch((ex) => {
                         this.change_tab('organization-tab');
-                        console.log("Error......")
+                        console.log("Error......" + ex)
                     })
                 }
                 this.change_tab(nextclass);
@@ -266,6 +370,22 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
 
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Ministry"){
+                    $('#mainform').hide();
+                    $('#screenPermission').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        },
+
         /**
          * method to load organization details
          */
@@ -273,23 +393,42 @@ export default {
             axios.get('organization/loadBasicDetails')
             .then((response) => {  
                 let data=response.data.data;
-                if(data != null){
-                    $("#showDetails").show();
-                    this.form.id  =   data.id;
-                    this.form.agencyCode  =   data.zestAgencyCode;
-                    this.form.agencyName  =   data.agencyName;
-                    this.form.chiwog  =   data.chiwogId;
-                    this.form.agencyType  =   data.organizationType;
-                }
+                this.form.id  =   data.id;
+                this.form.agencyCode = data.zestAgencyCode;
+                this.form.agencyName = data.agencyName;
+                this.form.agencyType = data.organizationType;
+                this.form.workingAgencyCode = data.zestAgencyCode;
+                
+                $('#dzongkhag').val(response.data.data.dzongkhagId).trigger('change');
+                this.form.dzongkhag = response.data.data.dzongkhagId;
+                this.getgewoglist(response.data.data.dzongkhagId);
+                this.form.gewog = response.data.data.gewogId;
+                this.getvillagelist(response.data.data.gewogId);
+                this.form.chiwog = response.data.data.chiwogId;
             })
             .catch((error) => {  
                 console.log("Error......"+error);
             });
         },
+
     },
 
        
     mounted() {
+        this.getScreenAccess();
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        this.loadactivedzongkhagList();
         this.getContactTypeDropdown();
         this.loadBasicDetails();
     },

@@ -10,6 +10,7 @@ class StudentPersonalDetils extends Migration{
         Schema::create('std_personal_detils', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('snationality');
+            $table->char('student_code',36)->nullable();
             $table->char('cid_passport',60)->nullable(false);
             $table->string('first_name');
             $table->string('middle_name')->nullable();
@@ -32,6 +33,7 @@ class StudentPersonalDetils extends Migration{
             $table->increments('id');
             $table->char('std_personal_id',36)->nullable();
             $table->string('snationality');
+            $table->char('student_code',36)->nullable();
             $table->char('cid_passport',60)->nullable();
             $table->string('first_name');
             $table->string('middle_name');
