@@ -188,7 +188,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveBasicDetails'])->name('saveBasicDetails');
     Route::post('/saveContactDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveContactDetails'])->name('saveContactDetails');
     Route::get('/loadBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadBasicDetails'])->name('loadBasicDetails');
-    Route::get('/getsAgencyList', [App\Http\Controllers\organization\EstablishmentController::class, 'getsAgencyList'])->name('getsAgencyList');
+    Route::get('/getsAgencyList/{param}', [App\Http\Controllers\organization\EstablishmentController::class, 'getsAgencyList'])->name('getsAgencyList');
     Route::get('/getHeadQuarterDetails/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getHeadQuarterDetails'])->name('getHeadQuarterDetails');
     
     // Change Basic route
@@ -261,7 +261,22 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadprogramDetails', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadprogramDetails'])->name('loadprogramDetails');
         Route::get('/loadDetails/{id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadDetails'])->name('loadDetails');
         Route::get('/loadProgramDetailsForNomination', [App\Http\Controllers\staff\HrDevelopmentController::class, 'loadProgramDetailsForNomination'])->name('loadProgramDetailsForNomination');
-    });   
+        Route::post('/saveParticipant', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveParticipant'])->name('saveParticipant');
+        Route::get('/getParticipantDetails/{action_type}/{program_id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getParticipantDetails'])->name('getParticipantDetails');
+        Route::get('/deleteParticipant/{id}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'deleteParticipant'])->name('deleteParticipant');
+        Route::post('/submitParticipants', [App\Http\Controllers\staff\HrDevelopmentController::class, 'submitParticipants'])->name('submitParticipants');
+        Route::post('/updateParticipant', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateParticipant'])->name('updateParticipant');
+        Route::post('/updateapplication', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateapplication'])->name('updateapplication');
+    }); 
+
+    Route::prefix('transfer')->group(function (){ 
+        Route::get('/getcurrentTransferWindowDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'getcurrentTransferWindowDetails'])->name('getcurrentTransferWindowDetails');
+        Route::post('/submitapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitapplicantDetails'])->name('submitapplicantDetails');
+        Route::get('/getDraftDetails', [App\Http\Controllers\staff\TransferController::class, 'getDraftDetails'])->name('getDraftDetails');
+        Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
+        Route::get('/loadtrainsferDetails/{appNo}/{type}', [App\Http\Controllers\staff\TransferController::class, 'loadtrainsferDetails'])->name('loadtrainsferDetails');
+        Route::post('/updateTransferApplication', [App\Http\Controllers\staff\TransferController::class, 'updateTransferApplication'])->name('updateTransferApplication');
+    });  
 });
 Route::prefix('common')->group(function () {
     Route::get('/getRoles/{param}', [App\Http\Controllers\CommonController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
@@ -270,6 +285,8 @@ Route::prefix('common')->group(function () {
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\CommonController::class, 'deleteFile'])->name('deleteFile');
     Route::get('/getApplicationDetials/{applicationId}', [App\Http\Controllers\CommonController::class, 'getApplicationDetials'])->name('getApplicationDetials');
     Route::get('/getTaskList/{type}', [App\Http\Controllers\CommonController::class, 'getTaskList'])->name('getTaskList');
+    Route::get('/releaseApplication/{application_number}', [App\Http\Controllers\CommonController::class, 'releaseApplication'])->name('releaseApplication');
+    
     Route::get('/getSessionDetail', [App\Http\Controllers\CommonController::class, 'getSessionDetail'])->name('getSessionDetail');
     Route::get('/getDzoNameById/{id}', [App\Http\Controllers\CommonController::class, 'getDzoNameById'])->name('getDzoNameById');
     Route::get('/getGewogNameById/{id}', [App\Http\Controllers\CommonController::class, 'getGewogNameById'])->name('getGewogNameById');

@@ -5,23 +5,30 @@
                 <tr>
                     <th>SL#</th>
                     <th>Training Name</th>
-                    <th>Institute/Vanue</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Duration</th>
+                    <th>Nomination Start Date</th>
+                    <th>Nomination End Date</th>
+                    <th>Status</th>
+                    <th class="pl-5 pr-5">Action</th>
                 </tr>
             </thead>
             <tbody>
                 
-                <tr v-for="(training, index) in staffList" :key="index">
+                <tr v-for="(training, index) in staffList" :key="index" >
                     <td>{{ index + 1 }} </td>
                     <td>{{ training.with_program.course_title }}</td>
-                    <td>{{ training.with_program.vanue }}</td>
                     <td>{{ training.with_program.start_date }}</td>
                     <td>{{ training.with_program.end_date }}</td>
+                    <td>{{ training.with_program.nomination_start_date }}</td>
+                    <td>{{ training.with_program.nomination_end_date }}</td>
+                    <td><b>{{ training.sequence== 1 ? "Nominating" : training.sequence== 2 ?  'Shortlisting' :'Selecting'}}</b></td>
                     <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'view')"><span class="fa fa-eye"></span>Veiw</a>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'open')"><span class="fa fa-edit"></span>Open</a>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'view')">Veiw</a>
+                        <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,training.sequence)">Open</a>
+                        <!-- <span v-if="training.actiontype== 'Shortlisting & Selection'">
+                            <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'verify')">Open</a>
+                        </span> -->
                     </td>
                 </tr>
             </tbody>
@@ -40,10 +47,12 @@ export default {
             if(type=="view"){
                 this.$router.push({name:'edit_nomination_selection',params: {data:id,type:type}});
             }
-            else{
-                this.$router.push({name:'create_nomination_selection',params: {data:id,type:type}});
+            else if(type!=1){
+                this.$router.push({name:'verify_nomination_selection',params: {data:id,statusId:type}});
             }
-            
+            else{
+                this.$router.push({name:'create_nomination_selection',params: {data:id,statusId:type}});
+            }
         },
         loadStaffList(){
             let uri='/staff/hrdevelopment/loadProgramDetailsForNomination';
