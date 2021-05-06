@@ -35,7 +35,9 @@ class StudentResponsibilityController extends Controller
             'student'           =>  $request->student,
             'role_id'           =>  $request->role_id,
             'remarks'           =>  $request->remarks,
-            //'user_id'           => $this->user_id() 
+            'action_type'       => $request->action_type,
+            'user_id'           => $this->userId(),
+            'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
         try{
@@ -51,5 +53,10 @@ class StudentResponsibilityController extends Controller
     public function loadStudentResponsibilities($param=""){
         $student_roles = $this->apiService->listData('emis/students/loadStudentResponsibilities/'.$param);
         return $student_roles;
+    }
+
+    public function getAssignedTeacherRoles($param=""){
+        $assigned_roles = $this->apiService->listData('emis/students/getAssignedTeacherRoles/'.$param);
+        return $assigned_roles;
     }
 }

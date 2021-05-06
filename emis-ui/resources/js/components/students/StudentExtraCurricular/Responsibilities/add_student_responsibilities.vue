@@ -48,6 +48,7 @@ export default {
                 student: '',
                 role_id: '',
                 remarks:'',
+                action_type:'add',
             }),
         }
     },

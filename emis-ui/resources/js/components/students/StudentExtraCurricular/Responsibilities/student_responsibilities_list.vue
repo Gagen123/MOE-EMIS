@@ -30,12 +30,12 @@
 export default {
     data(){
         return{
-            id:'2',
+            org_id:'2',
             dataList:[], 
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentResponsibilities/'+this.id){
+        loadDataList(uri='students/loadStudentResponsibilities/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -11,11 +11,11 @@
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label> Project</label>
-                        <select v-model="student_form.project" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('project') }" class="form-control select2" name="project" id="project">
-                        <option v-for="(item, index) in projectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <label> Scout</label>
+                        <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
+                        <option v-for="(item, index) in scoutList" :key="index" v-bind:value="item.id">{{ item.scout_name }}</option>
                     </select>
-                    <has-error :form="student_form" field="project"></has-error>
+                    <has-error :form="student_form" field="scout"></has-error>
                     </div>
                 </div>
             </div>
@@ -29,26 +29,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <!-- textarea -->
-                    <div class="form-group">
-                        <label>Responsibilities:</label>
-                        <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="student_form" field="remarks"></has-error>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <!-- textarea -->
-                    <div class="form-group">
-                        <label> Roles:</label>
-                        <ul v-for="(item, index) in studentList" :key="index">
-                        <input type="radio" :name="role" :id="role" :value="index"  @click="showidentity(index)"> {{item.Name}}<br />
-                        </ul>
-                    </div>
-                </div>
+            <div class="card-footer text-right">
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -58,25 +41,21 @@ export default {
     data(){
         return {
             studentList:[],
-            roleList:[],
-            programList:[],
-            users: [],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            scoutList:[],
+            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
+                id:'',
                 student: '',
-                award_given_by: '',
-                award_type_id: '',
-                place: '',
+                scout:'',
                 date: '',
-                remarks:'',
-                users: [],
+                action_type:'add',
             }),
         }
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+        loadStudentList(uri='students/loadStudentList/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -87,11 +66,11 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveScoutList(uri='students/listStudentScouts/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.scoutList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -113,22 +92,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        /**
-         * method to add more fields
-         */
-        addMore: function(){
-            this.count++;
-            this.student_form.users.push({teacher:'',role:''})    
-        }, 
-        /**
-         * method to remove fields
-         */
-        remove(index){    
-             if(this.student_form.users.length>1){
-                this.count--;
-                this.student_form.users.splice(index,1); 
-            }
-        },
         formaction: function(type){
             if(type=="reset"){
                 this.student_form.student= '';
@@ -136,13 +99,13 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveStudentProgram',this.student_form)
+                this.student_form.post('/students/saveScoutParticipants',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_programs_list');
+                    this.$router.push('/student_scouts_members_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -156,7 +119,10 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="student"){
-                this.student_form.program=$('#program').val();
+                this.student_form.student=$('#student').val();
+            }
+            if(id=="scout"){
+                this.student_form.scout=$('#scout').val();
             }
         },
     },
@@ -175,7 +141,7 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveProgramList();
+        this.loadActiveScoutList();
         this.loadActiveRoleList();
     },
     
