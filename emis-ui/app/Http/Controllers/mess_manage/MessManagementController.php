@@ -19,7 +19,14 @@ class MessManagementController extends Controller
         $this->apiService = $apiService;
     }
 
+    public function loadFoodReleaseList(){
+        //return json_encode('from UI');
+          $list = $this->apiService->listData('emis/mess_manage/foolrelease/loadFoodReleaseList');
+          return $list;
+    }
+
     public function saveFoodRelease(Request $request){
+        //return $request
         $rules = [
             'date'                  =>  'required',
             'dzongkhag'             =>  'required',
@@ -34,17 +41,17 @@ class MessManagementController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
-            'organizationId'           =>  $this->getWrkingAgencyId(),
+            //'organizationId'           =>  $this->getWrkingAgencyId(),
             'date'                     =>  $request['date'],
             'dzongkhag'                =>  $request['dzongkhag'],
-            'school    '               =>  $request['schoolName'],
+            'school    '               =>  $request['school'],
             'quarter'                  =>  $request['quarter'],
             'id'                       =>  $request['id'],
             'users'                    =>  $request['users'],
             'user_id'                  =>  $this->userId()
-        ];
+        ];  
         try{
-            $response_data= $this->apiService->createData('emis/mess_manage/foolreleasenote/saveFoodRelease', $foodrelease);
+            $response_data= $this->apiService->createData('emis/mess_manage/foodreleas/saveFoodRelease', $foodrelease);
             return $response_data;
         }
         catch(GuzzleHttp\Exception\ClientException $e){
@@ -52,17 +59,6 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadFoodReleaseList($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
-        }
-        $list = $this->apiService->listData('emis/mess_manage/foolreleasenote/loadFoodReleaseList/'.$orgId);
-        return $list;
-    }
-    public function getFoodReleaseDetails($fooreleaseId=""){
-        $foodreleaseDetails = $this->apiService->listData('emis/mess_manage/foolreleasenote/getFoodReleaseDetails/'.$foodreleaseId);
-        return $foodreleaseDetails;
-    }
 
     //local Procurement
 

@@ -21,9 +21,6 @@ class FoodReleaseController extends Controller
     }
 
     public function saveFoodRelease(Request $request){
-        $id = $request->id;
-
-        if($id != null){
             $foodrelease = [
                 'organizationId'            =>  $request['organizationId'],
                 'date'                      =>  $request['date'],
@@ -48,35 +45,6 @@ class FoodReleaseController extends Controller
                     $fodrel = ItemReleasedNote::create($itemreleasenote);
                 }
             return $this->successResponse($fodrel, Response::HTTP_CREATED);
-
-        }else{
-            $foodrelease = [
-                'organizationId'            =>  $request['organizationId'],
-                'date'                      =>  $request['date'],
-                'dzongkhag'                 =>  $request['dzongkhag'],
-                'school'                    =>  $request['school'],
-                'quarter'                   =>  $request['quarter'],
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
-                ];
-                
-                $fodrel = FoodRelease::create($foodrelease);
-                $foodreleaseId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
-    
-                foreach ($request->input('users') as $i=> $user){
-                    $itemreleasenote = array(
-                        'foodreleaseId'              =>  $foodreleaseId[0],
-                        'item'                       =>  $user['item'],
-                        'quantity'                   =>  $user['quantity'],
-                        'unit'                       =>  $user['unit'],
-                        'remarks'                    =>  $user['remarks'],
-                        'created_by'                 =>  $request->user_id,
-                        'created_at'                 =>  date('Y-m-d h:i:s')
-                );
-                    $fodrel = ItemReleasedNote::create($itemreleasenote);
-                }
-            return $this->successResponse($fodrel, Response::HTTP_CREATED);
-        }
     }
 
     public function loadFoodReleaseList($orgId=""){
@@ -86,12 +54,6 @@ class FoodReleaseController extends Controller
              'Quater'
             )->get();
         return $list;
-    }
-
-    public function getFoodReleseDetails($fodrelId=""){
-        $response_data=FoodRelease::where('id',$fodrelId)->first();
-        $response_data->itemrelease=ItemReleasedNote::where('foodreleaseId',$response_data->id)->get();
-        return $this->successResponse($response_data); 
     }
 }
 

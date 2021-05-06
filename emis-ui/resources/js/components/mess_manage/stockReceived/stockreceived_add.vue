@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="bootbox-form" id="foodreleaseId">
+        <form class="bootbox-form" id="stockreceivedId">
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

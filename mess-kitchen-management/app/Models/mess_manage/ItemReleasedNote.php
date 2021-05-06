@@ -3,12 +3,9 @@
 namespace App\Models\mess_manage;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Uuid;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemReleasedNote extends Model
 {
-    //
     use HasFactory, Uuid;
     protected $table="item_released_notes";
 

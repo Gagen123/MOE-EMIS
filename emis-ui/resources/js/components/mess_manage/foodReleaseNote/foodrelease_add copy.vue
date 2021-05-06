@@ -11,46 +11,26 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
-                     <!--   <select name="dzongkhag" id="dzongkhag" class="form-control editable_fields" v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" @change="remove_err('dzongkhag')">
+                        <select name="dzongkhag" id="dzongkhag" class="form-control editable_fields" v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" @change="remove_err('dzongkhag')">
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> -->
-                        <select class="form-control" id="dzongkhag"  v-model="itemrelease.dzongkhag" >
-                            <option value="">---Please Select---</option> 
-                            <option value="samtse">Samtse</option>
-                            <option value="thimphu">Thimphu</option>
-                            <option value="haa">Haa</option>
-                            <option value="paro">Paro</option>
-                        </select>
+                        <has-error :form="form" field="term"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">School Name:<span class="text-danger">*</span></label> 
-                    <!--    <select name="school" id="school" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school')">
+                        <select name="school" id="school" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school')">
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
-                        <has-error :form="form" field="school"></has-error> -->
-                        <select class="form-control" id="school"  v-model="itemrelease.school" >
-                            <option value="">---Please Select---</option> 
-                            <option value="SHSS">SHSS</option>
-                            <option value="YHSS">YHSS</option>
-                            <option value="DHSS">DHSS</option>
-                        </select>
+                        <has-error :form="form" field="school"></has-error>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Term(quater):<span class="text-danger">*</span></label> 
-                     <!--   <select name="term" id="term" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school'),getreleaseddetial()">
+                        <select name="term" id="term" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school'),getreleaseddetial()">
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> -->
-                       <select class="form-control" id="quarter"  v-model="itemrelease.quarter" >
-                            <option value="">---Please Select---</option> 
-                            <option value="1st">1st quarter</option>
-                            <option value="2nd">2nd quarter</option>
-                            <option value="3rd">3rd quarter</option>
-                        </select>     
-
+                        <has-error :form="form" field="term"></has-error>
                     </div>
                 </div>
             <div class="card">
@@ -68,30 +48,17 @@
                            <tbody>
                               <tr id="record1" v-for='(user, index) in form.users' :key="index">
                                   <td>
-                                <!--     <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
+                                     <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select>-->
-                                    <select class="form-control" id="item"  v-model="user.item" >
-                                        <option value="">---Please Select---</option> 
-                                        <option value="rice">rice</option>
-                                        <option value="potatoes">potatoes</option>
-                                        <option value="onion">onion</option>
-                                    </select>
+                                      </select>
                                   </td>
                                   <td>                          
                                     <input type="number" name="quantity" class="form-control" v-model="user.quantity"/>
                                   </td>
                                   <td>                                
-                                 <!--    <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
+                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                     </select> -->
-                                    <select class="form-control" id="unit"  v-model="user.unit" >
-                                        <option value="">---Please Select---</option> 
-                                        <option value="kg">kg</option>
-                                        <option value="litre">litre</option>
-                                        <option value="packet">packet</option>
-                                    </select>
-
+                                     </select>
                                   </td>
                                   <td>                                
                                        <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
@@ -124,11 +91,11 @@ export default {
     data(){
         return{
             count:1,
-           // schoolList:[],
-          //  termList:[],
-          //  itemList:[],
-          //  unitList:[],
-            itemrelease:[],
+            schoolList:[],
+            termList:[],
+            itemList:[],
+            unitList:[],
+            itemreleaseList:[],
             users: [],
             form: new form({
                  id: '', date: '', dzongkhag: '', school: '',term: '',
@@ -147,9 +114,7 @@ export default {
          */
         restForm(){
             this.form.date= '';
-             this.form.dzongkhag= '';
-            this.form.school= '';
-             this.form.term= '';
+            this.form.term= '';
             let formReset =this.form.users;
             formReset.splice(0, formReset.length);
             this.form.users.push({item:'',quantity:'',unit:'',remark:''})
@@ -163,13 +128,13 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.post('/mess_manage/saveFoodRelease',this.form)
+                    this.form.post('/mess_manage/saveStockReceived',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food release detail is added successfully'
+                        title: 'Stock Received detail is added successfully'
                     })
-                    this.$router.push('/foodrelease_list');
+                    this.$router.push('/stockreceived_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -189,27 +154,27 @@ export default {
         /**
          * method to get term in dropdown
          */
-      //  getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
-      //      axios.get(uri)
-      //      .then(response => {
-      //          let data = response.data;
-      //          this.termList = data;
-      //      });
-     //   },
+        getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.termList = data;
+            });
+        },
 
         /**
          * method to get unit in dropdown
          */
-       //  loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-       //     axios.get(uri)
-       //     .then(response => {
-       //         let data = response;
-       //         this.unitList =  data.data.data;
-       //     })
-       //     .catch(function (error) {
-       //         console.log("Error......"+error)
-       //     });
-      //  },
+         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
 
         /**
          * method to get item in dropdown
@@ -249,9 +214,9 @@ export default {
        
     },
      mounted() { 
-     //   this.loadActiveUnitList(); 
-      //  this.loadActiveItemList();
-     //   this.getTermInDropdown();
+        this.loadActiveUnitList(); 
+        this.loadActiveItemList();
+        this.getTermInDropdown();
     }
 }
 </script>

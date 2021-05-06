@@ -7,10 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class FoodRelease extends Model
 {
     use HasFactory, Uuid;
-    protected $table="foodreleases";
+    protected $table="food_releases";
 
     protected $fillable = [
-        'id','organizationId','date','dzongkhag','school','quarter','created_by','updated_by'
+        'id','date','dzongkhag','school','quarter','created_by','updated_by'
     ];
-
 }
