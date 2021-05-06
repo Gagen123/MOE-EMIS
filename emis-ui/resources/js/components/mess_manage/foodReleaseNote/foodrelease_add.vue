@@ -96,11 +96,11 @@ export default {
     data(){
         return{
             count:1,
-            schoolList:[],
-            termList:[],
-            itemList:[],
-            unitList:[],
-            dzongkhagList:[],
+            schoolList:[{school:"YHSS"}, {school:"MHSS"}],
+            termList:[{term:"first"},{term:"second"}],
+            itemList:[{item:"rice"}, {item:"potatoes"},{item:"onion"}],
+            unitList:[{unit:"kg"},{unit:"litre"},{unit:"peices"}],
+            dzongkhagList:[{dzongkhag:"samtse"},{dzongkhag:"Thimphu"}],
             users: [],
             form: new form({
                 id: '', date: '', school: '',term: '',

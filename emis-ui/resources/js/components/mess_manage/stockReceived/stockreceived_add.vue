@@ -32,38 +32,34 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(user, index) in form.users' :key="index">
+                              <tr id="record1" v-for='(releaseditem, index) in itemreleasedList' :key="index">
                                   <td>
-                                      <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select>
+                                      {{itemList[releaseditem.itemId]}}
                                   </td>
                                   <td>                          
-                                     <input type="number" name="releasedquantity" class="form-control" v-model="user.releasedquantity"/>
+                                     {{releaseditem.Quantity}}
                                   </td>
                                   <td>                                
-                                     <input type="number" name="receivedquantity" class="form-control" v-model="user.receivedquantity"/>
+                                     <input type="number" name="receivedquantity" class="form-control" v-model="item_form.receivedquantity[index]"/>
                                   </td>
                                   <td>                                
-                                     <input type="number" name="pendingquantity" class="form-control" v-model="user.pendingquantity"/>
+                                     {{getpending(releaseditem.pending)}}
                                   </td>
                                   <td>
-                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                     </select>
+                                     {{releaseditem.Unit}}
                                   </td>
                                   <td>                                
-                                       <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
+                                       <input type="text" name="remarks" class="form-control" v-model="item_form.remarks[index]"/>
                                   </td>
                               </tr> 
-                              <tr>
+                            <!--  <tr>
                                   <td colspan=7> 
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>                                          
+                              </tr>  -->                                        
                           </tbody>
                      </table>
                   </div>
@@ -86,14 +82,13 @@ export default {
             termList:[],
             itemList:[],
             unitList:[],
+            itemreleasedList:[],
 
             users: [],
             form: new form({
-                id: '', date: '', term: '',
-                users:
-                [{
-                    item:'',releasedquantity:'',receivedquantity:'',pendingquantity:'',unit:'', remarks:'',
-                }],
+                id: '', date: '', term: '', item:'',releasedquantity:'',
+                receivedquantity:'',pendingquantity:'',unit:'', remarks:'',
+                
             })
         }
     },
@@ -156,7 +151,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -174,7 +169,10 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.itemList =  data.data.data;
+                for(leti=0;i<data.data.data.length;i++){
+                this.itemList[data.data.data[i].id] =  data.data.data[i].name;
+                }
+                
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -199,7 +197,7 @@ export default {
             }
         },
        
-        getAge(pending){
+        getpending(pending){
            
             var difference = function (releasedquantity, receivedquantity) { return Math.abs(releasedquantity - receivedquantity); }
         },
