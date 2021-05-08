@@ -31,7 +31,7 @@
                             </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Level:<span class="text-danger">*</span></label>
-                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getClassAndStream('level'),remove_error('level')">
+                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getCategory(),remove_error('level')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
@@ -40,9 +40,10 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Category:<span class="text-danger">*</span></label>
                                 <br> 
-                                <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
-                                <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
-                                <span id="othercategoryforeccd"></span>
+                                <label><input  type="radio" name="category" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
+                                <label><input  type="radio" name="category" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
@@ -299,6 +300,7 @@ export default {
             }
             if(id=="level"){
                 this.form.level=$('#level').val();
+                this.getCategory();
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag=$('#dzongkhag').val();
@@ -352,7 +354,6 @@ export default {
                     if (result.isConfirmed) {
                         this.classStreamForm.post('organization/saveClassStream')
                         .then((response) => {
-                            alert(response.data);
                             if(response.data=="No Screen"){
                                 Toast.fire({  
                                     icon: 'error',
@@ -360,7 +361,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -387,9 +388,8 @@ export default {
                         this.change_tab('organization-tab');
                         console.log("Error:"+error)
                     })
-                }
-                else{
-                    this.change_tab(nextclass); 
+                }else{
+                    this.change_tab(nextclass);
                 }
             }
         },
@@ -429,12 +429,13 @@ export default {
         /**
          * method to get other category if the category is 'ECCD'
          */
-        getClassAndStream(level){
-            if($('#level').val()=="6"){
-                $('#othercategoryforeccd').html('<input type="radio" name="category" value="NGO" @change="showprivatedetails("ngo")" > NGO <input type="radio"  @change="showprivatedetails("public")"  name="category" value="Coporate"> Coporate');
+        getCategory(){
+            let level = $('#level option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd").show();
             }
             else{
-                $('#othercategoryforeccd').html('');
+                $(".eccd").hide();
             }
         },
 
@@ -460,6 +461,7 @@ export default {
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {  
+
                 let data=response.data.data[0];
                 this.form.cid           =   data.cid;
                 this.form.name          =   data.fullName;
@@ -467,7 +469,7 @@ export default {
                 this.form.email         =   data.email;
             })
             .catch((error) => {  
-                console.log("Error:"+error);
+                console.log("Error......"+error);
             });
         },
         
@@ -508,26 +510,46 @@ export default {
                 console.log("Error......"+error);
             });
         },
-        checkPendingApplication(){
-            axios.get('organization/checkPendingApplication/establishment')
-            .then((response) => {  
-                let data=response.data;
-                if(data!=""){
+
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data == "Org" || data == "Ministry"){
                     $('#mainform').hide();
                     $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
+                    $('#existmessage').html('You have no access to this page.');
                 }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
             });
-        },
+        }
+
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+
+        // checkPendingApplication(){
+        //     axios.get('organization/checkPendingApplication/establishment')
+        //     .then((response) => {  
+        //         let data=response.data;
+        //         if(data!=""){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
+        //         }
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
     },
     
     created(){
+        this.getScreenAccess();
         this.getLevel();
         this.getLocation();
-        this.checkPendingApplication();
+        // this.checkPendingApplication();
     },
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();

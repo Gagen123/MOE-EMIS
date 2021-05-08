@@ -87,6 +87,7 @@ export default {
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
+                id:'',
                 student: '',
                 offence_type: '',
                 date: '',
@@ -94,6 +95,7 @@ export default {
                 severity: '',
                 offence_description:'',
                 remarks:'',
+                action_type:'edit'
             }),
         }
     },
@@ -201,13 +203,16 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
+        this.student_form.student=this.$route.params.data.StdStudentId;
+        $('#student').val(this.$route.params.data.StdStudentId).trigger('change');
+        
         this.loadActiveOffenceTypeList();
         this.loadActiveActionTakenList();
         this.loadActiveSeverityList();
     },
     created() {
-        this.student_form.name=this.$route.params.data.StdStudentId;
+        this.loadStudentList();
+        
         this.student_form.offence_type=this.$route.params.data.StdDisciplinaryOffenceTypeId;
         this.student_form.date=this.$route.params.data.OffenceDate;
         this.student_form.action_taken=this.$route.params.data.StdDisciplinaryActionTypeId;

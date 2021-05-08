@@ -18,6 +18,7 @@ class Participant extends Model{
         'contact',
         'email',
         'nature_of_participant',
+        'remarks',
         'created_by',
         'updated_by',
         'created_at',

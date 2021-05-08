@@ -291,7 +291,9 @@ export default {
     methods: {
         openfile(file){ 
             let file_path=file.path+'/'+file.original_name;
-            window.location=file_path;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
         },
         loadHrDevelopmentMasters(type){
             let url="masters/loadHrDevelopmentMastersData/"+type;

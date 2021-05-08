@@ -95,11 +95,13 @@ export default {
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
+                id:'',
                 program: '',
                 year: '',
                 supporter:'',
                 remarks:'',
                 assigned_staff: [],
+                record_type:'add'
             }),
         }
     },

@@ -408,7 +408,6 @@ class EstablishmentController extends Controller
             $response_data->class_section=$classSection;
             $response_data->sections=$stream;
         }
-
         return $this->successResponse($response_data);
     }
 
@@ -434,12 +433,6 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($response_data);
     }
-
-    public function loadorgbygewogId($gewog_id){
-        $response_data=OrganizationDetails::all()->where('gewogId',$gewog_id);
-        return $this->successResponse(($response_data));
-    }
-
     public function getOrgList($dzo_id=""){
         $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
         return $this->successResponse($response_data);

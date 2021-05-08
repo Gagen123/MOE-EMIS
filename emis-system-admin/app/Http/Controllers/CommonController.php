@@ -47,6 +47,14 @@ class CommonController extends Controller{
             return DB::select($result_data);
         }
     }
+    
+    public function releaseApplication($application_number=""){
+        $update_data=[
+            'claimed_by'     =>  null,
+        ];
+        $response_data=TaskDetails::where('application_number', $application_number)->update($update_data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
 
     public function getDzoNameById($id=""){
         return Dzongkhag::where('id',$id)->first();

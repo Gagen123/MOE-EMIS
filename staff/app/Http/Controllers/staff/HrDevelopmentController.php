@@ -128,16 +128,19 @@ class HrDevelopmentController extends Controller{
         }
         if($request->id==""){
             $response_data = HrDevelopment::create($request_data);
-            foreach($request->attachment_details as $att){
-                $doc_data =[
-                    'parent_id'                        =>  $response_data->id,
-                    'attachment_for'                   =>  'Hr Development Programme',
-                    'path'                             =>  $att['path'],
-                    'original_name'                    =>  $att['original_name'],
-                    'user_defined_name'                =>  $att['user_defined_name'],
-                ];
-                $doc = DocumentDetails::create($doc_data);
+            if($request->attachment_details!="" && $request->attachment_details!=null){
+                foreach($request->attachment_details as $att){
+                    $doc_data =[
+                        'parent_id'                        =>  $response_data->id,
+                        'attachment_for'                   =>  'Hr Development Programme',
+                        'path'                             =>  $att['path'],
+                        'original_name'                    =>  $att['original_name'],
+                        'user_defined_name'                =>  $att['user_defined_name'],
+                    ];
+                    $doc = DocumentDetails::create($doc_data);
+                }
             }
+           
         }
         else{
             $act_det = HrDevelopment::where ('id', $request->id)->first();
@@ -269,10 +272,22 @@ class HrDevelopmentController extends Controller{
     public function loadProgramDetailsForNomination($param=""){
         $param = rtrim($param, ", ");
         $param=explode(',',$param);
-        $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->where('sequence',1)->get();
-        // $work_details=HrWorkflow::wherein('sys_role_id',$param)->where('sequence',1)->get();
-        // foreach($work_details as $work){
-        //     $work=HrDevelopment::where('id',$work->program_id)->where('status','created')->first();
+
+        $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->get();
+        foreach($work_details as $work){
+            $work->pro_app=ProgramApplication::where('program_id',$work->program_id)->first();
+        }
+        // if(sizeof($work_details)>0){
+        //     foreach($work_details as $work){
+        //         $work->actiontype='Nominating';
+        //     }
+        // }
+        // else{
+        //     //selection
+        //     $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->where('sequence',2)->get();
+        //     foreach($work_details as $work){
+        //         $work->actiontype='Shortlisting & Selection';
+        //     }
         // }
         return $this->successResponse($work_details);
     }
@@ -341,9 +356,25 @@ class HrDevelopmentController extends Controller{
     
     public function getParticipantDetails($param=""){
         parse_str($param,$param_array);
-        $response_details=Participant::where('dzo_id',$param_array['dzongkhag'])->where('org_id',$param_array['org'])->where('program_id',$param_array['program_id'])->get();
-        foreach($response_details as $part){
-            $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+        if($param_array['action_type']=="nomination"){
+            $response_details=Participant::where('dzo_id',$param_array['dzongkhag'])->where('org_id',$param_array['org'])->where('program_id',$param_array['program_id'])->get();
+            foreach($response_details as $part){
+                $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+            }
+        }
+        else if($param_array['action_type']=="verification"){
+            $response_details=Participant::where('program_id',explode('SSS',$param_array['program_id'])[0])->where('org_id',explode('SSS',$param_array['program_id'])[1])->get();
+            foreach($response_details as $part){
+                $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+            } 
+        }
+        else if($param_array['action_type']=="orgdetails"){
+            if($param_array['accessLevel']=="Ministry"){
+                $response_details=ProgramApplication::where('program_id',$param_array['program_id'])->get();
+            }
+            else{
+                $response_details=ProgramApplication::where('program_id',$param_array['program_id'])->where('dzo_id',$param_array['dzongkhag'])->get();
+            }
         }
         return $this->successResponse($response_details);
     }
@@ -407,6 +438,45 @@ class HrDevelopmentController extends Controller{
         else{
             $response_data="Already Submitted"; 
         }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function updateParticipant(Request $request){
+        $response_data="";
+        if(!$request->updatedata==null){
+            foreach($request->updatedata as $participant){
+                $update_data =[
+                    'remarks'                  =>  $participant['remarks'],
+                    'status'                   =>  $participant['status'],
+                ];
+                Participant::where('id', $participant['id'])->update($update_data);
+            }
+            $response_data="success";
+            $update_data =[
+                'remarks'                  =>  $participant['remarks'],
+                'status'                   =>  $participant['status'],
+            ];
+            // ProgramApplication::where('id', $participant['id'])->update($update_data);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function updateapplication(Request $request){
+        $response_data="";
+        $status="";
+        if($request->status==2){
+            $status="Shortlisted";
+        }
+        if($request->status==3){
+            $status="Selected";
+        }
+        $update_data =[
+            'remarks'                  =>  $request->remarks,
+            'status'                   =>  $status,
+            'updated_by'               =>  $request->user_id,
+            'updated_at'               =>  date('Y-m-d h:i:s')
+        ];
+        $response_data=ProgramApplication::where('program_id', $request->programId)->update($update_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 }

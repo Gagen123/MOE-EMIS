@@ -165,7 +165,7 @@ export default {
         this.loadActiveProjectList();
     },
     created() {
-        this.student_form.name=this.$route.params.data.StdStudentId;
+        this.student_form.name=this.$route.params.data.name;
         this.student_form.place=this.$route.params.data.Place;
         this.student_form.project_type_id=this.$route.params.data.CeaProjectTypeId;
         this.student_form.program_id=this.$route.params.data.CeaProgrammeId;

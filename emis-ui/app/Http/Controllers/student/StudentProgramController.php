@@ -194,7 +194,9 @@ class StudentProgramController extends Controller
             'program'               => $request->program,
             'from_date'             => $request->from_date,
             'to_date'               => $request->to_date,
-            'action_plan'           => $request->action_plan
+            'action_plan'           => $request->action_plan,
+            'user_id'           => $this->userId(),
+            'working_agency_id' => $this->getWrkingAgencyId()
 
             //'user_id'        => $this->user_id() 
         ];

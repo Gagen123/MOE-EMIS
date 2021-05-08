@@ -87,6 +87,7 @@ export default {
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
+                id:'',
                 student: '',
                 offence_type: '',
                 date: '',
@@ -94,6 +95,7 @@ export default {
                 severity: '',
                 offence_description:'',
                 remarks:'',
+                action_type:'add'
             }),
         }
     },

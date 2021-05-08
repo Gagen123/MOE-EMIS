@@ -180,6 +180,7 @@ class HomeController extends Controller{
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
         $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
         $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
+        // dd($role_workflow_submitter);
         $screens=[];
         $screens_ids="";
         if(($role_workflow_submitter!=null || $role_workflow_submitter!="") && $role_workflow_submitter!="Unauthorized."){

@@ -46,7 +46,8 @@ class StudentAwardController extends Controller
             'remarks'           =>  $request->remarks,
             'actiontype'        =>  $request->action_type,
             'recordtype'        =>  $request->record_type, 
-            //'user_id'           => $this->user_id() 
+            'user_id'           => $this->userId(),
+            'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
         try{

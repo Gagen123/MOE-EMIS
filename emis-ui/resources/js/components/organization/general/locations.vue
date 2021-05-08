@@ -1,6 +1,10 @@
 <template>
     <div>
-        <form class="bootbox-form" id="locationsId">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <form class="bootbox-form" id="mainform">
             <div class="card card-primary card-outline">
                 <div class="card-body">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
@@ -310,9 +314,25 @@ export default {
                 console.log("Error:"+error);
             }); 
         },
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Org"){
+                    $('#mainform').hide();
+                    $('#screenPermission').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        }
     },
 
     created(){
+        this.getScreenAccess();
         this.getDisasterList();
         this.loadAttachmentList();
         this.getLocationDetails(this.$route.query.orgId);
