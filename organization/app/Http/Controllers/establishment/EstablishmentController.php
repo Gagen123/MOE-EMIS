@@ -408,19 +408,10 @@ class EstablishmentController extends Controller
             $response_data->class_section=$classSection;
             $response_data->sections=$stream;
         }
-<<<<<<< HEAD
-        $response_data->class_section=$classSection;
-        $response_data->sections=$sections;
+
         return $this->successResponse($response_data);
     }
 
-    public function loadorgs(){
-        $response_data=OrganizationDetails::all();
-=======
-        
-        return $this->successResponse($response_data); 
-    }
-    
     public function loadorgs($type=""){
         $response_data="";
         if($type=="Org"){
@@ -432,11 +423,9 @@ class EstablishmentController extends Controller
         if($type=="Ministry"){
             $response_data=HeadQuaterDetails::where('organizationType',1)->select('agencyName AS name','id')->get();
         }
->>>>>>> 7c1eacc1bb000a6915f72069eed79032abdcde2f
         return $this->successResponse($response_data);
     }
     public function loadorgbyId($type="",$org_id=""){
-        // dd('i am here ');
         if($type=="org"){
             $response_data=OrganizationDetails::where('id',$org_id)->first();
         }

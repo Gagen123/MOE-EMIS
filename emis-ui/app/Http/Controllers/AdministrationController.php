@@ -17,7 +17,7 @@ class AdministrationController extends Controller{
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-    
+
     public function saveGlobalMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -28,7 +28,7 @@ class AdministrationController extends Controller{
                 'code'          =>  'required',
                 'status'        =>  'required',
             ];
-        } 
+        }
         if($request['record_type']=="dzongkhag" || $request['record_type']=="gender"){
             $rules = [
             'name'          =>  'required',
@@ -48,7 +48,7 @@ class AdministrationController extends Controller{
             ];
         }
         $this->validate($request, $rules,$customMessages);
-        $data =[ 
+        $data =[
             'name'          =>  $request['name'],
             'nationality'   =>  $request['nationality'],
             'parent_field'  =>  $request['parent_field'],
@@ -57,7 +57,7 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'            =>  $request['id'],
             'record_type'   =>$request['record_type'],
-            'user_id'       =>$this->userId() 
+            'user_id'       =>$this->userId()
         ];
         // dd($data);
         try{
@@ -68,13 +68,13 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-    
+
     public function loadGlobalMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
         return $global_masters;
     }
 
-    public function all_active_dropdowns($model="",$parent_id=""){
+    public function all_active_dropdowns($model="",$parent_id=""){ 
         $response_data = $this->apiService->listData('emis/masters/load_dropdown/'.$model."/".$parent_id);
         return $response_data;
     }
@@ -119,8 +119,8 @@ class AdministrationController extends Controller{
             );
         }
         $this->validate($request, $rules,$customMessages);
-        
-        $data =[ 
+
+        $data =[
             'name'  =>  $request['name'],
             'parent_field'    =>  $request['parent_field'],
             'parent_field1'    =>  $request['parent_field1'],
@@ -136,7 +136,7 @@ class AdministrationController extends Controller{
         // dd($response_data);
         return $response_data;
     }
-    
+
     public function loadStaffMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
         // dd($global_masters);
@@ -188,7 +188,7 @@ class AdministrationController extends Controller{
             ];
         }
         $this->validate($request, $rules, $customMessages);
-        $request['user_id'] = $this->user_id(); 
+        $request['user_id'] = $this->user_id();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
@@ -227,7 +227,7 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-    
+
     public function loadLocation(Request $request){
         $dis = $this->apiService->listData('emis/masters/location/loadLocation');
         return $dis;
@@ -286,7 +286,7 @@ class AdministrationController extends Controller{
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
         return $response_data;
-        
+
     }
 
     public function loadStructureCategory(Request $request){
@@ -314,7 +314,7 @@ class AdministrationController extends Controller{
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
         return $response_data;
-        
+
     }
 
     public function loadLevel(Request $request){
@@ -342,7 +342,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
         return $response_data;
-        
+
     }
 
     public function loadStructureFacility(Request $request){
@@ -369,7 +369,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
-        
+
     }
 
     public function loadEquipmentType(Request $request){
@@ -396,7 +396,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
-        
+
     }
 
     public function loadEquipmentUsage(Request $request){
@@ -423,7 +423,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
-        
+
     }
 
     public function loadSportFacility(Request $request){
@@ -450,7 +450,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
         return $response_data;
-        
+
     }
 
     public function loadSportSupporter(Request $request){
@@ -482,7 +482,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
         return $response_data;
-        
+
     }
 
     public function saveStrSubCategory(Request $request){
@@ -508,7 +508,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
         return $response_data;
-        
+
     }
 
     public function loadStrSubCategory(Request $request){
@@ -544,7 +544,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
         return $response_data;
-        
+
     }
 
     public function saveClass(Request $request){
@@ -565,7 +565,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
-        
+
     }
 
     public function loadClass(Request $request){
@@ -815,9 +815,9 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/attachment/saveAttachment', $attachment);
         return $response_data;
-        
+
     }
-    
+
     public function loadAttachment(){
         $loadAttachment = $this->apiService->listData('emis/masters/attachment/loadAttachment');
         return $loadAttachment;
@@ -836,10 +836,10 @@ class AdministrationController extends Controller{
         $dis =[
             'studenthealthName'  =>  $request['studenthealthName'],
         ];
-        
+
     }
     public function loadStudentHealth(Request $request){
-        
+
         $dis = $this->apiService->listData('masters/studentHealth/loadStudentHealth');
         return $dis;
     }
@@ -857,10 +857,10 @@ class AdministrationController extends Controller{
         $src =[
             'screeningName'  =>  $request['screeningName'],
         ];
-       
+
     }
     public function loadScreening(Request $request){
-        
+
         $src = $this->apiService->listData('masters/screening/loadScreening');
         return $src;
     }
@@ -905,5 +905,5 @@ class AdministrationController extends Controller{
         }
     }
 
-    
+
 }
