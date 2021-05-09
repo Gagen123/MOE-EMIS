@@ -269,7 +269,6 @@ class EstablishmentController extends Controller
 
     public function getApprovedOrgDetails($type="",$key=""){
         $response_data=ApplicationDetails::where('status','Approved')->where('category','0')->where('id',$key)->first();
-        // dd($response_data);
         $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
         $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
         $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
@@ -424,6 +423,13 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($response_data);
     }
+
+    //Used in NFE-MIS
+    public function loadorgbygewogId($gewog_id){
+      $response_data=OrganizationDetails::where('gewogId',$gewog_id)->get();
+      return $response_data;
+    }
+
     public function loadorgbyId($type="",$org_id=""){
         if($type=="org"){
             $response_data=OrganizationDetails::where('id',$org_id)->first();
