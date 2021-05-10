@@ -21,14 +21,14 @@ export default {
         return{ 
         } 
     },
-    methods: {
+    methods:{
         showadprocess(type){
             this.$router.push("/"+type);
 		},
     },
-    mounted() {
+    mounted(){
+
     },
-    
 }
 </script>
 

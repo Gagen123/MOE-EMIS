@@ -19,6 +19,9 @@ class CommonController extends Controller{
     public function getApplicationDetials($applicationId=""){
         return Workflow::where('application_number',$applicationId)->get();
     }
+    public function getTaskDetials($applicationId=""){
+        return TaskDetails::where('application_number',$applicationId)->first();
+    }
     public function getTaskList($type="",$user_id="",$param="",$param2=""){
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
         $param=explode('OUTSEP',$param);
@@ -26,6 +29,9 @@ class CommonController extends Controller{
         if($type=="common"){
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.explode('SSS',$param2)[1].' AND ';
+            }
+            if(strtolower($access_level)=="org"){
+                $result_data.='t.working_agency_id="'.explode('SSS',$param2)[2].'" AND ';
             }
             $result_data.=' t.claimed_by IS NULL AND ('; 
             for($i=0;$i<sizeof($param)-1;$i++){

@@ -63,7 +63,7 @@ class StudentMasterController extends Controller{
                 'scout_type' => $request->scout_type
             ];
             $data = $data + $additional_data;
-        }
+        } 
 
         
         try{

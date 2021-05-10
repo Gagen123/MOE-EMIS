@@ -15,6 +15,7 @@ class CreateClassesTable extends Migration
     {
         Schema::create('classes', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('sequence',11);
             $table->string('class');
             $table->tinyInteger('status');
             $table->char('created_by',36)->nullable(true);

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="card-body">
         <table id="working-agency-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>

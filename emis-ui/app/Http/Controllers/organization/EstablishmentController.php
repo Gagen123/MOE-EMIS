@@ -65,6 +65,8 @@ class EstablishmentController extends Controller
             'chiwog'                       =>  $request['chiwog'],
             'locationType'                 =>  $request['locationType'],
             'senSchool'                    =>  $request['senSchool'],
+            'isfeedingschool'              =>  $request['isfeedingschool'],
+            'feeding'                      =>  $request['feeding'],
             'geopolicaticallyLocated'      =>  $request['geopolicaticallyLocated'],
             'parentSchool'                 =>  $request['parentSchool'],
             'coLocatedParent'              =>  $request['coLocatedParent'],
@@ -121,6 +123,8 @@ class EstablishmentController extends Controller
 
     public function getClass(){
         $classInCheckbox = $this->apiService->listData('emis/organization/establishment/getClass');
+        $response_data=json_decode($classInCheckbox);
+        $classInCheckbox = collect($response_data)->sortBy('sequence')->toArray();
         return $classInCheckbox;
     }
 
@@ -142,7 +146,6 @@ class EstablishmentController extends Controller
     public function saveBasicDetails(Request $request){
         $rules = [
             'agencyType'          =>  'required',
-            
         ];
         $customMessages = [
             'agencyType.required'         => 'Agency type is required',
@@ -150,6 +153,7 @@ class EstablishmentController extends Controller
         $this->validate($request, $rules, $customMessages);
         $basicDetails =[
             'agencyCode'        =>  $request['agencyCode'],
+            'department'        =>  $request['department'],
             'agencyName'        =>  $request['agencyName'],
             'parentAgency'      =>  $request['parentAgency'],
             'dzongkhag'         =>  $request['dzongkhag'],
@@ -284,6 +288,12 @@ class EstablishmentController extends Controller
     
     public function getschoolDetials(){  
         $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        $response_data = $this->apiService->listData('emis/organization/establishment/getschoolDetials/'.$param);
+        return $response_data;
+    }
+    
+    public function getschoolList($dzoid=""){  
+        $param='MinistrySSS'.$dzoid.'SSS'.$this->getWrkingAgencyId();
         $response_data = $this->apiService->listData('emis/organization/establishment/getschoolDetials/'.$param);
         return $response_data;
     }

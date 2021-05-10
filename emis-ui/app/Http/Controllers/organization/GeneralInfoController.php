@@ -10,6 +10,7 @@ use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\AuthUser;
+use Illuminate\Support\Facades\Storage;
 
 class GeneralInfoController extends Controller
 {
@@ -308,6 +309,37 @@ class GeneralInfoController extends Controller
         }
         $response_data = $this->apiService->listData('emis/organization/getClassByOrg/'.$id);
         return $response_data;
+    }
+
+    
+    public function udpateOrgProfile(Request $request){
+        $file = $request->attachments;
+        $path="";
+        $file_store_path='orgProfile';
+        if($file!=null && $file!="" && $file!="undefined"){
+            $fle="public/".$request->profile_path;
+            if (Storage::exists($fle)){
+                Storage::delete($fle);
+            }
+            $file_name = time().'_' .$file->getClientOriginalName();
+            $file_path = $request->file('attachments')->storeAs($file_store_path, $file_name, 'public');
+            $path=$file_store_path.'/'.$file_name;
+        }
+        $org_details =[
+            'org_id'            =>  $request['org_id'],
+            'vission'           =>  $request['vission'],
+            'mission'           =>  $request['mission'],
+            'attachments'       =>  $path, 
+            'user_id'           =>  $this->userId()
+        ];
+        // dd($org_details);
+        $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
+        return $response_data;
+    }
+    
+    public function getOrgProfile($id = ""){
+        $org_details = $this->apiService->listData('emis/organization/getOrgProfile/'.$id);
+        return $org_details;
     }
 
 }

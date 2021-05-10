@@ -44,7 +44,7 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label class="mb-0.5">Full Name:<i class="text-danger">*</i></label>
-                                <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name"  readonly>
+                                <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name">
                                 <has-error :form="personal_form" field="name"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -141,13 +141,10 @@
                                 <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
                                 <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
                                     <option value=""> --Select--</option>
-                                    <option value="1"> Mothithang HSS</option>
-                                    <option value="2"> Yangchenphug HSS</option>
-                                    <option value="3"> Mathematics</option>
+                                   <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="working_agency_id"></has-error>
                             </div> 
-                            
                         </div>
                
                         <div class="form-group row">
@@ -569,6 +566,7 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
+            orgList:[],
             subjectList:[],
             cureerstageList:[],
             qualificationDescription:[],
@@ -838,11 +836,12 @@ export default {
             data.address='Permanent Address '+data.cid;
         },
         fetchDetails(){
-            this.personal_form.name='Pema Dechen';
-            this.personal_form.position_title='Principal';
-            this.personal_form.contact_number='12312312';
-            this.personal_form.email='pema@gov.bt';
+            // this.personal_form.name='Pema Dechen';
+            // this.personal_form.position_title='Principal';
+            // this.personal_form.contact_number='12312312';
+            // this.personal_form.email='pema@gov.bt';
         },
+        
         calcualtetotla(data){
             this.totle+=parseInt(data.percentage);
             if(this.grand_total>100){
@@ -1151,7 +1150,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        async getgewoglist(id){
+        getgewoglist(id){
             let dzoId=$('#dzongkhag').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -1167,7 +1166,19 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        async getvillagelist(id){
+        allOrgList(){
+            let uri = 'organization/getschoolList/'+$('#dzongkhag').val();
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getvillagelist(id){
             let gewogId=$('#gewog').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -1183,7 +1194,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        async changefunction(id){
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
@@ -1216,6 +1227,7 @@ export default {
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
+                this.allOrgList();
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
@@ -1330,6 +1342,7 @@ export default {
         this.loadpositiontitleList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
+        
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
         this.loadrelationshipList();

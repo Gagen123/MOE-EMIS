@@ -11,7 +11,7 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" >
+                <!-- <li class="nav-item active pr-1" >
                     <router-link id="module" to="/module" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Module
                     </router-link>
@@ -35,7 +35,7 @@
                     <router-link id="answer" to="/answer" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Answer
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>
@@ -51,7 +51,7 @@ export default {
     },
     methods:{
         getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
             axios.get(uri)
             .then(response => {
                 let data = response;

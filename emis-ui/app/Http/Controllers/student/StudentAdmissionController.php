@@ -307,6 +307,8 @@ class StudentAdmissionController extends Controller{
             'section'                   =>  $request->section,
             'student_type'              =>  $request->student_type,
             'no_meals'                  =>  $request->no_meals,
+            'meal_type'                 =>  $request->meal_type,
+            'feeding_type'              =>  $request->feeding_type,
             'scholarship'               =>  $request->scholarship,
             'special_benifit'           =>  $request->special_benifit,
             'disability'                =>  $request->disability,

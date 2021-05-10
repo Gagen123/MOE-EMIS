@@ -248,6 +248,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
             $router->get('/loadorgs/{type}', 'establishment\EstablishmentController@loadorgs');
+            $router->get('/getOrgDetailsById/{id}/{usertype}', 'establishment\EstablishmentController@getOrgDetailsById');
             $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
             $router->get('/loadorgbygewogId/{gewog_id}', 'establishment\EstablishmentController@loadorgbygewogId');
             $router->get('/getLocationDetails/{id}', ['uses' => 'establishment\EstablishmentController@getLocationDetails']);
@@ -295,5 +296,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
 
         });
+        
+        $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
+        $router->get('/getOrgProfile/{id}', ['uses' => 'establishment\EstablishmentController@getOrgProfile']);
+        
+    });
+    $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
+        $router->get('/loadStaffList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadStaffList']);
+        $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
+
     });
 });

@@ -489,7 +489,7 @@ export default {
         $('.select2').select2({
             theme: 'bootstrap4'
         }); 
-        this.getScreenAccess();
+        // this.getScreenAccess();
         this.loadQuestionList('Wash');
         this.loadQuestionList('Sanitation');
         this.loadQuestionList('Hygiene');

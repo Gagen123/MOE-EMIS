@@ -325,6 +325,15 @@ const routes = [
                     { path: '/edit_student_whereabouts', name:'edit_student_whereabouts', component: require('./components/students/StudentAdmission/Updates/edit_student_whereabouts.vue').default },
                 ] 
             },
+
+            //Student => Update transfers
+            { path: '/student_transfers', component: require('./components/students/StudentAdmission/transfer/transfer_index.vue').default,
+                children: [
+                    { path: '/',name:'student_transfers', component: require('./components/students/StudentAdmission/transfer/update_student_list.vue').default },
+                    { path: '/student_transfers_list',name:'student_transfers_list', component: require('./components/students/StudentAdmission/transfer/update_student_list.vue').default },
+                    { path: '/update_student_transfer', name:'update_student_transfer', component: require('./components/students/StudentAdmission/transfer/update_student_transfer.vue').default },
+                ] 
+            },
         ] 
     },
 

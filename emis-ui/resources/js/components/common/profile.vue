@@ -30,6 +30,10 @@
                                 Loged In AS:
                                 {{roles}}
                             </p>
+                            <p class="text-muted text-center">
+                                Access Level:
+                                {{accessLevel}}
+                            </p>
                         </div>
                     </div>
                     <!-- <div class="card card-primary">
@@ -89,6 +93,13 @@
                                             <input type="text" class="form-control" v-model="gewog" id="gewog" placeholder="Gewog">
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label for="inputSkills" class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-form-label">Working Agency</label>
+                                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                            <input v-if="accessLevel=='Org'" type="text" class="form-control" v-model="orgDetails.name" id="orgDetails" placeholder="School Name">
+                                            <input v-else type="text" class="form-control" v-model="orgDetails.agencyName" id="orgDetails1" placeholder="Working Agency">
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -106,7 +117,7 @@
                 userDetails: '',
                 user_name:'',full_name:'',role:'',
                 email:'',contact:'',cid:'',
-                dzongkhag:'',gewog:'',
+                dzongkhag:'',gewog:'',orgDetails:'',accessLevel:'',
                 roles:''
             }
         },
@@ -130,7 +141,18 @@
                 .catch(errors => { 
                     console.log(errors)
                 });
-            }
+            },
+            getorgName(rogId,accessLevel){
+                axios.get('common/getOrgDetailsById/'+rogId+'/'+accessLevel)
+                .then(response => {
+                    let data = response.data.data;
+                    this.orgDetails=data;
+                    this.accessLevel=accessLevel;
+                })    
+                .catch(errors => { 
+                    console.log(errors)
+                });
+            },
         },
         mounted() {
             axios.get('common/getSessionDetail')
@@ -154,6 +176,7 @@
                 this.roles=roleName;
                 this.getdzongkhag(data['Dzo_Id']);
                 this.getgewog(data['Geo_Id']);
+                this.getorgName(data['Agency_Code'],data['acess_level']);
             })    
             .catch(errors => { 
                 console.log(errors)
