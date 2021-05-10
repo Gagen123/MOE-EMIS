@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\mess_manage;
 
+//use Session;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -20,38 +21,39 @@ class MessManagementController extends Controller
     }
 
     public function loadFoodReleaseList(){
-        //return json_encode('from UI');
-          $list = $this->apiService->listData('emis/mess_manage/foolrelease/loadFoodReleaseList');
+          $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
           return $list;
     }
 
     public function saveFoodRelease(Request $request){
         //return $request
         $rules = [
-            'date'                  =>  'required',
+            'dateOfrelease'         =>  'required',
             'dzongkhag'             =>  'required',
             'school'                =>  'required',
             'quarter'               =>  'required',
         ];
         $customMessages = [
-            'date.required'            => 'date is required',
+            'dateOfrelease.required'            => 'dateOfrelease is required',
             'dzongkhag.required'       => 'Dzongkhag is required',
-            'school.required'          => 'School Name is required',
+            'school.required'          => 'School  is required',
             'quarter.required'         => 'Quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
-            'date'                     =>  $request['date'],
+            'dateOfrelease'                     =>  $request['dateOfrelease'],
             'dzongkhag'                =>  $request['dzongkhag'],
-            'school    '               =>  $request['school'],
+            'school'                   =>  $request['school'],
             'quarter'                  =>  $request['quarter'],
             'id'                       =>  $request['id'],
-            'users'                    =>  $request['users'],
+            'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
         ];  
+        // dd($foodrelease);
         try{
-            $response_data= $this->apiService->createData('emis/mess_manage/foodreleas/saveFoodRelease', $foodrelease);
+            $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
+            //dd($response_data);
             return $response_data;
         }
         catch(GuzzleHttp\Exception\ClientException $e){
@@ -62,37 +64,33 @@ class MessManagementController extends Controller
 
     //local Procurement
 
-    public function saveLcoalProcurement(Request $request){
+    public function loadLocalProcure(){
+     //return json_encode('from UI');  
+        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure');
+        return $list;
+    }
+
+    public function saveLocalProcure(Request $request){
+        //return $request
         $rules = [
-            'date'       =>  'required',
-            'item'       =>  'required',
-            'quantity'   =>  'required',
-            'unit'       =>  'required',
-            'Amount'     =>  'required',
-            'remark'     =>  'required',
+            'dateOfprocure'       =>  'required',
 
         ];
         $customMessages = [
-            'date.required'          => 'date is required',
-            'item.required'          => 'item  is required',
-            'quantity.required'      => 'quantity  is required',
-            'unit.required'          => 'unit  is required',
-            'Amount.required'        => 'Amount  is required',
-            'remark.required'        => 'remark  is required',
+            'dateOfprocure.required'          => 'dateOfprocure is required',
+          
         ];
         $this->validate($request, $rules, $customMessages);
         $localprocure =[
-            'date'          =>  $request['date'],
-            'item'          =>  $request['item'],
-            'quantity'      =>  $request['quantity'],
-            'unit'          =>  $request['unit'],
-            'Amount'        =>  $request['Amount'],
-            'remark'        =>  $request['remark'],
-
+            'dateOfprocure'          =>  $request['dateOfprocure'],
+            'id'                     =>  $request['id'],
+            'local_item'             =>  $request->local_item,
+            'user_id'                =>  $this->userId()
         ];
-        // dd($dis);
+       //  dd($localprocure);
         try{
-            $response_data= $this->apiService->createData('emis/mess_manage/localprocure/saveLocalProcurement', $dis);
+            $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcure', $localprocure);
+         //   dd($response_data);
             return $response_data;
         }
         catch(\GuzzleHttp\Exception\ClientException $e){
@@ -100,10 +98,7 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadLocalProcurement(Request $request){
-        $dis = $this->apiService->listData('emis/mess_manage/localprocure/loadLocalProcurement');
-        return $dis;
-    }
+    
 
     // Stock Received 
 
@@ -111,23 +106,10 @@ class MessManagementController extends Controller
         $rules = [
             'date'          =>  'required',
             'quarter'       =>  'required',
-            'item'          =>  'required',
-            'quantity'      =>  'required',
-            'unit'          =>  'required',
-            'Amount'        =>  'required',
-            'remark'        =>  'required',
-
         ];
         $customMessages = [
             'date.required'          => 'date is required',
             'quarter.required'       => 'quarter is required',
-            'item.required'          => 'item  is required',
-            'quantity.required'      => 'quantity  is required',
-            'unit.required'          => 'unit  is required',
-            'Amount.required'        => 'Amount  is required',
-            'remark.required'        => 'remark  is required',
-
-
 
         ];
         $this->validate($request, $rules, $customMessages);
@@ -143,7 +125,7 @@ class MessManagementController extends Controller
         ];
         // dd($dis);
         try{
-            $response_data= $this->apiService->createData('emis/mess_manage/stockreceived/saveStockReceived', $stockreceived);
+            $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
         }
         catch(\GuzzleHttp\Exception\ClientException $e){
@@ -151,10 +133,11 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadStockReceived(Request $request){
-        $dis = $this->apiService->listData('emis/mess_manage/stockreceived/loadStockReceived');
+    public function getFoodRelease($termId = ""){
+        $dis = $this->apiService->listData('emis/messManagement/getFoodRelease/' .$termId);
         return $dis;
     }
+
 
    // Stock Issued
    public function saveStockIssued(Request $request){

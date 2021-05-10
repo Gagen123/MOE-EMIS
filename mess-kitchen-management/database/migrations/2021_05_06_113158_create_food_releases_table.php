@@ -15,7 +15,7 @@ class CreateFoodReleasesTable extends Migration
     {
         Schema::create('food_releases', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->date('date');
+            $table->date('dateOfrelease');
             $table->char('dzongkhag',36);
             $table->char('school',36);
             $table->char('quarter',36);

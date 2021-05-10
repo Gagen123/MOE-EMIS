@@ -9,15 +9,17 @@
                             <th>Date of Food Release</th>
                             <th>Dzongkhag</th>
                             <th>School Name</th>
+                            <th>Quarter</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
                     <tbody>
                          <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
-                             <td> {{item.dzongkhag}}</td>
-                            <td> {{item.date}}</td>
-                            <td>{{item.school}}</td>
+                            <td> {{item.dateOfrelease}}</td>
+                            <td> {{item.dzongkhag}}</td>
+                            <td> {{item.school}}</td>
+                            <td> {{item.quarter}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>

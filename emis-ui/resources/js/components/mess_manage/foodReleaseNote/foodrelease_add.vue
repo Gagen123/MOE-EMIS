@@ -5,9 +5,9 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Food Release:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields" name="date" id="date" type="date" 
-                        v-model="form.date" :class="{ 'is-invalid': form.errors.has('date') }" @change="remove_err('date')">
-                        <has-error :form="form" field="date"></has-error>
+                        <input class="form-control editable_fields" name="dateOfrelease" id="dateOfrelease" type="date" 
+                        v-model="form.dateOfrelease" :class="{ 'is-invalid': form.errors.has('dateOfrelease') }" @change="remove_err('dateOfrelease')">
+                        <has-error :form="form" field="dateOfrelease"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
@@ -15,12 +15,13 @@
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
                         <has-error :form="form" field="term"></has-error> -->
-                        <select class="form-control" id="dzongkhag"  v-model="itemrelease.dzongkhag" >
+                        
+                        <select name="dzongkhag" class="form-control editable_fields" id="dzongkhag"  v-model="form.dzongkhag" >
                             <option value="">---Please Select---</option> 
-                            <option value="samtse">Samtse</option>
-                            <option value="thimphu">Thimphu</option>
-                            <option value="haa">Haa</option>
-                            <option value="paro">Paro</option>
+                            <option value="Samtse">Samtse</option>
+                            <option value="Thimphu">Thimphu</option>
+                            <option value="Haa">Haa</option>
+                            <option value="Paro">Paro</option>
                         </select>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -29,7 +30,7 @@
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
                         <has-error :form="form" field="school"></has-error> -->
-                        <select class="form-control" id="school"  v-model="itemrelease.school" >
+                        <select class="form-control editable_fields" id="school"  v-model="form.school" >
                             <option value="">---Please Select---</option> 
                             <option value="SHSS">SHSS</option>
                             <option value="YHSS">YHSS</option>
@@ -44,11 +45,11 @@
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
                         </select>
                         <has-error :form="form" field="term"></has-error> -->
-                       <select class="form-control" id="quarter"  v-model="itemrelease.quarter" >
+                       <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
                             <option value="">---Please Select---</option> 
-                            <option value="1st">1st quarter</option>
-                            <option value="2nd">2nd quarter</option>
-                            <option value="3rd">3rd quarter</option>
+                            <option value="1st quarter">1st quarter</option>
+                            <option value="2nd quarter">2nd quarter</option>
+                            <option value="3rd quarter">3rd quarter</option>
                         </select>     
 
                     </div>
@@ -66,12 +67,12 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(user, index) in form.users' :key="index">
+                              <tr id="record1" v-for='(item, index) in form.items_released' :key="index">
                                   <td>
                                 <!--     <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                       </select>-->
-                                    <select class="form-control" id="item"  v-model="user.item" >
+                                    <select class="form-control editable_fields" id="item"  v-model="item.item">
                                         <option value="">---Please Select---</option> 
                                         <option value="rice">rice</option>
                                         <option value="potatoes">potatoes</option>
@@ -79,13 +80,13 @@
                                     </select>
                                   </td>
                                   <td>                          
-                                    <input type="number" name="quantity" class="form-control" v-model="user.quantity"/>
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity">
                                   </td>
                                   <td>                                
                                  <!--    <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                      </select> -->
-                                    <select class="form-control" id="unit"  v-model="user.unit" >
+                                    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
                                         <option value="">---Please Select---</option> 
                                         <option value="kg">kg</option>
                                         <option value="litre">litre</option>
@@ -94,7 +95,7 @@
 
                                   </td>
                                   <td>                                
-                                       <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
+                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
                               </tr> 
                              <tr>
@@ -128,13 +129,13 @@ export default {
           //  termList:[],
           //  itemList:[],
           //  unitList:[],
-            itemrelease:[],
-            users: [],
+           // itemrelease:[],
+         //   items_released: [],
             form: new form({
-                 id: '', date: '', dzongkhag: '', school: '',term: '',
-                 users:
+                 id: '', dateOfrelease: '', dzongkhag: '', school: '',quarter: '',
+                 items_released:
                 [{
-                    item:'',quantity:'',unit:'', remark:'',
+                    item:'',quantity:'',unit:'', remarks:'',
                 }], 
             })
         }
@@ -146,13 +147,13 @@ export default {
          * method to reset form
          */
         restForm(){
-            this.form.date= '';
+            this.form.dateOfrelease= '';
              this.form.dzongkhag= '';
             this.form.school= '';
-             this.form.term= '';
-            let formReset =this.form.users;
+             this.form.quarter= '';
+            let formReset =this.form.items_released;
             formReset.splice(0, formReset.length);
-            this.form.users.push({item:'',quantity:'',unit:'',remark:''})
+            this.form.items_released.push({item:'',quantity:'',unit:'',remarks:''})
         },
 
         /**
@@ -233,16 +234,16 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({
-                item:'',quantity:'',unit:'',remark:''})    
+            this.form.items_released.push({
+                item:'',quantity:'',unit:'',remarks:''})    
         }, 
         /**
          * method to remove fields
          */
         remove(index){    
-             if(this.form.users.length>1){
+             if(this.form.items_released.length>1){
                 this.count--;
-                this.form.users.splice(index,1); 
+                this.form.items_released.splice(index,1); 
             }
         },
        

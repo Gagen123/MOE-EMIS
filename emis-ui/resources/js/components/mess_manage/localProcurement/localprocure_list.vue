@@ -13,7 +13,7 @@
                     <tbody>
                          <tr v-for="(item, index) in localprocure_list" :key="index">
                             <td> {{index + 1}}</td>
-                            <td> {{item.date}}</td>
+                            <td> {{item.dateOfprocure}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
@@ -35,7 +35,7 @@ export default {
         } 
     },
     methods: {
-        loadLocalProcureList(uri = 'mess_manage/loadLocalProcureList'){
+        loadLocalProcure(uri = 'mess_manage/loadLocalProcure'){
             axios.get(uri)
             .then(response => { 
                 let data = response;
@@ -51,15 +51,15 @@ export default {
                     "responsive": true,
                     "autoWidth": true,
                 }); 
-            }, 300);  
+            }, 300);   
         },
-        viewLocalProcureList(data){
+        viewLocalProcure(data){
             data.action='edit';
             this.$router.push({name:'LocalProcureEdit',params: {data:data}});
         },
     },
     mounted(){
-        this.loadLocalProcureList();
+        this.loadLocalProcure();
     },
     
 }

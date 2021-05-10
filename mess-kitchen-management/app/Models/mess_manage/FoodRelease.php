@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Models\mess_manage;
-
+use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class FoodRelease extends Model
 {
@@ -10,6 +11,12 @@ class FoodRelease extends Model
     protected $table="food_releases";
 
     protected $fillable = [
-        'id','date','dzongkhag','school','quarter','created_by','updated_by'
+        'id',
+        'dateOfrelease',
+        'dzongkhag',
+        'school',
+        'quarter',
+        'created_by',
+        'updated_by'
     ];
 }
