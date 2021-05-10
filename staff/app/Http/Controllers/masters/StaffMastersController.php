@@ -24,6 +24,10 @@ use App\Models\staff_masters\CureerStage;
 use App\Models\staff_masters\QualificationDescription;
 use App\Models\staff_masters\CourseMode;
 use App\Models\staff_masters\TransferUndertaking;
+use App\Models\staff_masters\ManagementBodyType;
+use App\Models\staff_service_masters\StaffAwardCategory;
+use App\Models\staff_service_masters\StaffAwardType;
+
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
@@ -172,8 +176,8 @@ class StaffMastersController extends Controller{
                 $response_data = $data;
             }
         }
-
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="transfer_uindertaking"){
+        // dd($request);
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="transfer_uindertaking" || $request['record_type']=="mgmn_body_type" || $request['record_type']=="staff_award_category" || $request['record_type']=="staff_award_type"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="transfer_reason"){
@@ -214,6 +218,15 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="course_mode"){
                     $table="master_course_mode";
+                }
+                if($request['record_type']=="mgmn_body_type"){
+                    $table="master_mgmn_body_type";
+                }
+                if($request['record_type']=="staff_award_category"){
+                    $table="master_staff_serice_category";
+                }
+                if($request['record_type']=="staff_award_type"){
+                    $table="master_staff_serice_type";
                 }
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
@@ -276,6 +289,17 @@ class StaffMastersController extends Controller{
                     $response_data = CourseMode::create($data);
                     // $table="master_course_mode";
                 }
+                if($request['record_type']=="mgmn_body_type"){
+                    $response_data = ManagementBodyType::create($data);
+                }
+                if($request['record_type']=="staff_award_category"){
+                    $response_data = StaffAwardCategory::create($data);
+                }
+                if($request['record_type']=="staff_award_type"){
+                    $ddition_field= ['parent_id'    =>  $request['parent_field']];
+                    $data=$data+$ddition_field;
+                    $response_data = StaffAwardType::create($data);
+                }
             }
             if($request->actiontype=="edit"){
                 $data ="";
@@ -332,6 +356,19 @@ class StaffMastersController extends Controller{
                     $data = CourseMode::find($request['id']);
                     $table="master_course_mode";
                 }
+                if($request['record_type']=="mgmn_body_type"){
+                    $data = ManagementBodyType::find($request['id']);
+                    $table="master_mgmn_body_type";
+                }
+                if($request['record_type']=="staff_award_category"){
+                    $data = StaffAwardCategory::find($request['id']);
+                    $table="master_staff_serice_category";
+                }
+                if($request['record_type']=="staff_award_type"){
+                    $data = StaffAwardType::find($request['id']);
+                    $table="master_staff_serice_type";
+                }
+
                 $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
@@ -362,6 +399,9 @@ class StaffMastersController extends Controller{
         if($param=="all_mgmn_desig"){
             return $this->successResponse(MgmnDesignation::all());
         }
+        if($param=="all_active_mgmn_desig"){
+            return $this->successResponse(MgmnDesignation::where ('status', '1')->get());
+        }
         if($param=="all_staff_major_groupList"){
             return $this->successResponse(StaffMajorGrop::all());
         }
@@ -379,7 +419,7 @@ class StaffMastersController extends Controller{
             return $this->successResponse(PositionTitle::with('submajorgroup')->get());
         }
         if($param=="all_active_position_title"){
-            return $this->successResponse(PositionTitle::where ('status', '1')->get());
+            return $this->successResponse(PositionTitle::where ('status', 1)->get());
         }
         
         if($param=="all_position_level_List"){
@@ -452,10 +492,30 @@ class StaffMastersController extends Controller{
         if($param=="all_coursemode_list"){
             return $this->successResponse(CourseMode::all());
         }
+        
         if($param=="all_active_coursemode_list"){
             return $this->successResponse(CourseMode::where('status','1')->get());
         }
+        if($param=="all_mgmn_body_type"){
+            return $this->successResponse(ManagementBodyType::all());
+        }
+        if($param=="all_active_mgmn_body_type"){
+            return $this->successResponse(ManagementBodyType::where('status','1')->get());
+        }
 
+        if($param=="all_staff_award_category_List"){
+            return $this->successResponse(StaffAwardCategory::all());
+        }
+        if($param=="all_active_staff_award_category_List"){
+            return $this->successResponse(StaffAwardCategory::where('status','1')->get());
+        }
+
+        if($param=="all_staff_award_type_List"){
+            return $this->successResponse(StaffAwardType::with('category')->get());
+        }
+        if($param=="all_active_staff_award_type_List"){
+            return $this->successResponse(StaffAwardType::where('status','1')->get());
+        }
     }
     public function load_staff_masters_by_id($param="",$id=""){
         if($param=="qdescription"){
@@ -477,6 +537,11 @@ class StaffMastersController extends Controller{
             return $this->successResponse(PositionTitle::where('id',$id)->first());
         }
         
-        
+    }
+    
+    public function loadStaffDropdownMasters($model="",$parent_id=""){
+        if($model=="StaffAwardType"){
+            return $this->successResponse(StaffAwardType::where('parent_id',$parent_id)->get());
+        }
     }
 }

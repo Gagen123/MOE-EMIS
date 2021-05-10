@@ -21,6 +21,8 @@ class PersonalDetails extends Model{
         'working_agency_id',
         'merital_status',
         'country_id',
+        'dzo_id',
+        'geowg_id',
         'village_id',
         'address',
         'email',

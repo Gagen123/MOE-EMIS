@@ -42,6 +42,7 @@ class StaffServicesController extends Controller{
             'action_type'                =>  $request->action_type,
             'user_id'                    =>  $this->userId() 
         ];
+        dd($staff_data);
         $response_data= $this->apiService->createData('emis/staffAward/saveStaffAward', $staff_data);
         return $response_data;
     }
