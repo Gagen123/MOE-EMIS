@@ -5,9 +5,9 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Stock Issued:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields" name="date" id="date" type="date" 
-                        v-model="form.date" :class="{ 'is-invalid': form.errors.has('date') }" @change="remove_err('date')">
-                        <has-error :form="form" field="date"></has-error>
+                        <input class="form-control editable_fields" name="dateOfissue" id="dateOfissue" type="date" 
+                        v-model="form.dateOfissue" :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')">
+                        <has-error :form="form" field="dateOfissue"></has-error>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -23,25 +23,37 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(user, index) in form.users' :key="index">
+                              <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                   <td>
-                                      <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
+                                     <!-- <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select>
-                                  </td>
-                                  <td>                                
-                                     <input type="number" name="quantity" class="form-control" v-model="user.quantity"/>
-                                 </td>
-                                 <td>
-                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                      </select> -->
+                                     <select class="form-control editable_fields" id="item"  v-model="item.item">
+                                         <option value="">---Please Select---</option> 
+                                         <option value="rice">rice</option>
+                                         <option value="potatoes">potatoes</option>
+                                         <option value="onion">onion</option>
                                      </select>
                                   </td>
                                   <td>                                
-                                     <input type="number" name="damagequantity" class="form-control" v-model="user.damagequantity"/>
+                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                 </td>
+                                 <td>
+                                <!--     <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                     </select>-->
+                                      <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                         <option value="">---Please Select---</option> 
+                                         <option value="kg">kg</option>
+                                         <option value="litre">litre</option>
+                                         <option value="packet">packet</option>
+                                    </select>
+                                  </td>
+                                  <td>                                
+                                     <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
                                  </td>
                                   <td>                                
-                                      <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
+                                      <input type="text" name="remarks" class="form-control" v-model="item.remarks"/>
                                   </td>
                               </tr> 
                               <tr>
@@ -71,14 +83,14 @@ export default {
     data(){
         return{
             count:1,
-            itemList:[],
-            unitList:[],
-            users: [],
+          //  itemList:[],
+         //   unitList:[],
+            item_issue: [],
             form: new form({
-                id: '', date: '', 
-                users:
+                id: '', dateOfissue: '', 
+                item_issue:
                 [{
-                    item:'',quantity:'',unit:'', damagequantity:'',remark:'',
+                    item:'',quantity:'',unit:'', damagequantity:'',remarks:'',
                 }],
             })
         }
@@ -90,10 +102,10 @@ export default {
          * method to reset form
          */
         restForm(){
-            this.form.date= '';
-            let formReset =this.form.users;
+            this.form.dateOfissue= '';
+            let formReset =this.form.item_issue;
             formReset.splice(0, formReset.length);
-            this.form.users.push({item:'',quantity:'',unit:'',damagequantity:'',remark:''})
+            this.form.item_issue.push({item:'',quantity:'',unit:'',damagequantity:'',remarks:''})
         },
 
         /**
@@ -134,52 +146,52 @@ export default {
         /**
          * method to get unit in dropdown
          */
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.unitList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+    //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+    //        axios.get(uri)
+    //        .then(response => {
+      //          let data = response;
+    //            this.unitList =  data.data.data;
+     //       })
+    //        .catch(function (error) {
+     //           console.log("Error......"+error)
+     //       });
+    //    },
 
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.itemList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+    //   loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+    //        axios.get(uri)
+    //        .then(response => {
+    //            let data = response;
+    //            this.itemList =  data.data.data;
+    //        })
+     //       .catch(function (error) {
+    //            console.log("Error......"+error)
+    //        });
+    //    },
 
         /**
          * method to add more fields
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({
-                item:'',quantity:'',unit:'',damagequantity:'',remark:''})    
+            this.form.item_issue.push({
+                item:'',quantity:'',unit:'',damagequantity:'',remarks:''})    
         }, 
         /**
          * method to remove fields
          */
         remove(index){    
-             if(this.form.users.length>1){
+             if(this.form.item_issue.length>1){
                 this.count--;
-                this.form.users.splice(index,1); 
+                this.form.item_issue.splice(index,1); 
             }
         },
     },
      mounted() { 
-        this.loadActiveUnitList(); 
-        this.loadActiveItemList();
+    //    this.loadActiveUnitList(); 
+    //    this.loadActiveItemList();
        
     }
 }

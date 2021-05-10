@@ -139,50 +139,38 @@ class MessManagementController extends Controller
     }
 
 
-   // Stock Issued
-   public function saveStockIssued(Request $request){
-    $rules = [
-        'date'          =>  'required',
-        'item'          =>  'required',
-        'quantity'      =>  'required',
-        'unit'          =>  'required',
-        'Amount'        =>  'required',
-        'remark'        =>  'required',
-
-    ];
-    $customMessages = [
-        'date.required'          => 'date is required',
-        'item.required'          => 'item  is required',
-        'quantity.required'      => 'quantity  is required',
-        'unit.required'          => 'unit  is required',
-        'Amount.required'        => 'Amount  is required',
-        'remark.required'        => 'remark  is required',
-
-
-
-    ];
-    $this->validate($request, $rules, $customMessages);
-    $localprocure =[
-        'date'             =>  $request['date'],
-        'quarter'          =>  $request['quarter'],
-        'item'             =>  $request['item'],
-        'quantity'         =>  $request['quantity'],
-        'unit'             =>  $request['unit'],
-        'Amount'           =>  $request['Amount'],
-        'remark'           =>  $request['remark'],
-
-    ];
-    // dd($dis);
-    try{
-        $response_data= $this->apiService->createData('emis/mess_manage/stockreceived/saveStockReceived', $dis);
-        return $response_data;
+    // Stock Issued
+    public function loadStockIssuedList(){
+     //   dd('m here');
+      $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList');
+      return $list;
     }
-    catch(\GuzzleHttp\Exception\ClientException $e){
-        return $e;
+
+    public function saveStockIssued(Request $request){
+     //return $request
+     $rules = [
+         'dateOfissue'         =>  'required',
+       ];
+      $customMessages = [
+         'dateOfissue.required'            => 'dateOfissue is required',
+         ];
+         $this->validate($request, $rules, $customMessages);
+       $stockissue =[
+         //'organizationId'           =>  $this->getWrkingAgencyId(),
+            'dateOfissue'              =>  $request['dateOfissue'],
+            'id'                       =>  $request['id'],
+            'item_issue'               =>  $request->item_issue,
+            'user_id'                  =>  $this->userId()
+        ];  
+       //   dd($stockissue);
+      try{
+        $response_data= $this->apiService->createData('emis/messManagement/saveStockIssued', $stockissue);
+         //dd($response_data);
+         return $response_data;
+         }
+         catch(GuzzleHttp\Exception\ClientException $e){
+          return $e;
+        }
     }
-}
-
-
-
 
 }

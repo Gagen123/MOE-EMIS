@@ -413,6 +413,9 @@ Route::prefix('mess_manage')->group(function () {
 
     // Route::post('/saveStockReceived', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockReceived'])->name('saveStockReceived');    
     Route::get('/getFoodRelease/{termId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getFoodRelease'])->name('getFoodRelease');
+
+    Route::post('/saveStockIssued', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockIssued'])->name('saveStockIssued');    
+    Route::get('/loadStockIssuedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockIssuedList'])->name('loadStockIssuedList');
 }); 
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');

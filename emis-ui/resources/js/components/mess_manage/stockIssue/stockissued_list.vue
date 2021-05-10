@@ -13,7 +13,7 @@
                     <tbody>
                          <tr v-for="(item, index) in stockissued_list" :key="index">
                             <td> {{index + 1}}</td>
-                            <td> {{item.date}}</td>
+                            <td> {{item.dateOfissue}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
