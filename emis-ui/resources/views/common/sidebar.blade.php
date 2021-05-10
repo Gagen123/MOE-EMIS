@@ -140,25 +140,6 @@
                             Academic Masters
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="mess_manage_master">
-                        <router-link to="/mess_management_master" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-carrot nav-icon"></i>
-                            Mess Management Master
-                        </router-link>
-                    </li> 
-                
-
-                  <li class="nav-item has-treeview" id="org_master" @click="setclass('mastersmanagement','','std_master')">
-                        <router-link to="/StudentMasterIndex" class="nav-link">
-                            <i class="nav-icon fas fa-database"></i>
-                            <p> 
-                                Studnet Masters
-                            </p>
-                        </router-link> 
-                    </li>-->
-                </ul>
-
-                <li class="nav-item has-treeview" id="organizationlink">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
