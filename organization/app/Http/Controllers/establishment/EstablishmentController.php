@@ -498,7 +498,7 @@ class EstablishmentController extends Controller
     }
     
     public function udpateOrgProfile(Request $request){
-        $org_det=OrgProfile::where('org_id',$request->org_id)->first();
+        $org_det=OrgProfile::where('org_id',$request->ori_id)->first();
         $org_data = [
             'org_id'        =>  $request->org_id,
             'mission'       =>  $request->mission,

@@ -85,8 +85,8 @@ export default {
         loadStaffList(uri='loadCommons/loadStaffList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.staffList =  data.data.data;
+                let data = response.data.data;
+                this.staffList =  data;
             })
             .catch(function (error){
                 console.log("Error: "+error)
@@ -95,8 +95,19 @@ export default {
         loadActiveAwardList(uri="masters/loadStaffMasters/all_active_staff_award_category_List"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.awardCategoryList =  data.data.data;
+                let data = response.data.data;
+                this.awardCategoryList =  data;
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
+        loadAwardType(id){
+            let uri="masters/loadStaffDropdownMasters/StaffAwardType/"+id;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.awardTypeList =  data;
             })
             .catch(function (error) {
                 console.log("Error:"+error)
@@ -121,7 +132,7 @@ export default {
                 this.award_form.status= 1;
             }
             if(type=="save"){
-                this.award_form.post('/staffServices/saveStaffAward')
+                this.award_form.post('staff/staffServices/saveStaffAward')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -147,21 +158,15 @@ export default {
             if(id=="award_type_id"){
                 this.award_form.award_type_id=$('#award_type_id').val();
             }
+            if(id=="staff"){
+                this.award_form.staff=$('#staff').val();
+            }
+            
         },
         
-        loadAwardType(id){
-            let uri="masters/loadStaffDropdownMasters/StaffAwardType/"+id;
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.awardTypeList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
+        
     },
-     mounted() {
+     mounted(){
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

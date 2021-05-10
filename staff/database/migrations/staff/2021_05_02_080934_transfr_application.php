@@ -19,6 +19,7 @@ class TransfrApplication extends Migration
             $table->timestamp('created_at')->nullable(true);
             $table->timestamp('updated_at')->nullable(true);
             $table->string('status',50)->nullable(false);
+            $table->string('dzongkhagApproved',36)->nullable(true);
         });
     }
     public function down(){
