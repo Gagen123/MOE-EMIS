@@ -320,7 +320,7 @@ export default {
         });
     },
     created(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
         // let month =(currentdate.getMonth() + 1);

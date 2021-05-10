@@ -51,7 +51,7 @@ export default {
             this.$router.push({name:"edit_civil_staff",params:{data:staff}});
 		},
         loadstff(){
-            axios.get('staff/loadAllStaff/Regular,Volunteer')
+            axios.get('loadCommons/loadStaffList/emptype/Regular,Volunteer')
             .then((response) => {  
                 this.substaffList =  response.data.data;
              })

@@ -82,17 +82,15 @@ class AdministrationController extends Controller{
     public function saveStaffMasters(Request $request){
         $rules=[];
         $customMessages =[];
-        if($request['record_type']=="working_agency"){
-            $rules = [
-                'name'  =>  'required',
-                'status'    =>  'required',
-            ];
-            $customMessages = [
-                'name.required' => 'This field is required',
-                'status.required' => 'This field is required',
-            ];
-        }
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification"){
+        $rules = [
+            'name'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'name.required' => 'This field is required',
+            'status.required' => 'This field is required',
+        ];
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category" || $request['record_type']=="staff_award_type"){
             $rules=array_merge($rules,
                 array('code'  =>  'required|numeric|digits:4',)
             );
@@ -102,7 +100,7 @@ class AdministrationController extends Controller{
                 'code.digits'          => 'The field should be of 4 digits.',)
             );
         }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification"){
+        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_type"){
             $rules=array_merge($rules,
                 array('parent_field'=> 'required',)
             );
@@ -141,6 +139,10 @@ class AdministrationController extends Controller{
         $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
         // dd($global_masters);
         return $global_masters;
+    }
+    public function loadStaffDropdownMasters($model="",$parent_id=""){
+        $response_data = $this->apiService->listData('emis/masters/loadStaffDropdownMasters/'.$model."/".$parent_id);
+        return $response_data;
     }
 
     public function saveAcademicMasters(Request $request){
@@ -937,4 +939,5 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
+    
 }

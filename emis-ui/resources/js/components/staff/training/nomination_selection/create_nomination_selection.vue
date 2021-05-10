@@ -412,7 +412,7 @@ export default {
             });
         },
         loadStaffList(){
-            axios.get('staff/loadStaff/workingagency')
+            axios.get('loadCommons/userworkingagency/userworkingagency')
             .then((response) => {   
                 let data=response.data.data;
                 this.staff_list=data;

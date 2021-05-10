@@ -222,12 +222,44 @@ class ChangeBasicDetailsController extends Controller
     }
 
     public function updateChangeBasicDetails(Request $request){
+        $appDetails = ApplicationDetails::where('applicationNo', $request->application_number)->first();
+        $orgDetail=OrganizationDetails::where('id',$appDetails->organizationId)->first();
+        $classSection=OrganizationClassStream::where('organizationId',$appDetails->organizationId)->get();
+        if(sizeof($classSection)>0){
+            OrganizationClassStream::where('organizationId',$appDetails->organizationId)->delete();
+        }
+        $appclassDetails=ApplicationClassStream::where('applicationNo',$request->application_number)->get();
+       
+        foreach($appclassDetails as $appclas){
+            $appclas =[
+                'organizationId'            =>  $appDetails->organizationId,
+                'classId'                   =>  $appclas->classId,
+                'streamId'                  =>  $appclas->streamId,
+                'updated_by'                =>  $request->user_id,
+            ];
+            OrganizationClassStream::create($appclas);
+        }
         $estd =[
             'status'                       =>   $request->status,
             'updated_remarks'              =>   $request->remarks,
             'updated_by'                   =>   $request->user_id, 
         ];
         $establishment = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
+        $appdetialsfororg =[
+            'name'            =>  $appDetails->proposedName,
+            'category'                   =>  $appDetails->category,
+            'levelId'                  =>  $appDetails->levelId,
+            'dzongkhagId'                =>  $request->dzongkhagId,
+            'gewogId'                =>  $request->gewogId,
+            'chiwogId'                =>  $request->chiwogId,
+            'locationId'                =>  $request->locationId,
+            'isGeopoliticallyLocated'    =>  $request->isGeopoliticallyLocated,
+            'isSenSchool'                =>  $request->isSenSchool,
+            'parentSchoolId'                =>  $request->parentSchoolId,
+            'isColocated'                 =>  $request->isColocated,
+            'updated_by'                =>  $request->user_id,
+        ];
+        $establishment = OrganizationDetails::where('id', $appDetails->organizationId)->update($appdetialsfororg);
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
 

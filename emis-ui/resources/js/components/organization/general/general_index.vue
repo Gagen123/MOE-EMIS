@@ -5,7 +5,13 @@
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                        <span :class="item.screen_icon"></span> 
+                        {{ item.screen_name}}
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link id="regularstaff" to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Location
@@ -23,18 +29,18 @@
                         Equipment & Furniture
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff3')">
-                    <router-link id="regularstaff3" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Class Mapping
-                    </router-link>
-                </li> -->
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff4')">
                     <router-link id="regularstaff4" to="/sections_add" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Sections
                     </router-link>
-                </li>
+                </li> -->
+                 <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff3')">
+                    <router-link id="regularstaff3" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Class Mapping
+                    </router-link>
+                </li> -->
             </ul>
         <router-view></router-view>
         </div>
@@ -46,15 +52,31 @@
 export default {
     data(){
         return{
-             
+              menubar:[],
         }
     },
 
     methods:{
-        activatelink(btnid){
-            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-            $('#'+btnid).addClass('btn-primary text-white');
-        }
-    }
+        // activatelink(btnid){
+        //     $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
+        //     $('#'+btnid).addClass('btn-primary text-white');
+        // }
+        getmenus(sub_mod_id){
+            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.menubar =  data.data;  
+            })
+            .catch(function (error) { 
+                console.log("Error:"+error)
+            });
+        },
+    },
+    mounted(){
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+        this.getmenus(routeparam);
+    },
 }
 </script>

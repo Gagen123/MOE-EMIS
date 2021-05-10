@@ -61,7 +61,6 @@ class CommonController extends Controller{
             $param.=$work.'OUTSEP';
         }
         $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
-        // dd($param2);
         $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
         // dd($response_data);
         return $response_data;
@@ -83,7 +82,8 @@ class CommonController extends Controller{
     public function getGewogNameById($id=""){
         return $this->apiService->getListData('emis/common/getGewogNameById/'.$id);
     }
-
+    
+    
     public function releaseApplication($application_number=""){
         $work_status=$this->apiService->getListData('emis/common/releaseApplication/'.$application_number);
         return $work_status;

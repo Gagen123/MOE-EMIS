@@ -614,7 +614,7 @@ export default {
     },
     
     mounted(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
         this.loadQuestionList('Kitchen');  
         this.loadWashDetialsList('kitchen');
     },

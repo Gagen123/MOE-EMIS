@@ -619,6 +619,21 @@
                                     <has-error :form="class_form" field="no_meals"></has-error>
                                 </div>
                             </div>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category: <span class="text-danger">*</span></label><br>
+                                    <input type="radio" name="meal_type" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" v-model="class_form.meal_type" value="Gyalpoi Tozey" id="meal_type"> Gyalpoi Tozey 
+                                    <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" name="meal_type" v-model="class_form.meal_type" value="Needy Student" id="meal_type1"> Needy Student
+                                    <has-error :form="class_form" field="meal_type"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Feeding Type: <span class="text-danger">*</span></label><br>
+                                    <input type="radio" name="feeding_type" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" v-model="class_form.feeding_type" value="Vegeterian" id="feeding_type"> Vegeterian 
+                                    <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Non-vegeterian" id="feeding_type1"> Non-vegeterian
+                                    <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Eggeterian" id="feeding_type2"> Eggeterian
+                                    <has-error :form="class_form" field="feeding_type"></has-error>
+                                </div>
+                            </div>
                             <br>
                             <label>Scholarship</label>
                             <div class="row form-group">
@@ -781,6 +796,8 @@ export default {
                 scholarship:[],
                 special_benifit:[],
                 disability:'',
+                meal_type:'',
+                feeding_type:'',
             }),
         }
     },
@@ -1172,7 +1189,8 @@ export default {
                     Toast.fire({
                         icon: 'success',
                         title: 'Student Personal Details has been saved successfully'
-                    })
+                    });
+                    this.getstudentGuardainClassDetails(this.$route.params.data,'guardian');
                     this.changetab(nextclass);
                 })
                 .catch((error) => {
@@ -1192,7 +1210,8 @@ export default {
                     Toast.fire({
                         icon: 'success',
                         title: 'Instructor Registration  successful'
-                    })
+                    });
+                    this.getstudentGuardainClassDetails(this.$route.params.data,'class');
                     this.changetab(nextclass);
                 })
                 .catch((error) => {
@@ -1547,20 +1566,24 @@ export default {
                 let data = response.data.data;
                 if(data != ""){
                     this.personal_form.student_id=id;
-                    this.personal_form.snationality=data.snationality;
-                    $('#snationality').val(data.snationality).trigger('change');
-                    this.personal_form.cid_passport=data.cid_passport;
-                    this.personal_form.first_name=data.first_name;
-                    this.personal_form.middle_name=data.middle_name;
-                    this.personal_form.last_name=data.last_name;
-                    this.personal_form.dob=data.dob;
-                    this.personal_form.sex_id=data.sex_id;
-                    this.personal_form.dzongkhag=data.snationality;
-                    this.personal_form.gewog=data.snationality;
-                    this.personal_form.village_id=data.snationality;
-                    this.personal_form.fulladdress=data.address;
-                    this.personal_form.mother_tongue=data.mother_tongue;
-                    this.personal_form.studentcode=data.snationality;
+                    this.showstdidentity(data.CmnCountryId);
+                    this.personal_form.snationality=data.CmnCountryId;
+                    this.personal_form.cid_passport=data.CidNo;
+                    this.personal_form.first_name=data.Name.split(' ')[0];
+                    if(data.Name.split(' ').length>2){
+                        this.personal_form.middle_name=data.Name.split(' ')[1];
+                        this.personal_form.last_name=data.Name.split(' ')[2];
+                    }
+                    if(data.Name.split(' ').length<2){
+                         this.personal_form.last_name=data.Name.split(' ')[1];
+                    }
+                    this.personal_form.dob=data.DateOfBirth;
+                    this.personal_form.sex_id=data.CmnSexId;
+                    // this.personal_form.dzongkhag=data.snationality;
+                    // this.personal_form.gewog=data.snationality;
+                    this.personal_form.village_id=data.CmnChiwogId;
+                    this.personal_form.fulladdress=data.Address;
+                    this.personal_form.mother_tongue=data.CmnLanguageId;
                 }   // this.personal_form.attachments=data.snationality;
             });
         },
@@ -1656,8 +1679,8 @@ export default {
             this.changefunction(id);
         });
         this.getstudentPersonalDetails(this.$route.params.data);
-        this.getstudentGuardainClassDetails(this.$route.params.data,'guardian');
-        this.getstudentGuardainClassDetails(this.$route.params.data,'class');
+        
+        
     },
 }
 </script>

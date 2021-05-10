@@ -157,6 +157,7 @@
                                             <th>SlNo</th> 
                                             <th>Preferences</th> 
                                             <th>Dzongkhag/Thromde</th> 
+                                            <th id="approveDzohead" style="display:none">Select Dzongkhag</th> 
                                         </tr>
                                     </thead> 
                                     <tbody>
@@ -166,6 +167,9 @@
                                             <td>
                                                 <span class="text-blue text-bold">{{dzongkhagList[form.preference_dzongkhag1]}}</span>
                                             </td> 
+                                            <td id="approveDzo1" style="display:none">
+                                                <input type="radio" name="dzongkhagApproved" :value="form.preference_dzongkhag1" v-model="form.dzongkhagApproved" id="approvedDzongkhag1">
+                                            </td> 
                                         </tr> 
                                         <tr>
                                             <td>2</td> 
@@ -173,12 +177,18 @@
                                             <td>
                                                 <span class="text-blue text-bold" v-if="form.preference_dzongkhag2!=''">{{dzongkhagList[form.preference_dzongkhag2]}}</span>
                                             </td>
+                                            <td id="approveDzo2" style="display:none">
+                                                <input type="radio" v-model="form.dzongkhagApproved" name="dzongkhagApproved" :value="form.preference_dzongkhag2" id="approvedDzongkhag2">
+                                            </td>
                                         </tr> 
                                         <tr>
                                             <td>3</td> 
                                             <td>Preferences 3</td> 
                                             <td>
                                                 <span class="text-blue text-bold" v-if="form.preference_dzongkhag3!=''">{{dzongkhagList[form.preference_dzongkhag3]}}</span>
+                                            </td>
+                                            <td id="approveDzo3" style="display:none">
+                                                <input type="radio" v-model="form.dzongkhagApproved" :value="form.preference_dzongkhag3" name="dzongkhagApproved" id="approvedDzongkhag3">
                                             </td>
                                         </tr> 
                                     </tbody>
@@ -225,6 +235,7 @@
                                  <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
                         </div>
                     </div>
@@ -270,6 +281,7 @@ export default {
                 }],
                 ref_docs:[],
                 remarks:'',
+                dzongkhagApproved:'',
                 actiontype:'',
             }),
         } 
@@ -285,22 +297,31 @@ export default {
                 this.form.description                =   data.description;
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
-                        this.form.preference_dzongkhag1  =   data.preferences[i].dzongkhag_id;
+                        this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
+                        $('#approvedDzongkhag1').val(data.preferences[i].dzongkhag_id);
                     }
                     if(i==1){
-                        this.form.preference_dzongkhag2  =   data.preferences[i].dzongkhag_id;
+                        this.form.preference_dzongkhag2     =   data.preferences[i].dzongkhag_id;
+                        $('#approvedDzongkhag2').val(data.preferences[i].dzongkhag_id);
                     }
                     if(i==2){
-                        this.form.preference_dzongkhag3  =   data.preferences[i].dzongkhag_id;
+                        this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
+                        $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
                     }
-                }
+                } 
                 this.draft_attachments=data.documents;
-                alert(response.data.app_stage);
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
+                    $('#approveDzohead').show();
+                    $('#approveDzo1').show();
+                    $('#approveDzo2').show();
+                    $('#approveDzo3').show();
+                }
+                if(response.data.app_stage.toLowerCase().includes('con')){
+                    $('#confirm').show();
                 }
             })
             .catch((error) =>{  
@@ -324,7 +345,7 @@ export default {
             });
         },
         getStaffDetials(staffId){
-            axios.get('staff/loadpersonalDetails/'+staffId)
+            axios.get('loadCommons/viewStaffDetails/by_id/'+staffId)
             .then(response =>{
                 let data = response.data.data;
                 if(data!=null){
@@ -349,6 +370,14 @@ export default {
                     $('#remarks').addClass('is-invalid');
                     action=false;
                 }
+                if(nextclass=="approve" && $("input[name='dzongkhagApproved']:checked").val()==undefined){
+                    Swal.fire(
+                        'error!',
+                        'Please select prefernece dzongkhag to approve this applicaiton',
+                        'error',
+                    ); 
+                    action=false;
+                }
                 if(action){
                     Swal.fire({
                         text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
@@ -360,6 +389,7 @@ export default {
                         }).then((result) => {
                         if (result.isConfirmed) {
                             this.form.actiontype=nextclass;
+                            this.form.dzongkhagApproved=$("input[name='dzongkhagApproved']:checked").val();
                             this.form.post('staff/transfer/updateTransferApplication')
                             .then((response) => {
                                 if(response!=""){
