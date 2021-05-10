@@ -22,7 +22,7 @@ class FoodReleaseController extends Controller
     public function saveFoodRelease(Request $request){
         // dd('m here');
         $foodrelease = [
-            'dateOfrelease'                      =>  $request['dateOfrelease'],
+            'dateOfrelease'             =>  $request['dateOfrelease'],
             'dzongkhag'                 =>  $request['dzongkhag'],
             'school'                    =>  $request['school'],
             'quarter'                   =>  $request['quarter'],

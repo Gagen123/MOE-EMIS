@@ -110,7 +110,7 @@ export default {
 
         /**
          * method to save data
-         */
+         */ 
         formaction: function(type){
             if(type=="reset"){
                 this.restForm();

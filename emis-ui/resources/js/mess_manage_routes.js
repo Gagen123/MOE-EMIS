@@ -49,7 +49,7 @@ const routes = [
                     { path: '/stockreceived_list', name:'StockReceivedList', component: require('./components/mess_manage/stockReceived/stockreceived_list.vue').default },
                 ]    
             },
-            { path: '/stockissued_index', 
+            { path: '/stockissued_index',  
                 component: require('./components/mess_manage/stockIssue/stockissued_index.vue').default ,
                 children: 
                 [

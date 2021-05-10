@@ -28,7 +28,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadLocalProcure', 'messManage\LocalProcureController@loadLocalProcure');
             $router->post('/saveLocalProcure', 'messManage\LocalProcureController@saveLocalProcure');
         });
-
+ 
         $router->group(['prefix' => 'stockissue'], function () use ($router) {
             $router->get('/loadStockIssuedList', 'messManage\StockIssuedController@loadStockIssuedList');
             $router->post('/saveStockIssued', 'messManage\StockIssuedController@saveStockIssued');

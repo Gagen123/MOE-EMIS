@@ -32,7 +32,7 @@ class StockIssuedController extends Controller
              'created_at'                =>  date('Y-m-d h:i:s')
             );
          $stckiss = StockIssued::create($stockissue);
-         dd('mhere');
+       //  dd('mhere');
         }
       //  dd('m here');
         return $this->successResponse($stckiss, Response::HTTP_CREATED);

@@ -34,7 +34,7 @@ class MessManagementController extends Controller
             'quarter'               =>  'required',
         ];
         $customMessages = [
-            'dateOfrelease.required'            => 'dateOfrelease is required',
+            'dateOfrelease.required'   => 'dateOfrelease is required',
             'dzongkhag.required'       => 'Dzongkhag is required',
             'school.required'          => 'School  is required',
             'quarter.required'         => 'Quarter is required',
@@ -42,7 +42,7 @@ class MessManagementController extends Controller
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
-            'dateOfrelease'                     =>  $request['dateOfrelease'],
+            'dateOfrelease'            =>  $request['dateOfrelease'],
             'dzongkhag'                =>  $request['dzongkhag'],
             'school'                   =>  $request['school'],
             'quarter'                  =>  $request['quarter'],
@@ -134,6 +134,7 @@ class MessManagementController extends Controller
     }
 
     public function getFoodRelease($termId = ""){
+        //   dd('m here'); 
         $dis = $this->apiService->listData('emis/messManagement/getFoodRelease/' .$termId);
         return $dis;
     }

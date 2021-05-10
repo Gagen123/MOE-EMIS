@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\mess_manage;
-
+namespace App\Http\Controllers\messManage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\mess_manage\LocalProcure;
+use App\Models\mess_manage\LocalProcure; 
 use Illuminate\Support\Facades\DB;
 
 class LocalProcureController extends Controller
@@ -19,8 +18,8 @@ class LocalProcureController extends Controller
     }
 
     public function saveLocalProcure(Request $request){
-    //    dd('m here');
-     $date = $request['dateOfprocure'];
+        // dd('m here');
+        $date = $request['dateOfprocure'];
      foreach ($request->local_item as $i=> $item){
             $localprocure = array(
              'dateOfprocure'              =>  $date,
@@ -38,11 +37,10 @@ class LocalProcureController extends Controller
         // dd('m here'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
-   
     public function loadLocalProcure(){
-     //    dd('m here'); 
-    //  return 'from service of mine';   
-     $list = DB::table('local_procures')->select('dateOfprocure as Date')->get();
-      return $list;
+          // return 'from service of mine';
+        $list = DB::table('local_procures')
+        ->select( 'dateOfprocure as Date')->get();
+        return $list;
     }
 }

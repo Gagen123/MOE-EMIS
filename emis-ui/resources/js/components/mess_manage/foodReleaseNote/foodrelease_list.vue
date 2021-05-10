@@ -44,8 +44,8 @@ export default {
         loadFoodReleaseList(uri = 'mess_manage/loadFoodReleaseList'){
             axios.get(uri)
             .then(response => { 
-                let data = response;
-                this.foodrelease_list =  data.data;
+                let data = response.data;
+                this.foodrelease_list =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
