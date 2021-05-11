@@ -187,7 +187,7 @@ class HomeController extends Controller{
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
-        $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
+        $role_riv=$this->apiService->listData('getmenusSubMenus/'.$id.'/'.$type, [], $headers);
         $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
         $screens=[];
         $screens_ids="";
@@ -202,7 +202,7 @@ class HomeController extends Controller{
                         'screen_name' => $work->screen_name,
                         'route' =>$work->Route,
                         'work_flow_status'=>$work->workflow_status,
-                        'actions' => 'NA',
+                        // 'actions' => 'NA',
                         'screen_icon'=>$work->screen_icon,
                     ];
                     array_push($screens,$screen);
@@ -222,7 +222,7 @@ class HomeController extends Controller{
                             'screen_name' => $priv->screenName,
                             'route' =>$priv->Route,
                             'work_flow_status'=>'NA',
-                            'actions' => json_decode($actions)[0]->action_name,
+                            // 'actions' => json_decode($actions)[0]->action_name,
                             'screen_icon'=>$priv->screen_icon,
                         ];
                         array_push($screens,$screen);
@@ -231,6 +231,13 @@ class HomeController extends Controller{
             }
         }
         return $screens;
+    }
+    
+    public function get_privileges($id=""){
+        $token =Session::get('User_Token');
+        $headers['Authorization'] = 'bearer '. $token;
+        $screen_riv=$this->apiService->listData('getPrivillegesOnScreenById/'.$id, [], $headers);
+        return $screen_riv;
     }
 
     public function logout(Request $request){

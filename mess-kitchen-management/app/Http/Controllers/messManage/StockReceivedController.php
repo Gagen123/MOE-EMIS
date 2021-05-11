@@ -17,9 +17,9 @@ class StockReceivedController extends Controller
     }
 
     public function getFoodRelease($termId = ""){
-        // return 'from service of mine';
+       //  return 'from service of mine';
       $list = DB::table('item_released_notes as a')
-      ->join('food_releases as b')
+      ->join('food_releases as b', 'b.id', '=', 'a.foodreleaseId')
       ->select( 'a.item as item','a.quantity as quantity')->get();
       return $list;
   }

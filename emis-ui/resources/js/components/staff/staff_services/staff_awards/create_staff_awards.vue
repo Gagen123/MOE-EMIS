@@ -37,12 +37,12 @@
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Place:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="award_form.place" :class="{ 'is-invalid': award_form.errors.has('place') }" id="place" @change="remove_err('place')" type="text">
+                    <input class="form-control" v-model="award_form.place" :class="{ 'is-invalid': award_form.errors.has('place') }" id="place" @change="remove_error('place')" type="text">
                     <has-error :form="award_form" field="place"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="award_form.date" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <input class="form-control" v-model="award_form.date" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
             </div>
@@ -64,6 +64,7 @@
 export default {
     data(){
         return {
+            screen_id:'',
             staffList:[],
             awardCategoryList:[],
             awardTypeList:[],
@@ -77,7 +78,7 @@ export default {
                 place: '',
                 date: '',
                 remarks:'',
-                action_type:'add'
+                action_type:'add',
             }),
         }
     },
@@ -138,7 +139,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_awards_list');
+                    this.$router.push({name:'list_staff_awards',query: {data:this.screen_id}});
                 })
                 .catch(() => {
                     console.log("Error:")
@@ -161,7 +162,6 @@ export default {
             if(id=="staff"){
                 this.award_form.staff=$('#staff').val();
             }
-            
         },
         
         
@@ -182,6 +182,7 @@ export default {
 
         this.loadStaffList();
         this.loadActiveAwardList();
+        this.screen_id=this.$route.query.data;
     },
     
 }

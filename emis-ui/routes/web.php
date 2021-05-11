@@ -5,6 +5,8 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('in
 Route::get('/logout', [App\Http\Controllers\HomeController::class, 'logout'])->name('logout');
 Route::get('/select_system', [App\Http\Controllers\HomeController::class, 'select_system'])->name('select_system');
 Route::get('/get_screens_on_submodules/{type}/{id}', [App\Http\Controllers\HomeController::class, 'get_screens_on_submodules'])->name('get_screens_on_submodules');
+Route::get('/get_privileges/{id}', [App\Http\Controllers\HomeController::class, 'get_privileges'])->name('get_privileges');
+
 
 
 Route::prefix('masters')->group(function () {
@@ -299,6 +301,13 @@ Route::prefix('staff')->group(function () {
     });
     Route::prefix('staffServices')->group(function (){ 
         Route::post('/saveStaffAward', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffAward'])->name('saveStaffAward');
+        Route::get('/loadStaffAward', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffAward'])->name('loadStaffAward');
+        Route::get('/deleteStaffServices/{type}/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'deleteStaffServices'])->name('deleteStaffServices');
+        Route::post('/saveStaffResponsibility', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffResponsibility'])->name('saveStaffResponsibility');
+        Route::get('/loadStaffResponsibility', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffResponsibility'])->name('loadStaffResponsibility');
+
+        Route::post('/saveStaffDisaplinary', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffDisaplinary'])->name('saveStaffDisaplinary');
+        Route::get('/loadStaffdisaplinary', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffdisaplinary'])->name('loadStaffdisaplinary');
     });
     
 });

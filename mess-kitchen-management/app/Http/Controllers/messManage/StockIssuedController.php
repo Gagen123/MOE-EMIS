@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\messManage;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,15 +31,15 @@ class StockIssuedController extends Controller
              'created_at'                =>  date('Y-m-d h:i:s')
             );
          $stckiss = StockIssued::create($stockissue);
-       //  dd('mhere');
+         //  dd('mhere');
         }
-      //  dd('m here');
+         //  dd('m here');
         return $this->successResponse($stckiss, Response::HTTP_CREATED);
     }
     public function loadStockIssuedList(){
      //return 'from service of mine';
         $list = DB::table('stock_issueds')
-        ->select( 'dateOfissue as Date',)->get();
+        ->select( 'dateOfissue as dateOfissue',)->get();
         return $list;
     }
 }
