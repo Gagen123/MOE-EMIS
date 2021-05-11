@@ -140,9 +140,6 @@
                             Academic Masters
                         </router-link>
                     </li>
-                </ul>
-
-                <li class="nav-item has-treeview" id="organizationlink">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
@@ -340,6 +337,14 @@
                         </router-link>
                     </li>
                 </ul>
+            </li>
+            <li class="nav-item" id="messlink">
+                <router-link to="/messManage_index" class="nav-link">
+                    <p> 
+                      <i class="nav-icon fa fa-carrot"></i>
+                        Mess Management
+                    </p>
+                </router-link>
             </li>
             <li class="nav-item" id="track_application">
                 <router-link to="/management_body_link" class="nav-link">

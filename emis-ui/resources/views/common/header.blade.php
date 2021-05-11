@@ -4,7 +4,7 @@
         <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-    @if(session('User_Details')['acess_level']=='Org')
+    @if(session('User_Details')['acess_level']=='Org' && session('org_profile')!=null)
       <div class="form-inline">
         @if(session('org_profile')->logo_path!='')
           <img src="storage/{{session('org_profile')->logo_path}}" onerror="this.src='img/question.PNG'" class="brand-image elevation-5 img-sm ml-4 img-circle" style="opacity: .8">

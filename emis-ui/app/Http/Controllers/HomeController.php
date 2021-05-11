@@ -159,9 +159,11 @@ class HomeController extends Controller{
                 //dd(json_decode($role_workflow));
                 Session::put('role_priv', $role_riv);
                 Session::put('role_workflow', $role_workflow);
-
-                $org_profile=$this->apiService->listData('emis/organization/getOrgProfile/'.$user->org_organization_id);
-                Session::put('org_profile', json_decode($org_profile)->data);
+                
+                if($user->org_organization_id!=null){
+                    $org_profile=$this->apiService->listData('emis/organization/getOrgProfile/'.$user->org_organization_id);
+                    Session::put('org_profile', json_decode($org_profile)->data);
+                }
                 return redirect()->route('dashboard');
             }
             else{
