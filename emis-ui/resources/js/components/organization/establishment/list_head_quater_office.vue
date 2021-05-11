@@ -72,7 +72,7 @@ export default {
         }
     },
     created(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
         this.loadSchool();
     }
 }

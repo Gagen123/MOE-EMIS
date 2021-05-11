@@ -20,6 +20,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
         $router->get('/loadStaffMasters/{param}','masters\StaffMastersController@loadStaffMasters');
         $router->get('/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
+        $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMastersController@loadStaffDropdownMasters');
         
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
         $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
@@ -28,7 +29,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
         $router->get('/loaddraftpersonalDetails/{type}/{user_id}', ['uses' => 'staff\StaffController@loaddraftpersonalDetails']);
-        $router->get('/loadpersonalDetails/{status}/{id}', ['uses' => 'staff\StaffController@loadpersonalDetails']);
+        // $router->get('/loadpersonalDetails/{status}/{id}', ['uses' => 'staff\StaffController@loadpersonalDetails']);
         
         $router->post('/savequalificationDetails', ['uses' => 'staff\StaffController@savequalificationDetails']);
         $router->get('/loadQualification/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@loadQualification']);
@@ -42,8 +43,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/updatefinalstaffDetails', ['uses' => 'staff\StaffController@updatefinalstaffDetails']);
         $router->post('/updatefinalPrivatestaffDetails', ['uses' => 'staff\StaffController@updatefinalPrivatestaffDetails']);
         
-        $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
-        $router->get('/loadStaff/{type}/{param}', ['uses' => 'staff\StaffController@loadStaff']);
+        // $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
+        // $router->get('/loadStaff/{type}/{param}', ['uses' => 'staff\StaffController@loadStaff']);
         
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
@@ -76,5 +77,23 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadtrainsferDetails/{appNo}', ['uses' => 'staff\TransferController@loadtrainsferDetails']); 
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
         }); 
+        
+        $router->group(['prefix' => 'managementBody'], function () use ($router) {
+            $router->post('/saveManagementBody', ['uses' => 'staff\ManagementBodyController@saveManagementBody']);
+            $router->post('/saveManagementBodyComposition', ['uses' => 'staff\ManagementBodyController@saveManagementBodyComposition']);
+            $router->get('/loadManagementBodyComposition/{id}', ['uses' => 'staff\ManagementBodyController@loadManagementBodyComposition']);
+            $router->get('/deleteManagementBodyComposition/{id}/{itemId}', ['uses' => 'staff\ManagementBodyController@deleteManagementBodyComposition']);
+            $router->post('/updateManagementBody', ['uses' => 'staff\ManagementBodyController@updateManagementBody']);
+            $router->get('/loadcreatedManagementBodyComposition/{param}', ['uses' => 'staff\ManagementBodyController@loadcreatedManagementBodyComposition']);
+            $router->get('/loadcurrentbaord/{id}', ['uses' => 'staff\ManagementBodyController@loadcurrentbaord']);
+            
+        }); 
     });
+
+    $router->group(['prefix' => 'loadstaff'], function () use ($router) {
+        $router->get('/loadStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadStaffList']);
+        $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
+        
+        
+    }); 
 });

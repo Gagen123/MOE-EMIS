@@ -98,7 +98,7 @@
             @endforeach
             @endif
             <hr>
-            <li class="nav-item has-treeview" id="mastermanagment">
+            <!-- <li class="nav-item has-treeview" id="mastermanagment">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-database"></i>
                     <p>
@@ -128,10 +128,11 @@
                         </router-link>
                     </li>
                     <li class="nav-item has-treeview" id="staff_master">
-                        <router-link to="/traing_master" class="nav-link pt-1 pb-1">
+                        <router-link to="/staff_award_index" class="nav-link pt-1 pb-1">
                             <i class="fa fa-users nav-icon"></i>
-                            HR Development (Training)
+                            Staff Service Master
                         </router-link>
+<<<<<<< HEAD
                     </li>
                     <li class="nav-item has-treeview" id="studentmaster">
                         <a href="#" class="nav-link pt-1 pb-1">
@@ -174,12 +175,17 @@
                             </li>
                         </ul>
                     </li>
+=======
+                    </li>          
+                    
+>>>>>>> 51d38ddf6e9d46a212b7889c98a7227089127b11
                     <li class="nav-item has-treeview" id="academicmaster">
                         <router-link to="/academic-link" class="nav-link pt-1 pb-1">
                             <i class="fa fa-book nav-icon"></i>
                             Academic Masters
                         </router-link>
                     </li>
+<<<<<<< HEAD
 
 
                   <!--  <li class="nav-item has-treeview" id="org_master" @click="setclass('mastersmanagement','','std_master')">
@@ -193,6 +199,8 @@
                 </ul>
 
                 <li class="nav-item has-treeview" id="organizationlink">
+=======
+>>>>>>> 51d38ddf6e9d46a212b7889c98a7227089127b11
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
@@ -233,15 +241,20 @@
                             </p>
                         </router-link>
                     </li>
+<<<<<<< HEAD
                     <!-- <li class="nav-item" id="annualUpdate" @click="setclass('organizationlink','','annualUpdate')">
                         <router-link to="/annualUpdate" class="nav-link">
                             <i class="fa fa-angle-double-right nav-icon"></i>
                             Data Submission
                         </router-link>
                     </li> -->
+=======
+>>>>>>> 51d38ddf6e9d46a212b7889c98a7227089127b11
                 </ul>
-            </li>
-            <li class="nav-item has-treeview" id="stafflink">
+            </li> -->
+
+
+            <!-- <li class="nav-item has-treeview" id="stafflink">
                 <router-link to="/staff_registration" class="nav-link pt-1 pb-1">
                     <p>
                     <i class="nav-icon fas fa-users-cog"></i>
@@ -254,7 +267,71 @@
                         Inset
                     </p>
                 </router-link>
+            </li> -->
+            <li class="nav-item has-treeview" >
+                <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
+                    <i class="fa fa-users nav-icon"></i>
+                    Organization Profile
+                </router-link> 
+            </li> 
+
+            <li class="nav-item has-treeview" >
+                <router-link to="/staff_award_index" class="nav-link pt-1 pb-1">
+                    <i class="fa fa-users nav-icon"></i>
+                    Staff Service Master
+                </router-link> 
+            </li>  
+
+            <li class="nav-item has-treeview" id="studentmaster">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-user-graduate"></i>
+                    <p>
+                        Student Masters
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="studentServices" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                        <router-link to="/StudentServicesMasterIndex" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                            Non-Academics Master
+                        </router-link>
+                    </li> 
+                </ul>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="studentadmission">
+                        <router-link to="/studentAdmissionMasterIndex" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                            Admission Master
+                        </router-link>
+                    </li>
+                </ul>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
+                        <router-link to="/StudentHealthMasterIndex" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                            Health Master
+                        </router-link>
+                    </li>
+                </ul>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="studentCea" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                        <router-link to="/StudentCeaMasterIndex" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                            Programs & Clubs
+                        </router-link>
+                    </li>
+                </ul>
             </li>
+<<<<<<< HEAD
+=======
+            <li class="nav-item has-treeview" id="staff_master">
+                <router-link to="/traing_master" class="nav-link pt-1 pb-1">
+                    <i class="fa fa-users nav-icon"></i>
+                    HR Development (Training)
+                </router-link>
+            </li>  
+>>>>>>> 51d38ddf6e9d46a212b7889c98a7227089127b11
 
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -265,7 +342,6 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                   <!-- student admission side menu  -->
                    <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
@@ -274,7 +350,6 @@
                             </p>
                         </router-link>
                     </li>
-                   <!-- student services side menu -->
                    <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
                         <router-link to="/student_services" class="nav-link">
                             <p>
@@ -328,14 +403,47 @@
                     </li>
                 </ul>
             </li>
+            <li class="nav-item" id="messlink">
+                <router-link to="/messManage_index" class="nav-link">
+                    <p> 
+                      <i class="nav-icon fa fa-carrot"></i>
+                        Mess Management
+                    </p>
+                </router-link>
+            </li>
             <li class="nav-item" id="track_application">
+                <router-link to="/management_body_link" class="nav-link">
+                    <p>
+                        <i class="nav-icon fas fa-mail-bulk"></i>
+                        Management Body Master
+                    </p>
+                </router-link> 
+            </li>
+            <li class="nav-item" id="track_application">
+                <router-link to="/staff_services_index" class="nav-link">
+                    <p>
+                        <i class="nav-icon fas fa-list"></i>
+                        Staff Services
+                    </p>
+                </router-link>  
+            </li>
+            <li class="nav-item" id="track_application">
+                <router-link to="/management_body" class="nav-link">
+                    <p>
+                        <i class="nav-icon fas fa-mail-bulk"></i>
+                        Management Body
+                    </p>
+                </router-link> 
+            </li>
+
+            <!-- <li class="nav-item" id="track_application">
                 <router-link to="/question_answer_index" class="nav-link">
                     <p>
                         <i class="fa fa-question nav-icon"></i>
                         Question & Answer set up
                     </p>
                 </router-link>
-            </li>
+            </li> -->
             <li class="nav-item" id="track_application">
                 <router-link to="/track_application" class="nav-link">
                     <p>

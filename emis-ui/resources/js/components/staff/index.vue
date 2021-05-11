@@ -12,7 +12,7 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
+                <!-- <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
                     <router-link to="/civil_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
                         Civil Staff static 
@@ -35,7 +35,14 @@
                         <span class="fa fa-user-check"></span>
                         Transfer static
                     </router-link>
+                </li> -->
+                <li class="nav-item pr-1" @click="activatelink('nomination')">
+                    <router-link to="/staff_awards" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Awards
+                    </router-link>
                 </li>
+
             </ul>
             <router-view></router-view>
         </div>

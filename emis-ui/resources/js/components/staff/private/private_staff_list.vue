@@ -51,7 +51,7 @@ export default {
             this.$router.push({name:"edit_private_staff",params:{data:staff}});
 		},
         loadstff(){
-            axios.get('staff/loadAllStaff/Private')
+            axios.get('loadCommons/loadStaffList/emptype/Private')
             .then((response) => {  
                 this.substaffList =  response.data.data;
              })

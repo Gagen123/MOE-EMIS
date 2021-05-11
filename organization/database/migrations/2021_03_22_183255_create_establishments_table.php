@@ -30,6 +30,8 @@ class CreateEstablishmentsTable extends Migration
             $table->tinyInteger('isColocated')->nullable(true);;
             $table->string('status')->nullable(true)->comment('Pending->Submitted->Under Process or Rejectd->Approved ->Registered');
             $table->string('applicationNo');
+            $table->char('isfeedingschool',5)->nullable(true);
+            $table->string('feeding',10)->nullable(true);
             $table->string('service');
             $table->char('organizationId',36)->nullable(true);
             $table->foreign('organizationId')->references('id')->on('organization_details');

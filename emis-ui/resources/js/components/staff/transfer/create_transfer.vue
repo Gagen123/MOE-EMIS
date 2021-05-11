@@ -372,7 +372,7 @@ export default {
             }
 		}, 
         loadstaff(){
-            let uri = 'staff/loadStaff/workingagency';
+            let uri = 'loadCommons/userworkingagency/userworkingagency';
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -513,8 +513,8 @@ export default {
             axios.get('common/getSessionDetail')
             .then(response => {
                 let data = response.data.data;
-                this.staff_id=data['User_Id'];
-                $('#staff_id').val(data['User_Id']).trigger('change');
+                this.form.staff_id=data['staff_id'];
+                $('#staff_id').val(data['staff_id']).trigger('change');
             })    
             .catch(errors =>{ 
                 console.log(errors)

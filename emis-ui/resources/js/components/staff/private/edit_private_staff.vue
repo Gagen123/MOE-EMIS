@@ -611,7 +611,7 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
         loadpersonalDetails(){
-            axios.get('staff/loadpersonalDetails/'+this.$route.params.data.id)
+            axios.get('loadCommons/viewStaffDetails/by_id/'+this.$route.params.data.id)
             .then((response) => {  
                 let data=response.data.data;
                 if(data.village_id!=null){

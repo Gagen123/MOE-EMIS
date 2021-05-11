@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
+        <!-- <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
             <div class="card-body" style="display:none">
                 <div class="row form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -59,7 +59,7 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> -->
         
         <table id="list-student-table" class="table table-bordered table-striped table-head-fixed">
             <thead>
@@ -76,8 +76,8 @@
             <tbody>
                 <tr v-for="(std, index) in stdList" :key="index">
                     <td>{{ index + 1 }} </td>
-                    <td>{{ std.cid_passport }}</td>
-                    <td>{{ std.first_name }} {{ std.middle_name }} {{ std.last_name }}</td>
+                    <td>{{ std.CidNo }}</td>
+                    <td>{{ std.Name }}</td>
                     <td>{{ std.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Edit</a>

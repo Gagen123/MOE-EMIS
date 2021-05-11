@@ -58,7 +58,9 @@
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
                                     <td> get SEX </td>
-                                        <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
+                                        <input type="hidden" name="student_id" class="form-control" 
+                                        v-model="student_form.std_id[index]">
+                                        {{ student.StdStudentId}}
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
                                         <input type="number" name="height" class="form-control" v-model="student_form.height[index]"/>

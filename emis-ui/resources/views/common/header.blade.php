@@ -4,16 +4,15 @@
         <a class="nav-link text-white" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
     </ul>
-    <!-- <div class="form-inline ml-3">
-        <div class="input-group input-group-sm">
-          <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-              <button class="btn btn-navbar">
-                <i class="fas fa-search"></i>
-              </button>
-          </div>
-        </div>
-    </div> -->
+    @if(session('User_Details')['acess_level']=='Org' && session('org_profile')!=null)
+      <div class="form-inline">
+        @if(session('org_profile')->logo_path!='')
+          <img src="storage/{{session('org_profile')->logo_path}}" onerror="this.src='img/question.PNG'" class="brand-image elevation-5 img-sm ml-4 img-circle" style="opacity: .8">
+        @endif
+        <span class="brand-text font-weight-light text-white ml-4">{{ session('org_profile')->orgName }} {{ session('org_profile')->level }}</span>
+      </div>
+    @endif
+    
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">

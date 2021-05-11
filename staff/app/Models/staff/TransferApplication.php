@@ -19,6 +19,7 @@ class TransferApplication extends Model{
         'updated_by',
         'created_at',
         'updated_at',
-        'status'
+        'status',
+        'dzongkhagApproved'
     ];
 }

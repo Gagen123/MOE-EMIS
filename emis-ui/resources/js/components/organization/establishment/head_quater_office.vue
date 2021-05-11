@@ -42,13 +42,21 @@
                                         <input type="text" class="form-control" v-model="form.agencyCode"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Department:</label>
+                                         <select v-model="form.department" :class="{ 'is-invalid': form.errors.has('department') }" class="form-control select2" name="department" id="department">
+                                            <option value="">--- Please Select ---</option>
+                                            <option value="Directorate">Directorate</option>
+                                            <option value="Department of School Education">Department of School Education</option>
+                                            <option value="Policy And Planning Division">Policy And Planning Division</option>
+                                            <option value="Human Resource Division">Human Resource Division</option>
+                                        </select> 
+                                        <!-- <input type="text" class="form-control" v-model="form.parentAgency"/> -->
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Agency Name:</label>
                                         <input type="text" class="form-control" v-model="form.agencyName"/>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Parent Agency:</label>
-                                        <input type="text" class="form-control" v-model="form.parentAgency"/>
-                                    </div>
+                                   
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -160,7 +168,7 @@ export default {
             villageList:[],
             form: new form({
                 id: '',organizationId:'',workingAgencyCode:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
-                gewog:'',chiwog:'',agencyType:'',status:'pending'
+                gewog:'',chiwog:'',agencyType:'',status:'pending',department:''
             }),
 
             form1: new form({
@@ -201,14 +209,14 @@ export default {
                 this.dzongkhagList =  data.data;
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error:"+error)
             });
         },
 
         /**
          * method to get gewog list
          */
-        async getgewoglist(id){
+        getgewoglist(id){
             let dzoId=$('#dzongkhag').val();
             if(id!="" && (dzoId==null || dzoId=="")){
                 dzoId=id;
@@ -263,6 +271,10 @@ export default {
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
             }
+            if(id=="department"){
+                this.form.department=$('#department').val();
+            }
+            
         },
 
         applyselect2(){
@@ -325,7 +337,7 @@ export default {
                         this.form1.post('organization/saveContactDetails')
                         .then(() => {
                             let message="Head Quater details has been added: <br><b>Thank You !</b>";
-                            this.$router.push({name:'acknowledgement',params: {data:message}});
+                            this.$router.push({name:'estb_acknowledgement',params: {data:message}});
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Data is saved successfully'
@@ -415,7 +427,7 @@ export default {
 
        
     mounted() {
-        this.getScreenAccess();
+        // this.getScreenAccess();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

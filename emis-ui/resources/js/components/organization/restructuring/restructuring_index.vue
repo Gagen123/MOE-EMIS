@@ -12,7 +12,7 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link id="regularstaff" to="/change_basic_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change Details
                     </router-link>
@@ -31,7 +31,7 @@
                     <router-link to="/closure_list" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Closure
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>
