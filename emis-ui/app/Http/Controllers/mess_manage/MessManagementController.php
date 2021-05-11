@@ -25,6 +25,10 @@ class MessManagementController extends Controller
           return $list;
     }
 
+    public function getFoodReleaseItem($foodreleaseId=''){
+        $list = $this->apiService->listData('emis/messManagement/getFoodReleaseItem/'.$foodreleaseId);
+        return $list;
+    }
     public function saveFoodRelease(Request $request){
         //return $request
         $rules = [
