@@ -179,8 +179,9 @@ export default {
          * method to current get latitude and longitude 
          */
         getLat: function(){
-            this.form.latitude = 27.514162;
-            this.form.longitude = 90.433601;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(this.showPosition);
+            } 
         },
 
         /**
@@ -328,15 +329,22 @@ export default {
             .catch(errors => { 
                 console.log(errors)
             });
+        },
+        showPosition(position){
+            $('#latitude').val(position.coords.latitude);
+            $('#longitude').val(position.coords.longitude);
+            $('#altitude').val(position.coords.altitude);
+            
         }
     },
 
     created(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
         this.getDisasterList();
         this.loadAttachmentList();
         this.getLocationDetails(this.$route.query.orgId);
         this.form.organizationId = this.$route.query.orgId;
+                
     },
 }
 </script>

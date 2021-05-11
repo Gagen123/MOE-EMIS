@@ -5,7 +5,12 @@
         </ol>
      <div class="container-fluid">   
             <ul class="nav nav-pills mb-2" role="tablist">
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       {{ item.screen_name}}
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/location_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Location Type
                     </router-link>
@@ -109,7 +114,7 @@
                     <router-link to="/attachment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Attachment
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>
@@ -122,14 +127,30 @@ export default {
     },
     data() {
         return {
+             menubar:[],
         }
     },
     methods: {
-		
+		getmenus(sub_mod_id){
+            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.menubar =  data.data;  
+            })
+            .catch(function (error) { 
+                console.log(error);
+            });
+        },
         activatelink(btnid){
             $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
             $('#'+btnid).addClass('btn-primary text-white');
         }
+    },
+    mounted() {
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+        this.getmenus(routeparam);
     },
 }
 </script>

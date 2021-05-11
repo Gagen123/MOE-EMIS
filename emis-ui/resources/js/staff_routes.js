@@ -113,15 +113,7 @@ const routes = [
                 { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_masters/position_level/edit_position_level.vue').default },
                 ],
             },
-            { path: '/management_body_designation',
-                component: require('./components/masters/staff_masters/mgmn_body_desig/mgmn_designation.vue').default,
-                children:[
-                { path: '/',name:'management_body_designation', component: require('./components/masters/staff_masters/mgmn_body_desig/list_mgmn_designation.vue').default },
-                { path: '/list_mgmn_desig',name:'list_mgmn_desig', component: require('./components/masters/staff_masters/mgmn_body_desig/list_mgmn_designation.vue').default },
-                { path: '/create_mgmn_desig',name:'create_mgmn_desig', component: require('./components/masters/staff_masters/mgmn_body_desig/create_mgmn_desig.vue').default },
-                { path: '/edit_mgmn_desig', name:'edit_mgmn_desig', component: require('./components/masters/staff_masters/mgmn_body_desig/edit_mgmn_desig.vue').default },
-                ],
-            },
+            
             { path: '/qualification_type',
                 component: require('./components/masters/staff_masters/qualification_type/qualification_type_index.vue').default,
                 children:[
@@ -158,7 +150,36 @@ const routes = [
                 { path: '/edit_relationship', name:'edit_relationship', component: require('./components/masters/staff_masters/relationship/edit_relationship.vue').default },
                 ],
             },
+
+
+            
         ],
+    },
+
+    { path: '/management_body_link',
+        component: require('./components/masters/management_body/management_body_index.vue').default,
+        children:[
+            {path: '/',name:'management_body_link', component: require('./components/masters/management_body/management_body_list.vue').default },
+            
+            { path: '/management_body_designation',
+                component: require('./components/masters/management_body/mgmn_body_desig/mgmn_designation.vue').default,
+                children:[
+                { path: '/',name:'management_body_designation', component: require('./components/masters/management_body/mgmn_body_desig/list_mgmn_designation.vue').default },
+                { path: '/list_mgmn_desig',name:'list_mgmn_desig', component: require('./components/masters/management_body/mgmn_body_desig/list_mgmn_designation.vue').default },
+                { path: '/create_mgmn_desig',name:'create_mgmn_desig', component: require('./components/masters/management_body/mgmn_body_desig/create_mgmn_desig.vue').default },
+                { path: '/edit_mgmn_desig', name:'edit_mgmn_desig', component: require('./components/masters/management_body/mgmn_body_desig/edit_mgmn_desig.vue').default },
+                ],
+            },
+            { path: '/management_body_type',
+                component: require('./components/masters/management_body/body_type/body_type_index.vue').default,
+                children:[
+                { path: '/',name:'management_body_type', component: require('./components/masters/management_body/body_type/list_body_type.vue').default },
+                { path: '/list_body_type',name:'list_body_type', component: require('./components/masters/management_body/body_type/list_body_type.vue').default },
+                { path: '/create_body_type',name:'create_body_type', component: require('./components/masters/management_body/body_type/create_body_type.vue').default },
+                { path: '/edit_body_type', name:'edit_body_type', component: require('./components/masters/management_body/body_type/edit_body_type.vue').default },
+                ],
+            },
+        ]
     },
     
     //HR Developemnt (Training) Masters
@@ -279,6 +300,71 @@ const routes = [
             },
         ]
     },
+
+    //Staff services master link
+    { path: '/staff_award_index',
+        component: require('./components/masters/staff_servces_masters/staff_service_master_index.vue').default,
+        children:[
+            {path: '/',name:'staff_award_index', component: require('./components/masters/staff_servces_masters/staff_service_master_list.vue').default },
+            
+            { path: '/staff_award_category_index',
+                component: require('./components/masters/staff_servces_masters/staff_award_category/staff_award_category_index.vue').default,
+                children:[
+                { path: '/',name:'staff_award_category_index', component: require('./components/masters/staff_servces_masters/staff_award_category/list_staff_award_category.vue').default },
+                { path: '/list_staff_award_category',name:'list_staff_award_category', component: require('./components/masters/staff_servces_masters/staff_award_category/list_staff_award_category.vue').default },
+                { path: '/create_staff_award_category',name:'create_staff_award_category', component: require('./components/masters/staff_servces_masters/staff_award_category/create_staff_award_category.vue').default },
+                { path: '/edit_staff_award_category', name:'edit_staff_award_category', component: require('./components/masters/staff_servces_masters/staff_award_category/edit_staff_award_category.vue').default },
+                ],
+            },
+            { path: '/staff_award_type_index',
+                component: require('./components/masters/staff_servces_masters/staff_award_type/staff_award_type_index.vue').default,
+                children:[
+                { path: '/',name:'staff_award_type_index', component: require('./components/masters/staff_servces_masters/staff_award_type/list_staff_award_type.vue').default },
+                { path: '/list_staff_award_type',name:'list_staff_award_type', component: require('./components/masters/staff_servces_masters/staff_award_type/list_staff_award_type.vue').default },
+                { path: '/create_staff_award_type',name:'create_staff_award_type', component: require('./components/masters/staff_servces_masters/staff_award_type/create_staff_award_type.vue').default },
+                { path: '/edit_staff_award_type', name:'edit_staff_award_type', component: require('./components/masters/staff_servces_masters/staff_award_type/edit_staff_award_type.vue').default },
+                ],
+            },
+            { path: '/staff_responsibilities_index',
+                component: require('./components/masters/staff_servces_masters/staff_responsibility/staff_responsibility_index.vue').default,
+                children:[
+                { path: '/',name:'staff_responsibilities_index', component: require('./components/masters/staff_servces_masters/staff_responsibility/list_staff_responsibility.vue').default },
+                { path: '/list_staff_responsibility',name:'list_staff_responsibility', component: require('./components/masters/staff_servces_masters/staff_responsibility/list_staff_responsibility.vue').default },
+                { path: '/create_staff_responsibility',name:'create_staff_responsibility', component: require('./components/masters/staff_servces_masters/staff_responsibility/create_staff_responsibility.vue').default },
+                { path: '/edit_staff_responsibility', name:'edit_staff_responsibility', component: require('./components/masters/staff_servces_masters/staff_responsibility/edit_staff_responsibility.vue').default },
+                ],
+            },
+            { path: '/offence_type_index',
+                component: require('./components/masters/staff_servces_masters/offence_type/offence_type_index.vue').default,
+                children:[
+                { path: '/',name:'offence_type_index', component: require('./components/masters/staff_servces_masters/offence_type/list_offence_type.vue').default },
+                { path: '/list_offence_type',name:'list_offence_type', component: require('./components/masters/staff_servces_masters/offence_type/list_offence_type.vue').default },
+                { path: '/create_offence_type',name:'create_offence_type', component: require('./components/masters/staff_servces_masters/offence_type/create_offence_type.vue').default },
+                { path: '/edit_offence_type', name:'edit_offence_type', component: require('./components/masters/staff_servces_masters/offence_type/edit_offence_type.vue').default },
+                ],
+            },
+            { path: '/offence_severity_index',
+                component: require('./components/masters/staff_servces_masters/offence_severity/offence_severity_index.vue').default,
+                children:[
+                { path: '/',name:'offence_severity_index', component: require('./components/masters/staff_servces_masters/offence_severity/list_offence_severity.vue').default },
+                { path: '/list_offence_severity',name:'list_offence_severity', component: require('./components/masters/staff_servces_masters/offence_severity/list_offence_severity.vue').default },
+                { path: '/create_offence_severity',name:'create_offence_severity', component: require('./components/masters/staff_servces_masters/offence_severity/create_offence_severity.vue').default },
+                { path: '/edit_offence_severity', name:'edit_offence_severity', component: require('./components/masters/staff_servces_masters/offence_severity/edit_offence_severity.vue').default },
+                ],
+            },
+            { path: '/offence_action_index',
+                component: require('./components/masters/staff_servces_masters/offence_action/offence_action_index.vue').default,
+                children:[
+                { path: '/',name:'offence_action_index', component: require('./components/masters/staff_servces_masters/offence_action/list_offence_action.vue').default },
+                { path: '/list_offence_action',name:'list_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/list_offence_action.vue').default },
+                { path: '/create_offence_action',name:'create_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/create_offence_action.vue').default },
+                { path: '/edit_offence_action', name:'edit_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/edit_offence_action.vue').default },
+                ],
+            },
+            
+        ]
+    },
+
     //STAFF Transactions 
     { path:'/staff_registration', 
         component: require('./components/staff/index.vue').default, 
@@ -323,6 +409,9 @@ const routes = [
                     { path: '/edit_transfer', name:'edit_transfer', component: require('./components/staff/transfer/edit_transfer.vue').default },
                 ],
             },
+
+            
+
             { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
             component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
@@ -353,11 +442,68 @@ const routes = [
                     { path: '/verify_nomination_selection',name:'verify_nomination_selection',  component: require('./components/staff/training/nomination_selection/verify_nomination_selection.vue').default },
                 ],
             },
+           
+        ]
+    },
+
+    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+   
+    //Management Body Transactions
+    { path:'/management_body', 
+        component: require('./components/staff/management/management_body_index.vue').default, 
+        children:[
+            { path: '/', name:'management_body', component: require('./components/staff/management/management_body_list.vue').default },
+
+            { path: '/create_management_body_index', 
+                component: require('./components/staff/management/create_body/management_body_index.vue').default, 
+                children:[
+                    { path: '/', name:'create_management_body_index',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
+                    { path: '/list_management_body',name:'list_management_body',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
+                    { path: '/create_management_body',name:'create_management_body',  component: require('./components/staff/management/create_body/create_management_body.vue').default },
+                    { path: '/edit_management_body',name:'edit_management_body',  component: require('./components/staff/management/create_body/edit_management_body.vue').default },
+                ],
+            },
+            
             { path: '/acknowledgement', name:'acknowledgement', component: require('./components/staff/acknowledgement.vue').default },
             { path: '/acknowledgement_for_errors', name:'acknowledgement_for_errors', component: require('./components/staff/acknowledgement_for_errors.vue').default },
         ]
     },
 
-    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+    //Staff Services
+    { path:'/staff_services_index', 
+        component: require('./components/staff/staff_services/staff_service_index.vue').default, 
+        children:[
+            { path: '/', name:'staff_services_index', component: require('./components/staff/staff_services/staff_service_list.vue').default },
+
+            { path: '/staff_awards', 
+                component: require('./components/staff/staff_services/staff_awards/staff_awards_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_awards',  component: require('./components/staff/staff_services/staff_awards/staff_awards_list.vue').default },
+                    { path: '/list_staff_awards',name:'list_staff_awards',  component: require('./components/staff/staff_services/staff_awards/staff_awards_list.vue').default },
+                    { path: '/create_staff_awards',name:'create_staff_awards', component: require('./components/staff/staff_services/staff_awards/create_staff_awards.vue').default },
+                    { path: '/edit_staff_awards', name:'edit_staff_awards', component: require('./components/staff/staff_services/staff_awards/edit_staff_awards.vue').default },
+                ],
+            },
+            { path: '/staff_responsibilities', 
+                component: require('./components/staff/staff_services/roles_responsibilities/roles_responsibilities_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_responsibilities',  component: require('./components/staff/staff_services/roles_responsibilities/list_roles_responsibilities.vue').default },
+                    { path: '/list_roles_responsibilities',name:'list_roles_responsibilities',  component: require('./components/staff/staff_services/roles_responsibilities/list_roles_responsibilities.vue').default },
+                    { path: '/create_roles_responsibilities',name:'create_roles_responsibilities', component: require('./components/staff/staff_services/roles_responsibilities/create_roles_responsibilities.vue').default },
+                    { path: '/edit_roles_responsibilities', name:'edit_roles_responsibilities', component: require('./components/staff/staff_services/roles_responsibilities/edit_roles_responsibilities.vue').default },
+                ],
+            },
+            { path: '/staff_disciplinary', 
+                component: require('./components/staff/staff_services/staff_disciplinary/staff_disciplinary_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_disciplinary',  component: require('./components/staff/staff_services/staff_disciplinary/list_staff_disciplinary.vue').default },
+                    { path: '/list_staff_disciplinary',name:'list_staff_disciplinary',  component: require('./components/staff/staff_services/staff_disciplinary/list_staff_disciplinary.vue').default },
+                    { path: '/create_staff_disciplinary',name:'create_staff_disciplinary', component: require('./components/staff/staff_services/staff_disciplinary/create_staff_disciplinary.vue').default },
+                    { path: '/edit_staff_disciplinary', name:'edit_staff_disciplinary', component: require('./components/staff/staff_services/staff_disciplinary/edit_staff_disciplinary.vue').default },
+                ],
+            },
+        ]
+    }
+    
 ];
 export default routes

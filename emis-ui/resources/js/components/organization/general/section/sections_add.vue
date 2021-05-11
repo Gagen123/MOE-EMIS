@@ -329,7 +329,7 @@ export default {
     },
 
     mounted(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
         this.form.organizationId = this.$route.query.orgId; 
         this.getschoolDetials();
         $('.select2').select2();

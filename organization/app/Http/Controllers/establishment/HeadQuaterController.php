@@ -29,12 +29,12 @@ class HeadQuaterController extends Controller
         $id = $request->id;
         if($id != null){
             $basic = [
-                'organizationId'         =>  1,
+                'organizationId'         =>  $request['department'],
                 'zestAgencyCode'         =>  $request['agencyCode'],
                 'agencyName'             =>  $request['agencyName'],
-                'dzongkhagId'               =>  1,
-                'gewogId'               =>  1,
-                'chiwogId'               =>  1,
+                'dzongkhagId'            =>  $request['dzongkhag'],
+                'gewogId'                =>  $request['gewog'],
+                'chiwogId'               =>  $request['chiwog'],
                 'organizationType'       =>  $request['agencyType'],
                 'status'                 =>  $request['status'],
                 'updated_by'             =>  $request->user_id,
@@ -45,12 +45,12 @@ class HeadQuaterController extends Controller
                 return $this->successResponse($basicDetails, Response::HTTP_CREATED);
         }else{
             $basic = [
-                'organizationId'         =>  1,
+                'organizationId'         =>  $request['department'],
                 'zestAgencyCode'         =>  $request['agencyCode'],
                 'agencyName'             =>  $request['agencyName'],
-                'dzongkhagId'               =>  1,
-                'gewogId'               =>  1,
-                'chiwogId'               =>  1,
+                'dzongkhagId'            =>  $request['dzongkhag'],
+                'gewogId'                =>  $request['gewog'],
+                'chiwogId'               =>  $request['chiwog'],
                 'organizationType'       =>  $request['agencyType'],
                 'status'                 =>  $request['status'],
                 'created_by'             =>  $request->user_id,

@@ -28,6 +28,8 @@ use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\establishment\HeadQuaterDetails;
+use App\Models\OrgProfile;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -57,6 +59,10 @@ class EstablishmentController extends Controller
      */
     public function saveEstablishment(Request $request){
         $id = $request->id;
+        $feedingModality=null;
+        if($request['isfeedingschool']=="1"){
+            $feedingModality=implode(',',$request['feeding']);
+        }
         if($id != null){
             $estd = [
                 'proposedName'                  =>  $request['proposedName'],
@@ -65,6 +71,8 @@ class EstablishmentController extends Controller
                 'dzongkhagId'                   =>  $request['dzongkhag'],
                 'gewogId'                       =>  $request['gewog'],
                 'chiwogId'                      =>  $request['chiwog'],
+                'isfeedingschool'               =>  $request['isfeedingschool'],
+                'feeding'                       =>  $feedingModality,
                 'locationId'                    =>  $request['locationType'], 
                 'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
                 'isSenSchool'                   =>  $request['senSchool'],
@@ -122,6 +130,7 @@ class EstablishmentController extends Controller
             else if(strlen($last_seq)==4){
                 $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
             }
+            
             $estd = [
                 'proposedName'                  =>  $request['proposedName'],
                 'category'                      =>  $request['category'],
@@ -129,6 +138,8 @@ class EstablishmentController extends Controller
                 'dzongkhagId'                   =>  $request['dzongkhag'],
                 'gewogId'                       =>  $request['gewog'],
                 'chiwogId'                      =>  $request['chiwog'],
+                'isfeedingschool'               =>  $request['isfeedingschool'],
+                'feeding'                       =>  $feedingModality,
                 'locationId'                    =>  $request['locationType'], 
                 'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
                 'isSenSchool'                   =>  $request['senSchool'],
@@ -208,7 +219,7 @@ class EstablishmentController extends Controller
      * method to get class in checkbox
      */
     public function getClass(){
-        return Classes::where('status',1)->get();
+        return Classes::where('status',1)->orderBy('sequence','ASC')->get();
     }
 
     /**
@@ -377,7 +388,13 @@ class EstablishmentController extends Controller
     public function getschoolDetials($param=""){
         $access_level=explode('SSS',$param)[0];
         if($access_level=="Ministry"){
-            $response_data=OrganizationDetails::all();
+            if(explode('SSS',$param)[1]=="private"){
+                $response_data=OrganizationDetails::where('category',0)->get();
+            }
+            else{
+                $response_data=OrganizationDetails::where('category',1)->get();
+            }
+            
         }
         if($access_level=="Dzongkhag"){
             $response_data=OrganizationDetails::where('dzongkhagId',explode('SSS',$param)[1])->get();
@@ -424,6 +441,17 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($response_data);
     }
+    
+    public function getOrgDetailsById($id="", $usertype=""){
+        $response_data="";
+        if($usertype=="Org"){
+            $response_data=OrganizationDetails::where('id',$id)->first();
+        }
+        else{
+            $response_data=HeadQuaterDetails::where('id',$id)->first();
+        }
+        return $this->successResponse($response_data);
+    }
     public function loadorgbyId($type="",$org_id=""){
         if($type=="org"){
             $response_data=OrganizationDetails::where('id',$org_id)->first();
@@ -466,6 +494,44 @@ class EstablishmentController extends Controller
         $response_data = DB::table('section_details as s')
         ->join('organization_class_streams as o', 'o.id', '=', 's.classSectionId')
         ->select('o.organizationId','s.section', 'o.classId','o.streamId')->where('o.organizationId', $id)->orderby('o.classId')->get();
+        return $this->successResponse($response_data); 
+    }
+    
+    public function udpateOrgProfile(Request $request){
+        $org_det=OrgProfile::where('org_id',$request->ori_id)->first();
+        $org_data = [
+            'org_id'        =>  $request->org_id,
+            'mission'       =>  $request->mission,
+            'vission'       =>  $request->vission,
+        ];
+        if($request->attachments!=""){
+            $org_data=$org_data+[
+                'logo_path'     =>  $request->attachments];
+        }
+        if($org_det==null || $org_det==""){
+            $org_data=$org_data+[
+                'created_by'    =>  $request->user_id,
+                'created_at'    =>  date('Y-m-d h:i:s')];
+            OrgProfile::create($org_data);
+        }
+        else{
+            $org_data=$org_data+[
+                'updated_by'    =>  $request->user_id,
+                'updated_at'    =>  date('Y-m-d h:i:s')];
+            OrgProfile::where('org_id',$request->org_id)->update($org_data);
+        }
+        $org_det=OrgProfile::where('org_id',$request->org_id)->first();
+        
+        return $this->successResponse($org_det, Response::HTTP_CREATED);
+    }
+    
+    public function getOrgProfile($id=""){
+        $response_data =OrgProfile::where('org_id',$id)->first();
+        if($response_data!=""){
+            $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+            $response_data->orgName=$org_det->name;
+            $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
+        }
         return $this->successResponse($response_data); 
     }
 }

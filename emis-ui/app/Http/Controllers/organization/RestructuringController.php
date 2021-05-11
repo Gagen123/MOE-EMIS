@@ -166,6 +166,7 @@ class RestructuringController extends Controller
             'user_id'                      =>   $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
+        // dd($response_data);
         return $work_response_data;
     }
 

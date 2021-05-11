@@ -74,11 +74,12 @@
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                <tr v-for="(student, index) in studentList" :key="index">
+                                <tr v-for="(student, index) in studentList" :key="index">    
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
                                     <td> get SEX </td>
-                                        <input type="hidden" name="height" class="form-control" v-model="student_form.std_id[index]=student.id" />{{student.StudentId}}
+                                        <input type="hidden" name="height" class="form-control"
+                                         v-model="student_form.std_id[index]" />{{student.StudentId}}
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
                                         <input type="checkbox" name="height" class="form-control-input" v-model="student_form.std_screened[index]"/>

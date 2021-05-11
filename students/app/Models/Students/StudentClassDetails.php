@@ -8,22 +8,24 @@ class StudentClassDetails extends Model
 {
     use HasFactory, Uuid;
     public $timestamps = false;
-    protected $table="std_class_detils";
+    protected $table="std_student_school_detail";
     protected $fillable = [
         'id',
-        'student_id',
-        'dzo_id',
-        'org_id',
-        'class_stream_id',
-        'section',
-        'student_type',
-        'no_meals',
-        'scholarship',
-        'special_benifit',
-        'disability',
+        'StdStudentId',
+        'StudentCode',
+        'Dzo_Id',
+        'Org_Id',
+        'OrgClassId',
+        'OrgClassSectionId',
+        'StdStudentTypeId',
+        'NoOfMeals',
+        'IsSenStudent',
+        'Meal_Type',
+        'Feeding_Type',
         'created_by',
         'created_at',
         'updated_by',
         'updated_at'
+
     ];
 }

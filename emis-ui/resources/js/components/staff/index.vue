@@ -12,7 +12,7 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
+                <!-- <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
                     <router-link to="/civil_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
                         Civil Staff static 
@@ -35,7 +35,14 @@
                         <span class="fa fa-user-check"></span>
                         Transfer static
                     </router-link>
+                </li> -->
+                <li class="nav-item pr-1" @click="activatelink('nomination')">
+                    <router-link to="/staff_awards" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Awards
+                    </router-link>
                 </li>
+
             </ul>
             <router-view></router-view>
         </div>
@@ -48,11 +55,12 @@ export default {
     data() {
         return {
             menubar:[],
+            menu_id:'',
         }
     },
     methods: {
-		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
+		getmenus(){
+            let uri = 'get_screens_on_submodules/module/'+menu_id
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -70,8 +78,8 @@ export default {
     },
     mounted(){
         let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        this.menu_id=routeparam;
+        this.getmenus();
     },
 }
 </script>

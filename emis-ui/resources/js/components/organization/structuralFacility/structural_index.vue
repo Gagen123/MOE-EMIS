@@ -11,7 +11,7 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" >
+                <!-- <li class="nav-item active pr-1" >
                     <router-link id="regularstaff" to="/infrastructure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Infrastructure
@@ -34,7 +34,7 @@
                         <span class=""></span>
                         School Feeding
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>

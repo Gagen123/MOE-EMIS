@@ -6,7 +6,7 @@
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Agency Type:</label>
-                            <span class="text-blue text-bold">{{ orgDetails.organizationType == 1 ? "Public" :  "private & Other"}}</span>
+                            <span class="text-blue text-bold">{{ orgDetails.organizationType == 1 ? "Agency in HQ" :  "Dzongkhag Education Office"}}</span>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label>ZEST Working Agency Code:</label>

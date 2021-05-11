@@ -51,6 +51,7 @@ class HomeController extends Controller{
                                 'mod_name' => $priv->moudle_name,
                                 'module_icon'=>$priv->module_icon,
                                 'module_route'=>$priv->module_route,
+                                'Sequence'=>$priv->Sequence,
                             ];
                             array_push($module,$mod);
                         }
@@ -84,7 +85,10 @@ class HomeController extends Controller{
                         }
                     }
                 }
-
+                // $module = collect($module)->sortBy('Sequence')->reverse()->toArray();
+                $module = collect($module)->sortBy('Sequence')->toArray();
+                // $sub_modules = collect($sub_modules)->sortBy('Sequence')->toArray();
+                
                 // dd($role_workflow_submitter);
                 if($role_workflow_submitter!=null){
                     foreach(json_decode($role_workflow_submitter) as $i=> $work){
@@ -155,6 +159,11 @@ class HomeController extends Controller{
                 //dd(json_decode($role_workflow));
                 Session::put('role_priv', $role_riv);
                 Session::put('role_workflow', $role_workflow);
+                
+                if($user->org_organization_id!=null){
+                    $org_profile=$this->apiService->listData('emis/organization/getOrgProfile/'.$user->org_organization_id);
+                    Session::put('org_profile', json_decode($org_profile)->data);
+                }
                 return redirect()->route('dashboard');
             }
             else{
@@ -165,7 +174,7 @@ class HomeController extends Controller{
     }
 
     public function dashboard(Request $request){
-        //dd(Session::get('User_Details'));
+        // dd(json_decode(Session::get('org_profile'))->data->orgName);
         if(Session::get('User_Details')!=""){
             return view('dashboard');
         }
@@ -178,7 +187,7 @@ class HomeController extends Controller{
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
-        $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
+        $role_riv=$this->apiService->listData('getmenusSubMenus/'.$id.'/'.$type, [], $headers);
         $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
         // dd($role_workflow_submitter);
         $screens=[];
@@ -194,7 +203,7 @@ class HomeController extends Controller{
                         'screen_name' => $work->screen_name,
                         'route' =>$work->Route,
                         'work_flow_status'=>$work->workflow_status,
-                        'actions' => 'NA',
+                        // 'actions' => 'NA',
                         'screen_icon'=>$work->screen_icon,
                     ];
                     array_push($screens,$screen);
@@ -214,7 +223,7 @@ class HomeController extends Controller{
                             'screen_name' => $priv->screenName,
                             'route' =>$priv->Route,
                             'work_flow_status'=>'NA',
-                            'actions' => json_decode($actions)[0]->action_name,
+                            // 'actions' => json_decode($actions)[0]->action_name,
                             'screen_icon'=>$priv->screen_icon,
                         ];
                         array_push($screens,$screen);
@@ -223,6 +232,13 @@ class HomeController extends Controller{
             }
         }
         return $screens;
+    }
+    
+    public function get_privileges($id=""){
+        $token =Session::get('User_Token');
+        $headers['Authorization'] = 'bearer '. $token;
+        $screen_riv=$this->apiService->listData('getPrivillegesOnScreenById/'.$id, [], $headers);
+        return $screen_riv;
     }
 
     public function logout(Request $request){

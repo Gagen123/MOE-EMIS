@@ -66,7 +66,7 @@
                                                     <has-error :form="personal_form" field="dob"></has-error>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Genter:<span class="text-danger">*</span></label>
+                                                    <label>Gender:<span class="text-danger">*</span></label>
                                                     <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
                                                         <option value=""> --Select--</option>
                                                         <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -618,14 +618,30 @@
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" name="no_meals" v-model="class_form.no_meals" value="0" id="no_meals3"> None
                                     <has-error :form="class_form" field="no_meals"></has-error>
                                 </div>
+                                
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category: <span class="text-danger">*</span></label><br>
+                                    <input type="radio" name="meal_type" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" v-model="class_form.meal_type" value="Gyalpoi Tozey" id="meal_type"> Gyalpoi Tozey 
+                                    <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" name="meal_type" v-model="class_form.meal_type" value="Needy Student" id="meal_type1"> Needy Student
+                                    <has-error :form="class_form" field="meal_type"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Feeding Type: <span class="text-danger">*</span></label><br>
+                                    <input type="radio" name="feeding_type" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" v-model="class_form.feeding_type" value="Vegeterian" id="feeding_type"> Vegeterian 
+                                    <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Non-vegeterian" id="feeding_type1"> Non-vegeterian
+                                    <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Eggeterian" id="feeding_type2"> Eggeterian
+                                    <has-error :form="class_form" field="feeding_type"></has-error>
+                                </div>
                             </div>
                             <br>
                             <label>Scholarship</label>
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for="(item, index) in studentscholarshipList" :key="index">
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" name="scholarship" :id="'customCheckbox'+index" v-model="class_form.scholarship" type="checkbox" :value="item.id">
-                                        <label :for="'customCheckbox'+index" name="scholarship" class="font-weight-normal custom-control-label">{{item.name}}</label>
+                                        <input class="custom-control-input" :name="'scholarship'+item" :id="'customCheckbox'+index" v-model="class_form.scholarship" type="checkbox" :value="item.id">
+                                        <label :for="'customCheckbox'+index" :name="'scholarship'+item" class="font-weight-normal custom-control-label">{{item.name}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -781,6 +797,8 @@ export default {
                 scholarship:[],
                 special_benifit:[],
                 disability:'',
+                meal_type:'',
+                feeding_type:'',
             }),
         }
     },
@@ -986,7 +1004,7 @@ export default {
                 if(type=="all_active_dzongkhag"){
                     this.dzongkhagList = data.data.data;
                 }
-                if(type=="all_active_genter"){
+                if(type=="all_active_gender"){
                     this.sex_idList = data.data.data;
                 }
             })
@@ -1544,7 +1562,7 @@ export default {
     },
 
     mounted() {
-        this.loadAllActiveMasters('all_active_genter');
+        this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('all_active_dzongkhag');
         this.loadAllActiveMasters('active_mother_tongue');
         this.loadAllStudentMasters('StudentType_Active');

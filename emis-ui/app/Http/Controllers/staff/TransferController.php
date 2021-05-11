@@ -123,20 +123,35 @@ class TransferController extends Controller{
             'user_id'           =>  $this->userId(),
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
-
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
+        $work_status=$workflowdet['status'];
+        $dat=$this->apiService->getListData('emis/common/getTaskDetials/'.$appNo);
+        
         $workflowstatus=$this->getAllCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $loadTransferDetails = json_decode($this->apiService->listData('emis/staff/transfer/loadtrainsferDetails/'.$appNo));
         $loadTransferDetails->app_stage=$workflowstatus;
-        dd($loadTransferDetails->data);
+        
         if(strpos(rtrim($workflowstatus,','),',')!==false){
-            if($loadTransferDetails->data->status=="Under Process"){
-                $loadTransferDetails->app_stage=explode(',',rtrim($workflowstatus,','))[0];
+            if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id!=4){
+                if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id==3){
+                    $loadTransferDetails->app_stage='Approver'; //cannot assign other then approver of transfer applicaiton
+                }
+                else if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id==2){
+                    $loadTransferDetails->app_stage='Verifier';
+                }
+                else{
+                    $loadTransferDetails->app_stage=explode(',',rtrim($workflowstatus,','))[0];
+                }
             } 
             else{
-                $loadTransferDetails->app_stage=explode(',',rtrim($workflowstatus,','))[1];
+                if(json_decode($dat)->status_id==1){
+                    $loadTransferDetails->app_stage='Verifier';
+                } 
+                else{
+                    $loadTransferDetails->app_stage=explode(',',rtrim($workflowstatus,','))[1];
+                }  
             } 
         }
-        dd($loadTransferDetails);
         return json_encode($loadTransferDetails);
     }
     
@@ -146,10 +161,10 @@ class TransferController extends Controller{
         $transfer_status='Under Process';
         if($request->actiontype=="reject"){
             $work_status=0;
-            $org_status="Rejected";
+            $transfer_status="Rejected";
         }
         if($request->actiontype=="approve"){
-            $org_status="Approved";
+            $transfer_status="Approved";
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -167,6 +182,7 @@ class TransferController extends Controller{
         $update_data =[
             'status'                       =>   $transfer_status,
             'application_number'           =>   $request->application_no,
+            'dzongkhagApproved'           =>   $request->dzongkhagApproved,
             'remarks'                      =>   $request->remarks,
             'user_id'                      =>   $this->userId() 
         ];

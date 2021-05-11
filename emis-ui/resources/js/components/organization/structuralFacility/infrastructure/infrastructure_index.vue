@@ -37,26 +37,26 @@ export default {
             }
         },
 
-        getScreenAccess(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                let data = response.data.data.acess_level;
-                if(data != "Org"){
-                    $('#mainform').hide();
-                    $('#screenPermission').show();
-                    $('#existmessage').html('You have no access to this page.');
-                }
+        // getScreenAccess(){
+        //     axios.get('common/getSessionDetail')
+        //     .then(response => {
+        //         let data = response.data.data.acess_level;
+        //         if(data != "Org"){
+        //             $('#mainform').hide();
+        //             $('#screenPermission').show();
+        //             $('#existmessage').html('You have no access to this page.');
+        //         }
                 
-            })    
-            .catch(errors => { 
-                console.log(errors)
-            });
-        }
+        //     })    
+        //     .catch(errors => { 
+        //         console.log(errors)
+        //     });
+        // }
 
     },
 
     mounted(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
     }
 }
 </script>
