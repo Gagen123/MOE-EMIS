@@ -49,7 +49,7 @@ class FoodReleaseController extends Controller
     public function loadFoodReleaseList(){
           // return 'from service of mine';
         $list = DB::table('food_releases')
-        ->select( 'dateOfrelease as Date',
+        ->select( 'dateOfrelease as dateOfrelease',
          'dzongkhag','school',
          'quarter'
          )->get();

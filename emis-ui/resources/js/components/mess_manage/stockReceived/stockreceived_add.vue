@@ -166,7 +166,7 @@ export default {
                 let data = response.data;
                 this.form.foodrelease_list=[];
                 for(let i=0;i<data.length;i++){
-                    // this.form.foodrelease_list.push({item:data[i].item,quantity:data[i],receivedquantity:'',pending:'',unit:'',remarks:''});
+                    this.form.foodrelease_list.push({item:data[i].item,quantity:data[i].quantity,receivedquantity:'',pending:'',unit:'',remarks:''});
                 }
             })
             .catch(function (error) {

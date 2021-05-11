@@ -16,8 +16,8 @@ class StockIssued extends Model
         'item',
         'quantity',
         'unit',
-        'damagequantity'
-        'remarks'
+        'damagequantity',
+        'remarks',
         'created_by',
         'updated_by'
     ];
