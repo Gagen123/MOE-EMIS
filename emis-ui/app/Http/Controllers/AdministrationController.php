@@ -90,7 +90,14 @@ class AdministrationController extends Controller{
             'name.required' => 'This field is required',
             'status.required' => 'This field is required',
         ];
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category" || $request['record_type']=="staff_award_type"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" 
+        || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" 
+        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" 
+        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" 
+        || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" 
+        || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category" 
+        || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
+        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
             $rules=array_merge($rules,
                 array('code'  =>  'required|numeric|digits:4',)
             );

@@ -86,7 +86,18 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateManagementBody', ['uses' => 'staff\ManagementBodyController@updateManagementBody']);
             $router->get('/loadcreatedManagementBodyComposition/{param}', ['uses' => 'staff\ManagementBodyController@loadcreatedManagementBodyComposition']);
             $router->get('/loadcurrentbaord/{id}', ['uses' => 'staff\ManagementBodyController@loadcurrentbaord']);
+        }); 
+
+        $router->group(['prefix' => 'staffServices'], function () use ($router) {
+            $router->post('/saveStaffAward', ['uses' => 'staff\StaffServicesController@saveStaffAward']);
+            $router->get('/loadStaffAward/{user_id}', ['uses' => 'staff\StaffServicesController@loadStaffAward']);
+            $router->get('/deleteStaffServices/{type}/{id}', ['uses' => 'staff\StaffServicesController@deleteStaffServices']);
             
+            $router->post('/saveStaffResponsibility', ['uses' => 'staff\StaffServicesController@saveStaffResponsibility']);
+            $router->get('/loadStaffResponsibility/{user_id}', ['uses' => 'staff\StaffServicesController@loadStaffResponsibility']);
+            
+            $router->post('/saveStaffDisaplinary', ['uses' => 'staff\StaffServicesController@saveStaffDisaplinary']);
+            $router->get('/loadStaffdisaplinary/{user_id}', ['uses' => 'staff\StaffServicesController@loadStaffdisaplinary']);
         }); 
     });
 
