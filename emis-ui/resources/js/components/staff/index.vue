@@ -55,11 +55,12 @@ export default {
     data() {
         return {
             menubar:[],
+            menu_id:'',
         }
     },
     methods: {
-		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
+		getmenus(){
+            let uri = 'get_screens_on_submodules/module/'+menu_id
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -77,8 +78,8 @@ export default {
     },
     mounted(){
         let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        this.menu_id=routeparam;
+        this.getmenus();
     },
 }
 </script>

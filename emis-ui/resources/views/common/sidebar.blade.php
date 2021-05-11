@@ -213,7 +213,15 @@
                     <i class="fa fa-users nav-icon"></i>
                     Staff Service Master
                 </router-link> 
-            </li>  
+            </li> 
+            <li class="nav-item" id="track_application">
+                <router-link to="/staff_services_index" class="nav-link">
+                    <p>
+                        <i class="nav-icon fas fa-list"></i>
+                        Staff Services
+                    </p>
+                </router-link>  
+            </li> 
 
             <li class="nav-item has-treeview" id="studentmaster">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -341,14 +349,7 @@
                     </p>
                 </router-link> 
             </li>
-            <li class="nav-item" id="track_application">
-                <router-link to="/staff_services_index" class="nav-link">
-                    <p>
-                        <i class="nav-icon fas fa-list"></i>
-                        Staff Services
-                    </p>
-                </router-link>  
-            </li>
+            
             <li class="nav-item" id="track_application">
                 <router-link to="/management_body" class="nav-link">
                     <p>

@@ -27,6 +27,10 @@ use App\Models\staff_masters\TransferUndertaking;
 use App\Models\staff_masters\ManagementBodyType;
 use App\Models\staff_service_masters\StaffAwardCategory;
 use App\Models\staff_service_masters\StaffAwardType;
+use App\Models\staff_service_masters\StaResponsiblity;
+use App\Models\staff_service_masters\StaffOffenceType;
+use App\Models\staff_service_masters\StaffOffenceSeverity;
+use App\Models\staff_service_masters\StaffOffenceAction;
 
 class StaffMastersController extends Controller{
     use ApiResponser;
@@ -177,7 +181,13 @@ class StaffMastersController extends Controller{
             }
         }
         // dd($request);
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" || $request['record_type']=="transfer_uindertaking" || $request['record_type']=="mgmn_body_type" || $request['record_type']=="staff_award_category" || $request['record_type']=="staff_award_type"){
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" 
+        || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" 
+        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" 
+        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" 
+        || $request['record_type']=="transfer_uindertaking" || $request['record_type']=="mgmn_body_type" || $request['record_type']=="staff_award_category" 
+        || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type" 
+        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="transfer_reason"){
@@ -228,6 +238,19 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="staff_award_type"){
                     $table="master_staff_serice_type";
                 }
+                if($request['record_type']=="staff_role_responsibility"){
+                    $table="master_staff_responsibility";
+                }
+                if($request['record_type']=="staff_offence_type"){
+                    $table="master_staff_offence_type";
+                }
+                if($request['record_type']=="staff_offence_severity"){
+                    $table="master_staff_offence_severity";
+                }
+                if($request['record_type']=="staff_offence_action"){
+                    $table="master_staff_offence_action";
+                }
+                
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
                     'status'    =>  'required',
@@ -300,6 +323,18 @@ class StaffMastersController extends Controller{
                     $data=$data+$ddition_field;
                     $response_data = StaffAwardType::create($data);
                 }
+                if($request['record_type']=="staff_role_responsibility"){
+                    $response_data = StaResponsiblity::create($data);
+                }
+                if($request['record_type']=="staff_offence_type"){
+                    $response_data = StaffOffenceType::create($data);
+                }
+                if($request['record_type']=="staff_offence_severity"){
+                    $response_data = StaffOffenceSeverity::create($data);
+                }
+                if($request['record_type']=="staff_offence_action"){
+                    $response_data = StaffOffenceAction::create($data);
+                }
             }
             if($request->actiontype=="edit"){
                 $data ="";
@@ -367,6 +402,22 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="staff_award_type"){
                     $data = StaffAwardType::find($request['id']);
                     $table="master_staff_serice_type";
+                }
+                if($request['record_type']=="staff_role_responsibility"){
+                    $data = StaResponsiblity::find($request['id']);
+                    $table="master_staff_responsibility";
+                }
+                if($request['record_type']=="staff_offence_type"){
+                    $data = StaffOffenceType::find($request['id']);
+                    $table="master_staff_offence_type";
+                }
+                if($request['record_type']=="staff_offence_severity"){
+                    $data = StaffOffenceSeverity::find($request['id']);
+                    $table="master_staff_offence_severity";
+                }
+                if($request['record_type']=="staff_offence_action"){
+                    $data = StaffOffenceAction::find($request['id']);
+                    $table="master_staff_offence_action";
                 }
 
                 $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
@@ -516,6 +567,35 @@ class StaffMastersController extends Controller{
         if($param=="all_active_staff_award_type_List"){
             return $this->successResponse(StaffAwardType::where('status','1')->get());
         }
+
+        if($param=="all_staff_responsibility_List"){
+            return $this->successResponse(StaResponsiblity::all());
+        }
+        if($param=="all_active_staff_responsibility_List"){
+            return $this->successResponse(StaResponsiblity::where('status','1')->get());
+        }
+
+        if($param=="all_staff_offence_type_List"){
+            return $this->successResponse(StaffOffenceType::all());
+        }
+        if($param=="all_active_staff_offence_type_List"){
+            return $this->successResponse(StaffOffenceType::where('status','1')->get());
+        }
+
+        if($param=="all_staff_offence_severity_List"){
+            return $this->successResponse(StaffOffenceSeverity::all());
+        }
+        if($param=="all_active_staff_offence_severity_List"){
+            return $this->successResponse(StaffOffenceSeverity::where('status','1')->get());
+        }
+        
+        if($param=="all_staff_offence_action_List"){
+            return $this->successResponse(StaffOffenceAction::all());
+        }
+        if($param=="all_active_staff_offence_action_List"){
+            return $this->successResponse(StaffOffenceAction::where('status','1')->get());
+        }
+        
     }
     public function load_staff_masters_by_id($param="",$id=""){
         if($param=="qdescription"){
@@ -535,6 +615,21 @@ class StaffMastersController extends Controller{
         }
         if($param=="position_title"){
             return $this->successResponse(PositionTitle::where('id',$id)->first());
+        }
+        if($param=="staff_award_type"){
+            return $this->successResponse(StaffAwardType::where('id',$id)->first());
+        }
+        if($param=="staff_award_category"){
+            return $this->successResponse(StaffAwardCategory::where('id',$id)->first());
+        }
+        if($param=="staff_responsibility"){
+            return $this->successResponse(StaResponsiblity::where('id',$id)->first());
+        }
+        if($param=="staff_offence_type"){
+            return $this->successResponse(StaffOffenceType::where('id',$id)->first());
+        }
+        if($param=="staff_offence_severity"){
+            return $this->successResponse(StaffOffenceSeverity::where('id',$id)->first());
         }
         
     }
