@@ -4,8 +4,8 @@ namespace App\Models\staff_masters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
-
-class ManagementBodyType extends Model{
+class MgmntBodyType extends Model
+{
     use HasFactory, Uuid;
     protected $table="master_mgmn_body_type";
     public $timestamps = false;

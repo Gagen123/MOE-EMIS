@@ -24,7 +24,7 @@ use App\Models\staff_masters\CureerStage;
 use App\Models\staff_masters\QualificationDescription;
 use App\Models\staff_masters\CourseMode;
 use App\Models\staff_masters\TransferUndertaking;
-use App\Models\staff_masters\ManagementBodyType;
+use App\Models\staff_masters\MgmntBodyType;
 use App\Models\staff_service_masters\StaffAwardCategory;
 use App\Models\staff_service_masters\StaffAwardType;
 use App\Models\staff_service_masters\StaResponsiblity;
@@ -313,7 +313,7 @@ class StaffMastersController extends Controller{
                     // $table="master_course_mode";
                 }
                 if($request['record_type']=="mgmn_body_type"){
-                    $response_data = ManagementBodyType::create($data);
+                    $response_data = MgmntBodyType::create($data);
                 }
                 if($request['record_type']=="staff_award_category"){
                     $response_data = StaffAwardCategory::create($data);
@@ -392,7 +392,7 @@ class StaffMastersController extends Controller{
                     $table="master_course_mode";
                 }
                 if($request['record_type']=="mgmn_body_type"){
-                    $data = ManagementBodyType::find($request['id']);
+                    $data = MgmntBodyType::find($request['id']);
                     $table="master_mgmn_body_type";
                 }
                 if($request['record_type']=="staff_award_category"){
@@ -548,10 +548,10 @@ class StaffMastersController extends Controller{
             return $this->successResponse(CourseMode::where('status','1')->get());
         }
         if($param=="all_mgmn_body_type"){
-            return $this->successResponse(ManagementBodyType::all());
+            return $this->successResponse(MgmntBodyType::all());
         }
         if($param=="all_active_mgmn_body_type"){
-            return $this->successResponse(ManagementBodyType::where('status','1')->get());
+            return $this->successResponse(MgmntBodyType::where('status','1')->get());
         }
 
         if($param=="all_staff_award_category_List"){
