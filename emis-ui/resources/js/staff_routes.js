@@ -410,8 +410,6 @@ const routes = [
                 ],
             },
 
-            
-
             { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
             component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
@@ -502,6 +500,16 @@ const routes = [
                     { path: '/edit_staff_disciplinary', name:'edit_staff_disciplinary', component: require('./components/staff/staff_services/staff_disciplinary/edit_staff_disciplinary.vue').default },
                 ],
             },
+            { path: '/staff_attendance', 
+                component: require('./components/staff/staff_services/attendance/attendance_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_attendance',  component: require('./components/staff/staff_services/attendance/list_attendance.vue').default },
+                    { path: '/list_attendance',name:'list_attendance',  component: require('./components/staff/staff_services/attendance/list_attendance.vue').default },
+                    { path: '/create_attendance',name:'create_attendance', component: require('./components/staff/staff_services/attendance/create_attendance.vue').default },
+                    { path: '/edit_attendance', name:'edit_attendance', component: require('./components/staff/staff_services/attendance/edit_attendance.vue').default },
+                ],
+            },
+            
         ]
     }
     
