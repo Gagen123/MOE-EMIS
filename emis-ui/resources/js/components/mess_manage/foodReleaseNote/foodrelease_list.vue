@@ -17,16 +17,17 @@
                          <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
-                            <td> {{item.dzongkhag}}</td>
+                            <td> {{item.dzongkhag}}</td>                      
                             <td> {{item.school}}</td>                   
                             <td> {{item.quarter}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
                                    
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewfoodreleasenote(item)">View</a>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewfoodreleasenote(item)"><i class="fas fa-eye"></i ></a>
                                </div>
                                <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewFoodReleaseList(item)"><i class="fas fa-edit"></i ></a>
+                                    
                                </div>
                             </td>
                         </tr> 

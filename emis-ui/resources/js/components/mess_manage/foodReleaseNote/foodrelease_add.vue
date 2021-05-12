@@ -11,47 +11,47 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
-                     <!--   <select name="dzongkhag" id="dzongkhag" class="form-control editable_fields" v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" @change="remove_err('dzongkhag')">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
+                        <select name="dzongkhag" id="dzongkhag" class="form-control editable_fields" v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" @change="remove_err('dzongkhag')">
+                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.dzongkhag }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> -->
+                        <has-error :form="form" field="dzongkhag"></has-error> 
                         
-                        <select name="dzongkhag" class="form-control editable_fields" id="dzongkhag"  v-model="form.dzongkhag" >
+                        <!--    <select name="dzongkhag" class="form-control editable_fields" id="dzongkhag"  v-model="form.dzongkhag" >
                             <option value="">---Please Select---</option> 
                             <option value="Samtse">Samtse</option>
                             <option value="Thimphu">Thimphu</option>
                             <option value="Haa">Haa</option>
                             <option value="Paro">Paro</option>
-                        </select>
+                        </select> -->
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">School Name:<span class="text-danger">*</span></label> 
-                    <!--    <select name="school" id="school" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school')">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
-                        </select>
-                        <has-error :form="form" field="school"></has-error> -->
-                        <select class="form-control editable_fields" id="school"  v-model="form.school" >
+                     <label class="">School Name:<span class="text-danger">*</span></label> 
+                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
+                         <option value=""> --Select--</option>
+                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>  
+                     </select> 
+                     <has-error :form="personal_form" field="working_agency_id"></has-error>
+                         <!--   <select class="form-control editable_fields" id="school"  v-model="form.school" >
                             <option value="">---Please Select---</option> 
                             <option value="SHSS">SHSS</option>
                             <option value="YHSS">YHSS</option>
                             <option value="DHSS">DHSS</option>
-                        </select>
+                        </select> -->
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Term(quater):<span class="text-danger">*</span></label> 
-                     <!--   <select name="term" id="term" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school'),getreleaseddetial()">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
+                       <label class="">Quarter:<span class="text-danger">*</span></label> 
+                       <select name="quarter" id="quarter" class="form-control editable_fields" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.quarter }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> -->
-                       <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
+                        <has-error :form="form" field="quarter"></has-error> 
+                            <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
                             <option value="">---Please Select---</option> 
                             <option value="1st quarter">1st quarter</option>
                             <option value="2nd quarter">2nd quarter</option>
                             <option value="3rd quarter">3rd quarter</option>
-                        </select>     
-
+                            </select>  -->   
                     </div>
                 </div>
             <div class="card">
@@ -69,30 +69,29 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_released' :key="index">
                                   <td>
-                                <!--     <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select>-->
-                                    <select class="form-control editable_fields" id="item"  v-model="item.item">
+                                    <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.item }}</option>
+                                      </select>
+                                     <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
                                         <option value="">---Please Select---</option> 
                                         <option value="rice">rice</option>
                                         <option value="potatoes">potatoes</option>
                                         <option value="onion">onion</option>
-                                    </select>
+                                     </select> -->
                                   </td>
                                   <td>                          
-                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity">
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
                                   <td>                                
-                                 <!--    <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                     </select> -->
-                                    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.unit }}</option>
+                                     </select> 
+                                        <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
                                         <option value="">---Please Select---</option> 
                                         <option value="kg">kg</option>
                                         <option value="litre">litre</option>
                                         <option value="packet">packet</option>
-                                    </select>
-
+                                     </select> -->
                                   </td>
                                   <td>                                
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
@@ -124,13 +123,14 @@
 export default {
     data(){
         return{
-            count:1,
-           // schoolList:[],
-          //  termList:[],
-          //  itemList:[],
-          //  unitList:[],
-           // itemrelease:[],
-         //   items_released: [],
+            
+            schoolList:[],
+            quarterList:[],
+            itemList:[],
+            unitList:[],
+            dzongkhagList:[],
+          //  itemrelease:[],
+            items_released: [],
             form: new form({
                  id: '', dateOfrelease: '', dzongkhag: '', school: '',quarter: '',
                  items_released:
@@ -148,9 +148,9 @@ export default {
          */
         restForm(){
             this.form.dateOfrelease= '';
-             this.form.dzongkhag= '';
+            this.form.dzongkhag= '';
             this.form.school= '';
-             this.form.quarter= '';
+            this.form.quarter= '';
             let formReset =this.form.items_released;
             formReset.splice(0, formReset.length);
             this.form.items_released.push({item:'',quantity:'',unit:'',remarks:''})
@@ -190,27 +190,27 @@ export default {
         /**
          * method to get term in dropdown
          */
-      //  getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
-      //      axios.get(uri)
-      //      .then(response => {
-      //          let data = response.data;
-      //          this.termList = data;
-      //      });
-     //   },
+       getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
+           axios.get(uri)
+           .then(response => {
+               let data = response.data;
+               this.termList = data;
+           });
+       },
 
         /**
          * method to get unit in dropdown
          */
-       //  loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-       //     axios.get(uri)
-       //     .then(response => {
-       //         let data = response;
-       //         this.unitList =  data.data.data;
-       //     })
-       //     .catch(function (error) {
-       //         console.log("Error......"+error)
-       //     });
-      //  },
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+           axios.get(uri)
+           .then(response => {
+               let data = response;
+               this.unitList =  data.data.data;
+           })
+           .catch(function (error) {
+               console.log("Error......"+error)
+           });
+       },
 
         /**
          * method to get item in dropdown
@@ -223,6 +223,20 @@ export default {
                 this.itemList[data.data.data[i].id] =  data.data.data[i].name;
                 }
                 
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get dzongkhag in dropdown
+         */
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dzongkhagList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -250,9 +264,9 @@ export default {
        
     },
      mounted() { 
-     //   this.loadActiveUnitList(); 
-      //  this.loadActiveItemList();
-     //   this.getTermInDropdown();
+        this.loadActiveUnitList(); 
+        this.loadActiveItemList();
+        this.getTermInDropdown();
     }
 }
 </script>

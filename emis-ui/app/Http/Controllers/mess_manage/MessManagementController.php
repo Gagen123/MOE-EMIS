@@ -102,46 +102,47 @@ class MessManagementController extends Controller
         }
     }
 
-    
-
     // Stock Received 
 
-    public function saveStockReceived(Request $request){
-        $rules = [
-            'date'          =>  'required',
-            'quarter'       =>  'required',
-        ];
-        $customMessages = [
-            'date.required'          => 'date is required',
-            'quarter.required'       => 'quarter is required',
+    // public function saveStockReceived(Request $request){
+    //     $rules = [
+    //         'dateOfreceived'          =>  'required',
+    //         'quarter'                 =>  'required',
+    //     ];
+    //     $customMessages = [
+    //         'dateOfreceived.required'       => 'dateOfreceived is required',
+    //         'quarter.required'              => 'quarter is required',
 
-        ];
-        $this->validate($request, $rules, $customMessages);
-        $stockreceived =[
-            'date'             =>  $request['date'],
-            'quarter'          =>  $request['quarter'],
-            'item'             =>  $request['item'],
-            'quantity'         =>  $request['quantity'],
-            'unit'             =>  $request['unit'],
-            'Amount'           =>  $request['Amount'],
-            'remark'           =>  $request['remark'],
+    //     ];
+    //     $this->validate($request, $rules, $customMessages);
+    //     $stockreceived =[
+    //         'dateOfreceived'                =>  $request['dateOfreceived'],
+    //         'quarter'                       =>  $request['quarter'],
+    //         'id'                            =>  $request['id'],
+    //         'foodrelease_list'              =>  $request->foodrelease_list,
+    //         'user_id'                       =>  $this->userId()
 
-        ];
-        // dd($dis);
-        try{
-            $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
-            return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-    }
+    //     ];
+    //    //  dd($stockreceived);
+    //     try{
+    //         $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
+    //         return $response_data;
+    //     }
+    //     catch(\GuzzleHttp\Exception\ClientException $e){
+    //         return $e;
+    //     }
+    // }
 
     public function getFoodRelease($termId = ""){
         //   dd('m here'); 
         $dis = $this->apiService->listData('emis/messManagement/getFoodRelease/' .$termId);
         return $dis;
     }
+    // public function loadStockReceivedList(){
+    //    //    dd('m here');
+    //     $list = $this->apiService->listData('emis/messManagement/loadStockReceivedList');
+    //     return $list;
+    // }
 
 
     // Stock Issued

@@ -41,14 +41,20 @@
                                      {{item.quantity}}
                                   </td>
                                   <td>                                
-                                     <input type="number" name="receivedquantity" class="form-control" v-model="item.receivedquantity"/>
+                                     <input type="number" name="receivedquantity" :id="'receivedquantity'+index" class="form-control" v-model="item.receivedquantity" @change='calculatepending(item.quantity,"receivedquantity"+index,"pending"+index)'/>
                                   </td>
-                                  <td>                                
-                                     <!-- {{getpending(releaseditem.pending)}} -->
-                                    <input type="text" name="pending" class="form-control" v-model="item.pending"/>
+                                  <td>      
+                                     <input type="number" :id="'pending'+index" :name="'pending'+index" class="form-control" :v-model="item.pending"/>                          
+                                  
                                   </td>
                                   <td>
-                                     <input type="text" name="unit" class="form-control" v-model="item.unit"/>
+                                 <!--    <input type="text" name="unit" class="form-control" v-model="item.unit"/>-->
+                                  <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                        <option value="">---Please Select---</option> 
+                                        <option value="kg">kg</option>
+                                        <option value="litre">litre</option>
+                                        <option value="packet">packet</option>
+                                    </select>
                                   </td>
                                   <td>                                
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks"/>
@@ -73,9 +79,9 @@ export default {
     data(){
         return{
             count:1,
-            termList:[],
-            itemList:[],
-            unitList:[],
+         //   termList:[],
+         //   itemList:[],
+        //    unitList:[],
             itemreleasedList:[],
 
             users: [],
@@ -100,7 +106,11 @@ export default {
             this.form.users.push({item:'',releasedquantity:'',receivedquantity:'',pendingquantity:'', unit:'',remark:''})
         },
 
-
+        calculatepending(qty,receiveId,targetId){
+            let recqty=$('#'+receiveId).val();
+            let result=qty-recqty;
+            $('#'+targetId).val(result);
+        },
         /**
          * method to save data
          */
@@ -135,27 +145,27 @@ export default {
         /**
          * method to get term in dropdown
          */
-        getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.termList = data;
-            });
-        },
+      //  getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
+      //      axios.get(uri)
+      //      .then(response => {
+      //          let data = response.data;
+       //         this.termList = data;
+      //      });
+      //  },
 
         /**
          * method to get unit in dropdown
          */
-         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.unitList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+        //  loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        // axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.unitList =  data.data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
 
         /**
          * method to load attachments
@@ -176,9 +186,7 @@ export default {
             });
         },
 
-        getpending(pending){
-            var difference = function (releasedquantity, receivedquantity) { return Math.abs(releasedquantity - receivedquantity); }
-        },
+        
     },
      mounted() { 
         // this.loadActiveUnitList(); 

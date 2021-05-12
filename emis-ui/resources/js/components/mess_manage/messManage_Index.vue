@@ -11,6 +11,12 @@
                      {{ item.screen_name}}
                  </router-link>
              </li>
+              <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
+                 <router-link to="/foodrelease_index" id="foodrelease" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     <span class="fas fa-receipt"></span>
+                     Food Release Note 
+                 </router-link>
+              </li>
              <li class="nav-item active pr-1" @click="activatelink('stockreceived')">
                  <router-link id="stockreceived" to="/stockreceived_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                      <span class="fa fa-receipt"></span>
@@ -29,12 +35,13 @@
                      Local Procurement
                  </router-link>
               </li>
-              <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
-                 <router-link to="/foodrelease_index" id="foodrelease" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-receipt"></span>
-                     Food Release Note 
+              <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
+                 <router-link to ="/schoolInventory_index" id="schoolInventory" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     <span class="fas fa-shopping-cart"></span>
+                     School Inventory
                  </router-link>
               </li>
+             
           </ul>
          <router-view></router-view>
     </div>

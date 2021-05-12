@@ -40,7 +40,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'stockreceived'], function () use ($router) {
             $router->get('/getFoodRelease/{termId}', 'messManage\StockReceivedController@getFoodRelease');
-          // $router->post('/saveStockReceived', 'messManage\StockReceivedController@saveStockReceived');
+        //    $router->post('/saveStockReceived', 'messManage\StockReceivedController@saveStockReceived');
+       //     $router->get('/loadStockReceivedList', 'messManage\StockReceivedController@loadStockReceivedList');
         });
 
     });
