@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use Session;
-// use Redirect;
 use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
@@ -17,7 +16,7 @@ class AdministrationController extends Controller{
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-    
+
     public function saveGlobalMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -28,7 +27,7 @@ class AdministrationController extends Controller{
                 'code'          =>  'required',
                 'status'        =>  'required',
             ];
-        } 
+        }
         if($request['record_type']=="dzongkhag" || $request['record_type']=="gender"){
             $rules = [
             'name'          =>  'required',
@@ -48,7 +47,7 @@ class AdministrationController extends Controller{
             ];
         }
         $this->validate($request, $rules,$customMessages);
-        $data =[ 
+        $data =[
             'name'          =>  $request['name'],
             'nationality'   =>  $request['nationality'],
             'parent_field'  =>  $request['parent_field'],
@@ -57,7 +56,7 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'            =>  $request['id'],
             'record_type'   =>$request['record_type'],
-            'user_id'       =>$this->userId() 
+            'user_id'       =>$this->userId()
         ];
         // dd($data);
         try{
@@ -68,7 +67,7 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-    
+
     public function loadGlobalMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
         return $global_masters;
@@ -90,12 +89,12 @@ class AdministrationController extends Controller{
             'name.required' => 'This field is required',
             'status.required' => 'This field is required',
         ];
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" 
-        || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" 
-        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" 
-        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" 
-        || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" 
-        || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category" 
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group"
+        || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level"
+        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area"
+        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"
+        || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"
+        || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category"
         || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
         || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
             $rules=array_merge($rules,
@@ -124,27 +123,24 @@ class AdministrationController extends Controller{
             );
         }
         $this->validate($request, $rules,$customMessages);
-        
-        $data =[ 
-            'name'  =>  $request['name'],
-            'parent_field'    =>  $request['parent_field'],
-            'parent_field1'    =>  $request['parent_field1'],
-            'status'    =>  $request['status'],
-            'code'    =>  $request['code'],
-            'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'record_type'=>$request['record_type'],
-            'user_id'=>$this->userId()
+
+        $data =[
+            'name'            =>$request['name'],
+            'parent_field'    =>$request['parent_field'],
+            'parent_field1'   =>$request['parent_field1'],
+            'status'          =>$request['status'],
+            'code'            =>$request['code'],
+            'actiontype'      =>$request['action_type'],
+            'id'              =>$request['id'],
+            'record_type'     =>$request['record_type'],
+            'user_id'         =>$this->userId()
         ];
-        // dd($data);
         $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
-        // dd($response_data);
         return $response_data;
     }
-    
+
     public function loadStaffMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
-        // dd($global_masters);
         return $global_masters;
     }
     public function loadStaffDropdownMasters($model="",$parent_id=""){
@@ -197,7 +193,7 @@ class AdministrationController extends Controller{
             ];
         }
         $this->validate($request, $rules, $customMessages);
-        $request['user_id'] = $this->user_id(); 
+        $request['user_id'] = $this->user_id();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
@@ -236,7 +232,7 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-    
+
     public function loadLocation(Request $request){
         $dis = $this->apiService->listData('emis/masters/location/loadLocation');
         return $dis;
@@ -295,7 +291,7 @@ class AdministrationController extends Controller{
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
         return $response_data;
-        
+
     }
 
     public function loadStructureCategory(Request $request){
@@ -323,7 +319,7 @@ class AdministrationController extends Controller{
         // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
         return $response_data;
-        
+
     }
 
     public function loadLevel(Request $request){
@@ -351,7 +347,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
         return $response_data;
-        
+
     }
 
     public function loadStructureFacility(Request $request){
@@ -378,7 +374,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
-        
+
     }
 
     public function loadEquipmentType(Request $request){
@@ -405,7 +401,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
-        
+
     }
 
     public function loadEquipmentUsage(Request $request){
@@ -432,7 +428,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
-        
+
     }
 
     public function loadSportFacility(Request $request){
@@ -459,7 +455,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
         return $response_data;
-        
+
     }
 
     public function loadSportSupporter(Request $request){
@@ -491,7 +487,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
         return $response_data;
-        
+
     }
 
     public function saveStrSubCategory(Request $request){
@@ -517,7 +513,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
         return $response_data;
-        
+
     }
 
     public function loadStrSubCategory(Request $request){
@@ -553,7 +549,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
         return $response_data;
-        
+
     }
 
     public function saveClass(Request $request){
@@ -574,7 +570,7 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
-        
+
     }
 
     public function loadClass(Request $request){
@@ -699,13 +695,11 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
+
             $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
+
     }
 
     public function loadRoadType(){
@@ -732,13 +726,10 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
             $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
+
     }
 
     public function loadServiceProvider(){
@@ -762,13 +753,10 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
             $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
+
     }
 
     public function loadStructureDesigner(){
@@ -792,13 +780,9 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
             $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
     }
 
     public function loadContactType(){
@@ -824,9 +808,9 @@ class AdministrationController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/masters/attachment/saveAttachment', $attachment);
         return $response_data;
-        
+
     }
-    
+
     public function loadAttachment(){
         $loadAttachment = $this->apiService->listData('emis/masters/attachment/loadAttachment');
         return $loadAttachment;
@@ -846,10 +830,10 @@ class AdministrationController extends Controller{
         $dis =[
             'studenthealthName'  =>  $request['studenthealthName'],
         ];
-        
+
     }
     public function loadStudentHealth(Request $request){
-        
+
         $dis = $this->apiService->listData('masters/studentHealth/loadStudentHealth');
         return $dis;
     }
@@ -867,10 +851,10 @@ class AdministrationController extends Controller{
         $src =[
             'screeningName'  =>  $request['screeningName'],
         ];
-       
+
     }
     public function loadScreening(Request $request){
-        
+
         $src = $this->apiService->listData('masters/screening/loadScreening');
         return $src;
     }
@@ -891,7 +875,6 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
         ];
-        // dd($dis);
         try{
             $response_data= $this->apiService->createData('masters/term/saveTerm', $dis);
             return $response_data;
@@ -920,7 +903,7 @@ class AdministrationController extends Controller{
         return $dis;
     }
     public function saveQuater(Request $request){
-     
+
         $rules = [
             'quaterName'  =>  'required',
             'status'    =>  'required',
@@ -937,7 +920,6 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-       // dd($dis);
         try{
             $response_data= $this->apiService->createData('emis/masters/mess_manage/saveQuater', $dis);
             return $response_data;
@@ -946,5 +928,5 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-    
+
 }

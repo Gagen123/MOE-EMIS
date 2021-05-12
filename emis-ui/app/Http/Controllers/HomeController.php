@@ -22,7 +22,7 @@ class HomeController extends Controller{
             //dd(Session::get('User_Details'));
             return view('dashboard');
         }
-        else{  
+        else{
             if($request->param!=""){
                 $user_Det= Crypt::decryptString($request->param);
                 $user=json_decode($user_Det)->user_details->user;
@@ -127,7 +127,7 @@ class HomeController extends Controller{
                         array_push($screens,$screen);
                     }
                 }
-                
+
                 //dd($screen);
                 $roles=json_decode($user_Det)->user_details->roles;
                 $user_details=[
@@ -155,7 +155,7 @@ class HomeController extends Controller{
                 $role_workflow=$this->apiService->listData('getworkflows/all/'.json_decode($user_Det)->system_id, [], $headers);
                 Session::put('User_Details', $user_details);
                 Session::put('User_Token', $token);
-                
+
                 //dd(json_decode($role_workflow));
                 Session::put('role_priv', $role_riv);
                 Session::put('role_workflow', $role_workflow);
@@ -189,12 +189,11 @@ class HomeController extends Controller{
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
         $role_riv=$this->apiService->listData('getmenusSubMenus/'.$id.'/'.$type, [], $headers);
         $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
-        // dd($role_workflow_submitter);
         $screens=[];
         $screens_ids="";
         if(($role_workflow_submitter!=null || $role_workflow_submitter!="") && $role_workflow_submitter!="Unauthorized."){
             foreach(json_decode($role_workflow_submitter) as $i=> $work){
-                if(strpos($screens_ids,$work->screen_id)===false){  
+                if(strpos($screens_ids,$work->screen_id)===false){
                     $screens_ids.=$work->screen_id.',';
                     $screen=[
                         'mod_id'=> $work->mod_id,
@@ -213,7 +212,7 @@ class HomeController extends Controller{
         if($role_riv!=null){
             foreach(json_decode($role_riv) as $i=> $priv){
                 if($priv->Organization == 1 || $priv->Dzongkhag == 1 || $priv->National == 1 ){
-                    if(strpos($screens_ids,$priv->Id)===false){  
+                    if(strpos($screens_ids,$priv->Id)===false){
                         $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
                         $screens_ids.=$priv->Id.',';
                         $screen=[
