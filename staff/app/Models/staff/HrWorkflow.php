@@ -4,6 +4,7 @@ namespace App\Models\staff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
+
 class HrWorkflow extends Model{
     use HasFactory, Uuid;
     protected $table="staff_program_workflow";

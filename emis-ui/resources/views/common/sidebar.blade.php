@@ -4,7 +4,7 @@
             <li class="nav-item">
                 <a href="dashboard" class="nav-link pt-1 pb-1">
                     <i class=" nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard</p> 
+                    <p>Dashboard</p>
                 </a>
             </li>
             @if(session('User_Details')!=null)
@@ -28,11 +28,11 @@
                     @if (sizeof(session('User_Details')['sub_modules'])>0)
                     @foreach(session('User_Details')['sub_modules'] as $sub_mod)
                         @if($sub_mod['mod_id']==$mod['mod_id'])
-                            @if($sub_mod['submod_route']!=null || $sub_mod['submod_route']!="") 
+                            @if($sub_mod['submod_route']!=null || $sub_mod['submod_route']!="")
                                 <li class="nav-item" >
                                     <router-link :to="{ name: '{{ $sub_mod['submod_route']}}', query: {data:'{{ $sub_mod['sub_mod_id'] }}' } }" class="nav-link" onclick="afterclick()">
                                         <i class=" nav-icon {{ $sub_mod['submod_icon']}}"></i>
-                                        <p>{{$sub_mod['sub_mod_name']}}</p> 
+                                        <p>{{$sub_mod['sub_mod_name']}}</p>
                                     </router-link>
                                 </li>
                             @else
@@ -53,7 +53,7 @@
                                                     <p>{{$scr['screen_name']}}</p>
                                                 </router-link>
                                             </li>
-                                        @endif 
+                                        @endif
                                         @endforeach
                                     </ul>
                                     @endif
@@ -116,10 +116,10 @@
                     <li class="nav-item has-treeview" id="org_master">
                         <router-link to="/OrganizationMasterIndex" class="nav-link">
                             <i class="nav-icon fas fa-database"></i>
-                            <p> 
+                            <p>
                                 Organization Masters
                             </p>
-                        </router-link> 
+                        </router-link>
                     </li>
                     <li class="nav-item has-treeview" id="staff_master">
                         <router-link to="/staff_link" class="nav-link pt-1 pb-1">
@@ -132,8 +132,8 @@
                             <i class="fa fa-users nav-icon"></i>
                             Staff Service Master
                         </router-link>
-                    </li>          
-                    
+                    </li>
+
                     <li class="nav-item has-treeview" id="academicmaster">
                         <router-link to="/academic-link" class="nav-link pt-1 pb-1">
                             <i class="fa fa-book nav-icon"></i>
@@ -152,7 +152,7 @@
                         <router-link to="/establishment_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Establishment 
+                                Establishment
                             </p>
                         </router-link>
                     </li>
@@ -160,7 +160,7 @@
                         <router-link to="/restructuring_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Restructuring 
+                                Restructuring
                             </p>
                         </router-link>
                     </li>
@@ -168,7 +168,7 @@
                         <router-link to="/structural_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Structural Facilities 
+                                Structural Facilities
                             </p>
                         </router-link>
                     </li>
@@ -176,7 +176,7 @@
                         <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                General Information 
+                                General Information
                             </p>
                         </router-link>
                     </li>
@@ -202,23 +202,23 @@
                 <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
                     <i class="fa fa-users nav-icon"></i>
                     Organization Profile
-                </router-link> 
-            </li> 
+                </router-link>
+            </li>
 
             <li class="nav-item has-treeview" >
                 <router-link to="/staff_award_index" class="nav-link pt-1 pb-1">
                     <i class="fa fa-users nav-icon"></i>
                     Staff Service Master
-                </router-link> 
-            </li> 
+                </router-link>
+            </li>
             <li class="nav-item" id="track_application">
                 <router-link to="/staff_services_index" class="nav-link">
                     <p>
                         <i class="nav-icon fas fa-list"></i>
                         Staff Services
                     </p>
-                </router-link>  
-            </li> 
+                </router-link>
+            </li>
 
             <li class="nav-item has-treeview" id="studentmaster">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -234,7 +234,7 @@
                             <i class="fa fa-angle-double-right nav-icon"></i>
                             Non-Academics Master
                         </router-link>
-                    </li> 
+                    </li>
                 </ul>
                 <ul class="nav nav-treeview">
                     <li class="nav-item" id="studentadmission">
@@ -266,7 +266,7 @@
                     <i class="fa fa-users nav-icon"></i>
                     HR Development (Training)
                 </router-link>
-            </li>  
+            </li>
 
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -281,7 +281,7 @@
                         <router-link to="/student_admission" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Admission Services 
+                                Admission Services
                             </p>
                         </router-link>
                     </li>
@@ -289,7 +289,7 @@
                         <router-link to="/student_services" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Student Services 
+                                Student Services
                             </p>
                         </router-link>
                     </li>
@@ -324,7 +324,7 @@
                         <router-link to="/student_scouts_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Scouts 
+                                Scouts
                             </p>
                         </router-link>
                     </li>
@@ -332,7 +332,7 @@
                         <router-link to="/student_trainings_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Trainings & Workshop 
+                                Trainings & Workshop
                             </p>
                         </router-link>
                     </li>
@@ -340,7 +340,7 @@
             </li>
             <li class="nav-item" id="messlink">
                 <router-link to="/messManage_index" class="nav-link">
-                    <p> 
+                    <p>
                       <i class="nav-icon fa fa-carrot"></i>
                         Mess Management
                     </p>
@@ -352,16 +352,16 @@
                         <i class="nav-icon fas fa-mail-bulk"></i>
                         Management Body Master
                     </p>
-                </router-link> 
+                </router-link>
             </li>
-            
+
             <li class="nav-item" id="track_application">
                 <router-link to="/management_body" class="nav-link">
                     <p>
                         <i class="nav-icon fas fa-mail-bulk"></i>
                         Management Body
                     </p>
-                </router-link> 
+                </router-link>
             </li>
 
             <!-- <li class="nav-item" id="track_application">
@@ -391,10 +391,9 @@
             <li class="nav-item" id="select_system">
                 <a href="{{route('select_system') }}" class="nav-link text-white">
                     <i class="nav-icon fa fa-sign-out-alt pr-4"></i>
-                    <p>Select System</p> 
-                </a> 
+                    <p>Select System</p>
+                </a>
             </li>
         </ul>
     </nav>
 </div>
- 

@@ -61,7 +61,7 @@ class StaffMastersController extends Controller{
                 $customMessages = [
                     'parent_field.required' => 'This field is required',
                 ];
-    
+
                 $this->validate($request, $rules,$customMessages);
                 $data = [
                     'group_id'  =>  $request['parent_field'],
@@ -78,10 +78,10 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="position_title"){
                     $response_data = PositionTitle::create($data);
-                } 
+                }
                 if($request['record_type']=="staff_subject"){
                     $response_data = Subjects::create($data);
-                }               
+                }
             }
             if($request->actiontype=="edit"){
                 $data ="";
@@ -97,14 +97,14 @@ class StaffMastersController extends Controller{
                     $table="master_stf_position_title";
                     $parent_id=$data->group_id;
                 }
-                
+
                 if($request['record_type']=="staff_subject"){
                     $data = Subjects::find($request['id']);
                     $table="master_stf_subject";
                     $parent_id=$data->sub_area_id;
-                } 
+                }
                 $messs_det='parent id:'.$parent_id.'; name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL emis_admin.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 $data->name = $request['name'];
                 $data->status = $request['status'];
                 if($request['record_type']=="sub_major_group"){
@@ -122,7 +122,7 @@ class StaffMastersController extends Controller{
                 $response_data = $data;
             }
         }
-        
+
         if($request['record_type']=="staff_qualification"){
             if($request->actiontype=="add"){
                 $table="";
@@ -140,7 +140,7 @@ class StaffMastersController extends Controller{
                     'parent_field.required' => 'This field is required',
                     'parent_field1.required' => 'This field is required',
                 ];
-    
+
                 $this->validate($request, $rules,$customMessages);
                 $data = [
                     'q_type_id'  =>  $request['parent_field'],
@@ -154,7 +154,7 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="staff_qualification"){
                     $response_data = Qualification::create($data);
                 }
-                               
+
             }
             if($request->actiontype=="edit"){
                 $data ="";
@@ -165,9 +165,9 @@ class StaffMastersController extends Controller{
                     $table="master_stf_qualification";
                     $messs_det='qualification type id:'.$data->q_type_id.'; qualification level id: '.$data->q_level_id.'; qualification:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 }
-                
-                $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
-                
+
+                $procid=DB::select("CALL emis_admin.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+
                 if($request['record_type']=="staff_qualification"){
                     $data->q_type_id = $request['parent_field'];
                     $data->q_level_id = $request['parent_field1'];
@@ -180,13 +180,12 @@ class StaffMastersController extends Controller{
                 $response_data = $data;
             }
         }
-        // dd($request);
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" 
-        || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" 
-        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" 
-        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" 
-        || $request['record_type']=="transfer_uindertaking" || $request['record_type']=="mgmn_body_type" || $request['record_type']=="staff_award_category" 
-        || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type" 
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group"
+        || $request['record_type']=="position_level" ||  $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level"
+        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area"
+        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"
+        || $request['record_type']=="transfer_uindertaking" || $request['record_type']=="mgmn_body_type" || $request['record_type']=="staff_award_category"
+        || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
         || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
             if($request->actiontype=="add"){
                 $table="";
@@ -250,7 +249,7 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="staff_offence_action"){
                     $table="master_staff_offence_action";
                 }
-                
+
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
                     'status'    =>  'required',
@@ -310,7 +309,6 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="course_mode"){
                     $response_data = CourseMode::create($data);
-                    // $table="master_course_mode";
                 }
                 if($request['record_type']=="mgmn_body_type"){
                     $response_data = MgmntBodyType::create($data);
@@ -394,6 +392,7 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="mgmn_body_type"){
                     $data = MgmntBodyType::find($request['id']);
                     $table="master_mgmn_body_type";
+
                 }
                 if($request['record_type']=="staff_award_category"){
                     $data = StaffAwardCategory::find($request['id']);
@@ -421,19 +420,19 @@ class StaffMastersController extends Controller{
                 }
 
                 $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL emis_admin.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
-                $data->name = $request['name'];
-                $data->status = $request['status'];
-                $data->updated_by = $request['user_id'];
-                $data->updated_at = date('Y-m-d h:i:s');
+                $data->name         =$request['name'];
+                $data->status       =$request['status'];
+                $data->updated_by   =$request['user_id'];
+                $data->updated_at   = date('Y-m-d h:i:s');
                 $data->update();
                 $response_data = $data;
             }
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadStaffMasters($param=""){
         if($param=="all_transfer"){
             return $this->successResponse(TransferReason::all());
@@ -465,14 +464,14 @@ class StaffMastersController extends Controller{
         if($param=="all_active_sub_group_List"){
             return $this->successResponse(StaffSubMajorGrop::where('status','1')->get());
         }
-        
+
         if($param=="all_position_title_List"){
             return $this->successResponse(PositionTitle::with('submajorgroup')->get());
         }
         if($param=="all_active_position_title"){
             return $this->successResponse(PositionTitle::where ('status', 1)->get());
         }
-        
+
         if($param=="all_position_level_List"){
             return $this->successResponse(PositionLevel::all());
         }
@@ -482,17 +481,16 @@ class StaffMastersController extends Controller{
         if($param=="active_qualification_type_List"){
             return $this->successResponse(QualificationType::where('status','1')->get());
         }
-        
+
         if($param=="all_qualification_level_List"){
             return $this->successResponse(QualificationLevel::all());
         }
         if($param=="active_qualification_level_List"){
             return $this->successResponse(QualificationLevel::where('status','1')->get());
         }
-        
+
         if($param=="all_qualification_List"){
             return $this->successResponse(Qualification::with('quialificationtype','quialificationlevel')->get());
-            // return $this->successResponse(Qualification::all());
         }
         if($param=="all_active_qualification_List"){
             return $this->successResponse(Qualification::where('status','1')->get());
@@ -543,7 +541,7 @@ class StaffMastersController extends Controller{
         if($param=="all_coursemode_list"){
             return $this->successResponse(CourseMode::all());
         }
-        
+
         if($param=="all_active_coursemode_list"){
             return $this->successResponse(CourseMode::where('status','1')->get());
         }
@@ -551,6 +549,7 @@ class StaffMastersController extends Controller{
             return $this->successResponse(MgmntBodyType::all());
         }
         if($param=="all_active_mgmn_body_type"){
+
             return $this->successResponse(MgmntBodyType::where('status','1')->get());
         }
 
@@ -588,14 +587,14 @@ class StaffMastersController extends Controller{
         if($param=="all_active_staff_offence_severity_List"){
             return $this->successResponse(StaffOffenceSeverity::where('status','1')->get());
         }
-        
+
         if($param=="all_staff_offence_action_List"){
             return $this->successResponse(StaffOffenceAction::all());
         }
         if($param=="all_active_staff_offence_action_List"){
             return $this->successResponse(StaffOffenceAction::where('status','1')->get());
         }
-        
+
     }
     public function load_staff_masters_by_id($param="",$id=""){
         if($param=="qdescription"){
@@ -631,9 +630,13 @@ class StaffMastersController extends Controller{
         if($param=="staff_offence_severity"){
             return $this->successResponse(StaffOffenceSeverity::where('id',$id)->first());
         }
-        
+        if($param=="staff_designation_details"){
+            return $this->successResponse(MgmnDesignation::where('id',$id)->first());
+        }
     }
-    
+
+
+
     public function loadStaffDropdownMasters($model="",$parent_id=""){
         if($model=="StaffAwardType"){
             return $this->successResponse(StaffAwardType::where('parent_id',$parent_id)->get());
