@@ -1167,7 +1167,7 @@ export default {
             });
         },
         allOrgList(){
-            let uri = 'organization/getschoolList/'+$('#dzongkhag').val();
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
             this.orgList = [];
             axios.get(uri)
             .then(response =>{

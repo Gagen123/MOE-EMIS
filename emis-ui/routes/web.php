@@ -308,6 +308,11 @@ Route::prefix('staff')->group(function () {
 
         Route::post('/saveStaffDisaplinary', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffDisaplinary'])->name('saveStaffDisaplinary');
         Route::get('/loadStaffdisaplinary', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffdisaplinary'])->name('loadStaffdisaplinary');
+
+        Route::post('/saveStaffAttendance', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffAttendance'])->name('saveStaffAttendance');
+        Route::get('/loadStaffattendance', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffattendance'])->name('loadStaffattendance');
+        Route::get('/loadattendanceDetails/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'loadattendanceDetails'])->name('loadattendanceDetails');
+        
     });
     
 });
@@ -333,7 +338,9 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadOrgDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadOrgDetails'])->name('loadOrgDetails');
 
     Route::get('/loadStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadStaffList'])->name('loadStaffList');
+    Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
+    Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     
 });
 

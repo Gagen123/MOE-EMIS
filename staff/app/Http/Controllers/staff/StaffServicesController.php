@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\staff_services\StaffAward;
 use App\Models\staff_services\StaffResponsiblity;
 use App\Models\staff_services\StaffDisaplinary;
+use App\Models\staff_services\StaffAttendance;
+use App\Models\staff_services\StaffAttendanceDetails;
+
 
 class StaffServicesController extends Controller{
     use ApiResponser;
@@ -163,5 +166,78 @@ class StaffServicesController extends Controller{
     public function loadStaffdisaplinary($user_id=""){
         $disaplinary=StaffDisaplinary::where('created_by',$user_id)->get();
         return $this->successResponse($disaplinary);
+    }
+
+    public function saveStaffAttendance(Request $request){
+        $data =[
+            'year'                      =>  $request->year,
+            'month'                     =>  $request->month,
+            'remarks'                   =>  $request->remarks,
+            'org_id'                       =>  $request->org,
+            'dzongkhag_id'                 =>  $request->dzongkhag,
+        ];
+        if($request->action_type=="edit"){
+            $additional=[
+                'updated_by'                 =>  $request->user_id, 
+                'updated_at'                 =>  date('Y-m-d h:i:s'),
+            ];
+            $data=$data+$additional;
+            StaffAttendance::where('id', $request->id)->update($data);
+            $response_data = StaffAttendance::where('id', $request->id)->first();
+            StaffAttendanceDetails::where('att_id',$request->id)->delete();
+            foreach($request->staffList as $leave){
+                $att_det=[
+                    'att_id'                   =>  $request->id, 
+                    'staff_id'                 =>  $leave['id'],
+                    'cid_work_permit'          =>  $leave['cid_work_permit'],
+                    'no_present_days'          =>  $leave['no_present_days'],
+                    'no_absent_days'           =>  $leave['no_present_days'],
+                ];
+                StaffAttendanceDetails::create($att_det);
+            }
+        }
+        else{
+            $additional=[
+                'created_by'                 =>  $request->user_id, 
+                'created_at'                 =>  date('Y-m-d h:i:s'),
+            ];
+            $data=$data+$additional;
+            $response_data = StaffAttendance::create($data); 
+
+            foreach($request->staffList as $leave){
+                $att_det=[
+                    'att_id'                   =>  $response_data->id, 
+                    'staff_id'                 =>  $leave['id'],
+                    'cid_work_permit'          =>  $leave['cid_work_permit'],
+                    'no_present_days'          =>  $leave['no_present_days'],
+                    'no_absent_days'           =>  $leave['no_present_days'],
+                ];
+                StaffAttendanceDetails::create($att_det);
+            }
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function loadStaffattendance($param=""){
+        $response_data="";
+        if(strpos($param,'SSS')){
+            $access_level=explode('SSS',$param)[0];
+            if($access_level=="Ministry"){
+                $response_data=StaffAttendance::all();
+            }
+            if($access_level=="Dzongkhag"){
+                $response_data=where('dzongkhag_id',explode('SSS',$param)[1])->get();
+            }
+            if($access_level=="Org"){
+                $response_data=StaffAttendance::where('org_id',explode('SSS',$param)[2])->get();
+            }
+        }
+        return $this->successResponse($response_data);
+    }
+    
+    public function loadattendanceDetails($id=""){
+        $att_detials=StaffAttendance::where('id',$id)->first();
+        $att_detials->details=StaffAttendanceDetails::where('att_id',$att_detials->id)->get();
+        return $this->successResponse($att_detials);
     }
 }

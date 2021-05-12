@@ -100,7 +100,7 @@ export default {
         staffaward_list(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-            this.dt =  $("#award-table").DataTable()
+                this.dt =  $("#award-table").DataTable()
             });
         }
     },

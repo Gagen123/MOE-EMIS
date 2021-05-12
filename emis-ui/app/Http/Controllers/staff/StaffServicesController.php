@@ -126,4 +126,32 @@ class StaffServicesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffdisaplinary/'.$this->userId());
         return $response_data;
     }
+    
+    public function saveStaffAttendance(Request $request){
+        $staff_data =[
+            'id'                        =>  $request->id,
+            'year'                      =>  $request->year,
+            'month'                     =>  $request->month,
+            'remarks'                   =>  $request->remarks,
+            'staffList'                 =>  $request->staffList,
+            'org'                       =>  $this->getWrkingAgencyId(),
+            'dzongkhag'                 =>  $this->getUserDzoId(),
+            'action_type'                =>  $request->action_type,
+            'user_id'                    =>  $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAttendance', $staff_data);
+        return $response_data;
+    }
+    
+    public function loadStaffattendance(){
+        $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffattendance/'.$param);
+        return $response_data;
+    }
+
+    public function loadattendanceDetails($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/loadattendanceDetails/'.$id);
+        return $response_data;
+    }
+    
 }

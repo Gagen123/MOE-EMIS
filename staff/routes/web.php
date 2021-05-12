@@ -98,13 +98,18 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             
             $router->post('/saveStaffDisaplinary', ['uses' => 'staff\StaffServicesController@saveStaffDisaplinary']);
             $router->get('/loadStaffdisaplinary/{user_id}', ['uses' => 'staff\StaffServicesController@loadStaffdisaplinary']);
+
+            $router->post('/saveStaffAttendance', ['uses' => 'staff\StaffServicesController@saveStaffAttendance']);
+            $router->get('/loadStaffattendance/{param}', ['uses' => 'staff\StaffServicesController@loadStaffattendance']);
+            $router->get('/loadattendanceDetails/{id}', ['uses' => 'staff\StaffServicesController@loadattendanceDetails']);
+            
         }); 
     });
 
     $router->group(['prefix' => 'loadstaff'], function () use ($router) {
         $router->get('/loadStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadStaffList']);
+        $router->get('/loadFewDetailsStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffList']);
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
-        
         
     }); 
 });
