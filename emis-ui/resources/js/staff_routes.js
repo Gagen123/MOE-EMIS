@@ -1,4 +1,4 @@
-const routes = [  
+const routes = [
     //STAFF Masters
     { path: '/staff_link',
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
@@ -32,8 +32,8 @@ const routes = [
                 ],
             },
             { path: '/marital_status',
-                component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default, 
-                children:[ 
+                component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default,
+                children:[
                     { path: '/',name:'marital_status', component: require('./components/masters/staff_masters/marital_status/list_marital_status.vue').default },
                     { path: '/list_marital_status',name:'list_marital_status', component: require('./components/masters/staff_masters/marital_status/list_marital_status.vue').default },
                     { path: '/create_marital_status',name:'create_marital_status', component: require('./components/masters/staff_masters/marital_status/create_marital_status.vue').default },
@@ -41,8 +41,8 @@ const routes = [
                 ],
             },
             { path: '/subject_area_masters',
-                component: require('./components/masters/staff_masters/subject_area/subject_area_index.vue').default, 
-                children:[ 
+                component: require('./components/masters/staff_masters/subject_area/subject_area_index.vue').default,
+                children:[
                     { path: '/',name:'subject_area_masters', component: require('./components/masters/staff_masters/subject_area/list_subject_area.vue').default },
                     { path: '/list_subject_area',name:'list_subject_area', component: require('./components/masters/staff_masters/subject_area/list_subject_area.vue').default },
                     { path: '/create_subject_area',name:'create_subject_area', component: require('./components/masters/staff_masters/subject_area/create_subject_area.vue').default },
@@ -50,8 +50,8 @@ const routes = [
                 ],
             },
             { path: '/teaching_subjects',
-                component: require('./components/masters/staff_masters/subject/marital_status_index.vue').default, 
-                children:[ 
+                component: require('./components/masters/staff_masters/subject/marital_status_index.vue').default,
+                children:[
                     { path: '/',name:'teaching_subjects', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
                     { path: '/list_subject',name:'list_subject', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
                     { path: '/create_subject',name:'create_subject', component: require('./components/masters/staff_masters/subject/create_subject.vue').default },
@@ -59,17 +59,17 @@ const routes = [
                 ],
             },
             { path: '/currier_stage',
-                component: require('./components/masters/staff_masters/currier_stage/currier_stage_index.vue').default, 
-                children:[ 
+                component: require('./components/masters/staff_masters/currier_stage/currier_stage_index.vue').default,
+                children:[
                     { path: '/',name:'currier_stage', component: require('./components/masters/staff_masters/currier_stage/list_currier_stage.vue').default },
                     { path: '/list_currier_stage',name:'list_currier_stage', component: require('./components/masters/staff_masters/currier_stage/list_currier_stage.vue').default },
                     { path: '/create_currier_stage',name:'create_currier_stage', component: require('./components/masters/staff_masters/currier_stage/create_currier_stage.vue').default },
                     { path: '/edit_currier_stage', name:'edit_currier_stage', component: require('./components/masters/staff_masters/currier_stage/edit_currier_stage.vue').default },
                 ],
-            }, 
+            },
             { path: '/qualification_description',
-                component: require('./components/masters/staff_masters/qualification_description/qualification_description_index.vue').default, 
-                children:[ 
+                component: require('./components/masters/staff_masters/qualification_description/qualification_description_index.vue').default,
+                children:[
                     { path: '/',name:'qualification_description', component: require('./components/masters/staff_masters/qualification_description/list_qualification_description.vue').default },
                     { path: '/list_qualification_description',name:'list_qualification_description', component: require('./components/masters/staff_masters/qualification_description/list_qualification_description.vue').default },
                     { path: '/create_qualification_description',name:'create_qualification_description', component: require('./components/masters/staff_masters/qualification_description/create_qualification_description.vue').default },
@@ -77,8 +77,8 @@ const routes = [
                 ],
             },
             { path: '/course_mode',
-                component: require('./components/masters/staff_masters/course_mode/course_mode_index.vue').default, 
-                children:[ 
+                component: require('./components/masters/staff_masters/course_mode/course_mode_index.vue').default,
+                children:[
                     { path: '/',name:'course_mode', component: require('./components/masters/staff_masters/course_mode/list_course_mode.vue').default },
                     { path: '/list_course_mode',name:'list_course_mode', component: require('./components/masters/staff_masters/course_mode/list_course_mode.vue').default },
                     { path: '/create_course_mode',name:'create_course_mode', component: require('./components/masters/staff_masters/course_mode/create_course_mode.vue').default },
@@ -113,7 +113,7 @@ const routes = [
                 { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_masters/position_level/edit_position_level.vue').default },
                 ],
             },
-            
+
             { path: '/qualification_type',
                 component: require('./components/masters/staff_masters/qualification_type/qualification_type_index.vue').default,
                 children:[
@@ -152,7 +152,7 @@ const routes = [
             },
 
 
-            
+
         ],
     },
 
@@ -160,7 +160,7 @@ const routes = [
         component: require('./components/masters/management_body/management_body_index.vue').default,
         children:[
             {path: '/',name:'management_body_link', component: require('./components/masters/management_body/management_body_list.vue').default },
-            
+
             { path: '/management_body_designation',
                 component: require('./components/masters/management_body/mgmn_body_desig/mgmn_designation.vue').default,
                 children:[
@@ -181,7 +181,7 @@ const routes = [
             },
         ]
     },
-    
+
     //HR Developemnt (Training) Masters
     { path: '/traing_master',
         component: require('./components/masters/hr_development_masters/hr_development_index.vue').default,
@@ -196,7 +196,7 @@ const routes = [
                     { path: '/edit_training_type', name:'edit_training_type', component: require('./components/masters/hr_development_masters/training_type/edit_training_type.vue').default },
                 ],
             },
-            
+
             { path: '/related_programme',
                 component: require('./components/masters/hr_development_masters/related_programme/related_programme_index.vue').default,
                 children:[
@@ -243,7 +243,7 @@ const routes = [
                     { path: '/edit_financial_source', name:'edit_financial_source', component: require('./components/masters/hr_development_masters/financial_source/edit_financial_source.vue').default },
                 ],
             },
-            
+
             { path: '/category',
                 component: require('./components/masters/hr_development_masters/category/category_index.vue').default,
                 children:[
@@ -262,7 +262,7 @@ const routes = [
                     { path: '/edit_donor_agency', name:'edit_donor_agency', component: require('./components/masters/hr_development_masters/donor_agency/edit_donor_agency.vue').default },
                 ],
             },
-            { path: '/project_donor_agency', 
+            { path: '/project_donor_agency',
                 component: require('./components/masters/hr_development_masters/project_donor_agency/project_donor_agency_index.vue').default,
                 children:[
                     { path: '/',name:'project_donor_agency', component: require('./components/masters/hr_development_masters/project_donor_agency/project_donor_agency_list.vue').default },
@@ -306,7 +306,7 @@ const routes = [
         component: require('./components/masters/staff_servces_masters/staff_service_master_index.vue').default,
         children:[
             {path: '/',name:'staff_award_index', component: require('./components/masters/staff_servces_masters/staff_service_master_list.vue').default },
-            
+
             { path: '/staff_award_category_index',
                 component: require('./components/masters/staff_servces_masters/staff_award_category/staff_award_category_index.vue').default,
                 children:[
@@ -361,16 +361,16 @@ const routes = [
                 { path: '/edit_offence_action', name:'edit_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/edit_offence_action.vue').default },
                 ],
             },
-            
+
         ]
     },
 
-    //STAFF Transactions 
-    { path:'/staff_registration', 
-        component: require('./components/staff/index.vue').default, 
+    //STAFF Transactions
+    { path:'/staff_registration',
+        component: require('./components/staff/index.vue').default,
         children:[
             { path: '/',name:'staff_registration', component: require('./components/staff/staff_default_page.vue').default },
-            { path: '/civil_staff', 
+            { path: '/civil_staff',
                 component: require('./components/staff/civil/civil_index.vue').default,
                 children:[
                     { path: '/',name:'civil_staff',  component: require('./components/staff/civil/civil_list.vue').default },
@@ -381,7 +381,7 @@ const routes = [
                 ],
             },
 
-            { path: '/private_staff', 
+            { path: '/private_staff',
                 component: require('./components/staff/private/private_staff_index.vue').default,
                 children:[
                     { path: '/',name:'private_staff',  component: require('./components/staff/private/private_staff_list.vue').default },
@@ -390,8 +390,8 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
-            
-            { path: '/transfer_window_index', 
+
+            { path: '/transfer_window_index',
                 component: require('./components/staff/transfer_window/transfer_window_index.vue').default,
                 children:[
                     { path: '/', name:'transfer_window_index',  component: require('./components/staff/transfer_window/transfer_window_list.vue').default },
@@ -400,7 +400,7 @@ const routes = [
                     { path: '/edit_transfer_window', name:'edit_transfer_window', component: require('./components/staff/transfer_window/edit_transfer_window.vue').default },
                 ],
             },
-            { path: '/transfer_index', 
+            { path: '/transfer_index',
                 component: require('./components/staff/transfer/transfer_index.vue').default,
                 children:[
                     { path: '/', name:'transfer_index',  component: require('./components/staff/transfer/transfer_list.vue').default },
@@ -410,20 +410,20 @@ const routes = [
                 ],
             },
 
-            
 
-            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
+
+            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement',
             component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
     },
 
-    //Staff Training 
-    { path:'/create_inset', 
-        component: require('./components/staff/training/inset_index.vue').default, 
+    //Staff Training
+    { path:'/create_inset',
+        component: require('./components/staff/training/inset_index.vue').default,
         children:[
             { path: '/',name:'create_inset', component: require('./components/staff/training/inset_list.vue').default },
-            { path: '/programme_index', 
-                component: require('./components/staff/training/create_programme/programme_index.vue').default, 
+            { path: '/programme_index',
+                component: require('./components/staff/training/create_programme/programme_index.vue').default,
                 children:[
                     { path: '/',name:'programme_index',  component: require('./components/staff/training/create_programme/list_programme.vue').default },
                     { path: '/list_programme',name:'list_programme',  component: require('./components/staff/training/create_programme/list_programme.vue').default },
@@ -431,9 +431,9 @@ const routes = [
                     { path: '/edit_training_programme',name:'edit_training_programme',  component: require('./components/staff/training/create_programme/edit_training_programme.vue').default },
                 ],
             },
-            
-            { path: '/nomination_selection', 
-                component: require('./components/staff/training/nomination_selection/nomination_selection_index.vue').default, 
+
+            { path: '/nomination_selection',
+                component: require('./components/staff/training/nomination_selection/nomination_selection_index.vue').default,
                 children:[
                     { path: '/',name:'nomination_selection',  component: require('./components/staff/training/nomination_selection/list_nomination_selection.vue').default },
                     { path: '/list_nomination_selection',name:'list_nomination_selection',  component: require('./components/staff/training/nomination_selection/list_nomination_selection.vue').default },
@@ -442,20 +442,20 @@ const routes = [
                     { path: '/verify_nomination_selection',name:'verify_nomination_selection',  component: require('./components/staff/training/nomination_selection/verify_nomination_selection.vue').default },
                 ],
             },
-           
+
         ]
     },
 
     { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
-   
+
     //Management Body Transactions
-    { path:'/management_body', 
-        component: require('./components/staff/management/management_body_index.vue').default, 
+    { path:'/management_body',
+        component: require('./components/staff/management/management_body_index.vue').default,
         children:[
             { path: '/', name:'management_body', component: require('./components/staff/management/management_body_list.vue').default },
 
-            { path: '/create_management_body_index', 
-                component: require('./components/staff/management/create_body/management_body_index.vue').default, 
+            { path: '/create_management_body_index',
+                component: require('./components/staff/management/create_body/management_body_index.vue').default,
                 children:[
                     { path: '/', name:'create_management_body_index',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
                     { path: '/list_management_body',name:'list_management_body',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
@@ -463,19 +463,29 @@ const routes = [
                     { path: '/edit_management_body',name:'edit_management_body',  component: require('./components/staff/management/create_body/edit_management_body.vue').default },
                 ],
             },
-            
+
+            { path:'/management_meeting',
+                component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,
+                children:[
+                    { path: '/', name:'list_management_body_for_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
+                    { path: '/open_meeting',name:'open_meeting', component: require('./components/staff/management/create_meeting/open_meeting.vue').default},
+                    { path: '/create_management_meeting',name:'create_management_meeting', component: require('./components/staff/management/create_meeting/create_management_meeting.vue').default},
+                ],
+            },
+
+
             { path: '/acknowledgement', name:'acknowledgement', component: require('./components/staff/acknowledgement.vue').default },
             { path: '/acknowledgement_for_errors', name:'acknowledgement_for_errors', component: require('./components/staff/acknowledgement_for_errors.vue').default },
         ]
     },
 
     //Staff Services
-    { path:'/staff_services_index', 
-        component: require('./components/staff/staff_services/staff_service_index.vue').default, 
+    { path:'/staff_services_index',
+        component: require('./components/staff/staff_services/staff_service_index.vue').default,
         children:[
             { path: '/', name:'staff_services_index', component: require('./components/staff/staff_services/staff_service_list.vue').default },
 
-            { path: '/staff_awards', 
+            { path: '/staff_awards',
                 component: require('./components/staff/staff_services/staff_awards/staff_awards_index.vue').default,
                 children:[
                     { path: '/', name:'staff_awards',  component: require('./components/staff/staff_services/staff_awards/staff_awards_list.vue').default },
@@ -484,7 +494,7 @@ const routes = [
                     { path: '/edit_staff_awards', name:'edit_staff_awards', component: require('./components/staff/staff_services/staff_awards/edit_staff_awards.vue').default },
                 ],
             },
-            { path: '/staff_responsibilities', 
+            { path: '/staff_responsibilities',
                 component: require('./components/staff/staff_services/roles_responsibilities/roles_responsibilities_index.vue').default,
                 children:[
                     { path: '/', name:'staff_responsibilities',  component: require('./components/staff/staff_services/roles_responsibilities/list_roles_responsibilities.vue').default },
@@ -493,7 +503,7 @@ const routes = [
                     { path: '/edit_roles_responsibilities', name:'edit_roles_responsibilities', component: require('./components/staff/staff_services/roles_responsibilities/edit_roles_responsibilities.vue').default },
                 ],
             },
-            { path: '/staff_disciplinary', 
+            { path: '/staff_disciplinary',
                 component: require('./components/staff/staff_services/staff_disciplinary/staff_disciplinary_index.vue').default,
                 children:[
                     { path: '/', name:'staff_disciplinary',  component: require('./components/staff/staff_services/staff_disciplinary/list_staff_disciplinary.vue').default },
@@ -504,6 +514,6 @@ const routes = [
             },
         ]
     }
-    
+
 ];
 export default routes

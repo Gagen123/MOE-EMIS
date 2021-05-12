@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use Session;
-// use Redirect;
 use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
@@ -74,7 +73,7 @@ class AdministrationController extends Controller{
         return $global_masters;
     }
 
-    public function all_active_dropdowns($model="",$parent_id=""){ 
+    public function all_active_dropdowns($model="",$parent_id=""){
         $response_data = $this->apiService->listData('emis/masters/load_dropdown/'.$model."/".$parent_id);
         return $response_data;
     }
@@ -90,12 +89,12 @@ class AdministrationController extends Controller{
             'name.required' => 'This field is required',
             'status.required' => 'This field is required',
         ];
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group" 
-        || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level" 
-        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area" 
-        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode" 
-        || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" 
-        || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category" 
+        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group"
+        || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level"
+        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area"
+        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"
+        || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"
+        || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category"
         || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
         || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
             $rules=array_merge($rules,
@@ -126,25 +125,22 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules,$customMessages);
 
         $data =[
-            'name'  =>  $request['name'],
-            'parent_field'    =>  $request['parent_field'],
-            'parent_field1'    =>  $request['parent_field1'],
-            'status'    =>  $request['status'],
-            'code'    =>  $request['code'],
-            'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'record_type'=>$request['record_type'],
-            'user_id'=>$this->userId()
+            'name'            =>$request['name'],
+            'parent_field'    =>$request['parent_field'],
+            'parent_field1'   =>$request['parent_field1'],
+            'status'          =>$request['status'],
+            'code'            =>$request['code'],
+            'actiontype'      =>$request['action_type'],
+            'id'              =>$request['id'],
+            'record_type'     =>$request['record_type'],
+            'user_id'         =>$this->userId()
         ];
-        // dd($data);
         $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
-        // dd($response_data);
         return $response_data;
     }
 
     public function loadStaffMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
-        // dd($global_masters);
         return $global_masters;
     }
     public function loadStaffDropdownMasters($model="",$parent_id=""){
@@ -699,13 +695,11 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
+
             $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
+
     }
 
     public function loadRoadType(){
@@ -732,13 +726,10 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
             $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
+
     }
 
     public function loadServiceProvider(){
@@ -762,13 +753,10 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
             $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
+
     }
 
     public function loadStructureDesigner(){
@@ -792,13 +780,9 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-        try{
             $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+
     }
 
     public function loadContactType(){
@@ -891,7 +875,6 @@ class AdministrationController extends Controller{
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
         ];
-        // dd($dis);
         try{
             $response_data= $this->apiService->createData('masters/term/saveTerm', $dis);
             return $response_data;
@@ -914,18 +897,13 @@ class AdministrationController extends Controller{
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
     }
-<<<<<<< HEAD
-
-
-}
-=======
     public function loadQuater(Request $request){
      //  return('from UI');
         $dis = $this->apiService->listData('emis/masters/mess_manage/loadQuater');
         return $dis;
     }
     public function saveQuater(Request $request){
-     
+
         $rules = [
             'quaterName'  =>  'required',
             'status'    =>  'required',
@@ -942,7 +920,6 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-       // dd($dis);
         try{
             $response_data= $this->apiService->createData('emis/masters/mess_manage/saveQuater', $dis);
             return $response_data;
@@ -951,6 +928,5 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-    
+
 }
->>>>>>> 51d38ddf6e9d46a212b7889c98a7227089127b11
