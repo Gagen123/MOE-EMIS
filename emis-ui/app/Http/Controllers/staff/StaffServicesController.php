@@ -143,14 +143,19 @@ class StaffServicesController extends Controller{
         return $response_data;
     }
     
-    public function loadStaffattendance(){
-        $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+    public function loadStaffattendance($dzo_id=""){
+        // $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        $param=$dzo_id;
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffattendance/'.$param);
         return $response_data;
     }
 
     public function loadattendanceDetails($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadattendanceDetails/'.$id);
+        return $response_data;
+    }
+    public function checkAttendanceDetailsByDate($year="",$month=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/checkAttendanceDetailsByDate/'.$year."/".$month.'/'.$this->getWrkingAgencyId());
         return $response_data;
     }
     

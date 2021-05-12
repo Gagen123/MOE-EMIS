@@ -5,7 +5,7 @@
                 <span class="card-title">
                     <b>Staff Attendace</b>
                 </span>
-                <span class="fa-pull-right pt-1">
+                <span class="fa-pull-right pt-1" v-if="access_level=='Org'">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_attendance')" id="listnewbtn"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_attendance')" id="addnewbtn"><i class="fa fa-plus"></i> Add New</button>
                 </span>
@@ -20,6 +20,7 @@
 export default {
     data(){
         return{ 
+            access_level:'',
             screen_id:'',
             privileges:'',
             list:'NA',
@@ -38,7 +39,6 @@ export default {
                 let data = response;
                 this.privileges =  data.data; 
                 for(let i=0;i<data.data.length;i++){
-                    alert(data.data[i].action_name+' : '+data.data[i].Organization+' : '+data.data[i].Dzongkhag)+' : '+data.data[i].National;
                     if(data.data[i].action_name.toLowerCase().includes('add') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
                         $('#addnewbtn').show();
                     }
@@ -76,6 +76,14 @@ export default {
         $('#addnewbtn').hide();
         $('#listnewbtn').hide();
         this.getprivileges();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.access_level=data['acess_level'];
+        })    
+        .catch(errors => { 
+            console.log(errors)
+        });
     },
 }
 </script>
