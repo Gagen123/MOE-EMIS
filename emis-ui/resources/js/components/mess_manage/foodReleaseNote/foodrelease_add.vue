@@ -25,12 +25,12 @@
                         </select> -->
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                     <label class="">School Name:<span class="text-danger">*</span></label> 
-                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
-                         <option value=""> --Select--</option>
-                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>  
-                     </select> 
-                     <has-error :form="personal_form" field="working_agency_id"></has-error>
+                        <label class="">School Name:<span class="text-danger">*</span></label> 
+                        <select name="working_agency_id" id="working_agency_id" class="form-control editable_fields" v-model="form.working_agency_id" :class="{ 'is-invalid': form.errors.has('working_agency_id') }" @change="remove_err('working_agency_id')">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select> 
+                     <has-error :form="form" field="working_agency_id"></has-error> 
                          <!--   <select class="form-control editable_fields" id="school"  v-model="form.school" >
                             <option value="">---Please Select---</option> 
                             <option value="SHSS">SHSS</option>
@@ -123,8 +123,7 @@
 export default {
     data(){
         return{
-            
-            schoolList:[],
+            orgList:[],
             quarterList:[],
             itemList:[],
             unitList:[],
@@ -132,7 +131,7 @@ export default {
           //  itemrelease:[],
             items_released: [],
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', school: '',quarter: '',
+                 id: '', dateOfrelease: '', dzongkhag: '', working_agency_id: '',quarter: '',
                  items_released:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
@@ -228,6 +227,21 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        /**
+         * 
+         */
+         allOrgList(){
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
 
         /**
          * method to get dzongkhag in dropdown
@@ -267,6 +281,8 @@ export default {
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
         this.getTermInDropdown();
+        this.loadactivedzongkhagList();
+
     }
 }
 </script>
