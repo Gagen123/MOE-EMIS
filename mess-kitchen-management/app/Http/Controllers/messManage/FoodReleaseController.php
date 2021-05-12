@@ -30,9 +30,12 @@ class FoodReleaseController extends Controller
             'created_at'                =>  date('Y-m-d h:i:s')
         ];
         $foodrel = FoodRelease::create($foodrelease);
-        foreach ($request->items_released as $i=> $item){
+
+        $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
+
+        foreach ($request->items_released as $i => $item){
             $itemreleasednote = array(
-                'foodreleaseId'              =>  $foodrel->id,
+                'foodreleaseId'              =>  $releasId[0],
                 'item'                       =>  $item['item'],
                 'quantity'                   =>  $item['quantity'],
                 'unit'                       =>  $item['unit'],
@@ -40,21 +43,23 @@ class FoodReleaseController extends Controller
                 'updated_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s')
             );
-            // dd('m here');
             $foodrel = ItemReleasedNote::create($itemreleasednote);
-           // dd('m here');
         }
         return $this->successResponse($foodrel, Response::HTTP_CREATED);
     }
     public function loadFoodReleaseList(){
           // return 'from service of mine';
-        $list = DB::table('food_releases')
-        ->select( 'dateOfrelease as dateOfrelease',
-         'dzongkhag','school',
-         'quarter'
+        $list = DB::table('food_releases as a')
+        ->select( 'a.dateOfrelease as dateOfrelease',
+         'a.dzongkhag','a.school',
+         'a.quarter', 'a.id'
          )->get();
         return $list;
     }
+
+    public function getFoodReleaseItem($foodreleaseId=''){
+      $list = DB::table('item_released_notes')
+      ->select( 'item','quantity','unit')->where('foodreleaseId',$foodreleaseId)->get();
+      return $list;
+    }
 }
-
-

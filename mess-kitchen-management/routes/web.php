@@ -22,11 +22,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'foodrelease'], function () use ($router) {
             $router->get('/loadFoodReleaseList', 'messManage\FoodReleaseController@loadFoodReleaseList');
             $router->post('/saveFoodRelease', 'messManage\FoodReleaseController@saveFoodRelease');
+            $router->get('/getFoodReleaseItem/{foodreleaseId}', 'messManage\FoodReleaseController@getFoodReleaseItem');
+            
         });
 
         $router->group(['prefix' => 'localprocure'], function () use ($router) {
             $router->get('/loadLocalProcure', 'messManage\LocalProcureController@loadLocalProcure');
             $router->post('/saveLocalProcure', 'messManage\LocalProcureController@saveLocalProcure');
+            
         });
  
         $router->group(['prefix' => 'stockissue'], function () use ($router) {
