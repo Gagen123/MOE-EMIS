@@ -7,13 +7,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\Level;
+use App\Models\OrganizationDetails;
 class LoadOrganizationController extends Controller{
     use ApiResponser;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
     
-    public function loadStaffList($type="", $id=""){
+    public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)->get();
@@ -31,7 +32,7 @@ class LoadOrganizationController extends Controller{
     }
     public function getOrgDetailsById($type="", $id=""){
         $response_data="";
-        if($type=="Orgbyid"){
+        if($type=="Orgbyid" || $type=="user_login_access_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
         }
         if($type=="Headquarterbyid"){
@@ -39,5 +40,4 @@ class LoadOrganizationController extends Controller{
         }
         return $this->successResponse($response_data);
     }
-    pub
 }

@@ -16,6 +16,7 @@ class CreateItemReleasedNotesTable extends Migration
         Schema::create('item_released_notes', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('foodreleaseId',36);
+           // $table->foreign('foodreleaseId')->references('id')->on('food_releases');
             $table->string('item');
             //$table->foreign('itemId')->references('id')->on('item');
             $table->integer('quantity')->length(11)->unsigned()->nullable(false);

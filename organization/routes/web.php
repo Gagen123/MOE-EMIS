@@ -302,7 +302,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
-        $router->get('/loadStaffList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadStaffList']);
+        $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
 
     });

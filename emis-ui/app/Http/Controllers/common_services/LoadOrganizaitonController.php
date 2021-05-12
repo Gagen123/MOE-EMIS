@@ -33,21 +33,17 @@ class LoadOrganizaitonController extends Controller{
 
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
-            $param=$parent_id;
+            $param=$id;
         }
 
         //type=gewoggwise, parent_id=?: to list with gewog id
         if($type=="gewoggwise"){
-            $param=$parent_id;
+            $param=$id;
         }
 
-        //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise"){
-            $param=$parent_id;
-        }
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$id);
     }
-    //type can be by_org_id,by_headquarter_id,user_login_access_id, orgcode etc and id shoulb be their respective values
+    //type can be Orgbyid,Headquarterbyid,user_login_access_id, orgcode etc and id shoulb be their respective values
     public function loadOrgDetails($type="",$id=""){
         return $this->apiService->getListData('emis/common_services/loadOrgDetails/'.$type.'/'.$id);
     }

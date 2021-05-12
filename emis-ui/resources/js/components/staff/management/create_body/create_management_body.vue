@@ -513,9 +513,8 @@ export default {
                 }
             });
         },
-
     },
-    mounted() {
+    mounted(){
         this.loadmanagmentBodyList('all_active_mgmn_body_type');
         this.loadmanagmentBodyList('all_active_mgmn_desig');
         this.loadStaffList();
