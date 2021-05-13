@@ -10,7 +10,7 @@
                         </select>
                         <span class="text-danger" id="dzongkhag_err"></span>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="org_section">
                         <label class="mb-0.5">Organization:<i class="text-danger">*</i></label>
                         <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -59,8 +59,8 @@ export default {
         } 
     },
     methods: {
-        loadDataList(dzo_id){
-            let uri = 'staff/staffServices/loadStaffattendance/'+dzo_id;
+        loadDataList(org_id){
+            let uri = 'staff/staffServices/loadStaffattendance/'+org_id;
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -133,7 +133,8 @@ export default {
             let data = response.data.data;
             this.access_level=data['acess_level'];
             if(data['acess_level']=="Org"){
-                this.loadDataList();
+                this.loadDataList(data['Agency_Code']);
+                $('#org_section').hide();
             }
             if(data['acess_level']=="Dzongkhag"){
                 this.allOrgList(data['Dzo_Id']);
