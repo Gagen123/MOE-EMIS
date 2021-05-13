@@ -412,7 +412,6 @@ const routes = [
 
 
 
-            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement',
             { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
             component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]

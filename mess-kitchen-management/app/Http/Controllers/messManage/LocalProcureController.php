@@ -34,7 +34,7 @@ class LocalProcureController extends Controller
 
          $localpro = LocalProcure::create($localprocure);
         }
-        // dd('m here'); 
+        // dd('localpro'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
     public function loadLocalProcure(){

@@ -11,10 +11,10 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
-                        <select name="dzongkhag" id="dzongkhag" class="form-control editable_fields" v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" @change="remove_err('dzongkhag')">
-                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.dzongkhag }}</option>
+                        <select v-model="dzongkhag" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="dzongkhag"></has-error> 
+                        <has-error :form="form" field="dzongkhag"></has-error>
                         
                         <!--    <select name="dzongkhag" class="form-control editable_fields" id="dzongkhag"  v-model="form.dzongkhag" >
                             <option value="">---Please Select---</option> 
@@ -26,11 +26,10 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">School Name:<span class="text-danger">*</span></label> 
-                        <select name="working_agency_id" id="working_agency_id" class="form-control editable_fields" v-model="form.working_agency_id" :class="{ 'is-invalid': form.errors.has('working_agency_id') }" @change="remove_err('working_agency_id')">
-                            <option value=""> --Select--</option>
+                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                     <has-error :form="form" field="working_agency_id"></has-error> 
+                        </select>
+                        <has-error :form="form" field="organizaiton"></has-error>
                          <!--   <select class="form-control editable_fields" id="school"  v-model="form.school" >
                             <option value="">---Please Select---</option> 
                             <option value="SHSS">SHSS</option>
@@ -42,7 +41,7 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
-                       <select name="quarter" id="quarter" class="form-control editable_fields" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
+                       <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
                             <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.quarter }}</option>
                         </select>
                         <has-error :form="form" field="quarter"></has-error> 
@@ -69,8 +68,8 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_released' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.item }}</option>
+                                    <select name="item" id="item" class="form-control select2" v-model="item.item">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                       </select>
                                      <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
                                         <option value="">---Please Select---</option> 
@@ -83,8 +82,9 @@
                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
                                   <td>                                
-                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.unit }}</option>
+                                     <select name="unit" id="unit" class="form-control editable_fields  select2" v-model="item.unit">
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         
                                      </select> 
                                         <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
                                         <option value="">---Please Select---</option> 
@@ -128,10 +128,12 @@ export default {
             itemList:[],
             unitList:[],
             dzongkhagList:[],
+            dzongkhag:'',
+            organizaiton:'',
           //  itemrelease:[],
             items_released: [],
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', working_agency_id: '',quarter: '',
+                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',quarter: '',
                  items_released:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
@@ -200,28 +202,25 @@ export default {
         /**
          * method to get unit in dropdown
          */
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-           axios.get(uri)
-           .then(response => {
-               let data = response;
-               this.unitList =  data.data.data;
-           })
-           .catch(function (error) {
-               console.log("Error......"+error)
-           });
-       },
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
 
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                for(leti=0;i<data.data.data.length;i++){
-                this.itemList[data.data.data[i].id] =  data.data.data[i].name;
-                }
-                
+                this.itemList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -230,8 +229,11 @@ export default {
         /**
          * 
          */
-         allOrgList(){
-            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+        allOrgList(dzo_id){
+            if(dzo_id==""){
+                dzo_id=$('#dzongkhag').val();
+            }
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
             this.orgList = [];
             axios.get(uri)
             .then(response =>{
@@ -241,6 +243,17 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
+        },
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="dzongkhag"){
+                this.dzongkhag=$('#dzongkhag').val();
+                this.allOrgList($('#dzongkhag').val());
+            }
         },
 
         /**
@@ -278,9 +291,19 @@ export default {
        
     },
      mounted() { 
+         $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+         Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
-        this.getTermInDropdown();
+       // this.getTermInDropdown();
         this.loadactivedzongkhagList();
 
     }

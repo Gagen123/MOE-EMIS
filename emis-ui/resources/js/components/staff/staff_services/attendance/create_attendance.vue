@@ -1,6 +1,11 @@
 <template>
     <div>
-        <form>
+        <div class="form-group row bg-red" id="submitted_msg" style="display:none">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-1">
+                <label>Your organizaiton has already submitted attendance for this month. You cannot submit agian!</label>
+            </div>
+        </div>
+        <form id="att_form">
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Attendace for: <span class="text-blue">{{attendance_form.monthName}}, {{attendance_form.year}}</span></label>
@@ -44,7 +49,7 @@
                 </div>
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Submit</button>
             </div>
         </form>
     </div>
@@ -86,17 +91,30 @@ export default {
         },
         formaction: function(type){
             if(type=="save"){
-                this.attendance_form.post('staff/staffServices/saveStaffAttendance')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push({name:'list_attendance',query: {data:this.screen_id}});
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
+                Swal.fire({
+                    title: 'Are you sure you wish to submit attendance for this month ?',
+                    text: "Once submitted, you cannot revert or edit details",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, I confirm!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.attendance_form.post('staff/staffServices/saveStaffAttendance')
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Thank you! Attendance details has been sugmitted'
+                            })
+                            this.$router.push({name:'list_attendance',query: {data:this.screen_id}});
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
+                });
+                
             }
 		},
         changefunction(id){
@@ -108,7 +126,6 @@ export default {
             if(id=="staff"){
                 this.attendance_form.staff=$('#staff').val();
             }
-            
         },
         
     },
@@ -119,14 +136,13 @@ export default {
         this.attendance_form.monthName=currentdate.toLocaleString('default', { month: 'long' });
         this.attendance_form.month=(currentdate.getMonth() + 1);
 
-        axios.get('staff/staffServices/checkAttendanceDetailsByDate/'+currentdate.getFullYear()+'/'+currentdate.getMonth() + 1)
+        axios.get('staff/staffServices/checkAttendanceDetailsByDate/'+currentdate.getFullYear()+'/'+(currentdate.getMonth()+1))
         .then(response => {
             let data = response.data.data;
-            // this.attendance_form=data;
-            this.attendance_form.staffList = data.details;
-            this.attendance_form.month = data.month;
-            this.attendance_form.year=data.year;
-            this.attendance_form.remarks=data.remarks;
+            if(data!=null){
+                $('#att_form').hide();
+                $('#submitted_msg').show();
+            }
         })
         .catch(function (error){
             console.log('Error: '+error);
@@ -155,7 +171,6 @@ export default {
                 this.dt =  $("#responsible-table").DataTable()
             });
         }
-    },
-    
+    }
 }
 </script>

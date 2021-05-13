@@ -77,6 +77,7 @@ class StudentMasterController extends Controller{
     }
 
     public function loadStudentMasters($param=""){
+      //  dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
         return $student_masters;
     }

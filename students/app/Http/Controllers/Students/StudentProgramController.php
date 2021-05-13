@@ -78,6 +78,7 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
+        dd('from services');
         $id ="1";
 
         $records = DB::table('cea_school_programme')
