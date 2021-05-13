@@ -33,6 +33,7 @@ export default {
     data(){
         return{
             dataList:[],
+            dt:''
         }
     },
     methods:{
@@ -52,6 +53,15 @@ export default {
     },
     mounted(){ 
         this.loadsubjectList();
+        this.dt =  $("#working-agency-table").DataTable()
     }, 
+    watch: {
+        dataList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
+    },
 }
 </script>

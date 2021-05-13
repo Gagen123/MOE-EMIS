@@ -34,11 +34,12 @@ class LocalProcureController extends Controller
 
          $localpro = LocalProcure::create($localprocure);
         }
-        // dd('localpro'); 
+      //  dd('m here');
+     //    dd('localprocure'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
     public function loadLocalProcure(){
-          // return 'from service of mine';
+        //   return 'from service of mine';
         $list = DB::table('local_procures')
         ->select( 'dateOfprocure as dateOfprocure')->get();
         return $list;

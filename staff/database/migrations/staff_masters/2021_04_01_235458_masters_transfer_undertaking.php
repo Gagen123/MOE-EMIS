@@ -10,6 +10,7 @@ class MastersTransferUndertaking extends Migration{
             $table->char('id',36)->unique()->primary();
             $table->string('name',500)->nullable(false);
             $table->boolean('status')->default(1);
+            $table->char('code',4)->nullable(false);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable(true);
