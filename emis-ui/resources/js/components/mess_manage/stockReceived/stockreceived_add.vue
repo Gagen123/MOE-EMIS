@@ -79,9 +79,9 @@ export default {
     data(){
         return{
             count:1,
-         //   termList:[],
-         //   itemList:[],
-        //    unitList:[],
+            termList:[],
+            itemList:[],
+            unitList:[],
             itemreleasedList:[],
 
             users: [],
@@ -145,32 +145,33 @@ export default {
         /**
          * method to get term in dropdown
          */
-      //  getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
-      //      axios.get(uri)
-      //      .then(response => {
-      //          let data = response.data;
-       //         this.termList = data;
-      //      });
-      //  },
+       getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
+           axios.get(uri)
+           .then(response => {
+               let data = response.data;
+               this.termList = data;
+           });
+       },
 
         /**
          * method to get unit in dropdown
          */
-        //  loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-        // axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         this.unitList =  data.data.data;
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error......"+error)
-        //     });
-        // },
+         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+         axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
 
         /**
-         * method to load attachments
+         * 
          */
-        getFoodRelease(uri = 'mess_manage/getFoodRelease/' +this.form.quarter){
+        getFoodRelease(foodreleaseId){
+            let uri = 'mess_manage/getFoodRelease/' +foodreleaseId
             axios.get(uri)
             .then(response => {
                 let data = response.data;
@@ -189,8 +190,9 @@ export default {
         
     },
      mounted() { 
-        // this.loadActiveUnitList(); 
-        // this.getTermInDropdown();
+         this.loadActiveUnitList(); 
+         this.getTermInDropdown();
+         this.getFoodRelease();
     }
 }
 </script>

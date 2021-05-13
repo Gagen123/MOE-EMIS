@@ -55,12 +55,33 @@ export default {
                 }); 
             }, 300);  
         },
+
         viewStockReceivedList(data){
             data.action='edit';
             this.$router.push({name:'StockReceivedEdit',params: {data:data}});
         },
     },
     mounted(){
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.access_level=data['acess_level'];
+            if(data['acess_level']=="Org"){
+                this.loadDataList(data['Agency_Code']);
+                $('#org_section').hide();
+            }
+            if(data['acess_level']=="Dzongkhag"){
+                this.allOrgList(data['Dzo_Id']);
+            }
+            if(data['acess_level']=="Ministry"){
+                $('#dzongkhag_id').show();
+                this.loadactivedzongkhagList();
+            }
+        })    
+        .catch(errors => { 
+            console.log(errors)
+        });
+
         this.loadStockReceivedList();
     },
     

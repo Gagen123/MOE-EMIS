@@ -43,7 +43,7 @@ class StockReceivedController extends Controller
 //        return $list;
 //    }
 
-    public function getFoodRelease($termId = ""){
+    public function getFoodRelease($foodreleaseId = ""){
        // return 'from service of mine';
       $list = DB::table('stock_receiveds')
       ->select( 'dateOfreceived','quarter')->get();
