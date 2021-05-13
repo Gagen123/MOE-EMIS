@@ -37,7 +37,7 @@ export default {
         }
     },
     methods:{
-       loadworkingagencyList(uri = 'masters/loadStaffMasters/all_staff_major_groupList'){
+        loadworkingagencyList(uri = 'masters/loadStaffMasters/all_staff_major_groupList'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -56,7 +56,7 @@ export default {
     },
     mounted(){ 
         this.loadworkingagencyList();
-        this.dt =  $("#working-agency-table").DataTable()
+        this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
         groupList(val) {

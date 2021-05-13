@@ -136,7 +136,7 @@
                             <li class="nav-item" id="dzongkhagmaster">
                                 <router-link to="/staff_link" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
-                                    Staff 
+                                    Staff  
                                 </router-link>
                             </li>
                             <li class="nav-item" id="dzongkhagmaster">
@@ -177,22 +177,70 @@
                             </li>
                         </ul>
                     </li>
-                    
-
+                    <li class="nav-item has-treeview" id="studentmaster">
+                        <a href="#" class="nav-link pt-1 pb-1">
+                            <i class="nav-icon fas fa-user-graduate"></i>
+                            <p>
+                                Student Masters
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentServices" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                                <router-link to="/StudentServicesMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Non-Academics Master
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentadmission">
+                                <router-link to="/studentAdmissionMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Admission Master
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
+                                <router-link to="/StudentHealthMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Health Master
+                                </router-link>
+                            </li>
+                        </ul>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="studentCea" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
+                                <router-link to="/StudentCeaMasterIndex" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Programs & Clubs
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item has-treeview" id="academicmaster">
                         <router-link to="/academic-link" class="nav-link pt-1 pb-1">
                             <i class="fa fa-book nav-icon"></i>
                             Academic Masters
                         </router-link>
                     </li>
+                </ul>
+            </li>
+            <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
-                        Organization
+                        Organization Transactions
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    <li class="nav-item has-treeview" >
+                        <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-users nav-icon"></i>
+                            Organization Profile
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
                         <router-link to="/establishment_index" class="nav-link">
                             <p>
@@ -227,84 +275,47 @@
                     </li>
                 </ul>
             </li>
-
-            <li class="nav-item has-treeview" id="stafflink">
-                <router-link to="/staff_registration" class="nav-link pt-1 pb-1">
-                    <p>
-                    <i class="nav-icon fas fa-users-cog"></i>
-                        Staff
-                    </p>
-                </router-link>
-                <router-link to="/create_inset" class="nav-link pt-1 pb-1">
-                    <p>
-                    <i class="nav-icon fas fa-list"></i>
-                        Inset
-                    </p>
-                </router-link>
-            </li>
-            <li class="nav-item has-treeview" >
-                <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
-                    <i class="fa fa-users nav-icon"></i>
-                    Organization Profile
-                </router-link>
-            </li>
-            <li class="nav-item" id="track_application">
-                <router-link to="/staff_services_index" class="nav-link">
-                    <p>
-                        <i class="nav-icon fas fa-list"></i>
-                        Staff Services
-                    </p>
-                </router-link>
-            </li>
-
-            <li class="nav-item has-treeview" id="studentmaster">
+            <li class="nav-item has-treeview" id="staff-transaction">
                 <a href="#" class="nav-link pt-1 pb-1">
-                    <i class="nav-icon fas fa-user-graduate"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>
-                        Student Masters
+                        Staff Transactions
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item" id="studentServices" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
-                        <router-link to="/StudentServicesMasterIndex" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                            Non-Academics Master
+                    <li class="nav-item has-treeview" id="stafflink">
+                        <router-link to="/staff_registration" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="nav-icon fas fa-users-cog"></i>
+                                Staff Details
+                            </p>
                         </router-link>
                     </li>
-                </ul>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item" id="studentadmission">
-                        <router-link to="/studentAdmissionMasterIndex" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                            Admission Master
+                    <li class="nav-item has-treeview" id="inset_link">
+                        <router-link to="/create_inset" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="nav-icon fas fa-list"></i>
+                                Hr Development
+                            </p>
                         </router-link>
                     </li>
-                </ul>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item" id="studentHealth" onclick="setclass('mastermanagment','studentmaster','studentHealth')">
-                        <router-link to="/StudentHealthMasterIndex" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                            Health Master
-                        </router-link>
-                    </li>
-                </ul>
-                <ul class="nav nav-treeview">
-                    <li class="nav-item" id="studentCea" onclick="setclass('mastermanagment','studentmaster','studentNonAcademics')">
-                        <router-link to="/StudentCeaMasterIndex" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                            Programs & Clubs
+                    <li class="nav-item" id="track_application">
+                        <router-link to="/staff_services_index" class="nav-link">
+                            <p>
+                                <i class="nav-icon fas fa-list"></i>
+                                Staff Services
+                            </p>
                         </router-link>
                     </li>
                 </ul>
             </li>
            
-
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-user-graduate"></i>
                     <p>
-                        Student
+                        Student Transactions
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
@@ -333,18 +344,9 @@
                             </p>
                         </router-link>
                     </li>
-                </ul>
-            </li>
-            <li class="nav-item has-treeview" id="studentlink">
-                <a href="#" class="nav-link pt-1 pb-1">
-                    <i class="nav-icon fas fa-user-graduate"></i>
-                    <p>
-                        Non-Academic Activities
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                   <li class="nav-item" id="programs" @click="setclass('program','','programsclubs')">
+
+                    <!-- Non-Academic Activities -->
+                    <li class="nav-item" id="programs" @click="setclass('program','','programsclubs')">
                         <router-link to="/student_programs_clubs" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -352,7 +354,7 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="scouts" @click="setclass('scouts','','scouts')">
+                    <li class="nav-item" id="scouts" @click="setclass('scouts','','scouts')">
                         <router-link to="/student_scouts_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -360,7 +362,7 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="clubs" @click="setclass('clubs','','studenttrainings')">
+                    <li class="nav-item" id="clubs" @click="setclass('clubs','','studenttrainings')">
                         <router-link to="/student_trainings_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -370,33 +372,43 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item" id="messlink">
-                <router-link to="/messManage_index" class="nav-link">
-                    <p>
-                      <i class="nav-icon fa fa-carrot"></i>
-                        Mess Management
-                    </p>
-                </router-link>
-            </li>
-           
 
-            <li class="nav-item" id="track_application">
-                <router-link to="/management_body" class="nav-link">
+            <li class="nav-item has-treeview" id="studentlink">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fa fa-adjust"></i>
                     <p>
-                        <i class="nav-icon fas fa-mail-bulk"></i>
-                        Management Body
+                        Other Transactions
+                        <i class="fas fa-angle-left right"></i>
                     </p>
-                </router-link>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="track_application">
+                        <router-link to="/question_answer_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-question nav-icon"></i>
+                                Question & Answer set up
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/messManage_index" class="nav-link">
+                            <p>
+                            <i class="nav-icon fa fa-carrot"></i>
+                                Mess Management
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="track_application">
+                        <router-link to="/management_body" class="nav-link">
+                            <p>
+                                <i class="nav-icon fas fa-mail-bulk"></i>
+                                Management Body
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
             </li>
 
-            <!-- <li class="nav-item" id="track_application">
-                <router-link to="/question_answer_index" class="nav-link">
-                    <p>
-                        <i class="fa fa-question nav-icon"></i>
-                        Question & Answer set up
-                    </p>
-                </router-link>
-            </li> -->
             <li class="nav-item" id="track_application">
                 <router-link to="/track_application" class="nav-link">
                     <p>
