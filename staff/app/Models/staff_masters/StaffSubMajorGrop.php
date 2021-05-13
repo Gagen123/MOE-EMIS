@@ -23,6 +23,6 @@ class StaffSubMajorGrop extends Model{
     ];
 
     public function majorgroup() {
-        return $this->belongsTo(StaffMajorGrop::class, 'group_id');
+        return $this->belongsTo(StaffMajorGrop::class, 'group_id')->select('id','name');
     }
 }

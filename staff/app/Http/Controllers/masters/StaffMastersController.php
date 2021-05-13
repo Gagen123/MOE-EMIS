@@ -53,10 +53,10 @@ class StaffMastersController extends Controller{
                     $table="master_stf_subject";
                 }
                 $rules = [
-                    'parent_field'    =>  'required',
-                    'name'  =>  'required|unique:'.$table,
-                    'code'    =>  'required|unique:'.$table,
-                    'status'    =>  'required',
+                    'parent_field'      =>  'required',
+                    'name'              =>  'required|unique:'.$table,
+                    'code'              =>  'required|unique:'.$table,
+                    'status'            =>  'required',
                 ];
                 $customMessages = [
                     'parent_field.required' => 'This field is required',
@@ -64,19 +64,21 @@ class StaffMastersController extends Controller{
 
                 $this->validate($request, $rules,$customMessages);
                 $data = [
-                    'group_id'  =>  $request['parent_field'],
-                    'sub_area_id'  =>  $request['parent_field'],
+                    'group_id'      =>  $request['parent_field'],
+                    'sub_area_id'   =>  $request['parent_field'],
                     'sub_group_id'  =>  $request['parent_field'],
-                    'name'  =>  $request['name'],
-                    'code'    =>  $request['code'],
-                    'status'    =>  $request['status'],
-                    'created_by'=>$request['user_id'],
-                    'created_at'=>date('Y-m-d h:i:s'),
+                    'name'          =>  $request['name'],
+                    'code'          =>  $request['code'],
+                    'status'        =>  $request['status'],
+                    'created_by'    =>  $request['user_id'],
+                    'created_at'    =>  date('Y-m-d h:i:s'),
                 ];
+                
                 if($request['record_type']=="sub_major_group"){
                     $response_data = StaffSubMajorGrop::create($data);
                 }
                 if($request['record_type']=="position_title"){
+                    $data=$data+['position_level_id'   =>$request->position_level];
                     $response_data = PositionTitle::create($data);
                 }
                 if($request['record_type']=="staff_subject"){
@@ -466,7 +468,7 @@ class StaffMastersController extends Controller{
         }
 
         if($param=="all_position_title_List"){
-            return $this->successResponse(PositionTitle::with('submajorgroup')->get());
+            return $this->successResponse(PositionTitle::with('submajorgroup','level')->get());
         }
         if($param=="all_active_position_title"){
             return $this->successResponse(PositionTitle::where ('status', 1)->get());
@@ -474,6 +476,9 @@ class StaffMastersController extends Controller{
 
         if($param=="all_position_level_List"){
             return $this->successResponse(PositionLevel::all());
+        }
+        if($param=="all_active_position_level_List"){
+            return $this->successResponse(PositionLevel::where ('status', 1)->get());
         }
         if($param=="all_qualification_tpe_List"){
             return $this->successResponse(QualificationType::all());
@@ -640,6 +645,9 @@ class StaffMastersController extends Controller{
     public function loadStaffDropdownMasters($model="",$parent_id=""){
         if($model=="StaffAwardType"){
             return $this->successResponse(StaffAwardType::where('parent_id',$parent_id)->get());
+        }
+        if($model=="StaffSubMajorGrop"){
+            return $this->successResponse(StaffSubMajorGrop::where('group_id',$parent_id)->get());
         }
     }
 }

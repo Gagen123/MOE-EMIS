@@ -1,7 +1,7 @@
 <template>
     <div> 
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="form-inline "><h6 class="pt-1">Staff Masters</h6></li>
+            <li class="form-inline "><h6 class="pt-1">Staff Transfer Masters</h6></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
@@ -43,11 +43,6 @@ export default {
                 let data = response;
                 this.menubar =  data.data;  
             })
-            .catch(function (error) { 
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
         },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});
