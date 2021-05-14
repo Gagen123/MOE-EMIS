@@ -20,6 +20,7 @@ class CreateStaffManagementMeetingsTable extends Migration
             $table->string('updated_by',36)->nullable(true);
             $table->timestamps();
         });
+
     }
     public function down()
     {

@@ -199,14 +199,6 @@
                                 </select>
                                 <has-error :form="staff" field="type"></has-error>
                             </div>
-                            <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="sele-staff_details" style="display:none">
-                                <label>Select Staff Member:<span class="text-danger">*</span></label>
-                                <select v-model="staff.staff" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
-                                    <option value="">--Select--</option>
-                                    <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}, {{item.position_title.name}}</option>
-                                </select>
-                                <has-error :form="staff" field="staff"></has-error>
-                            </div>  -->
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="non-staff_details" style="display:none">
                                 <label>Name:<span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" v-model="staff.nonstaffname" @change="remove_err('nonstaffname')" id="nonstaffname">
@@ -318,7 +310,7 @@ export default {
             }
             else if(nextclass=="final-tab"){
                 Swal.fire({
-                    text: "Are you sure you wish to safe this details ?",
+                    text: "Are you sure you wish to save this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -326,6 +318,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
+                        
                         this.form.post('staff/managementBody/updateManagementBody')
                         .then((response) => {
                             Swal.fire(
@@ -358,18 +351,9 @@ export default {
             this.staff.reset();
             $('#type').val(type);
             this.staff.emptye=type;
-            // $('#sele-staff_details').hide();
-            // $('#non-staff_details').hide();
-            // $('#nonstaffaddress').hide();
-            // $('#nonstaffcontact').hide();
-            // if(type=="Staff"){
-            //     $('#sele-staff_details').show();
-            // }
-            // else{
             $('#non-staff_details').show();
             $('#nonstaffaddress').show();
             $('#nonstaffcontact').show();
-            // }
             this.staff.fromdate=$('#from_date').val();
             this.staff.todate=$('#to_date').val();
             $('#addboardmembers').modal('show');

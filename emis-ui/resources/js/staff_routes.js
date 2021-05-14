@@ -470,8 +470,6 @@ const routes = [
                     { path: '/create_management_meeting',name:'create_management_meeting', component: require('./components/staff/management/create_meeting/create_management_meeting.vue').default},
                 ],
             },
-
-
             { path: '/acknowledgement', name:'acknowledgement', component: require('./components/staff/acknowledgement.vue').default },
             { path: '/acknowledgement_for_errors', name:'acknowledgement_for_errors', component: require('./components/staff/acknowledgement_for_errors.vue').default },
         ]

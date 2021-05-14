@@ -294,6 +294,7 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadcreatedManagementBodyComposition', [App\Http\Controllers\staff\ManagementBodyController::class, 'loadcreatedManagementBodyComposition'])->name('loadcreatedManagementBodyComposition');
         Route::get('/loadcurrentbaord/{id}', [App\Http\Controllers\staff\ManagementBodyController::class, 'loadcurrentbaord'])->name('loadcurrentbaord');
         Route::post('/saveManagementMeeting', [App\Http\Controllers\staff\ManagementBodyController::class, 'saveManagementMeeting'])->name('saveManagementMeeting');
+        Route::post('/saveResolutions', [App\Http\Controllers\staff\ManagementBodyController::class, 'saveResolutions'])->name('saveResolutions');
         Route::get('/loadCurrentMeeting', [App\Http\Controllers\staff\ManagementBodyController::class, 'loadCurrentMeeting'])->name('loadCurrentMeeting');
     });
     Route::prefix('staffServices')->group(function (){
