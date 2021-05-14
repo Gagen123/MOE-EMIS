@@ -128,6 +128,7 @@ class AdministrationController extends Controller{
             'name'            =>$request['name'],
             'parent_field'    =>$request['parent_field'],
             'parent_field1'   =>$request['parent_field1'],
+            'position_level'  =>$request['position_level'],
             'status'          =>$request['status'],
             'code'            =>$request['code'],
             'actiontype'      =>$request['action_type'],

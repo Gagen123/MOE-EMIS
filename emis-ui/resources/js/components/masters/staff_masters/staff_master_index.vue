@@ -16,62 +16,15 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'major_group_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Major Group
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'sub_major_group_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Sub Group
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'position_title_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Position Title
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'position_level_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Position Level
-                    </router-link>
-                </li>
                 
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'transfer_reason'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Transfer Reason
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'transfer_undertaking'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Transfer Undertaking
-                    </router-link>
-                </li>
+                
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'service_type'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Service Type Master
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'management_body_designation'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Mgn. Body Designation
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'qualification_type'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qualification Type
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'qualification_level'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qualification Level
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'staff_qualification'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Qualification
-                    </router-link>
-                </li>
+              
+                
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_relationship'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Staff Relationship

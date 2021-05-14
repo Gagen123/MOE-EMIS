@@ -4,33 +4,8 @@ const routes = [
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
         children:[
             {path: '/',name:'staff_link', component: require('./components/masters/staff_masters/staff_master_list.vue').default },
-            { path: '/transfer_reason',
-                component: require('./components/masters/staff_masters/transfer_reason/transfer_reason.vue').default,
-                children:[
-                { path: '/',name:'transfer_reason', component: require('./components/masters/staff_masters/transfer_reason/list_transfer_reason.vue').default },
-                { path: '/List_transfer_reason',name:'List_transfer_reason', component: require('./components/masters/staff_masters/transfer_reason/list_transfer_reason.vue').default },
-                { path: '/create_transfer_reason',name:'create_transfer_reason', component: require('./components/masters/staff_masters/transfer_reason/create_transfer_reason.vue').default },
-                { path: '/edit_transfer_reason', name:'edit_transfer_reason', component: require('./components/masters/staff_masters/transfer_reason/edit_transfer_reason.vue').default },
-                ],
-            },
-            { path: '/transfer_undertaking',
-                component: require('./components/masters/staff_masters/transfer_undertaking/transfer_undertaking_index.vue').default,
-                children:[
-                { path: '/',name:'transfer_undertaking', component: require('./components/masters/staff_masters/transfer_undertaking/list_transfer_undertaking.vue').default },
-                { path: '/list_transfer_undertaking',name:'list_transfer_undertaking', component: require('./components/masters/staff_masters/transfer_undertaking/list_transfer_undertaking.vue').default },
-                { path: '/create_transfer_undertaking',name:'create_transfer_undertaking', component: require('./components/masters/staff_masters/transfer_undertaking/create_transfer_undertaking.vue').default },
-                { path: '/edit_transfer_undertaking', name:'edit_transfer_undertaking', component: require('./components/masters/staff_masters/transfer_undertaking/edit_transfer_undertaking.vue').default },
-                ],
-            },
-            { path: '/major_group_master',
-                component: require('./components/masters/staff_masters/major_group/major_group_index.vue').default,
-                children:[
-                    { path: '/',name:'major_group_master', component: require('./components/masters/staff_masters/major_group/list_major_group.vue').default },
-                    { path: '/list_major_group',name:'list_major_group', component: require('./components/masters/staff_masters/major_group/list_major_group.vue').default },
-                    { path: '/create_major_group',name:'create_major_group', component: require('./components/masters/staff_masters/major_group/create_major_group.vue').default },
-                    { path: '/edit_major_group', name:'edit_major_group', component: require('./components/masters/staff_masters/major_group/edit_major_group.vue').default },
-                ],
-            },
+           
+            
             { path: '/marital_status',
                 component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default,
                 children:[
@@ -86,61 +61,7 @@ const routes = [
                 ],
             },
 
-            { path: '/sub_major_group_master',
-                component: require('./components/masters/staff_masters/major_sub_group/subgroup_index.vue').default,
-                children:[
-                { path: '/',name:'sub_major_group_master', component: require('./components/masters/staff_masters/major_sub_group/list_sub_group.vue').default },
-                { path: '/list_sub_major_group_master',name:'list_sub_major_group_master', component: require('./components/masters/staff_masters/major_sub_group/list_sub_group.vue').default },
-                { path: '/create_sub_major_group_master',name:'create_sub_major_group_master', component: require('./components/masters/staff_masters/major_sub_group/create_sub_group.vue').default },
-                { path: '/edit_sub_major_group_master', name:'edit_sub_major_group_master', component: require('./components/masters/staff_masters/major_sub_group/edit_sub_group.vue').default },
-                ],
-            },
-            { path: '/position_title_master',
-                component: require('./components/masters/staff_masters/position_title/position_title_index.vue').default,
-                children:[
-                { path: '/',name:'position_title_master', component: require('./components/masters/staff_masters/position_title/list_position_title.vue').default },
-                { path: '/list_position_title',name:'list_position_title', component: require('./components/masters/staff_masters/position_title/list_position_title.vue').default },
-                { path: '/create_position_title',name:'create_position_title', component: require('./components/masters/staff_masters/position_title/create_position_title.vue').default },
-                { path: '/edit_position_title', name:'edit_position_title', component: require('./components/masters/staff_masters/position_title/edit_position_title.vue').default },
-                ],
-            },
-            { path: '/position_level_master',
-                component: require('./components/masters/staff_masters/position_level/position_level_index.vue').default,
-                children:[
-                { path: '/',name:'position_level_master', component: require('./components/masters/staff_masters/position_level/list_position_level.vue').default },
-                { path: '/list_position_level_master',name:'list_position_level_master', component: require('./components/masters/staff_masters/position_level/list_position_level.vue').default },
-                { path: '/create_position_level_master',name:'create_position_level_master', component: require('./components/masters/staff_masters/position_level/create_position_level.vue').default },
-                { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_masters/position_level/edit_position_level.vue').default },
-                ],
-            },
-
-            { path: '/qualification_type',
-                component: require('./components/masters/staff_masters/qualification_type/qualification_type_index.vue').default,
-                children:[
-                { path: '/',name:'qualification_type', component: require('./components/masters/staff_masters/qualification_type/list_qualification_type.vue').default },
-                { path: '/list_qualification_type',name:'list_qualification_type', component: require('./components/masters/staff_masters/qualification_type/list_qualification_type.vue').default },
-                { path: '/create_qualification_type',name:'create_qualification_type', component: require('./components/masters/staff_masters/qualification_type/create_qualification_type.vue').default },
-                { path: '/edit_qualification_type', name:'edit_qualification_type', component: require('./components/masters/staff_masters/qualification_type/edit_qualification_type.vue').default },
-                ],
-            },
-            { path: '/qualification_level',
-                component: require('./components/masters/staff_masters/qualification_level/qualification_level_index.vue').default,
-                children:[
-                { path: '/',name:'qualification_level', component: require('./components/masters/staff_masters/qualification_level/list_qualification_level.vue').default },
-                { path: '/list_qualification_level',name:'list_qualification_level', component: require('./components/masters/staff_masters/qualification_level/list_qualification_level.vue').default },
-                { path: '/create_qualification_level',name:'create_qualification_level', component: require('./components/masters/staff_masters/qualification_level/create_qualification_level.vue').default },
-                { path: '/edit_qualification_level', name:'edit_qualification_level', component: require('./components/masters/staff_masters/qualification_level/edit_qualification_level.vue').default },
-                ],
-            },
-            { path: '/staff_qualification',
-                component: require('./components/masters/staff_masters/staff_qualification/staff_qualification_index.vue').default,
-                children:[
-                { path: '/',name:'staff_qualification', component: require('./components/masters/staff_masters/staff_qualification/list_staff_qualification.vue').default },
-                { path: '/list_staff_qualification',name:'list_staff_qualification', component: require('./components/masters/staff_masters/staff_qualification/list_staff_qualification.vue').default },
-                { path: '/create_staff_qualification',name:'create_staff_qualification', component: require('./components/masters/staff_masters/staff_qualification/create_staff_qualification.vue').default },
-                { path: '/edit_staff_qualification', name:'edit_staff_qualification', component: require('./components/masters/staff_masters/staff_qualification/edit_staff_qualification.vue').default },
-                ],
-            },
+            
             { path: '/staff_relationship',
                 component: require('./components/masters/staff_masters/relationship/relationship_index.vue').default,
                 children:[
@@ -154,6 +75,112 @@ const routes = [
 
 
         ],
+    },
+    
+    //Staff Transfer Masters
+    { path: '/qualification_index',
+        component: require('./components/masters/staff_qualification/staff_qualification_index.vue').default,
+        children:[
+            {path: '/',name:'qualification_index', component: require('./components/masters/staff_qualification/staff_qualification_list.vue').default },
+            
+            { path: '/qualification_type',
+                component: require('./components/masters/staff_qualification/qualification_type/qualification_type_index.vue').default,
+                children:[
+                { path: '/',name:'qualification_type', component: require('./components/masters/staff_qualification/qualification_type/list_qualification_type.vue').default },
+                { path: '/list_qualification_type',name:'list_qualification_type', component: require('./components/masters/staff_qualification/qualification_type/list_qualification_type.vue').default },
+                { path: '/create_qualification_type',name:'create_qualification_type', component: require('./components/masters/staff_qualification/qualification_type/create_qualification_type.vue').default },
+                { path: '/edit_qualification_type', name:'edit_qualification_type', component: require('./components/masters/staff_qualification/qualification_type/edit_qualification_type.vue').default },
+                ],
+            },
+            { path: '/qualification_level',
+                component: require('./components/masters/staff_qualification/qualification_level/qualification_level_index.vue').default,
+                children:[
+                { path: '/',name:'qualification_level', component: require('./components/masters/staff_qualification/qualification_level/list_qualification_level.vue').default },
+                { path: '/list_qualification_level',name:'list_qualification_level', component: require('./components/masters/staff_qualification/qualification_level/list_qualification_level.vue').default },
+                { path: '/create_qualification_level',name:'create_qualification_level', component: require('./components/masters/staff_qualification/qualification_level/create_qualification_level.vue').default },
+                { path: '/edit_qualification_level', name:'edit_qualification_level', component: require('./components/masters/staff_qualification/qualification_level/edit_qualification_level.vue').default },
+                ],
+            },
+            { path: '/staff_qualification', 
+                component: require('./components/masters/staff_qualification/staff_qualification/staff_qualification_index.vue').default,
+                children:[
+                { path: '/',name:'staff_qualification', component: require('./components/masters/staff_qualification/staff_qualification/list_staff_qualification.vue').default },
+                { path: '/list_staff_qualification',name:'list_staff_qualification', component: require('./components/masters/staff_qualification/staff_qualification/list_staff_qualification.vue').default },
+                { path: '/create_staff_qualification',name:'create_staff_qualification', component: require('./components/masters/staff_qualification/staff_qualification/create_staff_qualification.vue').default },
+                { path: '/edit_staff_qualification', name:'edit_staff_qualification', component: require('./components/masters/staff_qualification/staff_qualification/edit_staff_qualification.vue').default },
+                ],
+            },
+
+        ]
+    },
+
+    //Position Directory
+    { path: '/position_directory_index',
+        component: require('./components/masters/staff_position_directory/staff_position_directory_index.vue').default,
+        children:[
+            {path: '/',name:'position_directory_index', component: require('./components/masters/staff_position_directory/staff_position_directory_list.vue').default },
+            { path: '/major_group_master',
+                component: require('./components/masters/staff_position_directory/major_group/major_group_index.vue').default,
+                children:[
+                    { path: '/',name:'major_group_master', component: require('./components/masters/staff_position_directory/major_group/list_major_group.vue').default },
+                    { path: '/list_major_group',name:'list_major_group', component: require('./components/masters/staff_position_directory/major_group/list_major_group.vue').default },
+                    { path: '/create_major_group',name:'create_major_group', component: require('./components/masters/staff_position_directory/major_group/create_major_group.vue').default },
+                    { path: '/edit_major_group', name:'edit_major_group', component: require('./components/masters/staff_position_directory/major_group/edit_major_group.vue').default },
+                ],
+            },
+            { path: '/sub_major_group_master',
+            component: require('./components/masters/staff_position_directory/major_sub_group/subgroup_index.vue').default,
+                children:[
+                { path: '/',name:'sub_major_group_master', component: require('./components/masters/staff_position_directory/major_sub_group/list_sub_group.vue').default },
+                { path: '/list_sub_major_group_master',name:'list_sub_major_group_master', component: require('./components/masters/staff_position_directory/major_sub_group/list_sub_group.vue').default },
+                { path: '/create_sub_major_group_master',name:'create_sub_major_group_master', component: require('./components/masters/staff_position_directory/major_sub_group/create_sub_group.vue').default },
+                { path: '/edit_sub_major_group_master', name:'edit_sub_major_group_master', component: require('./components/masters/staff_position_directory/major_sub_group/edit_sub_group.vue').default },
+                ],
+            },
+            { path: '/position_title_master',
+                component: require('./components/masters/staff_position_directory/position_title/position_title_index.vue').default,
+                children:[
+                { path: '/',name:'position_title_master', component: require('./components/masters/staff_position_directory/position_title/list_position_title.vue').default },
+                { path: '/list_position_title',name:'list_position_title', component: require('./components/masters/staff_position_directory/position_title/list_position_title.vue').default },
+                { path: '/create_position_title',name:'create_position_title', component: require('./components/masters/staff_position_directory/position_title/create_position_title.vue').default },
+                { path: '/edit_position_title', name:'edit_position_title', component: require('./components/masters/staff_position_directory/position_title/edit_position_title.vue').default },
+                ],
+            },
+            { path: '/position_level_master',
+                component: require('./components/masters/staff_position_directory/position_level/position_level_index.vue').default,
+                children:[
+                { path: '/',name:'position_level_master', component: require('./components/masters/staff_position_directory/position_level/list_position_level.vue').default },
+                { path: '/list_position_level_master',name:'list_position_level_master', component: require('./components/masters/staff_position_directory/position_level/list_position_level.vue').default },
+                { path: '/create_position_level_master',name:'create_position_level_master', component: require('./components/masters/staff_position_directory/position_level/create_position_level.vue').default },
+                { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_position_directory/position_level/edit_position_level.vue').default },
+                ],
+            },
+        ]
+    },
+    //Staff Transfer Masters
+    { path: '/transfer_master_index',
+        component: require('./components/masters/staff_transfer/staff_transfer_index.vue').default,
+        children:[
+            {path: '/',name:'transfer_master_index', component: require('./components/masters/staff_transfer/staff_transfer_list.vue').default },
+            { path: '/transfer_reason',
+                component: require('./components/masters/staff_transfer/transfer_reason/transfer_reason.vue').default,
+                children:[
+                    { path: '/',name:'transfer_reason', component: require('./components/masters/staff_transfer/transfer_reason/list_transfer_reason.vue').default },
+                    { path: '/List_transfer_reason',name:'List_transfer_reason', component: require('./components/masters/staff_transfer/transfer_reason/list_transfer_reason.vue').default },
+                    { path: '/create_transfer_reason',name:'create_transfer_reason', component: require('./components/masters/staff_transfer/transfer_reason/create_transfer_reason.vue').default },
+                    { path: '/edit_transfer_reason', name:'edit_transfer_reason', component: require('./components/masters/staff_transfer/transfer_reason/edit_transfer_reason.vue').default },
+                ],
+            },
+            { path: '/transfer_undertaking',
+                component: require('./components/masters/staff_transfer/transfer_undertaking/transfer_undertaking_index.vue').default,
+                children:[
+                { path: '/',name:'transfer_undertaking', component: require('./components/masters/staff_transfer/transfer_undertaking/list_transfer_undertaking.vue').default },
+                { path: '/list_transfer_undertaking',name:'list_transfer_undertaking', component: require('./components/masters/staff_transfer/transfer_undertaking/list_transfer_undertaking.vue').default },
+                { path: '/create_transfer_undertaking',name:'create_transfer_undertaking', component: require('./components/masters/staff_transfer/transfer_undertaking/create_transfer_undertaking.vue').default },
+                { path: '/edit_transfer_undertaking', name:'edit_transfer_undertaking', component: require('./components/masters/staff_transfer/transfer_undertaking/edit_transfer_undertaking.vue').default },
+                ],
+            },
+        ]
     },
 
     { path: '/management_body_link',
@@ -410,7 +437,11 @@ const routes = [
                 ],
             },
 
+<<<<<<< HEAD
             { path: '/transfer_acknowledgement', name:'transfer_acknowledgement',
+=======
+            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
+>>>>>>> 2a2e685f835340abc51663ed35a2a7b43d1e9b10
             component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
     },

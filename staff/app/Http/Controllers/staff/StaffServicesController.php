@@ -219,25 +219,31 @@ class StaffServicesController extends Controller{
     }
     
     public function loadStaffattendance($param=""){
-        $response_data="";
-        if(strpos($param,'SSS')){
-            $access_level=explode('SSS',$param)[0];
-            if($access_level=="Ministry"){
-                $response_data=StaffAttendance::all();
-            }
-            if($access_level=="Dzongkhag"){
-                $response_data=where('dzongkhag_id',explode('SSS',$param)[1])->get();
-            }
-            if($access_level=="Org"){
-                $response_data=StaffAttendance::where('org_id',explode('SSS',$param)[2])->get();
-            }
-        }
+        // $response_data="";
+        // if(strpos($param,'SSS')){
+        //     $access_level=explode('SSS',$param)[0];
+        //     if($access_level=="Ministry"){
+        //         $response_data=StaffAttendance::all();
+        //     }
+        //     if($access_level=="Dzongkhag"){
+        //         $response_data=where('dzongkhag_id',explode('SSS',$param)[1])->get();
+        //     }
+        //     if($access_level=="Org"){
+        //         $response_data=StaffAttendance::where('org_id',explode('SSS',$param)[2])->get();
+        //     }
+        // }
+        $response_data=StaffAttendance::where('org_id',$param)->get();
         return $this->successResponse($response_data);
     }
     
     public function loadattendanceDetails($id=""){
         $att_detials=StaffAttendance::where('id',$id)->first();
         $att_detials->details=StaffAttendanceDetails::where('att_id',$att_detials->id)->get();
+        return $this->successResponse($att_detials);
+    }
+    
+    public function checkAttendanceDetailsByDate($year="",$month="",$org_id=""){
+        $att_detials=StaffAttendance::where('year',$year)->where('month',$month)->where('org_id',$org_id)->first();
         return $this->successResponse($att_detials);
     }
 }

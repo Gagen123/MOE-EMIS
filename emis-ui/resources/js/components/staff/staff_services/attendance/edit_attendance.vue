@@ -2,15 +2,21 @@
     <div>
         <form>
             <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Attendace for: <span class="text-blue">{{months[attendance_form.month]}}, {{attendance_form.year}} </span> </label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Created By: <span class="text-blue">{{attendance_form.created_by}}</span> </label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Created At: <span class="text-blue">{{attendance_form.created_at}}</span> </label>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="responsible-table" class="table table-bordered text-sm table-striped">
                         <thead>
-                            <tr>
+                            <tr>  
                                 <th>SL#</th>
                                 <th>CID</th>
                                 <th>Name</th>
@@ -60,6 +66,8 @@ export default {
                 id:'',
                 year:'',
                 month:'',
+                created_at:'',
+                created_by:'',
                 monthName:'',
                 remarks:'',
                 staffList:[],
@@ -123,6 +131,8 @@ export default {
             this.attendance_form.staffList = data.details;
             this.attendance_form.month = data.month;
             this.attendance_form.year=data.year;
+            this.attendance_form.created_at=data.created_at;
+            this.attendance_form.created_by=response.data.created_by;
             this.attendance_form.remarks=data.remarks;
         })
         .catch(function (error){
