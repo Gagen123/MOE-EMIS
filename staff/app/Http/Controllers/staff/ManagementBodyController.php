@@ -85,7 +85,6 @@ class ManagementBodyController extends Controller{
             'to_date'           =>  $request->todate,
         ];
         $response_data = ManagementBodyComposition::create($mgmn_details);
-
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -116,7 +115,6 @@ class ManagementBodyController extends Controller{
         if($request->type=="edit"){
             StaffManagementMeeting::where('id', $request->id)->update($meeting_data);
             $response_data = StaffManagementMeeting::where('id', $request->id)->first();
-
             return $this->successResponse("success edit");
         }
         else{
@@ -144,7 +142,6 @@ class ManagementBodyController extends Controller{
                         'created_at'  => date('Y-m-d h:i:s')
                     ]);
                 }
-
                 return $this->successResponse($met_data, Response::HTTP_CREATED);
 
             }else{
@@ -175,7 +172,6 @@ class ManagementBodyController extends Controller{
     }
 
     public function saveResolutions(Request $request){
-        // dd($request);
         // $rules = [
         //     'minutes'        =>'required',
         // ];
@@ -184,16 +180,22 @@ class ManagementBodyController extends Controller{
         // ];
         // $this->validate($request, $rules,$customMessages);
         foreach($request->minutes as $_data){
-            // $data = (object) $_data;
             $resolution =[
                 'meeting_id' =>$_data["meeting_id"],
                 'minutes'    =>$_data["minutes"],
-                'status'     =>'pending',
+                'status'     =>'created',
                 'created_by' =>$request->created_by,
                 'created_at' =>date('Y-m-d h:i:s'),
             ];
-            // dd($resolution);
             StaffManagementMeetingMinutes::create($resolution);
+            if($resolution){
+                $meeting_id = $resolution["meeting_id"];
+                $updatedata = [
+                    'status' => 'created'
+                ];
+                StaffManagementMeeting::where('id', $meeting_id)->update($updatedata);
+                StaffManagementMeetingMember::where('meeting_id', $meeting_id)->update($updatedata);
+            }
         }
         return $this->successResponse('success');
     }

@@ -4,8 +4,8 @@ const routes = [
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
         children:[
             {path: '/',name:'staff_link', component: require('./components/masters/staff_masters/staff_master_list.vue').default },
-           
-            
+
+
             { path: '/marital_status',
                 component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default,
                 children:[
@@ -61,7 +61,7 @@ const routes = [
                 ],
             },
 
-            
+
             { path: '/staff_relationship',
                 component: require('./components/masters/staff_masters/relationship/relationship_index.vue').default,
                 children:[
@@ -76,13 +76,13 @@ const routes = [
 
         ],
     },
-    
+
     //Staff Transfer Masters
     { path: '/qualification_index',
         component: require('./components/masters/staff_qualification/staff_qualification_index.vue').default,
         children:[
             {path: '/',name:'qualification_index', component: require('./components/masters/staff_qualification/staff_qualification_list.vue').default },
-            
+
             { path: '/qualification_type',
                 component: require('./components/masters/staff_qualification/qualification_type/qualification_type_index.vue').default,
                 children:[
@@ -101,7 +101,7 @@ const routes = [
                 { path: '/edit_qualification_level', name:'edit_qualification_level', component: require('./components/masters/staff_qualification/qualification_level/edit_qualification_level.vue').default },
                 ],
             },
-            { path: '/staff_qualification', 
+            { path: '/staff_qualification',
                 component: require('./components/masters/staff_qualification/staff_qualification/staff_qualification_index.vue').default,
                 children:[
                 { path: '/',name:'staff_qualification', component: require('./components/masters/staff_qualification/staff_qualification/list_staff_qualification.vue').default },
@@ -437,11 +437,7 @@ const routes = [
                 ],
             },
 
-<<<<<<< HEAD
             { path: '/transfer_acknowledgement', name:'transfer_acknowledgement',
-=======
-            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement', 
->>>>>>> 2a2e685f835340abc51663ed35a2a7b43d1e9b10
             component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
     },

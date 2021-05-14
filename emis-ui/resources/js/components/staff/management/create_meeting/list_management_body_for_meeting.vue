@@ -56,7 +56,6 @@ export default {
             }).catch(function (error) {console.log('err: '+error);});
         },
         openMeeting(item){
-            // alert(item.id);
             this.$router.push({name:"open_meeting",params:{data:item.id}});
         }
     },
