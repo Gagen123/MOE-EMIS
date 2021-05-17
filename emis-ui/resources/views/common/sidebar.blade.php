@@ -175,7 +175,7 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview" id="academicmaster">
-                        <router-link to="/academic-link" class="nav-link pt-1 pb-1">
+                        <router-link to="/academic-master" class="nav-link pt-1 pb-1">
                             <i class="fa fa-book nav-icon"></i>
                             Academic Masters
                         </router-link>
@@ -191,7 +191,13 @@
                         </router-link> 
                     </li>-->
                 </ul>
-
+            <!--academic-->
+                <li class="nav-item has-treeview" id="academic">
+                    <router-link to="/academic" class="nav-link pt-1 pb-1">
+                        <i class="nav-icon fas fa-book"></i>
+                            Academics
+                    </router-link>
+                </li>
                 <li class="nav-item has-treeview" id="organizationlink">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>

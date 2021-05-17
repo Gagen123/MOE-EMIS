@@ -19,6 +19,7 @@ class AcaClassSubject extends Migration
             $table->char('org_stream_id',36)->index();
             $table->char('aca_sub_id',36)->index();
             $table->char('aca_rating_type_id',36)->index();
+            $table->decimal('pass_score',6,2)->nullable();
             $table->unsignedTinyInteger('is_elective')->index()->default(0)->comment('1-Subject is elective for the class');
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();

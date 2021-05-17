@@ -36,8 +36,9 @@ import questionroutes from "./question_routes";
 import staff from "./staff_routes";
 import organization from "./organization";
 import student_routes from "./student_routes";
+import academic_routes from "./academic_routes";
 var allRoutes = [];
-allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes);
+allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,academic_routes);
 const routes = allRoutes;
 const router = new VueRouter({
     routes

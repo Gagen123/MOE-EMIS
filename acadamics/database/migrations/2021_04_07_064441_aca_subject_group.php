@@ -1,5 +1,6 @@
 <?php
 
+use Database\Seeders\SubjectGroupSeeder;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +22,8 @@ class AcaSubjectGroup extends Migration
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
         });
+        $seeder = new SubjectGroupSeeder();
+        $seeder->run();
     }
 
     /**

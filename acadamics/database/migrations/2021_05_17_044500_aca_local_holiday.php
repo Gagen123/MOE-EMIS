@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AcaStudentResultFinal extends Migration
+class AcaLocalHoliday extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class AcaStudentResultFinal extends Migration
      */
     public function up()
     {
-        Schema::create('aca_student_result_final', function (Blueprint $table) {
-            $table->char('id',36)->primary();
-            $table->char('std_student_id',36)->index();
-            $table->unsignedTinyInteger('result')->index()->default(1)->comment('1-Promoted; 0-Detained');
-            $table->string('remarks',500)->nullable();
+        Schema::create('aca_local_holiday', function (Blueprint $table) {
+            $table->integer('id')->primary();
+            $table->integer('org_id')->index();
+            $table->date('holiday_date');
+            $table->string('description',200);
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
@@ -31,6 +31,6 @@ class AcaStudentResultFinal extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('aca_student_result_final');
+        Schema::dropIfExists('aca_local_holiday');
     }
 }

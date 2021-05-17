@@ -5,7 +5,7 @@
                 <table id="subject-group-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>SL#</th>
+                            <th>Display Order</th>
                             <th>Subject Group Name</th>
                             <th>Status</th>
                             <th>Action</th> 
@@ -13,13 +13,12 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in subjectgroupList" :key="index">
-                            <td>{{ index + 1 }}</td>
+                            <td class="text-right">{{ item.display_order }}</td>
                             <td>{{ item.name }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
-                                    <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
                                 </div>
                             </td>
                         </tr>
@@ -42,7 +41,6 @@ export default {
             .then(response => {
                 let data = response 
                 this.subjectgroupList =  data.data.data;
-                // console.table(this.subjectgroupList)
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
@@ -53,6 +51,10 @@ export default {
                 $("#subject-group-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
+                    columnDefs: [
+                        { width: 50, targets: 0},
+                    ],
+
                 }); 
             }, 3000);
         },

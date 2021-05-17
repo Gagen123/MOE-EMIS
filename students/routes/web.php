@@ -62,6 +62,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
+		$router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
 
         $router->post('/saveStudentAward',['uses' => 'Students\StudentAwardController@saveStudentAward']);
         $router->get('/loadStudentAwards/{param}',['uses' => 'Students\StudentAwardController@loadStudentAwards']);

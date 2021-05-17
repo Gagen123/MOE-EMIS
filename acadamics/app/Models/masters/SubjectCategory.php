@@ -14,6 +14,7 @@ class SubjectCategory extends Model
     protected $fillable = [
         'id',
         'name',
+        'display_order',
         'status', 
         'created_by',
         'created_at',

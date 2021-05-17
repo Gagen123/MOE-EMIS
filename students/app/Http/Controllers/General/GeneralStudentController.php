@@ -205,5 +205,21 @@ class GeneralStudentController extends Controller
         }
         return $databaseModel;
     }
+	  public function getStudents($org_id , Request $request){
+        $query = 'SELECT id AS std_student_id, roll_no, name FROM std_details WHERE org_class_id = ?';
+        $param = [$request->classId];
+        if($request->streamId){
+            $query .= ' AND org_stream_id = ?';
+            array_push($param, $request->streamId);
+        }
+        if($request->sectionId){
+            $query .= ' AND org_class_section_id = ?';
+            array_push($param, $request->sectionId);
+        }
+
+        array_push($param, $org_id);
+        $student = DB::select($query . ' AND org_id=? ORDER BY roll_no', $param);
+        return $this->successResponse($student);
+    }
     
 }

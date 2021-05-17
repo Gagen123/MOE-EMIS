@@ -44,6 +44,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         
         $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
         $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
+		
+		  //Method by Chimi thinley
+        $router->get('/getTeacher/{orgId}', ['uses' => 'staff\StaffController@getTeacher']);
         
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
