@@ -60,7 +60,7 @@ export default {
     },
     methods: {
 		getmenus(){
-            let uri = 'get_screens_on_submodules/module/'+menu_id
+            let uri = 'get_screens_on_submodules/module/'+this.menu_id
             axios.get(uri)
             .then(response => {
                 let data = response;

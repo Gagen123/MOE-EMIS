@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item programme-tab" @click="shownexttab('board-details-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Board Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Board Details </label>
                         </a>
                     </li>
                     <li class="nav-item eligibility-tab" @click="shownexttab('members-details-tab')">
@@ -37,7 +37,7 @@
                                 <input type="date" v-model="form.to_date" id="to_date" @change="remove_err('to_date')" name="to_date" class="form-control">
                                 <span class="text-danger" id="to_date"></span>
                             </div>
-                        </div> 
+                        </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <textarea v-model="form.remarks" name="remarks" class="form-control"></textarea>
@@ -59,15 +59,15 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-3">
                                 <table id="staff_data_table" class="table table-sm table-bordered table-striped w-100">
                                     <thead>
-                                        <tr> 
+                                        <tr>
                                             <th>Sl#</th>
                                             <th>Name</th>
-                                            <th>Designation/Position Title</th> 
-                                            <th>Contact Number</th>  
-                                            <th>email</th>    
-                                            <th>From Date</th> 
-                                            <th>To Date</th>  
-                                            <th>Action</th>                     
+                                            <th>Designation/Position Title</th>
+                                            <th>Contact Number</th>
+                                            <th>email</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -87,7 +87,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div> 
+                        </div>
                         <div class="dropdown-divider"></div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -97,16 +97,16 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-3">
                                 <table id="non-staff_data_table" class="table table-sm table-bordered table-striped w-100">
                                     <thead>
-                                        <tr> 
+                                        <tr>
                                             <th>Sl#</th>
                                             <th>Name</th>
-                                            <th>Address</th> 
-                                            <th>Designation</th> 
+                                            <th>Address</th>
+                                            <th>Designation</th>
                                             <th>Contact Number</th>
-                                            <th>Email</th>   
-                                            <th>From Date</th> 
-                                            <th>To Date</th>  
-                                            <th>Action</th>                      
+                                            <th>Email</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -136,16 +136,16 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-3">
                                 <table id="student_data_table" class="table table-sm table-bordered table-striped w-100">
                                     <thead>
-                                        <tr> 
+                                        <tr>
                                             <th>Sl#</th>
                                             <th>Name</th>
-                                            <th>Address</th> 
-                                            <th>Designation</th> 
+                                            <th>Address</th>
+                                            <th>Designation</th>
                                             <th>Contact Number</th>
-                                            <th>Email</th>   
-                                            <th>From Date</th> 
-                                            <th>To Date</th>  
-                                            <th>Action</th>                      
+                                            <th>Email</th>
+                                            <th>From Date</th>
+                                            <th>To Date</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -177,7 +177,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="modal fade show" id="addboardmembers" aria-modal="true" style="padding-right: 17px;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -198,15 +198,7 @@
                                     <option value="Student">Student</option>
                                 </select>
                                 <has-error :form="staff" field="type"></has-error>
-                            </div> 
-                            <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="sele-staff_details" style="display:none">
-                                <label>Select Staff Member:<span class="text-danger">*</span></label>
-                                <select v-model="staff.staff" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
-                                    <option value="">--Select--</option>
-                                    <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}, {{item.position_title.name}}</option>
-                                </select>
-                                <has-error :form="staff" field="staff"></has-error>
-                            </div>  -->
+                            </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="non-staff_details" style="display:none">
                                 <label>Name:<span class="text-danger">*</span> </label>
                                 <input type="text" class="form-control" v-model="staff.nonstaffname" @change="remove_err('nonstaffname')" id="nonstaffname">
@@ -221,11 +213,11 @@
                                     <option v-for="(item, index) in designationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="staff" field="designation"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="nonstaffaddress">
                                 <label>Address</label>
                                 <textarea v-model="staff.address" name="address" class="form-control"></textarea>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row" id="nonstaffcontact" style="display:none">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -234,7 +226,7 @@
                                 <has-error :form="staff" field="phone"></has-error>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Email</label> 
+                                <label>Email</label>
                                 <input type="email" id="email" v-model="staff.email" name="email" class="form-control">
                                 <has-error :form="staff" field="email"></has-error>
                             </div>
@@ -246,13 +238,13 @@
                                 <has-error :form="staff" field="fromdate"></has-error>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>To Date</label> 
+                                <label>To Date</label>
                                 <input type="date" id="todate" v-model="staff.todate" name="todate" class="form-control">
                                 <has-error :form="staff" field="todate"></has-error>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer"> 
+                    <div class="modal-footer">
                         <button type="button" data-dismiss="modal" class="btn btn-success btn-sm  mb-0.5"  @click="showadprocess()"> <i class="fa fa-check"></i> Add</button>
                     </div>
                 </div>
@@ -296,7 +288,7 @@ export default {
         shownexttab(nextclass){
             if(nextclass=="members-details-tab"){
                 this.form.post('staff/managementBody/saveManagementBody')
-                .then((response) => { 
+                .then((response) => {
                     if(response.data!=""){
                         Toast.fire({
                             icon: 'success',
@@ -306,9 +298,9 @@ export default {
                         this.form.id=response.data.data.id;
                         this.loadcomposition();
                         this.next_tab(nextclass);
-                    } 
+                    }
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     Toast.fire({
                         icon: 'error',
                         title: 'Not able to save data. Please try again'
@@ -318,7 +310,7 @@ export default {
             }
             else if(nextclass=="final-tab"){
                 Swal.fire({
-                    text: "Are you sure you wish to safe this details ?",
+                    text: "Are you sure you wish to save this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -326,8 +318,9 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
+                        
                         this.form.post('staff/managementBody/updateManagementBody')
-                        .then((response) => {  
+                        .then((response) => {
                             Swal.fire(
                                 'Success!',
                                 'Details has been saved successfully.',
@@ -335,7 +328,7 @@ export default {
                             )
                             this.$router.push('/list_management_body');
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error......"+error)
                         });
                     }
@@ -353,51 +346,42 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
-        },  
+        },
         showaddmembers(type){
             this.staff.reset();
             $('#type').val(type);
             this.staff.emptye=type;
-            // $('#sele-staff_details').hide();
-            // $('#non-staff_details').hide();
-            // $('#nonstaffaddress').hide();
-            // $('#nonstaffcontact').hide();
-            // if(type=="Staff"){
-            //     $('#sele-staff_details').show();
-            // }
-            // else{
             $('#non-staff_details').show();
             $('#nonstaffaddress').show();
             $('#nonstaffcontact').show();
-            // }
             this.staff.fromdate=$('#from_date').val();
             this.staff.todate=$('#to_date').val();
             $('#addboardmembers').modal('show');
         },
-         
+
         showadprocess(){
             this.staff.management_id=this.form.id;
             this.staff.post('staff/managementBody/saveManagementBodyComposition')
-            .then((response) => { 
+            .then((response) => {
                 if(response.data!=""){
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved Successfully'
                     });
                     this.loadcomposition();
-                } 
+                }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 Swal.fire(
                     'Error!',
                     'Not able to save this details. Please try again.',
                     'error',
                 )
                 console.log("Error:"+error)
-            }); 
+            });
         },
         loadcomposition(){
-            let uri = 'staff/managementBody/loadManagementBodyComposition/'+this.form.id;
+            let uri = 'staff/managementBody/loadManagementBodyComposition/'+ this.form.id;
             axios.get(uri)
             .then(response => {
                 this.staffcomposition_list=[];
@@ -415,24 +399,24 @@ export default {
                         this.nonstaffcomposition_list.push(data[i]);
                     }
                 }
-                
+
             })
             .catch(function (error) {
-                console.log('error: '+error); 
+                console.log('error: '+error);
             });
         },
         loadeditpage(item){
              axios.get('staff/managementBody/deleteManagementBodyComposition/'+item.id+'/'+this.form.id)
-            .then((response) => { 
+            .then((response) => {
                 if(response.data!=""){
                     Toast.fire({
                         icon: 'success',
                         title: 'Data deleted successfully'
                     });
                     this.loadcomposition();
-                } 
+                }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 Swal.fire(
                     'Error!',
                     'Not able to save this details. Please try again.',
@@ -440,16 +424,16 @@ export default {
                 )
                 console.log("Error:"+error)
             });
-        }, 
+        },
         reloadtable(){
             $("#staff_data_table").DataTable({
                 "responsive": true,
                 "autoWidth": true,
-            }); 
+            });
             $("#non-staff_data_table").DataTable({
                 "responsive": true,
                 "autoWidth": true,
-            }); 
+            });
         },
         validatedate(){
             let ret=true;
@@ -473,7 +457,7 @@ export default {
             }
             return ret;
         },
-        
+
         remove_err(fieldId,errorId){
             if($('#'+fieldId).val()!=""){
                 $('#'+errorId).html('');
@@ -491,14 +475,14 @@ export default {
                 if(type=="all_active_mgmn_desig"){
                     this.designationList =  data.data.data;
                     for(let i=0;i<data.data.data.length;i++){
-                        this.designationArray[data.data.data[i].id] = data.data.data[i].name; 
+                        this.designationArray[data.data.data[i].id] = data.data.data[i].name;
                     }
                 }
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                } 
+                }
             });
         },
         loadStaffList(uri = 'staff/loadStaff/workingagency'){
@@ -513,14 +497,13 @@ export default {
                 }
             });
         },
-        
     },
-    mounted() {
+    mounted(){
         this.loadmanagmentBodyList('all_active_mgmn_body_type');
         this.loadmanagmentBodyList('all_active_mgmn_desig');
         this.loadStaffList();
     },
-    
+
 }
 </script>
 

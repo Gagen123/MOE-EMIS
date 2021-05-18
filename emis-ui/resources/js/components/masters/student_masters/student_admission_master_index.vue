@@ -47,11 +47,6 @@ export default {
                 let data = response;
                 this.menubar =  data.data;  
             })
-            .catch(function (error) { 
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
         },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});

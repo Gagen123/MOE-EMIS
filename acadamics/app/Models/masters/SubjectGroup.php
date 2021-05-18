@@ -14,7 +14,8 @@ class SubjectGroup extends Model
     protected $fillable = [
         'id',
         'name',
-        'status', 
+        'display_order',
+        'status',
         'created_by',
         'created_at',
         'updated_by',

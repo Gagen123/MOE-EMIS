@@ -28,23 +28,23 @@
                 </table>
             </div>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             management_body_list:{},
             staffcomposition_list:[],
-            
-        } 
+
+        }
     },
     methods: {
         loadgenderList(uri = 'staff/managementBody/loadcreatedManagementBodyComposition'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                this.staffcomposition_list = data; 
+                this.staffcomposition_list = data;
             })
             .catch(function (error){
                console.log('Error: '+error);
@@ -56,7 +56,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.management_body_list[data.data.data[i].id] = data.data.data[i].name; 
+                    this.management_body_list[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -73,7 +73,7 @@ export default {
         $("#managment-table").DataTable({
             "responsive": true,
             "autoWidth": true,
-        }); 
+        });
     },
 }
 </script>

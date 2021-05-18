@@ -26,7 +26,7 @@ class AdministrationController extends Controller{
                     'nationality'  =>  'required|unique:country_master,nationality',
                     'status'        =>  'required',
                 ];
-                $validate=$this->validate($request, $rule); 
+                $validate=$this->validate($request, $rule);
                 $data =[
                     'country_name'  =>  $request['name'],
                     'nationality'  =>  $request['nationality'],
@@ -132,7 +132,7 @@ class AdministrationController extends Controller{
                 //storing audit trials
                 $messs_det='name:'.$data->name.$aditionla_param.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
-                
+
                 $data->name         = $request['name'];
                 if($request->record_type=="gewog"){
                     $data->dzongkhag_id = $request['parent_field'];
@@ -148,7 +148,7 @@ class AdministrationController extends Controller{
                 return $this->successResponse($data);
             }
         }
-        
+
     }
     public function loadGlobalMasters($param=""){
         if($param=="all_country"){
@@ -157,36 +157,31 @@ class AdministrationController extends Controller{
         if($param=="all_active_country"){
             return $this->successResponse(Country::where('status','1')->get());
         }
-        
         if($param=="all_dzongkhag"){
             return $this->successResponse(Dzongkhag::all());
         }
-
         if($param=="all_active_dzongkhag"){
             return $this->successResponse(Dzongkhag::where('status','1')->get());
         }
         if($param=="all_gewog_List"){
             return $this->successResponse(Gewog::with('dzongkhag')->get());
         }
-        
         if($param=="all_village_List"){
             return $this->successResponse(Village::with('dzothroughgewog','gewog')->get());
         }
-
         if($param=="all_gender"){
             return $this->successResponse(Gender::all());
         }
         if($param=="all_active_gender"){
             return $this->successResponse(Gender::where('status','1')->get());
         }
-
         if($param=="all_mother_tongue"){
             return $this->successResponse(MotherTongue::all());
         }
         if($param=="active_mother_tongue"){
             return $this->successResponse(MotherTongue::where('status','1')->get());
         }
-        
+
     }
     public function load_dropdown($model="",$parent_id=""){
         if($model=="dzongkhag"){
@@ -203,6 +198,17 @@ class AdministrationController extends Controller{
             ->select('d.id as dzo_id','d.name as dzo_name', 'g.id as gewog_id', 'g.name gewog_name', 'v.id as village_id', 'v.name village_name')
             ->where('v.id', '=', $id)->first();
         return $this->successResponse($response_data);
+    }
+    public function load_village_details_by_gewog_id($gewog_id){
+        $response_data = DB::table('gewog_master as g')
+                    ->join('village_master as v', 'g.id', '=','v.gewog_id')
+                    ->select('v.*')
+                    ->where('v.gewog_id', '=', $gewog_id)
+                    ->get();
+            return $this->successResponse($response_data);
+    }
+    public function load_gewog_dzongkhag_id($dzoId=""){
+        return $this->successResponse(Gewog::where('dzongkhag_id',$dzoId)->get());
     }
     public function load_village_details_by_village_id($id=""){
         return $this->successResponse(Village::where('id',$id)->first());
@@ -223,5 +229,5 @@ class AdministrationController extends Controller{
     public function load_Gender_details_by_id($id=""){
         return $this->successResponse(Gender::where('id',$id)->first());
     }
-    
+
 }

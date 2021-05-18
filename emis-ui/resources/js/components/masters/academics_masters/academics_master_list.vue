@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="academic-table" class="table table-bordered text-sm table-striped">
+                <!-- <table id="academic-table" class="table table-bordered text-sm table-striped">
                     <thead>
                         <tr>
                             <th>SL#</th>
@@ -14,7 +14,7 @@
                     </thead>
                     <tbody id="tbody">
                     </tbody>
-                </table>
+                </table> -->
             </div>
         </div>
     </div>      

@@ -18,6 +18,8 @@ class AcaSubject extends Migration
             $table->char('aca_sub_category_id',36)->index();
             $table->char('aca_sub_group_id',36)->nullable();
             $table->string('name',100)->unique();
+            $table->unsignedTinyInteger('assessed_by_class_teacher')->index()->default(0);
+            $table->unsignedTinyInteger('display_order')->index();
             $table->unsignedTinyInteger('status')->index()->default(1)->comment('0-Disabled');
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();

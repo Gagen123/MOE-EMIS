@@ -16,6 +16,7 @@ class AcaAssessmentArea extends Migration
         Schema::create('aca_assessment_area', function (Blueprint $table) {
             $table->char('id',36)->primary();
             $table->string('name',100)->unique();
+            $table->string('code',10);
             $table->char('aca_sub_id', 36)->index();
             $table->char('aca_rating_type_id',36)->index()->nullable();
             $table->unsignedTinyInteger('display_order')->index();

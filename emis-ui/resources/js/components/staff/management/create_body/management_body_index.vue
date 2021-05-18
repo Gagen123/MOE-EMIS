@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card card-primary card-outline">
-            <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white"> 
+            <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white">
                 <span class="card-title">
                     <b>Composition</b>
                 </span>
@@ -10,8 +10,8 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_management_body')"><i class="fa fa-plus"></i> New</button>
                 </span>
             </div>
-            <div class="card-body pb-1 mb-0 pt-1 mt-0">  
-                <router-view></router-view> 
+            <div class="card-body pb-1 mb-0 pt-1 mt-0">
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -19,8 +19,8 @@
 <script>
 export default {
     data(){
-        return{ 
-        } 
+        return{
+        }
     },
     methods: {
         showadprocess(type){
@@ -29,7 +29,7 @@ export default {
     },
     mounted() {
     },
-    
+
 }
 </script>
 

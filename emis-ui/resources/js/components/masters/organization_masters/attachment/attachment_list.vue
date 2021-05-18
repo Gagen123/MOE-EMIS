@@ -30,6 +30,7 @@ export default {
     data(){
         return{
             attachmentList:[],
+            dt:'',
         }
     },
 
@@ -60,6 +61,16 @@ export default {
     },
     mounted(){
         this.loadAttachmentList();
+        this.dt =  $("#transfer-table").DataTable()
+    },
+    
+    watch: {
+        attachmentList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#transfer-table").DataTable()
+            });
+        }
     },
 }
 </script>
