@@ -39,31 +39,10 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-        loadSubgGroupList(uri = 'masters/loadAcademicMasters/all_active_subject_group'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.subject_group_list =  data.data.data
-              
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadSubcategoryList(uri = 'masters/loadAcademicMasters/all_active_subject_category'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.subject_category_list = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
-                this.form.status= 1;
+                this.form.holiday_date= '';
+                this.form.description= '';
             }
             if(type=="save"){
                 this.form.post('/masters/saveAcademicMasters',this.form)
@@ -72,7 +51,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-subject');
+                    this.$router.push('/list-national-holiday');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -81,21 +60,7 @@ export default {
 		}, 
     },
       mounted(){ 
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').select2().
-        on("select2:select", e => {
-            const event = new Event("change", { bubbles: true, cancelable: true });
-            e.params.data.element.parentElement.dispatchEvent(event);
-        })
-        .on("select2:unselect", e => {
-        const event = new Event("change", { bubbles: true, cancelable: true });
-        e.params.data.element.parentElement.dispatchEvent(event);
-        });
-        this.loadSubgGroupList()
-        this.loadSubcategoryList()
+        
     },
 }
 </script>

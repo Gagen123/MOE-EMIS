@@ -80,7 +80,8 @@ export default {
             streamId:'',
             className:'',
             streamName:'',
-            classSubjects: []
+            classSubjects: [],
+            dt:'',
         }
     },
     methods: {
@@ -138,6 +139,7 @@ export default {
     mounted(){ 
         this.loadClassSubject();
         this.loadRatingTypeList();
+        this.dt =  $("#subject-assessment-type-table").DataTable();
     },
     created() {
         this.className=this.$route.params.data.class;
@@ -146,6 +148,14 @@ export default {
         this.streamName=this.$route.params.data.stream;
         this.id=this.$route.params.data.id;
     },
+    watch: {
+        classSubjects(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-assessment-type-table").DataTable()
+            });
+        }
+    }
     
 }
 </script>

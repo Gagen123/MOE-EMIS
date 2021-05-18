@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="final-annual-result-table" class="table table-sm table-bordered table-striped">
+                <table id="consolidated-result-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Class</th>
@@ -52,11 +52,12 @@ export default {
     data(){
         return{
             studentConsolidatedResultList:[],
+            dt:''
         }
     },
     methods:{
-           async loadConsolidatedResultList(){
-             try{
+        async loadConsolidatedResultList(){
+            try{
                 let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
                 let studentsConsolidatedResult = await axios.get('academics/loadConsolidatedResultList').then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
@@ -68,18 +69,10 @@ export default {
                             studentsConsolidatedResult[index].section = item1.section
                         }
                     })
-                })
-                this.studentConsolidatedResultList = studentsConsolidatedResult
-                 setTimeout(function(){
-                $("#final-annual-result-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    "order": [[ 0, "asc" ]]
-            
-                })
-            }, 2000); 
-   
-             }catch(e){
+            })
+            this.studentConsolidatedResultList = studentsConsolidatedResult
+           
+            }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
@@ -115,6 +108,17 @@ export default {
     },
     mounted(){ 
         this.loadConsolidatedResultList()   
+        this.dt = $("#consolidated-result-table").DataTable({
+            "order": [[ 0, "asc" ]]
+        })
     },
+    watch: {
+        studentConsolidatedResultList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#consolidated-result-table").DataTable()
+            });
+        }
+    }
 }
 </script>

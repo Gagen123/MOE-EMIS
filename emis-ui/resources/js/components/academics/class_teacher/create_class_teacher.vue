@@ -50,6 +50,7 @@ export default {
         return {
             classTeacherList: [],
             teacherList:[],
+            dt:''
         }
     },
     methods: {
@@ -76,8 +77,8 @@ export default {
                 }); 
             }, 3000);
         },
-         async classTeacher(){ 
-             try{
+        async classTeacher(){ 
+            try{
                 let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
                 let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
                 classSections.forEach((classSection,index) => {
@@ -88,12 +89,6 @@ export default {
                     })
                 })
                 this.classTeacherList = classSections
-                setTimeout(function(){
-                    $("#class-teacher-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    }); 
-                }, 3000);
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -118,9 +113,16 @@ export default {
     mounted(){ 
         this.classTeacher();
         this.getTeacher();
-       
-        
-    },
-    
+        this.dt = $("#class-teacher-table").DataTable()
+    }, 
+    watch: {
+        classTeacherList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#class-teacher-table").DataTable()
+            });
+        }
+    }
+   
 }
 </script>

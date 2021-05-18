@@ -1,9 +1,9 @@
 <template>
     <div> 
         <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h6 class="pt-1">Acadamics</h6></li>
+            <li class="form-inline "><h6 class="pt-1">ACADEMICS</h6></li>
         </ol>
-        <div class="container-fluid">
+        <div class="ml-2 container-fluid">
             <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">

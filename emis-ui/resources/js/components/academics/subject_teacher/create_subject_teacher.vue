@@ -54,7 +54,8 @@ export default {
     data() {
         return {
             subjectTeacherList: [],
-            teacherList:[]
+            teacherList:[],
+            dt:''
         }
     },
     methods: {
@@ -113,13 +114,6 @@ export default {
                     });
                 });
                 this.subjectTeacherList = finalSubjectTeachers;
-
-                setTimeout(function(){
-                    $("#subject-teacher-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    }); 
-                }, 3000);
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -142,10 +136,20 @@ export default {
 	 
     },
     mounted(){ 
-        this.getsubjectTeachers()
-        this.getTeacher()
+        this.getsubjectTeachers();
+        this.getTeacher();
+        this.dt = $("#subject-teacher-table").DataTable()
+
         
     },
+    watch: {
+        subjectTeacherList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#subject-teacher-table").DataTable()
+            });
+        }
+    }
     
 }
 </script>

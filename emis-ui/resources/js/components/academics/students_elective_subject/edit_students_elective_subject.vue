@@ -47,7 +47,8 @@ export default {
     data() {
         return {
             studentElectiveSubjectList: [],
-            electiveSubjectList:[]
+            electiveSubjectList:[],
+            dt:''
         }
     },
     methods: {
@@ -56,7 +57,7 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },      
-       async studentElectiveSubject(){
+        async studentElectiveSubject(){
           let uri = 'academics/getStudentElectiveSubjects'
           uri += ('?classId='+this.classId)
           if(this.streamId !== null){
@@ -68,22 +69,13 @@ export default {
             try{
                 let studentElectiveSubjects = await axios.get(uri).then(response => response.data)
                 this.studentElectiveSubjectList = studentElectiveSubjects.students
-                 this.electiveSubjectList = studentElectiveSubjects.electiveSubjects.data
-
-                setTimeout(function(){
-                    $("#students-elective-subject-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    }); 
-                }, 3000);
-
+                this.electiveSubjectList = studentElectiveSubjects.electiveSubjects.data
             }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
              }                    
         },
-    
         save(){
              axios.post('/academics/saveStudentElectiveSubject', {data:this.studentElectiveSubjectList})
                  .then(() => {
@@ -96,23 +88,29 @@ export default {
                 .catch(function(error){
                 this.errors = response.error;
             });
-        },
-	 
+        }
     },
     mounted(){ 
-        this.studentElectiveSubject()
+        this.studentElectiveSubject();
+        this.dt = $("#students-elective-subject-table").DataTable()
     },
     created() {
-
         this.className=this.$route.params.data.class;
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.section_id=this.$route.params.data.org_section_id;
         this.streamName=this.$route.params.data.stream;
         this.section=this.$route.params.data.section;
-
         this.id=this.$route.params.data.id;
     },
+    watch: {
+        studentElectiveSubjectList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#students-elective-subject-table").DataTable()
+            });
+        }
+    }
     
 }
 </script>

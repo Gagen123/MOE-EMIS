@@ -57,6 +57,7 @@
             assessmentAreaList:[],
             ratingList:[],
             studentAssessmentList:[],
+            dt:''
         }
     },
     methods:{
@@ -77,19 +78,6 @@
                 this.assessmentAreaList = studentAssesssments.assessmentAreas
                 this.ratingList = studentAssesssments.ratings
                 this.studentAssessmentList = studentAssesssments.studentAssessments
-                setTimeout(function(){
-                $("#assessment-term-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    "paging": false,
-                    scrollX: true,
-                    scrollCollapse: true,
-                    fixedColumns:   {
-                        leftColumns: 2
-                    }
-                }); 
-            }, 3000);
-
             }catch(e){
                 if(e.toString().includes("500")){
                 $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -139,6 +127,14 @@
         },
         mounted(){ 
             this.loadStudentAssessments()
+            this.dt = $("#assessment-term-table").DataTable({
+                "paging": false,
+                scrollX: true,
+                scrollCollapse: true,
+                fixedColumns:   {
+                    leftColumns: 2
+                }
+            })
         },
         created() {
             this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
@@ -152,6 +148,14 @@
             this.subject=this.$route.params.data.sub_name;
             this.term=this.$route.params.data.term_name;
         },
+        watch: {
+            studentAssessmentList(val) {
+                this.dt.destroy();
+                this.$nextTick(() => {
+                    this.dt = $("#assessment-term-table").DataTable()
+                });
+            }
+        }
 }
 </script>
 <style scoped>

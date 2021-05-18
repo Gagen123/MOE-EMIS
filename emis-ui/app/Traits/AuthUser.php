@@ -74,6 +74,18 @@ trait AuthUser
         return $w_status;
     }
 
+    public function getAllCurrentWorkflowStatus($screenId=""){
+        $works=Session::get('role_workflow');
+        $w_status="";
+        foreach(json_decode($works) as $i=> $work){
+            //$w_status.=$work->screen_id.'; ';
+            if($work->screen_id==$screenId){
+                $w_status.=$work->workflow_status.', ';
+            }
+        }
+        return $w_status;
+    }
+
     public function getcurrentworkflowStatusForUpdate($param=""){
         $works=Session::get('role_workflow');
         $w_status=0;

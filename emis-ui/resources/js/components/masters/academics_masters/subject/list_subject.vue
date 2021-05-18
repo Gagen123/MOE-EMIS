@@ -37,6 +37,7 @@ export default {
     data(){
         return{
             subjectList:[],
+            dt:''
         }
     },
     methods:{
@@ -51,16 +52,6 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#subject-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    columnDefs: [
-                        { width: 60, targets: 0},
-                    ],
-                 
-                }); 
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'aca_edit_subject',params: {data:data}});
@@ -68,6 +59,19 @@ export default {
     },
     mounted(){ 
         this.loadSubjectList();
+        this.dt =  $("#subject-table").DataTable({
+            columnDefs: [
+                { width: 60, targets: 0},
+            ],
+        })
     },
+    watch: {
+        subjectList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-table").DataTable()
+            });
+        }
+    }
 }
 </script>

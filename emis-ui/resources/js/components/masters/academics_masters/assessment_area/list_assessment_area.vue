@@ -39,6 +39,7 @@ export default {
     data(){
         return{
             assessmentAreaList:[],
+            dt:''
         }
     },
     methods:{
@@ -53,16 +54,6 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#assessment-area-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    columnDefs: [
-                        { width: 2, targets: 0},
-                        { width: 80, targets:[2,3]},
-                    ],
-                }); 
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'aca_edit_assessment_area',params: {data:data}});
@@ -70,6 +61,20 @@ export default {
     },
     mounted(){ 
         this.loadAssessmentAreaList();
+        this.dt =  $("#assessment-area-table").DataTable({
+            columnDefs: [
+                    { width: 2, targets: 0},
+                    { width: 80, targets:[2,3]},
+                ],
+        });
     },
+    watch: {
+        assessmentAreaList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#assessment-area-table").DataTable()
+            });
+        }
+    }
 }
 </script>

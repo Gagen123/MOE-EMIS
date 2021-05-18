@@ -20,7 +20,7 @@ class RatingTypeSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Four level rating (Need Improvement-Good-Very Good-Outstanding)',
-                'is_percentage_based'=>'0',
+                'input_type'=>'0',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),
@@ -28,7 +28,7 @@ class RatingTypeSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Four level rating (Beginning-Approaching-Meeting-Exceeding)',
-                'is_percentage_based'=>'0',
+                'input_type'=>'0',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),
@@ -36,7 +36,7 @@ class RatingTypeSeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Percentage marks',
-                'is_percentage_based'=>'1',
+                'input_type'=>'1',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),
@@ -45,7 +45,7 @@ class RatingTypeSeeder extends Seeder
                
                 'id' => Str::uuid(),
                 'name' => 'Descriptive',
-                'is_percentage_based'=>'0',
+                'input_type'=>'0',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),

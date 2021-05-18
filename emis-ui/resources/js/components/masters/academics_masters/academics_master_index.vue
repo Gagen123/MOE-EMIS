@@ -1,7 +1,7 @@
 <template>
     <div> 
         <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h6 class="pt-1">Acadamics Masters</h6></li>
+            <li class="form-inline "><h6 class="pt-1">ACADEMICS MASTERS</h6></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
@@ -9,6 +9,11 @@
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                         <span :class="item.screen_icon"></span> 
                         {{ item.screen_name}}
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('sub_assmt_area')">
+                    <router-link id="sub_assmt_area" to="/national-holiday-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       National Holiday 
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('sub_group')">

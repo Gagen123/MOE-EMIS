@@ -37,8 +37,10 @@ import staff from "./staff_routes";
 import organization from "./organization";
 import student_routes from "./student_routes";
 import academic_routes from "./academic_routes";
+import mess_manage_routes from "./mess_manage_routes";
+
 var allRoutes = [];
-allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,academic_routes);
+allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes);
 const routes = allRoutes;
 const router = new VueRouter({
     routes

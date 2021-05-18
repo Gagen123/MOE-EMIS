@@ -15,7 +15,7 @@ class AcaStudentAttendance extends Migration
     {
         
         Schema::create('aca_student_attendance', function (Blueprint $table) {
-            $table->integer('id')->primary();
+            $table->char('id',36)->primary();
             $table->char('org_id',36)->index();
             $table->char('org_class_id',36)->index();
             $table->char('org_stream_id',36)->index()->nullable();

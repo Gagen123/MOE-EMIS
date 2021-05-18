@@ -54,6 +54,8 @@ class StaffController extends Controller{
             'dob'                   =>  $request->dob,
             'merital_status'        =>  $request->marital_status,
             'country_id'            =>  $request->country_id,
+            'dzo_id'                =>  $request->dzo_id,
+            'geowg_id'              =>  $request->geowg_id,
             'village_id'            =>  $request->village_id,
             'address'               =>  $request->address,
             'contact_no'            =>  $request->contact_number,
@@ -105,9 +107,9 @@ class StaffController extends Controller{
         }
     }
     
-    public function loadpersonalDetails($status="",$id=""){
-        return $this->successResponse(PersonalDetails::where('id',$id)->where('status',$status)->first());
-    }
+    // public function loadpersonalDetails($status="",$id=""){
+    //     return $this->successResponse(PersonalDetails::where('id',$id)->where('status',$status)->first());
+    // }
 
     public function savequalificationDetails(Request $request){
         $response_data=[];
@@ -275,18 +277,18 @@ class StaffController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
-    public function loadAllStaff($type=""){
-        if(strpos($type,',')){
-            $emp_type=[];
-            foreach(explode(',',$type) as $emp){
-                array_push($emp_type,$emp);
-            }
-            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
-        }
-        else{
-            return $this->successResponse(PersonalDetails::where('emp_type_id',$type)->where('status','Created')->get());
-        }
-    }
+    // public function loadAllStaff($type=""){
+    //     if(strpos($type,',')){
+    //         $emp_type=[];
+    //         foreach(explode(',',$type) as $emp){
+    //             array_push($emp_type,$emp);
+    //         }
+    //         return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
+    //     }
+    //     else{
+    //         return $this->successResponse(PersonalDetails::where('emp_type_id',$type)->where('status','Created')->get());
+    //     }
+    // }
     
     public function getEmisUsers($empId=""){
         if(strlen($empId)==11){
@@ -353,8 +355,21 @@ class StaffController extends Controller{
         return $this->successResponse(TransferWindow::all());
     }
     
-    public function loadStaff(){
-        return $this->successResponse(PersonalDetails::all());
+    // public function loadStaff($type="",$param=""){
+    //     if($type=="workingagency"){
+    //         return $this->successResponse(PersonalDetails::where('working_agency_id',$param)->get());
+    //     }
+    //     else if($type=="dzongkhagwise"){
+    //         return $this->successResponse(PersonalDetails::where('dzo_id',$param)->get());
+    //     }
+    //     else{
+    //         return $this->successResponse(PersonalDetails::all());
+    //     }
+    //     return $this->successResponse(PersonalDetails::all());
+    // }
+    
+    public function load_staff_details_by_id($id=""){
+        return $this->successResponse(PersonalDetails::where('id',$id)->first());
     }
 	public function getTeacher($orgId){
         $teacher = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);

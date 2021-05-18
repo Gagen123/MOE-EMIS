@@ -17,7 +17,7 @@
                     <td>{{ item.name}}</td>
                     <td>{{item.category  == 1 ? "public" :  "private"}}</td>
                     <td>{{ item.level}}</td>
-                    <td>{{ item.status}} </td>
+                    <td>{{ item.status == 1 ? "Active" : "Inactive"}} </td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewBifurcationList(item.id)"><i class="fas fa-edit"></i ></a>

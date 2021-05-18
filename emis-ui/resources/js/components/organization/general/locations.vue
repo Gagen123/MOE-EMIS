@@ -1,6 +1,10 @@
 <template>
     <div>
-        <form class="bootbox-form" id="locationsId">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <form class="bootbox-form" id="mainform">
             <div class="card card-primary card-outline">
                 <div class="card-body">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
@@ -175,8 +179,9 @@ export default {
          * method to current get latitude and longitude 
          */
         getLat: function(){
-            this.form.latitude = 27.514162;
-            this.form.longitude = 90.433601;
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(this.showPosition);
+            } 
         },
 
         /**
@@ -310,13 +315,36 @@ export default {
                 console.log("Error:"+error);
             }); 
         },
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data != "Org"){
+                    $('#mainform').hide();
+                    $('#screenPermission').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        },
+        showPosition(position){
+            $('#latitude').val(position.coords.latitude);
+            $('#longitude').val(position.coords.longitude);
+            $('#altitude').val(position.coords.altitude);
+            
+        }
     },
 
     created(){
+        // this.getScreenAccess();
         this.getDisasterList();
         this.loadAttachmentList();
         this.getLocationDetails(this.$route.query.orgId);
         this.form.organizationId = this.$route.query.orgId;
+                
     },
 }
 </script>

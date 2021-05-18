@@ -53,7 +53,8 @@ export default {
         return {
             classAssessmentFrequencyList: [],
             assesmentFrequencyList:[],
-            errMessage:''
+            errMessage:'',
+            dt:''
         }
     },
     methods: {
@@ -72,15 +73,6 @@ export default {
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             })
-            setTimeout(function(){
-                $("#class-assessment-frequency-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                      columnDefs: [
-                        { width: 2, targets: 0}
-                    ],
-                }); 
-            }, 3000);
         },
          async classAssessmentFrequency(){
              try{
@@ -124,9 +116,22 @@ export default {
     },
     mounted(){ 
         this.getAssessmentFrequencyList();
-        this.classAssessmentFrequency()
-        
+        this.classAssessmentFrequency();
+        this.dt =  $("#class-assessment-frequency-table").DataTable({
+            columnDefs: [
+                    { width: 2, targets: 0},
+                    { width: 80, targets:[2,3]},
+                ],
+        })
     },
+    watch: {
+        classAssessmentFrequencyList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#class-assessment-frequency-table").DataTable()
+            });
+        }
+    }
     
 }
 </script>

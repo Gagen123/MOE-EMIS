@@ -49,8 +49,9 @@ class StudentDisciplinaryController extends Controller
             'action_taken'          => $request->action_taken,
             'offence_description'   => $request->offence_description,
             'remarks'               => $request->remarks,
-
-            //'user_id'           => $this->user_id() 
+            'action_type'           => $request->action_type,
+            'user_id'               => $this->userId(),
+            'working_agency_id'     => $this->getWrkingAgencyId()
         ];
 
         try{

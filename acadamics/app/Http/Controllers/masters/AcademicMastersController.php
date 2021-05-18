@@ -195,10 +195,53 @@ class AcademicMastersController extends Controller
                 $responsedata = $data;
             }
         }
+         
+        if($request['record_type'] == 'national_holiday') {
+            if($request['action_type'] =="add"){
+                $rules = [
+                    'holiday_date'  =>  'required',
+                    'description' => 'required',
+                ];
+                $customMessages = [
+                    'holiday_date.required' => 'This field is required',
+                    'description.required' => 'This field is required',
+                ];
+                $data = [
+                    'holiday_date' => $request['holiday_date'],
+                    'description' => $request['description'],
+                    'created_by' =>  $request['user_id'],
+                    'created_at'=>   date('Y-m-d h:i:s'),
+                ];
+                $responsedata= AssessmentArea::create($data);
+            }
+            if($request['action_type'] =="edit"){
+                $rules = [
+                    'holiday_date'  =>  'required',
+                    'description' => 'required',
+                ];
+                $customMessages = [
+                    'holiday_date.required' => 'This field is required',
+                    'description.required' => 'This field is required',
+                ];
+                $this->validate($request, $rules,  $customMessages);
+
+                $data = AssessmentArea::find($request['id']);
+                $messs_det='holiday_date:'.$data->holiday_date.'; description:'.$data->description;
+                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_national_holiday','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+                $data->holiday_date = $request['holiday_date'];
+                $data->description = $request['description'];
+                $data->update();
+                $responsedata = $data;
+            }
+        }
         return $this->successResponse($responsedata, Response::HTTP_CREATED);
 
     }
     public function loadAcademicMasters($param=""){
+        if($param == "all_national_holiday"){
+            $national_holiday = DB::select("SELECT holiday_date, description FROM aca_national_holiday");
+            return $this->successResponse($national_holiday);
+        }
         if($param == "all_subject_group"){
             $subject = DB::select('SELECT * FROM aca_subject_group ORDER BY display_order');
             return $this->successResponse($subject);

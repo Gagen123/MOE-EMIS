@@ -113,10 +113,8 @@
                                 <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
                                 <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
                                     <option value=""> --Select--</option>
-                                    <option value="1"> Mothithang HSS</option>
-                                    <option value="2"> Yangchenphug HSS</option>
-                                    <option value="3"> Mathematics</option>
-                                </select>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>  
+                                </select> 
                                 <has-error :form="personal_form" field="working_agency_id"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -330,6 +328,7 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
+            orgList:[],
             subjectList:[],
             cureerstageList:[],
             marital_statusList:[],
@@ -417,6 +416,18 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        allOrgList(){
+            let uri = 'organization/getschoolList/private';
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -777,6 +788,7 @@ export default {
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
+                
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
@@ -913,7 +925,7 @@ export default {
         this.loadpositiontitleList();
         this.loadactivecureerstageList();
         this.loadactivesubjectList();
-
+        this.allOrgList();
         this.loaddraftpersonalDetails();
         
     },

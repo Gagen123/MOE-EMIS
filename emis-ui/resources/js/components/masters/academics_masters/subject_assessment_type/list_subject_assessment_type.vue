@@ -33,6 +33,7 @@ export default {
     data(){
         return{
             classesStreamsList:[],
+            dt:'',
         }
     },
     methods:{
@@ -47,19 +48,22 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#subject-assessment-type-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'aca_edit_subject_assessment_type',params: {data:data}});
         },
     },
     mounted(){ 
-        this.getClassStreamList()
+        this.getClassStreamList();
+        this.dt =  $("#subject-assessment-type-table").DataTable()
     },
+    watch: {
+        classesStreamsList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-assessment-type-table").DataTable()
+            });
+        }
+    }
 }
 </script>

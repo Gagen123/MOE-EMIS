@@ -58,7 +58,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'student_awards_edit',params: {data:data}});
+            this.$router.push({name:'edit_student_awards',params: {data:data}});
         },
     },
     mounted(){

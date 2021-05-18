@@ -67,6 +67,8 @@ class StaffController extends Controller{
             'marital_status'    =>  $request->marital_status,
             'dob'               =>  $request->dob,
             'country_id'        =>  $request->country_id,
+            'dzo_id'            =>  $request->dzongkhag,
+            'geowg_id'          =>  $request->geowg,
             'village_id'        =>  $request->village_id,
             'address'           =>  $request->address,
             'contact_number'    =>  $request->contact_number,
@@ -89,10 +91,10 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$type.'/'.$this->userId());
         return $response_data;
     }
-    public function loadpersonalDetails($id=""){
-        $response_data= $this->apiService->listData('emis/staff/loadpersonalDetails/'.$id);
-        return $response_data;
-    }
+    // public function loadpersonalDetails($id=""){
+    //     $response_data= $this->apiService->listData('emis/staff/loadpersonalDetails/'.$id);
+    //     return $response_data;
+    // }
     
     public function savequalificationDetails(Request $request){
         $rules = [
@@ -217,10 +219,10 @@ class StaffController extends Controller{
         return $response_data;
     }
     
-    public function loadAllStaff($type=""){
-        $response_data= $this->apiService->listData('emis/staff/loadAllStaff/'.$type);
-        return $response_data;
-    }
+    // public function loadAllStaff($type=""){
+    //     $response_data= $this->apiService->listData('emis/staff/loadAllStaff/'.$type);
+    //     return $response_data;
+    // }
     public function saveTransferWindow(Request $request){
         $rules = [
             'year'                  =>  'required  ',
@@ -252,11 +254,15 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loadTransferWindow');
         return $response_data;
     }
-    public function loadStaff(){
-        $response_data= $this->apiService->listData('emis/staff/loadStaff');
-        return $response_data;
-    }
-    
-    
-    
+    // public function loadStaff($type=""){
+    //     $param="";
+    //     if($type=="workingagency"){
+    //         $param=$this->getWrkingAgencyId();
+    //     }
+    //     if($type=="dzongkhagwise"){
+    //         $param=$this->getUserDzoId();
+    //     }
+    //     $response_data= $this->apiService->listData('emis/staff/loadStaff/'.$type.'/'.$param);
+    //     return $response_data;
+    // }
 }

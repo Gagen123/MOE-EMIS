@@ -39,8 +39,7 @@ class StudentProgramController extends Controller
             'supporter'         => $request->supporter,
             'year'              => $request->year,
             'remarks'           => $request->remarks,
-            'assigned_staff'    => $request->assigned_staff,
-            'assigned_student'  => $request->assigned_student,
+            'assigned_staff'    => $request->assigned_staff
 
             //'user_id'        => $this->user_id() 
         ];
@@ -64,6 +63,15 @@ class StudentProgramController extends Controller
     }
 
     /*
+    * Function is to load the list of student Programs
+    */
+
+    public function loadStudentPrograms($param=""){
+        $student_records = $this->apiService->listData('emis/students/loadStudentPrograms/'.$param);
+        return $student_records;
+    }
+
+    /*
     * Save Program Members
     */
 
@@ -72,21 +80,23 @@ class StudentProgramController extends Controller
         $rules = [
             'student'            => 'required',
             'program'            => 'required',
-            'task'            => 'required',
+            'responsibilities'            => 'required',
         ];
 
         $customMessages = [
             'student.required'  => 'This field is required',
             'program.required'     => 'This field is required',
-            'task.required'  => 'This field is required',
+            'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'student'          => $request->student,
-            'program'             => $request->program,
-            'task'             => $request->task
+            'id'                    => $request->id,
+            'student'               => $request->student,
+            'program'               => $request->program,
+            'date'                  => $request->date,
+            'responsibilities'      => $request->responsibilities,
+            'role'                  => $request->role
 
             //'user_id'        => $this->user_id() 
         ];
@@ -99,6 +109,15 @@ class StudentProgramController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+
+    /*
+    * Function is to list Program Members
+    */
+
+    public function listProgramMembers($param=""){
+        $student_records = $this->apiService->listData('emis/students/listProgramMembers/'.$param);
+        return $student_records;
     }
 
 
@@ -139,5 +158,65 @@ class StudentProgramController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+
+    /*
+    * Function is to load inventory of the programs
+    */
+
+    public function loadProgramInventory($param=""){
+        $student_records = $this->apiService->listData('emis/students/loadProgramInventory/'.$param);
+        return $student_records;
+    }
+
+    /*
+    * Save Program Action Plan
+    */
+
+    public function saveProgramActionPlan(Request $request){
+
+        $rules = [
+            'program'            => 'required',
+            'from_date'            => 'required',
+            'to_date'           => 'required'
+        ];
+
+        $customMessages = [
+            'program.required'     => 'This field is required',
+            'from_date.required'  => 'This field is required',
+            'to_date.required'  => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $data =[
+            'id'                    => $request->id,
+            'organisation_id'       => $request->organisation_id,
+            'program'               => $request->program,
+            'from_date'             => $request->from_date,
+            'to_date'               => $request->to_date,
+            'action_plan'           => $request->action_plan,
+            'user_id'           => $this->userId(),
+            'working_agency_id' => $this->getWrkingAgencyId()
+
+            //'user_id'        => $this->user_id() 
+        ];
+
+
+        try{
+            $response_data= $this->apiService->createData('emis/students/saveProgramActionPlan', $data);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    /*
+    * Function is to load the student Programs Action Plan
+    */
+
+    public function loadProgramActionPlan($param=""){
+        $student_records = $this->apiService->listData('emis/students/loadProgramActionPlan/'.$param);
+        return $student_records;
     }
 }

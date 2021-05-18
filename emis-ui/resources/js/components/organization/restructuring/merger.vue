@@ -189,7 +189,8 @@
                                 <br> 
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
-                                <span id="othercategoryforeccd"></span>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
@@ -410,6 +411,20 @@ export default {
                 });
             }
         },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getCategory(){
+            let level = $('#level option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd").show();
+            }
+            else{
+                $(".eccd").hide();
+            }
+        },
+
         showprivatedetails(type){
             if(type=='private'){
                 $('#privatedetails').show();
@@ -556,6 +571,7 @@ export default {
             }
             if(id=="level"){
                 this.form.level=$('#level').val();
+                this.getCategory();
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag = $('#dzongkhag').val();
@@ -661,26 +677,43 @@ export default {
             }
         },
 
+        getScreenAccess(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data.acess_level;
+                if(data == "Org" || data == "Ministry"){
+                    $('#mainform').hide();
+                    $('#applicaitonUnderProcess').show();
+                    $('#existmessage').html('You have no access to this page.');
+                }
+                
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        }
+
         /**
          * method to check pending status
          */
-        checkPendingApplication(){
-            axios.get('organization/checkPendingApplication/merger')
-            .then((response) => {  
-                let data=response.data;
-                if(data!=""){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-                }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
-            });
-        },
+        // checkPendingApplication(){
+        //     axios.get('organization/checkPendingApplication/merger')
+        //     .then((response) => {  
+        //         let data=response.data;
+        //         if(data!=""){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
+        //         }
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
     },
     
     mounted() {
+        this.getScreenAccess();
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
         this.form.year=current_year;
@@ -703,7 +736,7 @@ export default {
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();
-        this.checkPendingApplication();
+        // this.checkPendingApplication();
 
     },
 }

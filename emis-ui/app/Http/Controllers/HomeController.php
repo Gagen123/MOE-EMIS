@@ -22,7 +22,7 @@ class HomeController extends Controller{
             //dd(Session::get('User_Details'));
             return view('dashboard');
         }
-        else{  
+        else{
             if($request->param!=""){
                 $user_Det= Crypt::decryptString($request->param);
                 $user=json_decode($user_Det)->user_details->user;
@@ -51,6 +51,7 @@ class HomeController extends Controller{
                                 'mod_name' => $priv->moudle_name,
                                 'module_icon'=>$priv->module_icon,
                                 'module_route'=>$priv->module_route,
+                                'Sequence'=>$priv->Sequence,
                             ];
                             array_push($module,$mod);
                         }
@@ -84,7 +85,10 @@ class HomeController extends Controller{
                         }
                     }
                 }
-
+                // $module = collect($module)->sortBy('Sequence')->reverse()->toArray();
+                $module = collect($module)->sortBy('Sequence')->toArray();
+                // $sub_modules = collect($sub_modules)->sortBy('Sequence')->toArray();
+                
                 // dd($role_workflow_submitter);
                 if($role_workflow_submitter!=null){
                     foreach(json_decode($role_workflow_submitter) as $i=> $work){
@@ -123,7 +127,7 @@ class HomeController extends Controller{
                         array_push($screens,$screen);
                     }
                 }
-                
+
                 //dd($screen);
                 $roles=json_decode($user_Det)->user_details->roles;
                 $user_details=[
@@ -151,10 +155,15 @@ class HomeController extends Controller{
                 $role_workflow=$this->apiService->listData('getworkflows/all/'.json_decode($user_Det)->system_id, [], $headers);
                 Session::put('User_Details', $user_details);
                 Session::put('User_Token', $token);
-                
+
                 //dd(json_decode($role_workflow));
                 Session::put('role_priv', $role_riv);
                 Session::put('role_workflow', $role_workflow);
+                
+                if($user->org_organization_id!=null){
+                    $org_profile=$this->apiService->listData('emis/organization/getOrgProfile/'.$user->org_organization_id);
+                    Session::put('org_profile', json_decode($org_profile)->data);
+                }
                 return redirect()->route('dashboard');
             }
             else{
@@ -165,7 +174,7 @@ class HomeController extends Controller{
     }
 
     public function dashboard(Request $request){
-        //dd(Session::get('User_Details'));
+        // dd(json_decode(Session::get('org_profile'))->data->orgName);
         if(Session::get('User_Details')!=""){
             return view('dashboard');
         }
@@ -178,13 +187,13 @@ class HomeController extends Controller{
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
-        $role_riv=$this->apiService->listData('getprivillegesbyid/'.$id.'/'.$type, [], $headers);
+        $role_riv=$this->apiService->listData('getmenusSubMenus/'.$id.'/'.$type, [], $headers);
         $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
         $screens=[];
         $screens_ids="";
         if(($role_workflow_submitter!=null || $role_workflow_submitter!="") && $role_workflow_submitter!="Unauthorized."){
             foreach(json_decode($role_workflow_submitter) as $i=> $work){
-                if(strpos($screens_ids,$work->screen_id)===false){  
+                if(strpos($screens_ids,$work->screen_id)===false){
                     $screens_ids.=$work->screen_id.',';
                     $screen=[
                         'mod_id'=> $work->mod_id,
@@ -193,7 +202,7 @@ class HomeController extends Controller{
                         'screen_name' => $work->screen_name,
                         'route' =>$work->Route,
                         'work_flow_status'=>$work->workflow_status,
-                        'actions' => 'NA',
+                        // 'actions' => 'NA',
                         'screen_icon'=>$work->screen_icon,
                     ];
                     array_push($screens,$screen);
@@ -203,7 +212,7 @@ class HomeController extends Controller{
         if($role_riv!=null){
             foreach(json_decode($role_riv) as $i=> $priv){
                 if($priv->Organization == 1 || $priv->Dzongkhag == 1 || $priv->National == 1 ){
-                    if(strpos($screens_ids,$priv->Id)===false){  
+                    if(strpos($screens_ids,$priv->Id)===false){
                         $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
                         $screens_ids.=$priv->Id.',';
                         $screen=[
@@ -213,7 +222,7 @@ class HomeController extends Controller{
                             'screen_name' => $priv->screenName,
                             'route' =>$priv->Route,
                             'work_flow_status'=>'NA',
-                            'actions' => json_decode($actions)[0]->action_name,
+                            // 'actions' => json_decode($actions)[0]->action_name,
                             'screen_icon'=>$priv->screen_icon,
                         ];
                         array_push($screens,$screen);
@@ -222,6 +231,13 @@ class HomeController extends Controller{
             }
         }
         return $screens;
+    }
+    
+    public function get_privileges($id=""){
+        $token =Session::get('User_Token');
+        $headers['Authorization'] = 'bearer '. $token;
+        $screen_riv=$this->apiService->listData('getPrivillegesOnScreenById/'.$id, [], $headers);
+        return $screen_riv;
     }
 
     public function logout(Request $request){

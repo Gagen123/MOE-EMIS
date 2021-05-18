@@ -59,7 +59,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'student_trainings_edit',params: {data:data}});
+            this.$router.push({name:'edit_student_trainings',params: {data:data}});
         },
     },
     mounted(){

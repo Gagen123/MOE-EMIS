@@ -33,7 +33,7 @@
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Month:</label>
-                                <input type="date" name="month" id="month" class="form-control" v-model="form.month" :class="{ 'is-invalid': form.errors.has('month') }" @change="remove_err('month')"/>
+                                <input type="date" :min="getEndDate" :max="nowDate" name="month" id="month" class="form-control" v-model="form.month" :class="{ 'is-invalid': form.errors.has('month') }" @change="remove_err('month')"/>
                                 <has-error :form="form" field="month"></has-error>
                             </div>
                         </div> 
@@ -219,7 +219,14 @@
 <script>
 export default {
     data(){
-        return{ 
+
+        return{
+            //set the minimum date
+            nowDate: new Date().toISOString().slice(0,10),
+            date: new Date(), 
+            picker: new Date().toISOString().substr(0, 10),
+            landscape: false,
+            reactive: false,
             //this is just for testing
             programList:[{program:"Program 1"}, {program:"Program 2"}],
             itemList:[],
@@ -382,7 +389,12 @@ export default {
                 })
             }
 		},
-    
+    computed: {
+        getEndDate() {
+        var endDate = new Date(this.date.getFullYear(), this.date.getMonth() - 1, 10);
+        return endDate.toISOString().slice(0,10)
+        }
+    },
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();

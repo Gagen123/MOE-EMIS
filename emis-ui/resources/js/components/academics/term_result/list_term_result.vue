@@ -56,11 +56,12 @@ export default {
     data(){
         return{
             classSubjectTermList:[],
+            dt:''
         }
     },
     methods:{
-           async classSubjectTerm(){
-             try{
+        async classSubjectTerm(){
+            try{
                 let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
                 let classSubjectTerms = await axios.get('academics/loadStudentAssessmentList').then(response => {
                     return response.data.data
@@ -75,15 +76,6 @@ export default {
                     })
                 })
                 this.classSubjectTermList = classSubjectTerms
-                 setTimeout(function(){
-                $("#assessment-term-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    "order": [[ 0, "asc" ]]
-            
-                })
-            }, 2000); 
-   
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -121,7 +113,20 @@ export default {
         }
     },
     mounted(){ 
-        this.classSubjectTerm()   
+        this.classSubjectTerm()
+        this.dt = $("#assessment-term-table").DataTable({
+            "order": [[ 0, "asc" ]]
+        })
+
     },
+    watch: {
+        classSubjectTermList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#assessment-term-table").DataTable()
+            });
+        }
+    }
+        
 }
 </script>

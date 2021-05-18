@@ -47,16 +47,6 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#subject-group-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    columnDefs: [
-                        { width: 50, targets: 0},
-                    ],
-
-                }); 
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_subject_group',params: {data:data}});
@@ -64,6 +54,19 @@ export default {
     },
     mounted(){ 
         this.loadsubjectgroupList();
+        this.dt =  $("#subject-group-table").DataTable({
+            columnDefs: [
+                { width: 50, targets: 0},
+            ],
+        })
     },
+    watch: {
+        subjectgroupList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-group-table").DataTable()
+            });
+        }
+    }
 }
 </script>

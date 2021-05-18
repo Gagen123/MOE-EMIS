@@ -14,7 +14,7 @@
             </div>      
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="subject-assessment-type-table" class="table table-sm table-bordered table-striped">
+                    <table id="class_subject_assessment_area-create-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Assessment Area</th>
@@ -69,7 +69,8 @@ export default {
             term_name:'',
             sub_name:'',
             input_type:'',
-            classSubAssessmentList:[]
+            classSubAssessmentList:[],
+            dt:''
         }
     },
     methods: {
@@ -91,17 +92,7 @@ export default {
             .catch(function (error){
                 console.log('Error..... '+error)
             });
-            setTimeout(function(){
-                $("#subject-assessment-type-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
-        get(){
-          
-        },
-    
         save(){
             let selectedclassSubAssessment = this.classSubAssessmentList.filter(classSubAssessment=>classSubAssessment.assmt_area_selected)
             axios.post('/masters/saveclassSubjectAssessment', {aca_assmt_term_id:this.aca_assmt_term_id,aca_sub_id:this.aca_sub_id, org_class_id:this.org_class_id,org_stream_id:this.org_stream_id,data:selectedclassSubAssessment})
@@ -120,6 +111,8 @@ export default {
     },
     mounted(){ 
         this.loadclassSubjectAssessment();
+        this.dt =  $("#class_subject_assessment_area-create-table").DataTable()
+        
     },
     created() {
         this.org_class_id=this.$route.params.data.org_class_id;
@@ -131,9 +124,15 @@ export default {
         this.sub_name = this.$route.params.data.sub_name;
         this.term_name = this.$route.params.data.term_name;
         this.input_type = this.$route.params.data.input_type;
-
-
     },
+    watch: {
+        classSubAssessmentList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#class_subject_assessment_area-create-table").DataTable()
+            });
+        }
+    }
     
 }
 </script>

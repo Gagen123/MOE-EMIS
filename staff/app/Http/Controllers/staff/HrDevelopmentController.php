@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 use App\Models\staff\HrDevelopment;
 use App\Models\staff\DocumentDetails;
 use App\Models\staff\HrWorkflow;
+use App\Models\staff\Participant;
+use App\Models\staff\ApplicationSequence;
+use App\Models\staff\ProgramApplication;
+
 
 class HrDevelopmentController extends Controller{
     use ApiResponser;
@@ -115,6 +119,7 @@ class HrDevelopmentController extends Controller{
             );
         }
         if($request->status=="Created"){
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','program_details')"); 
             $request_data=array_merge($request_data,
                 array('updated_by'            =>  $request->user_id,
                       'updated_at'            =>  date('Y-m-d h:i:s')
@@ -123,16 +128,19 @@ class HrDevelopmentController extends Controller{
         }
         if($request->id==""){
             $response_data = HrDevelopment::create($request_data);
-            foreach($request->attachment_details as $att){
-                $doc_data =[
-                    'parent_id'                        =>  $response_data->id,
-                    'attachment_for'                   =>  'Hr Development Programme',
-                    'path'                             =>  $att['path'],
-                    'original_name'                    =>  $att['original_name'],
-                    'user_defined_name'                =>  $att['user_defined_name'],
-                ];
-                $doc = DocumentDetails::create($doc_data);
+            if($request->attachment_details!="" && $request->attachment_details!=null){
+                foreach($request->attachment_details as $att){
+                    $doc_data =[
+                        'parent_id'                        =>  $response_data->id,
+                        'attachment_for'                   =>  'Hr Development Programme',
+                        'path'                             =>  $att['path'],
+                        'original_name'                    =>  $att['original_name'],
+                        'user_defined_name'                =>  $att['user_defined_name'],
+                    ];
+                    $doc = DocumentDetails::create($doc_data);
+                }
             }
+           
         }
         else{
             $act_det = HrDevelopment::where ('id', $request->id)->first();
@@ -211,7 +219,11 @@ class HrDevelopmentController extends Controller{
 
         $act_det->fill($request_data);
         $response_data=$act_det->save();
-
+        $workflow=HrWorkflow::where('program_id',$request->id)->get();
+        if(sizeof($workflow)>0){
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')"); 
+            HrWorkflow::where('program_id',$request->id)->delete();
+        }
         foreach ($request->role_action_mapp as $i=> $rol){
             $work_details = array(
                 'program_id'=>$request->id,
@@ -225,28 +237,246 @@ class HrDevelopmentController extends Controller{
     }
     
     public function loadprogramDetails($param=""){
-        if(strpos($param,'SSS')){
-            $access_level=explode('SSS',$param)[0];
-            if($access_level=="Ministry"){
-                $response_data=HrDevelopment::all();
-            }
-            if($access_level=="Dzongkhag"){
-                $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
-                )->where('c.dzo_id', explode('SSS',$param)[1])->get();
-            }
-            if($access_level=="Org"){
-                $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','c.updated_by', 'c.updated_at'
-                )->where('c.org_id', explode('SSS',$param)[2])->get();
+        // $response_data="";
+        // if(strpos($param,'SSS')){
+        //     $access_level=explode('SSS',$param)[0];
+        //     // if($access_level=="Ministry"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        //     // if($access_level=="Dzongkhag"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        //     // if($access_level=="Org"){
+        //     //     $response_data=HrDevelopment::all();
+        //     // }
+        // }
+        $response_data=HrDevelopment::all();
+        return $this->successResponse($response_data);
+    }
+    
+    public function loadDetails($id=""){
+        parse_str($id,$param_array);
+        $app_det=ProgramApplication::where('program_id',$param_array['id'])->where('org_id',$param_array['org'])->where('dzo_id',$param_array['dzongkhag'])->first();
+        if($app_det!=null && $app_det!=""){
+            $hrdev= $app_det;
+        }
+        else{ 
+            $hrdev=HrDevelopment::where('id',$param_array['id'])->where('status','Created')->first();
+            if($hrdev!="" && $hrdev!=null){
+                $hrdev->workflow=HrWorkflow::where('program_id',$param_array['id'])->orderBy('sequence')->get();
             }
         }
-        return $this->successResponse(HrDevelopment::where('parent_id',$id)->get());
+        return $this->successResponse($hrdev);
+    }
+    
+    public function loadProgramDetailsForNomination($param=""){
+        $param = rtrim($param, ", ");
+        $param=explode(',',$param);
+
+        $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->get();
+        foreach($work_details as $work){
+            $work->pro_app=ProgramApplication::where('program_id',$work->program_id)->first();
+        }
+        // if(sizeof($work_details)>0){
+        //     foreach($work_details as $work){
+        //         $work->actiontype='Nominating';
+        //     }
+        // }
+        // else{
+        //     //selection
+        //     $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->where('sequence',2)->get();
+        //     foreach($work_details as $work){
+        //         $work->actiontype='Shortlisting & Selection';
+        //     }
+        // }
+        return $this->successResponse($work_details);
+    }
+    
+    public function saveParticipant(Request $request){
+        $rules = [
+            'programId'             =>  'required',
+            'participant'           =>  'required',
+            'contact'               =>  'required',
+            'email'                 =>  'required',
+            'nature_of_participant' =>  'required',
+        ];
+        $customMessages = [
+            'programId.required'              => 'Please select nomination start date',
+            'participant.required'            => 'Please select nomination end date',
+            'contact.required'                => 'Please select this field',
+            'email.required'                  => 'This field is required',
+            'nature_of_participant.required'  => 'This field is required',
+        ];
+
+        $this->validate($request, $rules,$customMessages);
+        if($request->action_type=="add"){
+            $request_data =[
+                'program_id'                =>  $request->programId,
+                'org_id'                    =>  $request->org_id,
+                'dzo_id'                    =>  $request->dzo_id,
+                'participant_id'            =>  $request->participant,
+                'contact'                   =>  $request->contact,
+                'email'                     =>  $request->email,
+                'nature_of_participant'     =>  $request->nature_of_participant,
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $response_data= Participant::create($request_data);
+        }
+        else{
+            $request_data =[
+                'org_id'                    =>  $request->org_id,
+                'dzo_id'                    =>  $request->dzo_id,
+                'participant_id'            =>  $request->participant,
+                'contact'                   =>  $request->contact,
+                'email'                     =>  $request->email,
+                'nature_of_participant'     =>  $request->nature_of_participant,
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $act_det = Participant::where ('id', $request->id)->first();
+            // dd($request->id);
+            $act_det->fill($request_data);
+            $response_data=$act_det->save();
+            $response_data= Participant::where('id',$request->id)->first();
+        }
+        if(!$request->attachment_details==null){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $response_data->id,
+                    'attachment_for'                   =>  'Participant',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['name'],
+                ];
+                $doc = DocumentDetails::create($doc_data);
+            }
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function getParticipantDetails($param=""){
+        parse_str($param,$param_array);
+        if($param_array['action_type']=="nomination"){
+            $response_details=Participant::where('dzo_id',$param_array['dzongkhag'])->where('org_id',$param_array['org'])->where('program_id',$param_array['program_id'])->get();
+            foreach($response_details as $part){
+                $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+            }
+        }
+        else if($param_array['action_type']=="verification"){
+            $response_details=Participant::where('program_id',explode('SSS',$param_array['program_id'])[0])->where('org_id',explode('SSS',$param_array['program_id'])[1])->get();
+            foreach($response_details as $part){
+                $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+            } 
+        }
+        else if($param_array['action_type']=="orgdetails"){
+            if($param_array['accessLevel']=="Ministry"){
+                $response_details=ProgramApplication::where('program_id',$param_array['program_id'])->get();
+            }
+            else{
+                $response_details=ProgramApplication::where('program_id',$param_array['program_id'])->where('dzo_id',$param_array['dzongkhag'])->get();
+            }
+        }
+        return $this->successResponse($response_details);
+    }
+    
+    public function getParticipantDetailsById($id=""){
+        $response_details=Participant::where('id',$id)->first();
+        $response_details->document=DocumentDetails::where('parent_id',$response_details->id)->get();
+        return $this->successResponse($response_details);
+    }
+    
+    public function deleteParticipant($id=""){
+        $response_data = Participant::findOrFail($id);
+        $response_data->delete();
+        return $this->successResponse($response_data);
+    }
+    
+    public function submitParticipants(Request $request){
+        $app_det=ProgramApplication::where('program_id',$request->programId)->where('org_id',$request->org_id)->where('dzo_id',$request->dzo_id)->first();
+        if($app_det==""){
+            $last_seq=ApplicationSequence::where('service_name','Hr Development')->first();
+            if($last_seq==null || $last_seq==""){
+                $last_seq=1;
+                $app_details = [
+                    'service_name'                  =>  'Hr Development',
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::create($app_details);
+            }
+            else{
+                $last_seq=$last_seq->last_sequence+1;
+                $app_details = [
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::where('service_name', 'Hr Development')->update($app_details);
+            }
+            $appNo='';
+            if(strlen($last_seq)==1){
+                $appNo= $appNo.date('Y').'.'.date('m').'.000'.$last_seq;
+            }
+            else if(strlen($last_seq)==2){
+                $appNo= $appNo.date('Y').'.'.date('m').'.00'.$last_seq;
+            }
+            else if(strlen($last_seq)==3){
+                $appNo= $appNo.date('Y').'.'.date('m').'.0'.$last_seq;
+            }
+            else if(strlen($last_seq)==4){
+                $appNo= $appNo.date('Y').'.'.date('m').'.'.$last_seq;
+            }
+            $request_data =[
+                'program_id'                =>  $request->programId,
+                'org_id'                    =>  $request->org_id,
+                'dzo_id'                    =>  $request->dzo_id,
+                'app_no'                    =>  $appNo,
+                'remarks'                   =>  $request->remarks,
+                'status'                    =>  'Nominated',
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $response_data= ProgramApplication::create($request_data);
+        }
+        else{
+            $response_data="Already Submitted"; 
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function updateParticipant(Request $request){
+        $response_data="";
+        if(!$request->updatedata==null){
+            foreach($request->updatedata as $participant){
+                $update_data =[
+                    'remarks'                  =>  $participant['remarks'],
+                    'status'                   =>  $participant['status'],
+                ];
+                Participant::where('id', $participant['id'])->update($update_data);
+            }
+            $response_data="success";
+            $update_data =[
+                'remarks'                  =>  $participant['remarks'],
+                'status'                   =>  $participant['status'],
+            ];
+            // ProgramApplication::where('id', $participant['id'])->update($update_data);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function updateapplication(Request $request){
+        $response_data="";
+        $status="";
+        if($request->status==2){
+            $status="Shortlisted";
+        }
+        if($request->status==3){
+            $status="Selected";
+        }
+        $update_data =[
+            'remarks'                  =>  $request->remarks,
+            'status'                   =>  $status,
+            'updated_by'               =>  $request->user_id,
+            'updated_at'               =>  date('Y-m-d h:i:s')
+        ];
+        $response_data=ProgramApplication::where('program_id', $request->programId)->update($update_data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 }

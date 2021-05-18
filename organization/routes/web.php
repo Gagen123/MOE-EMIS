@@ -18,76 +18,76 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
-    
+
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {
         // disaster route
         $router->get('/loadDisaster', 'Masters\DisasterController@loadDisaster');
         $router->post('/saveDisaster', 'Masters\DisasterController@saveDisaster');
 
-        
+
     });
     $router->group(['prefix' => 'masters/location'], function () use ($router) {
         // location route
         $router->get('/loadLocation', 'Masters\LocationController@loadLocation');
         $router->post('/saveLocation', 'Masters\LocationController@saveLocation');
-        
+
     });
 
     $router->group(['prefix' => 'masters/structureCategory'], function () use ($router) {
         // structure category route
         $router->get('/loadStructureCategory', 'Masters\StructureCategoryController@loadStructureCategory');
         $router->post('/saveStructureCategory', 'Masters\StructureCategoryController@saveStructureCategory');
-        
+
     });
 
     $router->group(['prefix' => 'masters/level'], function () use ($router) {
         // level category route
         $router->post('/saveLevel', 'Masters\LevelController@saveLevel');
         $router->get('/loadLevel', 'Masters\LevelController@loadLevel');
-        
+
     });
 
     $router->group(['prefix' => 'masters/structureFacility'], function () use ($router) {
         // structure facility category route
         $router->post('/saveStructureFacility', 'Masters\StructureFacilityController@saveStructureFacility');
         $router->get('/loadStructureFacility', 'Masters\StructureFacilityController@loadStructureFacility');
-        
+
     });
 
     $router->group(['prefix' => 'masters/equipmentType'], function () use ($router) {
         // equipment type route
         $router->post('/saveEquipmentType', 'Masters\EquipmentTypeController@saveEquipmentType');
         $router->get('/loadEquipmentType', 'Masters\EquipmentTypeController@loadEquipmentType');
-        
+
     });
 
     $router->group(['prefix' => 'masters/equipmentUsage'], function () use ($router) {
         // equipment usage route
         $router->post('/saveEquipmentUsage', 'Masters\EquipmentUsageController@saveEquipmentUsage');
         $router->get('/loadEquipmentUsage', 'Masters\EquipmentUsageController@loadEquipmentUsage');
-        
+
     });
 
     $router->group(['prefix' => 'masters/sportFacility'], function () use ($router) {
         // sport facility route
         $router->post('/saveSportFacility', 'Masters\SportFacilityTypeController@saveSportFacility');
         $router->get('/loadSportFacility', 'Masters\SportFacilityTypeController@loadSportFacility');
-        
+
     });
 
     $router->group(['prefix' => 'masters/sportFacilitySubtype'], function () use ($router) {
         // sport facility subtype route
         $router->post('/saveSportFacilitySubtype', 'Masters\SportFacilitySubTypeController@saveSportFacilitySubtype');
         $router->get('/loadSportFacilitySubtype', 'Masters\SportFacilitySubTypeController@loadSportFacilitySubtype');
-        
+
     });
     $router->group(['prefix' => 'masters/sportSupporter'], function () use ($router) {
         // sport supporter route
         $router->post('/saveSportSupporter', 'Masters\SportSupporterController@saveSportSupporter');
         $router->get('/loadSportSupporter', 'Masters\SportSupporterController@loadSportSupporter');
-        
+
     });
-    
+
     $router->group(['prefix' => 'masters/structureSubCategory'], function () use ($router) {
         // structure sub category route
         $router->post('/saveStrSubCategory', 'Masters\StructureSubCategoryController@saveStrSubCategory');
@@ -109,7 +109,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->post('/saveClass', 'Masters\ClassController@saveClass');
         $router->get('/loadClass', 'Masters\ClassController@loadClass');
     });
-    
+
     $router->group(['prefix' => 'masters/stream'], function () use ($router) {
         // class route
         $router->post('/saveStream', 'Masters\StreamController@saveStream');
@@ -178,11 +178,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 			$router->get('/getclassSections/{orgId}', 'generalInformation\SectionController@getclassSections');
 
         });
-    
+
         $router->group(['prefix' => 'classMapping'], function () use ($router) {
             // section route
             $router->post('/saveClassMapping', 'generalInformation\ClassMappingController@saveClassMapping');
-    
+
         });
 
         $router->group(['prefix' => 'connectivity'], function () use ($router) {
@@ -201,9 +201,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             // locations route
             $router->post('/saveLocation', 'generalInformation\LocationsController@saveLocation');
             $router->get('/getDisasterListInCheckbox', 'generalInformation\LocationsController@getDisasterListInCheckbox');
-    
+
         });
-        
+
         $router->group(['prefix' => 'sport'], function () use ($router) {
             $router->post('/saveSport', 'structuralFacility\SportController@saveSport');
             $router->get('/loadSport/{orgId}', 'structuralFacility\SportController@loadSport');
@@ -220,9 +220,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveDinningHall', 'structuralFacility\SchoolFeedingController@saveDinningHall');
             $router->get('/loadFoodStoreStatus/{user_id}', ['uses' => 'structuralFacility\SchoolFeedingController@loadFoodStoreStatus']);
             $router->get('/loadUtensilKitchenStatus/{user_id}', ['uses' => 'structuralFacility\SchoolFeedingController@loadUtensilKitchenStatus']);
-    
+
         });
-        
+
         $router->group(['prefix' => 'infrastructure'], function () use ($router) {
             $router->post('/saveInfrastructure', 'structuralFacility\InfrastructureController@saveInfrastructure');
             $router->get('/getCategoryInDropdown', 'structuralFacility\InfrastructureController@getCategoryInDropdown');
@@ -233,9 +233,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getInfrastructureDetails/{infraId}', 'structuralFacility\InfrastructureController@getInfrastructureDetails');
             $router->post('/saveWashFeeding', 'structuralFacility\InfrastructureController@saveWashFeeding');
             $router->get('/getWashFeeding/{type}', ['uses' => 'structuralFacility\InfrastructureController@getWashFeeding']);
-            
+
         });
-        
+
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
             $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');
@@ -252,22 +252,24 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
-            $router->get('/loadorgs', 'establishment\EstablishmentController@loadorgs');
+            $router->get('/loadorgs/{type}', 'establishment\EstablishmentController@loadorgs');
+            $router->get('/getOrgDetailsById/{id}/{usertype}', 'establishment\EstablishmentController@getOrgDetailsById');
             $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
+            $router->get('/loadorgbygewogId/{gewog_id}', 'establishment\EstablishmentController@loadorgbygewogId');
             $router->get('/getLocationDetails/{id}', ['uses' => 'establishment\EstablishmentController@getLocationDetails']);
             $router->get('/getConnectivityDetails/{id}', ['uses' => 'establishment\EstablishmentController@getConnectivityDetails']);
             $router->get('/getSectionDetails/{id}', ['uses' => 'establishment\EstablishmentController@getSectionDetails']);
         });
-        
+
         $router->group(['prefix' => 'headQuater'], function () use ($router) {
             $router->post('/saveContactDetails', 'establishment\HeadQuaterController@saveContactDetails');
             $router->post('/saveBasicDetails', 'establishment\HeadQuaterController@saveBasicDetails');
             $router->get('/loadBasicDetails/{user_id}', ['uses' => 'establishment\HeadQuaterController@loadBasicDetails']);
             $router->get('/getsAgencyList/{param}', ['uses' => 'establishment\HeadQuaterController@getsAgencyList']);
             $router->get('/getHeadQuarterDetails/{id}', ['uses' => 'establishment\HeadQuaterController@getHeadQuarterDetails']);
-            
+
         });
-    
+
         $router->group(['prefix' => 'changeDetails'], function () use ($router) {
             $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
             $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
@@ -280,18 +282,18 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadPriviousOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadPriviousOrgDetails']);
             $router->post('/updateChangeBasicDetails', 'establishment\ChangeBasicDetailsController@updateChangeBasicDetails');
         });
-    
+
         $router->group(['prefix' => 'bifurcation'], function () use ($router) {
             $router->post('/saveBifurcation', 'restructuring\BifurcationController@saveBifurcation');
             $router->get('/loadbifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadbifurcationForVerification']);
             // $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
-    
+
         });
-    
+
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
             $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
-    
+
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
             $router->post('/saveClosure', 'restructuring\ClosureController@saveClosure');
@@ -299,5 +301,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
 
         });
+        
+        $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
+        $router->get('/getOrgProfile/{id}', ['uses' => 'establishment\EstablishmentController@getOrgProfile']);
+        
+    });
+    $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
+        $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
+        $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
+
     });
 });

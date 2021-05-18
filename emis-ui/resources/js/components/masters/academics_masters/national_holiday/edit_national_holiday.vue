@@ -41,8 +41,8 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
-                this.form.status= 1;
+                this.form.holiday_date= '';
+                this.form.description= '';
             }
             if(type=="save"){
                 this.form.post('/masters/saveAcademicMasters',this.form)

@@ -3,8 +3,17 @@ const routes = [
     { path: '/academic-master', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
         children: 
         [
+           
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
-
+            
+            { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
+                    { path: '/list-national-holiday', name:'list_national_holiday', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
+                    { path: '/create-national-holiday', name: 'create_national_holiday', component: require('./components/masters/academics_masters/national_holiday/create_national_holidy.vue').default },
+                    { path: '/edit-national-holiday', name: 'edit_national_holiday', component: require('./components/masters/academics_masters/national_holiday/edit_national_holiday.vue').default },
+                ]
+            },
             { path: '/subject-group-master', component: require('./components/masters/academics_masters/subject_group/subject_group_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/academics_masters/subject_group/list_subject_group.vue').default },
@@ -48,7 +57,8 @@ const routes = [
                     { path: '/list-subject-assessment-area', name:'list_subject_assessment_area', component: require('./components/masters/academics_masters/class_subject_assessment_area/list_class_subject_assessment_area.vue').default },
                     { path: '/create-subject-assessment-area', name: 'aca_subject_assessment_area', component: require('./components/masters/academics_masters/class_subject_assessment_area/create_class_subject_assessment_area.vue').default },
                 ]
-            }
+            },
+         
             
         ]
     },

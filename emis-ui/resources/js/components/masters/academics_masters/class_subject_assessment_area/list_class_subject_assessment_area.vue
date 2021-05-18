@@ -34,11 +34,12 @@ export default {
     data(){
         return{
             classSubAssmtFrequencyList:[],
+            dt:''
         }
     },
     methods:{
-           async classSubAssmtFrequency(){
-             try{
+        async classSubAssmtFrequency(){
+            try{
                 let classStreams = await axios.get('masters/getClassStream').then(response => {
                     return response.data.data
                 })
@@ -56,21 +57,6 @@ export default {
                     })
                 })
                 this.classSubAssmtFrequencyList = classSubAssmtFrequencies
-                 setTimeout(function(){
-                $("#class_subject_assessment_area-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                    "order": [[ 0, "asc" ]],
-                    rowGroup: {
-                        dataSrc: 0 
-                    },
-                     columnDefs: [ {
-            targets:  0,
-            visible: false
-        } ]
-                })
-            }, 2000); 
-   
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -82,7 +68,24 @@ export default {
         },
     },
     mounted(){ 
-        this.classSubAssmtFrequency()   
+        this.classSubAssmtFrequency();
+        this.dt =  $("#class_subject_assessment_area-table").DataTable({
+            rowGroup: {
+                    dataSrc: 0 
+                },
+            columnDefs: [{
+                targets:  0,
+                visible: false
+            }]
+         }) 
     },
+    watch: {
+        classSubAssmtFrequencyList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#class_subject_assessment_area-table").DataTable()
+            });
+        }
+    }
 }
 </script>

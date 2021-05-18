@@ -64,12 +64,14 @@ export default {
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_award_form: new form({
+                id:'',
                 student: '',
                 award_given_by: '',
                 award_type_id: '',
                 place: '',
                 date: '',
                 remarks:'',
+                action_type:'add'
             }),
         }
     },

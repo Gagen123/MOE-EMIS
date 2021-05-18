@@ -27,6 +27,9 @@ use App\Models\ApplicationSequence;
 use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
+use App\Models\establishment\HeadQuaterDetails;
+use App\Models\OrgProfile;
+
 
 use Illuminate\Support\Facades\DB;
 
@@ -56,6 +59,10 @@ class EstablishmentController extends Controller
      */
     public function saveEstablishment(Request $request){
         $id = $request->id;
+        $feedingModality=null;
+        if($request['isfeedingschool']=="1"){
+            $feedingModality=implode(',',$request['feeding']);
+        }
         if($id != null){
             $estd = [
                 'proposedName'                  =>  $request['proposedName'],
@@ -64,7 +71,9 @@ class EstablishmentController extends Controller
                 'dzongkhagId'                   =>  $request['dzongkhag'],
                 'gewogId'                       =>  $request['gewog'],
                 'chiwogId'                      =>  $request['chiwog'],
-                'locationId'                    =>  $request['locationType'], 
+                'isfeedingschool'               =>  $request['isfeedingschool'],
+                'feeding'                       =>  $feedingModality,
+                'locationId'                    =>  $request['locationType'],
                 'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
                 'isSenSchool'                   =>  $request['senSchool'],
                 'parentSchoolId'                =>  $request['parentSchool'],
@@ -86,7 +95,7 @@ class EstablishmentController extends Controller
                     'updated_by'               =>  $request->user_id,
                     'created_at'               =>  date('Y-m-d h:i:s')
                 ];
-                
+
                 $establishment = ApplicationProprietorDetails::where('applicationId', 1)->update($pvtDetails);
             }
             $establishment = ApplicationDetails::where('id', $id)->update($estd);
@@ -98,14 +107,14 @@ class EstablishmentController extends Controller
                 $app_details = [
                     'service_name'                  =>  'New Establishment',
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::create($app_details);
             }
             else{
                 $last_seq=$last_seq->last_sequence+1;
                 $app_details = [
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::where('service_name', 'New Establishment')->update($app_details);
             }
             $application_no='Estb-';
@@ -121,6 +130,7 @@ class EstablishmentController extends Controller
             else if(strlen($last_seq)==4){
                 $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
             }
+
             $estd = [
                 'proposedName'                  =>  $request['proposedName'],
                 'category'                      =>  $request['category'],
@@ -128,7 +138,9 @@ class EstablishmentController extends Controller
                 'dzongkhagId'                   =>  $request['dzongkhag'],
                 'gewogId'                       =>  $request['gewog'],
                 'chiwogId'                      =>  $request['chiwog'],
-                'locationId'                    =>  $request['locationType'], 
+                'isfeedingschool'               =>  $request['isfeedingschool'],
+                'feeding'                       =>  $feedingModality,
+                'locationId'                    =>  $request['locationType'],
                 'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
                 'isSenSchool'                   =>  $request['senSchool'],
                 'parentSchoolId'                =>  $request['parentSchool'],
@@ -165,7 +177,7 @@ class EstablishmentController extends Controller
         $classStream='';
         $inserted_class="";
         $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('service', 'New Establishment')->where('status', 'pending')->first();
-        // return $application_details;     
+        // return $application_details;
         if($request->stream!="" && sizeof($request->stream)>0){
             foreach ($request->stream as $stm){
                 foreach ($classes as $cls){
@@ -207,7 +219,7 @@ class EstablishmentController extends Controller
      * method to get class in checkbox
      */
     public function getClass(){
-        return Classes::where('status',1)->get();
+        return Classes::where('status',1)->orderBy('sequence','ASC')->get();
     }
 
     /**
@@ -241,34 +253,33 @@ class EstablishmentController extends Controller
         $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
         foreach($classSection as $cls){
             $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-            
+
         }
         foreach($sections as $sec){
             $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
         }
         $response_data->class_section=$classSection;
         $response_data->sections=$sections;
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
     public function updateEstablishment(Request $request){
         $estd =[
             'status'                       =>   $request->status,
             'updated_remarks'              =>   $request->remarks,
-            'updated_by'                   =>   $request->user_id, 
+            'updated_by'                   =>   $request->user_id,
         ];
         $establishment = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
-    
+
     public function loadApprovedOrgs(){
         return $this->successResponse(ApplicationDetails::where('status','Approved')->where('service','New Establishment')->where('category','0')->get());
     }
 
-    
+
     public function getApprovedOrgDetails($type="",$key=""){
         $response_data=ApplicationDetails::where('status','Approved')->where('category','0')->where('id',$key)->first();
-        // dd($response_data);
         $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
         $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
         $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
@@ -284,7 +295,7 @@ class EstablishmentController extends Controller
         $response_data->sections=$sections;
         return $this->successResponse($response_data);
     }
-    
+
     public function registerOrganizationDetails(Request $request){
         $last_seq=ApplicationSequence::where('service_name','Organization Code')->first();
         if($last_seq==null || $last_seq==""){
@@ -292,14 +303,14 @@ class EstablishmentController extends Controller
             $app_details = [
                 'service_name'                  =>  'Organization Code',
                 'last_sequence'                 =>  $last_seq,
-            ];  
+            ];
             ApplicationSequence::create($app_details);
         }
         else{
             $last_seq=$last_seq->last_sequence+1;
             $app_details = [
                 'last_sequence'                 =>  $last_seq,
-            ];  
+            ];
             ApplicationSequence::where('service_name', 'Organization Code')->update($app_details);
         }
         $org_code='';
@@ -372,11 +383,17 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
-    
+
     public function getschoolDetials($param=""){
         $access_level=explode('SSS',$param)[0];
         if($access_level=="Ministry"){
-            $response_data=OrganizationDetails::all();
+            if(explode('SSS',$param)[1]=="private"){
+                $response_data=OrganizationDetails::where('category',0)->get();
+            }
+            else{
+                $response_data=OrganizationDetails::where('category',1)->get();
+            }
+
         }
         if($access_level=="Dzongkhag"){
             $response_data=OrganizationDetails::where('dzongkhagId',explode('SSS',$param)[1])->get();
@@ -389,7 +406,7 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($response_data);
     }
-    
+
     public function getFullSchoolDetials($id=""){
         $response_data=OrganizationDetails::where('id',$id)->first();
         if($response_data!=null || $response_data!=""){
@@ -407,14 +424,29 @@ class EstablishmentController extends Controller
             $response_data->class_section=$classSection;
             $response_data->sections=$stream;
         }
-        
-        return $this->successResponse($response_data); 
-    }
-    
-    public function loadorgs(){
-        $response_data=OrganizationDetails::all();
         return $this->successResponse($response_data);
     }
+
+    public function loadorgs($type=""){
+        $response_data="";
+        if($type=="Org"){
+            $response_data=OrganizationDetails::all();
+        }
+        if($type=="Dzongkhag"){
+            $response_data=HeadQuaterDetails::where('organizationType',2)->select('agencyName AS name','id')->get();
+        }
+        if($type=="Ministry"){
+            $response_data=HeadQuaterDetails::where('organizationType',1)->select('agencyName AS name','id')->get();
+        }
+        return $this->successResponse($response_data);
+    }
+
+    //Used in NFE-MIS
+    public function loadorgbygewogId($gewog_id){
+      $response_data=OrganizationDetails::where('gewogId',$gewog_id)->get();
+      return $response_data;
+    }
+
     public function loadorgbyId($type="",$org_id=""){
         if($type=="org"){
             $response_data=OrganizationDetails::where('id',$org_id)->first();
@@ -424,6 +456,7 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($response_data);
     }
+
     public function getOrgList($dzo_id=""){
         $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
         return $this->successResponse($response_data);
@@ -440,7 +473,7 @@ class EstablishmentController extends Controller
     public function getLocationDetails($id=""){
         $response_data=Locations::where('organizationId',$id)->first();
         $response_data->disasterRisk=LocationDisasterRisk::where('locationId',$response_data->id)->get();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
     public function getConnectivityDetails($id=""){
@@ -450,13 +483,51 @@ class EstablishmentController extends Controller
         $response_data->telephone=ServiceProvider::where('id',$response_data->telephoneServiceProvoderId)->first()->name;
         $response_data->internet=ServiceProvider::where('id',$response_data->internetServiceProviderId)->first()->name;
         $response_data->contact=ContactDetails::where('organizationId',$id)->get();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
     public function getSectionDetails($id=""){
         $response_data = DB::table('section_details as s')
         ->join('organization_class_streams as o', 'o.id', '=', 's.classSectionId')
         ->select('o.organizationId','s.section', 'o.classId','o.streamId')->where('o.organizationId', $id)->orderby('o.classId')->get();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
+    }
+
+    public function udpateOrgProfile(Request $request){
+        $org_det=OrgProfile::where('org_id',$request->ori_id)->first();
+        $org_data = [
+            'org_id'        =>  $request->org_id,
+            'mission'       =>  $request->mission,
+            'vission'       =>  $request->vission,
+        ];
+        if($request->attachments!=""){
+            $org_data=$org_data+[
+                'logo_path'     =>  $request->attachments];
+        }
+        if($org_det==null || $org_det==""){
+            $org_data=$org_data+[
+                'created_by'    =>  $request->user_id,
+                'created_at'    =>  date('Y-m-d h:i:s')];
+            OrgProfile::create($org_data);
+        }
+        else{
+            $org_data=$org_data+[
+                'updated_by'    =>  $request->user_id,
+                'updated_at'    =>  date('Y-m-d h:i:s')];
+            OrgProfile::where('org_id',$request->org_id)->update($org_data);
+        }
+        $org_det=OrgProfile::where('org_id',$request->org_id)->first();
+
+        return $this->successResponse($org_det, Response::HTTP_CREATED);
+    }
+
+    public function getOrgProfile($id=""){
+        $response_data =OrgProfile::where('org_id',$id)->first();
+        if($response_data!=""){
+            $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+            $response_data->orgName=$org_det->name;
+            $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
+        }
+        return $this->successResponse($response_data);
     }
 }

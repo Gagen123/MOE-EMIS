@@ -8,8 +8,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\StudentPersonalDetails;
+use App\Models\Students\Std_Students;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
+use App\Models\Students\ApplicationSequence;
 
 class StudentAdmissionController extends Controller
 {
@@ -40,59 +42,80 @@ class StudentAdmissionController extends Controller
         $this->validate($request, $rules, $customMessages);
         if( $request->type=="edit"){
             //caling procedure to insert in audit
-            $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','personal')");
+            //$procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','personal')");
             $data =[
-                'snationality'              =>  $request->snationality,
-                'cid_passport'              =>  $request->cid_passport,
-                'first_name'                =>  $request->first_name,
-                'middle_name'               =>  $request->middle_name,
-                'last_name'                 =>  $request->last_name,
-                'dob'                       =>  $request->dob,
-                'sex_id'                    =>  $request->sex_id,
-                'village_id'                =>  $request->village_id, 
-                'address'                   =>  $request->fulladdress,
-                'mother_tongue'             =>  $request->mother_tongue, 
-                'attachments'               =>  $request->attachments, 
+                'OrgOrganizationId'         =>  $request->snationality,
+                'CmnCountryId'              =>  $request->snationality,
+                'CidNo'                     =>  $request->cid_passport,
+                'Name'                      =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
+                'DateOfBirth'               =>  $request->dob,
+                'CmnSexId'                  =>  $request->sex_id,
+                'CmnChiwogId'               =>  $request->village_id, 
+                'CmnGewogId'                =>  $request->gewog,
+                'IsNewAdmission'            =>1,
+                'Address'                   =>  $request->fulladdress,
+                'CmnLanguageId'             =>  $request->mother_tongue, 
+                'PhotoPath'                 =>  $request->attachments, 
             ];
-            $response_data = StudentPersonalDetails::where('id',$request->student_id)->update($data);
+            $response_data = Std_Students::where('id',$request->student_id)->update($data);
         } 
+        else if($request->type=="update_transfer"){
+            //keep history 
+            $data =[
+                'OrgOrganizationId'         =>  $request->snationality,
+                'CmnCountryId'              =>  $request->snationality,
+                'CidNo'                     =>  $request->cid_passport,
+                'Name'                      =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
+                'DateOfBirth'               =>  $request->dob,
+                'CmnSexId'                  =>  $request->sex_id,
+                'CmnChiwogId'               =>  $request->village_id, 
+                'CmnGewogId'                =>  $request->gewog,
+                'IsNewAdmission'            =>1,
+                'Address'                   =>  $request->fulladdress,
+                'CmnLanguageId'             =>  $request->mother_tongue, 
+                'PhotoPath'                 =>  $request->attachments, 
+            ];
+            $updated_data = Std_Students::where('id',$request->student_id)->update($data);
+            $response_data = Std_Students::where('id',$request->student_id)->first();
+        }
         else{
-            $data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+            $data = Std_Students::where('CidNo',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
             if($data==""){
                 $data =[
-                    'snationality'              =>  $request->snationality,
-                    'cid_passport'              =>  $request->cid_passport,
-                    'first_name'                =>  $request->first_name,
-                    'middle_name'               =>  $request->middle_name,
-                    'last_name'                 =>  $request->last_name,
-                    'dob'                       =>  $request->dob,
-                    'sex_id'                    =>  $request->sex_id,
-                    'village_id'                =>  $request->village_id, 
-                    'village_id'                =>  $request->village_id, 
-                    'address'                   =>  $request->fulladdress,
-                    'mother_tongue'             =>  $request->mother_tongue, 
-                    'attachments'               =>  $request->attachments, 
+                    'OrgOrganizationId'         =>  $request->snationality,
+                    'CmnCountryId'              =>  $request->snationality,
+                    'CidNo'                     =>  $request->cid_passport,
+                    'Name'                      =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
+                    'DateOfBirth'               =>  $request->dob,
+                    'CmnSexId'                    =>  $request->sex_id,
+                    'CmnChiwogId'                =>  $request->village_id, 
+                    'CmnGewogId'                  =>  $request->gewog,
+                    'IsNewAdmission'            =>1,
+                    'Address'                   =>  $request->fulladdress,
+                    'CmnLanguageId'             =>  $request->mother_tongue, 
+                    'PhotoPath'               =>  $request->attachments, 
                     'created_by'                =>  $request->user_id,
                     'created_at'                =>  date('Y-m-d h:i:s'),
                 ];
-                $response_data = StudentPersonalDetails::create($data);
+                $response_data = Std_Students::create($data);
             }
             else{
                 $data =[
-                    'snationality'              =>  $request->snationality,
-                    'cid_passport'              =>  $request->cid_passport,
-                    'first_name'                =>  $request->first_name,
-                    'middle_name'               =>  $request->middle_name,
-                    'last_name'                 =>  $request->last_name,
-                    'dob'                       =>  $request->dob,
-                    'sex_id'                    =>  $request->sex_id,
-                    'village_id'                =>  $request->village_id, 
-                    'address'                   =>  $request->fulladdress,
-                    'mother_tongue'             =>  $request->mother_tongue, 
-                    'attachments'               =>  $request->attachments, 
+                    'OrgOrganizationId'         =>  $request->snationality,
+                    'CmnCountryId'              =>  $request->snationality,
+                    'CidNo'              =>  $request->cid_passport,
+                    'Name'                =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
+                    'DateOfBirth'                       =>  $request->dob,
+                    'CmnSexId'                    =>  $request->sex_id,
+                    'CmnChiwogId'                =>  $request->village_id, 
+                    'CmnGewogId'                  =>  $request->gewog,
+                    'IsNewAdmission'            =>1,
+                    'Address'                   =>  $request->fulladdress,
+                    'CmnLanguageId'             =>  $request->mother_tongue, 
+                    'PhotoPath'               =>  $request->attachments, 
                 ];
-                $updated_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->update($data);
-                $response_data = StudentPersonalDetails::where('cid_passport',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
+                $updated_data = Std_Students::where('CidNo',$request->cid_passport)->update($data);
+                $response_data = Std_Students::where('CidNo',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
             }
         }
         
@@ -256,14 +279,14 @@ class StudentAdmissionController extends Controller
         $this->validate($request, $rules, $customMessages);
         // $update_data = StudentPersonalDetails::where('id',$request->student_id)->where('status','pending')->where('created_by',$request->user_id)->first();
         $update_data =[
-            'parent_marital_status'     =>  $request->merital_status,
-            'primary_contact'           =>  $request->primary_contact,
+            'CmnParentsMaritalStatusId'     =>  $request->merital_status,
+            'PrimaryContact'           =>  $request->primary_contact,
         ];
-        if( $request->type=="edit"){
+        // if( $request->type=="edit"){
             
-            $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','guardain')");
-        }
-        $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
+        //     $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','guardain')");
+        // }
+        $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
         $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
             $data =[                
@@ -342,42 +365,123 @@ class StudentAdmissionController extends Controller
         ];
         
         $this->validate($request, $rules, $customMessages);
-        if( $request->type=="edit"){
-            $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','classes')");
-            $data = StudentClassDetails::where('student_id',$request->student_id)->delete();
-        }
         $scholar="";
         $special_benifit="";
-        if($request->scholarship!=null && !sizeof($request->scholarship)>0){
-            foreach($request->scholarship as $scho){
-                $scholar.=$scho.', ';
-            }
-        }
+        // if($request->scholarship!=null && !sizeof($request->scholarship)>0){
+        //     foreach($request->scholarship as $scho){
+        //         $scholar.=$scho.', ';
+        //     }
+        // }
         
-        if($request->special_benifit!=null && !sizeof($request->special_benifit)>0){
-            foreach($request->special_benifit as $bn){
-                $special_benifit.=$bn.', ';
-            }
+        // if($request->special_benifit!=null && !sizeof($request->special_benifit)>0){
+        //     foreach($request->special_benifit as $bn){
+        //         $special_benifit.=$bn.', ';
+        //     }
+        // }
+        if( $request->type=="edit"){
+            $data =[
+                'Dzo_Id'                    =>  $request->dzo_id,
+                'Org_Id'                    =>  $request->org_id,
+                'OrgClassId'                =>  $request->class_stream_id,
+                'OrgClassSectionId'         =>  $request->section,
+                'StdStudentTypeId'          =>  $request->student_type,
+                'NoOfMeals'                 =>  $request->no_meals,
+                'IsSenStudent'              =>  $request->disability,
+                'Meal_Type'                 =>  $request->meal_type,
+                'Feeding_Type'              =>  $request->feeding_type,
+                'scholarship'               =>  $scholar,
+                'special_benifit'           =>  $special_benifit,
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = StudentClassDetails::where('StdStudentId',$request->student_id,)->update($data);
         }
-        
-        $data =[
-            'student_id'                =>  $request->student_id,
-            'dzo_id'                    =>  $request->dzo_id,
-            'org_id'                    =>  $request->org_id,
-            'class_stream_id'           =>  $request->class_stream_id,
-            'section'                   =>  $request->section,
-            'student_type'              =>  $request->student_type,
-            'no_meals'                  =>  $request->no_meals,
-            'scholarship'               =>  $scholar,
-            'special_benifit'           =>  $special_benifit,
-            'disability'                =>  $request->disability,
-            'user_id'                   =>  $request->user_id,
-        ];
-        $response_data = StudentClassDetails::create($data);
-        $update_data =[
-            'status'     =>  'created',
-        ];
-        $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
+        else if($request->type=="transfer_update"){
+            $data =[
+                'Dzo_Id'                    =>  $request->dzo_id,
+                'Org_Id'                    =>  $request->org_id,
+                'OrgClassId'                =>  $request->class_stream_id,
+                'OrgClassSectionId'         =>  $request->section,
+                'StdStudentTypeId'          =>  $request->student_type,
+                'NoOfMeals'                 =>  $request->no_meals,
+                'IsSenStudent'              =>  $request->disability,
+                'Meal_Type'                 =>  $request->meal_type,
+                'Feeding_Type'              =>  $request->feeding_type,
+                'scholarship'               =>  $scholar,
+                'special_benifit'           =>  $special_benifit,
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = StudentClassDetails::where('StdStudentId',$request->student_id,)->update($data);
+
+            $data =[
+                'IsTransferred'                    =>  0,
+                'IsRejoined'                    =>  1,
+            ];
+            $response_data = Std_Students::where('id',$request->student_id,)->update($data);
+        }
+        else{
+            $last_seq=ApplicationSequence::where('service_name','Student Admission')->first();
+            if($last_seq==null || $last_seq==""){
+                $last_seq=1;
+                $app_details = [
+                    'service_name'                  =>  'Student Admission',
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::create($app_details);
+            }
+            else{
+                $last_seq=$last_seq->last_sequence+1;
+                $app_details = [
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::where('service_name', 'Student Admission')->update($app_details);
+            }
+            $appNo='201.00005.11.';
+            if(strlen($last_seq)==1){
+                $appNo= $appNo.'000000'.$last_seq;
+            }
+            else if(strlen($last_seq)==2){
+                $appNo= $appNo.'00000'.$last_seq;
+            }
+            else if(strlen($last_seq)==3){
+                $appNo= $appNo.'0000'.$last_seq;
+            }
+            else if(strlen($last_seq)==4){
+                $appNo= $appNo.'000'.$last_seq;
+            }
+            else if(strlen($last_seq)==5){
+                $appNo= $appNo.'00'.$last_seq;
+            }
+            else if(strlen($last_seq)==6){
+                $appNo= $appNo.'0'.$last_seq;
+            }
+            else if(strlen($last_seq)==7){
+                $appNo= $appNo.$last_seq;
+            }
+            $data =[
+                'StdStudentId'              =>  $request->student_id,
+                'StudentCode'               =>$appNo,
+                'Dzo_Id'                    =>  $request->dzo_id,
+                'Org_Id'                    =>  $request->org_id,
+                'OrgClassId'                =>  $request->class_stream_id,
+                'OrgClassSectionId'                   =>  $request->section,
+                'StdStudentTypeId'              =>  $request->student_type,
+                'NoOfMeals'                  =>  $request->no_meals,
+                'IsSenStudent'                =>  $request->disability,
+                'Meal_Type'                 =>  $request->meal_type,
+                'Feeding_Type'              =>  $request->feeding_type,
+                'scholarship'               =>  $scholar,
+                'special_benifit'           =>  $special_benifit,
+                'created_by'                   =>  $request->user_id,
+            ];
+            $response_data = StudentClassDetails::create($data);
+        }
+        // $update_data =[
+        //     'student_code'=>$appNo,
+        //     'status'     =>  'created',
+        // ];
+        // $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
@@ -385,48 +489,54 @@ class StudentAdmissionController extends Controller
         if(strpos($param,'SSS')){
             $access_level=explode('SSS',$param)[0];
             if($access_level=="Ministry"){
-                $response_data=StudentPersonalDetails::all();
+                $response_data=Std_Students::where('IsNewAdmission',1)->get();
             }
             if($access_level=="Dzongkhag"){
-                $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
-                )->where('c.dzo_id', explode('SSS',$param)[1])->get();
+                $response_data = DB::table('std_student_school_detail as c')
+                ->join('std_student as p', 'p.id', '=', 'c.StdStudentId')
+                ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
+                'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
+                'p.PhotoPath','p.CmnParentsMaritalStatusId','p.PrimaryContact',
+                 'p.Status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
+                )->where('c.Dzo_Id', explode('SSS',$param)[1])->where('IsNewAdmission',1)->get();
             }
             if($access_level=="Org"){
-                $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','c.updated_by', 'c.updated_at'
-                )->where('c.org_id', explode('SSS',$param)[2])->get();
+                $response_data = DB::table('std_student_school_detail as c')
+                ->join('std_student as p', 'p.id', '=', 'c.StdStudentId')
+                ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
+                'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
+                'p.PhotoPath','p.CmnParentsMaritalStatusId','p.PrimaryContact',
+                 'p.Status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
+                )->where('c.Org_Id', explode('SSS',$param)[2])->where('IsNewAdmission',1)->get();
             }
+        }
+        else if($param=="transfered"){
+            $response_data=Std_Students::where('IsTransferred',1)->get();
         }
         else{
             parse_str($param,$output); //revert query string to array and stored to $output
-            $response_data = DB::table('std_class_detils as c')
-                ->join('std_personal_detils as p', 'p.id', '=', 'c.student_id')
-                ->select('p.id','p.snationality', 'p.cid_passport','p.first_name',
-                'p.middle_name','p.last_name','p.dob','p.sex_id','p.village_id','p.address',
-                'p.mother_tongue','p.attachments','p.parent_marital_status','p.primary_contact', 'p.status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
+            $response_data = DB::table('std_student_school_detail as c')
+                ->join('std_student as p', 'p.id', '=', 'c.StdStudentId')
+                ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
+                'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
+                'p.PhotoPath','p.CmnParentsMaritalStatusId','p.PrimaryContact',
+                 'p.Status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
                 );
             if($output['section']!=""){
-                $response_data=$response_data->where('c.section', $output['section'])->get();
+                $response_data=$response_data->where('c.OrgClassSectionId', $output['section'])->where('IsNewAdmission',1)->get();
             }
             else if($output['class']!=""){
-                $response_data=$response_data->where('c.class_stream_id', $output['class'])->get();
+                $response_data=$response_data->where('c.OrgClassId', $output['class'])->where('IsNewAdmission',1)->get();
             }
             else{
-                $response_data=$response_data->where('c.org_id', $output['org'])->get();
+                $response_data=$response_data->where('c.Org_Id', $output['org'])->where('IsNewAdmission',1)->get();
             }
         }
         return $this->successResponse($response_data);
     }
     
     public function getStudentDetails($std_id=""){
-        $response_data=StudentPersonalDetails::where('id',$std_id)->first();
+        $response_data=Std_Students::where('id',$std_id)->first();
         return $this->successResponse($response_data);
     }
     public function getstudentGuardainClassDetails($std_id="",$type=""){
@@ -434,7 +544,7 @@ class StudentAdmissionController extends Controller
             $response_data=StudentGuardainDetails::where('student_id',$std_id)->get();
         }  
         if($type=="class"){
-            $response_data=StudentClassDetails::where('student_id',$std_id)->first();
+            $response_data=StudentClassDetails::where('StdStudentId',$std_id)->first();
         }  
         return $this->successResponse($response_data);
     }

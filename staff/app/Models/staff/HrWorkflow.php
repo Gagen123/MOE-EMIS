@@ -4,6 +4,7 @@ namespace App\Models\staff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
+
 class HrWorkflow extends Model{
     use HasFactory, Uuid;
     protected $table="staff_program_workflow";
@@ -15,4 +16,7 @@ class HrWorkflow extends Model{
         'authority_type',
         'sys_role_id',
     ];
+    public function with_program() {
+        return $this->belongsTo(HrDevelopment::class, 'program_id');
+    }
 }

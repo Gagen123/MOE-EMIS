@@ -36,6 +36,7 @@ export default {
     data(){
         return{
             classesStreamSectionList:[],
+            dt:''
         }
     },
     methods:{
@@ -50,19 +51,22 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#student-elective-subject-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_students_elective_subject',params: {data:data}});
         },
     },
     mounted(){ 
-        this.getClassStreamList()
+        this.getClassStreamList();
+        this.dt = $("#student-elective-subject-table").DataTable()
     },
+    watch: {
+        classesStreamSectionList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#student-elective-subject-table").DataTable()
+            });
+        }
+    }
 }
 </script>

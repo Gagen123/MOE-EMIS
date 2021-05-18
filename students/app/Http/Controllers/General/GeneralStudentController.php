@@ -55,24 +55,18 @@ class GeneralStudentController extends Controller
         
     }
 
-    public function loadStudentList($id=""){
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+    public function loadStudentList($param=""){
+        $id = $param;
         
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(5)
+        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
                             ->get(['id', 'Name', 'DateOfBirth']));
     }
 
-    public function loadStudentBySection($param1, $param2, $param3){
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+    public function loadStudentBySection($param1){
+        $id = $param1;
         
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(5)
-                            ->get(['id', 'Name']));
-        // $results = Student::where('OrgOrganizationId',$id)->take(5)
-        //             ->get(['id', 'Name', 'DateOfBirth']);
-        // $age = Carbon::parse($results->DateOfBirth);
-        // dd($age);
-        
-        // return $this->successResponse(Carbon::parse($results->DateOfBirth));
+        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
+                            ->get(['id', 'Name', 'DateOfBirth']));
     }
     /**
      * method to list students masters

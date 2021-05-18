@@ -30,12 +30,12 @@
 export default {
     data(){
         return{
-            id:'2',
+            org_id:'2',
             dataList:[], 
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentResponsibilities/'+this.id){
+        loadDataList(uri='students/loadStudentResponsibilities/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -54,7 +54,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'student_responsibilities_edit',params: {data:data}});
+            this.$router.push({name:'edit_student_responsibilities',params: {data:data}});
         },
     },
     mounted(){
