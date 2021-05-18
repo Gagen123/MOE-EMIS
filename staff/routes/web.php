@@ -25,6 +25,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
         $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
         $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
+
+        $router->post('/saveLeaveConfigMasters', ['uses' => 'masters\StaffMastersController@saveLeaveConfigMasters']);
+        $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
+        $router->get('/loadAllLeaveConfigMasters','masters\StaffMastersController@loadAllLeaveConfigMasters');
+        $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
@@ -106,7 +111,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadStaffattendance/{param}', ['uses' => 'staff\StaffServicesController@loadStaffattendance']);
             $router->get('/loadattendanceDetails/{id}', ['uses' => 'staff\StaffServicesController@loadattendanceDetails']);
             $router->get('/checkAttendanceDetailsByDate/{year}/{month}/{org_id}', ['uses' => 'staff\StaffServicesController@checkAttendanceDetailsByDate']);
-            
+
+            $router->get('/checkEligibility/{type_id}/{role_ids}', ['uses' => 'staff\StaffServicesController@checkEligibility']);
+            $router->get('/getLeaveConfigDetails/{role_ids}', ['uses' => 'staff\StaffServicesController@getLeaveConfigDetails']);
+            $router->post('/submitLeaveApplication', ['uses' => 'staff\StaffServicesController@submitLeaveApplication']);
+            $router->get('/loadLeaveDetails/{appNo}', ['uses' => 'staff\StaffServicesController@loadLeaveDetails']);
+            $router->post('/verifyApproveRejectLeaveApplication', ['uses' => 'staff\StaffServicesController@verifyApproveRejectLeaveApplication']);
         }); 
     });
 

@@ -85,6 +85,8 @@
         return{
             commonTaskList:[],
             myTaskList:[],
+            dt:'',
+            dt1:'',
         }
     },
     methods: {
@@ -94,6 +96,17 @@
                 let data = response.data;
                 if(data!="Not Found"){
                     this.commonTaskList=data;
+                }
+            });
+        },
+        loadcommontaskFoLeave(){
+            axios.get('common/getTaskList/commonLeaveOthers')
+            .then(response => {
+                let data = response.data;
+                if(data!=undefined){
+                    for(let i =0; i<data.length; i++){
+                        this.commonTaskList.push(data[i]);
+                    }
                 }
             });
         },
@@ -151,13 +164,33 @@
                 if(data.service_name.includes('Transfer')){
                     this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
                 }
+                if(data.service_name.includes('Leave')){
+                    this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
+                }
             }   
         }
     },
     mounted(){
         $('[data-toggle="tooltip"]').tooltip();
+        this.dt =  $("#common-task-table").DataTable();
+        this.dt1 =  $("#own-task-table").DataTable()
         this.loadcommontask();
+        this.loadcommontaskFoLeave(); 
         this.loadowntask();
-    }
+    },
+    watch:{
+        commonTaskList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#common-task-table").DataTable()
+            });
+        },
+        myTaskList() {
+            this.dt1.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#own-task-table").DataTable()
+            });
+        }
+    },
 }
 </script>

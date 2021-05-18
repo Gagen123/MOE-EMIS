@@ -169,10 +169,16 @@
                                     HR Development (Training)
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="track_application">
+                            <li class="nav-item" id="management_body_link">
                                 <router-link to="/management_body_link" class="nav-link">
                                     <i class="nav-icon fas fa-mail-bulk"></i>
                                     Management Body Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="leave_index">
+                                <router-link to="/leave_index" class="nav-link">
+                                    <i class="nav-icon fas fa-mail-bulk"></i>
+                                    Leave & Others
                                 </router-link>
                             </li>
                         </ul>
