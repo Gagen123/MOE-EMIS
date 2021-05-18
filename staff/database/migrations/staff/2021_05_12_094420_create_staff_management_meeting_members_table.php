@@ -13,6 +13,7 @@ class CreateStaffManagementMeetingMembersTable extends Migration
             $table->uuid('id')->primary();
             $table->char('meeting_id',36)->nullable(false);
             $table->char('member_id',36)->nullable(false);
+            $table->string('status')->nullable(false);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
             $table->timestamps();

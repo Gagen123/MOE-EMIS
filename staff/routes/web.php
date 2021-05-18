@@ -93,7 +93,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadcurrentbaord/{id}', ['uses' => 'staff\ManagementBodyController@loadcurrentbaord']);
             $router->post('/saveManagementMeeting', ['uses' => 'staff\ManagementBodyController@saveManagementMeeting']);
             $router->get('/loadCurrentMeeting/{userid}', ['uses' => 'staff\ManagementBodyController@loadCurrentMeeting']);
-
+            $router->post('/saveResolutions', ['uses' => 'staff\ManagementBodyController@saveResolutions']);
         });
 
         $router->group(['prefix' => 'staffServices'], function () use ($router) {

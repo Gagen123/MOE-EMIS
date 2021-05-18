@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 
-
-class StaffManagementMeetingMember extends Model
+class StaffManagementMeetingMinutes extends Model
 {
     use HasFactory, Uuid;
-    protected $table="staff_management_meeting_members";
+    protected $table="staff_management_meeting_minutes";
     public $timestamps = false;
     protected $fillable = [
         'id',
         'meeting_id',
-        'member_id',
+        'minutes',
         'status',
         'created_by',
         'updated_by',

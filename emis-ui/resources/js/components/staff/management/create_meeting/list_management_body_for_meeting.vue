@@ -56,17 +56,24 @@ export default {
             }).catch(function (error) {console.log('err: '+error);});
         },
         openMeeting(item){
-            this.$router.push({name:"open_meeting",params:{data:item}});
+            this.$router.push({name:"open_meeting",params:{data:item.id}});
         }
     },
     mounted() {
         this.loadmgmnbodytype();
         this.loadComposition();
-        $("#meeting-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        });
+        this.dt = $("#meeting-table").DataTable();
+
     },
+    watch: {
+        staffcomposition(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#meeting-table").DataTable()
+            });
+        }
+    },
+
 }
 </script>
 

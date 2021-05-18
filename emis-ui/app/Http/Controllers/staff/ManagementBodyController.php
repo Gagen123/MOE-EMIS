@@ -45,29 +45,29 @@ class ManagementBodyController extends Controller{
 
     public function saveManagementBodyComposition(Request $request){
         $rules = [
-            'nonstaffname'                =>  'required',
-            'designation'                =>  'required',
-            'phone'                  =>  'required',
+            'nonstaffname'  =>  'required',
+            'designation'   =>  'required',
+            'phone'         =>  'required',
         ];
         $customMessages = [
-            'nonstaffname.required'      => 'This field is required',
-            'designation.required'      => 'This field is required',
+            'nonstaffname.required' => 'This field is required',
+            'designation.required'  => 'This field is required',
             'phone.required'        => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
         $mgmn_details =[
-            'management_id'      =>  $request->management_id,
-            'emptye'            =>  $request->emptye,
-            'nonstaffname'         =>  $request->nonstaffname,
-            'designation'           =>  $request->designation,
-            'phone'           =>  $request->phone,
-            'email'           =>  $request->email,
-            'address'           =>  $request->address,
-            'fromdate'           =>  $request->fromdate,
-            'todate'           =>  $request->todate,
-            'org'               =>  $this->getWrkingAgencyId(),
-            'dzongkhag'         =>  $this->getUserDzoId(),
-            'user_id'           =>$this->userId()
+            'management_id'   =>$request->management_id,
+            'emptye'          =>$request->emptye,
+            'nonstaffname'    =>$request->nonstaffname,
+            'designation'     =>$request->designation,
+            'phone'           =>$request->phone,
+            'email'           =>$request->email,
+            'address'         =>$request->address,
+            'fromdate'        =>$request->fromdate,
+            'todate'          =>$request->todate,
+            'org'             =>$this->getWrkingAgencyId(),
+            'dzongkhag'       =>$this->getUserDzoId(),
+            'user_id'         =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/managementBody/saveManagementBodyComposition', $mgmn_details);
         return $response_data;
@@ -89,14 +89,41 @@ class ManagementBodyController extends Controller{
         $this->validate($request, $rules,$customMessages);
 
         $meeting_data =[
-            'meeting_date'  =>$request->meeting_date,
-            'start_time'    =>$request->start_time,
-            'end_time'      =>$request->end_time,
-            'venue'         =>$request->venue,
-            'created_by'    =>$this->userId()
+            'id'            => $request->id,
+            'meeting_date'  => $request->meeting_date,
+            'start_time'    => $request->start_time,
+            'end_time'      => $request->end_time,
+            'venue'         => $request->venue,
+            'members'       => $request->met_members,
+            'created_by'    => $this->userId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/managementBody/saveManagementMeeting', $meeting_data);
         return $response_data;
+    }
+
+    public function saveResolutions(Request $request){
+        // $rules = [
+        //     'minutes'   =>'required',
+        // ];
+        // $customMessages = [
+        //     'minutes.required' =>'This field is required',
+        // ];
+        // $this->validate($request, $rules,$customMessages);
+
+        // foreach($request->minutesas $_data){
+        //     dd($data);
+        //     $obj->created_by = $this->userId();
+        // }
+
+        // dd($request->minutes);
+
+        $meeting_data =[
+            'minutes'     => $request->minutes, //hass array of reslution
+            'created_by'  => $this->userId(),
+        ];
+        $response_data= $this->apiService->createData('emis/staff/managementBody/saveResolutions', $meeting_data);
+        return $response_data;
+
     }
 
     public function loadCurrentMeeting(){
