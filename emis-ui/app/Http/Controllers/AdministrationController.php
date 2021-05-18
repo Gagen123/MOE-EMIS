@@ -73,6 +73,13 @@ class AdministrationController extends Controller{
         return $global_masters;
     }
 
+    public function getroles($param){
+        // dd($this->getRoleIds('roleIds'));
+        $param=$param.'SSS'.$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId().'SSS'.$this->getRoleIds('roleIds');
+        $system = $this->apiService->listData('system/get_roles/'.$param);
+        return $system;
+    }
+
     public function all_active_dropdowns($model="",$parent_id=""){
         $response_data = $this->apiService->listData('emis/masters/load_dropdown/'.$model."/".$parent_id);
         return $response_data;
@@ -96,7 +103,7 @@ class AdministrationController extends Controller{
         || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"
         || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category"
         || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
-        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
+        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action" || $request['record_type']=="leave_type"){
             $rules=array_merge($rules,
                 array('code'  =>  'required|numeric|digits:4',)
             );
@@ -106,7 +113,7 @@ class AdministrationController extends Controller{
                 'code.digits'          => 'The field should be of 4 digits.',)
             );
         }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_type"){
+        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_type" || $request['record_type']=="leave_type"){
             $rules=array_merge($rules,
                 array('parent_field'=> 'required',)
             );
@@ -137,6 +144,45 @@ class AdministrationController extends Controller{
             'user_id'         =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
+        return $response_data;
+    }
+
+    public function saveLeaveConfigMasters(Request $request){
+        $rules=[];
+        $customMessages =[];
+        $rules = [
+            'leave_type_id' =>  'required',
+            'role_id'       =>  'required',
+        ];
+        $customMessages = [
+            'leave_type_id.required' => 'This field is required',
+            'role_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $data =[
+            'id'                =>  $request['id'],
+            'leave_type_id'     =>  $request['leave_type_id'],
+            'role_id'           =>  $request['role_id'],
+            'action_type'       =>  $request['action_type'],
+            'role_action_mapp'  =>  $request['role_action_mapp'],
+            'user_id'           =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/saveLeaveConfigMasters', $data);
+        return $response_data;
+    }
+    
+    public function loadLeaveConfigMasters($type="",$submitter=""){
+        $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigMasters/'.$type.'/'.$submitter);
+        return $response_data;
+    }
+    
+    public function loadAllLeaveConfigMasters(){
+        $response_data = $this->apiService->listData('emis/masters/loadAllLeaveConfigMasters');
+        return $response_data;
+    }
+    
+    public function loadLeaveConfigDetails($id=""){
+        $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/'.$id);
         return $response_data;
     }
 
@@ -1016,5 +1062,10 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
+
+    
+    
+
+    
 
 }

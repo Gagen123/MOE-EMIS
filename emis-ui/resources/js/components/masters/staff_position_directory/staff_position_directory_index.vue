@@ -30,7 +30,6 @@
                        Position Title
                     </router-link>
                 </li>
-               
             </ul>
             <router-view></router-view>
         </div>

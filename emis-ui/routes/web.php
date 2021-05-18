@@ -12,6 +12,7 @@ Route::get('/get_privileges/{id}', [App\Http\Controllers\HomeController::class, 
 Route::prefix('masters')->group(function () {
     Route::post('/saveGlobalMasters', [App\Http\Controllers\AdministrationController::class, 'saveGlobalMasters'])->name('saveGlobalMasters');
     Route::get('/loadGlobalMasters/{param}', [App\Http\Controllers\AdministrationController::class, 'loadGlobalMasters'])->name('loadGlobalMasters');
+    Route::get('/getroles/{param}', [App\Http\Controllers\AdministrationController::class, 'getroles'])->name('getroles');
     Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdministrationController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
     Route::post('/saveStaffMasters', [App\Http\Controllers\AdministrationController::class, 'saveStaffMasters'])->name('saveStaffMasters');
     Route::get('/loadStaffMasters/{param}', [App\Http\Controllers\AdministrationController::class, 'loadStaffMasters'])->name('loadStaffMasters');
@@ -22,6 +23,10 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveDzongkhag', [App\Http\Controllers\AdministrationController::class, 'saveDzongkhag'])->name('savedzongkhag');
     Route::get('/loadalldzongkhag', [App\Http\Controllers\AdministrationController::class, 'loadalldzongkhag'])->name('loadalldzongkhag');
 
+    Route::post('/saveLeaveConfigMasters', [App\Http\Controllers\AdministrationController::class, 'saveLeaveConfigMasters'])->name('saveLeaveConfigMasters');
+    Route::get('/loadLeaveConfigMasters/{type}/{submitter}', [App\Http\Controllers\AdministrationController::class, 'loadLeaveConfigMasters'])->name('loadLeaveConfigMasters');
+    Route::get('/loadAllLeaveConfigMasters', [App\Http\Controllers\AdministrationController::class, 'loadAllLeaveConfigMasters'])->name('loadAllLeaveConfigMasters');
+    Route::get('/loadLeaveConfigDetails/{id}', [App\Http\Controllers\AdministrationController::class, 'loadLeaveConfigDetails'])->name('loadLeaveConfigDetails');
     Route::post('/saveLocation', [App\Http\Controllers\AdministrationController::class, 'saveLocation'])->name('saveLocation');
     Route::get('/loadLocation', [App\Http\Controllers\AdministrationController::class, 'loadLocation'])->name('loadLocation');
 
@@ -318,7 +323,13 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadStaffattendance/{dzo_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffattendance'])->name('loadStaffattendance');
         Route::get('/loadattendanceDetails/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'loadattendanceDetails'])->name('loadattendanceDetails');
         Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkAttendanceDetailsByDate'])->name('checkAttendanceDetailsByDate');
+
+        Route::get('/checkEligibility/{type_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkEligibility'])->name('checkEligibility');
+        Route::post('/submitLeaveApplication', [App\Http\Controllers\staff\StaffServicesController::class, 'submitLeaveApplication'])->name('submitLeaveApplication');
+        Route::get('/loadLeaveDetails/{appNo}/{type}', [App\Http\Controllers\staff\StaffServicesController::class, 'loadLeaveDetails'])->name('loadLeaveDetails');
+        Route::post('/verifyApproveRejectLeaveApplication', [App\Http\Controllers\staff\StaffServicesController::class, 'verifyApproveRejectLeaveApplication'])->name('verifyApproveRejectLeaveApplication');
     });
+    
 
 });
 Route::prefix('common')->group(function () {
@@ -328,6 +339,7 @@ Route::prefix('common')->group(function () {
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\CommonController::class, 'deleteFile'])->name('deleteFile');
     Route::get('/getApplicationDetials/{applicationId}', [App\Http\Controllers\CommonController::class, 'getApplicationDetials'])->name('getApplicationDetials');
     Route::get('/getTaskList/{type}', [App\Http\Controllers\CommonController::class, 'getTaskList'])->name('getTaskList');
+    Route::get('/commonLeaveOthers/{type}', [App\Http\Controllers\CommonController::class, 'commonLeaveOthers'])->name('commonLeaveOthers');
     Route::get('/releaseApplication/{application_number}', [App\Http\Controllers\CommonController::class, 'releaseApplication'])->name('releaseApplication');
 
     Route::get('/getSessionDetail', [App\Http\Controllers\CommonController::class, 'getSessionDetail'])->name('getSessionDetail');

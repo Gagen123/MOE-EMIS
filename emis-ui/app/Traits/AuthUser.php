@@ -15,6 +15,15 @@ trait AuthUser
         return Session::get('User_Details');
 
     }
+    public function getRoleIds($param=""){
+        $response="";
+        foreach($this->currentUser()['roles'] as $role){
+            $response.=$role->Id.',';
+        }
+        if($param=="roleIds"){
+            return rtrim($response, ",");
+        }
+    }
 
     public function userId(){
         return $this->currentUser()['User_Id'];
@@ -103,5 +112,7 @@ trait AuthUser
            'screen_id' =>$screen_id,
         ];
     }
+
+    
     
 }

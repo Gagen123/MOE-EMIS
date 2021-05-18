@@ -1,11 +1,9 @@
 const routes = [
-    //STAFF Masters
+    //STAFF Masters 
     { path: '/staff_link',
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
         children:[
             {path: '/',name:'staff_link', component: require('./components/masters/staff_masters/staff_master_list.vue').default },
-
-
             { path: '/marital_status',
                 component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default,
                 children:[
@@ -60,7 +58,6 @@ const routes = [
                     { path: '/edit_course_mode', name:'edit_course_mode', component: require('./components/masters/staff_masters/course_mode/edit_course_mode.vue').default },
                 ],
             },
-
 
             { path: '/staff_relationship',
                 component: require('./components/masters/staff_masters/relationship/relationship_index.vue').default,
@@ -206,6 +203,35 @@ const routes = [
                 { path: '/edit_body_type', name:'edit_body_type', component: require('./components/masters/management_body/body_type/edit_body_type.vue').default },
                 ],
             },
+        ]
+    },
+
+    //Staff Leave
+    { path: '/leave_index',
+        component: require('./components/masters/staff_leave_masters/staff_leave_index.vue').default,
+        children:[
+            {path: '/',name:'leave_index', component: require('./components/masters/staff_leave_masters/list_staff_leave_list.vue').default },
+            
+            { path: '/leave_type_index',
+                component: require('./components/masters/staff_leave_masters/leave_type/staff_leave_type_index.vue').default,
+                children:[
+                { path: '/',name:'leave_type_index', component: require('./components/masters/staff_leave_masters/leave_type/list_staff_leave_type.vue').default },
+                { path: '/list_leave_type',name:'list_leave_type', component: require('./components/masters/staff_leave_masters/leave_type/list_staff_leave_type.vue').default },
+                { path: '/create_leave_type',name:'create_leave_type', component: require('./components/masters/staff_leave_masters/leave_type/create_staff_leave_type.vue').default },
+                { path: '/edit_leave_type', name:'edit_leave_type', component: require('./components/masters/staff_leave_masters/leave_type/edit_staff_leave_type.vue').default },
+                ],
+            },
+
+            { path: '/leave_config_index',
+                component: require('./components/masters/staff_leave_masters/leave_config/leave_config_index.vue').default,
+                children:[
+                    { path: '/',name:'leave_config_index', component: require('./components/masters/staff_leave_masters/leave_config/list_leave_config.vue').default },
+                    { path: '/list_leave_config',name:'list_leave_config', component: require('./components/masters/staff_leave_masters/leave_config/list_leave_config.vue').default },
+                    { path: '/create_leave_config',name:'create_leave_config', component: require('./components/masters/staff_leave_masters/leave_config/create_leave_config.vue').default },
+                    { path: '/edit_leave_config', name:'edit_leave_config', component: require('./components/masters/staff_leave_masters/leave_config/edit_leave_config.vue').default },
+                ],
+            },
+            
         ]
     },
 
@@ -544,9 +570,20 @@ const routes = [
                     { path: '/edit_attendance', name:'edit_attendance', component: require('./components/staff/staff_services/attendance/edit_attendance.vue').default },
                 ],
             },
-
+            
+            { path: '/apply_leave', 
+                component: require('./components/staff/staff_services/apply_leave/leave_index.vue').default,
+                children:[
+                    { path: '/', name:'apply_leave',  component: require('./components/staff/staff_services/apply_leave/list_leave.vue').default },
+                    { path: '/list_leave',name:'list_leave',  component: require('./components/staff/staff_services/apply_leave/list_leave.vue').default },
+                    { path: '/create_leave',name:'create_leave', component: require('./components/staff/staff_services/apply_leave/create_leave.vue').default },
+                    { path: '/edit_leave', name:'edit_leave', component: require('./components/staff/staff_services/apply_leave/edit_leave.vue').default },
+                    { path: '/Leave_acknowledgement', name:'Leave_acknowledgement', component: require('./components/staff/staff_services/apply_leave/leave_acknowledgement.vue').default },
+                ],
+            },
         ]
-    }
+    },    
+    { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/staff_services/apply_leave/leave_verification.vue').default },
 
 ];
 export default routes

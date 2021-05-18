@@ -55,15 +55,28 @@ class CommonController extends Controller{
     }
     public function getTaskList($type=""){
         $work_status=$this->getVerificationApprovalWorkStatus();
-        // dd($work_status);
         $param="";
-        foreach($work_status as $work){
-            $param.=$work.'OUTSEP';
+        if($type=="commonLeaveOthers"){
+            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
+            $param="NA";
+            // dd($response_data);
+            if($response_data!=null){
+                foreach($response_data as $work){
+                    $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->authority_type_id.'OUTSEP';
+                }
+            }
         }
-        $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
-        $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
-        // dd($response_data);
-        return $response_data;
+        else{
+            foreach($work_status as $work){
+                $param.=$work.'OUTSEP';
+            }
+        }
+        if($param!="NA"){
+            $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+            $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
+            // dd($response_data);
+            return $response_data;
+        }
     }
     
     public function getSessionDetail($applicationId=""){

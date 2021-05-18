@@ -48,6 +48,7 @@ class LoadStaffController extends Controller{
         return $response_data;
     }
     
+    //load staff details: id,name,gender and position title
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         $param="";
         //type=allstaff: to listentire staff

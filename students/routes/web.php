@@ -61,10 +61,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });  
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
-<<<<<<< HEAD
         $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 		$router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
-=======
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 
         $router->post('/reportStudents',['uses' => 'Students\StudentAdmissionRelatedController@reportStudents']);
@@ -73,7 +71,6 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentTransfers/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
         $router->post('/saveStudentWhereabouts',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentWhereabouts']);
         $router->get('/loadStudentWhereabouts/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentWhereabouts']);
->>>>>>> d0d5500d796441143ad6f14e32cfcd4a4fa98be8
 
         $router->post('/saveStudentAward',['uses' => 'Students\StudentAwardController@saveStudentAward']);
         $router->get('/loadStudentAwards/{param}',['uses' => 'Students\StudentAwardController@loadStudentAwards']);
