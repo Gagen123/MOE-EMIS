@@ -221,6 +221,7 @@ class StudentHealthController extends Controller
         
         $data =[
             'id'                                    => $request->id,
+            'OrgOrganizationId'                     => $request->organization_id,
             'StdHealthScreeningTypeId'              => $request->screening,
             'prepared_by'                           => $request->prepared_by,
             'StdScreeningPositionTitleId'           => $request->screening_position,
@@ -315,16 +316,34 @@ class StudentHealthController extends Controller
 
     public function listScreeningSummary($param=""){
 
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+        $id =$param;
 
-        $records = DB::table('std_health_screening')
-                    ->join('std_health_screening_type', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
-                    ->select('std_health_screening.*', 'std_health_screening_type.name AS screening_type')
-                    ->groupBy('std_health_screening.StdHealthScreeningTypeId', 'std_health_screening.date')
+        // $records=StudentHealthScreening::where('OrgOrganizationId',$id)->first();
+        // $records->screening_type = DB::table('std_health_screening_type')->where('id', $records->StdHealthScreeningTypeId)->select('name')->first();
+        // $records->not_screened = DB::table('std_health_not_screened')->where('StdHealthScreeningId', $records->id)->count();
+        // return $this->successResponse($records); 
+
+        $records = DB::table('std_health_screening_type')
+                    ->select('std_health_screening.id', 'std_health_screening.date', 'std_health_screening.class', 
+                                'std_health_screening.section', 'std_health_screening.stream', 'std_health_screening_type.name AS screening_type',
+                                DB::raw('COUNT(std_health_not_screened.StdStudentId) as not_screened'), 
+                                DB::raw('COUNT(std_health_referred.StdStudentId) as referred'))
+                    ->join('std_health_screening', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
+                    ->leftjoin('std_health_not_screened', 'std_health_screening.id', '=', 'std_health_not_screened.StdHealthScreeningId')
+                    ->leftjoin('std_health_referred', 'std_health_screening.id', '=', 'std_health_referred.StdHealthScreeningId')
+                    ->groupBy('std_health_screening.class', 'std_health_screening.StdHealthScreeningTypeId', 'std_health_screening.date')
                     ->get();
         
         return $this->successResponse($records);
 
+    }
+
+    public function getHealthScreeningSummary($param=""){
+        $id = $param;
+
+        $response_data=StudentHealthScreening::where('id',$id)->first();
+        $response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
+        return $this->successResponse($response_data); 
     }
 
     /*

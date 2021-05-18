@@ -9,6 +9,8 @@
                             <th>Term</th>
                             <th>Date</th>
                             <th>Class</th>
+                            <th>Section</th>
+                            <th>Stream</th>
                             <th>Total Issued (Boys)</th>
                             <th>Total Issued (Girls)</th>
                             <th>Action</th>                     
@@ -19,7 +21,10 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.term}}</td>
                             <td>{{ item.date}}</td>
-                            <td></td>
+                            <td>{{ item.class}}</td>
+                            <td>{{ item.section}}</td>
+                            <td v-if="item.stream">{{ item.stream}}</td>
+                            <td v-else>{{ NA }}</td>
                             <td></td>
                             <td></td>
                             <td>

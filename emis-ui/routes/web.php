@@ -358,8 +358,8 @@ Route::prefix('students')->group(function () {
     
     
 
-    Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\GeneralStudentController::class, 'loadStudentList'])->name('loadStudentList');
-    Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\student\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
+    Route::get('/loadStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentList'])->name('loadStudentList');
+    Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
 
     Route::post('/saveStudentAward', [App\Http\Controllers\student\StudentAwardController::class, 'saveStudentAward'])->name('saveStudentAward');
     Route::get('/loadStudentAwards/{param}', [App\Http\Controllers\student\StudentAwardController::class, 'loadStudentAwards'])->name('loadStudentAwards');
@@ -380,6 +380,7 @@ Route::prefix('students')->group(function () {
     Route::post('/addHealthScreeningRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addHealthScreeningRecords'])->name('addHealthScreeningRecords');
     Route::get('/loadHealthScreeningRecords/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthScreeningRecords'])->name('loadHealthScreeningRecords');
     Route::get('/listScreeningSummary/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'listScreeningSummary'])->name('listScreeningSummary');
+    Route::get('/getHealthScreeningSummary/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthScreeningSummary'])->name('getHealthScreeningSummary');
 
     Route::post('/addBmiRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addBmiRecords'])->name('addBmiRecords');
     Route::get('/loadBmiSummary/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadBmiSummary'])->name('loadBmiSummary');
@@ -394,6 +395,7 @@ Route::prefix('students')->group(function () {
     Route::post('/saveStudentProgram', [App\Http\Controllers\student\StudentProgramController::class, 'saveStudentProgram'])->name('saveStudentProgram');
     Route::get('/loadStudentPrograms/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'loadStudentPrograms'])->name('loadStudentPrograms');
     Route::get('/listStudentPrograms/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listStudentPrograms'])->name('listStudentPrograms');
+    Route::get('/getProgramDetails/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'getProgramDetails'])->name('getProgramDetails');
     Route::post('/saveProgramMembers', [App\Http\Controllers\student\StudentProgramController::class, 'saveProgramMembers'])->name('saveProgramMembers');
     Route::get('/listProgramMembers/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listProgramMembers'])->name('listProgramMembers');
     Route::post('/saveProgramActionPlan', [App\Http\Controllers\student\StudentProgramController::class, 'saveProgramActionPlan'])->name('saveProgramActionPlan');

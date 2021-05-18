@@ -158,12 +158,20 @@ class StudentHealthController extends Controller
     }
 
     public function loadHealthScreeningRecords($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_records = $this->apiService->listData('emis/students/loadHealthScreeningRecords/'.$param);
         return $student_records;
     }
 
     public function listScreeningSummary($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_records = $this->apiService->listData('emis/students/listScreeningSummary/'.$param);
+        return $student_records;
+    }
+
+    public function getHealthScreeningSummary($param=""){
+        $param = $this->getWrkingAgencyId();
+        $student_records = $this->apiService->listData('emis/students/getHealthScreeningSummary/'.$param);
         return $student_records;
     }
 

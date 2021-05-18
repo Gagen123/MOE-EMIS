@@ -14,9 +14,9 @@ class CeaProgram extends Model
     protected $fillable = [
         'id',
         'CeaProgrammeTypeId',
-        'name',
+        'Name',
         'CeaProgrammeId',
-        'description', 
+        'Description', 
         'status'
     ];
 }
