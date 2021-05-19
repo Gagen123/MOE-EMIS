@@ -62,7 +62,7 @@ class CommonController extends Controller{
             // dd($response_data);
             if($response_data!=null){
                 foreach($response_data as $work){
-                    $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->authority_type_id.'OUTSEP';
+                    $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
                 }
             }
         }

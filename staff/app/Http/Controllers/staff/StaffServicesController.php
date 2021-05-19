@@ -269,12 +269,12 @@ class StaffServicesController extends Controller{
                 $roles.="'$role',";
             }
             $roles=rtrim($roles,',');
-            $result_data="SELECT l.leave_type_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
             LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id  
             WHERE d.role_id IN(".$roles.")";
         }
         else{
-            $result_data="SELECT l.leave_type_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
             LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id 
             WHERE d.role_id ='".$role_ids."'";
         }
@@ -363,10 +363,25 @@ class StaffServicesController extends Controller{
             'updated_by'                    =>  $request->user_id, 
             'updated_at'                    =>  date('Y-m-d h:i:s')
         ];
-        
         LeaveApplication::where('application_number', $request->application_number)->update($app_details);
         $response_data = LeaveApplication::where('application_number', $request->application_number)->first(); 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    
+    public function getApprovedLeaveCount($staff_id="",$leave_type_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$leave_type_id)->where('status','Approved')->where('year',date('Y'))->select('no_days')->get();
+        return $this->successResponse($leave_detials);
+    }
+    
+    public function getOnGoingLeave($staff_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->whereNotIn('status', ['Rejected','Approved'])->select('application_number')->first();
+        return $this->successResponse($leave_detials);
+    }
+
+    public function getallLeaves($staff_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->get();
+        return $this->successResponse($leave_detials);
+    }
+    
     
 }

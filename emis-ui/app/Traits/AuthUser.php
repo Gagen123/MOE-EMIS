@@ -27,9 +27,10 @@ trait AuthUser
 
     public function userId(){
         return $this->currentUser()['User_Id'];
-
     }
-
+    public function staffId(){
+        return $this->currentUser()['staff_id'];
+    }
     public function getAccessLevel(){
         return $this->currentUser()['acess_level'];
     }
