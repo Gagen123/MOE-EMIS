@@ -12,13 +12,9 @@ class StockReceived extends Model
 
     protected $fillable = [
         'id',
+        'organizationId',
         'dateOfreceived',
-        'quarter',
-        'item',
-        'receivedquantity',
-        "'pending'+index'",
-        'unit',
-        'remarks',
+        'term_id',
         'created_by',
         'updated_by'
     ];

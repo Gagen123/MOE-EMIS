@@ -20,39 +20,42 @@ class FoodReleaseController extends Controller
     }
 
     public function saveFoodRelease(Request $request){
-        // dd('m here');
+         //dd('m here');
         $foodrelease = [
             'dateOfrelease'             =>  $request['dateOfrelease'],
-            'dzongkhag'                 =>  $request['dzongkhag'],
-            'school'                    =>  $request['school'],
-            'quarter'                   =>  $request['quarter'],
+            'dzongkhag_id'              =>  $request['dzongkhag'],
+            'org_id'                    =>  $request['organizaiton'],
+            'term_id'                   =>  $request['term'],
             'updated_by'                =>  $request->user_id,
             'created_at'                =>  date('Y-m-d h:i:s')
         ];
+
         $foodrel = FoodRelease::create($foodrelease);
 
-        $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
-
+       // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
+        // dd($request->items_release);
         foreach ($request->items_released as $i => $item){
             $itemreleasednote = array(
-                'foodreleaseId'              =>  $releasId[0],
-                'item'                       =>  $item['item'],
+              //  'foodreleaseId'              =>  $releasId[0], 
+                'foodreleaseId'              =>  $foodrel->id,
+                'item_id'                    =>  $item['item'],
                 'quantity'                   =>  $item['quantity'],
-                'unit'                       =>  $item['unit'],
+                'unit_id'                    =>  $item['unit'],
                 'remark'                     =>  $item['remarks'],
                 'updated_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s')
             );
-            $foodrel = ItemReleasedNote::create($itemreleasednote);
+            ItemReleasedNote::create($itemreleasednote);
         }
         return $this->successResponse($foodrel, Response::HTTP_CREATED);
+       // return($foodrel);
     }
     public function loadFoodReleaseList(){
-          // return 'from service of mine';
-        $list = DB::table('food_releases as a')
-        ->select( 'a.dateOfrelease as dateOfrelease',
-         'a.dzongkhag','a.school',
-         'a.quarter', 'a.id'
+        //   return 'from service of mine';
+        $list = DB::table('food_releases')
+        ->select( 'dateOfrelease as dateOfrelease',
+         'dzongkhag_id as dzongkhag','org_id as organization',
+         'term_id as term','id'
          )->get();
         return $list;
     }

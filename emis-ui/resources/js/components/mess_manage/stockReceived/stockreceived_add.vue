@@ -1,21 +1,40 @@
 <template>
     <div>
-        <form class="bootbox-form" id="stockreceivedId">
+        <form class="bootbox-form" id="stockReceivedId">
             <div class="card-body">
-                <div class="form-group row">
+                <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of Stock Received:<span class="text-danger">*</span></label> 
+                        <label class="">Date of stock Received:<span class="text-danger">*</span></label> 
                         <input class="form-control editable_fields" name="dateOfreceived" id="dateOfreceived" type="date" 
                         v-model="form.dateOfreceived" :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')">
                         <has-error :form="form" field="dateOfreceived"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Term(quater):<span class="text-danger">*</span></label> 
-                        <select name="quarter" id="quarter" class="form-control editable_fields" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter'),getFoodRelease()">
-                            <!-- <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option> -->
-                            <option value="1st quarter">1st quarter</option>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
+                        <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
+                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="quarter"></has-error>
+                        <has-error :form="form" field="dzongkhag"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">School Name:<span class="text-danger">*</span></label> 
+                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
+                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="organizaiton"></has-error>
+                    </div> -->
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                       <label class="">Term:<span class="text-danger">*</span></label> 
+                       <select name="term" id="term" class="form-control select2" v-model="form.term" :class="{ 'is-invalid': form.errors.has('term') }" @change="remove_err('term')">
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="term"></has-error> 
+                            <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
+                            <option value="">---Please Select---</option> 
+                            <option value="1st quarter">1st quarter</option>
+                            <option value="2nd quarter">2nd quarter</option>
+                            <option value="3rd quarter">3rd quarter</option>
+                            </select>  -->   
                     </div>
                 </div>
             <div class="card">
@@ -25,41 +44,51 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
-                                  <th>Released Quantity</th>
-                                  <th>Quantity Received</th>
-                                  <th>Pending</th>
+                                  <th>Quantity</th>
                                   <th>Unit</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.foodrelease_list' :key="index">
+                              <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
-                                      {{item.item}}
+                                    <select name="item" id="item" class="form-control" v-model="item.item">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                      </select>
+                                     <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
+                                        <option value="">---Please Select---</option> 
+                                        <option value="rice">rice</option>
+                                        <option value="potatoes">potatoes</option>
+                                        <option value="onion">onion</option>
+                                     </select> -->
                                   </td>
                                   <td>                          
-                                     {{item.quantity}}
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
                                   <td>                                
-                                     <input type="number" name="receivedquantity" :id="'receivedquantity'+index" class="form-control" v-model="item.receivedquantity" @change='calculatepending(item.quantity,"receivedquantity"+index,"pending"+index)'/>
-                                  </td>
-                                  <td>      
-                                     <input type="number" :id="'pending'+index" :name="'pending'+index" class="form-control" :v-model="item.pending"/>                          
-                                  
-                                  </td>
-                                  <td>
-                                 <!--    <input type="text" name="unit" class="form-control" v-model="item.unit"/>-->
-                                  <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         
+                                     </select> 
+                                        <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
                                         <option value="">---Please Select---</option> 
                                         <option value="kg">kg</option>
                                         <option value="litre">litre</option>
                                         <option value="packet">packet</option>
-                                    </select>
+                                     </select> -->
                                   </td>
                                   <td>                                
-                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks"/>
+                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
                               </tr> 
+                             <tr>
+                                  <td colspan=7> 
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                      @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                      @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                  </td>
+                              </tr>                                    
                           </tbody>
                      </table>
                   </div>
@@ -78,17 +107,22 @@
 export default {
     data(){
         return{
-            count:1,
-            termList:[],
+          //  orgList:[],
+          //  quarterList:[],
             itemList:[],
             unitList:[],
-            itemreleasedList:[],
-
-            users: [],
+            termList:[],
+          //  dzongkhagList:[],
+          //  dzongkhag:'',
+        //    organizaiton:'',
+          //  itemrelease:[],
+            items_received: [],
             form: new form({
-                id: '', dateOfreceived: '', quarter: '', 
-                foodrelease_list:[],
-                
+                 id: '', dateOfreceived: '', term: '',
+                 items_received:
+                [{
+                    item:'',quantity:'',unit:'', remarks:'',
+                }], 
             })
         }
     },
@@ -101,20 +135,15 @@ export default {
         restForm(){
             this.form.dateOfreceived= '';
             this.form.term= '';
-            let formReset =this.form.users;
+            let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.users.push({item:'',releasedquantity:'',receivedquantity:'',pendingquantity:'', unit:'',remark:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
         },
 
-        calculatepending(qty,receiveId,targetId){
-            let recqty=$('#'+receiveId).val();
-            let result=qty-recqty;
-            $('#'+targetId).val(result);
-        },
         /**
          * method to save data
          */
-        formaction: function(type){
+        formaction: function(type){ 
             if(type=="reset"){
                 this.restForm();
             }
@@ -123,15 +152,22 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Stock Received detail is added successfully'
+                        title: 'Food received detail is added successfully'
                     })
                     this.$router.push('/stockreceived_list');
                 })
                 .catch(() => {
-                    console.log("Error......")
+                    console.log("Error......");
+                    this.applyselect();
                 })
             }
 		},
+
+        applyselect(){
+            if(!$('#term').attr('class').includes('select2-hidden-accessible')){
+                $('#term').addClass('select2-hidden-accessible');
+            }
+        },
 
         /**
          * method to remove error
@@ -145,19 +181,28 @@ export default {
         /**
          * method to get term in dropdown
          */
-       getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
-           axios.get(uri)
-           .then(response => {
-               let data = response.data;
-               this.termList = data;
-           });
-       },
+       loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.termList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
 
         /**
          * method to get unit in dropdown
          */
-         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-         axios.get(uri)
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
             .then(response => {
                 let data = response;
                 this.unitList =  data.data.data;
@@ -168,31 +213,72 @@ export default {
         },
 
         /**
-         * 
+         * method to get item in dropdown
          */
-        getFoodRelease(foodreleaseId){
-            let uri = 'mess_manage/getFoodRelease/' +foodreleaseId
+      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
             axios.get(uri)
             .then(response => {
-                let data = response.data;
-                this.form.foodrelease_list=[];
-                for(let i=0;i<data.length;i++){
-                    this.form.foodrelease_list.push({item:data[i].item,quantity:data[i].quantity,receivedquantity:'',pending:'',unit:'',remarks:''});
-                }
+                let data = response;
+                this.itemList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error......"+error)
             });
         },
-
+        /**
+         * 
+         */
         
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="term"){
+                this.form.term=$('#term').val();
+            }
+        },
+
+        /**f
+         * method to get dzongkhag in dropdown
+         */
+
+        /**
+         * method to add more fields
+         */
+        addMore: function(){
+            this.count++;
+            this.form.items_received.push({
+                item:'',quantity:'',unit:'',remarks:''})    
+        }, 
+        /**
+         * method to remove fields
+         */
+        remove(index){    
+             if(this.form.items_received.length>1){
+                this.count--;
+                this.form.items_received.splice(index,1); 
+            }
+        },
+       
+       
     },
      mounted() { 
-         this.loadActiveUnitList(); 
-         this.getTermInDropdown();
-         this.getFoodRelease();
+         $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+         Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        this.loadActiveUnitList(); 
+        this.loadActiveItemList();
+        this.loadActiveTermList();
+       
     }
 }
 </script>

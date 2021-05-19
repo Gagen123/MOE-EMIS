@@ -36,7 +36,7 @@
                  </router-link>
               </li>
               <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
-                 <router-link to ="/schoolInventory_index" id="schoolInventory" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 <router-link to ="/stockInventory_list" id="schoolInventory" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                      <span class="fas fa-shopping-cart"></span>
                      School Inventory
                  </router-link>
@@ -49,12 +49,36 @@
 </template>
 <script>
 export default {
+    data(){
+        return{
+            menubar:[],
+        }
+    },
+
+
+
     methods: {
         activatelink(btnid){
             $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
             $('#'+btnid).addClass('btn-primary text-white');
-        }
-    }
+        },
+        getmenus(sub_mod_id){
+            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.menubar =  data.data;  
+            })
+            .catch(function (error) { 
+                console.log("Error:"+error)
+            });
+        },
+    },
+    mounted(){
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+        this.getmenus(routeparam);
+    },
 }
 </script> 
 
