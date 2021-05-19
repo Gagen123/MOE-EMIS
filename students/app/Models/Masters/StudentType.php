@@ -12,8 +12,8 @@ class StudentType extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'name',
-        'status',
+        'Name',
+        'Status',
         'created_by', 
         'created_at',
         'updated_by',

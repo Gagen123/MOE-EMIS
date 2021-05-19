@@ -169,10 +169,16 @@
                                     HR Development (Training)
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="track_application">
+                            <li class="nav-item" id="management_body_link">
                                 <router-link to="/management_body_link" class="nav-link">
                                     <i class="nav-icon fas fa-mail-bulk"></i>
                                     Management Body Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="leave_index">
+                                <router-link to="/leave_index" class="nav-link">
+                                    <i class="nav-icon fas fa-mail-bulk"></i>
+                                    Leave & Others
                                 </router-link>
                             </li>
                         </ul>
@@ -219,12 +225,20 @@
                         </ul>
                     </li>
                     <li class="nav-item has-treeview" id="academicmaster">
-                        <router-link to="/academic-link" class="nav-link pt-1 pb-1">
+                        <router-link to="/academic-master" class="nav-link pt-1 pb-1">
                             <i class="fa fa-book nav-icon"></i>
                             Academic Masters
                         </router-link>
                     </li>
                 </ul>
+            <!--academic-->
+                <li class="nav-item has-treeview" id="academic">
+                    <router-link to="/academic" class="nav-link pt-1 pb-1">
+                        <i class="nav-icon fas fa-book"></i>
+                            Academics
+                    </router-link>
+                </li>
+                <li class="nav-item has-treeview" id="organizationlink">
             </li>
             <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">

@@ -25,6 +25,8 @@ class TaskDetails extends Model
         'claimed_by',
         'claimed_date',
         'last_action_by',
-        'last_action_date'
+        'last_action_date',
+        'app_role_id',
+        'record_type_id'
     ];
 }

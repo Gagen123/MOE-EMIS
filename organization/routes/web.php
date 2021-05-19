@@ -117,6 +117,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassInDropdown', 'Masters\StreamController@getClassInDropdown');
 
     });
+	
+	$router->group(['prefix' => 'masters/classstream'], function () use ($router) {
+        $router->get('/getClassStream', 'Masters\ClassStreamController@getClassStream');
+    });
 
     $router->group(['prefix' => 'masters/electricitySource'], function () use ($router) {
         $router->post('/saveElectricitySource', 'Masters\ElectricitySourceController@saveElectricitySource');
@@ -171,6 +175,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
+			$router->get('/getclassSections/{orgId}', 'generalInformation\SectionController@getclassSections');
 
         });
 
@@ -304,6 +309,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
-
+        $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
     });
 });

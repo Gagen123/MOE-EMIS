@@ -5,7 +5,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div>
@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label class="mb-0.5">Offence Type:<i class="text-danger">*</i></label>
                         <select v-model="student_form.offence_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('offence_type') }" class="form-control select2" name="offence_type" id="offence_type">
-                            <option v-for="(item, index) in offenceTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in offenceTypeList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="offence_type"></has-error>
                     </div>
@@ -35,7 +35,7 @@
                     <div class="form-group">
                         <label class="mb-0.5">Severity:<i class="text-danger">*</i></label>
                         <select v-model="student_form.severity" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('severity') }" class="form-control select2" name="severity" id="severity">
-                            <option v-for="(item, index) in severityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in severityList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="severity"></has-error>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="form-group">
                         <label class="mb-0.5">Action Taken:<i class="text-danger">*</i></label>
                         <select v-model="student_form.action_taken" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('action_taken') }" class="form-control select2" name="action_taken" id="action_taken">
-                            <option v-for="(item, index) in actionTakenList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in actionTakenList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="action_taken"></has-error>
                     </div>

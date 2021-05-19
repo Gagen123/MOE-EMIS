@@ -46,7 +46,7 @@ class StudentDisciplinaryController extends Controller
         
         $data =[
             'id'                            => $request->id,
-            'OrgOrganizationId'             => NULL,
+            'OrgOrganizationId'             => $request->working_agency_id,
             'StdStudentId'                  => $request->student,
             'StdDisciplinaryOffenceTypeId'  => $request->offence_type,
             'StdDisciplinarySeverityId'     => $request->severity,

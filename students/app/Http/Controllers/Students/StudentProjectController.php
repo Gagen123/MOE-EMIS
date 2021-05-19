@@ -108,6 +108,19 @@ class StudentProjectController extends Controller
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
-        
+    }
+
+    /**
+     * List the Project Members
+     */
+
+    public function listProjectMembers($param){
+        $records = DB::table('cea_project')
+                ->join('cea_project_membership', 'cea_project.id', '=', 'cea_project_membership.CeaProjectId')
+                ->join('std_student', 'cea_project_membership.StdStudentId', '=', 'std_student.id')
+                ->select('cea_project.name AS project_name', 'std_student.Name AS student_name')
+                ->get();
+
+        return $this->successResponse($records);
     }
 }

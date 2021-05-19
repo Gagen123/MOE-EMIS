@@ -11,8 +11,9 @@ use App\Models\staff_services\StaffResponsiblity;
 use App\Models\staff_services\StaffDisaplinary;
 use App\Models\staff_services\StaffAttendance;
 use App\Models\staff_services\StaffAttendanceDetails;
-
-
+use App\Models\staff_masters\LeaveConfiguration;
+use App\Models\staff_services\LeaveApplication;
+use App\Models\staff\ApplicationSequence;
 class StaffServicesController extends Controller{
     use ApiResponser;
     public function __construct() {
@@ -246,4 +247,141 @@ class StaffServicesController extends Controller{
         $att_detials=StaffAttendance::where('year',$year)->where('month',$month)->where('org_id',$org_id)->first();
         return $this->successResponse($att_detials);
     }
+    public function checkEligibility($type_id="",$role_ids=""){
+        $response_data="";
+        if(strpos( $role_ids,',')){
+            $role_ids=explode(',',$role_ids);
+            $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->wherein('submitter_role_id',$role_ids)
+            ->select('id','leave_type_id')->get();
+        }
+        else{
+            $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->where('submitter_role_id',$role_ids)
+            ->select('id','leave_type_id')->get();
+        }
+        return $this->successResponse($response_data);
+    }
+    public function getLeaveConfigDetails($role_ids=""){
+        $result_data="";
+        if(strpos( $role_ids,',')){
+            $role_ids=explode(',',$role_ids);
+            $roles="";
+            foreach($role_ids as $role){
+                $roles.="'$role',";
+            }
+            $roles=rtrim($roles,',');
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
+            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id  
+            WHERE d.role_id IN(".$roles.")";
+        }
+        else{
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
+            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id 
+            WHERE d.role_id ='".$role_ids."'";
+        }
+        return DB::select($result_data);
+    }
+
+    public function submitLeaveApplication(Request $request){
+        $rules = [
+            'staff_id'                  =>  'required',
+            'reason'                    =>  'required',
+            'from_date'                  =>  'required',
+            'to_date'                    =>  'required',
+            'no_days'                    =>  'required',
+        ];
+        $customMessages = [
+            'staff_id.required'         => 'This field is required',
+            'reason.required'           => 'This field is required',
+            'from_date.required'         => 'This field is required',
+            'to_date.required'           => 'This field is required',
+            'no_days.required'         => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+
+        $last_seq=ApplicationSequence::where('service_name','Leave')->first();
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'Leave',
+                'last_sequence'                 =>  $last_seq,
+            ];  
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];  
+            ApplicationSequence::where('service_name', 'Leave')->update($app_details);
+        }
+        $appNo='L';
+        if(strlen($last_seq)==1){
+            $appNo= $appNo.date('Y').'.'.date('m').'.0000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $appNo= $appNo.date('Y').'.'.date('m').'.000'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $appNo= $appNo.date('Y').'.'.date('m').'.00'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $appNo= $appNo.date('Y').'.'.date('m').'.0'.$last_seq;
+        }
+        else if(strlen($last_seq)==5){
+            $appNo= $appNo.date('Y').'.'.date('m').'.'.$last_seq;
+        }
+        
+        $data_data =[
+            'application_number'        =>  $appNo,
+            'leave_type_id'             =>  $request->leave_type_id,
+            'staff_id'                  =>  $request->staff_id,
+            'year'                      =>  $request->year,
+            'date_of_application'       =>  $request->date_of_application,
+            'reason'                    =>  $request->reason,
+            'from_date'                 =>  $request->from_date,
+            'to_date'                   =>  $request->to_date,
+            'no_days'                   =>  $request->no_days,
+            'org_id'                    =>  $request->org,
+            'status'                    =>  $request->status,
+            'dzongkhag_id'              =>  $request->dzongkhag,
+            'created_by'                =>  $request->user_id, 
+            'created_at'                =>  date('Y-m-d h:i:s')
+        ];
+        $response_data = LeaveApplication::create($data_data); 
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function loadLeaveDetails($appNo=""){
+        $leave_detials=LeaveApplication::where('application_number',$appNo)->first();
+        return $this->successResponse($leave_detials);
+    }
+    
+    public function verifyApproveRejectLeaveApplication(Request $request){
+        $app_details =[
+            'status'                        =>  $request->status,
+            'remarks'                       =>  $request->remarks,
+            'updated_by'                    =>  $request->user_id, 
+            'updated_at'                    =>  date('Y-m-d h:i:s')
+        ];
+        LeaveApplication::where('application_number', $request->application_number)->update($app_details);
+        $response_data = LeaveApplication::where('application_number', $request->application_number)->first(); 
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function getApprovedLeaveCount($staff_id="",$leave_type_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$leave_type_id)->where('status','Approved')->where('year',date('Y'))->select('no_days')->get();
+        return $this->successResponse($leave_detials);
+    }
+    
+    public function getOnGoingLeave($staff_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->whereNotIn('status', ['Rejected','Approved'])->select('application_number')->first();
+        return $this->successResponse($leave_detials);
+    }
+
+    public function getallLeaves($staff_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->get();
+        return $this->successResponse($leave_detials);
+    }
+    
+    
 }

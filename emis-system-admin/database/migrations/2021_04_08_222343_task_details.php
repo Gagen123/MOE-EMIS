@@ -17,6 +17,8 @@ class TaskDetails extends Migration{
             $table->string('access_level',36)->nullable(false);
             $table->string('user_dzo_id',11)->nullable(false);
             $table->char('working_agency_id',36)->nullable(true);
+            $table->char('app_role_id',36)->nullable(true);
+            $table->char('record_type_id',36)->nullable(true);
             $table->string('claimed_by',36)->nullable(true);
             $table->string('created_by',36)->nullable(false);
             $table->timestamp('applied_on')->nullable();

@@ -60,7 +60,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/VaccinationList');
+                    this.$router.push('/vaccination_list');
                 })
                 .catch(() => {
                     console.log("Error......")

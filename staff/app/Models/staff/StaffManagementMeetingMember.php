@@ -16,6 +16,7 @@ class StaffManagementMeetingMember extends Model
         'id',
         'meeting_id',
         'member_id',
+        'status',
         'created_by',
         'updated_by',
         'created_at',

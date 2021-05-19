@@ -31,12 +31,20 @@ use App\Models\staff_service_masters\StaResponsiblity;
 use App\Models\staff_service_masters\StaffOffenceType;
 use App\Models\staff_service_masters\StaffOffenceSeverity;
 use App\Models\staff_service_masters\StaffOffenceAction;
+use App\Models\staff_masters\LeaveType;
+use App\Models\staff_masters\LeaveConfiguration;
+use App\Models\staff_masters\LeaveConfigurationDetials;
+
+
 
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="emis_staff_db";
+    public $audit_database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
+        
+        $this->audit_database = config('services.constant.auditdb');
     }
     public function saveStaffMasters(Request $request){
         $response_data=[];
@@ -106,13 +114,14 @@ class StaffMastersController extends Controller{
                     $parent_id=$data->sub_area_id;
                 }
                 $messs_det='parent id:'.$parent_id.'; name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL emis_admin.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 $data->name = $request['name'];
                 $data->status = $request['status'];
                 if($request['record_type']=="sub_major_group"){
                     $data->group_id = $request['parent_field'];
                 }
                 if($request['record_type']=="position_title"){
+                    $data->position_level_id = $request['position_level'];
                     $data->sub_group_id = $request['parent_field'];
                 }
                 if($request['record_type']=="staff_subject"){
@@ -168,7 +177,7 @@ class StaffMastersController extends Controller{
                     $messs_det='qualification type id:'.$data->q_type_id.'; qualification level id: '.$data->q_level_id.'; qualification:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
                 }
 
-                $procid=DB::select("CALL emis_admin.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
                 if($request['record_type']=="staff_qualification"){
                     $data->q_type_id = $request['parent_field'];
@@ -188,7 +197,7 @@ class StaffMastersController extends Controller{
         || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"
         || $request['record_type']=="transfer_uindertaking" || $request['record_type']=="mgmn_body_type" || $request['record_type']=="staff_award_category"
         || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
-        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action"){
+        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action" || $request['record_type']=="leave_type"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="transfer_reason"){
@@ -251,7 +260,9 @@ class StaffMastersController extends Controller{
                 if($request['record_type']=="staff_offence_action"){
                     $table="master_staff_offence_action";
                 }
-
+                if($request['record_type']=="leave_type"){
+                    $table="master_staff_leave_type";
+                }
                 $rules = [
                     'name'  =>  'required|unique:'.$table,
                     'status'    =>  'required',
@@ -334,6 +345,11 @@ class StaffMastersController extends Controller{
                 }
                 if($request['record_type']=="staff_offence_action"){
                     $response_data = StaffOffenceAction::create($data);
+                }
+                if($request['record_type']=="leave_type"){
+                    $data=$data+['no_days'    =>  $request['parent_field'],'category'    =>  $request['parent_field1']
+                ];
+                    $response_data = LeaveType::create($data);
                 }
             }
             if($request->actiontype=="edit"){
@@ -420,12 +436,19 @@ class StaffMastersController extends Controller{
                     $data = StaffOffenceAction::find($request['id']);
                     $table="master_staff_offence_action";
                 }
-
+                if($request['record_type']=="leave_type"){
+                    $data = LeaveType::find($request['id']);
+                    $table="master_staff_leave_type";
+                }
                 $messs_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL emis_admin.emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+                $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
                 $data->name         =$request['name'];
                 $data->status       =$request['status'];
+                if($request['record_type']=="leave_type"){
+                    $data->no_days       =$request['parent_field'];
+                    $data->category       =$request['parent_field1'];
+                }
                 $data->updated_by   =$request['user_id'];
                 $data->updated_at   = date('Y-m-d h:i:s');
                 $data->update();
@@ -600,6 +623,13 @@ class StaffMastersController extends Controller{
             return $this->successResponse(StaffOffenceAction::where('status','1')->get());
         }
 
+        if($param=="all_leave_type_list"){
+            return $this->successResponse(LeaveType::all());
+        }
+        if($param=="all_active_leave_type_list"){
+            return $this->successResponse(LeaveType::where('status','1')->get());
+        }
+
     }
     public function load_staff_masters_by_id($param="",$id=""){
         if($param=="qdescription"){
@@ -649,5 +679,72 @@ class StaffMastersController extends Controller{
         if($model=="StaffSubMajorGrop"){
             return $this->successResponse(StaffSubMajorGrop::where('group_id',$parent_id)->get());
         }
+    }
+
+    public function saveLeaveConfigMasters(Request $request){
+        $rules = [
+            'leave_type_id' =>  'required',
+            'role_id'       =>  'required',
+        ];
+        $customMessages = [
+            'leave_type_id.required' => 'This field is required',
+            'role_id.required' => 'This field is required',
+        ];
+        $data = array(
+            'leave_type_id'             =>  $request['leave_type_id'],
+            'submitter_role_id'         =>  $request['role_id'],
+            
+        );
+        
+        $this->validate($request, $rules,$customMessages);
+        if($request['action_type']=="add"){
+            $data =$data +[
+                'created_by'                =>  $request['user_id'],
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $config_det= LeaveConfiguration::create($data);
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'leave_config_id'       =>  $config_det->id,
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $action_Id= LeaveConfigurationDetials::create($data);
+            }
+        }
+        if($request['action_type']=="edit"){
+            $data =$data +[
+                'updated_by'                =>  $request['user_id'],
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            LeaveConfiguration::where('id',$request['id'])->update($data);
+            LeaveConfigurationDetials::where('leave_config_id',$request['id'])->delete();
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'leave_config_id'       =>  $request['id'],
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $action_Id= LeaveConfigurationDetials::create($data);
+            }
+        }
+        
+        return $this->successResponse($config_det, Response::HTTP_CREATED);
+    }
+    
+    public function loadLeaveConfigMasters($type="",$submitter=""){
+        return $this->successResponse(LeaveConfiguration::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
+    }
+    
+    public function loadAllLeaveConfigMasters($type="",$submitter=""){
+        return $this->successResponse(LeaveConfiguration::all());
+    }
+    
+    public function loadLeaveConfigDetails($id=""){
+        $data=LeaveConfiguration::where('id',$id)->first();
+        $data->conDetails= LeaveConfigurationDetials::where('leave_config_id',$id)->get();
+        return $this->successResponse($data);
     }
 }
