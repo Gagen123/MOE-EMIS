@@ -70,19 +70,12 @@ export default {
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             })
-            setTimeout(function(){
-                $("#class-teacher-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
         async classTeacher(){ 
             try{
                 let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
                 let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
 
-                console.log(classTeachers);
                 classSections.forEach((classSection,index) => {
                     classTeachers.forEach(item => {
                         if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){

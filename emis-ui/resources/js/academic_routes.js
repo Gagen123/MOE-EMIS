@@ -6,14 +6,14 @@ const routes = [
            
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
             
-            { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
-                children: [
-                    { path: '', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
-                    { path: '/list-national-holiday', name:'list_national_holiday', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
-                    { path: '/create-national-holiday', name: 'create_national_holiday', component: require('./components/masters/academics_masters/national_holiday/create_national_holidy.vue').default },
-                    { path: '/edit-national-holiday', name: 'edit_national_holiday', component: require('./components/masters/academics_masters/national_holiday/edit_national_holiday.vue').default },
-                ]
-            },
+            // { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
+            //     children: [
+            //         { path: '', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
+            //         { path: '/list-national-holiday', name:'list_national_holiday', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
+            //         { path: '/create-national-holiday', name: 'create_national_holiday', component: require('./components/masters/academics_masters/national_holiday/create_national_holidy.vue').default },
+            //         { path: '/edit-national-holiday', name: 'edit_national_holiday', component: require('./components/masters/academics_masters/national_holiday/edit_national_holiday.vue').default },
+            //     ]
+            // },
             { path: '/subject-group-master', component: require('./components/masters/academics_masters/subject_group/subject_group_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/academics_masters/subject_group/list_subject_group.vue').default },
@@ -104,13 +104,13 @@ const routes = [
 
             ]
         },
-        // { path:'/student-elective-subject', component:require('./components/academics/students_elective_subject/students_elective_subject_index.vue').default,
-        //     children: [
-        //         { path: '', component:require('./components/academics/students_elective_subject/list_students_elective_subject.vue').default},
-        //         { path: '/list-students-elective-subject', name: 'list_students_elective_subject', component: require('./components/academics/students_elective_subject/list_students_elective_subject.vue').default },
-        //         { path: '/create-student-elective-subject',name:'create_students_elective_subject', component:require('./components/academics/students_elective_subject/create_students_elective_subject.vue').default},
-        //     ]
-        // },
+        { path:'/student-attendance', component:require('./components/academics/student_attendance/student_attendance_index.vue').default,
+            children: [
+                { path: '', component:require('./components/academics/student_attendance/list_student_attendance.vue').default},
+                { path: '/list-student-attendance', name: 'list_student_attendance', component: require('./components/academics/student_attendance/list_student_attendance.vue').default },
+                { path: '/edit-student-attendance',name:'edit_student_attendance', component:require('./components/academics/student_attendance/edit_student_attendance.vue').default},
+            ]
+        },
         
 
     ]
