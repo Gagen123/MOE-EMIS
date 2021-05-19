@@ -11,11 +11,11 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('sub_assmt_area')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('sub_assmt_area')">
                     <router-link id="sub_assmt_area" to="/national-holiday-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        National Holiday 
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item active pr-1" @click="activatelink('sub_group')">
                     <router-link id="sub_group" to="/subject-group-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Subject Group
@@ -72,7 +72,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar = data.data.data;  
+                this.menubar = data.data;  
             })
             .catch(function (error) { 
                 console.log("Error:"+error)
