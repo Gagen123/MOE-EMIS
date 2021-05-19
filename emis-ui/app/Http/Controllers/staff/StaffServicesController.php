@@ -184,38 +184,48 @@ class StaffServicesController extends Controller{
             'no_days.required'         => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        $staff_data =[
-            'id'                        =>  $request->id,
-            'leave_type_id'             =>  $request->leave_type_id,
-            'staff_id'                  =>  $request->staff_id,
-            'year'                      =>  $request->year,
-            'date_of_application'       =>  $request->date_of_application,
-            'from_date'                 =>  $request->from_date,
-            'to_date'                   =>  $request->to_date,
-            'no_days'                   =>  $request->no_days,
-            'reason'                    =>  $request->reason,
-            'status'                    =>  'Pending For Approval',
-            'org'                       =>  $this->getWrkingAgencyId(),
-            'dzongkhag'                 =>  $this->getUserDzoId(),
-            'user_id'                   =>  $this->userId() 
-        ]; 
-        $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
-        // dd($response_data);
-        $workflow_data=[
-            'db_name'           =>  $this->database_name,
-            'table_name'        =>  $this->leave_table_name,
-            'service_name'      =>  $this->service_name,
-            'application_number'=>  json_decode($response_data)->data->application_number,
-            'screen_id'         =>  json_decode($response_data)->data->application_number,
-            'status_id'         =>  1,
-            'remarks'           =>  $request->remarks,
-            'user_dzo_id'       =>  $this->getUserDzoId(),
-            'access_level'      =>  $this->getAccessLevel(),
-            'working_agency_id' =>  $this->getWrkingAgencyId(),
-            'action_by'         =>  $this->userId(),
-        ];
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        return $work_response_data;
+        $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
+        
+        if($appRole_id!=[]){
+            // dd($appRole_id[0]->SysRoleId);
+            $staff_data =[
+                'id'                        =>  $request->id,
+                'leave_type_id'             =>  $request->leave_type_id,
+                'staff_id'                  =>  $request->staff_id,
+                'year'                      =>  $request->year,
+                'date_of_application'       =>  $request->date_of_application,
+                'from_date'                 =>  $request->from_date,
+                'to_date'                   =>  $request->to_date,
+                'no_days'                   =>  $request->no_days,
+                'reason'                    =>  $request->reason,
+                'status'                    =>  'Pending For Approval',
+                'org'                       =>  $this->getWrkingAgencyId(),
+                'dzongkhag'                 =>  $this->getUserDzoId(),
+                'user_id'                   =>  $this->userId() 
+            ]; 
+            $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
+            // dd($response_data);
+            $workflow_data=[
+                'db_name'               =>  $this->database_name,
+                'table_name'            =>  $this->leave_table_name,
+                'service_name'          =>  $this->service_name,
+                'application_number'    =>  json_decode($response_data)->data->application_number,
+                'screen_id'             =>  json_decode($response_data)->data->application_number,
+                'status_id'             =>  1,
+                'app_role_id'           =>  $appRole_id[0]->SysRoleId,
+                'record_type_id'        =>  $request->leave_type_id,
+                'remarks'               =>  $request->remarks,
+                'user_dzo_id'           =>  $this->getUserDzoId(),
+                'access_level'          =>  $this->getAccessLevel(),
+                'working_agency_id'     =>  $this->getWrkingAgencyId(),
+                'action_by'             =>  $this->userId(),
+            ];
+            $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            return $work_response_data;
+        }
+        else{
+            return 'No role mapping found for this selected user. Please contact with system administrator';
+        }
     }
     public function loadLeaveDetails($appNo="",$type=""){
         $update_data=[
@@ -229,7 +239,12 @@ class StaffServicesController extends Controller{
         if($response_data!=null){
             foreach($response_data as $work){
                 if($leave_details->data->leave_type_id==$work->leave_type_id && $updated_data->data->status_id==$work->sequence){
-                    $leave_details->data->app_seq_no=$work->authority_type_id;
+                    if($work->authority_type_id==10){
+                        $leave_details->data->app_seq_no=$work->authority_type_id;
+                    }
+                    else{
+                        $leave_details->data->app_seq_no=$work->sequence;
+                    }
                 }
             }
         }
@@ -276,5 +291,20 @@ class StaffServicesController extends Controller{
         $response_data= $this->apiService->createData('emis/staff/staffServices/verifyApproveRejectLeaveApplication', $update_data);
         return $response_data;
     }
+
+    public function getApprovedLeaveCount($staff_id="",$leave_type_id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/getApprovedLeaveCount/'.$staff_id.'/'.$leave_type_id);
+        return $response_data;
+    }
+    public function getOnGoingLeave($staff_id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/getOnGoingLeave/'.$staff_id);
+        return $response_data;
+    }
+    
+    public function getallLeaves(){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/getallLeaves/'.$this->staffId());
+        return $response_data;
+    }
+    
     
 }

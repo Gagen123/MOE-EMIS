@@ -20,200 +20,26 @@ class GeneralStudentController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
 
-    /** 
-     * method to save or update student masters data
-    */
-
-    public function saveStudentMasters(Request $request){
-        
-        $rules = [
-            'name'  =>  'required',
-        ];
-
-        $this->validate($request, $rules);
-
-        $record_type = $request['recordtype'];
-        $data = [
-            'id'  =>  $request['id'],
-            'name'  =>  $request['name'],
-            'description'  =>  $request['description'],
-            'status'    =>  $request['status'],
-            'created_by'=>$request['user_id'],
-            'created_at'=>date('Y-m-d h:i:s'),
-        ];
-        
-        $databaseModel=$this->getModelName($record_type);
-
-        if($request->actiontype=="add"){
-            $response_data = $this->insertData($data, $databaseModel);
-
-        } else if($request->actiontype=="edit"){
-            $response_data = $this->updateData($data, $databaseModel);
-        }
-
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
-    }
+    /**
+     * Get the basic student list (id, name, student code)
+     */
 
     public function loadStudentList($param=""){
         $id = $param;
         
         return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
-                            ->get(['id', 'Name', 'DateOfBirth']));
+                            ->get(['id', 'Name', 'student_cod']));
     }
+
+    /**
+     * Get the student list by stream and section (id, name, student code, class, section, stream)
+     */
 
     public function loadStudentBySection($param1){
         $id = $param1;
         
         return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
                             ->get(['id', 'Name', 'DateOfBirth']));
-    }
-    /**
-     * method to list students masters
-    */
-
-    public function loadStudentMasters($param=""){
-
-        $databaseModel=$this->getModelName($param);
-
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-
-        return $this->successResponse($model::all());
-
-    }
-
-    /**
-     * method to list students masters of active records for dropdown
-    */
-
-    public function loadActiveStudentMasters($param=""){
-
-        $databaseModel=$this->getModelName($param);
-
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-        $status = '1';
-
-        return $this->successResponse($model::where('status',$status)->first());
-
-    }
-
-    /**
-     * method to list students masters by id
-    */
-
-    public function allActiveStudentDropdowns($param="",$id=""){
-        
-        $databaseModel = $this->getModelName($param);
-
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-
-        return $this->successResponse($model::where('id',$id)->first());
-        
-    }
-
-    /**
-     * Function to insert data into the respective tables
-     */
-
-    private function insertData($data, $databaseModel){
-
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-
-        $response_data = $model::create($data);
-        
-        return $response_data;
-
-    }
-
-    /**
-     * Function to insert data into the respective tables
-     */
-
-    private function updateData($dataRequest, $databaseModel){
-
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-        $model = new $modelName();
-
-        $data = $model::find($dataRequest['id']);
-
-        //Audit Trails
-        // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-        // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
-        
-        //data to be updated
-        $data->name = $dataRequest['name'];
-        $data->description = $dataRequest['description'];
-        $data->status = $dataRequest['status'];
-        $data->updated_by = $dataRequest['created_by'];
-        $data->updated_at = date('Y-m-d h:i:s');
-        $data->update();
-        
-        return $data;
-
-    }
-
-    /*
-    * To get the model names based on parameters
-    */
-
-    private function getModelName($parameter){
-        $databaseModel='';
-
-        switch($parameter){
-            case "student_awards" : {
-                    $databaseModel = "StudentAwards";
-                    break;
-                }
-            case "offence_type" : {
-                    $databaseModel = "OffenceType";
-                    break;
-                }
-            case "offence_severity" : {
-                    $databaseModel = "OffenceSeverity";
-                    break;
-                }
-            case "disciplinary_action_taken" : {
-                    $databaseModel = "DisciplinaryActionTaken";
-                    break;
-                }
-            case "roles_responsibilities" : {
-                    $databaseModel = "StudentRole";
-                    break;
-                }
-            case "program_name" : {
-                    $databaseModel = "CeaProgram";
-                    break;
-                }
-            case "program_support" : {
-                    $databaseModel = "CeaProgramSupporter";
-                    break;
-                }
-            case "project_type" : {
-                    $databaseModel = "CeaProjectType";
-                    break;
-                } 
-        }
-        return $databaseModel;
-    }
-	  public function getStudents($org_id , Request $request){
-        $query = 'SELECT id AS std_student_id, roll_no, name FROM std_details WHERE org_class_id = ?';
-        $param = [$request->classId];
-        if($request->streamId){
-            $query .= ' AND org_stream_id = ?';
-            array_push($param, $request->streamId);
-        }
-        if($request->sectionId){
-            $query .= ' AND org_class_section_id = ?';
-            array_push($param, $request->sectionId);
-        }
-
-        array_push($param, $org_id);
-        $student = DB::select($query . ' AND org_id=? ORDER BY roll_no', $param);
-        return $this->successResponse($student);
     }
     
 }

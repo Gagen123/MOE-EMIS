@@ -91,6 +91,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/addHealthScreeningRecords', ['uses' => 'Students\StudentHealthController@addHealthScreeningRecords']);
         $router->get('/loadHealthScreeningRecords/{param}', ['uses' => 'Students\StudentHealthController@loadHealthScreeningRecords']);
         $router->get('/listScreeningSummary/{param}', ['uses' => 'Students\StudentHealthController@listScreeningSummary']);
+        $router->get('/getHealthScreeningSummary/{param}', ['uses' => 'Students\StudentHealthController@getHealthScreeningSummary']);
 
         $router->post('/addBmiRecords', ['uses' => 'Students\StudentHealthController@addBmiRecords']);
         $router->get('/loadBmiSummary/{param}', ['uses' => 'Students\StudentHealthController@loadBmiSummary']);
@@ -115,6 +116,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentProgram', ['uses' => 'Students\StudentProgramController@saveStudentProgram']);
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
         $router->get('/listStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@listStudentPrograms']);
+        $router->get('/getProgramDetails/{param}', ['uses' => 'Students\StudentProgramController@getProgramDetails']);
         $router->post('/saveProgramMembers', ['uses' => 'Students\StudentProgramController@saveProgramMembers']);
         $router->get('/listProgramMembers/{param}', ['uses' => 'Students\StudentProgramController@listProgramMembers']);
         $router->post('/saveProgramActionPlan', ['uses' => 'Students\StudentProgramController@saveProgramActionPlan']);

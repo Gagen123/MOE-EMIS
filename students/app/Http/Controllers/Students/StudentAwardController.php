@@ -43,7 +43,7 @@ class StudentAwardController extends Controller
         $data =[
             'id'                => $request->id,
             'StdStudentId'           =>  $request->student,
-            'awarded_by'    =>  $request->award_given_by,
+            'AwardedBy'    =>  $request->award_given_by,
             'CeaAwardId'     =>  $request->award_type_id,
             'Place'             =>  $request->place,
             'AwardDate'              =>  $request->date,

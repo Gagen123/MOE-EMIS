@@ -16,9 +16,9 @@
                         <label>Date of Application:</label> 
                         <span class="text-blue">{{current_date}}</span>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>No of days/months you can avail:</label> 
-                        <span class="text-blue">{{total_leave_apply}}</span>
+                        <span class="text-blue">{{leave_balance}}{{total_leave_apply}}</span>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4 pb-4">
                         <label class="mb-0.5">Applicant:<i class="text-danger">*</i></label>
@@ -68,6 +68,8 @@ export default {
             count:1,
             current_date:'',
             total_leave_apply:'',
+            actual_leave_avail:0,
+            leave_balance:0,
             form: new form({
                 staff_id:'',
                 leave_type_id:'',
@@ -98,7 +100,6 @@ export default {
         },
         calculateNoDays(){
             if($('#from_date').val()==""){
-                alert($('#from_date').val());
                 Swal.fire({
                     icon: 'error',
                     title: 'Sorry! ',
@@ -124,8 +125,20 @@ export default {
                 this.form.no_days=Difference_In_Days;
             }
         },
+        validated(){
+            let returntype=true;
+            if(this.total_leave_apply.toLowerCase().includes('day') && this.form.no_days>this.leave_balance){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Sorry! ',
+                    text: 'You can avail maximum of '+this.leave_balance +' Days',
+                });
+                returntype=false; 
+            }
+            return returntype;
+        },
 		formaction: function(type){
-            if(type=="save"){
+            if(type=="save" && this.validated()){
                 Swal.fire({
                     text: "Are you sure you wish to submit for further approval ?",
                     icon: 'info',
@@ -134,22 +147,33 @@ export default {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
                 }).then((result) => {
-                    if (result.isConfirmed) {
+                    if (result.isConfirmed) { 
                         this.form.post('/staff/staffServices/submitLeaveApplication',this.form)
                         .then((response) => {
-                            if(response!=null && response!=""){
+                            if(response.data.data!=undefined){
                                 let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
                                     'Leave Applicaiton has been submitted for approval',
                                     'success',
-                                )
+                                ) 
                             }
+                            else{
+                                if(response.data.includes('No role mapping found for this selected use')){
+                                    Swal.fire({
+                                        title: 'No Role Configuration ! ',
+                                        text: "Sorry! "+response.data,
+                                        icon: 'error',
+                                    });
+                                } 
+                            }
+                            // 
                         })
                         .catch((err) =>{
+                            console.log("Error: "+err);
                             this.applyselect2();
-                            console.log("Error: "+err)
+                            
                         })
                     }
                 })
@@ -168,6 +192,7 @@ export default {
             }
             if(id=="staff_id"){
                 this.form.staff_id=$('#staff_id').val();
+                this.getApprovedLeaveCount();
             }
         },
         loadstaff(){
@@ -180,29 +205,83 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
-        },
+        }, 
         getLeave_details(){
             axios.get('staff/staffServices/checkEligibility/'+$('#leave_type_id').val())
             .then(response =>{
                 let data = response;
                 if(data.data.data!=""){
                     //need to handle for multiple role later, for now it will take for first role at the index 0
-                    this.total_leave_apply=data.data.data[0].leave_details.no_days+' ('+data.data.data[0].leave_details.category+')';
+                    this.total_leave_apply=' ('+data.data.data[0].leave_details.category+')';
+                    this.actual_leave_avail=data.data.data[0].leave_details.no_days;
+                    this.leave_balance=data.data.data[0].leave_details.no_days;
                     $('#form_details').show();
                     $('#applyId').show();
+                    this.getApprovedLeaveCount();
                 }
                 else{
                     Swal.fire({
                         title: 'No Leave Configuration ! ',
                         text: "Sorry! System cannot find leave configuration for this role. Please contact system administrator",
                         icon: 'error',
-                    })
+                    });
+                    $('#form_details').hide();
+                    $('#applyId').hide();
                 }
             })
             .catch(function (error){
                 console.log(error);
             });
-        },        
+            
+        },  
+        getApprovedLeaveCount(){
+            if(this.total_leave_apply.toLowerCase().includes('day')){
+                axios.get('staff/staffServices/getApprovedLeaveCount/'+this.form.staff_id+'/'+$('#leave_type_id').val())
+                .then(response =>{
+                    let totlaApprovedleave=0;
+                    let data = response.data.data;
+                    for(let i=0;i<data.length;i++){
+                        totlaApprovedleave+=parseInt(data[i].no_days);
+                    }
+                    let leavebalance=0;
+                    leavebalance=this.actual_leave_avail-totlaApprovedleave;
+                    this.leave_balance=leavebalance;
+                    if(leavebalance<1){
+                        Swal.fire({
+                            title: 'No Leave Balance ! ',
+                            text: "Sorry! You have already availed maximum number of leave for this type",
+                            icon: 'error',
+                        });
+                        $('#applyId').hide();
+                    }
+                    else{
+                        $('#applyId').show();
+                    }
+                })
+                .catch(function (error){
+                    console.log(error);
+                });
+            }
+            axios.get('staff/staffServices/getOnGoingLeave/'+this.form.staff_id)
+            .then(response =>{
+                let data = response.data.data;
+                if(data!=""){
+                    Swal.fire({
+                        title: 'Already Applied ! ',
+                        text: "Sorry! You have submitted leave application with applicaiton number: "+data.application_number+' which is under process.',
+                        icon: 'error',
+                    });
+                    $('#applyId').hide();
+                }
+                else{
+                    $('#applyId').show();
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+            
+        },     
         applyselect2(){
             if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
                 $('#leave_type_id').addClass('select2-hidden-accessible');
@@ -230,6 +309,16 @@ export default {
         });
         this.loadleaveTypeList();
         this.loadstaff();
+
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.form.staff_id=data['staff_id'];
+            $('#staff_id').val(data['staff_id']).trigger('change');
+        })    
+        .catch(errors => { 
+            console.log(errors)
+        });
     },
 }
 </script>

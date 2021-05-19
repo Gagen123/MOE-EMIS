@@ -13,8 +13,8 @@ class StudentAwardType extends Model
 
     protected $fillable = [
         'id',
-        'name', 
-        'description', 
-        'status'
+        'Name', 
+        'Description', 
+        'Status'
     ];
 }

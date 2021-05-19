@@ -43,6 +43,14 @@ class StudentMasterController extends Controller{
             $data = $data + $additional_data;
         }
 
+        if($request->record_type == 'training'){
+            $additional_data = [
+                'training_type_id' => $request->training_type_id,
+                'program_id'       => $request->program_id
+            ];
+            $data = $data + $additional_data;
+        } 
+
         if($request->record_type == 'program_role'){
             $additional_data = [
                 'program' => $request->program,

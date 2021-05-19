@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_award_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_award_form" field="student"></has-error>
                 </div> 
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label class="mb-0.5">Award Type:<i class="text-danger">*</i></label>
                             <select v-model="student_award_form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
-                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
                             <has-error :form="student_award_form" field="award_type_id"></has-error>
                     </div>

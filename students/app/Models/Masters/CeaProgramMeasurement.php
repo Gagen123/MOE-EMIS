@@ -9,12 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class CeaProgramMeasurement extends Model
 {
     use HasFactory, Uuid;
-    protected $table="cea_program_measurement";
+    protected $table="cea_programme_measurement";
 
     protected $fillable = [
         'id',
-        'name', 
-        'description', 
-        'status'
+        'Name', 
+        'Description', 
+        'Status'
     ];
 }

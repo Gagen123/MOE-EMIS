@@ -50,6 +50,11 @@
                     Training/Workshop 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('quarter_name_index')">
+                    <router-link to="/quarter_name_index" id="quarter_name_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Quarter 
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('program_item_index')">
                     <router-link to="/program_item_index" id="program_item_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Program Items 
