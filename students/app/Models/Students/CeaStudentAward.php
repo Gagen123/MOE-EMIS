@@ -16,7 +16,7 @@ class CeaStudentAward extends Model
         'StdStudentId',
         'CeaAwardId',
         'AwardDate',
-        'awarded_by',
+        'AwardedBy',
         'Place',
         'Remarks'
     ];

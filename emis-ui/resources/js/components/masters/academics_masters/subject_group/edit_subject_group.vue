@@ -9,6 +9,11 @@
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Display Order:<span class="text-danger">*</span></label>
+                        <input class="form-control text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
+                        <has-error :form="form" field="display_order"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">status:</label>
                         <br>
                         <label><input v-model="form.status" type="radio" value="1" /> Active</label>
@@ -27,10 +32,10 @@
 export default {
     data() {
         return {
-            count:10,
             form: new form({
                 id: '',
                 name: '',
+                display_order:'',
                 status:'',
                 record_type:'subject_group',
                 action_type:'edit',
@@ -46,6 +51,7 @@ export default {
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
+                this.form.display_order=''
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -65,6 +71,7 @@ export default {
     },
     created() {
         this.form.name=this.$route.params.data.name;
+        this.form.display_order = this.$route.params.data.display_order
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     },

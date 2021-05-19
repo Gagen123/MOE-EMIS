@@ -14,7 +14,8 @@ class Student extends Model
     protected $fillable = [
         'id',
         'OrgOrganizationId', 
-        'CidNo', 
+        'CidNo',
+        'student_code',
         'Name',
         'CmnSexId',
         'DateOfBirth',

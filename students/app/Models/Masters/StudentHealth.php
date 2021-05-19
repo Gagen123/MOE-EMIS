@@ -13,7 +13,9 @@ class StudentHealth extends Model
     protected $table="student_healths";
 
     protected $fillable = [
-        'id','name', 'status'
+        'id',
+        'Name', 
+        'Status'
     ];
 }
 

@@ -72,7 +72,7 @@ class StudentResponsibilityController extends Controller
 
     public function loadStudentResponsibilities($param=""){
 
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+        $id =$param;
 
         $roles = DB::table('std_role_student')
                 ->join('std_student', 'std_role_student.StdStudentId', '=', 'std_student.id')

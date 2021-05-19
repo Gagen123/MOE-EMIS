@@ -12,27 +12,31 @@
                         <has-error :form="form" field="aca_sub_category_id"></has-error>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>Rating Type:<span class="text-danger">*</span></label> 
-                         <select v-model="form.aca_sub_group_id" class="form-control select2" id="aca_sub_group_id" :class="{ 'is-invalid': form.errors.has('aca_sub_group_id') }"> -->
-                            <option value="">--Select--</option>
-                            <option v-for="(item, index) in rating_type_list" :key="index" :value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="aca_sub_group_id"></has-error>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Assessment Area:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>Display Order:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.order" :class="{ 'is-invalid': form.errors.has('order') }" id="order" @change="remove_err('order')" type="number">
-                        <has-error :form="form" field="order"></has-error>
+                        <label>Assessment Area Code:<span class="text-danger">*</span></label>
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <label>Rating Type:</label> 
+                         <select v-model="form.aca_rating_type_id" class="form-control select2" id="aca_rating_type_id"> 
+                            <option value="">--Select--</option>
+                            <option v-for="(item, index) in filterRating(1)" :key="index" :value="item.id">{{ item.name }}</option>
+                        </select> 
                     </div>
                 </div>  
                 <div class="row form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <label>Display Order:<span class="text-danger">*</span></label>
+                        <input class="form-control text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
+                        <has-error :form="form" field="display_order"></has-error>
+                    </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label class="required">Status:</label>
                         <br> 
@@ -58,6 +62,7 @@ export default {
                 aca_sub_id:'',
                 aca_rating_type_id:'',
                 name: '',
+                code:'',
                 display_order:'',
                 status: 1,
                 record_type:'assessment_area',
@@ -92,9 +97,13 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        filterRating(value){
+           return this.rating_type_list.filter(item => item.input_type != value);
+        },
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
+                this.form.code = '';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -104,7 +113,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-subject');
+                    this.$router.push('/list-assessment-area');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -128,6 +137,7 @@ export default {
         });
         this.loadSubList()
         this.loadRatingTypeList()
+        this.filterRating()
     },
 }
 </script>

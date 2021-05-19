@@ -4,23 +4,23 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Award Name:<span class="text-danger">*</span></label> 
+                        <label>Training/Workshop/Seminar Name:<span class="text-danger">*</span></label> 
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="mb-0.5">Award Type:<i class="text-danger">*</i></label>
-                            <select v-model="form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
-                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <label class="mb-0.5">Training Type:<i class="text-danger">*</i></label>
+                            <select v-model="form.training_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('training_type_id') }" class="form-control select2" name="training_type_id" id="training_type_id">
+                                <option v-for="(item, index) in trainingType" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
-                            <has-error :form="form" field="award_type_id"></has-error>
+                            <has-error :form="form" field="training_type_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="mb-0.5">Program:<i class="text-danger">*</i></label>
+                        <label class="mb-0.5">Under Program:<i class="text-danger">*</i></label>
                             <select v-model="form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
-                                <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
                             <has-error :form="form" field="program_id"></has-error>
                     </div>
@@ -57,21 +57,21 @@ export default {
             form: new form({
                 id: '',
                 name: '',
-                award_type_id:'',
+                training_type_id:'',
                 program_id:'',
                 description:'',
                 status: 1,
-                record_type:'student_awards',
+                record_type:'training',
                 action_type:'add',
             })
         }
     },
     methods: {
-        loadActiveAwardList(uri="masters/loadActiveStudentMasters/student_award_type"){
+        loadActiveTrainingTypeList(uri="masters/loadActiveStudentMasters/training_type"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.awardList =  data.data.data;
+                this.trainingType =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -93,8 +93,8 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="award_type_id"){
-                this.form.award_type_id=$('#award_type_id').val();
+            if(id=="training_type_id"){
+                this.form.training_type_id=$('#training_type_id').val();
             }
             if(id=="program_id"){
                 this.form.program_id=$('#program_id').val();
@@ -118,7 +118,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_award_list');
+                    this.$router.push('/training_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -139,7 +139,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadActiveAwardList();
+        this.loadActiveTrainingTypeList();
         this.loadActiveProgramList();
     },
     

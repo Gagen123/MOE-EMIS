@@ -14,11 +14,11 @@ class StudentAwards extends Model
     protected $fillable = [
         'id',
         'CeaAwardTypeId',
-        'name',
+        'Name',
         'CeaAwardId',
         'CeaProgrammeId',
-        'description', 
-        'status'
+        'Description', 
+        'Status'
     ];
 }
 

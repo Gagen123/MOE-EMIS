@@ -202,45 +202,61 @@ class AdministrationController extends Controller{
         if($request['record_type'] == 'subject_group') {
             $rules = [
                 'name'  =>  'required',
+                'display_order' => 'required',
                 'status'    =>  'required',
+                
             ];
             $customMessages = [
                 'name.required' => 'This field is required',
+                'display_order.required' => 'This field is required',
                 'status.required' => 'This field is required',
             ];
         }
         if($request['record_type'] == 'subject') {
             $rules = [
                 'aca_sub_category_id' => 'required',
-                'aca_sub_group_id' => 'required',
                 'name'  =>  'required',
+                'display_order' => 'required',
                 'status'    =>  'required',
+                'assessedByClassTeacher' => 'required'
             ];
             $customMessages = [
                 'aca_sub_category_id.required' => 'This field is required',
-                'aca_sub_group_id.required' => 'This field is required',
                 'name.required' => 'This field is required',
+                'display_order.required' => 'This field is required',
                 'status.required' => 'This field is required',
+                'assessedByClassTeacher.required' => 'This field is required',
+
             ];
         }
         if($request['record_type'] == 'assessment_area') {
             $rules = [
                 'aca_sub_id' => 'required',
-                'aca_rating_type_id' => 'required',
                 'name'  =>  'required',
+                'code' => 'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
             ];
             $customMessages = [
                 'aca_sub_id.required' => 'This field is required',
-                'aca_rating_type_id.required' => 'This field is required',
-                'display_order.required' => 'This field is required',
                 'name.required' => 'This field is required',
+                'code.required' => 'This field is required',
+                'display_order.required' => 'This field is required',
                 'status.required' => 'This field is required',
             ];
         }
+        if($request['record_type'] == 'national_holiday') {
+            $rules = [
+                'holiday_date'  =>  'required',
+                'description' => 'required',
+            ];
+            $customMessages = [
+                'holiday_date.required' => 'This field is required',
+                'description.required' => 'This field is required',
+            ];
+        }
         $this->validate($request, $rules, $customMessages);
-        $request['user_id'] = $this->user_id();
+        $request['user_id'] = $this->userId();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
@@ -249,7 +265,84 @@ class AdministrationController extends Controller{
         $global_masters = $this->apiService->listData('emis/masters/loadAcademicMasters/'.$param);
         return $global_masters;
     }
+    public function loadClassSubject($class_id="",$stream_id=""){
+        $uri = 'emis/masters/loadClassSubject/'.$class_id;
+        if($stream_id){
+           $uri .= ('/'.$stream_id);
+        }
+        $response_data = $this->apiService->listData($uri);
+        return $response_data;
+    }
+    public function getClassAssessmentFrequency(){
+        $global_masters = $this->apiService->listData('emis/masters/getClassAssessmentFrequency');
+        return $global_masters;   
+    }
+    public function saveClassSubject(Request $request){
+        $rules = [
+            'data.*.aca_sub_id' => 'required',
+            'data.*.aca_rating_type_id'  => 'required',
+        ];
+        $customMessages = [
+            'data.*.aca_sub_id.required' => 'This field is required',
+            'data.*.aca_rating_type_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveClassSubject', $data);
+        return $response_data;
 
+    }
+    public function saveAssessmentFrequency(Request $request){
+        $rules = [
+           'data.*.aca_assmt_frequency_id' => 'required',
+        ];
+        $customMessages = [
+            'data.*.aca_assmt_frequency_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveAssessmentFrequency', $data);
+        return $response_data;
+
+    }
+    public function loadclassSubAssmtFrequency(){
+        $global_masters = $this->apiService->listData('emis/masters/loadclassSubAssmtFrequency');
+        return $global_masters;   
+    }
+    public function loadclassSubjectAssessment($term_id, $sub_id, $class_id, $stream_id=""){
+        $uri = 'emis/masters/loadclassSubjectAssessment/'.$term_id.'/'.$sub_id.'/'.$class_id;
+    if($stream_id){
+           $uri .= ('/'.$stream_id);
+        }
+        $response_data = $this->apiService->listData($uri);
+        return $response_data; 
+    }
+    public function saveclassSubjectAssessment(Request $request){    
+        $rules = [
+           'aca_assmt_term_id' => 'required',
+           'aca_sub_id' => 'required',
+           'org_class_id' => 'required',
+           'data.*.display_order' => 'required',
+           'data.*.aca_assmt_area_id' => 'required',
+
+        ];
+        $customMessages = [
+            'aca_assmt_term_id.required' => 'This field is required',
+            'aca_sub_id.required' => 'This field is required',
+            'org_class_id.required' => 'This field is required',
+            'data.*.display_order.required' => 'This field is required',
+            'data.*.aca_assmt_area_id.required' => 'This field is required',
+
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveclassSubjectAssessment', $data);
+        return $response_data;
+
+    }
     public function loaddzongkhagDetails($id){
         $dzo = $this->apiService->listData('emis/masters/dzongkhag/getallDzongkhag');
         return $dzo;
@@ -302,7 +395,6 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-        // dd($dis);
         try{
             $response_data= $this->apiService->createData('emis/masters/disaster/saveDisaster', $dis);
             return $response_data;
@@ -335,7 +427,6 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-        // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
         return $response_data;
 
@@ -363,7 +454,6 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-        // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
         return $response_data;
 
@@ -664,6 +754,10 @@ class AdministrationController extends Controller{
         $loadStream = $this->apiService->listData('emis/masters/stream/loadStream');
         return $loadStream;
     }
+    public function getClassStream(){
+        $getClassStream = $this->apiService->listData('emis/masters/classstream/getClassStream');
+        return $getClassStream;
+    }
 
     public function saveElectricitySource(Request $request){
         $rules = [
@@ -743,10 +837,8 @@ class AdministrationController extends Controller{
             'user_id'       =>$this->userId()
         ];
 
-            $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
-            return $response_data;
-
-
+        $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
+        return $response_data;
     }
 
     public function loadRoadType(){
@@ -773,10 +865,8 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-            $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
-            return $response_data;
-
-
+        $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
+        return $response_data;
     }
 
     public function loadServiceProvider(){
@@ -800,10 +890,8 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-            $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
-            return $response_data;
-
-
+        $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
+        return $response_data;
     }
 
     public function loadStructureDesigner(){
@@ -827,9 +915,8 @@ class AdministrationController extends Controller{
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
         ];
-            $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
-            return $response_data;
-
+        $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
+        return $response_data;
     }
 
     public function loadContactType(){

@@ -1,34 +1,50 @@
 <template>
     <div> 
         <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h6 class="pt-1">Acadamics Masters</h6></li>
+            <li class="form-inline "><h6 class="pt-1">ACADEMICS MASTERS</h6></li>
         </ol>
         <div class="container-fluid">
-            <ul class="nav nav-pills mb-2" role="tablist">
+            <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
-                    <!-- <router-link :to="item.route" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                       {{ item.screen_name}}
-                    </router-link> -->
-                    <!-- <a href="#" @click="populate_pate(item.route,item.actions)" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                         {{ item.screen_name}}
-                    </a> -->
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       {{ item.screen_name}}
+                        <span :class="item.screen_icon"></span> 
+                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link to="/subject-group-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                <li class="nav-item active pr-1" @click="activatelink('sub_assmt_area')">
+                    <router-link id="sub_assmt_area" to="/national-holiday-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       National Holiday 
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('sub_group')">
+                    <router-link id="sub_group" to="/subject-group-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Subject Group
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link to="/subject-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                <li class="nav-item active pr-1" @click="activatelink('sub')">
+                    <router-link id="sub" to="/subject-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Subject 
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link to="/assessment-area-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                <li class="nav-item active pr-1" @click="activatelink('assmt_area')">
+                    <router-link id="assmt_area" to="/assessment-area-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                       Assessment Area
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1" @click="activatelink('assmt_frequency')">
+                    <router-link id="assmt_frequency" to="/assessment-frequency-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     Assessment Frequency
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('sub_assmt_type')">
+                    <router-link id="sub_assmt_type" to="/subject-assessment-type-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                      Class Subject
+                    </router-link>
+                </li>
+               
+                <li class="nav-item active pr-1" @click="activatelink('sub_assmt_area')">
+                    <router-link id="sub_assmt_area" to="/subject-assessment-area-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Class Subject Assessment Area 
                     </router-link>
                 </li>
             </ul>
@@ -47,6 +63,10 @@ export default {
         }
     },
     methods: {
+        activatelink(btnid){
+            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
+            $('#'+btnid).addClass('btn-primary text-white');
+        },
 		getmenus(sub_mod_id){
             let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
             axios.get(uri)
@@ -55,13 +75,8 @@ export default {
                 this.menubar = data.data.data;  
             })
             .catch(function (error) { 
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error:"+error)
             });
-        },
-        populate_pate(data,action){
-            this.$router.push({name:data,query: {data:action}});
         },
     },
     mounted() {

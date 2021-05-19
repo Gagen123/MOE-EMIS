@@ -225,21 +225,26 @@ export default {
             }
         },
         /**
-         * method to pre populate add more data
-         */
-        getTeacherRoles(progId){
-            axios.get('students/getAssignedTeacherRoles/'+progId)
+         * method to get program details by id
+        */
+        getStudentProgramDetails(id){
+            axios.get('students/getProgramDetails/'+id)
             .then((response) => {  
                 let data=response.data.data;
+                this.student_form.id= data.Id;
+                this.student_form.name= data.StdStudentId;
+                this.student_form.program= data.CeaProgrammeId;
+                this.student_form.year = data.EstablishmentYear;
+                this.student_form.supporter= data.CeaProgrammeSupporterId;
+                this.student_form.remarks= data.Remarks;
 
-                let prop=data.facility;
-                let facilityDetails=[];
+                let prop=data.roles;
+                let rolesAssigned=[];
                 for(let i=0;i<prop.length;i++){
-                    facilityDetails.push({teacher:prop[i].StfStaffId,role:prop[i].CeaRoleId,remarks:prop[i].Remarks});
+                    rolesAssigned.push({teacher:prop[i].StfStaffId, role:prop[i].CeaRoleId, remarks:prop[i].Remarks});
                 }
                 this.count=data.length;
-                this.student_form.assigned_staff=facilityDetails;
-                
+                this.student_form.assigned_staff = rolesAssigned;
             })
             .catch((error) =>{  
                 console.log("Error:"+error);
@@ -266,13 +271,7 @@ export default {
         this.loadActiveRolesList();
     },
     created() {
-        this.student_form.name=this.$route.params.data.StdStudentId;
-        this.student_form.program=this.$route.params.data.CeaProgrammeId;
-        this.student_form.year=this.$route.params.data.EstablishmentYear;
-        this.student_form.supporter=this.$route.params.data.CeaProgrammeSupporterId;
-        this.student_form.remarks=this.$route.params.data.Remarks;
-        this.student_form.id=this.$route.params.data.Id;
-        this.getTeacherRoles(this.$route.params.data.Id);
+        this.getStudentProgramDetails(this.$route.params.data.Id);
     },
 }
 </script>

@@ -17,6 +17,8 @@ class AcaAssessmentTerm extends Migration
             $table->char('id',36)->primary();
             $table->char('aca_assmt_frequency_id',36)->index();
             $table->string('name',100)->unique();
+            $table->date('from_date');
+            $table->date('to_date');
             $table->unsignedTinyInteger('display_order')->index();
             $table->unsignedTinyInteger('status')->index()->default(1)->comment('0 - Disabled');
             $table->string('created_by',36)->index();

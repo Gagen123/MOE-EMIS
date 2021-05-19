@@ -20,5 +20,32 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters'], function () use ($router) {
         $router->post('/saveAcademicMasters', ['uses' => 'masters\AcademicMastersController@saveAcademicMasters']);
         $router->get('/loadAcademicMasters/{param}','masters\AcademicMastersController@loadAcademicMasters');
+        $router->get('/loadClassSubject/{class_id}[/{stream_id}]','masters\AcademicMastersController@loadClassSubject');
+        $router->post('/saveClassSubject',['uses' => 'masters\AcademicMastersController@saveClassSubject']);
+        $router->post('/saveAssessmentFrequency',['uses' => 'masters\AcademicMastersController@saveAssessmentFrequency']);
+        $router->get('/getClassAssessmentFrequency',['uses' => 'masters\AcademicMastersController@getClassAssessmentFrequency']);
+        $router->get('/loadclassSubAssmtFrequency',['uses' => 'masters\AcademicMastersController@loadclassSubAssmtFrequency']);
+        $router->get('/loadclassSubjectAssessment/{term_id}/{sub_id}/{class_id}[/{stream_id}]',['uses' => 'masters\AcademicMastersController@loadclassSubjectAssessment']);
+        $router->post('/saveclassSubjectAssessment',['uses' => 'masters\AcademicMastersController@saveclassSubjectAssessment']);
+
+    });
+    $router->group(['prefix' => 'academics'], function () use ($router) {
+        $router->get('/getClassTeacher/{orgId}',['uses' => 'academic\AcademicController@getClassTeacher']);
+        $router->post('/saveClassTeacher',['uses' => 'academic\AcademicController@saveClassTeacher']);
+        $router->post('/saveSubjectTeacher',['uses' => 'academic\AcademicController@saveSubjectTeacher']);
+        $router->get('/getSubjectTeacher/{orgId}',['uses' => 'academic\AcademicController@getSubjectTeacher']);
+        $router->get('/getElectiveSubjects/{classId}[/{streamId}]',['uses' => 'academic\AcademicController@getElectiveSubjects']);
+        $router->post('/saveStudentElectiveSubject',['uses' => 'academic\AcademicController@saveStudentElectiveSubject']);
+        $router->get('/getStudentElectiveSubjects',['uses' => 'academic\AcademicController@getStudentElectiveSubjects']);
+        $router->get('/loadStudentAssessmentList/{staffId}/{orgId}',['uses' => 'academic\AcademicController@loadStudentAssessmentList']);
+        $router->get('/loadAssessmentAreas/{term_id}/{sub_id}/{class_id}[/{stream_id}]',['uses' => 'academic\AcademicController@loadAssessmentAreas']);
+        $router->get('/loadStudentAssessments/{org_id}',['uses' => 'academic\AcademicController@loadStudentAssessments']);
+        $router->post('/saveStudentAssessment',['uses' => 'academic\AcademicController@saveStudentAssessment']);
+        $router->post('/unlockForEdit/{Id}',['uses' => 'academic\AcademicController@unlockForEdit']);
+        $router->get('/loadConsolidatedResultList/{staffId}/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResultList']);
+        $router->get('/loadAssessmentAreasForConsolidated',['uses' => 'academic\AcademicController@loadAssessmentAreasForConsolidated']);
+        $router->get('/loadConsolidatedResult/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResult']); 
+        $router->post('/saveConsolidatedResut',['uses' => 'academic\AcademicController@saveConsolidatedResut']);
+
     });
 });

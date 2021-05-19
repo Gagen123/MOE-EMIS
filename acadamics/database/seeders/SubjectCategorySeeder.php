@@ -20,6 +20,7 @@ class SubjectCategorySeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Academic',
+                'display_order'=>'1',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),
@@ -27,6 +28,7 @@ class SubjectCategorySeeder extends Seeder
             [
                 'id' => Str::uuid(),
                 'name' => 'Non-Academic',
+                'display_order'=>'2',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),
