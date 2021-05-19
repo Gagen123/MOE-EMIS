@@ -48,4 +48,17 @@ class LoadOrganizaitonController extends Controller{
         return $this->apiService->getListData('emis/common_services/loadOrgDetails/'.$type.'/'.$id);
     }
 
+    public function loadClassStreamSection($type="",$id=""){
+        //type=userworkingagency: to list with working agency from user login
+        if($type=="userworkingagency"){
+            $id=$this->getWrkingAgencyId();
+        }
+
+        //type=selelctedorgWise: by selected organization
+        if($type=="selelctedorgWise"){
+            $id=$id;
+        }
+        return $this->apiService->getListData('emis/common_services/loadClassStreamSection/'.$type.'/'.$id);
+    }
+
 }

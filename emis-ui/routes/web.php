@@ -356,7 +356,8 @@ Route::prefix('common')->group(function () {
 Route::prefix('loadCommons')->group(function () {
     Route::get('/loadOrgList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadOrgList'])->name('loadOrgList');
     Route::get('/loadOrgDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadOrgDetails'])->name('loadOrgDetails');
-
+    Route::get('/loadClassStreamSection/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
+    
     Route::get('/loadStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadStaffList'])->name('loadStaffList');
     Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
