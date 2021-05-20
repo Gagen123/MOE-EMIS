@@ -25,7 +25,7 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control select2" v-model="item.item">
+                                    <select name="item" id="item" class="form-control" v-model="item.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                       </select>
                                 <!--     <select class="form-control editable_fields" id="item"  v-model="item.item">
@@ -39,7 +39,7 @@
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
                                  <td>                                
-                                <select name="unit" id="unit" class="form-control select2" v-model="item.unit">
+                                <select name="unit" id="unit" class="form-control" v-model="item.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                      </select> 
                                     <!-- <select class="form-control editable_fields" id="unit"  v-model="item.unit">

@@ -87,6 +87,7 @@ class MessManagementController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $localprocure =[
+            'organizationId'         =>  $this->getWrkingAgencyId(),
             'dateOfprocure'          =>  $request['dateOfprocure'],
             'id'                     =>  $request['id'],
             'local_item'             =>  $request->local_item,
@@ -180,7 +181,7 @@ class MessManagementController extends Controller
          ];
          $this->validate($request, $rules, $customMessages);
        $stockissue =[
-         //'organizationId'           =>  $this->getWrkingAgencyId(),
+            'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,

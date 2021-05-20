@@ -62,7 +62,7 @@ class FoodReleaseController extends Controller
 
     public function getFoodReleaseItem($foodreleaseId=''){
       $list = DB::table('item_released_notes')
-      ->select( 'item','quantity','unit')->where('foodreleaseId',$foodreleaseId)->get();
+      ->select( 'item_id as item','quantity','unit_id as unit')->where('foodreleaseId',$foodreleaseId)->get();
       return $list;
     }
 }

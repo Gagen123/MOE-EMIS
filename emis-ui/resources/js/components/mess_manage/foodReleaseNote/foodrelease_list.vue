@@ -56,17 +56,17 @@
                                 </div> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Dzongkhag Name: </label>
-                                 <span class="text-indigo-600">{{displayItem.dzongkhag}}</span>
+                                 <span class="text-indigo-600">{{ dzongkhagList[displayItem.dzongkhag]}}</span>
                                 </div> 
                            </div>
                            <div class="form-group row">
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">School Name: </label>
-                                 <span class="text-indigo-600">{{displayItem.organization}}</span>
+                                 <span class="text-indigo-600">{{orgList[displayItem.organization]}}</span>
                                </div> 
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Quarter: </label>
-                                 <span class="text-indigo-600">{{displayItem.term}}</span>
+                                 <span class="text-indigo-600">{{termList[displayItem.term]}}</span>
                               </div>
                           </div>
                       </div>
@@ -115,6 +115,7 @@ export default {
             dzongkhagList:{},
             termList:{},
             orgList:{},
+            unitList:{},
            
         } 
     },

@@ -31,12 +31,6 @@
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="term"></has-error> 
-                            <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
-                            <option value="">---Please Select---</option> 
-                            <option value="1st quarter">1st quarter</option>
-                            <option value="2nd quarter">2nd quarter</option>
-                            <option value="3rd quarter">3rd quarter</option>
-                            </select>  -->   
                     </div>
                 </div>
             <div class="card">
@@ -54,15 +48,9 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_released' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control" v-model="item.item">
+                                    <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                       </select>
-                                     <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                        <option value="">---Please Select---</option> 
-                                        <option value="rice">rice</option>
-                                        <option value="potatoes">potatoes</option>
-                                        <option value="onion">onion</option>
-                                     </select> -->
                                   </td>
                                   <td>                          
                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
@@ -119,6 +107,7 @@ export default {
             organizaiton:'',
           //  itemrelease:[],
             items_released: [],
+          
             form: new form({
                  id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',term: '',
                  items_released:
@@ -126,6 +115,7 @@ export default {
                     item:'',quantity:'',unit:'', remarks:'',
                 }], 
             })
+            
         }
     },
 
@@ -213,7 +203,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -227,7 +217,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -319,7 +309,17 @@ export default {
                 this.form.items_released.splice(index,1); 
             }
         },
-       
+        addMoreattachments: function(){
+            this.filecount++;
+            this.form.attachments.push({file_name:'',attachment:''})
+        },
+        removeattachments(index){    
+            if(this.form.attachments.length>1){
+                this.filecount--;
+                this.form.attachments.pop(); 
+                this.form.ref_docs.pop();
+            }
+        },
        
     },
      mounted() { 
@@ -333,10 +333,12 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadActiveUnitList(); 
-        this.loadActiveItemList();
-        this.loadActiveTermList();
+       
         this.loadactivedzongkhagList();
+        this.loadActiveTermList();
+        this.loadActiveItemList();
+        this.loadActiveUnitList(); 
+       
 
     }
 }

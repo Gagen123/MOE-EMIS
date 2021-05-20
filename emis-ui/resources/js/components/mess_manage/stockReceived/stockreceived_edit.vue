@@ -1,154 +1,287 @@
 <template>
     <div>
-        <form>
-            <div class="form-group row">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Stock received for: <span class="text-blue">{{foodrelease_form.quarter}}</span> </label>
+        <form class="bootbox-form" id="stockReceivedId">
+            <div class="card-body">
+                <div class="form-group row"> 
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Date of stock Received:<span class="text-danger">*</span></label> 
+                        <input class="form-control editable_fields" name="dateOfreceived" id="dateOfreceived" type="date" 
+                        v-model="form.dateOfreceived" :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')">
+                        <has-error :form="form" field="dateOfreceived"></has-error>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
+                        <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
+                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="dzongkhag"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">School Name:<span class="text-danger">*</span></label> 
+                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
+                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="organizaiton"></has-error>
+                    </div> -->
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                       <label class="">Term:<span class="text-danger">*</span></label> 
+                       <select name="term" id="term" class="form-control select2" v-model="form.term" :class="{ 'is-invalid': form.errors.has('term') }" @change="remove_err('term')">
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="term"></has-error> 
+                            <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
+                            <option value="">---Please Select---</option> 
+                            <option value="1st quarter">1st quarter</option>
+                            <option value="2nd quarter">2nd quarter</option>
+                            <option value="3rd quarter">3rd quarter</option>
+                            </select>  -->   
+                    </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Date of Food Released: <span class="text-blue">{{foodrelease_form.dateOfreceive}}</span> </label>
-                </div>
+            <div class="card">
+                <div class="form-group row">
+                   <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                       <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Item</th>
+                                  <th>Quantity</th>
+                                  <th>Unit</th>
+                                  <th>Remarks</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
+                                  <td>
+                                    <select name="item" id="item" class="form-control" v-model="item.item">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                      </select>
+                                     <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
+                                        <option value="">---Please Select---</option> 
+                                        <option value="rice">rice</option>
+                                        <option value="potatoes">potatoes</option>
+                                        <option value="onion">onion</option>
+                                     </select> -->
+                                  </td>
+                                  <td>                          
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                  </td>
+                                  <td>                                
+                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         
+                                     </select> 
+                                        <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                        <option value="">---Please Select---</option> 
+                                        <option value="kg">kg</option>
+                                        <option value="litre">litre</option>
+                                        <option value="packet">packet</option>
+                                     </select> -->
+                                  </td>
+                                  <td>                                
+                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks">
+                                  </td>
+                              </tr> 
+                             <tr>
+                                  <td colspan=7> 
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                      @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                      @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                  </td>
+                              </tr>                                    
+                          </tbody>
+                     </table>
+                  </div>
+              </div>
             </div>
-            <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="responsible-table" class="table table-bordered text-sm table-striped">
-                        <thead>
-                            <tr>  
-                                <th>SL#</th>
-                                <th>Date of Food Received</th>
-                                <th>Item</th>
-                                <th>Quantity</th>
-                                <th>Unit</th>
-                                <th>Received Quantity</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(item, index) in foodrelease_form.releaseList" :key="index">
-                                <td>{{ index+1}}</td>
-                                <td>
-                                    <input type="date" v-model="item.dateOfreceive" value="0" @change="remove_err('dateOfreceive')" class="form-control">
-                                </td>
-                               
-                                <td>{{item.item}}</td>
-                                <td>{{item.quantity}}</td> 
-                                <td>{{item.unit}}</td>
-                                <td>
-                                    <input type="number" v-model="item.quantityReceive" :id="'quantityReceive'+index"  @change="remove_err('quantityReceive')" class="form-control">
-                                </td>
-                                <td>
-                                    <input type="number" v-model="item.remarks" id="remarks" @change="remove_err('remarks')" class="form-control">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div> 
+             <div class="card-footer text-right">
+                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
+             </div> 
             </div>
-        <!--    <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="attendance_form.remarks" :class="{ 'is-invalid': attendance_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="attendance_form" field="remarks"></has-error>
-                </div>
-            </div>-->
-            <!-- <div class="card-footer text-right">
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div> -->
         </form>
     </div>
 </template>
+
 <script>
 export default {
     data(){
-        return {
-            screen_id:'',
-            quarter: [],
-            dateOfrelease:'',
-            
-            foodrelease_form: new form({ 
-                id:'',
-                releaseList:'',
-                dateOfreceive:'',
-                quantity:'',
-                unit:'',
-                quantityReceive:'',
-                remarks:'',
-                action_type:'edit',
-            }),
+        return{
+          //  orgList:[],
+          //  quarterList:[],
+            itemList:[],
+            unitList:[],
+            termList:[],
+          //  dzongkhagList:[],
+          //  dzongkhag:'',
+        //    organizaiton:'',
+          //  itemrelease:[],
+            items_received: [],
+            form: new form({
+                 id: '', dateOfreceived: '', term: '',
+                 items_received:
+                [{
+                    item:'',quantity:'',unit:'', remarks:'',
+                }], 
+            })
         }
     },
-    methods: {
+
+    methods:{
+
+        /**
+         * method to reset form
+         */
+        restForm(){
+            this.form.dateOfreceived= '';
+            this.form.term= '';
+            let formReset =this.form.items_received;
+            formReset.splice(0, formReset.length);
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
+        },
+
+        /**
+         * method to save data
+         */
+        formaction: function(type){ 
+            if(type=="reset"){
+                this.restForm();
+            }
+            if(type=="save"){
+                    this.form.post('/mess_manage/saveStockReceived',this.form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Food received detail is added successfully'
+                    })
+                    this.$router.push('/stockreceived_list');
+                })
+                .catch(() => {
+                    console.log("Error......");
+                    this.applyselect();
+                })
+            }
+		},
+
+        applyselect(){
+            if(!$('#term').attr('class').includes('select2-hidden-accessible')){
+                $('#term').addClass('select2-hidden-accessible');
+            }
+        },
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+
+        /**
+         * method to get term in dropdown
+         */
+       loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.termList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
         },
-        formaction: function(type){
-            if(type=="save"){
-                this.foodrelease_form.post('mess_manage/getfoodreleasedList')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push({name:'stockreceived_list',query: {data:this.screen_id}});
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
-            }
-		},
+
+        /**
+         * method to get unit in dropdown
+         */
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get item in dropdown
+         */
+      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.itemList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        /**
+         * 
+         */
+        
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="staff"){
-                this.foodrelease_form.quarter=$('#quarter').val();
+            if(id=="term"){
+                this.form.term=$('#term').val();
             }
         },
-        
+
+        /**f
+         * method to get dzongkhag in dropdown
+         */
+
+        /**
+         * method to add more fields
+         */
+        addMore: function(){
+            this.count++;
+            this.form.items_received.push({
+                item:'',quantity:'',unit:'',remarks:''})    
+        }, 
+        /**
+         * method to remove fields
+         */
+        remove(index){    
+             if(this.form.items_received.length>1){
+                this.count--;
+                this.form.items_received.splice(index,1); 
+            }
+        },
+       
+       
     },
-     mounted(){
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2();
+     mounted() { 
+         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
-        
-        Fire.$on('changefunction',(id)=> {
+         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.screen_id=this.$route.query.data;
-        this.foodrelease_form.id=this.$route.params.data;
-        axios.get('mess_manage/loadfoodReceivedDetails/'+this.$route.params.data)
-        .then(response => {
-            let data = response.data.data;
-            // this.attendance_form=data;
-            this.foodrelease_form.releaseList = data.details;
-            this.foodrelease_form.month = data.month;
-            this.foodrelease_form.quarter=data.quarter;
-            this.foodrelease_form.dateOfreceive=data.dateOfreceive;
-           
-        })
-        .catch(function (error){
-            console.log('Error: '+error); 
-        });
-        
-    },
-    watch: {
-        releaseList(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#responsible-table").DataTable()
-            });
-        }
-    },
-    
+        this.loadActiveUnitList(); 
+        this.loadActiveItemList();
+        this.loadActiveTermList();
+        this.form.dateOfreceived = this.$route.params.data.dateOfreceived;
+        this.form.term = this.$route.params.data.term_id;
+
+       
+    }
 }
 </script>
