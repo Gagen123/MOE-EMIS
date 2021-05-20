@@ -43,8 +43,11 @@ class AcademicController extends Controller
         $class_teacher = $this->apiService->listData('emis/academics/getClassTeacher/'.$orgId);
         return $class_teacher;  
     }
-    public function getClassTeacherClasss($orgId,$staffId){
-        return $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+    public function getClassTeacherClasss(){
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->userId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        return  $class_teacher_class;
     }
     // public function getTeacher(){
     //     $orgId = $this->getWrkingAgencyId();

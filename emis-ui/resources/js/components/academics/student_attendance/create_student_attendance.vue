@@ -19,12 +19,8 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Select Module: <span class="text-danger">*</span></label> 
-                                <select class="form-control" id="module_name" @change="removeerror('module_name','module_name_err'),loadsubmodule()" v-model="form.module_name">
-                                    <option v-bind:value="'No_Module'">No Module & Sub Module</option>
-                                    <option v-for="(item, index) in moduleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                                </select>
-                                <span class="text-danger" id="module_name_err"></span>
+                                <label>Date: <span class="text-danger">*</span></label> 
+                                <input v-model="attendance_date" type="date">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -38,7 +34,7 @@
                                                 <th>Present</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody id="tbody">
                                             <tr v-for="(item, index) in classStremSectionList" :key="index">
                                                 <td>{{ index+1 }}</td>
                                                 <td> {{ item.class }} </td>
@@ -71,17 +67,30 @@
 </template>
 
 <script>
+import index from '../index.vue'
 export default {
+  components: { index },
     data(){
         return {}
     },
 
     methods:{
+        async getClassTeacherClasss(){
+            try{
+                let classTeacherClass = await axios.get('academics/getClassTeacherClasss').then(response => { return response.data})
+                console.log(classTeacherClass)
+
+            }catch(e){
+                if(e.toString().includes("500")){
+                $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            }
+        }
       
        
     },
     mounted(){
-    
+    this.getClassTeacherClasss()
     }
 }
 </script>
