@@ -18,7 +18,7 @@ class Subject extends Model
         'name',
         'display_order',
         'status',
-        'assessedByClassTeacher',
+        'assessed_by_class_teacher',
         'created_by',
         'created_at',
         'updated_by',

@@ -27,6 +27,11 @@
                       Student Elective Subject
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('student_attendance')">
+                    <router-link id="term-assessment" to="/student-attendance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Student Attendance 
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('term-assessment')">
                     <router-link id="term-assessment" to="/term-result" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Term Result 

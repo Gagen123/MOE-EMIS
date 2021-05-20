@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Database\Seeders\RatingSeeder;
 
 class AcaRating extends Migration
 {
@@ -26,6 +27,8 @@ class AcaRating extends Migration
             $table->foreign('aca_rating_type_id')->references('id')->on('aca_rating_type');
 
         });
+        $seeder = new RatingSeeder();
+        $seeder->run();
     }
 
     /**
