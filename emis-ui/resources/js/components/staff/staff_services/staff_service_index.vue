@@ -40,7 +40,7 @@
                         <span class="fa fa-user-clock"></span>
                         Apply Leave
                     </router-link>
-                </li> -->
+                </li> -->  
             </ul>
             <router-view></router-view>
         </div>

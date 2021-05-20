@@ -79,6 +79,7 @@ const routes = [
                     { path: '/foodrelease_list', name:'FoodReleaseList', component: require('./components/mess_manage/foodReleaseNote/foodrelease_list.vue').default },
                 ]    
             },
+            { path: '/stockInventory_list',  name:'StockInventory_List',component: require('./components/mess_manage/stockInventory/stockInventory_list.vue').default },
         ],
     },
 ];

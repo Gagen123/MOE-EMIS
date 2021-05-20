@@ -6,7 +6,6 @@
                     <th>SL#</th>
                     <th>Item Type</th>
                     <th>Status</th>
-                    <!-- <th>Created Date</th> -->
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -15,10 +14,9 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewQuaterList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                         </div>
                     </td>
                 </tr>
@@ -55,8 +53,8 @@ export default {
                 }); 
             }, 300);  
         },
-        viewQuaterList(data){
-            data.action='edit';
+        showedit(data){
+           
             this.$router.push({name:'QuaterEdit',params: {data:data}});
         },
     },

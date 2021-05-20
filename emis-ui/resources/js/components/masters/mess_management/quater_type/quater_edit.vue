@@ -6,12 +6,12 @@
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Quater Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.quaterName" :class="{ 'is-invalid': form.errors.has('quaterName') }" id="quaterName" @change="remove_err('quaterName')" type="text">
-                        <has-error :form="form" field="quaterName"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label>Display Order Code:</label> 
-                      <input class="form-control" v-model="form.code"  id="Displaycode" type="number">
+                      <input class="form-control" v-model="form.code"  id="display_code" type="number">
                       <has-error :form="form" field="code" ></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -38,9 +38,10 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                quaterName: '',
+                name: '',
+                code:'',
                 status: '',
-                // action_type:'edit',
+                action_type:'edit',
             })
         }
     },
@@ -53,7 +54,8 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.quaterName= '';
+                this.form.name= '';
+                this.from.name= '';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -73,10 +75,11 @@ export default {
     },
 
     created() {
-        this.form.quaterName=this.$route.params.data.name;
+        this.form.name=this.$route.params.data.name;
+        this.from.code=this.$route.params.data.code;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
-        // this.form.action_type=this.$route.params.data.action;
+        
     },
 }
 </script>

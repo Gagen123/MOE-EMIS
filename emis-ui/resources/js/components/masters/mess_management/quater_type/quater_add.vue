@@ -5,8 +5,8 @@
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Quater Name:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.quaterName" :class="{ 'is-invalid': form.errors.has('quaterName') }" id="quaterName" @change="remove_err('quaterName')" type="text" tabindex="1" autofocus="true">
-                    <has-error :form="form" field="quaterName"></has-error>
+                    <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="quarter_name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                    <has-error :form="form" field="name"></has-error>
                 </div>
                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Display Order Code:</label> 
@@ -38,9 +38,10 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                quaterName: '',
+                name: '',
+                code:'',
                 status: 1,
-                // action_type:'add',
+                action_type:'add',
             })
         }
     },
@@ -53,7 +54,8 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.quaterName= '';
+                this.form.name= '';
+                this.form.code= '';
                 this.form.status= 1;
             }
             if(type=="save"){

@@ -120,7 +120,7 @@ export default {
         });
         
         Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
+            this.changefunction(id); 
         });
         this.screen_id=this.$route.query.data;
         this.attendance_form.id=this.$route.params.data;

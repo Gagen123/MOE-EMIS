@@ -68,9 +68,6 @@ const routes = [
                 { path: '/edit_relationship', name:'edit_relationship', component: require('./components/masters/staff_masters/relationship/edit_relationship.vue').default },
                 ],
             },
-
-
-
         ],
     },
 
