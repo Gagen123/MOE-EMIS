@@ -60,6 +60,7 @@ class StaffController extends Controller{
             'address'               =>  $request->address,
             'contact_no'            =>  $request->contact_number,
             'email'                 =>  $request->email,
+            'alternative_email' =>  $request->alternative_email,
             'position_title_id'     =>  $request->position_title,
             'working_agency_id'     =>  $request->working_agency_id,
             'comp_sub_id'           =>  $request->comp_sub,

@@ -143,11 +143,15 @@
                 });
             },
             getorgName(rogId,accessLevel){
-                axios.get('common/getOrgDetailsById/'+rogId+'/'+accessLevel)
+                let type="Headquarterbyid";
+                if(accessLevel=="Org"){
+                    type="Orgbyid";
+                }
+                axios.get('loadCommons/loadOrgDetails/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.orgDetails=data;
-                    this.accessLevel=accessLevel;
+                    
                 })    
                 .catch(errors => { 
                     console.log(errors)
@@ -177,6 +181,7 @@
                 this.getdzongkhag(data['Dzo_Id']);
                 this.getgewog(data['Geo_Id']);
                 this.getorgName(data['Agency_Code'],data['acess_level']);
+                this.accessLevel=data['acess_level'];
             })    
             .catch(errors => { 
                 console.log(errors)

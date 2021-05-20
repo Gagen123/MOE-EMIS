@@ -1,4 +1,4 @@
-Setting up the system administration, user management and authentication:
+Setting up the system administration, and user management:
     ----Pre Requisition----
         Dzongkhag, gewog list should be ready at emis system administration micro service.
         Some of the school list and headquarter list at organizaiton micro service
@@ -18,4 +18,14 @@ Setting up the system administration, user management and authentication:
             - add icons, actions, workflow status to configure further respective system link.
             - Add Module: while adding module, if that module has submodule to be added, then route field can be blank, but if it doesnot have any sub module then it should have index page route
             - Add Screen and submodule: Screens can be added under modules, submodules and without them.
+
+    4)  - Add role from Role management under Role Priv. Management.
+        - Now to mapp role with privileges, select role, system, module and submodule from Role Priv. Manamgement. then 
+          click on load detials to lod screens and actions. from there set check radio button to give access.
+
+    5)  - Now add user and assign designated role with that user.   
+
+    6) - for the workflow configuration, you need to check workflow radio while adding screens. then to configure, click on workflow management and proceed.
+
+
 

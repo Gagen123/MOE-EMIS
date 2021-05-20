@@ -1,126 +1,287 @@
 <template>
     <div>
-       <div class="card card-primary card-outline card-outline-tabs">
+        <form class="bootbox-form" id="stockReceivedId">
             <div class="card-body">
-               <!-- <div class="tab-content"> -->
-                    <div class="tab-pane fade active show tab-content-details" id="stock-details-tabs" role="tabpanel" aria-labelledby="inventorydetails">
-                        <div class="form-group row">
-                            
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                             <label>Date of Receipt:</label>
-                              <input type="date" class="form-control" name="date_id" id="month">
-                            </div> 
-                        </div>
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="transferoption-table" class="table w-100 table-bordered table-striped">
-                                  <thead>
-                                      <tr>
-                                         <th>Item</th>
-                                         <th>Quantity Received</th> 
-                                         <th>Remarks</th>  
-                                     </tr>
-                                 </thead>
-                                 <tbody id="table_data_populate">
-                                    <tr id="record1" v-for='(user, index) in users' :key="index">
-                                         <td>
-                                             <select name="names" id="names" class="form-control editable_fields" v-model="user.names">
-                                                 <option value="">--Select item--</option>
-                                                 <option value="1">Potatoes</option>
-                                                 <option>Onions</option>
-                                                 <option>Raddish</option>
-                                                 <option>Cabbage</option>
-                                             </select>
-                                         </td>
-                                         <td>
-                                             <input type="number" name="number" class="form-control" v-model="user.number"/>
-                                          </td>
-                                          <td>
-                                             <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
-                                          </td>
-                                       </tr>
-                                       
-                                     <tr>
-                                          <td colspan="9"> 
-                                             <button type="button" class="btn btn-xs btn-primary" id="addMore" @click="addMore('user')"><i class="fa fa-plus"></i> Add More</button>
-                                             <button type="button" class="btn btn-xs btn-danger" id="addMore"  @click="remove('user')"><i class="fa fa-trash"></i> Remove</button>
-                                         </td>
-                                      </tr>
-                                 </tbody>
-                             </table>
-                            </div>
-                        </div>
-                         <hr>
-                       <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('expenditure-tab','final-tab')"> <i class="fa fa-save"></i>Save </button>
-                            </div>
-                        </div>
+                <div class="form-group row"> 
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Date of stock Received:<span class="text-danger">*</span></label> 
+                        <input class="form-control editable_fields" name="dateOfreceived" id="dateOfreceived" type="date" 
+                        v-model="form.dateOfreceived" :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')">
+                        <has-error :form="form" field="dateOfreceived"></has-error>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
+                        <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
+                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="dzongkhag"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">School Name:<span class="text-danger">*</span></label> 
+                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
+                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="organizaiton"></has-error>
+                    </div> -->
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                       <label class="">Term:<span class="text-danger">*</span></label> 
+                       <select name="term" id="term" class="form-control select2" v-model="form.term" :class="{ 'is-invalid': form.errors.has('term') }" @change="remove_err('term')">
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="term"></has-error> 
+                            <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
+                            <option value="">---Please Select---</option> 
+                            <option value="1st quarter">1st quarter</option>
+                            <option value="2nd quarter">2nd quarter</option>
+                            <option value="3rd quarter">3rd quarter</option>
+                            </select>  -->   
                     </div>
                 </div>
+            <div class="card">
+                <div class="form-group row">
+                   <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                       <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Item</th>
+                                  <th>Quantity</th>
+                                  <th>Unit</th>
+                                  <th>Remarks</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
+                                  <td>
+                                    <select name="item" id="item" class="form-control" v-model="item.item">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                      </select>
+                                     <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
+                                        <option value="">---Please Select---</option> 
+                                        <option value="rice">rice</option>
+                                        <option value="potatoes">potatoes</option>
+                                        <option value="onion">onion</option>
+                                     </select> -->
+                                  </td>
+                                  <td>                          
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                  </td>
+                                  <td>                                
+                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         
+                                     </select> 
+                                        <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                        <option value="">---Please Select---</option> 
+                                        <option value="kg">kg</option>
+                                        <option value="litre">litre</option>
+                                        <option value="packet">packet</option>
+                                     </select> -->
+                                  </td>
+                                  <td>                                
+                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks">
+                                  </td>
+                              </tr> 
+                             <tr>
+                                  <td colspan=7> 
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                      @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                      @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                  </td>
+                              </tr>                                    
+                          </tbody>
+                     </table>
+                  </div>
+              </div>
             </div>
-       </div> 
+             <div class="card-footer text-right">
+                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
+             </div> 
+            </div>
+        </form>
+    </div>
 </template>
+
 <script>
 export default {
-    
-    data() {
-        return {
-             users:
-            [{
-                names:'',number:'',remarks:''
-            }] 
+    data(){
+        return{
+          //  orgList:[],
+          //  quarterList:[],
+            itemList:[],
+            unitList:[],
+            termList:[],
+          //  dzongkhagList:[],
+          //  dzongkhag:'',
+        //    organizaiton:'',
+          //  itemrelease:[],
+            items_received: [],
+            form: new form({
+                 id: '', dateOfreceived: '', term: '',
+                 items_received:
+                [{
+                    item:'',quantity:'',unit:'', remarks:'',
+                }], 
+            })
         }
     },
 
+    methods:{
 
-    methods: {
-        addMore: function(){
-            this.users.push({names:'',number:'',remarks:''})
+        /**
+         * method to reset form
+         */
+        restForm(){
+            this.form.dateOfreceived= '';
+            this.form.term= '';
+            let formReset =this.form.items_received;
+            formReset.splice(0, formReset.length);
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
         },
-        remove(index){    
-             this.users.splice(index,1);             
-        },
-        
-        
-        
-        shownexttab(presentclass,nextclass){  
-            
-            // $('#tabhead >li >a').removeClass('active');
-            // $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            // $('.'+nextclass+' >a').addClass('active');
-            // $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            // $('.'+nextclass+' >a').removeClass('disabled');
-            // //body
-            // $('.tab-content-details').hide();
-            // $('#'+nextclass).show().removeClass('fade');
-            if(nextclass=="final-tab"){ 
-                Swal.fire({
-                    text: "Are you sure you wish to safe this details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6', 
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire(
-                            'Success!',
-                            'Details has been saved successfully.',
-                            'success',
-                        )
-                        this.$router.push('/stockreceipt');
-                    }
-                });
+
+        /**
+         * method to save data
+         */
+        formaction: function(type){ 
+            if(type=="reset"){
+                this.restForm();
+            }
+            if(type=="save"){
+                    this.form.post('/mess_manage/saveStockReceived',this.form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Food received detail is added successfully'
+                    })
+                    this.$router.push('/stockreceived_list');
+                })
+                .catch(() => {
+                    console.log("Error......");
+                    this.applyselect();
+                })
+            }
+		},
+
+        applyselect(){
+            if(!$('#term').attr('class').includes('select2-hidden-accessible')){
+                $('#term').addClass('select2-hidden-accessible');
             }
         },
+
+        /**
+         * method to remove error
+         */
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+
+        /**
+         * method to get term in dropdown
+         */
+       loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.termList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
+
+        /**
+         * method to get unit in dropdown
+         */
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get item in dropdown
+         */
+      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.itemList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        /**
+         * 
+         */
+        
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="term"){
+                this.form.term=$('#term').val();
+            }
+        },
+
+        /**f
+         * method to get dzongkhag in dropdown
+         */
+
+        /**
+         * method to add more fields
+         */
+        addMore: function(){
+            this.count++;
+            this.form.items_received.push({
+                item:'',quantity:'',unit:'',remarks:''})    
+        }, 
+        /**
+         * method to remove fields
+         */
+        remove(index){    
+             if(this.form.items_received.length>1){
+                this.count--;
+                this.form.items_received.splice(index,1); 
+            }
+        },
+       
+       
     },
-    mounted() {
-        $('.select2').select2()
-        $('.select2bs4').select2({
+     mounted() { 
+         $('.select2').select2();
+        $('.select2').select2({
             theme: 'bootstrap4'
         });
-    },
-    
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+         Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        this.loadActiveUnitList(); 
+        this.loadActiveItemList();
+        this.loadActiveTermList();
+        this.form.dateOfreceived = this.$route.params.data.dateOfreceived;
+        this.form.term = this.$route.params.data.term_id;
+
+       
+    }
 }
 </script>

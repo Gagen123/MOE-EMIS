@@ -171,7 +171,6 @@ export default {
                 this.dt =  $("#responsible-table").DataTable()
             });
         }
-    },
-    
+    }
 }
 </script>

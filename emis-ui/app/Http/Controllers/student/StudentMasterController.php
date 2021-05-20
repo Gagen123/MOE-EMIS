@@ -27,7 +27,7 @@ class StudentMasterController extends Controller{
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'             => $request->id,
+            'id'             =>  $request->id,
             'name'           =>  $request->name,
             'description'    =>  $request->description,
             'status'         =>  $request->status,
@@ -85,11 +85,13 @@ class StudentMasterController extends Controller{
     }
 
     public function loadStudentMasters($param=""){
+      //  dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
         return $student_masters;
     }
 
     public function loadActiveStudentMasters($param=""){
+      //  dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }

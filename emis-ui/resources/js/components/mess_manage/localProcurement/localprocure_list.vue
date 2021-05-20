@@ -16,7 +16,7 @@
                             <td> {{item.dateOfprocure}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><i class="fas fa-edit"></i></a>
                                </div>
                             </td>
                         </tr> 
@@ -54,6 +54,10 @@ export default {
             }, 300);   
         },
         viewLocalProcure(data){
+            data.action='edit';
+            this.$router.push({name:'LocalProcureEdit',params: {data:data}});
+        },
+        loadeditpage(data){
             data.action='edit';
             this.$router.push({name:'LocalProcureEdit',params: {data:data}});
         },

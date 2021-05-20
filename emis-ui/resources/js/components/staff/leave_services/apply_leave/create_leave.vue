@@ -79,6 +79,7 @@ export default {
                 to_date:'',
                 no_days:'',
                 reason:'',
+                action_type:'create'
             })
         }
     },
@@ -116,12 +117,13 @@ export default {
                 });
                 $('#to_date').val('');
             }
-            if($('#from_date').val()!="" && $('#to_date').val()!="" && $('#from_date').val() < $('#to_date').val()){
+            if($('#from_date').val()!="" && $('#to_date').val()!="" && $('#from_date').val() <= $('#to_date').val()){
                 let date1 = new Date($('#from_date').val());
                 let date2 = new Date($('#to_date').val());
                 let Difference_In_Time = date2.getTime() - date1.getTime();
                 let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
                 // $('#no_days').val(Difference_In_Days);
+                Difference_In_Days++;
                 this.form.no_days=Difference_In_Days;
             }
         },

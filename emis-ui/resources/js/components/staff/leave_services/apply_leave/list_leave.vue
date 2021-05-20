@@ -1,27 +1,29 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-body pb-1 mb-0 pt-1 mt-0 small">
+            <div class="card-body pb-1 mb-0 pt-1 mt-0 small overflow-auto">
                 <table id="responsible-table" class="table table-bordered text-sm table-striped">
                     <thead>
                         <tr>
-                            <th style="width:5%">SL#</th>
-                            <th style="width:20%">Leave Type</th>
-                            <th style="width:10%">Days/Months</th>
-                            <th style="width:20%">Date of Applicaiton</th>
-                            <th style="width:30%">Status</th>
-                            <th style="width:15%">Action</th>
+                            <th>Application Number</th>
+                            <th>Applicant</th>
+                            <th>Leave Type</th>
+                            <th>Days/Months</th>
+                            <th>Date of Applicaiton</th>
+                            <th>Status</th>
+                            <th class="pl-4 pr-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in leave_list" :key="index">
-                            <td>{{ index+1}}</td>
+                            <td>{{ item.application_number}}</td>
+                            <td>{{ item.staff_name}}</td>
                             <td>{{ leavetypeList[item.leave_type_id]}}</td>
                             <td>{{ item.no_days}}</td>
                             <td>{{ item.date_of_application}}</td>
                             <td>{{ item.status}}</td>
                             <td>
-                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View</a>
+                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
                             </td>
                         </tr>
                     </tbody>

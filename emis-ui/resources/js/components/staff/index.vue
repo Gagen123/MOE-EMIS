@@ -12,34 +12,28 @@
                     </router-link>
                 </li>
 
-                <!-- <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
+                <li class="nav-item pr-1" onclick="afterclick('regularstaff')">
                     <router-link to="/civil_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
-                        Civil Staff static 
+                        Civil Staff 
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/private_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
-                        Private Staff static
+                        Private Staff
                     </router-link>
                 </li>
                 <li class="nav-item pr-1">
                     <router-link to ="/transfer_window_index" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
-                        Transfer Time Schedule static
+                        Transfer Time Schedule
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('nomination')">
                     <router-link to="/transfer_index" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Transfer static
-                    </router-link>
-                </li> -->
-                <li class="nav-item pr-1" @click="activatelink('nomination')">
-                    <router-link to="/staff_awards" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-check"></span>
-                        Awards
+                        Transfer
                     </router-link>
                 </li>
 
@@ -60,7 +54,7 @@ export default {
     },
     methods: {
 		getmenus(){
-            let uri = 'get_screens_on_submodules/module/'+this.menu_id
+            let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
             axios.get(uri)
             .then(response => {
                 let data = response;

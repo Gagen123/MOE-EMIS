@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="training-table" class="table table-sm table-bordered table-striped">
+                <table id="civil-staff-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
@@ -24,7 +24,7 @@
                             <td>{{ genderArray[item.sex_id]}}</td>
                             <!-- <td>{{ item.position_title.name}}</td> -->
                             <td>{{ positiontitleList[item.position_title_id]}}</td>
-                            <td>{{ item.working_agency_id}}</td>
+                            <td>{{ item.working_agency}}</td>
                             <td>{{ item.email}}</td>
                             <td>{{ item.contact_no}}</td>
                             <td>
@@ -44,6 +44,7 @@ export default {
             substaffList:[],
             genderArray:{},
             positiontitleList:{},
+            dt:'',
         } 
     },
     methods: {
@@ -89,11 +90,17 @@ export default {
         this.loadgenderList();
         this.loadpositionTitleList();
         this.loadstff();        
-        $("#training-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        }); 
+        this.dt =  $("#civil-staff-table").DataTable()
     },
+    watch: {
+        substaffList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#civil-staff-table").DataTable()
+            });
+        }
+    },
+    
     
 }
 </script>
