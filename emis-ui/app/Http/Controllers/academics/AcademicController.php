@@ -18,11 +18,11 @@ class AcademicController extends Controller
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-    public function getclassSections(){
-        $orgId=$this->getWrkingAgencyId();
-        $class_section = $this->apiService->listData('emis/academics/getclassSections/'.$orgId);
-        return $class_section;
-    }
+    // public function getclassSections(){
+    //     $orgId=$this->getWrkingAgencyId();
+    //     $class_section = $this->apiService->listData('emis/academics/getclassSections/'.$orgId);
+    //     return $class_section;
+    // }
     public function saveClassTeacher(Request $request){
         $rules = [
             'data.*.stf_staff_id' => 'required'
@@ -42,6 +42,9 @@ class AcademicController extends Controller
         $orgId = $this->getWrkingAgencyId();
         $class_teacher = $this->apiService->listData('emis/academics/getClassTeacher/'.$orgId);
         return $class_teacher;  
+    }
+    public function getClassTeacherClasss($orgId,$staffId){
+        return $this->successResponse($this->acamasterservice->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId));
     }
     // public function getTeacher(){
     //     $orgId = $this->getWrkingAgencyId();

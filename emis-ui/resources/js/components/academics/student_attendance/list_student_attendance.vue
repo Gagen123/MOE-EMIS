@@ -8,8 +8,9 @@
                             <tr>
                                 <th>Sl#</th>
                                 <th>Class</th>
-                                <th>stream</th>
+                                <th>Stream</th>
                                 <th>Section</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -25,10 +26,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer text-right">
-                <button type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>     
@@ -48,15 +45,28 @@ export default {
             }
         },
         async loadClassStreamSection(){
-            axios.get(uri)
-            .then(response =>{
-                this.classStremSectionList = response.data.data;
-            })
-            .catch(function (error){
-                 if(error.toString().includes("500")){
+             try{
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
+
+                classSections.forEach((classSection,index) => {
+                    classSection.org_class_id = classSection.class
+                    classSection.org_stream_id = classSection.stream
+                    classSection.org_section_id = classSection.section
+                    classTeachers.forEach(item => {
+                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
+                            classSections[index].stf_staff_id = item.stf_staff_id
+                        }
+                    })
+                })
+                this.classStremSectionList = classSections
+                console.log(this.classStremSectionList)
+             }catch(e){
+                if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-            })
+             } 
+
         },
         showedit(data){
             this.$router.push({name:'edit_student_attendance',params: {data:data}});

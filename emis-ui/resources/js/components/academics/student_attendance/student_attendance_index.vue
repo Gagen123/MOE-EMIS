@@ -7,6 +7,8 @@
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
                                 <label class="fa-pull-left">Student Attendance</label>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('aca_list_assessment_area')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('aca_create_assessment_area')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <div class="card-body pb-1 mb-0 pt-1 mt-0">  
                                 <router-view></router-view> 

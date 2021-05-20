@@ -27,13 +27,13 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadclassSubAssmtFrequency',['uses' => 'masters\AcademicMastersController@loadclassSubAssmtFrequency']);
         $router->get('/loadclassSubjectAssessment/{term_id}/{sub_id}/{class_id}[/{stream_id}]',['uses' => 'masters\AcademicMastersController@loadclassSubjectAssessment']);
         $router->post('/saveclassSubjectAssessment',['uses' => 'masters\AcademicMastersController@saveclassSubjectAssessment']);
-
     });
     $router->group(['prefix' => 'academics'], function () use ($router) {
         $router->get('/getClassTeacher/{orgId}',['uses' => 'academic\AcademicController@getClassTeacher']);
         $router->post('/saveClassTeacher',['uses' => 'academic\AcademicController@saveClassTeacher']);
         $router->post('/saveSubjectTeacher',['uses' => 'academic\AcademicController@saveSubjectTeacher']);
         $router->get('/getSubjectTeacher/{orgId}',['uses' => 'academic\AcademicController@getSubjectTeacher']);
+        $router->get('/getClassTeacherClasss/{orgId}/{staffId}',['uses' => 'academic\AcademicController@getClassTeacherClasss']);
         $router->get('/getElectiveSubjects/{classId}[/{streamId}]',['uses' => 'academic\AcademicController@getElectiveSubjects']);
         $router->post('/saveStudentElectiveSubject',['uses' => 'academic\AcademicController@saveStudentElectiveSubject']);
         $router->get('/getStudentElectiveSubjects',['uses' => 'academic\AcademicController@getStudentElectiveSubjects']);

@@ -18,7 +18,7 @@ class SubjectGroupSeeder extends Seeder
     {
         DB::table('aca_subject_group')->insert([
             [
-                'id' => Str::uuid(),
+                'id' => 'de4c45a0-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'Science',
                 'display_order'=>'1',
                 'status' => '1',
@@ -26,7 +26,7 @@ class SubjectGroupSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => 'ec56c881-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'English',
                 'display_order'=>'2',
                 'status' => '1',
@@ -34,7 +34,7 @@ class SubjectGroupSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => 'f4610935-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'Dzongkha',
                 'display_order'=>'3',
                 'status' => '1',

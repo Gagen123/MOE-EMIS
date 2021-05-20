@@ -1,14 +1,16 @@
 <template>
     <div>
-        <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
-            <div class="ml-1 row form-group">
-              <div class="mr-3">
-                <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
-              </div>
-              <div class="mr-3">
-               <input v-model="attendance_date" type="date">
-              </div>
-            </div>          
+        <form @submit.prevent="save" class="bootbox-form" id="student_attendance">
+             <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                         <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
+                    </div>
+                    <div class="mt-2 col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                       <label for="attendance_date" class="mb-1">Date:</label>
+                        <input id="attendance_date" v-model="attendance_date" type="date" class="form-control">
+                        <has-error :form="form" field="display_order"></has-error>
+                    </div>
+                </div>   
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="edit-student-attendance-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
@@ -119,6 +121,9 @@
         },
         mounted(){ 
             this.loadStudentAttendance()
+            $('#attendance_date').datepicker({
+                daysOfWeekDisabled: [0]
+            });
             this.dt = $("#assessment-term-table").DataTable()
         },
         created() {

@@ -18,7 +18,7 @@ class RatingTypeSeeder extends Seeder
     {
         DB::table('aca_rating_type')->insert([
             [
-                'id' => Str::uuid(),
+                'id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
                 'name' => 'Four level rating (Need Improvement-Good-Very Good-Outstanding)',
                 'input_type'=>'0',
                 'status' => '1',
@@ -26,7 +26,7 @@ class RatingTypeSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name' => 'Four level rating (Beginning-Approaching-Meeting-Exceeding)',
                 'input_type'=>'0',
                 'status' => '1',
@@ -34,7 +34,7 @@ class RatingTypeSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => '643c845c-b8c5-11eb-b80d-b07b2586b8c6',
                 'name' => 'Percentage marks',
                 'input_type'=>'1',
                 'status' => '1',
@@ -43,7 +43,7 @@ class RatingTypeSeeder extends Seeder
             ],
             [
                
-                'id' => Str::uuid(),
+                'id' => 'ad1aacc8-b8c5-11eb-b80d-b07b2586b8c6',
                 'name' => 'Descriptive',
                 'input_type'=>'0',
                 'status' => '1',
