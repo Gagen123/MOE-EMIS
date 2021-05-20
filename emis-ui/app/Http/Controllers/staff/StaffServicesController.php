@@ -199,6 +199,7 @@ class StaffServicesController extends Controller{
                 'no_days'                   =>  $request->no_days,
                 'reason'                    =>  $request->reason,
                 'status'                    =>  'Pending For Approval',
+                'action_type'               =>  $request->action_type,
                 'org'                       =>  $this->getWrkingAgencyId(),
                 'dzongkhag'                 =>  $this->getUserDzoId(),
                 'user_id'                   =>  $this->userId() 
@@ -226,6 +227,36 @@ class StaffServicesController extends Controller{
         else{
             return 'No role mapping found for this selected user. Please contact with system administrator';
         }
+    }
+    
+    public function editLeaveApplication(Request $request){
+        $rules = [
+            'staff_id'                  =>  'required',
+            'reason'                    =>  'required',
+            'from_date'                  =>  'required',
+            'to_date'                    =>  'required',
+            'no_days'                    =>  'required',
+        ];
+        $customMessages = [
+            'staff_id.required'         => 'This field is required',
+            'reason.required'           => 'This field is required',
+            'from_date.required'         => 'This field is required',
+            'to_date.required'           => 'This field is required',
+            'no_days.required'         => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $staff_data =[
+            'id'                        =>  $request->id,
+            'staff_id'                  =>  $request->staff_id,
+            'from_date'                 =>  $request->from_date,
+            'to_date'                   =>  $request->to_date,
+            'no_days'                   =>  $request->no_days,
+            'reason'                    =>  $request->reason,
+            'action_type'               =>  $request->action_type,
+            'user_id'                   =>  $this->userId() 
+        ]; 
+        $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
+        return $response_data;
     }
     public function loadLeaveDetails($appNo="",$type=""){
         $update_data=[
@@ -302,7 +333,7 @@ class StaffServicesController extends Controller{
     }
     
     public function getallLeaves(){
-        $response_data= $this->apiService->listData('emis/staff/staffServices/getallLeaves/'.$this->staffId());
+        $response_data= $this->apiService->listData('emis/staff/staffServices/getallLeaves/'.$this->staffId().'__'.$this->userId());
         return $response_data;
     }
     

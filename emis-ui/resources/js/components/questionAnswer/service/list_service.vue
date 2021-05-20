@@ -32,7 +32,7 @@
 export default {
     data(){
         return{
-            moduleList:[],
+            moduleList:[],dt:'',
         }
     },
     methods:{ 
@@ -54,6 +54,15 @@ export default {
     },
     mounted(){ 
         this.loadModuleList();
+        this.dt =  $("#working-agency-table").DataTable()
+    },
+    watch: {
+        moduleList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
     },
 }
 </script>

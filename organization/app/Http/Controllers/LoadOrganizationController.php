@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\Level;
 use App\Models\OrganizationDetails;
+use App\Models\establishment\HeadQuaterDetails;
 use App\Models\generalInformation\SectionDetails;
 use Illuminate\Support\Facades\DB;
 
@@ -20,26 +21,37 @@ class LoadOrganizationController extends Controller{
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
-            $response_data=OrganizationDetails::where('id',$id)->get();
+            $response_data=OrganizationDetails::where('id',$id)->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="gewoggwise"){
-            $response_data=OrganizationDetails::where('gewogId',$id)->get();
+            $response_data=OrganizationDetails::where('gewogId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="dzongkhagwise"){
-            $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="allorganizationList"){
-            $response_data=OrganizationDetails::all();
+            $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->all();
         }
         return $this->successResponse($response_data);
     }
-    public function getOrgDetailsById($type="", $id=""){
+    public function loadOrgDetails($type="", $id=""){
         $response_data="";
         if($type=="Orgbyid" || $type=="user_login_access_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
         }
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->first();
+        }
+        return $this->successResponse($response_data);
+    }
+    
+    public function loadHeaquarterList($type="", $id=""){
+        $response_data="";
+        if($type=="all_dzongkhag_headquarters" || $type=="all_ministry_headquarters"){
+            $response_data=HeadQuaterDetails::where('organizationType',$id)->select('id','agencyName AS name','dzongkhagId','organizationType')->get();
+        }
+        if($type=="allList"){
+            $response_data=HeadQuaterDetails::select('id','agencyName AS name','dzongkhagId','organizationType')->all();
         }
         return $this->successResponse($response_data);
     }

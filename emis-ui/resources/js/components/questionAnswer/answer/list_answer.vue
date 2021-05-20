@@ -87,7 +87,7 @@ export default {
             category_list:[],
             question_list:[],
             answerList:[],
-            
+            dt:'',
             form: new form({
                 grant_parent_field:'',
                 parent_field:'',
@@ -237,6 +237,15 @@ export default {
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
         });
+        this.dt =  $("#working-agency-table").DataTable()
+    },
+    watch: {
+        answerList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
     },
 }
 </script>

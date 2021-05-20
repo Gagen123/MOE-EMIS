@@ -38,7 +38,7 @@ export default {
     },
     methods: {
 		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
+            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
             axios.get(uri)
             .then(response => {
                 let data = response;

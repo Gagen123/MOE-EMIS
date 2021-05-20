@@ -73,6 +73,7 @@ class StaffController extends Controller{
             'address'           =>  $request->address,
             'contact_number'    =>  $request->contact_number,
             'email'             =>  $request->email,
+            'alternative_email' =>  $request->alternative_email,
             'remarks'           =>  $request->remarks,
             'position_title'    =>  $request->position_title,
             'working_agency_id' =>  $request->working_agency_id,
