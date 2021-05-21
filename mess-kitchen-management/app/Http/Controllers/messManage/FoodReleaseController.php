@@ -26,10 +26,11 @@ class FoodReleaseController extends Controller
             'dzongkhag_id'              =>  $request['dzongkhag'],
             'org_id'                    =>  $request['organizaiton'],
             'term_id'                   =>  $request['term'],
+            'remarks'                   =>  $request['remarks'],
             'updated_by'                =>  $request->user_id,
             'created_at'                =>  date('Y-m-d h:i:s')
         ];
-
+       // dd($foodrelease);
         $foodrel = FoodRelease::create($foodrelease);
 
        // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
@@ -48,14 +49,14 @@ class FoodReleaseController extends Controller
             ItemReleasedNote::create($itemreleasednote);
         }
         return $this->successResponse($foodrel, Response::HTTP_CREATED);
-       // return($foodrel);
+       // dd($foodrel);
     }
     public function loadFoodReleaseList(){
         //   return 'from service of mine';
         $list = DB::table('food_releases')
         ->select( 'dateOfrelease as dateOfrelease',
          'dzongkhag_id as dzongkhag','org_id as organization',
-         'term_id as term','id'
+         'term_id as term','remarks as remarks','id'
          )->get();
         return $list;
     }
