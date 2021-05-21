@@ -25,29 +25,29 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                   <td>
-                                     <!-- <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
+                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select> -->
-                                     <select class="form-control editable_fields" id="item"  v-model="item.item">
+                                      </select>
+                                      <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
                                          <option value="">---Please Select---</option> 
                                          <option value="rice">rice</option>
                                          <option value="potatoes">potatoes</option>
                                          <option value="onion">onion</option>
-                                     </select>
+                                     </select>-->
                                   </td>
                                   <td>                                
                                      <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                  </td>
                                  <td>
-                                <!--     <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                     </select>-->
-                                      <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                    <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select> 
+                                    <!-- <select class="form-control editable_fields" id="unit"  v-model="item.unit">
                                          <option value="">---Please Select---</option> 
                                          <option value="kg">kg</option>
                                          <option value="litre">litre</option>
                                          <option value="packet">packet</option>
-                                    </select>
+                                    </select>-->
                                   </td>
                                   <td>                                
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
@@ -83,8 +83,8 @@ export default {
     data(){
         return{
             count:1,
-          //  itemList:[],
-         //   unitList:[],
+            itemList:[],
+            unitList:[],
             item_issue: [],
             form: new form({
                 id: '', dateOfissue: '', 
@@ -146,30 +146,30 @@ export default {
         /**
          * method to get unit in dropdown
          */
-    //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-    //        axios.get(uri)
-    //        .then(response => {
-      //          let data = response;
-    //            this.unitList =  data.data.data;
-     //       })
-    //        .catch(function (error) {
-     //           console.log("Error......"+error)
-     //       });
-    //    },
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+           axios.get(uri)
+           .then(response => {
+               let data = response;
+               this.unitList =  data.data.data;
+           })
+           .catch(function (error) {
+               console.log("Error......"+error)
+           });
+       },
 
         /**
          * method to get item in dropdown
          */
-    //   loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
-    //        axios.get(uri)
-    //        .then(response => {
-    //            let data = response;
-    //            this.itemList =  data.data.data;
-    //        })
-     //       .catch(function (error) {
-    //            console.log("Error......"+error)
-    //        });
-    //    },
+      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+           axios.get(uri)
+           .then(response => {
+               let data = response;
+               this.itemList =  data.data.data;
+           })
+           .catch(function (error) {
+               console.log("Error......"+error)
+           });
+       },
 
         /**
          * method to add more fields
@@ -189,9 +189,9 @@ export default {
             }
         },
     },
-     mounted() { 
-    //    this.loadActiveUnitList(); 
-    //    this.loadActiveItemList();
+    mounted() { 
+        this.loadActiveUnitList(); 
+        this.loadActiveItemList();
        
     }
 }

@@ -37,10 +37,10 @@ class CommonController extends Controller{
             for($i=0;$i<sizeof($param)-1;$i++){
                 if($type=="commonLeaveOthers"){
                     if(sizeof($param)-2==$i){
-                        $result_data.='( t.application_number like "L%" AND t.status_id='.explode('SSS',$param[$i])[1].'))';  
+                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))';  
                     } 
                     else{ 
-                        $result_data.='( t.application_number like "L%" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
+                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
                     } 
                 }else{
                     if(sizeof($param)-2==$i){

@@ -12,77 +12,77 @@
                 @if($mod['module_route']!=null || $mod['module_route']!="")
                 <li class="nav-item" >
                     <router-link id="{{$mod['module_route']}}" :to="{ name: '{{ $mod['module_route']}}', query: {data:'{{ $mod['mod_id'] }}' } }" class="nav-link" onclick="afterclick()">
-                        <i class=" nav-icon {{ $mod['module_icon']}}"></i>
+                        <i class=" {{ $mod['module_icon']}}"></i>
                         <p>{{$mod['mod_name']}} </p>
                     </router-link>
                 </li>
                 @else
-                <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="nav-icon fas {{ $mod['module_icon']}}"></i>
-                    <p>{{$mod['mod_name']}}
-                        <i class="right fas fa-angle-left"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview">
-                    @if (sizeof(session('User_Details')['sub_modules'])>0)
-                    @foreach(session('User_Details')['sub_modules'] as $sub_mod)
-                        @if($sub_mod['mod_id']==$mod['mod_id'])
-                            @if($sub_mod['submod_route']!=null || $sub_mod['submod_route']!="")
-                                <li class="nav-item" >
-                                    <router-link :to="{ name: '{{ $sub_mod['submod_route']}}', query: {data:'{{ $sub_mod['sub_mod_id'] }}' } }" class="nav-link" onclick="afterclick()">
-                                        <i class=" nav-icon {{ $sub_mod['submod_icon']}}"></i>
-                                        <p>{{$sub_mod['sub_mod_name']}}</p>
-                                    </router-link>
-                                </li>
-                            @else
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="nav-icon fas {{ $sub_mod['submod_icon']}}"></i>
-                                        <p>{{$sub_mod['sub_mod_name']}}
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    @if(sizeof(session('User_Details')['screens'])>0)
-                                    <ul class="nav nav-treeview">
-                                        @foreach(session('User_Details')['screens'] as $scr)
-                                        @if($scr['sub_mod_id']==$sub_mod['sub_mod_id'])
-                                            <li class="nav-item" >
-                                                <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
-                                                    <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
-                                                    <p>{{$scr['screen_name']}}</p>
-                                                </router-link>
-                                            </li>
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link pt-1 pb-1">
+                        <i class="{{ $mod['module_icon']}}"></i>
+                        <p>{{$mod['mod_name']}}  
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @if (sizeof(session('User_Details')['sub_modules'])>0)
+                        @foreach(session('User_Details')['sub_modules'] as $sub_mod)
+                            @if($sub_mod['mod_id']==$mod['mod_id'])
+                                @if($sub_mod['submod_route']!=null || $sub_mod['submod_route']!="")
+                                    <li class="nav-item" >
+                                        <router-link :to="{ name: '{{ $sub_mod['submod_route']}}', query: {data:'{{ $sub_mod['sub_mod_id'] }}' } }" class="nav-link" onclick="afterclick()">
+                                            <i class=" nav-icon {{ $sub_mod['submod_icon']}}"></i>
+                                            <p>{{$sub_mod['sub_mod_name']}}</p>
+                                        </router-link>
+                                    </li>
+                                @else
+                                    <li class="nav-item">
+                                        <a href="#" class="nav-link">
+                                            <i class="nav-icon fas {{ $sub_mod['submod_icon']}}"></i>
+                                            <p>{{$sub_mod['sub_mod_name']}}
+                                                <i class="right fas fa-angle-left"></i>
+                                            </p>
+                                        </a>
+                                        @if(sizeof(session('User_Details')['screens'])>0)
+                                        <ul class="nav nav-treeview">
+                                            @foreach(session('User_Details')['screens'] as $scr)
+                                            @if($scr['sub_mod_id']==$sub_mod['sub_mod_id'])
+                                                <li class="nav-item" >
+                                                    <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                                                        <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
+                                                        <p>{{$scr['screen_name']}}</p>
+                                                    </router-link>
+                                                </li>
+                                            @endif
+                                            @endforeach
+                                        </ul>
                                         @endif
-                                        @endforeach
-                                    </ul>
-                                    @endif
-                                </li>
+                                    </li>
+                                @endif
                             @endif
+                        @endforeach
+                        @foreach(session('User_Details')['screens'] as $i=> $scr)
+                            @if($scr['sub_mod_id']=="" && $scr['mod_id']==$mod['mod_id'])
+                            <li class="nav-item">
+                                <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                                    <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
+                                    <p>{{$scr['screen_name']}}</p>
+                                </router-link>
+                            </li>
+                            @endif
+                        @endforeach
                         @endif
-                    @endforeach
-                    @foreach(session('User_Details')['screens'] as $i=> $scr)
-                        @if($scr['sub_mod_id']=="" && $scr['mod_id']==$mod['mod_id'])
-                        <li class="nav-item">
-                            <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
-                                <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
-                                <p>{{$scr['screen_name']}}</p>
-                            </router-link>
-                        </li>
-                        @endif
-                    @endforeach
-                    @endif
-                    @foreach(session('User_Details')['screens'] as $scr)
-                        @if($mod['mod_id'] == $scr['mod_id'] && $scr['sub_mod_id']==null)
-                        <li class="nav-item">
-                            <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
-                                <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
-                                <p>{{$scr['screen_name']}} </p>
-                            </router-link>
-                        </li>
-                        @endif
-                    @endforeach
-                </ul>
+                        @foreach(session('User_Details')['screens'] as $scr)
+                            @if($mod['mod_id'] == $scr['mod_id'] && $scr['sub_mod_id']==null)
+                            <li class="nav-item">
+                                <router-link :to="{ name: '{{ $scr['route']}}', query: {data:'{{ $scr['actions'] }}',screen_id:'{{ $scr['screen_id'] }}',work_flow_status:'{{ $scr['work_flow_status'] }}' } }" class="nav-link" onclick="afterclick()">
+                                    <i class=" nav-icon {{ $scr['screen_icon']}}"></i>
+                                    <p>{{$scr['screen_name']}} </p>
+                                </router-link>
+                            </li>
+                            @endif
+                        @endforeach
+                    </ul>
                 @endif
             </li>
             @endforeach
@@ -244,7 +244,7 @@
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>
                     <p>
-                        Organization Transactions
+                        Organization
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
@@ -293,7 +293,7 @@
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-users"></i>
                     <p>
-                        Staff Transactions
+                        Staff
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>
@@ -314,6 +314,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item has-treeview" id="inset_link">
+                        <router-link to="/leave_service_index" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="nav-icon fas fa-list"></i>
+                                Leave Services
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="track_application">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>
@@ -329,7 +337,7 @@
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-user-graduate"></i>
                     <p>
-                        Student Transactions
+                        Student
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>

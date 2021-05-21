@@ -269,12 +269,12 @@ class StaffServicesController extends Controller{
                 $roles.="'$role',";
             }
             $roles=rtrim($roles,',');
-            $result_data="SELECT l.leave_type_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
             LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id  
             WHERE d.role_id IN(".$roles.")";
         }
         else{
-            $result_data="SELECT l.leave_type_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
             LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id 
             WHERE d.role_id ='".$role_ids."'";
         }
@@ -297,57 +297,69 @@ class StaffServicesController extends Controller{
             'no_days.required'         => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-
-        $last_seq=ApplicationSequence::where('service_name','Leave')->first();
-        if($last_seq==null || $last_seq==""){
-            $last_seq=1;
-            $app_details = [
-                'service_name'                  =>  'Leave',
-                'last_sequence'                 =>  $last_seq,
-            ];  
-            ApplicationSequence::create($app_details);
+        if($request->action_type=="create"){
+            $last_seq=ApplicationSequence::where('service_name','Leave')->first();
+            if($last_seq==null || $last_seq==""){
+                $last_seq=1;
+                $app_details = [
+                    'service_name'                  =>  'Leave',
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::create($app_details);
+            }
+            else{
+                $last_seq=$last_seq->last_sequence+1;
+                $app_details = [
+                    'last_sequence'                 =>  $last_seq,
+                ];  
+                ApplicationSequence::where('service_name', 'Leave')->update($app_details);
+            }
+            $appNo='L';
+            if(strlen($last_seq)==1){
+                $appNo= $appNo.date('Y').'.'.date('m').'.0000'.$last_seq;
+            }
+            else if(strlen($last_seq)==2){
+                $appNo= $appNo.date('Y').'.'.date('m').'.000'.$last_seq;
+            }
+            else if(strlen($last_seq)==3){
+                $appNo= $appNo.date('Y').'.'.date('m').'.00'.$last_seq;
+            }
+            else if(strlen($last_seq)==4){
+                $appNo= $appNo.date('Y').'.'.date('m').'.0'.$last_seq;
+            }
+            else if(strlen($last_seq)==5){
+                $appNo= $appNo.date('Y').'.'.date('m').'.'.$last_seq;
+            }
+            $data_data =[
+                'application_number'        =>  $appNo,
+                'leave_type_id'             =>  $request->leave_type_id,
+                'staff_id'                  =>  $request->staff_id,
+                'year'                      =>  $request->year,
+                'date_of_application'       =>  $request->date_of_application,
+                'reason'                    =>  $request->reason,
+                'from_date'                 =>  $request->from_date,
+                'to_date'                   =>  $request->to_date,
+                'no_days'                   =>  $request->no_days,
+                'org_id'                    =>  $request->org,
+                'status'                    =>  $request->status,
+                'dzongkhag_id'              =>  $request->dzongkhag,
+                'created_by'                =>  $request->user_id, 
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $response_data = LeaveApplication::create($data_data); 
         }
         else{
-            $last_seq=$last_seq->last_sequence+1;
-            $app_details = [
-                'last_sequence'                 =>  $last_seq,
-            ];  
-            ApplicationSequence::where('service_name', 'Leave')->update($app_details);
+            $udpate_data =[
+                'reason'                    =>  $request->reason,
+                'from_date'                 =>  $request->from_date,
+                'to_date'                   =>  $request->to_date,
+                'no_days'                   =>  $request->no_days,
+                'updated_by'                =>  $request->user_id, 
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            LeaveApplication::where('id',$request->id)->update($udpate_data);
+            $response_data = LeaveApplication::where('id',$request->id)->first();
         }
-        $appNo='L';
-        if(strlen($last_seq)==1){
-            $appNo= $appNo.date('Y').'.'.date('m').'.0000'.$last_seq;
-        }
-        else if(strlen($last_seq)==2){
-            $appNo= $appNo.date('Y').'.'.date('m').'.000'.$last_seq;
-        }
-        else if(strlen($last_seq)==3){
-            $appNo= $appNo.date('Y').'.'.date('m').'.00'.$last_seq;
-        }
-        else if(strlen($last_seq)==4){
-            $appNo= $appNo.date('Y').'.'.date('m').'.0'.$last_seq;
-        }
-        else if(strlen($last_seq)==5){
-            $appNo= $appNo.date('Y').'.'.date('m').'.'.$last_seq;
-        }
-        
-        $data_data =[
-            'application_number'        =>  $appNo,
-            'leave_type_id'             =>  $request->leave_type_id,
-            'staff_id'                  =>  $request->staff_id,
-            'year'                      =>  $request->year,
-            'date_of_application'       =>  $request->date_of_application,
-            'reason'                    =>  $request->reason,
-            'from_date'                 =>  $request->from_date,
-            'to_date'                   =>  $request->to_date,
-            'no_days'                   =>  $request->no_days,
-            'org_id'                    =>  $request->org,
-            'status'                    =>  $request->status,
-            'dzongkhag_id'              =>  $request->dzongkhag,
-            'created_by'                =>  $request->user_id, 
-            'created_at'                =>  date('Y-m-d h:i:s')
-        ];
-        $response_data = LeaveApplication::create($data_data); 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
@@ -363,10 +375,25 @@ class StaffServicesController extends Controller{
             'updated_by'                    =>  $request->user_id, 
             'updated_at'                    =>  date('Y-m-d h:i:s')
         ];
-        
         LeaveApplication::where('application_number', $request->application_number)->update($app_details);
         $response_data = LeaveApplication::where('application_number', $request->application_number)->first(); 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    
+    public function getApprovedLeaveCount($staff_id="",$leave_type_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$leave_type_id)->where('status','Approved')->where('year',date('Y'))->select('no_days')->get();
+        return $this->successResponse($leave_detials);
+    }
+    
+    public function getOnGoingLeave($staff_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',$staff_id)->whereNotIn('status', ['Rejected','Approved'])->select('application_number')->first();
+        return $this->successResponse($leave_detials);
+    }
+
+    public function getallLeaves($staff_id=""){
+        $leave_detials=LeaveApplication::where('staff_id',explode('__',$staff_id)[0])->orWhere('created_by',explode('__',$staff_id)[1])->get();
+        return $this->successResponse($leave_detials);
+    }
+    
     
 }

@@ -26,6 +26,7 @@ class PersonalDetails extends Model{
         'village_id',
         'address',
         'email',
+        'alternative_email',
         'contact_no',
         'comp_sub_id',
         'elective_sub_id1',

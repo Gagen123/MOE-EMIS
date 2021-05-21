@@ -14,19 +14,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                         <tr v-for="(item, index) in foodrelease_list" :key="index">
+                        <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
-                            <td> {{item.dzongkhag}}</td>
-                            <td> {{item.school}}</td>                   
-                            <td> {{item.quarter}}</td>
+                            <td> {{dzongkhagList[item.dzongkhag]}}</td>                      
+                            <td> {{orgList[item.organization]}}</td>                   
+                            <td> {{termList[item.term]}}</td>
+                              
                             <td> 
                               <div class="btn-group btn-group-sm">
                                    
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewfoodreleasenote(item)">View</a>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewfoodreleasenote(item)"><i class="fas fa-eye"></i ></a>
                                </div>
                                <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewFoodReleaseList(item)"><i class="fas fa-edit"></i ></a>
+                                    
                                </div>
                             </td>
                         </tr> 
@@ -54,17 +56,17 @@
                                 </div> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Dzongkhag Name: </label>
-                                 <span class="text-indigo-600">{{displayItem.dzongkhag}}</span>
+                                 <span class="text-indigo-600">{{ dzongkhagList[displayItem.dzongkhag]}}</span>
                                 </div> 
                            </div>
                            <div class="form-group row">
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">School Name: </label>
-                                 <span class="text-indigo-600">{{displayItem.school}}</span>
+                                 <span class="text-indigo-600">{{orgList[displayItem.organization]}}</span>
                                </div> 
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Quarter: </label>
-                                 <span class="text-indigo-600">{{displayItem.quarter}}</span>
+                                 <span class="text-indigo-600">{{termList[displayItem.term]}}</span>
                               </div>
                           </div>
                       </div>
@@ -106,10 +108,15 @@
 export default {
     data(){
         return{ 
-            totle:0,
+           
             foodrelease_list:[],
             displayItem:'',
             itemrelease_list:[],
+            dzongkhagList:{},
+            termList:{},
+            orgList:{},
+            unitList:{},
+           
         } 
     },
     methods: {
@@ -156,9 +163,53 @@ export default {
             data.action='edit';
             this.$router.push({name:'FoodReleaseEdit',params: {data:data}});
         },
+
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        allOrgList(uri="loadCommons/loadOrgList/allorganizationList/NA"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.orgList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.termList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
     },
     mounted(){
+        this.loadactivedzongkhagList();
+        this.allOrgList();
+        this.loadActiveTermList();
         this.loadFoodReleaseList();
+       
     },
     
 }

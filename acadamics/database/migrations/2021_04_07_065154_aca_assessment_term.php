@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Database\Seeders\AssessmentTermSeeder;
+
 
 class AcaAssessmentTerm extends Migration
 {
@@ -28,6 +30,8 @@ class AcaAssessmentTerm extends Migration
             $table->foreign('aca_assmt_frequency_id')->references('id')->on('aca_assessment_frequency');
 
         });
+        $seeder = new AssessmentTermSeeder();
+        $seeder->run();
     }
 
     /**

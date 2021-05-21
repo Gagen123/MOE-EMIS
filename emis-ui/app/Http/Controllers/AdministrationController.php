@@ -218,14 +218,14 @@ class AdministrationController extends Controller{
                 'name'  =>  'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
-                'assessedByClassTeacher' => 'required'
+                'assessed_by_class_teacher' => 'required'
             ];
             $customMessages = [
                 'aca_sub_category_id.required' => 'This field is required',
                 'name.required' => 'This field is required',
                 'display_order.required' => 'This field is required',
                 'status.required' => 'This field is required',
-                'assessedByClassTeacher.required' => 'This field is required',
+                'assessed_by_class_teacher.required' => 'This field is required',
 
             ];
         }

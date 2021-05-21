@@ -29,9 +29,9 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <select  v-model="subjectTeacherList[index].stf_staff_id" class="form-control  editable_fields" id="class_teacher_id"> 
                                             <option  selected="selected" value="">NOT OFFERRED IN THE SCHOOL</option>
-                                            <option v-for="(item, index) in teacherList" :key="index" :value="item.stf_staff_id">
-                                                <span v-if="item.employee_code">{{item.employee_code}}: </span> 
-                                                {{ item.name }}, {{item.position}} 
+                                            <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
+                                                <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span> 
+                                                {{ item1.name }}, {{item1.position_title}} 
                                             </option>
                                         </select>
                                         <!-- <has-error :form='form' field="aca_assmnt_frequency_id"></has-error> -->
@@ -64,33 +64,44 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-        getTeacher(uri = 'academics/getTeacher'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.teacherList = data.data.data;
-            })
-            .catch(function (error){
-                 if(error.toString().includes("500")){
+        async getTeacher(){
+           let finalTeachers = []
+            try{
+                let teachers = await axios.get('loadCommons/loadFewDetailsStaffList/userworkingagency/NA').then(response => response.data.data)
+                let bb = []
+                teachers.forEach((item => {
+                    bb['cid_work_permit'] = item.cid_work_permit
+                    bb["emp_id"] = item.emp_id;
+                    bb["gender"] = item.gender;
+                    bb["name"] = item.name;
+                    bb["position_title"] = item.position_title;
+                    bb["position_title_id"] = item.position_title_id;
+                    bb["sex_id"] = item.sex_id;
+                    bb["stf_staff_id"] = item.id
+                    const obj = {...bb};
+                    finalTeachers.push(obj);
+                }))
+                this.teacherList = finalTeachers
+
+              }catch(e){
+                if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-            })
-            setTimeout(function(){
-                $("#subject-teacher-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
+             }  
         },
          async getsubjectTeachers(){
              let finalSubjectTeachers =[];
              try{
-                let classSections = await axios.get('academics/getclassSections').then(response => response.data)
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data)
                 let subjectTeachers = await axios.get('academics/getSubjectTeacher').then(response => response.data.data)
+
                 classSections.forEach((classSection) => {
+                    classSection.org_class_id = classSection.class
+                    classSection.org_stream_id = classSection.stream
+                    classSection.org_section_id = classSection.section
                     subjectTeachers["classSubjects"].forEach(item => {
                         let aa = [];
-                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null))){
+                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
                             aa["org_class_id"] = classSection.org_class_id;
                             aa["org_stream_id"] = classSection.org_stream_id;
                             aa["org_section_id"] = classSection.org_section_id;

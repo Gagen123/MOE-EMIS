@@ -577,12 +577,12 @@ export default {
     },
     
     created(){
-        this.getScreenAccess();
+       // this.getScreenAccess();
         this.getLevel();
         this.getLocation();
         // this.checkPendingApplication();
     },
-    mounted() {
+    mounted() { 
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

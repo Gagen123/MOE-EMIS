@@ -1,0 +1,84 @@
+<template>
+    <div>
+        <div class="card">
+            <div class="card-body pb-1 mb-0 pt-1 mt-0 small overflow-auto">
+                <table id="responsible-table" class="table table-bordered text-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Application Number</th>
+                            <th>Applicant</th>
+                            <th>Leave Type</th>
+                            <th>Days/Months</th>
+                            <th>Date of Applicaiton</th>
+                            <th>Status</th>
+                            <th class="pl-4 pr-5">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in leave_list" :key="index">
+                            <td>{{ item.application_number}}</td>
+                            <td>{{ item.staff_name}}</td>
+                            <td>{{ leavetypeList[item.leave_type_id]}}</td>
+                            <td>{{ item.no_days}}</td>
+                            <td>{{ item.date_of_application}}</td>
+                            <td>{{ item.status}}</td>
+                            <td>
+                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>      
+</template>
+<script>
+export default {
+    data(){
+        return{ 
+            leave_list:[],
+            leavetypeList:{},
+        } 
+    },
+    methods: {
+        getallLeaves(){
+            let uri = 'staff/staffServices/getallLeaves';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.leave_list = data; 
+            })
+            .catch(function (error){
+               console.log('Error: '+error);
+            });
+        },
+        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.leavetypeList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
+        loadeditpage(item){
+            this.$router.push({name:"edit_leave",params:{data:item}});
+        }
+    },
+    mounted(){this.loadleaveTypeList();
+        this.getallLeaves();
+        this.dt = $("#responsible-table").DataTable();
+    },
+    watch: {
+        leave_list(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#responsible-table").DataTable()
+            });
+        }
+    },
+}
+</script>

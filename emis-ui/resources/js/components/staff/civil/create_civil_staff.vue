@@ -124,6 +124,11 @@
                                 </label>
                                 <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
                                 <has-error :form="personal_form" field="email"></has-error>
+                            </div> 
+                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Alternative Email:</label>
+                                <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                                <has-error :form="personal_form" field="alternative_email"></has-error>
                             </div>   
                         </div>
                                              
@@ -592,6 +597,7 @@ export default {
                 working_agency_id:'',
                 contact_number:'',
                 email:'',
+                alternative_email:'',
                 comp_sub:'',
                 elective_sub1:'',
                 elective_sub2:'',

@@ -73,7 +73,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
-
+       
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
