@@ -19,8 +19,8 @@ class RatingSeeder extends Seeder
         DB::table('aca_rating')->insert([
             [
                 
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '08101ed8-5d3f-11eb-9b9f-28f10e0628d5',
+                'id' => '2c51c8a6-b8c2-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Need Improvement',
                 'score'=>'1',
                 'status' => '1',
@@ -28,8 +28,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '08101ed8-5d3f-11eb-9b9f-28f10e0628d5',
+                'id' => '204f3544-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Good',
                 'score'=>'2',
                 'status' => '1',
@@ -37,8 +37,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '08101ed8-5d3f-11eb-9b9f-28f10e0628d5',
+                'id' => '3a22aa4e-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Very Good',
                 'score'=>'3',
                 'status' => '1',
@@ -46,8 +46,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '08101ed8-5d3f-11eb-9b9f-28f10e0628d5',
+                'id' => '4747f296-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Outstanding',
                 'score'=>'4',
                 'status' => '1',
@@ -55,8 +55,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '2f31dfbb-5cc9-11eb-9b9f-28f10e0628d5',
+                'id' => '54b29b7e-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Beginning',
                 'score'=>'1',
                 'status' => '1',
@@ -64,8 +64,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '2f31dfbb-5cc9-11eb-9b9f-28f10e0628d5',
+                'id' => '67fdfba5-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Approaching',
                 'score'=>'2',
                 'status' => '1',
@@ -73,8 +73,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '2f31dfbb-5cc9-11eb-9b9f-28f10e0628d5',
+                'id' => '7881f340-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Meeting',
                 'score'=>'3',
                 'status' => '1',
@@ -82,8 +82,8 @@ class RatingSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
-                'aca_rating_type_id' => '2f31dfbb-5cc9-11eb-9b9f-28f10e0628d5',
+                'id' => '88ddb252-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Exceeding',
                 'score'=>'4',
                 'status' => '1',

@@ -40,7 +40,7 @@ export default {
     data(){
         return{
             moduleArray:{},
-            questionListt:[],
+            questionListt:[],dt:''
         }
     },
     methods:{ 
@@ -81,6 +81,15 @@ export default {
             theme: 'bootstrap4'
         }); 
         this.loadQuestionList();
+        this.dt =  $("#working-agency-table").DataTable()
+    },
+    watch: {
+        questionListt() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
     },
 }
 </script>

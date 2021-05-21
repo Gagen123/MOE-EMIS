@@ -34,7 +34,7 @@
 export default {
     data(){
         return{
-            categoryList:[],
+            categoryList:[],dt:''
         }
     },
     methods:{
@@ -56,6 +56,15 @@ export default {
     },
     mounted(){ 
         this.loadcategoryList();
+        this.dt =  $("#working-agency-table").DataTable()
+    },
+    watch: {
+        categoryList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
     },
 }
 </script>

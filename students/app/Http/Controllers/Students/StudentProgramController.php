@@ -78,12 +78,6 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
-<<<<<<< HEAD
-        dd('from services');
-        $id ="1";
-=======
->>>>>>> d03d24b73ad973ef2fe352536f2d7b304472ae42
-
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')

@@ -64,7 +64,7 @@ export default {
         this.dt =  $("#assessment-area-table").DataTable({
             columnDefs: [
                     { width: 2, targets: 0},
-                    { width: 80, targets:[2,3]},
+                    { width: 80, targets:[1,3]},
                 ],
         });
     },

@@ -35,13 +35,12 @@
                     </router-link>
                 </li>
                
-                
-                <li class="nav-item active pr-1">
+                <!-- <li class="nav-item active pr-1">
                     <router-link to="/apply_leave" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Apply Leave
                     </router-link>
-                </li>
+                </li> -->  
             </ul>
             <router-view></router-view>
         </div>
@@ -59,7 +58,7 @@ export default {
     },
     methods: {
 		getmenus(){
-            let uri = 'get_screens_on_submodules/module/'+this.menu_id
+            let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -71,9 +70,6 @@ export default {
                 }
             });
         },
-        // populate_pate(data,action){
-        //     this.$router.push({name:data,query: {data:action}});
-        // },
     },
     mounted() {
         let routeparam=this.$route.query.data;

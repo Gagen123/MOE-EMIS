@@ -1031,6 +1031,7 @@ export default {
             });
         },
         getgewoglist(id,type){
+            alert(id);
             let dzoId=$('#dzongkhag').val();
             if(id!=""){
                 dzoId=id;

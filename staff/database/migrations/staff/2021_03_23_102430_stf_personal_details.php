@@ -23,6 +23,7 @@ class StfPersonalDetails extends Migration{
             $table->char('village_id',36)->nullable(true);
             $table->string('address',255)->nullable(true);
             $table->string('email',100)->nullable(false);
+            $table->string('alternative_email',100)->nullable(true);
             $table->string('contact_no',8)->nullable(false);
             $table->char('comp_sub_id',36)->nullable(true);
             $table->char('elective_sub_id1',36)->nullable();
