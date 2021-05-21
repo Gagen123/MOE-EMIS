@@ -23,10 +23,11 @@ class LocalProcureController extends Controller
         $date = $request['dateOfprocure'];
      foreach ($request->local_item as $i=> $item){
             $localprocure = array(
+             'organizationId'             =>  $orgId,
              'dateOfprocure'              =>  $date,
-             'item'                       =>  $item['item'],
+             'item_id'                    =>  $item['item'],
              'quantity'                   =>  $item['quantity'],
-             'unit'                       =>  $item['unit'],
+             'unit_id'                    =>  $item['unit'],
              'amount'                     =>  $item['amount'],
              'remark'                     =>  $item['remark'],
              'updated_by'                 =>  $request->user_id,
@@ -42,7 +43,7 @@ class LocalProcureController extends Controller
     public function loadLocalProcure(){
         //   return 'from service of mine';
         $list = DB::table('local_procures')
-        ->select( 'dateOfprocure as dateOfprocure')->get();
+        ->select( 'dateOfprocure as dateOfprocure', 'item_id as item')->get();
         return $list;
     }
 }

@@ -754,9 +754,40 @@ class AdministrationController extends Controller{
         $loadStream = $this->apiService->listData('emis/masters/stream/loadStream');
         return $loadStream;
     }
+
     public function getClassStream(){
         $getClassStream = $this->apiService->listData('emis/masters/classstream/getClassStream');
         return $getClassStream;
+    }
+
+    public function saveClassStreamMapping(Request $request){
+
+        //need to do array validation
+        // $rules = [
+        //     'className'  =>  'required',
+        //     'status'    =>  'required',
+        // ];
+        // $customMessages = [
+        //     'className.required' => 'Class is required',
+        //     'status.required'   => 'Status field is required',
+        // ];
+        // $this->validate($request, $rules, $customMessages);
+
+        $class =[
+            'classStream'  =>  $request['classStream'],
+            'status'  =>  $request['status'],
+            'id'    =>  $request['id'],
+            'user_id'=>$this->userId()
+        ];
+
+        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStream', $class);
+        return $response_data;
+
+    }
+
+    public function loadClassStreamMapping(){
+        $loadClassStream = $this->apiService->listData('emis/masters/classStreamMapping/loadClassStreamMapping');
+        return $loadClassStream;
     }
 
     public function saveElectricitySource(Request $request){

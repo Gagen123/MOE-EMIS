@@ -17,24 +17,32 @@ class StockIssuedController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveStockIssued(Request $request){
-        // dd('m here');
-        $date = $request['dateOfissue'];
-        foreach  ($request->item_issue as $i=> $item){
-            $stockissue = array(
-             'dateOfissue'               =>  $date,
-             'item'                      =>  $item['item'],
-             'quantity'                  =>  $item['quantity'],
-             'unit'                      =>  $item['unit'],
-             'damagequantity'            =>  $item['damagequantity'],
-             'remarks'                   =>  $item['remarks'],
-             'updated_by'                =>  $request->user_id,
-             'created_at'                =>  date('Y-m-d h:i:s')
-            );
-         $stckiss = StockIssued::create($stockissue);
-         //  dd('mhere');
+        foreach($request->item_issue as $item){
+            $item['dateOfissue'] = $request['dateOfissue'];
+            $item["organizationId"] = $request['organizationId'];
+            $item["created_by"] = $request["user_id"];
+            $item["created_at"] = date('Y-m-d h:i:s');
+
+        //     $stockissue = array(
+        //      'organizationId'            =>  $orgId,
+        //      'dateOfissue'               =>  $request['dateOfissue'];
+             
+        //      'item'                      =>  $item['item'],
+        //      'quantity'                  =>  $item['quantity'],
+        //      'unit'                      =>  $item['unit'],
+        //      'damagequantity'            =>  $item['damagequantity'],
+        //      'remarks'                   =>  $item['remarks'],
+        //      'updated_by'                =>  $request->user_id,
+        //      'created_at'                =>  date('Y-m-d h:i:s')
+
+
+        //     );
+       // dd($item);
+         $stckiss = StockIssued::create($item);
+          // dd('stockissue');
         }
          //  dd('m here');
-        return $this->successResponse($stckiss, Response::HTTP_CREATED);
+        return $this->successResponse($item, Response::HTTP_CREATED);
     }
     public function loadStockIssuedList(){
      //return 'from service of mine';

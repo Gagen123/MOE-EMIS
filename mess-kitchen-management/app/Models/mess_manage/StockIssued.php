@@ -11,7 +11,8 @@ class StockIssued extends Model
     protected $table="stock_issueds";
 
     protected $fillable = [
-        'id',
+        'id',   
+        'organizationId',                         
         'dateOfissue',
         'item',
         'quantity',

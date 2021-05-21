@@ -13,10 +13,11 @@ class LocalProcure extends Model
 
     protected $fillable = [
         'id',
+        'organizationId',
         'dateOfprocure',
-        'item',
+        'item_id',
         'quantity',
-        'unit',
+        'unit_id',
         'amount',
         'remark',
         'created_by',

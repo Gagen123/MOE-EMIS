@@ -82,9 +82,16 @@
                           </tbody>
                      </table>
                   </div>
-              </div>
+              </div> 
             </div>
-             <div class="card-footer text-right">
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label class="mb-0.5">Remarks:</label>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="form" field="remarks"></has-error>
+                </div>
+            </div>
+            <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                  <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
              </div> 
@@ -107,17 +114,19 @@ export default {
             organizaiton:'',
           //  itemrelease:[],
             items_released: [],
+          
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',term: '',
+                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',term: '', remarks: '',
                  items_released:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
                 }], 
             })
+            
         }
     },
 
-    methods:{ 
+    methods:{
 
         /**
          * method to reset form
@@ -127,6 +136,7 @@ export default {
             this.form.dzongkhag= '';
             this.form.organizaiton= '';
             this.form.term= '';
+            this.form.remarks='';
             let formReset =this.form.items_released;
             formReset.splice(0, formReset.length);
             this.form.items_released.push({item:'',quantity:'',unit:'',remarks:''})
@@ -307,7 +317,17 @@ export default {
                 this.form.items_released.splice(index,1); 
             }
         },
-       
+        addMoreattachments: function(){
+            this.filecount++;
+            this.form.attachments.push({file_name:'',attachment:''})
+        },
+        removeattachments(index){    
+            if(this.form.attachments.length>1){
+                this.filecount--;
+                this.form.attachments.pop(); 
+                this.form.ref_docs.pop();
+            }
+        },
        
     },
      mounted() { 
@@ -326,7 +346,7 @@ export default {
         this.loadActiveTermList();
         this.loadActiveItemList();
         this.loadActiveUnitList(); 
-        this.form.dateOfrelease=this.$route.params.data.dateOfrelease;
+         this.form.dateOfrelease=this.$route.params.data.dateOfrelease;
         this.form.dzongkhag= this.$route.params.data.dzongkhag_id;
         this.form.organizaiton= this.$route.params.data.org_id;
         this.form.term= this.$route.params.data.term_id;

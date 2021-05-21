@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Date of Stock Received</th>
                     <th>Term</th>
+                    <th>Remarks</th>
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -14,6 +15,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.dateOfreceived}}</td>
                     <td>{{ termList[item.term]}} </td>
+                    <td>{{ item.remarks}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewStockReceivedList(item)"><i class="fas fa-edit"></i ></a>

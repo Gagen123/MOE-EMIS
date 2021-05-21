@@ -16,6 +16,7 @@ class FoodRelease extends Model
         'dzongkhag_id',
         'org_id',
         'term_id',
+        'remarks',
         'created_by',
         'updated_by'
     ];
