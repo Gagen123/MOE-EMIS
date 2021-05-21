@@ -30,7 +30,7 @@ class AcademicController extends Controller
         return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id FROM aca_class_teacher WHERE org_id = ?', [$orgId]));
     }
     public function getClassTeacherClasss($orgId,$staffId){
-        return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id FROM aca_class_teacher WHERE org_id = ? AND stf_staff_id = ?', [$orgId,$staffId]));
+        return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id FROM aca_class_teacher WHERE stf_staff_id = ? AND org_id = ?', [$staffId,$orgId]));
     }
     public function saveClassTeacher(Request $request){
         $rules = [
@@ -191,6 +191,22 @@ class AcademicController extends Controller
         $isElectiveQ = DB::select($query, $param);
         return $isElectiveQ[0]->is_elective;
     }
+    public function laodStudentAttendance($orgId,$staffId,Request $request){
+        $query ='SELECT  t1.org_id,t2.std_student_id, t1.org_class_id, t1.org_class_id, t1.org_stream_id, t1.org_section_id, t1.attendance_date,  t2.is_present
+                 FROM aca_student_attendance t1
+                 JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id WHERE t1.org_id = ? AND t1.org_class_id';
+        $param = [$orgId,$staffId,$request->org_class_id];
+        if($request->org_stream_id){
+            $query .= ' AND t1.org_stream_id = ?';
+            array_push($param, $request->org_stream_id);
+        }
+        if($request->org_section_id){
+            $query .= ' AND t1.org_section_id = ?';
+            array_push($param, $request->org_section_id);
+        }
+        $studentAttendance = DB::select("$query ORDER BY t1.attendance_date DESC", $param);
+        return $this->successResponse($studentAttendance);
+    }
     public function saveStudentAssessment(Request $request){
         $rules = [
             'data.*.std_student_id' => 'required',
@@ -259,8 +275,6 @@ class AcademicController extends Controller
                 LEFT JOIN aca_result_consolidated t5 ON t1.org_id = t5.org_id AND t1.org_class_id = t5.org_class_id AND (t1.org_stream_id = t5.org_stream_id OR (t1.org_stream_id IS NULL AND t5.org_stream_id IS NULL)) AND (t1.org_section_id = t5.org_section_id OR (t1.org_section_id IS NULL AND t5.org_section_id IS NULL)) AND t2.aca_assmt_term_id= t5.aca_assmt_term_id
             GROUP BY t5.id,t4.stf_staff_id,t1.org_class_id,t1.org_stream_id,t1.org_section_id,t2.aca_assmt_term_id,t3.name,t5.published,t5.published_date,t1.no_of_subjects,t5.finalized,t5.finalized_date";
 
-
-
         $finalResult = "SELECT t4.id AS aca_result_consolidated_id,(t3.stf_staff_id=?) AS is_class_teacher,t1.org_class_id,t1.org_stream_id,t2.org_section_id,NULL AS aca_assmt_term_id,'Final Result' AS term,1 AS subject_teachers_finalized,t4.finalized AS class_teacher_finalized,NULL AS subject_teachers_finalized_date,DATE_FORMAT(t4.finalized_date,'%d-%m-%Y %H:%i %p') AS subject_teachers_finalized_date,t4.published, DATE_FORMAT(t4.published_date,'%d-%m-%Y %H:%i %p') AS published_date
         FROM (SELECT aa.org_class_id,aa.org_stream_id,COUNT(bb.id) AS no_of_terms FROM aca_class_assessment_frequency aa JOIN aca_assessment_term bb ON aa.aca_assmt_frequency_id = bb.aca_assmt_frequency_id GROUP BY aa.org_class_id,aa.org_stream_id) t1
             LEFT JOIN (SELECT org_class_id,org_stream_id,org_section_id,COUNT(id) AS no_of_terms_finalized FROM aca_result_consolidated WHERE finalized=1 AND org_id = ? GROUP BY org_class_id,org_stream_id,org_section_id) t2 ON t1.org_class_id = t2.org_class_id AND (t1.org_stream_id = t2.org_stream_id OR (t1.org_stream_id IS NULL AND t2.org_stream_id IS NULL))
@@ -323,7 +337,6 @@ class AcademicController extends Controller
            return($e);
        }
     }
-
     public function saveConsolidatedResut(Request $request){
         DB::transaction(function() use($request) {
             $query= "DELETE FROM aca_result_consolidated WHERE org_id = ? AND org_class_id = ?";
@@ -373,5 +386,6 @@ class AcademicController extends Controller
         });
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
+
 
 }

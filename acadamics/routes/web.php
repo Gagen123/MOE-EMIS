@@ -37,6 +37,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getElectiveSubjects/{classId}[/{streamId}]',['uses' => 'academic\AcademicController@getElectiveSubjects']);
         $router->post('/saveStudentElectiveSubject',['uses' => 'academic\AcademicController@saveStudentElectiveSubject']);
         $router->get('/getStudentElectiveSubjects',['uses' => 'academic\AcademicController@getStudentElectiveSubjects']);
+        $router->get('/laodStudentAttendance/{orgId}/{staffId}',['uses' => 'academic\AcademicController@laodStudentAttendance']);
         $router->get('/loadStudentAssessmentList/{staffId}/{orgId}',['uses' => 'academic\AcademicController@loadStudentAssessmentList']);
         $router->get('/loadAssessmentAreas/{term_id}/{sub_id}/{class_id}[/{stream_id}]',['uses' => 'academic\AcademicController@loadAssessmentAreas']);
         $router->get('/loadStudentAssessments/{org_id}',['uses' => 'academic\AcademicController@loadStudentAssessments']);

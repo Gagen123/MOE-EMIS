@@ -45,9 +45,24 @@ class AcademicController extends Controller
     }
     public function getClassTeacherClasss(){
         $orgId = $this->getWrkingAgencyId();
-        $staffId = $this->userId();
+        $staffId = $this->staffId();
         $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
         return  $class_teacher_class;
+    }
+    public function  saveStudentAttendance(Request $request){
+        // $rules = [
+        //     'class..std_student_id' => 'required'
+        // ];
+        // $customMessages = [
+        //     'data.*.std_student_id.required' => 'This field is required'
+        // ];
+        // $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+
+        $response_data = $this->apiService->createData('emis/academics/saveSubjectTeacher', $data);
+        return $response_data;
+       
     }
     // public function getTeacher(){
     //     $orgId = $this->getWrkingAgencyId();
@@ -117,8 +132,29 @@ class AcademicController extends Controller
         }
         return json_encode(["students"=>$students, "electiveSubjects"=>json_decode($this->getElectiveSubjects($request->classId, $request->streamId),true)]);
     } 
+    public function laodStudentAttendance(Request $request){
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+
+        $uri = 'emis/academics/laodStudentAttendance/'.$orgId.'/'. $staffId;
+
+        $uri .= ('?&org_class_id='.$request->org_class_id);
+
+        if($request->org_stream_id !== null){
+            $uri .= (('&org_stream_id='.$request->org_stream_id));
+        }
+        if($request->org_section_id){
+            $uri .= (('&org_section_id='.$request->org_section_id));
+        }
+        return $response_data;
+        $students = $this->getStudents($orgId,$request->classId,$request->streamId,$request->sectionId);
+        $studentAssessments = json_decode($this->apiService->listData($uri),true);
+
+
+
+    }
     public function loadStudentAssessmentList(){
-        $staffId = $this->userId();
+        $staffId = $this->staffId();
         $orgId=$this->getWrkingAgencyId();
         $class_subject_term= $this->apiService->listData('emis/academics/loadStudentAssessmentList/'.$staffId.'/'.$orgId);
         return $class_subject_term;   
@@ -199,7 +235,7 @@ class AcademicController extends Controller
         return $response_data;
     }
     public function loadConsolidatedResultList(){
-        $staffId = $this->userId();
+        $staffId = $this->staffId();
         $orgId= $this->getWrkingAgencyId();
         $class_term= $this->apiService->listData('emis/academics/loadConsolidatedResultList/'.$staffId.'/'.$orgId);
         return $class_term;  

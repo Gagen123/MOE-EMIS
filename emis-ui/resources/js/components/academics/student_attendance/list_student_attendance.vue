@@ -8,17 +8,13 @@
                             <tr>
                                 <th>Sl#</th>
                                 <th>Class</th>
-                                <th>Stream</th>
-                                <th>Section</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in classStremSectionList" :key="index">
                                  <td>{{ index+1 }}</td>
-                                 <td> {{ item.class }} </td>
-                                 <td> {{ item.stream }}  </td>
-                                 <td> {{ item.section }} </td>
+                                 <td> {{ item.org_class_id }} {{ item.org_stream_id }}  {{ item.org_section_id}} </td>
                                 <td>
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
                                 </td>                                                                               
@@ -47,19 +43,20 @@ export default {
         async loadClassStreamSection(){
              try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
-
-                classSections.forEach((classSection,index) => {
-                    classSection.org_class_id = classSection.class
-                    classSection.org_stream_id = classSection.stream
-                    classSection.org_section_id = classSection.section
-                    classTeachers.forEach(item => {
-                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
-                            classSections[index].stf_staff_id = item.stf_staff_id
+                let studentAttendance = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
+                studentAttendance.forEach((classTeacher,index) => {
+                    classSections.forEach(item => {
+                        if(classTeacher.org_class_id == item.class && (classTeacher.org_stream_id == item.stream || (classTeacher.org_stream_id == null && item.stream == null)) && (classTeacher.org_section_id == item.org_section_id || (classTeacher.section == null && item.section == null))){
+                            classTeachers[index].org_class_id = item.class;
+                            classTeachers[index].org_stream_id = item.stream
+                            classTeachers[index].org_section_id = item.section
+                            // classTeachers[index].class = item.class;
+                            // classTeachers[index].stream = item.stream
+                            // classTeachers[index].section = item.section
                         }
                     })
-                })
-                this.classStremSectionList = classSections
+                });
+                this.classStremSectionList = classTeachers
                 console.log(this.classStremSectionList)
              }catch(e){
                 if(e.toString().includes("500")){
