@@ -122,6 +122,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassStream', 'Masters\ClassStreamController@getClassStream');
     });
 
+    $router->group(['prefix' => 'masters/classStreamMapping'], function () use ($router) {
+        // class route
+        $router->post('/saveClassStreamMapping', 'Masters\ClassStreamController@saveClassStreamMapping');
+        $router->get('/loadClassStreamMapping', 'Masters\ClassStreamController@loadClassStreamMapping');
+    });
+
     $router->group(['prefix' => 'masters/electricitySource'], function () use ($router) {
         $router->post('/saveElectricitySource', 'Masters\ElectricitySourceController@saveElectricitySource');
         $router->get('/loadElectricitySource', 'Masters\ElectricitySourceController@loadElectricitySource');
