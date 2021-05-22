@@ -63,7 +63,7 @@ class SectionController extends Controller
         $class = DB::table('organization_class_streams as a')
             ->join('classes as b', 'b.id', '=', 'a.classId')
             ->select('a.id as record_id','a.classId as id', 'b.class as class')->where('organizationId', $orgId)->groupby('a.classId')->get();
-        return $class;
+         return $class;
     }
 
     /**

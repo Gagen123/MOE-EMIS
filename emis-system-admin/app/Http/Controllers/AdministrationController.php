@@ -151,6 +151,7 @@ class AdministrationController extends Controller{
 
     }
     public function loadGlobalMasters($param=""){
+        // dd("inside system admin serices");
         if($param=="all_country"){
             return $this->successResponse(Country::all());
         }

@@ -69,7 +69,7 @@ class StudentAdmissionController extends Controller{
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetails', $data);
         return $response_data;
     }
-    public function saveStudentGardianDetails(Request $request){
+      public function saveStudentGardianDetails(Request $request){
         $rules = [
             'merital_status'                        => 'required',
             'primary_contact'                       => 'required',

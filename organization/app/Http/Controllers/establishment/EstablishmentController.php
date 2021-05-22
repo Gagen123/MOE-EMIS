@@ -460,6 +460,7 @@ class EstablishmentController extends Controller
     public function getOrgList($dzo_id=""){
         $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
         return $this->successResponse($response_data);
+        
     }
     public function getClassByOrg($id=""){
         $classSection=OrganizationClassStream::where('organizationId',$id)->where('streamId',null)->groupBy('classId')->get();
