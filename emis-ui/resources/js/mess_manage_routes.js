@@ -80,6 +80,17 @@ const routes = [
                 ]    
             },
             { path: '/stockInventory_list',  name:'StockInventory_List',component: require('./components/mess_manage/stockInventory/stockInventory_list.vue').default },
+            
+            { path: '/teststockreceived_index',  
+                component: require('./components/mess_manage/teststockreceived/teststockreceived_index.vue').default ,
+                children: 
+                [
+                    { path: '', component: require('./components/mess_manage/teststockreceived/teststockreceived_list.vue').default },
+                    { path: '/teststockreceived_add', name:'TestStockReceivedAdd', component: require('./components/mess_manage/teststockreceived/teststockreceived_add.vue').default },
+                    { path: '/teststockreceived_edit', name:'TestStockReceivedEdit', component: require('./components/mess_manage/teststockreceived/teststockreceived_edit.vue').default },
+                    { path: '/teststockreceived_list', name:'TestStockReceivedList', component: require('./components/mess_manage/teststockreceived/teststockreceived_list.vue').default },
+                ]    
+            },
         ],
     },
 ];

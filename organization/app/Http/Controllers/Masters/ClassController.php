@@ -24,7 +24,7 @@ class ClassController extends Controller
     */
     
     public function loadClass(){
-        $class = Classes::all();
+        $class = Classes::orderBy('displayOrder')->get();
         return $class;
     }
 

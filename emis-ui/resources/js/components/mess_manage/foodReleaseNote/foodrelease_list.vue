@@ -10,6 +10,7 @@
                             <th>Dzongkhag</th>
                             <th>School Name</th>
                             <th>Quarter</th>
+                            <th>Remarks</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
@@ -20,6 +21,7 @@
                             <td> {{dzongkhagList[item.dzongkhag]}}</td>                      
                             <td> {{orgList[item.organization]}}</td>                   
                             <td> {{termList[item.term]}}</td>
+                            <td> {{ item.remarks}}</td>
                               
                             <td> 
                               <div class="btn-group btn-group-sm">
@@ -83,9 +85,9 @@
                              <tbody>
                                  <tr v-for="(tableitem, index) in itemrelease_list" :key="index">
                                      <td> {{index + 1}}</td>
-                                     <td> {{tableitem.item}}</td>
+                                     <td> {{itemList[tableitem.item]}}</td>
                                      <td> {{tableitem.quantity}}</td>
-                                     <td> {{tableitem.unit}}</td>                   
+                                     <td> {{unitList[tableitem.unit]}}</td>                   
                                  </tr>
                              </tbody>
                           </table>
@@ -116,6 +118,7 @@ export default {
             termList:{},
             orgList:{},
             unitList:{},
+            itemList:{},
            
         } 
     },
@@ -202,6 +205,30 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
 
     },
     mounted(){
@@ -209,6 +236,8 @@ export default {
         this.allOrgList();
         this.loadActiveTermList();
         this.loadFoodReleaseList();
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
        
     },
     

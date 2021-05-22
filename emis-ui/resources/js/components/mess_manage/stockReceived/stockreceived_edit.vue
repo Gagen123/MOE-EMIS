@@ -93,12 +93,21 @@
                      </table>
                   </div>
               </div>
+              
             </div>
-             <div class="card-footer text-right">
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label class="mb-0.5">Remarks:</label>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="form" field="remarks"></has-error>
+                </div>
+            </div>
+            <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                  <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-             </div> 
+            </div> 
             </div>
+            
         </form>
     </div>
 </template>
@@ -118,7 +127,7 @@ export default {
           //  itemrelease:[],
             items_received: [],
             form: new form({
-                 id: '', dateOfreceived: '', term: '',
+                 id: '', dateOfreceived: '', term: '', remarks: '',
                  items_received:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
@@ -135,6 +144,7 @@ export default {
         restForm(){
             this.form.dateOfreceived= '';
             this.form.term= '';
+            this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
             this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
@@ -280,7 +290,6 @@ export default {
         this.loadActiveTermList();
         this.form.dateOfreceived = this.$route.params.data.dateOfreceived;
         this.form.term = this.$route.params.data.term_id;
-
        
     }
 }

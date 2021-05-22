@@ -18,8 +18,8 @@
                     School List
                 </router-link>
             </li>
-            <li class="nav-item pr-1"  @click="activatelink('volunteer')">
-                <router-link id="volunteer" to="/establishment" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link id="/new_establishment_index" to="/new_establishment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                    New Establishment
                 </router-link>
