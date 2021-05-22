@@ -545,6 +545,23 @@ const routes = [
     },
     { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/leave_services/apply_leave/leave_verification.vue').default },
 
+    //Leadership Selection
+    { path:'/staff_leadership_selection_index',
+        component: require('./components/staff/leadership/leadership_index.vue').default,
+        children:[
+            { path: '/', name:'staff_leadership_selection_index', component: require('./components/staff/leadership/leadership_list.vue').default },
+
+            { path: '/nomination_for_leadership', 
+                component: require('./components/staff/leadership/leadership_nomination/leadership_nomination_index.vue').default,
+                children:[
+                    { path: '/', name:'nomination_for_leadership',  component: require('./components/staff/leadership/leadership_nomination/list_leadership_nomination.vue').default },
+                    { path: '/list_leadership_nomination',name:'list_leadership_nomination',  component: require('./components/staff/leadership/leadership_nomination/list_leadership_nomination.vue').default },
+                    { path: '/create_leadership_nomination',name:'create_leadership_nomination', component: require('./components/staff/leadership/leadership_nomination/create_leadership_nomination.vue').default },
+                    { path: '/edit_leadership_nomination', name:'edit_leadership_nomination', component: require('./components/staff/leadership/leadership_nomination/edit_leadership_nomination.vue').default },
+                ],
+            },
+        ]
+    },
     //Staff Services
     { path:'/staff_services_index',
         component: require('./components/staff/staff_services/staff_service_index.vue').default,
