@@ -1,47 +1,47 @@
 <template>
-    <div> 
-        <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="stockreceived-table" class="table table-sm table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Sl#</th>
-                            <th>Date of Stock Received</th>
-                            <th>Quater</th>
-                            <th>Action</th>                     
-                        </tr>
-                    </thead>
-                    <tbody>
-                         <tr v-for="(item, index) in stockreceived_list" :key="index">
-                            <td> {{index + 1}}</td>
-                            <td> {{item.date}}</td>
-                            <td>{{item.term}}</td>
-                            <td> 
-                              <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
-                               </div>
-                            </td>
-                        </tr> 
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div>
+        <table id="stockreceived-table" class="table table-bordered text-sm table-striped">
+            <thead>
+                <tr>
+                    <th>SL#</th>
+                    <th>Date of Stock Received</th>
+                    <th>Term</th>
+                    <th>Remarks</th>
+                    <th>Action</th> 
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <tr v-for="(item, index) in stockReceivedList" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ item.dateOfreceived}}</td>
+                    <td>{{ termList[item.term]}} </td>
+                    <td>{{ item.remarks}}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info" @click="viewStockReceivedList(item)"><i class="fas fa-edit"></i ></a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
+
 <script>
 export default {
     data(){
-        return{ 
-            totle:0,
-            stockreceived_list:[]
-        } 
+        return{
+            stockReceivedList:[],
+            termList:{},
+        }
     },
-    methods: {
-        loadStockReceivedList(uri = 'mess_manage/loadStockReceivedList'){
+
+    methods:{
+        loadFoodReleaseListing(uri = 'mess_manage/loadFoodReleaseListing/null'){
             axios.get(uri)
-            .then(response => { 
+            .then(response => {
                 let data = response;
-                this.stockreceived_list =  data.data;
+                this.stockReceivedList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -59,12 +59,25 @@ export default {
             data.action='edit';
             this.$router.push({name:'StockReceivedEdit',params: {data:data}});
         },
-    },
-    mounted(){
-        this.loadStockReceivedList();
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.termList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+       
     },
     
+    mounted(){
+        this.loadActiveTermList();
+        this.loadFoodReleaseListing();
+        
+    },
 }
 </script>
-
-

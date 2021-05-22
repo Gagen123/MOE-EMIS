@@ -48,9 +48,7 @@
                                 <has-error :form="personal_form" field="name"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i>
-                                    <img src="img/question.png" data-toggle="tooltip" title="Please provide correct date of birth. System will use this data for wishing his/her birth day" class="brand-image img-circle elevation-3" style="width:25px">
-                                </label>
+                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i> </label>
                                 <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
                                 <has-error :form="personal_form" field="dob"></has-error>
                             </div> 
@@ -124,6 +122,11 @@
                                 </label>
                                 <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
                                 <has-error :form="personal_form" field="email"></has-error>
+                            </div> 
+                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Alternative Email:</label>
+                                <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                                <has-error :form="personal_form" field="alternative_email"></has-error>
                             </div>   
                         </div>
                                              
@@ -377,7 +380,7 @@
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Qualification Details</h4>
+                                        <h4 class="modal-title">Nomination</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
@@ -592,6 +595,7 @@ export default {
                 working_agency_id:'',
                 contact_number:'',
                 email:'',
+                alternative_email:'',
                 comp_sub:'',
                 elective_sub1:'',
                 elective_sub2:'',
@@ -1276,33 +1280,13 @@ export default {
             }
         },
         getDetailsbyCID(){
-            if ($this.nomination_form.nomi_cid.length != 11){
-                this.ciderror = 'Please ender 11 digit CID';
-            }
-            else {
-                axios.get('getpersonbycid/'+ $this.nomination_form.nomi_cid)
+            if (this.nomination_form.nomi_cid.length == 11){
+                axios.get('getpersonbycid/'+ this.nomination_form.nomi_cid)
                 .then(response => {
                     this.ciderror = '';
-                    alert(response.data);
-                    // if (Object.keys(response).length) {
                     if (response.data.citizenDetail[0]) {
-                        this.instructor = response.data.citizenDetail[0];
-                        if(this.instructor == ""){
-                            Swal.fire({
-                                html: "No data found for matching CID",
-                                icon: 'info'
-                            });
-                        }else{
-                            // this.form.instructor_name = this.instructor.firstName + " " + this.instructor.lastName;
-                            // this.form.dob = this.instructor.dob;
-                            // this.form.gender = this.instructor.gender;
-                            // this.form.qualification = this.instructor.qualification;
-                            // this.form.dzongkhag = this.instructor.dzongkhagName;
-                            // this.form.gewog = this.instructor.gewogName;
-                            // this.form.village = this.instructor.villageName;
-                            // this.form.thram_no = this.instructor.thramNo;
-                            // this.form.house_no = this.instructor.houseNo;
-                        }
+                        let response_data = response.data.citizenDetail[0];
+                        this.nomination_form.nomi_name = response_data.firstName + " " + response_data.lastName;
                     }else{
                         this.ciderror = 'Invalid CID.';
                         Swal.fire({
@@ -1311,12 +1295,12 @@ export default {
                         });
                     }
                 })
-                .catch(() => {
-                        this.ciderror = 'Invalid CID / service down.';
-                        Swal.fire({
-                                html: "No data found for matching CID/service down",
-                                icon: 'error'
-                        });
+                .catch((e) => {
+                    this.ciderror = 'Invalid CID / service down.';
+                    Swal.fire({
+                            html: "No data found for matching CID/service down"+e,
+                            icon: 'error'
+                    });
                 });
             }
         }
@@ -1326,7 +1310,7 @@ export default {
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
-        $('.select2').select2({
+        $('.select2').select2({ 
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){

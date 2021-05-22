@@ -16,6 +16,7 @@ class AssessmentArea extends Model
         'aca_sub_id',
         'aca_rating_type_id',
         'name',
+        'code',
         'display_order',
         'status', 
         'created_by',
@@ -23,4 +24,5 @@ class AssessmentArea extends Model
         'updated_by',
         'updated_at',
     ];
+    
 }

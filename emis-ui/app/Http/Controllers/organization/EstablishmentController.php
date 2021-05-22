@@ -34,51 +34,47 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
-        $rules = [
-            'proposedName'          =>  'required',
-            'level'                 =>  'required',
-            'category'              =>  'required',
-            'dzongkhag'             =>  'required',
-            'gewog'                 =>  'required',
-            'chiwog'                =>  'required',
-            'locationType'          =>  'required',
-            'senSchool'             =>  'required',
-        ];
-        $customMessages = [
-            'proposedName.required'         => 'Proposed Name is required',
-            'level.required'                => 'Level is required',
-            'category.required'             => 'Category is required',
-            'dzongkhag.required'            => 'Dzongkhag is required',
-            'gewog.required'                => 'Gewog is required',
-            'chiwog.required'               => 'Chiwog is required',
-            'locationType.required'         => 'Location Type  is required',
-            'senSchool.required'            => 'Sen School is required',
-            
-        ];
+
+        dd('UI');
+
+        switch($request['establishment_type']){
+            case "public_school" : {
+                    $validation = $this->validatePublicSchoolFields($request);
+                    $establishment_data = $this->setPublicSchoolFields($request);
+                    break;
+                }
+            case "private_school" : {
+                    $validation = $this->validatePrivateSchoolFields($request);
+                    $establishment_data = $this->setPrivateSchoolFields($request);
+                    break;
+                }
+            case "public_eccd" : {
+                    $validation = $this->validatePublicEccdFields($request);
+                    $establishment_data = $this->setPublicEccdFields($request);
+                    break;
+                }
+            case "private_eccd" : {
+                    $validation = $this->validatePrivateEccdFields($request);
+                    $establishment_data = $this->setPublicSchoolFields($request);
+                    break;
+                }
+            case "public_ecr" : {
+                    $validation = $this->validatePublicEccdFields($request);
+                    $establishment_data = $this->setPublicEccdFields($request);
+                    break;
+                }
+            default : {
+                
+                break;
+            }
+        }
+
+        $rules = $validation['rules'];
+        $customMessages = $validation['messages'];
+
         $this->validate($request, $rules, $customMessages);
-        $estd =[
-            'proposedName'                 =>  $request['proposedName'],
-            'level'                        =>  $request['level'],
-            'category'                     =>  $request['category'],
-            'dzongkhag'                    =>  $request['dzongkhag'],
-            'gewog'                        =>  $request['gewog'],
-            'chiwog'                       =>  $request['chiwog'],
-            'locationType'                 =>  $request['locationType'],
-            'senSchool'                    =>  $request['senSchool'],
-            'isfeedingschool'              =>  $request['isfeedingschool'],
-            'feeding'                      =>  $request['feeding'],
-            'geopolicaticallyLocated'      =>  $request['geopolicaticallyLocated'],
-            'parentSchool'                 =>  $request['parentSchool'],
-            'coLocatedParent'              =>  $request['coLocatedParent'],
-            'cid'                          =>  $request['cid'],
-            'name'                         =>  $request['name'],
-            'phoneNo'                      =>  $request['phoneNo'],
-            'email'                        =>  $request['email'],
-            'status'                       =>  $request['status'],
-            'id'                           =>  $request['id'],
-            'user_id'                      =>  $this->userId() 
-        ];
-        $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $estd);
+
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
         return $response_data;
     }
 
@@ -339,6 +335,250 @@ class EstablishmentController extends Controller
     public function getSectionDetails($id=""){  
         $response_data = $this->apiService->listData('emis/organization/establishment/getSectionDetails/'.$id);
         return $response_data;
+    }
+    
+    /**
+     * Validation function for various types of Establishments
+     */
+
+    private function validatePublicSchoolFields($request){
+
+        $rules = [
+            'initiatedBy'           =>  'required',
+            'proposedName'          =>  'required',
+            'level'                 =>  'required',
+            'category'              =>  'required',
+            'gewog'                 =>  'required',
+            'chiwog'                =>  'required',
+            'locationType'          =>  'required',
+            'senSchool'             =>  'required',
+        ];
+        $customMessages = [
+            'initiatedBy.required'          => 'Proposal Initiated By is required',
+            'proposedName.required'         => 'Proposed Name is required',
+            'level.required'                => 'Level is required',
+            'category.required'             => 'Category is required',
+            'dzongkhag.required'            => 'Dzongkhag is required',
+            'gewog.required'                => 'Gewog is required',
+            'chiwog.required'               => 'Chiwog is required',
+            'locationType.required'         => 'Location Type  is required',
+            'senSchool.required'            => 'Sen School is required',
+            
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validatePrivateSchoolFields($request){
+
+        $rules = [
+            'proprietorName'        =>  'required',
+            'proprietorCid'         =>  'required',
+            'proprietorPhone'       =>  'required',
+            'proprietorMobile'      =>  'required',
+            'proprietorEmail'       =>  'required',
+            'totalLand'             =>  'required',
+            'enrollmentBoys'        =>  'required',
+            'enrollmentGirls'       =>  'required',
+            'proposedName'          =>  'required',
+            'proposedLocation'      =>  'required',
+            'typeOfSchool'          =>  'required',
+            'level'                 =>  'required',
+            'category'              =>  'required',
+            'dzongkhag'             =>  'required',
+            'gewog'                 =>  'required',
+            'chiwog'                =>  'required',
+        ];
+        $customMessages = [
+            'proprietorName.required'       => 'Proprietor Name is required',
+            'proprietorCid.required'        => 'Proprietor CID is required',
+            'proprietorPhone.required'      => 'Phone No. is required',
+            'proprietorMobile.required'     => 'Mobile No.  is required',
+            'totalLand.required'            => 'Total Land proposed is required',
+            'enrollmentBoys.required'       => 'Expected Enrollment is required',
+            'enrollmentGirls.required'      => 'Expected Enrollment is required',
+            'typeOfSchool.required'         => 'Type of School is required',
+            'proposedName.required'         => 'Proposed Name is required',
+            'proposedLocation.required'     => 'Proposed Location is required',
+            'level.required'                => 'Level is required',
+            'category.required'             => 'Category is required',
+            'dzongkhag.required'            => 'Dzongkhag is required',
+            'gewog.required'                => 'Gewog is required',
+            'chiwog.required'               => 'Chiwog is required',
+            
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return $validation;
+    }
+
+    private function validatePublicEccdFields($request){
+
+        $rules = [
+            'initiatedBy'           =>  'required',
+            'proposedName'          =>  'required',
+            'proposedLocation'      =>  'required',
+            'category'              =>  'required',
+            'gewog'                 =>  'required',
+            'chiwog'                =>  'required'
+        ];
+        $customMessages = [
+            'initiatedBy.required'          => 'Proposal Initiated By is required',
+            'proposedName.required'         => 'Proposed Name is required',
+            'proposedLocation.required'     => 'Proposed Location is required',
+            'category.required'             => 'Category is required',
+            'dzongkhag.required'            => 'Dzongkhag is required',
+            'gewog.required'                => 'Gewog is required',
+            'chiwog.required'               => 'Chiwog is required',
+            
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validatePrivateEccdFields($request){
+
+        $rules = [
+            'proprietorName'            =>  'required',
+            'proprietorCid'             =>  'required',
+            'proprietorPhone'           =>  'required',
+            'proprietorMobile'          =>  'required',
+            'proprietorEmail'           =>  'required',
+            'proposedInfrastructure'    =>  'required',
+            'proposedName'              =>  'required',
+            'proposedLocation'          =>  'required',
+            'category'                  =>  'required',
+            'dzongkhag'                 =>  'required',
+            'gewog'                     =>  'required',
+            'chiwog'                    =>  'required'
+        ];
+        $customMessages = [
+            'proprietorName.required'           => 'Proprietor Name is required',
+            'proprietorCid.required'            => 'Proprietor CID is required',
+            'proprietorPhone.required'          => 'Phone No. is required',
+            'proprietorMobile.required'         => 'Mobile No.  is required',
+            'proposedInfrastructure.required'   => 'Infrastructure to be housed in is required',
+            'proposedName.required'             => 'Proposed Name is required',
+            'proposedLocation.required'         => 'Proposed Location is required',
+            'category.required'                 => 'Category is required',
+            'dzongkhag.required'                => 'Dzongkhag is required',
+            'gewog.required'                    => 'Gewog is required',
+            'chiwog.required'                   => 'Chiwog is required'
+            
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    /**
+     * Setting the data fields to be saved
+     */
+
+    private function setPublicSchoolFields($request){
+
+        $estd =[
+            'initiatedBy'                  =>  $request['initiatedBy'],
+            'proposedName'                 =>  $request['proposedName'],
+            'level'                        =>  $request['level'],
+            'category'                     =>  $request['category'],
+            'dzongkhag'                    =>  $request['dzongkhag'],
+            'gewog'                        =>  $request['gewog'],
+            'chiwog'                       =>  $request['chiwog'],
+            'locationType'                 =>  $request['locationType'],
+            'senSchool'                    =>  $request['senSchool'],
+            'isfeedingschool'              =>  $request['isfeedingschool'],
+            'feeding'                      =>  $request['feeding'],
+            'geopolicaticallyLocated'      =>  $request['geopolicaticallyLocated'],
+            'status'                       =>  $request['status'],
+            'establishment_type'           =>  $request['establishment_type'],
+            'id'                           =>  $request['id'],
+            'user_id'                      =>  $this->userId() 
+        ];
+
+        return $estd;
+    }
+
+    private function setPrivateSchoolFields($request){
+
+        $estd =[
+            'proprietorName'               =>  $request['proprietorName'],
+            'proprietorCid'                =>  $request['proprietorCid'],
+            'proprietorPhone'              =>  $request['proprietorPhone'],
+            'proprietorMobile'             =>  $request['proprietorMobile'],
+            'proprietorEmail'              =>  $request['proprietorEmail'],
+            'totalLand'                    =>  $request['totalLand'],
+            'enrollmentBoys'               =>  $request['enrollmentBoys'],
+            'enrollmentGirls'              =>  $request['enrollmentGirls'],
+            'proposedLocation'             =>  $request['proposedLocation'],
+            'typeOfSchool'                 =>  $request['typeOfSchool'],
+            'proposedName'                 =>  $request['proposedName'],
+            'level'                        =>  $request['level'],
+            'category'                     =>  $request['category'],
+            'dzongkhag'                    =>  $request['dzongkhag'],
+            'gewog'                        =>  $request['gewog'],
+            'chiwog'                       =>  $request['chiwog'],
+            'status'                       =>  $request['status'],
+            'establishment_type'           =>  $request['establishment_type'],
+            'id'                           =>  $request['id'],
+            'user_id'                      =>  $this->userId() 
+        ];
+
+        return $estd;
+    }
+
+    private function setPublicEccdFields($request){
+
+        $estd =[
+            'initiatedBy'                  =>  $request['initiatedBy'],
+            'proposedName'                 =>  $request['proposedName'],
+            'category'                     =>  $request['category'],
+            'dzongkhag'                    =>  $request['dzongkhag'],
+            'gewog'                        =>  $request['gewog'],
+            'chiwog'                       =>  $request['chiwog'],
+            'proposedLocation'             =>  $request['proposedLocation'],
+            'locationType'                 =>  $request['locationType'],
+            'status'                       =>  $request['status'],
+            'establishment_type'           =>  $request['establishment_type'],
+            'id'                           =>  $request['id'],
+            'user_id'                      =>  $this->userId() 
+        ];
+
+        return $estd;
+    }
+
+    private function setPrivateEccdFields($request){
+
+        $estd =[
+            'proprietorName'               =>  $request['proprietorName'],
+            'proprietorCid'                =>  $request['proprietorCid'],
+            'proprietorPhone'              =>  $request['proprietorPhone'],
+            'proprietorMobile'             =>  $request['proprietorMobile'],
+            'proprietorEmail'              =>  $request['proprietorEmail'],
+            'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+            'proposedName'                 =>  $request['proposedName'],
+            'proposedLocation'             =>  $request['proposedLocation'],
+            'category'                     =>  $request['category'],
+            'dzongkhag'                    =>  $request['dzongkhag'],
+            'gewog'                        =>  $request['gewog'],
+            'chiwog'                       =>  $request['chiwog'],
+            'status'                       =>  $request['status'],
+            'establishment_type'           =>  $request['establishment_type'],
+            'id'                           =>  $request['id'],
+            'user_id'                      =>  $this->userId() 
+        ];
+
+        return $estd;
     }
 
 }

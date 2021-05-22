@@ -161,7 +161,7 @@ class AdministrationController extends Controller{
         if($param=="all_dzongkhag"){
             return $this->successResponse(Dzongkhag::all());
         }
-        if($param=="all_active_dzongkhag"){
+        if($param=="all_active_dzongkhag"){ 
             return $this->successResponse(Dzongkhag::where('status','1')->get());
         }
         if($param=="all_gewog_List"){

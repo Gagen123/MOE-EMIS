@@ -2,30 +2,30 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="subject-group-table" class="table table-sm table-bordered table-striped">
+                <table id="assessment-area-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                           <th >SL#</th>
-                            <th >Subject Name</th>
-                            <th >Rating Type</th>
-                            <th >Assessment Area</th>
                             <th >Display Order</th>
+                            <th >Subject Name</th>
+                            <th >Assessment Area</th>
+                            <th >Assessment Area Code</th>
+                            <th >Rating Type</th>
                             <th >Status</th>
                             <th >Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        <tr v-for="(item, index) in subjectgroupList" :key="index">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{item.sub_category_name}}</td>
-                            <td>{{item.sub_group_name}}</td>
-                            <td>{{ item.sub_name }}</td>
+                        <tr v-for="(item, index) in assessmentAreaList" :key="index">
+                            <td class="text-right">{{ item.display_order }}</td>
+                            <td>{{item.sub_name}}</td>
+                            <td>{{ item.assessment_area_name }}</td>
+                            <td>{{ item.code }}</td>
+                            <td>{{item.rating_type_name}}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
-                                <div class="btn-group btn-group-sm">
+                                <!-- <div class="btn-group btn-group-sm"> -->
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
-                                    <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
-                                </div>
+                                <!-- </div> -->
                             </td>
                         </tr>
                     </tbody>
@@ -39,6 +39,7 @@ export default {
     data(){
         return{
             assessmentAreaList:[],
+            dt:''
         }
     },
     methods:{
@@ -47,26 +48,33 @@ export default {
             .then(response => {
                 let data = response 
                 this.assessmentAreaList =  data.data.data;
-                console.table(this.assessmentAreaList)
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#subject-group-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
         showedit(data){
-            this.$router.push({name:'aca_edit_subject',params: {data:data}});
+            this.$router.push({name:'aca_edit_assessment_area',params: {data:data}});
         },
     },
     mounted(){ 
         this.loadAssessmentAreaList();
+        this.dt =  $("#assessment-area-table").DataTable({
+            columnDefs: [
+                    { width: 2, targets: 0},
+                    { width: 80, targets:[1,3]},
+                ],
+        });
     },
+    watch: {
+        assessmentAreaList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#assessment-area-table").DataTable()
+            });
+        }
+    }
 }
 </script>

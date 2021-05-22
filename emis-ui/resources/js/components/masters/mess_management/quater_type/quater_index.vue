@@ -28,9 +28,8 @@ export default {
 
     methods:{
         loadpage:function(type){
-            if(type=="QuaterAdd"|| type=="QuaterList" || type=="QuaterReload"){
-                this.$router.push({name:type,params: {data:null}});
-            }
+            this.$router.push({name:type});
+            
         },
     }
 }

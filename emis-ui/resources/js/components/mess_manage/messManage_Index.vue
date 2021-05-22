@@ -11,6 +11,12 @@
                      {{ item.screen_name}}
                  </router-link>
              </li>
+              <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
+                 <router-link to="/foodrelease_index" id="foodrelease" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     <span class="fas fa-receipt"></span>
+                     Food Release Note 
+                 </router-link>
+              </li>
              <li class="nav-item active pr-1" @click="activatelink('stockreceived')">
                  <router-link id="stockreceived" to="/stockreceived_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                      <span class="fa fa-receipt"></span>
@@ -29,12 +35,18 @@
                      Local Procurement
                  </router-link>
               </li>
-              <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
-                 <router-link to="/foodrelease_index" id="foodrelease" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-receipt"></span>
-                     Food Release Note 
+              <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
+                 <router-link to ="/stockInventory_list" id="schoolInventory" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     <span class="fas fa-shopping-cart"></span>
+                     School Inventory
                  </router-link>
               </li>
+              <!-- <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
+                 <router-link to ="/teststockreceived_index" id="teststockreceived" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     <span class="fas fa-shopping-cart"></span>
+                     Test Stock Received 
+                 </router-link>
+              </li> -->
           </ul>
          <router-view></router-view>
     </div>
@@ -42,12 +54,36 @@
 </template>
 <script>
 export default {
+    data(){
+        return{
+            menubar:[],
+        }
+    },
+
+
+
     methods: {
         activatelink(btnid){
             $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
             $('#'+btnid).addClass('btn-primary text-white');
-        }
-    }
+        },
+        getmenus(sub_mod_id){
+            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.menubar =  data.data;  
+            })
+            .catch(function (error) { 
+                console.log("Error:"+error)
+            });
+        },
+    },
+    mounted(){
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+        this.getmenus(routeparam);
+    },
 }
 </script> 
 

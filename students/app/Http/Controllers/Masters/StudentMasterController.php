@@ -73,7 +73,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
-
+       
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
@@ -162,14 +162,14 @@ class StudentMasterController extends Controller
         if($type=='data'){
             $data = [
                 'id'  =>  $request['id'],
-                'name'  =>  $request['name'],
-                'status'    =>  $request['status'],
+                'Name'  =>  $request['name'],
+                'Status'    =>  $request['status'],
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
             ];
             if($record_type!="StudentType" || $record_type!="ScholarType" || $record_type!="SpBenefit"){
                 $additional_data = [
-                    'description'  =>  $request['description'],
+                    'Description'  =>  $request['description'],
                 ];
                 $data = $data + $additional_data; 
             }
@@ -186,7 +186,7 @@ class StudentMasterController extends Controller
                         $additional_data = [
                             'CeaAwardTypeId'  =>  $request['award_type_id'],
                             'CeaProgrammeId'  =>  $request['program_id'],
-                            'CeaAwardId'      => '1'
+                            'CeaAwardId'      =>  $request['award_id'],
                         ];
                         $data = $data + $additional_data;
                     }
@@ -237,6 +237,13 @@ class StudentMasterController extends Controller
                 }
             case "training" : {
                     $databaseModel = "CeaTraining";
+                    if($type =='data'){
+                        $additional_data = [
+                            'CeaTrainingTypeId'  =>  $request['training_type_id'],
+                            'CeaProgrammeId'  =>  $request['program_id']
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "scout_type" : {
@@ -264,6 +271,10 @@ class StudentMasterController extends Controller
                         $data = $data + $additional_data;
                         unset($data['description']);
                     }
+                    break;
+                }
+            case "quarter_name" : {
+                    $databaseModel = "CeaQuarterType";
                     break;
                 }
             case "vaccine_type" : {

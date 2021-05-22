@@ -1,26 +1,68 @@
 <?php
 
 namespace App\Http\Controllers\messManage;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-//use App\Models\mess_manage\ItemReleasedNote; 
+use App\Models\mess_manage\StockReceived;
+use App\Models\mess_manage\StockReceivedItem; 
 use Illuminate\Support\Facades\DB;
 
 class StockReceivedController extends Controller
-{    use ApiResponser;
+{
+    //
+    use ApiResponser;
 
     public function __construct()
     {
         date_default_timezone_set('Asia/Dhaka');
     }
+    public function saveStockReceived(Request $request){
+        //dd('m here');
+       $stockreceived = [
+           'dateOfreceived'             =>  $request['dateOfreceived'],
+           'term_id'                    =>  $request['term'],
+           'remarks'                    =>  $request['remarks'],
+           'organizationId'             =>  $request['organizationId'],
+           'updated_by'                 =>  $request->user_id,
+           'created_at'                 =>  date('Y-m-d h:i:s')
+       ];
+      // dd($stockreceived);
+       $stockrcv = StockReceived::create($stockreceived);
 
-    public function getFoodRelease($termId = ""){
-       //  return 'from service of mine';
-      $list = DB::table('item_released_notes as a')
-      ->join('food_releases as b', 'b.id', '=', 'a.foodreleaseId')
-      ->select( 'a.item as item','a.quantity as quantity')->get();
-      return $list;
-  }
+      // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
+       // dd($request->items_release);
+       foreach ($request->items_received as $i => $item){
+           $stockreciveitems = array(
+               'stockreceivedId'              =>  $stockrcv->id,
+               'item_id'                      =>  $item['item'],
+               'receivedquantity'             =>  $item['quantity'],
+               'unit_id'                      =>  $item['unit'],
+               'remarks'                      =>  $item['remarks'],
+               'updated_by'                   =>  $request->user_id,
+               'created_at'                   =>  date('Y-m-d h:i:s')
+           );
+           StockReceivedItem::create($stockreciveitems);
+       }
+       return $this->successResponse($stockrcv, Response::HTTP_CREATED);
+      // dd($stockrcv);
+    }
+
+    public function loadFoodReleaseListing($org_Id=""){
+    //  return 'from service of mine';
+       $stckrecive = DB::table('stock_receiveds')
+      ->select('dateOfreceived as dateOfreceived', 'term_id as term', 'remarks as remarks')->where('organizationId', $org_Id)->get();
+      return $stckrecive;
+      // $response_data=StockReceived::where('organizationId',$org_id)->get();
+      // return $this->successResponse($response_data);
+    }
+
+    // public function getfoodreleaseditemList($stockreceivedId){
+    //     $foodreleaseitem = DB::table('item_released_notes')
+    //     ->select('item_id', 'quantity', 'unit_id')->where('stockreceivedId', $stockreceivedId)->get();
+    //     return $foodreleaseitem;
+    // }
+
 }

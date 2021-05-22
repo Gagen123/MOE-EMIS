@@ -41,17 +41,15 @@ class StudentProgramController extends Controller
             'year.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                        => $request->id,
-            'OrgOrganizationId'         => 1,
+            'OrgOrganizationId'         => $request->organisation_id,
             'CeaProgrammeId'            => $request->program,
             'CeaProgrammeSupporterId'   => $request->supporter,
-            'EstablishmentYear'           => $request->year,
+            'EstablishmentYear'         => $request->year,
             'Remarks'                   => $request->remarks,
             'assigned_staff'            => $request->assigned_staff
-
-            //'user_id'        => $this->user_id() 
         ];
 
         $assigned_staff_details = $data['assigned_staff'];
@@ -60,6 +58,8 @@ class StudentProgramController extends Controller
 
         $response = CeaSchoolProgramme::create($data);
         $lastInsertId = $response->id;
+
+        
 
         foreach($assigned_staff_details as $key => $value){
             $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
@@ -78,8 +78,6 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
-        $id ="1";
-
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
@@ -102,6 +100,18 @@ class StudentProgramController extends Controller
                 ->get();
 
         return $this->successResponse($records);
+    }
+
+    /**
+     * Get the Program Details given a program id
+     */
+
+    public function getProgramDetails($param=""){
+        $id = $param;
+
+        $response_data=CeaSchoolProgramme::where('id',$id)->first();
+        $response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
+        return $this->successResponse($response_data); 
     }
 
     /*

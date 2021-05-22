@@ -35,13 +35,13 @@ class StudentProgramController extends Controller
         
         $data =[
             'id'                => $request->id,
+            'organisation_id'       => $this->getWrkingAgencyId(),
             'program'           => $request->program,
             'supporter'         => $request->supporter,
             'year'              => $request->year,
             'remarks'           => $request->remarks,
-            'assigned_staff'    => $request->assigned_staff
-
-            //'user_id'        => $this->user_id() 
+            'assigned_staff'    => $request->assigned_staff,
+            'user_id'        => $this->userId() 
         ];
 
         try{
@@ -70,6 +70,16 @@ class StudentProgramController extends Controller
         $student_records = $this->apiService->listData('emis/students/loadStudentPrograms/'.$param);
         return $student_records;
     }
+
+    /**
+     * Get the program details based on id while editing
+     * 
+     */
+
+     public function getProgramDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getProgramDetails/'.$param);
+        return $student_records;
+     }
 
     /*
     * Save Program Members
@@ -140,7 +150,7 @@ class StudentProgramController extends Controller
         
         $data =[
             'id'                    => $request->id,
-            'organisation_id'       => $request->organisation_id,
+            'organisation_id'       => $this->getWrkingAgencyId(),
             'program'               => $request->program,
             'month'                 => $request->month,
             'inventoryDetails'      => $request->inventoryDetails,
@@ -190,15 +200,12 @@ class StudentProgramController extends Controller
         
         $data =[
             'id'                    => $request->id,
-            'organisation_id'       => $request->organisation_id,
+            'organisation_id'       => $this->getWrkingAgencyId(),
             'program'               => $request->program,
             'from_date'             => $request->from_date,
             'to_date'               => $request->to_date,
             'action_plan'           => $request->action_plan,
-            'user_id'           => $this->userId(),
-            'working_agency_id' => $this->getWrkingAgencyId()
-
-            //'user_id'        => $this->user_id() 
+            'user_id'           => $this->userId()
         ];
 
 

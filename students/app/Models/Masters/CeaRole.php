@@ -14,9 +14,9 @@ class CeaRole extends Model
     protected $fillable = [
         'id',
         'CeaProgrammeId',
-        'name',
-        'assigned_to',
-        'description', 
-        'status'
+        'Name',
+        'AssignedTo',
+        'Remarks', 
+        'Status'
     ];
 }

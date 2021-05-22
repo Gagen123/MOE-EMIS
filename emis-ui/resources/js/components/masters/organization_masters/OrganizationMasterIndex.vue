@@ -10,7 +10,7 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/location_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Location Type
                     </router-link>
@@ -80,6 +80,11 @@
                         Stream
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('classs_stream')">
+                    <router-link to="/class_stream_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Class Stream Mapping
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/contact_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Contact Type
@@ -114,7 +119,7 @@
                     <router-link to="/attachment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Attachment
                     </router-link>
-                </li> -->
+                </li>
             </ul>
             <router-view></router-view>
         </div>

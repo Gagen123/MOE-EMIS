@@ -3,7 +3,7 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Module:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="grant_parent_field" v-model="form.grant_parent_field" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('grant_parent_field') }">
                             <option value=""> --Select--</option>
@@ -11,7 +11,7 @@
                         </select> 
                         <has-error :form="form" field="grant_parent_field"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Service:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="parent_field" v-model="form.parent_field" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parent_field') }">
                             <option value=""> --Select--</option>
@@ -19,13 +19,21 @@
                         </select> 
                         <has-error :form="form" field="parent_field"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Category:<span class="text-danger">*</span></label>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Category:</label>
                         <select class="form-control select2" id="category" v-model="form.category" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select> 
                         <has-error :form="form" field="category"></has-error>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Category Type:</label>
+                        <select class="form-control select2" id="category_type" v-model="form.category_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type') }">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in category_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select> 
+                        <has-error :form="form" field="category_type"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -47,7 +55,7 @@
                     <thead>
                         <tr>
                             <th >SL#</th>
-                            <th >Answer</th>
+                            <th >Answer <span id="anstype"></span></th>
                             <th >Status</th>
                         </tr>
                     </thead>
@@ -90,12 +98,14 @@ export default {
             module_list:[],
             service_list:[],
             category_list:[],
+            category_type_list:[],
             list_of_question:[],
             form: new form({
                 id: '',
                 grant_parent_field:'',
                 parent_field:'',
                 category:'',
+                category_type:'',
                 question_field:'',
                 answer:[{name:'',status:1}],
                 action_type:'add',
@@ -128,7 +138,20 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        async getdropdowns(id,type){
+        async getdropdowns(id,type,identification){
+            if(type=="Service"){
+                this.service_list=[];
+            }
+            if(type=="Category"){
+                this.category_list=[];
+            }
+            if(type=="CategoryType"){
+                this.category_type_list=[];
+            }
+            if(type=="Question"){
+                this.list_of_question=[];
+                id=this.form.parent_field+"SSS"+id+"SSS"+identification;
+            }
             let uri = 'questionAnswers/loadQuestionaries/actlistbyparent_'+type+'_'+id;
             axios.get(uri)
             .then(response =>{
@@ -138,6 +161,9 @@ export default {
                 }
                 if(type=="Category"){
                     this.category_list = data.data.data;
+                }
+                if(type=="CategoryType"){
+                    this.category_type_list=data.data.data;
                 }
                 if(type=="Question"){
                     this.list_of_question = data.data.data;
@@ -187,16 +213,22 @@ export default {
             }
             if(id=="grant_parent_field"){
                 this.form.grant_parent_field=$('#grant_parent_field').val();
-                this.getdropdowns($('#grant_parent_field').val(),'Service');
+                this.getdropdowns($('#grant_parent_field').val(),'Service','');
+                this.getdropdowns($('#grant_parent_field').val(),'CategoryType','');
             }
             if(id=="parent_field"){
                 this.form.parent_field=$('#parent_field').val();
-                this.getdropdowns($('#parent_field').val(),'Category');
+                this.getdropdowns($('#parent_field').val(),'Category','');
             } 
             if(id=="category"){
                 this.list_of_question=[];
                 this.form.category=$('#category').val();
-                this.getdropdowns($('#category').val(),'Question');
+                this.getdropdowns($('#category').val(),'Question','cat');
+            }
+            if(id=="category_type"){
+                this.list_of_question=[];
+                this.form.category_type=$('#category_type').val();
+                this.getdropdowns($('#category_type').val(),'Question','catType');
             }
             if(id=="question_field"){
                 this.form.answer=[];
@@ -218,6 +250,7 @@ export default {
                 
                 if($('#question_field').val().split('_')[1]=="Dropdown" || $('#question_field').val().split('_')[1]=="Radio" || $('#question_field').val().split('_')[1]=="Checkbox"){
                     $('#answer-table').show();
+                    $('#anstype').html('( Answer Type:'+$('#question_field').val().split('_')[1]+' )');
                     $('#save_btn').show();
                     $('#not_applicable_message').hide();
                 }

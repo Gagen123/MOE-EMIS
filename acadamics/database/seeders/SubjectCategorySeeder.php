@@ -18,15 +18,17 @@ class SubjectCategorySeeder extends Seeder
     {
         DB::table('aca_subject_category')->insert([
             [
-                'id' => Str::uuid(),
+                'id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'Academic',
+                'display_order'=>'1',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),
             ],
             [
-                'id' => Str::uuid(),
+                'id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'Non-Academic',
+                'display_order'=>'2',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
                 'created_at' => Carbon::now(),

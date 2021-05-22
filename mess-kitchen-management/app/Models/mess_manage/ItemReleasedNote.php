@@ -18,9 +18,9 @@ class ItemReleasedNote extends Model
     protected $fillable = [
         'id',
         'foodreleaseId',
-        'item',
+        'item_id',
         'quantity',
-        'unit',
+        'unit_id',
         'remark',
         'created_by',
         'updated_by'

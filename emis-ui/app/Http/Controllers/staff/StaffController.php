@@ -73,6 +73,7 @@ class StaffController extends Controller{
             'address'           =>  $request->address,
             'contact_number'    =>  $request->contact_number,
             'email'             =>  $request->email,
+            'alternative_email' =>  $request->alternative_email,
             'remarks'           =>  $request->remarks,
             'position_title'    =>  $request->position_title,
             'working_agency_id' =>  $request->working_agency_id,
@@ -91,10 +92,10 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loaddraftpersonalDetails/'.$type.'/'.$this->userId());
         return $response_data;
     }
-    // public function loadpersonalDetails($id=""){
-    //     $response_data= $this->apiService->listData('emis/staff/loadpersonalDetails/'.$id);
-    //     return $response_data;
-    // }
+    public function checkThisCid($cid=""){
+        $response_data= $this->apiService->listData('emis/staff/checkThisCid/'.$cid);
+        return $response_data;
+    }
     
     public function savequalificationDetails(Request $request){
         $rules = [
@@ -246,12 +247,12 @@ class StaffController extends Controller{
             'user_id'                           =>  $this->userId() 
         ];
         // dd($personal_details);
-        $response_data= $this->apiService->createData('emis/staff/saveTransferWindow', $transfer_window_details);
+        $response_data= $this->apiService->createData('emis/staff/transfer/saveTransferWindow', $transfer_window_details);
         return $response_data;
     }
     
     public function loadTransferWindow(){
-        $response_data= $this->apiService->listData('emis/staff/loadTransferWindow');
+        $response_data= $this->apiService->listData('emis/staff/transfer/loadTransferWindow');
         return $response_data;
     }
     // public function loadStaff($type=""){

@@ -1,0 +1,3 @@
+Executed SQL Statement : delete from `usermanagement_db`.`users` where `id` = '02cd921e-53a1-4587-8056-2695f11387b8' 
+Error Number : 1451 
+Error Message: Cannot delete or update a parent row: a foreign key constraint fails (`usermanagement_db`.`sys_user_sys_mapping`, CONSTRAINT `sys_user_sys_mapping_sysuserid_foreign` FOREIGN KEY (`SysUserId`) REFERENCES `users` (`id`)) 

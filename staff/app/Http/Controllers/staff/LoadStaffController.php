@@ -24,21 +24,25 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::where('working_agency_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="emptype"){
-            return $this->successResponse(PersonalDetails::where('emp_type_id',$parent_id)->where('status','Created')->get());
+            $emp_type=[];
+            foreach(explode(',',$parent_id) as $emp){
+                array_push($emp_type,$emp);
+            }
+            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
         }
     }
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         if($type=="allstaff"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id')->where('id', 1)->all());
+            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('id', 1)->all());
         }
         if($type=="userdzongkhagwise" || $type=="dzongkhagwise"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id')->where('dzo_id',$parent_id)->where('status','Created')->get());
+            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('dzo_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="orgwise" || $type=="userworkingagency"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id')->where('working_agency_id',$parent_id)->where('status','Created')->get());
+            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('working_agency_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="emptype"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id')->where('emp_type_id',$parent_id)->where('status','Created')->get());
+            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('emp_type_id',$parent_id)->where('status','Created')->get());
         }
     }
     

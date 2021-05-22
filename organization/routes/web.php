@@ -117,6 +117,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassInDropdown', 'Masters\StreamController@getClassInDropdown');
 
     });
+	
+	$router->group(['prefix' => 'masters/classstream'], function () use ($router) {
+        $router->get('/getClassStream', 'Masters\ClassStreamController@getClassStream');
+    });
+
+    $router->group(['prefix' => 'masters/classStreamMapping'], function () use ($router) {
+        // class route
+        $router->post('/saveClassStreamMapping', 'Masters\ClassStreamController@saveClassStreamMapping');
+        $router->get('/loadClassStreamMapping', 'Masters\ClassStreamController@loadClassStreamMapping');
+    });
 
     $router->group(['prefix' => 'masters/electricitySource'], function () use ($router) {
         $router->post('/saveElectricitySource', 'Masters\ElectricitySourceController@saveElectricitySource');
@@ -171,6 +181,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
+			$router->get('/getclassSections/{orgId}', 'generalInformation\SectionController@getclassSections');
 
         });
 
@@ -247,7 +258,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
-            $router->get('/loadorgs/{type}', 'establishment\EstablishmentController@loadorgs');
             $router->get('/getOrgDetailsById/{id}/{usertype}', 'establishment\EstablishmentController@getOrgDetailsById');
             $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
             $router->get('/loadorgbygewogId/{gewog_id}', 'establishment\EstablishmentController@loadorgbygewogId');
@@ -304,6 +314,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
-
+        $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
+        $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
     });
 });

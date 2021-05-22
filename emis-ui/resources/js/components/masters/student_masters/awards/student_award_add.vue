@@ -13,7 +13,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0.5">Award Type:<i class="text-danger">*</i></label>
                             <select v-model="form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
-                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
                             <has-error :form="form" field="award_type_id"></has-error>
                     </div>

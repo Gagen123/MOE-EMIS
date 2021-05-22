@@ -19,7 +19,7 @@ class LoadStaffController extends Controller{
     //parameter type: type of staff you want to extrace
     //parameter parent_id: if you have parent id at user interface, then send it along with type
     public function loadStaffList($type="",$parent_id=""){
-        $param="";
+        $param=$parent_id;
         //type=allstaff: to listentire staff
         if($type=="allstaff"){
             $param='NA';
@@ -44,16 +44,21 @@ class LoadStaffController extends Controller{
         if($type=="orgwise"){
             $param=$parent_id;
         }
+        //type=orgwise, parent_id=?: to list with dzongkhag id
+        if($type=="orgwise"){
+            $param=$parent_id;
+        }
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;
     }
     
+    //load staff details: id,name,gender and position title
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         $param="";
         //type=allstaff: to listentire staff
         if($type=="allstaff"){
             $param='NA';
-        }
+        } 
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
         if($type=="userdzongkhagwise"){

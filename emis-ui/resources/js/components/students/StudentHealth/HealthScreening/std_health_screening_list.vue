@@ -7,7 +7,12 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Screening</th>
+                            <th>Class</th>
+                            <th>Section</th>
+                            <th>Stream</th>
                             <th>Month</th>
+                            <th>Screened</th>
+                            <th>Referred</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
@@ -15,7 +20,13 @@
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.screening_type}}</td>
+                            <td>{{ item.class}}</td>
+                            <td>{{ item.section}}</td>
+                            <td v-if="item.stream">{{ item.stream}}</td>
+                            <td v-else>{{ NA }}</td>
                             <td>{{ item.date}}</td>
+                            <td>{{ item.not_screened}}</td>
+                            <td>{{ item.referred}}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -58,7 +69,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'student_projects_edit',params: {data:data}});
+            this.$router.push({name:'std_health_screening_edit',params: {data:data}});
         },
     },
     mounted(){

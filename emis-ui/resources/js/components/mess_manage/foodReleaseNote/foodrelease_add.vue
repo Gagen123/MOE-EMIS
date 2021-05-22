@@ -2,7 +2,7 @@
     <div>
         <form class="bootbox-form" id="foodreleaseId">
             <div class="card-body">
-                <div class="form-group row">
+                <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Food Release:<span class="text-danger">*</span></label> 
                         <input class="form-control editable_fields" name="dateOfrelease" id="dateOfrelease" type="date" 
@@ -11,47 +11,26 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
-                     <!--   <select name="dzongkhag" id="dzongkhag" class="form-control editable_fields" v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" @change="remove_err('dzongkhag')">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
+                        <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
+                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> -->
-                        
-                        <select name="dzongkhag" class="form-control editable_fields" id="dzongkhag"  v-model="form.dzongkhag" >
-                            <option value="">---Please Select---</option> 
-                            <option value="Samtse">Samtse</option>
-                            <option value="Thimphu">Thimphu</option>
-                            <option value="Haa">Haa</option>
-                            <option value="Paro">Paro</option>
-                        </select>
+                        <has-error :form="form" field="dzongkhag"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">School Name:<span class="text-danger">*</span></label> 
-                    <!--    <select name="school" id="school" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school')">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
+                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
+                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="school"></has-error> -->
-                        <select class="form-control editable_fields" id="school"  v-model="form.school" >
-                            <option value="">---Please Select---</option> 
-                            <option value="SHSS">SHSS</option>
-                            <option value="YHSS">YHSS</option>
-                            <option value="DHSS">DHSS</option>
-                        </select>
+                        <has-error :form="form" field="organizaiton"></has-error>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Term(quater):<span class="text-danger">*</span></label> 
-                     <!--   <select name="term" id="term" class="form-control editable_fields" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }" @change="remove_err('school'),getreleaseddetial()">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.termName }}</option>
+                       <label class="">Term:<span class="text-danger">*</span></label> 
+                       <select name="term" id="term" class="form-control select2" v-model="form.term" :class="{ 'is-invalid': form.errors.has('term') }" @change="remove_err('term')">
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> -->
-                       <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
-                            <option value="">---Please Select---</option> 
-                            <option value="1st quarter">1st quarter</option>
-                            <option value="2nd quarter">2nd quarter</option>
-                            <option value="3rd quarter">3rd quarter</option>
-                        </select>     
-
+                        <has-error :form="form" field="term"></has-error> 
                     </div>
                 </div>
             <div class="card">
@@ -69,30 +48,24 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_released' :key="index">
                                   <td>
-                                <!--     <select name="item" id="item" class="form-control editable_fields" v-model="user.item">
+                                    <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select>-->
-                                    <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                        <option value="">---Please Select---</option> 
-                                        <option value="rice">rice</option>
-                                        <option value="potatoes">potatoes</option>
-                                        <option value="onion">onion</option>
-                                    </select>
+                                      </select>
                                   </td>
                                   <td>                          
-                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity">
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
                                   <td>                                
-                                 <!--    <select name="unit" id="unit" class="form-control editable_fields" v-model="user.unit">
+                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                     </select> -->
-                                    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
+                                         
+                                     </select> 
+                                        <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
                                         <option value="">---Please Select---</option> 
                                         <option value="kg">kg</option>
                                         <option value="litre">litre</option>
                                         <option value="packet">packet</option>
-                                    </select>
-
+                                     </select> -->
                                   </td>
                                   <td>                                
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
@@ -109,9 +82,16 @@
                           </tbody>
                      </table>
                   </div>
-              </div>
+              </div> 
             </div>
-             <div class="card-footer text-right">
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label class="mb-0.5">Remarks:</label>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="form" field="remarks"></has-error>
+                </div>
+            </div>
+            <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                  <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
              </div> 
@@ -124,20 +104,25 @@
 export default {
     data(){
         return{
-            count:1,
-           // schoolList:[],
-          //  termList:[],
-          //  itemList:[],
-          //  unitList:[],
-           // itemrelease:[],
-         //   items_released: [],
+            orgList:[],
+            quarterList:[],
+            itemList:[],
+            unitList:[],
+            termList:[],
+            dzongkhagList:[],
+            dzongkhag:'',
+            organizaiton:'',
+          //  itemrelease:[],
+            items_released: [],
+          
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', school: '',quarter: '',
+                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',term: '', remarks: '',
                  items_released:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
                 }], 
             })
+            
         }
     },
 
@@ -148,9 +133,10 @@ export default {
          */
         restForm(){
             this.form.dateOfrelease= '';
-             this.form.dzongkhag= '';
-            this.form.school= '';
-             this.form.quarter= '';
+            this.form.dzongkhag= '';
+            this.form.organizaiton= '';
+            this.form.term= '';
+            this.form.remarks='';
             let formReset =this.form.items_released;
             formReset.splice(0, formReset.length);
             this.form.items_released.push({item:'',quantity:'',unit:'',remarks:''})
@@ -173,10 +159,25 @@ export default {
                     this.$router.push('/foodrelease_list');
                 })
                 .catch(() => {
-                    console.log("Error......")
+                    console.log("Error......");
+                    this.applyselect();
                 })
             }
 		},
+
+        applyselect(){
+            if(!$('#term').attr('class').includes('select2-hidden-accessible')){
+                $('#term').addClass('select2-hidden-accessible');
+            }
+            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+                $('#dzongkhag').addClass('select2-hidden-accessible');
+            }
+             if(!$('#organizaiton').attr('class').includes('select2-hidden-accessible')){
+                $('#organizaiton').addClass('select2-hidden-accessible');
+            }
+
+
+        },
 
         /**
          * method to remove error
@@ -190,44 +191,114 @@ export default {
         /**
          * method to get term in dropdown
          */
-      //  getTermDropdown(uri = '/student/getTermInDropdown/'+this.form.category){
-      //      axios.get(uri)
-      //      .then(response => {
-      //          let data = response.data;
-      //          this.termList = data;
-      //      });
-     //   },
-
-        /**
-         * method to get unit in dropdown
-         */
-       //  loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-       //     axios.get(uri)
-       //     .then(response => {
-       //         let data = response;
-       //         this.unitList =  data.data.data;
-       //     })
-       //     .catch(function (error) {
-       //         console.log("Error......"+error)
-       //     });
-      //  },
-
-        /**
-         * method to get item in dropdown
-         */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+       loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                for(leti=0;i<data.data.data.length;i++){
-                this.itemList[data.data.data[i].id] =  data.data.data[i].name;
-                }
-                
+                this.termList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
+
+        /**
+         * method to get unit in dropdown
+         */
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get item in dropdown
+         */
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.itemList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        /**
+         * 
+         */
+        allOrgList(dzo_id){
+            if(dzo_id==""){
+                dzo_id=$('#dzongkhag').val();
+            }
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="dzongkhag"){
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.allOrgList($('#dzongkhag').val());
+            }
+            if(id=="term"){
+                this.form.term=$('#term').val();
+            }
+            if(id=="organizaiton"){
+                this.form.organizaiton=$('#organizaiton').val();
+            }
+           
+        },
+
+        /**f
+         * method to get dzongkhag in dropdown
+         */
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dzongkhagList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+
+        // loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         for(let i=0;i<data.data.data.length;i++){
+        //             this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name; 
+        //         }
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
 
         /**
          * method to add more fields
@@ -246,13 +317,37 @@ export default {
                 this.form.items_released.splice(index,1); 
             }
         },
-       
+        // addMoreattachments: function(){
+        //     this.filecount++;
+        //     this.form.attachments.push({file_name:'',attachment:''})
+        // },
+        // removeattachments(index){    
+        //     if(this.form.attachments.length>1){
+        //         this.filecount--;
+        //         this.form.attachments.pop(); 
+        //         this.form.ref_docs.pop();
+        //     }
+        // },
        
     },
      mounted() { 
-     //   this.loadActiveUnitList(); 
-      //  this.loadActiveItemList();
-     //   this.getTermInDropdown();
+         $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+         Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+       
+        this.loadactivedzongkhagList();
+        this.loadActiveTermList();
+        this.loadActiveItemList();
+        this.loadActiveUnitList(); 
+       
+
     }
 }
 </script>

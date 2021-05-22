@@ -18,14 +18,16 @@ class LocalProcureController extends Controller
     }
 
     public function saveLocalProcure(Request $request){
-         dd('m here');
+       //  dd('m here');
+        $orgId = $request['organizationId'];
         $date = $request['dateOfprocure'];
      foreach ($request->local_item as $i=> $item){
             $localprocure = array(
+             'organizationId'             =>  $orgId,
              'dateOfprocure'              =>  $date,
-             'item'                       =>  $item['item'],
+             'item_id'                    =>  $item['item'],
              'quantity'                   =>  $item['quantity'],
-             'unit'                       =>  $item['unit'],
+             'unit_id'                    =>  $item['unit'],
              'amount'                     =>  $item['amount'],
              'remark'                     =>  $item['remark'],
              'updated_by'                 =>  $request->user_id,
@@ -34,13 +36,14 @@ class LocalProcureController extends Controller
 
          $localpro = LocalProcure::create($localprocure);
         }
-        // dd('m here'); 
+      //  dd('m here');
+     //    dd('localprocure'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
     public function loadLocalProcure(){
-          // return 'from service of mine';
+        //   return 'from service of mine';
         $list = DB::table('local_procures')
-        ->select( 'dateOfprocure as dateOfprocure')->get();
+        ->select( 'dateOfprocure as dateOfprocure', 'item_id as item')->get();
         return $list;
     }
 }

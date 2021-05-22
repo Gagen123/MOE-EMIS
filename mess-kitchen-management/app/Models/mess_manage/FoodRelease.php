@@ -10,12 +10,13 @@ class FoodRelease extends Model
     use HasFactory, Uuid;
     protected $table="food_releases";
 
-    protected $fillable = [
+    protected $fillable = [ 
         'id',
         'dateOfrelease',
-        'dzongkhag',
-        'school',
-        'quarter',
+        'dzongkhag_id',
+        'org_id',
+        'term_id',
+        'remarks',
         'created_by',
         'updated_by'
     ];

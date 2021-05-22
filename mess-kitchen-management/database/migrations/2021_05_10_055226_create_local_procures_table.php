@@ -15,10 +15,11 @@ class CreateLocalProcuresTable extends Migration
     {
         Schema::create('local_procures', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('organizationId');
             $table->date('dateOfprocure');
-            $table->char('item',36);
+            $table->char('item_id',36);
             $table->char('quantity',36);
-            $table->char('unit',36);
+            $table->char('unit_id',36);
             $table->char('amount',36);
             $table->char('remark',36);
             $table->char('created_by',36)->nullable(true);

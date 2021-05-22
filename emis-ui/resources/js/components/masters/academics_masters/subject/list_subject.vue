@@ -2,10 +2,10 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="subject-group-table" class="table table-sm table-bordered table-striped">
+                <table id="subject-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                           <th >SL#</th>
+                            <th >Display  Order</th>
                             <th >Subject Category Name</th>
                             <th >Subject Group Name</th>
                             <th >Subject Name</th>
@@ -14,8 +14,8 @@
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        <tr v-for="(item, index) in subjectGroupList" :key="index">
-                            <td>{{ index + 1 }}</td>
+                        <tr v-for="(item, index) in subjectList" :key="index">
+                            <td class="text-right">{{ item.display_order}}</td>
                             <td>{{item.sub_category_name}}</td>
                             <td>{{item.sub_group_name}}</td>
                             <td>{{ item.sub_name }}</td>
@@ -23,7 +23,6 @@
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
-                                    <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
                                 </div>
                             </td>
                         </tr>
@@ -37,34 +36,42 @@
 export default {
     data(){
         return{
-            subjectGroupList:[],
+            subjectList:[],
+            dt:''
         }
     },
     methods:{
-        loadSubjectGroupList(uri = 'masters/loadAcademicMasters/all_subject'){
+        loadSubjectList(uri = 'masters/loadAcademicMasters/all_subject'){
             axios.get(uri)
             .then(response => {
                 let data = response 
-                this.subjectGroupList =  data.data.data;
+                this.subjectList =  data.data.data;
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#subject-group-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'aca_edit_subject',params: {data:data}});
         },
     },
     mounted(){ 
-        this.loadSubjectGroupList();
+        this.loadSubjectList();
+        this.dt =  $("#subject-table").DataTable({
+            columnDefs: [
+                { width: 60, targets: 0},
+            ],
+        })
     },
+    watch: {
+        subjectList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-table").DataTable()
+            });
+        }
+    }
 }
 </script>

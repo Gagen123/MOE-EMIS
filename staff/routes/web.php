@@ -25,11 +25,16 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
         $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
         $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
+
+        $router->post('/saveLeaveConfigMasters', ['uses' => 'masters\StaffMastersController@saveLeaveConfigMasters']);
+        $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
+        $router->get('/loadAllLeaveConfigMasters','masters\StaffMastersController@loadAllLeaveConfigMasters');
+        $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
         $router->get('/loaddraftpersonalDetails/{type}/{user_id}', ['uses' => 'staff\StaffController@loaddraftpersonalDetails']);
-        // $router->get('/loadpersonalDetails/{status}/{id}', ['uses' => 'staff\StaffController@loadpersonalDetails']);
+        $router->get('/checkThisCid/{cid}', ['uses' => 'staff\StaffController@checkThisCid']);
 
         $router->post('/savequalificationDetails', ['uses' => 'staff\StaffController@savequalificationDetails']);
         $router->get('/loadQualification/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@loadQualification']);
@@ -42,14 +47,21 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         $router->post('/updatefinalstaffDetails', ['uses' => 'staff\StaffController@updatefinalstaffDetails']);
         $router->post('/updatefinalPrivatestaffDetails', ['uses' => 'staff\StaffController@updatefinalPrivatestaffDetails']);
+        
+        $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
+        $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
+		
+		  //Method by Chimi thinley
+        $router->get('/getTeacher/{orgId}', ['uses' => 'staff\StaffController@getTeacher']);
+        
 
         // $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
         // $router->get('/loadStaff/{type}/{param}', ['uses' => 'staff\StaffController@loadStaff']);
 
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
-        $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
-        $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);
+        
+        
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
 
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
@@ -70,6 +82,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateParticipant', ['uses' => 'staff\HrDevelopmentController@updateParticipant']);
         });
         $router->group(['prefix' => 'transfer'], function () use ($router) {
+            $router->post('/saveTransferWindow', ['uses' => 'staff\TransferController@saveTransferWindow']);
+            $router->get('/loadTransferWindow', ['uses' => 'staff\TransferController@loadTransferWindow']);
+
             $router->get('/getcurrentTransferWindowDetails/{id}', ['uses' => 'staff\TransferController@getcurrentTransferWindowDetails']);
             $router->post('/submitapplicantDetails', ['uses' => 'staff\TransferController@submitapplicantDetails']);
             $router->get('/getDraftDetails/{user_id}', ['uses' => 'staff\TransferController@getDraftDetails']);
@@ -106,7 +121,15 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadStaffattendance/{param}', ['uses' => 'staff\StaffServicesController@loadStaffattendance']);
             $router->get('/loadattendanceDetails/{id}', ['uses' => 'staff\StaffServicesController@loadattendanceDetails']);
             $router->get('/checkAttendanceDetailsByDate/{year}/{month}/{org_id}', ['uses' => 'staff\StaffServicesController@checkAttendanceDetailsByDate']);
-            
+
+            $router->get('/checkEligibility/{type_id}/{role_ids}', ['uses' => 'staff\StaffServicesController@checkEligibility']);
+            $router->get('/getLeaveConfigDetails/{role_ids}', ['uses' => 'staff\StaffServicesController@getLeaveConfigDetails']);
+            $router->post('/submitLeaveApplication', ['uses' => 'staff\StaffServicesController@submitLeaveApplication']);
+            $router->get('/loadLeaveDetails/{appNo}', ['uses' => 'staff\StaffServicesController@loadLeaveDetails']);
+            $router->post('/verifyApproveRejectLeaveApplication', ['uses' => 'staff\StaffServicesController@verifyApproveRejectLeaveApplication']);
+            $router->get('/getApprovedLeaveCount/{staff_id}/{leave_type_id}', ['uses' => 'staff\StaffServicesController@getApprovedLeaveCount']);
+            $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
+            $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
         }); 
     });
 

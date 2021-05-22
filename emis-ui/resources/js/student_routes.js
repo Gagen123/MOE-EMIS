@@ -1,6 +1,15 @@
 const routes = [  
     { path: '/StudentServicesMasterIndex', component: require('./components/masters/student_masters/StudentServicesIndex.vue').default,
         children: [
+            { path: '/award_type_list', 
+                component: require('./components/masters/student_masters/awards/award_type_index.vue').default ,
+                children: [
+                    { path: '', component: require('./components/masters/student_masters/awards/award_type_list.vue').default },
+                    { path: '/award_type_add', name:'award_type_add', component: require('./components/masters/student_masters/awards/award_type_add.vue').default },
+                    { path: '/award_type_edit', name:'award_type_edit', component: require('./components/masters/student_masters/awards/award_type_edit.vue').default },
+                    { path: '/award_type_list', name:'award_type_list', component: require('./components/masters/student_masters/awards/award_type_list.vue').default },
+                ]    
+            },
             { path: '/student_award_index', 
                 component: require('./components/masters/student_masters/awards/student_award_index.vue').default ,
                 children: [
@@ -151,6 +160,15 @@ const routes = [
         { path: '/program_measurement_list', name:'ProgramMeasurementList', component: require('./components/masters/student_masters/programs_clubs/program_measurement_list.vue').default },
       ]    
     },
+    { path: '/quarter_name_index', 
+    component: require('./components/masters/student_masters/programs_clubs/quarter_name_index.vue').default ,
+      children: [
+        { path: '', component: require('./components/masters/student_masters/programs_clubs/quarter_name_list.vue').default },
+        { path: '/quarter_name_add', name:'quarter_name_add', component: require('./components/masters/student_masters/programs_clubs/quarter_name_add.vue').default },
+        { path: '/quarter_name_edit', name:'quarter_name_edit', component: require('./components/masters/student_masters/programs_clubs/quarter_name_edit.vue').default },
+        { path: '/quarter_name_list', name:'quarter_name_list', component: require('./components/masters/student_masters/programs_clubs/quarter_name_list.vue').default },
+      ]    
+    },
   ] 
 },
 { path: '/StudentHealthMasterIndex', component: require('./components/masters/student_masters/StudentHealthIndex.vue').default,
@@ -272,7 +290,7 @@ const routes = [
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
         children: [
-            { path: '/',name:'student_admission', component: require('./components/students/StudentAdmission/student_admission_list.vue').default },
+            { path: '/', name:'student_admission', component: require('./components/students/StudentAdmission/student_admission_list.vue').default },
             { path: '/student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
                 children: [ 
                     { path: '/', name:'student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
@@ -342,7 +360,7 @@ const routes = [
     { path: '/student_services', component: require('./components/students/StudentServices/index.vue').default,
     children: [
         //Student => Houses
-        { path: '/student_houses', component: require('./components/students/StudentServices/Houses/student_houses.vue').default,
+        { path: '/student_houses', name:'student_services', component: require('./components/students/StudentServices/Houses/student_houses.vue').default,
             children: [
                 { path: '/', name:'student_houses', component: require('./components/students/StudentServices/Houses/student_houses_list.vue').default },
                 { path: '/student_houses_list', name:'student_houses_list', component: require('./components/students/StudentServices/Houses/student_houses_list.vue').default },
@@ -384,7 +402,7 @@ const routes = [
     { path: '/student_programs_clubs', component: require('./components/students/StudentExtraCurricular/programs_clubs_index.vue').default,
     children: [
         //Student => Programs and Clubs
-        { path: '/student_programs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs.vue').default,
+        { path: '/student_programs', name:'student_programs_clubs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs.vue').default,
             children: [
                 { path: '/', name:'student_programs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs_list.vue').default },
                 { path: '/student_programs_list', name:'student_programs_list', component: require('./components/students/StudentExtraCurricular/Programs/student_programs_list.vue').default },
@@ -487,7 +505,7 @@ const routes = [
     //Student Health
     { path: '/student_health', component: require('./components/students/StudentHealth/index.vue').default,
     children: [
-        { path: '/std_health_screening', 
+        { path: '/std_health_screening', name:'student_health',
             component: require('./components/students/StudentHealth/HealthScreening/std_health_screening.vue').default,
             children: [
                 { path: '/', name:'std_health_screening', component: require('./components/students/StudentHealth/HealthScreening/std_health_screening_list.vue').default },

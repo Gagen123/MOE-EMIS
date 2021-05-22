@@ -21,6 +21,7 @@ class MessManagementController extends Controller
     }
 
     public function loadFoodReleaseList(){
+      //  dd('m here');
           $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
           return $list;
     }
@@ -32,24 +33,25 @@ class MessManagementController extends Controller
     public function saveFoodRelease(Request $request){
         //return $request
         $rules = [
-            'dateOfrelease'         =>  'required',
-            'dzongkhag'             =>  'required',
-            'school'                =>  'required',
-            'quarter'               =>  'required',
+            'dateOfrelease'            =>  'required',
+            'dzongkhag'                =>  'required',
+            'organizaiton'             =>  'required',
+            'term'                     =>  'required',
         ];
         $customMessages = [
-            'dateOfrelease.required'   => 'dateOfrelease is required',
-            'dzongkhag.required'       => 'Dzongkhag is required',
-            'school.required'          => 'School  is required',
-            'quarter.required'         => 'Quarter is required',
+            'dateOfrelease.required'    =>  'dateOfrelease is required',
+            'dzongkhag.required'        =>  'dzongkhag is required',
+            'organizaiton.required'     =>  'organizaiton  is required',
+            'term.required'             =>  'term is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
             'dzongkhag'                =>  $request['dzongkhag'],
-            'school'                   =>  $request['school'],
-            'quarter'                  =>  $request['quarter'],
+            'organizaiton'             =>  $request['organizaiton'],
+            'term'                     =>  $request['term'],
+            'remarks'                  =>  $request['remarks'],
             'id'                       =>  $request['id'],
             'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
@@ -86,6 +88,7 @@ class MessManagementController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $localprocure =[
+            'organizationId'         =>  $this->getWrkingAgencyId(),
             'dateOfprocure'          =>  $request['dateOfprocure'],
             'id'                     =>  $request['id'],
             'local_item'             =>  $request->local_item,
@@ -102,32 +105,30 @@ class MessManagementController extends Controller
         }
     }
 
-    
-
     // Stock Received 
 
     public function saveStockReceived(Request $request){
         $rules = [
-            'date'          =>  'required',
-            'quarter'       =>  'required',
+            'dateOfreceived'          =>  'required',
+            'term'                    =>  'required',
         ];
         $customMessages = [
-            'date.required'          => 'date is required',
-            'quarter.required'       => 'quarter is required',
+            'dateOfreceived.required'       => 'dateOfreceived is required',
+            'term.required'                 => 'Term is required',
 
         ];
         $this->validate($request, $rules, $customMessages);
         $stockreceived =[
-            'date'             =>  $request['date'],
-            'quarter'          =>  $request['quarter'],
-            'item'             =>  $request['item'],
-            'quantity'         =>  $request['quantity'],
-            'unit'             =>  $request['unit'],
-            'Amount'           =>  $request['Amount'],
-            'remark'           =>  $request['remark'],
+            'organizationId'                =>  $this->getWrkingAgencyId(),
+            'dateOfreceived'                =>  $request['dateOfreceived'],
+            'term'                          =>  $request['term'],
+            'remarks'                       =>  $request['remarks'],
+            'id'                            =>  $request['id'],
+            'items_received'                =>  $request->items_received,
+            'user_id'                       =>  $this->userId()
 
         ];
-        // dd($dis);
+        // dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -137,11 +138,32 @@ class MessManagementController extends Controller
         }
     }
 
-    public function getFoodRelease($termId = ""){
-        //   dd('m here'); 
-        $dis = $this->apiService->listData('emis/messManagement/getFoodRelease/' .$termId);
-        return $dis;
+    public function loadFoodReleaseListing($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+       // dd('m here');
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+        return $list;
+       // dd($list);
     }
+    //     $response_data= $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+    //     return $response_data;
+    // }
+    
+    public function getfoodreleaseditemList($foodreleaseId=""){
+        //dd('m here');
+        $itemList = $this->apiService->listData('emis/messManagement/getfoodreleaseditemList/'.$foodreleaseId);
+        return $itemList;
+    }
+ 
+    public function getfoodreleasedetailbyquarter($quarter_id="",$foodreleaseId=""){
+      //  dd('m here');
+        $response_data= $this->apiService->listData('emis/messManagement/getfoodreleasedetailbyquarter/'.$quarter_id."/".$foodreleaseId.'/'.$this->getWrkingAgencyId());
+        return $response_data;
+    }
+       
+
 
 
     // Stock Issued
@@ -161,7 +183,7 @@ class MessManagementController extends Controller
          ];
          $this->validate($request, $rules, $customMessages);
        $stockissue =[
-         //'organizationId'           =>  $this->getWrkingAgencyId(),
+            'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,

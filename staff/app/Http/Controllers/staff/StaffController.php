@@ -60,6 +60,7 @@ class StaffController extends Controller{
             'address'               =>  $request->address,
             'contact_no'            =>  $request->contact_number,
             'email'                 =>  $request->email,
+            'alternative_email' =>  $request->alternative_email,
             'position_title_id'     =>  $request->position_title,
             'working_agency_id'     =>  $request->working_agency_id,
             'comp_sub_id'           =>  $request->comp_sub,
@@ -107,9 +108,9 @@ class StaffController extends Controller{
         }
     }
     
-    // public function loadpersonalDetails($status="",$id=""){
-    //     return $this->successResponse(PersonalDetails::where('id',$id)->where('status',$status)->first());
-    // }
+    public function checkThisCid($cid=""){
+        return $this->successResponse(PersonalDetails::where('cid_work_permit',$cid)->first());
+    }
 
     public function savequalificationDetails(Request $request){
         $response_data=[];
@@ -299,62 +300,6 @@ class StaffController extends Controller{
         }
     }
 
-    public function saveTransferWindow(Request $request){
-        $response_data=[];
-        $rules = [
-            'from_date'                         =>  'required',
-            'to_date'                           =>  'required | date | after:from_date',
-        ];
-        $customMessages = [
-            'from_date.required'                => 'Please select from date',
-            'to_date.required'                  => 'Please select to date',
-        ];
-        if($request->action_type=="add"){
-            $rules=array_merge($rules,
-                array(
-                'year'                              =>  'required |unique:stf_transfer_window',)
-            );
-            $customMessages=array_merge($customMessages,
-                array(
-                    'year.required'                     => 'Current Year is required',
-                    'year.unique'                       => 'Current Year is already recorded',
-                )
-            );
-        }
-        $this->validate($request, $rules,$customMessages);
-        
-        $data =[
-            'year'                              =>  $request->year,
-            'from_date'                         =>  $request->from_date,
-            'to_date'                           =>  $request->to_date,
-            'remarks'                           =>  $request->remarks,
-            'status'                            =>  $request->status,
-        ];
-        if($request->action_type=="add"){
-            $data=array_merge($data,
-                array('created_by'            =>  $request->user_id,
-                      'created_at'            =>  date('Y-m-d h:i:s')
-                )
-            );
-            $response_data = TransferWindow::create($data);
-        }
-        else if($request->action_type=="edit"){
-            $data=array_merge($data,
-                array('updated_by'            =>  $request->user_id,
-                      'updated_at'            =>  date('Y-m-d h:i:s')
-                )
-            );
-            $act_det = TransferWindow::where ('id', $request->id)->firstOrFail();
-            $act_det->fill($data);
-            $response_data=$act_det->save();
-        }
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
-    }
-    
-    public function loadTransferWindow(){
-        return $this->successResponse(TransferWindow::all());
-    }
-    
     // public function loadStaff($type="",$param=""){
     //     if($type=="workingagency"){
     //         return $this->successResponse(PersonalDetails::where('working_agency_id',$param)->get());
@@ -370,6 +315,10 @@ class StaffController extends Controller{
     
     public function load_staff_details_by_id($id=""){
         return $this->successResponse(PersonalDetails::where('id',$id)->first());
+    }
+	public function getTeacher($orgId){
+        $teacher = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);
+        return $this->successResponse($teacher);
     }
     
 }

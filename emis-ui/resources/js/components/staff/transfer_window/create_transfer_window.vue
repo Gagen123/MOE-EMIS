@@ -70,11 +70,24 @@ export default {
                     })
                     this.$router.push('/list_transfer_window');
                 })
-                .catch(() => {
+                .catch((e) => {
                     console.log("Error.")
                 })
             }
-		}, 
+		},
+        checkdate(){
+            let date1=$('#from_date').val();
+            let date12=$('#to_date').val();
+            if(date1!="" && date12!=""){
+                if(date1>=date12){
+                    Swal.fire({
+                        html: "Form date cannot be greater to equal to from date. Please provide correct to date",
+                        icon: 'error'
+                    });
+                    $('#to_date').val('');
+                }
+            }
+        } 
     },
 }
 </script>

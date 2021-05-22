@@ -7,6 +7,7 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Date of Procurement</th>
+                            <th>Item Procured </th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
@@ -14,9 +15,10 @@
                          <tr v-for="(item, index) in localprocure_list" :key="index">
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfprocure}}</td>
+                            <td> {{itemList[item.item]}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><i class="fas fa-edit"></i></a>
                                </div>
                             </td>
                         </tr> 
@@ -31,7 +33,8 @@ export default {
     data(){
         return{ 
             totle:0,
-            localprocure_list:[]
+            localprocure_list:[],
+            itemList:{},
         } 
     },
     methods: {
@@ -57,9 +60,27 @@ export default {
             data.action='edit';
             this.$router.push({name:'LocalProcureEdit',params: {data:data}});
         },
+        loadeditpage(data){
+            data.action='edit';
+            this.$router.push({name:'LocalProcureEdit',params: {data:data}});
+        },
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
     },
     mounted(){
+        this.loadActiveItemList();
         this.loadLocalProcure();
+       
     },
     
 }

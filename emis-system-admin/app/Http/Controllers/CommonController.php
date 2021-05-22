@@ -26,7 +26,7 @@ class CommonController extends Controller{
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
         $param=explode('OUTSEP',$param);
         $access_level=explode('SSS',$param2)[0];
-        if($type=="common"){
+        if($type=="common" || $type=="commonLeaveOthers"){
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.explode('SSS',$param2)[1].' AND ';
             }
@@ -35,16 +35,26 @@ class CommonController extends Controller{
             }
             $result_data.=' t.claimed_by IS NULL AND ('; 
             for($i=0;$i<sizeof($param)-1;$i++){
-                if(sizeof($param)-2==$i){
-                    $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))'; 
-                } 
-                else{ 
-                    $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
-                }  
+                if($type=="commonLeaveOthers"){
+                    if(sizeof($param)-2==$i){
+                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))';  
+                    } 
+                    else{ 
+                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
+                    } 
+                }else{
+                    if(sizeof($param)-2==$i){
+                        $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))'; 
+                    } 
+                    else{ 
+                        $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
+                    } 
+                }
             }
             // return $result_data;
             return DB::select($result_data);
         }
+        
         if($type=="own"){
             $result_data.='t.claimed_by="'.$user_id.'"'; 
             if(strtolower($access_level)=="dzongkhag"){
@@ -86,7 +96,6 @@ class CommonController extends Controller{
         if($type=="merger"){
             $response_data=TaskDetails::where('service_name', 'Merger')->where('created_by', $user_id)->whereNotIn('status_id', [0,3])->where('created_by', $user_id)->first();
         }
-       
         return $response_data;
     }
     

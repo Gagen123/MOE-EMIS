@@ -372,7 +372,7 @@ export default {
             }
 		}, 
         loadstaff(){
-            let uri = 'loadCommons/userworkingagency/userworkingagency';
+            let uri = 'loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
             .then(response =>{
                 let data = response;
