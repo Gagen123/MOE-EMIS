@@ -34,7 +34,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
         $router->get('/loaddraftpersonalDetails/{type}/{user_id}', ['uses' => 'staff\StaffController@loaddraftpersonalDetails']);
-        // $router->get('/loadpersonalDetails/{status}/{id}', ['uses' => 'staff\StaffController@loadpersonalDetails']);
+        $router->get('/checkThisCid/{cid}', ['uses' => 'staff\StaffController@checkThisCid']);
 
         $router->post('/savequalificationDetails', ['uses' => 'staff\StaffController@savequalificationDetails']);
         $router->get('/loadQualification/{staff_id}/{user_id}', ['uses' => 'staff\StaffController@loadQualification']);
@@ -60,8 +60,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
-        $router->post('/saveTransferWindow', ['uses' => 'staff\StaffController@saveTransferWindow']);
-        $router->get('/loadTransferWindow', ['uses' => 'staff\StaffController@loadTransferWindow']);
+        
+        
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
 
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
@@ -82,6 +82,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateParticipant', ['uses' => 'staff\HrDevelopmentController@updateParticipant']);
         });
         $router->group(['prefix' => 'transfer'], function () use ($router) {
+            $router->post('/saveTransferWindow', ['uses' => 'staff\TransferController@saveTransferWindow']);
+            $router->get('/loadTransferWindow', ['uses' => 'staff\TransferController@loadTransferWindow']);
+
             $router->get('/getcurrentTransferWindowDetails/{id}', ['uses' => 'staff\TransferController@getcurrentTransferWindowDetails']);
             $router->post('/submitapplicantDetails', ['uses' => 'staff\TransferController@submitapplicantDetails']);
             $router->get('/getDraftDetails/{user_id}', ['uses' => 'staff\TransferController@getDraftDetails']);

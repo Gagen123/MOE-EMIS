@@ -258,7 +258,7 @@ Route::prefix('questionAnswers')->group(function () {
 Route::prefix('staff')->group(function () {
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
-    // Route::get('/loadpersonalDetails/{id}', [App\Http\Controllers\staff\StaffController::class, 'loadpersonalDetails'])->name('loadpersonalDetails');
+    Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');
     Route::get('/loadQualification/{staff_id}', [App\Http\Controllers\staff\StaffController::class, 'loadQualification'])->name('loadQualification');

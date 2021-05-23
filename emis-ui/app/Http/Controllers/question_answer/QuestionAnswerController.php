@@ -27,7 +27,7 @@ class QuestionAnswerController extends Controller{
             'status.required'  => 'this field is required'
         ];
         
-        if($request->action_type=="add"){
+        if($request->action_type=="add" && $request->record_type!="CategoryType"){
             $rules=array_merge($rules,
                 array('code'      =>  'required|numeric|digits:4',)
             );
@@ -38,7 +38,8 @@ class QuestionAnswerController extends Controller{
                 )
             );
         }
-        if($request->record_type=="Service" || $request->record_type=="Category" || $request->record_type=="Question"){
+        if($request->record_type=="Service" || $request->record_type=="Category" || $request->record_type=="CategoryType" 
+        || $request->record_type=="Question"){
             $rules=array_merge($rules,
                 array('parent_field'      =>  'required',)
             );
@@ -56,11 +57,11 @@ class QuestionAnswerController extends Controller{
         }
         if($request->record_type=="Question"){
             $rules=array_merge($rules,
-                array('category'        =>  'required',
+                array(
                 'answer_type'           =>  'required',)
             );
             $customMessages =array_merge($customMessages,
-                array( 'category.required'  => 'this field is required',
+                array(
                 'answer_type.required'      => 'this field is required',)
             );
         }
@@ -71,6 +72,7 @@ class QuestionAnswerController extends Controller{
             'grant_parent_field'        =>  $request['grant_parent_field'],
             'parent_field'              =>  $request['parent_field'],
             'category'                  =>  $request['category'],
+            'category_type'             =>  $request['category_type'],
             'answer_type'               =>  $request['answer_type'],
             'code'                      =>  $request['code'],
             'status'                    =>  $request['status'],
@@ -84,6 +86,9 @@ class QuestionAnswerController extends Controller{
     }
 
     public function loadQuestionaries($type=""){
+        // if($type="loadQuestion"){
+
+        // }
         $response_data = $this->apiService->listData('emis/questionAnswers/loadQuestionaries/'.$type);
         return $response_data;
     }
@@ -92,13 +97,11 @@ class QuestionAnswerController extends Controller{
         $rules = [
             'grant_parent_field'        =>  'required',
             'parent_field'              =>  'required',
-            'category'                  =>  'required',
             'question_field'            =>  'required',
         ];
         $customMessages = [
             'grant_parent_field.required'   => 'this field is required',
             'parent_field.required'         => 'this field is required',
-            'category.required'             => 'this field is required',
             'question_field.required'       => 'this field is required',
         ];
         

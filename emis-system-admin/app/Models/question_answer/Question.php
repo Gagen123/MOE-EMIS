@@ -10,10 +10,11 @@ class Question extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'parent_id',
+        'service_id',
+        'category_id',
+        'category_type_id',
         'name',
         'answer_type',
-        'code',
         'status',
         'created_by',
         'created_at',
@@ -21,10 +22,12 @@ class Question extends Model{
         'updated_at'
     ];
     public function category() {
-        return $this->belongsTo(Category::class, 'parent_id');
+        return $this->belongsTo(Category::class, 'category_id')->select('id','name');
     } 
     public function service() {
-        return $this->hasOneThrough(Service::class,Category::class,'id','id','parent_id','parent_id');
+        return $this->belongsTo(Service::class,'service_id')->select('id','parent_id','name');
     } 
-    
+    public function categorytype() {
+        return $this->belongsTo(CategoryType::class,'category_type_id')->select('id','name');
+    }
 }

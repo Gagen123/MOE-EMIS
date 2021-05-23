@@ -39,9 +39,7 @@
                                 <has-error :form="personal_form" field="name"></has-error>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i>
-                                    <img src="img/question.png" data-toggle="tooltip" title="Please provide correct date of birth. System will use this data for wishing his/her birth day" class="brand-image img-circle elevation-3" style="width:25px">
-                                </label>
+                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i></label>
                                 <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
                                 <has-error :form="personal_form" field="dob"></has-error>
                             </div> 
@@ -835,68 +833,107 @@ export default {
 
         },
         getDetailsbyCID(fieldId){
-            if($('#country_id option:selected').text().includes('Bhutan')){
-                if ($('#'+fieldId).val().length != 11){
+            //staff/loaddraftpersonalDetails/Private
+            axios.get('staff/checkThisCid/'+ $('#'+fieldId).val())
+            .then(response => {
+                let data=response.data.data;
+                if(data!=null && data.name!="" && data.status=="Created"){
                     Swal.fire({
-                        html: "Please ender 11 digit CID",
+                        html: "This person is already registered. You cannot add the same person for multipe times",
                         icon: 'error'
-                    });
+                    }); 
+                    this.personal_form.name = " ";
+                    this.personal_form.dob = " ";
+                    $('#dob').val("");
+                    personal_detail.gender="";
+                    this.personal_form.dzongkhag ="";
+                    $('#dzongkhag').val("").trigger('change');
+                    this.personal_form.gewog = "";
+                    this.personal_form.village_id = "";
+                }
+                else if(data!=null &&  data.name!="" && data.status=="Pending"){
+                    Swal.fire({
+                        html: "This person has already initaited the applicaiton process. You may check with other responsible person to complete his/her registration",
+                        icon: 'error'
+                    }); 
+                    this.personal_form.name = " ";
+                    this.personal_form.dob = " ";
+                    $('#dob').val("");
+                    personal_detail.gender="";
+                    this.personal_form.dzongkhag ="";
+                    $('#dzongkhag').val("").trigger('change');
+                    this.personal_form.gewog = "";
+                    this.personal_form.village_id = "";
                 }
                 else{
-                    axios.get('getpersonbycid/'+ $('#'+fieldId).val())
-                    .then(response => {
-                        if (JSON.stringify(response.data)!='{}'){
-                            let personal_detail = response.data.citizenDetail[0];
-                            this.personal_form.name = personal_detail.firstName + " " + personal_detail.lastName;
-                            let date_of_birth = new Date(personal_detail.dob);
-                            let month =(date_of_birth .getMonth() + 1);
-                            let day = date_of_birth .getDate();
-                            if(day<10){
-                                day='0'+day;
-                            }
-                            if(month<10){
-                                month='0'+month;
-                            }
-                            let year =date_of_birth .getFullYear();
-                            this.personal_form.dob = year+ "-"+month + "-" + day;
-                            $('#dob').val(year+ "-"+month + "-" + day);
-                            if(personal_detail.gender=="M"){
-                                personal_detail.gender="male";
-                            }
-                            else if(personal_detail.gender=="F"){
-                                personal_detail.gender="female";
-                            }
-                            else{
-                                personal_detail.gender="others";
-                            }
-                            for(let i=0; i<this.sex_idList.length;i++){
-                                if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                    $('#sex_id').val(this.sex_idList[i].id).trigger('change');
-                                    this.personal_form.sex_id =  this.sex_idList[i].id;
-                                }  
-                            }
-                            this.personal_form.dzongkhag =personal_detail.dzongkhagId;
-                            $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                            this.getgewoglist(personal_detail.dzongkhagId);
-                            this.personal_form.gewog = personal_detail.gewogId;
-                            this.getvillagelist(personal_detail.gewogId);
-                            $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
-                            this.personal_form.village_id = personal_detail.villageSerialNo;
-                        }else{
+                    if($('#country_id option:selected').text().includes('Bhutan')){
+                        if ($('#'+fieldId).val().length != 11){
                             Swal.fire({
-                                html: "No data found for this CID",
+                                html: "Please ender 11 digit CID",
                                 icon: 'error'
                             });
                         }
-                    })
-                    .catch((exception) => {
-                        Swal.fire({
-                            html: "No data found for matching CID/service down"+exception,
-                            icon: 'error'
-                        });
-                    });
+                        else{
+                            axios.get('getpersonbycid/'+ $('#'+fieldId).val())
+                            .then(response => {
+                                if (JSON.stringify(response.data)!='{}'){
+                                    let personal_detail = response.data.citizenDetail[0];
+                                    this.personal_form.name = personal_detail.firstName + " " + personal_detail.lastName;
+                                    let date_of_birth = new Date(personal_detail.dob);
+                                    let month =(date_of_birth .getMonth() + 1);
+                                    let day = date_of_birth .getDate();
+                                    if(day<10){
+                                        day='0'+day;
+                                    }
+                                    if(month<10){
+                                        month='0'+month;
+                                    }
+                                    let year =date_of_birth .getFullYear();
+                                    this.personal_form.dob = year+ "-"+month + "-" + day;
+                                    $('#dob').val(year+ "-"+month + "-" + day);
+                                    if(personal_detail.gender=="M"){
+                                        personal_detail.gender="male";
+                                    }
+                                    else if(personal_detail.gender=="F"){
+                                        personal_detail.gender="female";
+                                    }
+                                    else{
+                                        personal_detail.gender="others";
+                                    }
+                                    for(let i=0; i<this.sex_idList.length;i++){
+                                        if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
+                                            $('#sex_id').val(this.sex_idList[i].id).trigger('change');
+                                            this.personal_form.sex_id =  this.sex_idList[i].id;
+                                        }  
+                                    }
+                                    this.personal_form.dzongkhag =personal_detail.dzongkhagId;
+                                    $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                                    this.getgewoglist(personal_detail.dzongkhagId);
+                                    this.personal_form.gewog = personal_detail.gewogId;
+                                    this.getvillagelist(personal_detail.gewogId);
+                                    $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
+                                    this.personal_form.village_id = personal_detail.villageSerialNo;
+                                }else{
+                                    Swal.fire({
+                                        html: "No data found for this CID",
+                                        icon: 'error'
+                                    });
+                                }
+                            })
+                            .catch((exception) => {
+                                Swal.fire({
+                                    html: "No data found for matching CID/service down"+exception,
+                                    icon: 'error'
+                                });
+                            });
+                        }
+                    }
                 }
-            }
+            })
+            .catch((exception) => {
+                console.log('exception: '+exception );
+            });
+            
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){

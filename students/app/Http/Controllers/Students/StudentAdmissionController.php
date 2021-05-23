@@ -124,8 +124,50 @@ class StudentAdmissionController extends Controller
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    //function for student portal
+    public function saveStudentDetailsFromPortal(Request $request){
+        dd($request);
+        $rules = [
+            'snationality'              => 'required',
+            'cid_passport'              => 'required',
+            'first_name'                => 'required',
+            'dob'                       => 'required',
+            'sex_id'                    => 'required',
+            
+        ];
+        $customMessages = [
+            'snationality.required'             => 'This field is required',
+            'cid_passport.required'             => 'This field is required',
+            'first_name.required'               => 'This field is required',
+            'dob.required'                      => 'This field is required',
+            'sex_id.required'                   => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'snationality'              =>  $request->snationality,
+            'student_id'                =>  $request->student_id,
+            'cid_passport'              =>  $request->cid_passport,
+            'first_name'                =>  $request->first_name,
+            'middle_name'               =>  $request->middle_name,
+            'last_name'                 =>  $request->last_name,
+            'dob'                       =>  $request->dob,
+            'sex_id'                    =>  $request->sex_id,
+            'dzongkhag'                 =>  $request->dzongkhag, 
+            'gewog'                     =>  $request->gewog, 
+            'village_id'                =>  $request->village_id, 
+            'fulladdress'               =>  $request->fulladdress, 
+            'type'                      =>  $request->type, 
+        ];
+        $response_data = StudentPersonalDetails::create($data);
+        // $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetails', $data);
+        return $response_data;
+    }
+    
     
     public function saveStudentGardianDetails(Request $request){
+        // dd($request);
         $rules = [
             'merital_status'                        => 'required',
             'primary_contact'                       => 'required',
@@ -280,15 +322,11 @@ class StudentAdmissionController extends Controller
         }
         
         $this->validate($request, $rules, $customMessages);
-        // $update_data = StudentPersonalDetails::where('id',$request->student_id)->where('status','pending')->where('created_by',$request->user_id)->first();
         $update_data =[
             'CmnParentsMaritalStatusId'     =>  $request->merital_status,
             'PrimaryContact'           =>  $request->primary_contact,
         ];
-        // if( $request->type=="edit"){
-            
-        //     $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','guardain')");
-        // }
+      
         $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
         $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
@@ -353,6 +391,7 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    
     
     public function saveStudentClassDetails(Request $request){
         $rules = [
