@@ -352,6 +352,18 @@ const routes = [
                     { path: '/update_student_transfer', name:'update_student_transfer', component: require('./components/students/StudentAdmission/transfer/update_student_transfer.vue').default },
                 ] 
             },
+            // Aboard Student WhereAbouts 
+            { path: '/abroad_student',  
+                component: require('./components/students/StudentAdmission/StudentAboard/student_aboard_index.vue').default ,
+                children: 
+                [
+                    { path: '', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
+                    { path: '/studentaboard_add', name:'StudentAboardAdd', component: require('./components/students/StudentAdmission/StudentAboard/add_student_aboard.vue').default },
+                    { path: '/studentaboard_edit', name:'StudentAboardEdit', component: require('./components/students/StudentAdmission/StudentAboard/edit_student_aboard.vue').default },
+                    { path: '/studentaboard_list', name:'StudentAboardList', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
+                ]    
+            },
+
         ] 
     },
 

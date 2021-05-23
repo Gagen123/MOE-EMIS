@@ -12,6 +12,9 @@ use App\Models\Students\Std_Students;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
+use App\Models\Students\StudentAboard;
+
+
 
 class StudentAdmissionController extends Controller
 {

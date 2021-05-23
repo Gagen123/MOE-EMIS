@@ -142,4 +142,69 @@ class StudentAdmissionRelatedController extends Controller
         $student_awards = $this->apiService->listData('emis/students/loadStudentWhereabouts/'.$param);
         return $student_awards;
     }
+
+    ///Student Residing Aboard
+    //load function 
+    public function loadAboardList($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadlist = $this->apiService->listData('emis/students/loadAboardList/'.$orgId);
+        return $loadlist;
+    }
+    //save function 
+    public function saveStudentAboard(Request $request){
+        $rules = [
+            'cid_passport'          =>  'required',
+           // 'first_name'            =>  'required',
+          //  'middle_name'           =>  'required',
+          //  'last_name'             =>  'required',
+            // 'dob'                   =>  'required',
+            // 'sex_id'                =>  'required',
+            // 'mother_tongue'         =>  'required',
+            // 'status'                =>  'required',
+            // 'fulladdress'           =>  'required',
+            // 'country'               =>  'required',
+            // 'city'                  =>  'required',
+        ];
+        $customMessages = [
+            'cid_passport.required'      => 'cid_passport is required',
+          // 'first_name.required'        => 'first_name is required',
+          //  'middle_name.required'       => 'middle_name is required',
+          // 'last_name'                  => 'last_name is required',
+            // 'dob'                        => 'dob is required',
+            // 'sex_id'                     => 'sex_id is required',
+            // 'mother_tongue'              => 'mother_tongue is required',
+            // 'status'                     => 'status is required',
+            // 'fulladdress'                => 'fulladdress is required',
+            // 'country'                    => 'country is required',
+            // 'city'                       => 'city is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $personal_details =[
+            'organizationId'             =>  $this->getWrkingAgencyId(),
+            'cid_passport'               =>  $request->cid_passport,
+            'first_name'                 =>  $request->first_name,
+            'middle_name'                =>  $request->middle_name,
+            'last_name'                  =>  $request->last_name,
+            'dob'                        =>  $request->dob,
+            'sex_id'                     =>  $request->sex_id, 
+            'mother_tongue'              =>  $request->mother_tongue,
+            'status'                     =>  $request->status,
+            'fulladdress'                =>  $request->fulladdress, 
+            'country'                    =>  $request->country,        
+            'city'                       =>  $request->city,            
+            'id'                         =>  $request->id,
+            'user_id'                    =>  $this->userId()
+
+        ];
+     //   dd($personal_details);
+        try{
+            $response_data= $this->apiService->createData('emis/students/saveStudentAboard', $personal_details);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
 }
