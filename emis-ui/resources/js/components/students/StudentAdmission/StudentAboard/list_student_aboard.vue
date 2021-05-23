@@ -85,6 +85,7 @@ export default {
         this.loadactivecountryList();
         this.loadAboardList();
         
+
     },
 }
 </script>

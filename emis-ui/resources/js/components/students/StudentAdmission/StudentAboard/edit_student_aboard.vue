@@ -291,7 +291,7 @@ export default {
             
         },
     },
-     mounted() { 
+    mounted() { 
         this.loadAllActiveMasters('all_country');
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('active_mother_tongue');
@@ -304,6 +304,17 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.form.id=this.$route.params.data.id;
+        this.form.cid_passport=this.$route.params.data.cid_passport;
+        this.form.first_name=this.$route.params.data.first_name;
+        this.form.middle_name=this.$route.params.data.middle_name;
+        this.form.last_name=this.$route.params.data.last_name;
+        this.form.sex_id=this.$route.params.data.sex_id;
+        this.form.mother_tongue=this.$route.params.data.mother_tongue;
+        this.form.status=this.$route.params.data.status;
+        this.form.fulladdress=this.$route.params.data.fulladdress;
+        this.form.country=this.$route.params.data.country;
+        this.form.city=this.$route.params.data.city;
     }
 }
 </script>
