@@ -14,6 +14,7 @@ class Service extends Model{
         'name',
         'code',
         'status',
+        'type',
         'created_by',
         'created_at',
         'updated_by',

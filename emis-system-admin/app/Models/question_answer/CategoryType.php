@@ -13,6 +13,7 @@ class CategoryType extends Model{
         'parent_id',
         'name',
         'status',
+        'type',
         'created_by',
         'created_at',
         'updated_by',

@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+            
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
@@ -109,7 +110,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -131,14 +132,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(role, index) in file_form.fileUpload' :key="index">
-                                                <td>                                
-                                                    <input type="text" name="file_name" id="file_name" class="form-control" v-model="file_form.file_name" :class="{ 'is-invalid': file_form.errors.has('file_name') }" @change="remove_err('file_name')" placeholder="File Name"/>
+                                            <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
+                                                <!-- <td>                                
+                                                    <input type="text" name="file_name" id="file_name" class="form-control" v-model="file.file_name" :class="{ 'is-invalid': file_form.errors.has('file_name') }" @change="remove_err('file_name')" placeholder="File Name"/>
                                                     <has-error :file_form="form" field="file_name"></has-error>
                                                 </td>
                                                 <td>                                
                                                     <input type="file" name="file_upload" id="file_upload" class="form-control" v-on:change="onChangeFileUpload" :class="{ 'is-invalid': file_form.errors.has('file_upload') }" @change="remove_err('file_upload')"/>
                                                     <has-error :file_form="form" field="file_upload"></has-error>
+                                                </td> -->
+                                                <td>
+                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                </td>
+                                                <td>                                
+                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -158,7 +167,7 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')"> Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -208,13 +217,20 @@ export default {
             streamList:[],
             classStreamList:[],
             fileUpload: [],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            draft_data:[],
+            // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             file_form: new form({
                 id:'',
                 file_name: '',
                 fileUpload: [],
-                record_type:'add'
+                record_type:'add',
+                applicaiton_number:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
 
             form: new form({
@@ -345,7 +361,7 @@ export default {
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
-                this.form.ref_docs.push({name:$('#fileName'+currentcount).val(), attach: e.target.files[0],remarks:$('#remarks'+currentcount).val()});
+                this.file_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
                 $('#fileName'+currentcount).prop('readonly',true);
             }
             else{
@@ -450,7 +466,7 @@ export default {
                             }
                             if(response!="" && response!="No Screen"){
                                 let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'acknowledgement',params: {data:message}});
+                                this.$router.push({name:'estb_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
                                     title: 'Application for new establishment has been submitted for further action'
@@ -468,6 +484,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
+                            this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -478,7 +496,23 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    this.file_form.post('organization/saveUploadedFiles',this.form)
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    }
+                    let formData = new FormData();
+                    formData.append('id', this.file_form.id);
+                    formData.append('ref_docs[]', this.file_form.ref_docs);
+                    for(let i=0;i<this.file_form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                        // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
+                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                    }
+                    formData.append('applicaiton_number', this.file_form.applicaiton_number);
+                    
+                    axios.post('organization/saveUploadedFiles', formData, config)
+                    // this.file_form.post('organization/saveUploadedFiles',this.form)
                     .then((response) => {
                         if(response.data!=""){
                             this.change_tab(nextclass);
@@ -494,7 +528,12 @@ export default {
                 }
             }
         },
-
+        loadpendingdetails(type){
+            axios.get('organization/loaddraftApplication/'+type)
+              .then(response => {
+                this.draft_data = response.data.data;
+            });
+        },
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -655,7 +694,7 @@ export default {
     },
     
     created(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
         this.getLevel();
         this.getLocation();
         // this.checkPendingApplication();
@@ -690,9 +729,10 @@ export default {
         this.getClassStream();
         this.getLevel();
         this.getLocation();
-        this.loadactivedzongkhagList();
+        // this.loadactivedzongkhagList();
         this.loaddOrganizationDetails();
         this.getOrgList();
+        this.loadpendingdetails('Public_School');
     }, 
 }
 </script>
