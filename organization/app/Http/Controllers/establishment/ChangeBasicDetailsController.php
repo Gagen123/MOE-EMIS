@@ -272,8 +272,72 @@ class ChangeBasicDetailsController extends Controller
         ];
 
         $changeDetails = ApplicationEstDetailsChange::create($data);
+        $EstDetailsChangeId = $changeDetails->id;
+
+
+        foreach($request->class as $key => $classId){
+            $stream_exists = $this->checkStreamExists($classId);
+            
+            if(empty($stream_exists)){
+
+                $classStream = [
+                    'ApplicationDetailsId'  => $EstDetailsChangeId,
+                    'classId'               => $classId,
+                    'streamId'              => '',
+                    'created_by'            => $request->user_id,
+                    'created_at'            => date('Y-m-d h:i:s'),
+                ];
+                
+                $class = ApplicationClassStream::create($classStream);
+
+            } 
+        }
+        if($request->stream!=null && $request->stream!=""){
+            foreach($request->stream as $key2 => $classStreamId){
+                $class_stream_data = $this->getClassStreamId($classStreamId);
+    
+                foreach($class_stream_data as $v){
+                    $classStream = [
+                        'ApplicationDetailsId'  => $EstDetailsChangeId,
+                        'classId'               => $v->classId,
+                        'streamId'              => $v->streamId,
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    $class = ApplicationClassStream::create($classStream);
+                }
+            }
+        }
 
         return $changeDetails;
+    }
+
+    /**
+     * Check whether a class has streams or not
+     */
+    private function checkStreamExists($classId){
+        $data = DB::table('class_stream_mappings')
+                ->select('streamId', 'classId')
+                ->where('classId', $classId)
+                ->get()
+                ->toArray();
+
+        return $data;
+
+    }
+
+    /**
+     * Get class and stream id based on id
+     */
+    private function getClassStreamId($id){
+        $data = DB::table('class_stream_mappings')
+                ->select('classId', 'streamId')
+                ->where('id', $id)
+                ->get()
+                ->toArray();
+
+        return $data;
+
     }
 
     private function extractChangeInPropreitorData($request, $applicationDetailsId){
@@ -297,7 +361,7 @@ class ChangeBasicDetailsController extends Controller
             'proprietorEmail'               => $request['proprietorEmail']
         ];
 
-        $propDetails = ApplicationProprietorDetails::create($data);
+        $propDetails = ApplicationProprietorDetails::create($prop_data);
 
         return $propDetails;
         
