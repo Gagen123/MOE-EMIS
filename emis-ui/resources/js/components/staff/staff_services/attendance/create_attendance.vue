@@ -73,7 +73,7 @@ export default {
     },
     methods: {
         
-        loadStaffList(uri='loadCommons/loadFewDetailsStaffList/userdzongkhagwise/NA'){
+        loadStaffList(uri='loadCommons/loadFewDetailsStaffList/userworkingagency/NA'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

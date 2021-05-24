@@ -3,7 +3,7 @@
         <div class="card card-primary card-outline"> 
             <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
                 <span class="card-title">
-                    <b>Food Release</b>
+                    <b>Stock Received</b>
                 </span>
                 <span class="fa-pull-right pr-2">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="loadpage('StockReceivedList')"><i class="fa fa-list"></i> List</button>

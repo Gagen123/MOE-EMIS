@@ -51,6 +51,7 @@ class MessManagementController extends Controller
             'dzongkhag'                =>  $request['dzongkhag'],
             'organizaiton'             =>  $request['organizaiton'],
             'term'                     =>  $request['term'],
+            'remarks'                  =>  $request['remarks'],
             'id'                       =>  $request['id'],
             'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
@@ -121,12 +122,13 @@ class MessManagementController extends Controller
             'organizationId'                =>  $this->getWrkingAgencyId(),
             'dateOfreceived'                =>  $request['dateOfreceived'],
             'term'                          =>  $request['term'],
+            'remarks'                       =>  $request['remarks'],
             'id'                            =>  $request['id'],
             'items_received'                =>  $request->items_received,
             'user_id'                       =>  $this->userId()
 
         ];
-        // dd($stockreceived);
+         dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;

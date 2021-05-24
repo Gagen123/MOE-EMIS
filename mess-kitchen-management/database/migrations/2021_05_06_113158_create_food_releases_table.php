@@ -15,10 +15,11 @@ class CreateFoodReleasesTable extends Migration
     {
         Schema::create('food_releases', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->date('dateOfrelease');
+            $table->date('dateOfrelease')->nullable(false);
             $table->char('dzongkhag_id',36)->nullable(false);
             $table->char('org_id',36)->nullable(false);
-            $table->char('term_id',36);
+            $table->char('term_id',36)->nullable(false);
+            $table->string('remarks')->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

@@ -15,6 +15,7 @@ class StockReceived extends Model
         'organizationId',
         'dateOfreceived',
         'term_id',
+        'remarks',
         'created_by',
         'updated_by'
     ];

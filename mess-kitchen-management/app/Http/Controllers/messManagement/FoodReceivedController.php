@@ -30,7 +30,7 @@ class FoodReceivedController extends Controller
       ];
       
       $stckrcv = StockReceived::create($stockreceive);
-     // dd($stckrcv);
+     //dd($stckrcv);
         foreach  ($request->items_received as $i=> $item){
             $stockitemrcv = array(
              'stockreceivedId'           =>  $stckrcv->id,
@@ -41,12 +41,12 @@ class FoodReceivedController extends Controller
              'updated_by'                =>  $request->user_id,
              'created_at'                =>  date('Y-m-d h:i:s')
             );
-            StockReceivedItem::create($stockitemrcv);
+          $stckrcv =  StockReceivedItem::create($stockitemrcv);
          // dd($stockitemrcv);
         }
          //  dd('m here');
         return $this->successResponse($stckrcv, Response::HTTP_CREATED);
-       // return($stckrcv);
+        return($stckrcv);
     }
 
     public function loadFoodReleaseListing($org_Id=""){

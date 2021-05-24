@@ -290,7 +290,7 @@ const routes = [
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
         children: [
-            { path: '/',name:'student_admission', component: require('./components/students/StudentAdmission/student_admission_list.vue').default },
+            { path: '/', name:'student_admission', component: require('./components/students/StudentAdmission/student_admission_list.vue').default },
             { path: '/student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
                 children: [ 
                     { path: '/', name:'student_new_admission', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
@@ -352,6 +352,18 @@ const routes = [
                     { path: '/update_student_transfer', name:'update_student_transfer', component: require('./components/students/StudentAdmission/transfer/update_student_transfer.vue').default },
                 ] 
             },
+            // Aboard Student WhereAbouts 
+            { path: '/abroad_student',  
+                component: require('./components/students/StudentAdmission/StudentAboard/student_aboard_index.vue').default ,
+                children: 
+                [
+                    { path: '', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
+                    { path: '/studentaboard_add', name:'StudentAboardAdd', component: require('./components/students/StudentAdmission/StudentAboard/add_student_aboard.vue').default },
+                    { path: '/studentaboard_edit', name:'StudentAboardEdit', component: require('./components/students/StudentAdmission/StudentAboard/edit_student_aboard.vue').default },
+                    { path: '/studentaboard_list', name:'StudentAboardList', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
+                ]    
+            },
+
         ] 
     },
 
@@ -360,7 +372,7 @@ const routes = [
     { path: '/student_services', component: require('./components/students/StudentServices/index.vue').default,
     children: [
         //Student => Houses
-        { path: '/student_houses', component: require('./components/students/StudentServices/Houses/student_houses.vue').default,
+        { path: '/student_houses', name:'student_services', component: require('./components/students/StudentServices/Houses/student_houses.vue').default,
             children: [
                 { path: '/', name:'student_houses', component: require('./components/students/StudentServices/Houses/student_houses_list.vue').default },
                 { path: '/student_houses_list', name:'student_houses_list', component: require('./components/students/StudentServices/Houses/student_houses_list.vue').default },
@@ -402,7 +414,7 @@ const routes = [
     { path: '/student_programs_clubs', component: require('./components/students/StudentExtraCurricular/programs_clubs_index.vue').default,
     children: [
         //Student => Programs and Clubs
-        { path: '/student_programs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs.vue').default,
+        { path: '/student_programs', name:'student_programs_clubs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs.vue').default,
             children: [
                 { path: '/', name:'student_programs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs_list.vue').default },
                 { path: '/student_programs_list', name:'student_programs_list', component: require('./components/students/StudentExtraCurricular/Programs/student_programs_list.vue').default },
@@ -505,7 +517,7 @@ const routes = [
     //Student Health
     { path: '/student_health', component: require('./components/students/StudentHealth/index.vue').default,
     children: [
-        { path: '/std_health_screening', 
+        { path: '/std_health_screening', name:'student_health',
             component: require('./components/students/StudentHealth/HealthScreening/std_health_screening.vue').default,
             children: [
                 { path: '/', name:'std_health_screening', component: require('./components/students/StudentHealth/HealthScreening/std_health_screening_list.vue').default },

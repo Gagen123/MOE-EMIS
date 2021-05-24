@@ -17,6 +17,7 @@ class CreateStockReceivedsTable extends Migration
             $table->uuid('id')->primary();
             $table->date('dateOfreceived',36);
             $table->char('term_id',36);
+            $table->string('remarks');
             $table->char('organizationId',36)->nullable(false);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);

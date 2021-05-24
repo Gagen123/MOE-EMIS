@@ -15,6 +15,7 @@ class CreateStockIssuedsTable extends Migration
     {
         Schema::create('stock_issueds', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('organizationId',36);
             $table->date('dateOfissue');
             $table->char('item',36);
             $table->char('quantity',36);

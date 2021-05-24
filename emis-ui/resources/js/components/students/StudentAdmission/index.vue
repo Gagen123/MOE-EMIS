@@ -55,6 +55,12 @@
                         Admit Transferer
                     </router-link>
                 </li>
+                <li class="nav-item pr-1">
+                    <router-link to="/abroad_student" id="updates" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Student Residing Abroad 
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>
