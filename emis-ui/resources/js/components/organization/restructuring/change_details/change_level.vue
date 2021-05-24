@@ -10,7 +10,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-body pt-0 mt-1">organizationId
+            <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
@@ -19,7 +19,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" v-model="form." :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
@@ -79,7 +79,7 @@ export default {
             streamList:[],
             classStreamList:[],
             form: new form({
-                organizationId:'', application_type:'level_change', class:[], stream:[], :'',
+                organizationId:'', application_type:'level_change', class:[], stream:[], 
                 application_for:'Change in Level', action_type:'add', status:'pending'
             })
         } 
@@ -167,7 +167,7 @@ export default {
             }
         },
         
-        change_tab(nextclass){
+        change_tab(nextclass){ 
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
             $('.'+nextclass+' >a').addClass('active');
