@@ -250,6 +250,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
+            $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
+            $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
             $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
             $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);

@@ -30,6 +30,7 @@ use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\establishment\HeadQuaterDetails;
 use App\Models\OrgProfile;
+use App\Models\generalInformation\AttachmentFile;
 
 
 class EstablishmentController extends Controller
@@ -108,6 +109,7 @@ class EstablishmentController extends Controller
         // }
 
         $response_data = $this->insertData($establishment_data, $dataModel);
+        $response_data->applicaiton_details=$inserted_application_data;
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -603,6 +605,21 @@ class EstablishmentController extends Controller
         ->select('o.organizationId','s.section', 'o.classId','o.streamId')->where('o.organizationId', $id)->orderby('o.classId')->get();
         return $this->successResponse($response_data);
     }
+    
+    public function saveUploadedFiles(Request $request){
+        $doc;
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $attach =[
+                    'orgRecordId'                =>  $att['applicaiton_number'],
+                    'filePath'                   =>  $att['path'],
+                    'title'                      =>  $att['original_name'],
+                ];
+                $doc = AttachmentFile::create($attach);
+            }
+        }
+        return $doc;
+    }
 
     public function udpateOrgProfile(Request $request){
         $org_det=OrgProfile::where('org_id',$request->ori_id)->first();
@@ -640,5 +657,13 @@ class EstablishmentController extends Controller
             $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
         }
         return $this->successResponse($response_data);
+    }
+    
+    public function loaddraftApplication($type="",$user_id=""){
+        $app_details=  ApplicationDetails::where('status','pending')->where('created_by',$user_id)->where('establishment_type',$type)->first();
+        if($app_details!=""){
+            $app_details->estb_details=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
+        }
+        return $this->successResponse($app_details);
     }
 }
