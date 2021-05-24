@@ -19,7 +19,6 @@ class ApplicationAttachments extends Model
     protected $fillable = [
         'id',
         'ApplicationDetailsId',
-        'ApplicationVerificationId',
         'name',
         'path'
     ];

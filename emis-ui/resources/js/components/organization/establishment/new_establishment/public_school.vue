@@ -133,14 +133,6 @@
                                         </thead>
                                         <tbody>
                                             <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
-                                                <!-- <td>                                
-                                                    <input type="text" name="file_name" id="file_name" class="form-control" v-model="file.file_name" :class="{ 'is-invalid': file_form.errors.has('file_name') }" @change="remove_err('file_name')" placeholder="File Name"/>
-                                                    <has-error :file_form="form" field="file_name"></has-error>
-                                                </td>
-                                                <td>                                
-                                                    <input type="file" name="file_upload" id="file_upload" class="form-control" v-on:change="onChangeFileUpload" :class="{ 'is-invalid': file_form.errors.has('file_upload') }" @change="remove_err('file_upload')"/>
-                                                    <has-error :file_form="form" field="file_upload"></has-error>
-                                                </td> -->
                                                 <td>
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
@@ -461,7 +453,7 @@ export default {
                             if(response.data=="No Screen"){
                                 Toast.fire({  
                                     icon: 'error',
-                                    title: 'Technical Errors: please contact system admimnistrator for further details'
+                                    title: 'Technical Errors: please contact system administrator for further details'
                                 });
                             }
                             if(response!="" && response!="No Screen"){

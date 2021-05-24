@@ -182,6 +182,11 @@ class EstablishmentController extends Controller
         return $streamInCheckbox;
     }
 
+    public function loadOrgApplications(){
+        $loadOrgApplications = $this->apiService->listData('emis/organization/establishment/loadOrgApplications/'.$this->userId() );
+        return $loadOrgApplications;
+    }
+
     public function loadOrganizationDetails(){        
         $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->userId() );
         return $loadOrganizationDetails;

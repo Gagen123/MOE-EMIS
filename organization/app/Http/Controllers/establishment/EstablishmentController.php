@@ -31,7 +31,7 @@ use App\Models\OrganizationClassStream;
 use App\Models\establishment\HeadQuaterDetails;
 use App\Models\establishment\ApplicationEstPublic;
 use App\Models\OrgProfile;
-use App\Models\generalInformation\AttachmentFile;
+use App\Models\establishment\ApplicationAttachments;
 
 
 class EstablishmentController extends Controller
@@ -277,17 +277,35 @@ class EstablishmentController extends Controller
             } 
         }
 
-        foreach($request->stream as $key2 => $classStreamId){
-            $class_stream_data = $this->getClassStreamId($classStreamId);
-            foreach($class_stream_data as $v){
-                $classStream = [
-                    'ApplicationDetailsId'  => $request->applicaiton_number,
-                    'classId'               => $v->classId,
-                    'streamId'              => $v->streamId,
-                    'created_by'            => $request->user_id,
-                    'created_at'            => date('Y-m-d h:i:s'),
-                ];
-                $class = ApplicationClassStream::create($classStream);
+        // foreach($request->stream as $key2 => $classStreamId){
+        //     $class_stream_data = $this->getClassStreamId($classStreamId);
+        //     foreach($class_stream_data as $v){
+        //         $classStream = [
+        //             'ApplicationDetailsId'  => $request->applicaiton_number,
+        //             'classId'               => $v->classId,
+        //             'streamId'              => $v->streamId,
+        //             'created_by'            => $request->user_id,
+        //             'created_at'            => date('Y-m-d h:i:s'),
+        //         ];
+        //         $class = ApplicationClassStream::create($classStream);
+
+        
+         //this above is commented with conflict   
+
+        if($request->stream!=null && $request->stream!=""){
+            foreach($request->stream as $key2 => $classStreamId){
+                $class_stream_data = $this->getClassStreamId($classStreamId);
+    
+                foreach($class_stream_data as $v){
+                    $classStream = [
+                        'ApplicationDetailsId'  => $application_details->application_no,
+                        'classId'               => $v->classId,
+                        'streamId'              => $v->streamId,
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    $class = ApplicationClassStream::create($classStream);
+                }
             }
         }
 
@@ -344,6 +362,13 @@ class EstablishmentController extends Controller
      */
     public function loadOrganizationDetails($user_id=""){
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','pending')->first());
+    }
+
+    /**
+     * method to load organization applications
+     */
+    public function loadOrgApplications($user_id=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','submitted')->get());
     }
 
     /**
@@ -605,15 +630,18 @@ class EstablishmentController extends Controller
     }
     
     public function saveUploadedFiles(Request $request){
+        
         $doc;
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
+                $application_details=  ApplicationDetails::where('application_no',$att['applicaiton_number'])->first();
                 $attach =[
-                    'orgRecordId'                =>  $att['applicaiton_number'],
-                    'filePath'                   =>  $att['path'],
-                    'title'                      =>  $att['original_name'],
+                    'ApplicationDetailsId'       =>  $application_details->id,
+                    'path'                   =>  $att['path'],
+                    'name'                      =>  $att['original_name'],
                 ];
-                $doc = AttachmentFile::create($attach);
+
+                $doc = ApplicationAttachments::create($attach);
             }
         }
         return $doc;
