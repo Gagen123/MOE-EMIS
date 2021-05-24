@@ -10,6 +10,7 @@
                     <option value="change_feeding_details"> Change Feeding Details </option>
                     <option value="change_level"> Change Level </option>
                     <option value="change_sen_details"> Change SEN Details </option>
+                    <option value="change_proprietor_details"> Change Proprietor Details </option>
                     <option value="change_all_details"> Change All Details </option>
                 </select>
                 <has-error :form="form" field="establishment_type"></has-error>

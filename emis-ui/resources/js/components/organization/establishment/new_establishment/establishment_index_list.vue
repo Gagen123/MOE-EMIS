@@ -4,25 +4,17 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >School Name</th>
-                    <th >Category</th>
-                    <th >Level</th>
+                    <th >Application No.</th>
+                    <th >Application For</th>
                     <th >Status</th>
-                    <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                        </div>
-                    </td>
+                    <td>{{ item.application_no}}</td>
+                    <td>{{ item.establishment_type}}</td>
+                    <td>{{ item.status}}</td>
                 </tr>
             </tbody>
         </table>
@@ -37,7 +29,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentRecords/'+this.id){
+        loadDataList(uri='organization/loadOrgApplications'){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -37,7 +37,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('class-tab')">Save <i class="fa fa-arrow-right"></i></button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -64,12 +64,8 @@ export default {
             classList:[],
             streamList:[],
             form: new form({
-                organizationId:'',name:'',level:'1',category:'1',dzongkhag:'',gewog:'',chiwog:'',
-                locationType:'1',geoLocated:'0',senSchool:'0', parentSchool:'',coLocatedParent:'0',
-                cid:'',fullName:'',phoneNo:'',email:'',status:'pending'
-            }),
-            classStreamForm: new form({
-                id: '',class:[], stream:[],application_number:'',status:'submitted'
+                organizationId:'', application_type:'sen_change', senSchool:'0',
+                application_for:'Change in SEN details', action_type:'add', status:'pending'
             })
         } 
     },
@@ -92,23 +88,6 @@ export default {
         },
 
         /**
-         * method to populate dropdown
-         */
-        async changefunction(id){
-            if(id=="dzongkhag"){
-                this.form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
-            }
-            if(id=="gewog"){
-                this.form.gewog=$('#gewog').val();
-                this.getvillagelist();
-            }
-            if(id=="chiwog"){
-                this.form.chiwog=$('#chiwog').val();
-            }
-        },
-
-        /**
          * method to show next and previous tab
          */
         shownexttab(nextclass){ 
@@ -122,7 +101,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveChangeClass')
+                        this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -147,6 +126,7 @@ export default {
                     }
                 });
             }
+            
         },
         
         change_tab(nextclass){
@@ -157,6 +137,21 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();   
+            }
+            
         },
 
         applyselect2(){

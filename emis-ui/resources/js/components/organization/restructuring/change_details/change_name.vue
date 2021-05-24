@@ -17,13 +17,13 @@
                             <form class="form-horizontal">
                             <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Select Organization:<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getCategory(),remove_error('level')">
+                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
-                                    <has-error :form="form" field="level"></has-error>
+                                    <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -61,19 +61,11 @@ export default {
     data(){
         return{
             orgList:'',
-            levelList:[],
-            locationList:[],
-            dzongkhagList:[],
-            gewog_list:[],
-            villageList:[], 
-            classList1:[],
-            streamList1:[],
             classList:[],
             streamList:[],
             form: new form({
-                organizationId:'',name:'',level:'1',category:'1',dzongkhag:'',gewog:'',chiwog:'',
-                locationType:'1',geoLocated:'0',senSchool:'0', parentSchool:'',coLocatedParent:'0',
-                cid:'',fullName:'',phoneNo:'',email:'',status:'pending'
+                organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change', 
+                application_for:'Change in Name', action_type:'add', status:'pending'
             }),
         } 
     },
@@ -109,7 +101,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveChangeClass')
+                        this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -145,6 +137,21 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();   
+            }
+            
         },
 
         applyselect2(){

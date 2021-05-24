@@ -17,13 +17,13 @@
                             <form class="form-horizontal">
                             <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Select Organization:<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getCategory(),remove_error('level')">
+                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
-                                    <has-error :form="form" field="level"></has-error>
+                                    <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -44,7 +44,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('class-tab')">Save <i class="fa fa-arrow-right"></i></button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
                                 </div>
                             </div>
                         </div>
@@ -61,23 +61,12 @@ export default {
     data(){
         return{
             orgList:'',
-            levelList:[],
-            locationList:[],
-            dzongkhagList:[],
-            gewog_list:[],
-            villageList:[], 
-            classList1:[],
-            streamList1:[],
             classList:[],
             streamList:[],
             form: new form({
-                organizationId:'',name:'',level:'1',category:'1',dzongkhag:'',gewog:'',chiwog:'',
-                locationType:'1',geoLocated:'0',senSchool:'0', parentSchool:'',coLocatedParent:'0',
-                cid:'',fullName:'',phoneNo:'',email:'',status:'pending'
+                organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
+                application_for:'Change in Feeding Details', action_type:'add', status:'pending'
             }),
-            classStreamForm: new form({
-                id: '',class:[], stream:[],application_number:'',status:'submitted'
-            })
         } 
     },
     methods: {
@@ -91,70 +80,6 @@ export default {
             }
         }, 
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
-        
-
-        /**
-         * method to get active dzongkhag list
-         */
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.dzongkhagList =  data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
-        /**
-         * method to get gewog list
-         */
-        async getgewoglist(id){
-            let dzoId=$('#dzongkhag').val();
-            if(id!="" && dzoId==null){
-                dzoId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.gewog_list = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        /**
-         * method to get gewog list
-         */
-        async getvillagelist(id){
-            let gewogId=$('#gewog').val();
-            if(id!="" && gewogId==null){
-                gewogId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/gewog/'+this.form.gewog;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-
-       
         /**
          * method to get location in dropdown
          */
@@ -177,49 +102,16 @@ export default {
          * method to populate dropdown
          */
         async changefunction(id){
-            if(id=="dzongkhag"){
-                this.form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
             }
-            if(id=="gewog"){
-                this.form.gewog=$('#gewog').val();
-                this.getvillagelist();
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();   
             }
-            if(id=="chiwog"){
-                this.form.chiwog=$('#chiwog').val();
-            }
+            
         },
-
-        /**
-         * method to get class in checkbox
-         */
-        getApplicationNo:function(){
-            axios.get('/organization/getApplicationNo')
-              .then(response => {
-                this.form.id = response.data;
-            });
-        },
-
-        /**
-         * method to show private fields
-         */
-        showprivatedetails(type){
-            if(type=='private'){
-                $('#privatedetails').show();
-            }
-            else{
-                $('#privatedetails').hide();
-            }
-        },
-
-        show_parent_school_details(param){
-            if(param){
-                $('#parentDetails').show();
-            }
-            else{
-                $('#parentDetails').hide();
-            }
-        } ,
 
         /**
          * method to show next and previous tab
@@ -235,7 +127,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveChangeClass')
+                        this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -259,27 +151,6 @@ export default {
                         })
                     }
                 });
-            }
-            else{
-                if(nextclass=="class-tab"){
-                     this.form.post('organization/saveChangeBasicDetails',this.form)
-                    .then((response) => {
-                        this.classStreamForm.application_number=response.data.data.applicationNo;
-                       Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                        this.change_tab(nextclass);
-                    })
-                    .catch((e) => {
-                        this.change_tab('organization-tab');
-                        this.applyselect2();
-                        console.log("error: "+e)
-                    })
-                }
-                else{
-                    this.change_tab(nextclass);
-                }
             }
         },
         
@@ -309,37 +180,6 @@ export default {
             if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
                 $('#locationType').addClass('select2-hidden-accessible');
             }
-        },
-
-         getScreenAccess(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                let data = response.data.data.acess_level;
-                if(data != "Org"){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have no access to this page.');
-                }
-                
-            })    
-            .catch(errors => { 
-                console.log(errors)
-            });
-        },
-
-        checkPendingApplication(){
-            axios.get('organization/checkPendingApplication/change')
-            .then((response) => {  
-                let data=response.data;
-                if(data!=""){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-                }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
-            });
         },
 
 
@@ -374,58 +214,6 @@ export default {
                 $('#feedingDetails').hide();
             }
         },
-
-        /**
-         * method to current details
-        */        
-        loadCurrentOrgDetails(){
-            axios.get('organization/getFullSchoolDetials/sessionDet')
-            .then((response) => {  
-                let data=response.data.data;
-                this.form.id        =   data.id;
-                this.form.name      =   data.name;
-                this.form.level     =   data.levelId;
-                this.form.category  =   data.category;
-                this.form.locationType  =   data.locationId;
-
-                //to populate parent school details if category is private
-                if(data.isSenSchool == 1){
-                    this.show_parent_school_details(true);
-                }
-                $('#dzongkhag').val(data.dzongkhagId).trigger('change');
-                this.form.dzongkhag = data.dzongkhagId;
-                this.getgewoglist(data.dzongkhagId);
-                 $('#gewog').val(data.gewogId).trigger('change');
-                this.form.gewog = data.gewogId;
-                this.getvillagelist(data.gewogId);
-                this.form.chiwog = data.chiwogId;
-                this.form.geoLocated                =   data.isGeopoliticallyLocated;
-                this.form.senSchool                 =   data.isSenSchool;
-                this.form.parentSchool              =   data.parentSchoolId;
-                this.form.coLocatedParent           =   data.isColocated;
-                let prop=data.proprietor;
-                for(let i=0;i<prop.length;i++){
-                    this.form.cid = prop[i].cid;
-                    this.form.fullName = prop[i].fullName;
-                    this.form.phoneNo = prop[i].phoneNo;
-                    this.form.email = prop[i].email;
-                    this.showprivatedetails('private');
-                }
-                this.classList1=data.class_section;
-                this.streamList1=data.sections;
-                // for(let i=0;i<data.class_section.length;i++){
-                //     $('#'+data.class_section[i].classId).prop('checked',true);
-                //     this.form.class.push(data.class_section[i].classId)
-                //     for(let j=0;j<data.sections.length;j++){  
-                //         $('#'+data.class_section[i].classId+data.sections[j].streamId).prop('checked',true);
-                //         //this.form.stream.push(data.class_section[i].classId+'##'+data.sections[j].streamId);
-                //     } 
-                // }
-            })
-            .catch((error) => {  
-                console.log("Error: "+error);
-            });
-        },
         
     },
     
@@ -442,16 +230,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getScreenAccess();
-        this.getClass();
-        this.getStream();  
-        this.checkPendingApplication();
-        this.getLevel();
-        this.getLocation();
+        
         this.getOrgList();
-        this.loadactivedzongkhagList();
-        this.loadCurrentOrgDetails();
-        this.getApplicationNo();
     }
 }
 </script>

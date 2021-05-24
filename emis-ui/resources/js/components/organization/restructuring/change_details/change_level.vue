@@ -10,20 +10,20 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-body pt-0 mt-1">
+            <div class="card-body pt-0 mt-1">organizationId
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <form class="form-horizontal">
                             <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Select Organization:<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getCategory(),remove_error('level')">
+                                    <select name="organizationId" v-model="form." :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
-                                    <has-error :form="form" field="level"></has-error>
+                                    <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -44,29 +44,28 @@
                             </div>
                             <br>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <span v-for="(item, key, index) in  classList" :key="index">
+                                <span v-for="(item, key, index) in  classStreamList" :key="index">
                                     <br>
-                                    <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-for="(stm, key, index) in streamList" :key="index" >
-                                        <span v-if="item.class=='XI' || item.class=='XII'">
+                                    <input type="checkbox" v-model="form.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                        <span v-if="item.class=='Class 11' || item.class=='Class 12'">
                                             <br>
-                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                            <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
+                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
                                         </span>
-                                    </span>
                                 </span> 
                             </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('class-tab')">Save <i class="fa fa-arrow-right"></i></button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>level
         
     </div>
 </template>
@@ -76,22 +75,12 @@ export default {
     data(){
         return{
             orgList:'',
-            levelList:[],
-            locationList:[],
-            dzongkhagList:[],
-            gewog_list:[],
-            villageList:[], 
-            classList1:[],
-            streamList1:[],
             classList:[],
             streamList:[],
+            classStreamList:[],
             form: new form({
-                organizationId:'',name:'',level:'1',category:'1',dzongkhag:'',gewog:'',chiwog:'',
-                locationType:'1',geoLocated:'0',senSchool:'0', parentSchool:'',coLocatedParent:'0',
-                cid:'',fullName:'',phoneNo:'',email:'',status:'pending'
-            }),
-            classStreamForm: new form({
-                id: '',class:[], stream:[],application_number:'',status:'submitted'
+                organizationId:'', application_type:'level_change', class:[], stream:[], :'',
+                application_for:'Change in Level', action_type:'add', status:'pending'
             })
         } 
     },
@@ -117,18 +106,6 @@ export default {
             });
         },
 
-       
-        /**
-         * method to get location in dropdown
-         */
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-            });
-        },
-
         getOrgList(uri = '/organization/getOrgList'){
             axios.get(uri)
             .then(response => {
@@ -140,16 +117,12 @@ export default {
          * method to populate dropdown
          */
         async changefunction(id){
-            if(id=="dzongkhag"){
-                this.form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();
             }
-            if(id=="gewog"){
-                this.form.gewog=$('#gewog').val();
-                this.getvillagelist();
-            }
-            if(id=="chiwog"){
-                this.form.chiwog=$('#chiwog').val();
+
+            if(id=="level"){
+                this.form.level=$('#level').val();
             }
         },
 
@@ -167,7 +140,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveChangeClass')
+                        this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -242,6 +215,16 @@ export default {
                 this.streamList = response.data;
             });
         },
+
+        /**
+         * method to get class stream in checkbox
+         */
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping')
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
         
     },
     
@@ -261,6 +244,7 @@ export default {
         
         this.getClass();
         this.getStream();  
+        this.getClassStream();
         this.getLevel();
         this.getOrgList();
     }
