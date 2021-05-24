@@ -343,7 +343,17 @@ const routes = [
           name:'change_details_index', component: require('./components/organization/restructuring/change_details/change_details_index.vue').default,
             children: [
               { path: '',name:'change_details_index', component: require('./components/organization/restructuring/change_details/change_details_list.vue').default },
-              { path: '/change_details_add',name:'change_details_add', component: require('./components/organization/restructuring/change_details/change_details_add.vue').default },
+              { path: '/change_details_add',
+                  component: require('./components/organization/restructuring/change_details/change_details_add.vue').default,
+                  children: [
+                      { path: '/change_name',name:"change_name", component: require('./components/organization/restructuring/change_details/change_name.vue').default },
+                      { path: '/change_level',name:"change_level", component: require('./components/organization/restructuring/change_details/change_level.vue').default },
+                      { path: '/change_feeding_details', name:'change_feeding_details', component: require('./components/organization/restructuring/change_details/change_feeding_details.vue').default },
+                      { path: '/change_sen_details', name:'change_sen_details', component: require('./components/organization/restructuring/change_details/change_sen_details.vue').default },
+                      { path: '/change_all_details', name:'change_all_details', component: require('./components/organization/restructuring/change_details/change_all_details.vue').default },
+                    ]
+              },
+
               { path: '/change_details_edit', name:'change_details_edit', component: require('./components/organization/restructuring/change_details/change_details_edit.vue').default },
               { path: '/change_details_list', name:'change_details_list', component: require('./components/organization/restructuring/change_details/change_details_list.vue').default },
             ]  

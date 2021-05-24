@@ -37,7 +37,7 @@ export default {
         }
     },
     methods:{
-        loadClosureList(uri = 'organization/getschoolDetials'){
+        loadClosureList(uri = 'organization/getOrgList'){
             axios.get(uri)
             .then(response => {
                 let data = response;
