@@ -82,9 +82,9 @@ class EstablishmentController extends Controller
     }
 
     public function saveUploadedFiles(Request $request){
-        dd('Need to fix file upload');
-        
+        $applicaiton_number = $request->applicaiton_number;
         $files = $request->attachments;
+        // dd($files);
         $filenames = $request->attachmentname;
         $remarks = $request->remarks;
         $attachment_details=[];
@@ -102,14 +102,19 @@ class EstablishmentController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
+                            'applicaiton_number'     =>  $applicaiton_number,
                             // 'remark'                 =>  $remarks[$index]
                         )
                     );
                 }
             }
         }
-
-        $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
+        $request_data =[
+            'attachment_details'                =>  $attachment_details,
+            'user_id'                           =>  $this->userId() 
+        ];
+        // dd( $request_data);
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
         return $response_data;
     }
 
@@ -138,12 +143,12 @@ class EstablishmentController extends Controller
         ];
 
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-
+        // dd($response_data);
         // $workflow_data=[
         //     'db_name'           =>$this->database_name,
         //     'table_name'        =>$this->table_name,
-        //     'service_name'      =>$this->service_name,
-        //     'application_number'=>json_decode($response_data)->data->applicationNo,
+        //     'service_name'      =>json_decode($response_data)->data->establishment_type,//service name 
+        //     'application_number'=>json_decode($response_data)->data->application_no,
         //     'screen_id'         =>$workflowdet['screen_id'],
         //     'status_id'         =>$workflowdet['status'],
         //     'remarks'           =>null,
@@ -152,7 +157,7 @@ class EstablishmentController extends Controller
         //     'working_agency_id' =>$this->getWrkingAgencyId(),
         //     'action_by'         =>$this->userId(),
         // ];
-        // // dd($workflow_data);
+        // dd($workflow_data);
         // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $response_data;
     }
@@ -623,6 +628,12 @@ class EstablishmentController extends Controller
         ];
 
         return $estd;
+    }
+    
+    public function loaddraftApplication($type=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/loaddraftApplication/'.$type.'/'.$this->userId());
+        // dd($response_data);
+        return $response_data;
     }
 
 }
