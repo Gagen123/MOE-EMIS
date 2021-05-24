@@ -34,7 +34,7 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
-
+        
         switch($request['establishment_type']){
             case "public_school" : {
                     $this->service_name = "Public School";
@@ -120,7 +120,6 @@ class EstablishmentController extends Controller
 
 
     public function saveClassStream(Request $request){
-
         $rules = [
             'class'          =>  'required',
         ];
@@ -128,44 +127,53 @@ class EstablishmentController extends Controller
             'class.required'         => 'Class is required',
         ];
         $this->validate($request, $rules, $customMessages);
-
-        $workflowdet=$this->getsubmitterStatus('new establishment');
-        // if($workflowdet['screen_id']=="0"){
-        //     return "No Screen";
-        // }
-
         $classStream =[
             'class'                 =>  $request['class'],
             'stream'                =>  $request['stream'],
             'proposed_establishment'    =>  $request['proposed_establishment'],
+            'applicaiton_number'    =>  $request['applicaiton_number'],
             'status'                =>  $request['status'],
             'user_id'               =>  $this->userId() ,
         ];
-
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-        // dd($response_data);
-        // $workflow_data=[
-        //     'db_name'           =>$this->database_name,
-        //     'table_name'        =>$this->table_name,
-        //     'service_name'      =>json_decode($response_data)->data->establishment_type,//service name 
-        //     'application_number'=>json_decode($response_data)->data->application_no,
-        //     'screen_id'         =>$workflowdet['screen_id'],
-        //     'status_id'         =>$workflowdet['status'],
-        //     'remarks'           =>null,
-        //     'user_dzo_id'       =>$this->getUserDzoId(),
-        //     'access_level'      =>$this->getAccessLevel(),
-        //     'working_agency_id' =>$this->getWrkingAgencyId(),
-        //     'action_by'         =>$this->userId(),
-        // ];
+
+        //get submitter role
+        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        $screen_id="";
+        $status="";
+        $app_role="";
+        $service_name=json_decode($response_data)->data->establishment_type;
+        foreach($workflowdet as $work){
+            if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                $screen_id=$work->SysSubModuleId;
+                $status=$work->Sequence;
+                $app_role=$work->SysRoleId;
+            }
+        }
+
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$service_name,//service name 
+            'application_number'=>json_decode($response_data)->data->application_no,
+            'screen_id'         =>$screen_id,
+            'status_id'         =>$status,
+            'remarks'           =>null,
+            'app_role_id'       => $app_role,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
         // dd($workflow_data);
-        // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        return $response_data;
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
     }
 
     public function getClass(){
         $classInCheckbox = $this->apiService->listData('emis/organization/establishment/getClass');
-        $response_data=json_decode($classInCheckbox);
-        $classInCheckbox = collect($response_data)->sortBy('sequence')->toArray();
+        // $response_data=json_decode($classInCheckbox);
+        // $classInCheckbox = collect($response_data)->sortBy('sequence')->toArray();
         return $classInCheckbox;
     }
 
@@ -233,7 +241,9 @@ class EstablishmentController extends Controller
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
         $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
-        $loadOrganizationDetails->app_stage=$workflowstatus;
+        if($loadOrganizationDetails!=null){
+            $loadOrganizationDetails->app_stage=$workflowstatus;
+        }
         return json_encode($loadOrganizationDetails);
     }
 

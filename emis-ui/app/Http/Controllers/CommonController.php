@@ -53,8 +53,18 @@ class CommonController extends Controller{
     public function getApplicationDetials($applicationId=""){
         return $this->apiService->getListData('emis/common/getApplicationDetials/'.$applicationId);
     }
+    public function getApprovalWorkStatus(){
+        $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
+        $w_status_screen=[];
+        foreach($work_status as $i=> $work){
+            if($work->Sequence>1){
+                array_push($w_status_screen,$work->SysSubModuleId.'SSS'.($work->Sequence - 1));
+            }
+        }
+        return $w_status_screen;
+    }
     public function getTaskList($type=""){
-        $work_status=$this->getVerificationApprovalWorkStatus();
+        $work_status=$this->getApprovalWorkStatus();
         $param="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
@@ -70,12 +80,11 @@ class CommonController extends Controller{
             foreach($work_status as $work){
                 $param.=$work.'OUTSEP';
             }
-        }
-        if($param!="NA"){
-            $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
-            $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
-            // dd($response_data);
-            return $response_data;
+            if($param!="NA"){
+                $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+                $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
+                return $response_data;
+            }
         }
     }
     

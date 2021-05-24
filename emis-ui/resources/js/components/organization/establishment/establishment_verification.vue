@@ -26,15 +26,15 @@
                             <div class="form-group row"> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Application Number:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.applicationNo}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.application_no}}</span>
                                 </div> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Submitted Date:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.application_date}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.application_date}}</span>
                                 </div> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.service}}</span>
+                                    <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
                                 </div> 
                             </div>
                         </div>
@@ -43,59 +43,59 @@
                             <div class="form-group row"> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.proposedName}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.org_details.proposedName}}</span>
                                 </div>  
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Level:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.level}}</span>
+                                    <span class="text-blue text-bold">{{levelList[applicationdetails.org_details.level]}}</span>
                                 </div>  
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Category:</label>
                                     <span class="text-blue text-bold">
-                                        {{ applicaitondetailsform.category  == 1 ? "public" :  "private"}}
+                                        {{ applicationdetails.category  == 1 ? "Public" :  "Private"}}
                                     </span>
-                                </div>
+                                </div> 
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.dzongkhag}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.dzongkhag}}</span>
                                 </div>  
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Gewog:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.gewog}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.gewog}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Chiwog:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.village}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.village}}</span>
                                 </div>                 
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.locationType}}</span>
+                                    <span class="text-blue text-bold">{{locationList[applicationdetails.org_details.locationTypeId]}}</span>
                                 </div>   
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
-                                        {{ applicaitondetailsform.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
+                                        {{ applicationdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
                                 </div> 
                             </div>
 
-                            <div class="form-group row" v-if="applicaitondetailsform.senSchool==1">
+                            <div class="form-group row" v-if="applicationdetails.senSchool==1">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
                                     <label class="mb-0">Parent School:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.parentSchool}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.parentSchool}}</span>
                                 </div>   
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Co-located with Parent School</label>
                                     <span class="text-blue text-bold">
-                                        {{ applicaitondetailsform.coLocated  == 1 ? "Yes" :  "No"}}
+                                        {{ applicationdetails.coLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
                                 </div> 
                             </div>
-                            <div v-if="applicaitondetailsform.category==0">
+                            <div v-if="applicationdetails.category==0">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <h4><u>Proprietor Details</u></h4>
@@ -139,19 +139,29 @@
                             </div>
                         </div> 
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, index) in  class_section" :key="index">
+                            <span v-for="(item, key, index) in  class_section" :key="index">
+                                <br>{{calssArray}}
+                                <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}</label>
+                                <span v-if="item.class=='Class 11' || item.class=='Class 12'">
+                                    <br>
+                                    <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
+                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
+                                </span>
+                            </span> 
+
+                            <!-- <span v-for="(item, index) in  class_section" :key="index">
                                 <br>
-                                <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                <span v-for="(stm, key, index) in sectionList" :key="index" >
+                                <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}</label>
+                                 <span v-for="(stm, key, index) in sectionList" :key="index" >
                                     <span v-if="item.classId==stm.classId">
                                         <br>
                                         <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
                                     </span>
-                                </span>
-                            </span> 
+                                </span> 
+                            </span>  -->
                         </div>
                         <Workflow
-                            :appNo="applicaitondetailsform.applicationNo"
+                            :appNo="applicationdetails.applicationNo"
                         />
                         
                         <div class="row">
@@ -186,13 +196,12 @@ export default {
         return{ 
             proprietorList:[],
             class_section:[],
+            calssArray:{},
             sectionList:[],
-            applicaitondetailsform: new form({
-                id: '',applicationNo:'',application_date:'',service:'',proposedName:'',
-                level:'',category:'1',dzongkhag:'',gewog:'',village:'',locationType:'',
-                geopolicaticallyLocated:'0',senSchool:'0',parentSchool:'',coLocatedParent:'0',cid:'',name:'',
-                phoneNo:'',email:'',status:'',remarks:''
-            }),
+            applicationdetails:[],
+            levelList:{},
+            locationList:[],
+            applicationOrgdetails:[],
             classStreamForm: new form({
                 id: '',class:[], stream:[], status:'submitted'
             }),
@@ -206,23 +215,9 @@ export default {
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
-                this.applicaitondetailsform.applicationNo               =   data.applicationNo;
-                this.applicaitondetailsform.application_date            =   data.application_date;
-                this.applicaitondetailsform.service                     =   data.service;
-                this.applicaitondetailsform.proposedName                =   data.proposedName;
-                this.applicaitondetailsform.level                       =   data.level;
-                this.applicaitondetailsform.category                    =   data.category;
-                this.applicaitondetailsform.dzongkhag                   =   response.data.dzongkhag;
-                this.applicaitondetailsform.gewog                       =   response.data.gewog;
-                this.applicaitondetailsform.village                     =   response.data.village;
-                this.applicaitondetailsform.locationType                =   data.locationType;
-                this.applicaitondetailsform.geopolicaticallyLocated     =   data.isGeopoliticallyLocated;
-                this.applicaitondetailsform.senSchool                   =   data.isSenSchool;
-                this.applicaitondetailsform.parentSchool                =   data.parentSchool;
-                this.applicaitondetailsform.coLocated                   =   data.isColocated;
-                this.proprietorList                                     =   data.proprietor;
-                this.class_section                                      =   data.class_section;
-                this.sectionList                                        =   data.sections;
+                this.applicationdetails=data;
+                // this.applicationOrgdetails=JSON.stringify(data.org_details);
+                this.class_section=data.org_class_stream;
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
@@ -258,7 +253,7 @@ export default {
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
                         if (result.isConfirmed) {
-                            this.form.applicationNo=this.applicaitondetailsform.applicationNo;
+                            this.form.applicationNo=this.applicationdetails.applicationNo;
                             this.form.actiontype=nextclass;
                             this.form.post('organization/updateNewEstablishmentApplication')
                             .then((response) => {
@@ -292,10 +287,55 @@ export default {
                 $('#'+nextclass).show().removeClass('fade');
             }
         },
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.levelList[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.locationList[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping')
+              .then(response => {
+                this.classStreamList = response.data.data;
+                let data = response.data.data;
+                //this.calssArray[data[i].id] = data[i].name;
+            });
+        },
+
+        /**
+         * method to get class in checkbox
+         */
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
     },
     mounted(){
-        this.applicaitondetailsform.applicationNo=this.$route.params.data.application_number;
+        this.getLevel();
+        this.getLocation();
+        this.getClassStream();
+        this.getClass();
+        // this.applicationdetails.applicationNo=this.$route.params.data.application_number;
         this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
+        
+        
     }
 }
 </script>

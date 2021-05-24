@@ -29,6 +29,7 @@ use App\Models\OrganizationDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\establishment\HeadQuaterDetails;
+use App\Models\establishment\ApplicationEstPublic;
 use App\Models\OrgProfile;
 use App\Models\generalInformation\AttachmentFile;
 
@@ -256,18 +257,15 @@ class EstablishmentController extends Controller
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
-        $application_details=  ApplicationDetails::where('created_by',$request->user_id)
-                                                    ->where('establishment_type', $request->proposed_establishment)
-                                                    ->where('status', 'pending')
-                                                    ->first();
-
+        // $application_details=  ApplicationDetails::where('created_by',$request->user_id) //updated by tshewang after sending application number
+        //                                             ->where('establishment_type', $request->proposed_establishment)
+        //                                             ->where('status', 'pending')
+        //                                             ->first();
         foreach($request->class as $key => $classId){
             $stream_exists = $this->checkStreamExists($classId);
-            
             if(empty($stream_exists)){
-
                 $classStream = [
-                    'ApplicationDetailsId'  => $application_details->application_no,
+                    'ApplicationDetailsId'  => $request->applicaiton_number,
                     'classId'               => $classId,
                     'streamId'              => '',
                     'created_by'            => $request->user_id,
@@ -281,10 +279,9 @@ class EstablishmentController extends Controller
 
         foreach($request->stream as $key2 => $classStreamId){
             $class_stream_data = $this->getClassStreamId($classStreamId);
-
             foreach($class_stream_data as $v){
                 $classStream = [
-                    'ApplicationDetailsId'  => $application_details->application_no,
+                    'ApplicationDetailsId'  => $request->applicaiton_number,
                     'classId'               => $v->classId,
                     'streamId'              => $v->streamId,
                     'created_by'            => $request->user_id,
@@ -293,9 +290,10 @@ class EstablishmentController extends Controller
                 $class = ApplicationClassStream::create($classStream);
             }
         }
-        
+
         $array = ['status' => $request->status];
-        DB::table('application_details')->where('application_no',$application_details->application_no)->update($array);
+        DB::table('application_details')->where('application_no',$request->applicaiton_number)->update($array);
+        $application_details=  ApplicationDetails::where('application_no',$request->applicaiton_number)->first();
         return $this->successResponse($application_details, Response::HTTP_CREATED);
     }
 
@@ -331,7 +329,7 @@ class EstablishmentController extends Controller
      * method to get class in checkbox
      */
     public function getClass(){
-        return Classes::where('status',1)->orderBy('sequence','ASC')->get();
+        return Classes::where('status',1)->get();
     }
 
     /**
@@ -356,22 +354,22 @@ class EstablishmentController extends Controller
     }
 
     public function loadEstbDetailsForVerification($appNo=""){
-        $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
-        $response_data->application_date=date_format(Carbon::parse($response_data->created_at), 'Y-m-d h:i:s');
-        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
-        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
-        $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
-        $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
-        foreach($classSection as $cls){
-            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        $response_data->application_date=date_format(Carbon::parse($response_data->action_date), 'Y-m-d h:i:s');
+        if($response_data->establishment_type=="Public School"){
+            $response_data->org_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
         }
-        foreach($sections as $sec){
-            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        }
-        $response_data->class_section=$classSection;
-        $response_data->sections=$sections;
+        $response_data->org_class_stream=ApplicationClassStream::where('ApplicationDetailsId',$appNo)->get();
+        
+        // $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        // $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
+        // $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
+        // foreach($classSection as $cls){
+        //     $cls->class_name=ApplicationClassStream::where('id',$cls->classId)->first()->class;
+        // }
+        // $response_data->class_section=$classSection;
         return $this->successResponse($response_data);
     }
 
