@@ -185,6 +185,7 @@ class GeneralInfoController extends Controller
     }
 
     public function saveLocation(Request $request){
+        dd($request);
         $orgId = $request->organizationId;
         if($orgId != "undefined" && $orgId != null){
             $orgId = $orgId;

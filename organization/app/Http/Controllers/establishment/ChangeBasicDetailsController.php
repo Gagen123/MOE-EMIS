@@ -135,6 +135,77 @@ class ChangeBasicDetailsController extends Controller
     }
 
     /**
+     * Extract Application Details for bifurcation
+     */
+
+    private function extractEstBifurcationData($request){
+        $data =[
+            t
+        ];
+    }
+
+    /**
+     * Extract Application Details for merger
+     */
+
+    private function extractEstMergerData($request){
+        $data =[
+            t
+        ];
+    }
+
+    /**
+     * Extract Change of Details
+     */
+
+    private function extractEstChangeData($request){
+        $data =[
+            t
+        ];
+    }
+
+    /**
+     * Extract Proprietor Details if Change is details is private
+     */
+
+    private function extractProprietorData($request){
+        $data =[
+            t
+        ];
+    }
+
+    /**
+     * Extract Closure Details
+     */
+
+    private function extractEstClosureData($request){
+        $data =[
+            t
+        ];
+    }
+
+    /**
+     * Extract Attachment Details
+     */
+
+    private function extractEstAttachmentData($request, $foreignKeyFor, $foreignKeyId){
+        $data =[
+            t
+        ];
+    }
+
+    /**
+     * Extract Application Details for no of meals
+     */
+
+    private function extractNoMealsData($request){
+        $data =[
+            t
+        ];
+    }
+
+
+    /**
      * method to save class and stream details
      */
     public function saveChangeClass(Request $request){

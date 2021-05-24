@@ -18,7 +18,7 @@ class EstablishmentController extends Controller
     public $apiService;
     public $database_name="organization_db";
     public $table_name="application_details";
-    public $service_name="New Establishment";
+    public $service_name;
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
@@ -35,30 +35,33 @@ class EstablishmentController extends Controller
 
     public function saveEstablishment(Request $request){
 
-        dd('UI');
-
         switch($request['establishment_type']){
             case "public_school" : {
+                    $this->service_name = "Public School";
                     $validation = $this->validatePublicSchoolFields($request);
                     $establishment_data = $this->setPublicSchoolFields($request);
                     break;
                 }
             case "private_school" : {
+                    $this->service_name = "Private School";
                     $validation = $this->validatePrivateSchoolFields($request);
                     $establishment_data = $this->setPrivateSchoolFields($request);
                     break;
                 }
             case "public_eccd" : {
+                    $this->service_name = "Public ECCD";
                     $validation = $this->validatePublicEccdFields($request);
                     $establishment_data = $this->setPublicEccdFields($request);
                     break;
                 }
             case "private_eccd" : {
+                    $this->service_name = "Private ECCD";
                     $validation = $this->validatePrivateEccdFields($request);
-                    $establishment_data = $this->setPublicSchoolFields($request);
+                    $establishment_data = $this->setPrivateEccdFields($request);
                     break;
                 }
             case "public_ecr" : {
+                    $this->service_name = "Public ECR";
                     $validation = $this->validatePublicEccdFields($request);
                     $establishment_data = $this->setPublicEccdFields($request);
                     break;
@@ -78,7 +81,41 @@ class EstablishmentController extends Controller
         return $response_data;
     }
 
+    public function saveUploadedFiles(Request $request){
+        dd('Need to fix file upload');
+        
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'Organization';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
+        return $response_data;
+    }
+
+
     public function saveClassStream(Request $request){
+
         $rules = [
             'class'          =>  'required',
         ];
@@ -86,35 +123,38 @@ class EstablishmentController extends Controller
             'class.required'         => 'Class is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
         $workflowdet=$this->getsubmitterStatus('new establishment');
-        if($workflowdet['screen_id']=="0"){
-            return "No Screen";
-        }
+        // if($workflowdet['screen_id']=="0"){
+        //     return "No Screen";
+        // }
 
         $classStream =[
-            'class'        =>  $request['class'],
-            'stream'       =>  $request['stream'],
-            'status'       =>  $request['status'],
-            'user_id'      =>  $this->userId() ,
+            'class'                 =>  $request['class'],
+            'stream'                =>  $request['stream'],
+            'proposed_establishment'    =>  $request['proposed_establishment'],
+            'status'                =>  $request['status'],
+            'user_id'               =>  $this->userId() ,
         ];
+
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-        //dd($response_data->data->applicationNo);
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,
-            'application_number'=>json_decode($response_data)->data->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$workflowdet['status'],
-            'remarks'           =>null,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
-        // dd($workflow_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        return $work_response_data;
+
+        // $workflow_data=[
+        //     'db_name'           =>$this->database_name,
+        //     'table_name'        =>$this->table_name,
+        //     'service_name'      =>$this->service_name,
+        //     'application_number'=>json_decode($response_data)->data->applicationNo,
+        //     'screen_id'         =>$workflowdet['screen_id'],
+        //     'status_id'         =>$workflowdet['status'],
+        //     'remarks'           =>null,
+        //     'user_dzo_id'       =>$this->getUserDzoId(),
+        //     'access_level'      =>$this->getAccessLevel(),
+        //     'working_agency_id' =>$this->getWrkingAgencyId(),
+        //     'action_by'         =>$this->userId(),
+        // ];
+        // // dd($workflow_data);
+        // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $response_data;
     }
 
     public function getClass(){
@@ -499,9 +539,10 @@ class EstablishmentController extends Controller
             'senSchool'                    =>  $request['senSchool'],
             'isfeedingschool'              =>  $request['isfeedingschool'],
             'feeding'                      =>  $request['feeding'],
-            'geopolicaticallyLocated'      =>  $request['geopolicaticallyLocated'],
+            'geopoliticallyLocated'        =>  $request['geopoliticallyLocated'],
             'status'                       =>  $request['status'],
             'establishment_type'           =>  $request['establishment_type'],
+            'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
             'user_id'                      =>  $this->userId() 
         ];
@@ -530,6 +571,7 @@ class EstablishmentController extends Controller
             'chiwog'                       =>  $request['chiwog'],
             'status'                       =>  $request['status'],
             'establishment_type'           =>  $request['establishment_type'],
+            'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
             'user_id'                      =>  $this->userId() 
         ];
@@ -550,6 +592,7 @@ class EstablishmentController extends Controller
             'locationType'                 =>  $request['locationType'],
             'status'                       =>  $request['status'],
             'establishment_type'           =>  $request['establishment_type'],
+            'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
             'user_id'                      =>  $this->userId() 
         ];
@@ -574,6 +617,7 @@ class EstablishmentController extends Controller
             'chiwog'                       =>  $request['chiwog'],
             'status'                       =>  $request['status'],
             'establishment_type'           =>  $request['establishment_type'],
+            'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
             'user_id'                      =>  $this->userId() 
         ];

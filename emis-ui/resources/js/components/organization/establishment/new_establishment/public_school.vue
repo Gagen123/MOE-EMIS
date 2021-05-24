@@ -81,8 +81,8 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Geopolitically Located:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6 pt-3">
-                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="1" tabindex=""/> Yes</label>
-                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
+                                <label><input  type="radio" v-model="form.geopoliticallyLocated" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.geopoliticallyLocated" value="0" tabindex=""/> No</label>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -133,7 +133,7 @@
                                         <tbody>
                                             <tr id="record1" v-for='(role, index) in file_form.fileUpload' :key="index">
                                                 <td>                                
-                                                    <input type="text" name="file_name" id="file_name" class="form-control" v-model="role.file_name" :class="{ 'is-invalid': file_form.errors.has('file_name') }" @change="remove_err('file_name')" placeholder="File Name"/>
+                                                    <input type="text" name="file_name" id="file_name" class="form-control" v-model="file_form.file_name" :class="{ 'is-invalid': file_form.errors.has('file_name') }" @change="remove_err('file_name')" placeholder="File Name"/>
                                                     <has-error :file_form="form" field="file_name"></has-error>
                                                 </td>
                                                 <td>                                
@@ -170,15 +170,14 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classList" :key="index">
+                            <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <br>
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                <span v-for="(stm, key, index) in streamList" :key="index" >
-                                    <span v-if="item.class=='XI' || item.class=='XII'">
+                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                    <span v-if="item.class=='Class 11' || item.class=='Class 12'">
                                         <br>
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                        <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
+                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
                                     </span>
-                                </span>
                             </span> 
                         </div>
                         <hr>
@@ -207,26 +206,24 @@ export default {
             orgList:[],
             classList:[],
             streamList:[],
+            classStreamList:[],
             fileUpload: [],
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             file_form: new form({
                 id:'',
-                program: '',
-                year: '',
-                supporter:'',
-                remarks:'',
+                file_name: '',
                 fileUpload: [],
                 record_type:'add'
             }),
 
             form: new form({
                 id: '',initiatedBy:'', proposedName:'',level:'',category:'1',dzongkhag:this.dzongkhag, gewog:'',chiwog:'0',locationType:'',
-                geopolicaticallyLocated:'0',senSchool:'0', isfeedingschool:'0',feeding:[], 
+                geopoliticallyLocated:'0',senSchool:'0', isfeedingschool:'0',feeding:[], 
                 establishment_type:'public_school', status:'pending'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], status:'submitted'
+                id: '',class:[], stream:[], proposed_establishment:'Public School', status:'submitted'
             }) 
         } 
     },
@@ -323,7 +320,7 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.file_form.fileUpload.push({role:'', remarks:''})
+            this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
         addMoreStudents: function(){
             this.count++;
@@ -400,6 +397,16 @@ export default {
         },
 
         /**
+         * method to get class stream in checkbox
+         */
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping')
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
+
+        /**
          * method to get class in checkbox
          */
         getClass:function(){
@@ -471,7 +478,7 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    this.form.post('organization/saveEstablishment',this.form)
+                    this.file_form.post('organization/saveUploadedFiles',this.form)
                     .then((response) => {
                         if(response.data!=""){
                             this.change_tab(nextclass);
@@ -602,7 +609,7 @@ export default {
                 this.getvillagelist(JSON.parse(response.data.gewog).data.id);
                 this.form.chiwog = data.chiwogId;
 
-                this.form.geopolicaticallyLocated   =   data.isGeopoliticallyLocated;
+                this.form.geopoliticallyLocated   =   data.isGeopoliticallyLocated;
                 this.form.senSchool                 =   data.isSenSchool;
                 this.form.parentSchool              =   data.parentSchoolId;
                 this.form.coLocated                 =   data.isColocated;
@@ -680,6 +687,7 @@ export default {
        
         this.getClass();
         this.getStream();
+        this.getClassStream();
         this.getLevel();
         this.getLocation();
         this.loadactivedzongkhagList();
