@@ -716,6 +716,7 @@ class RestructuringController extends Controller
         $change =[
             'organizationId'            =>  $request['organizationId'],
             'level_change'              =>  $request['level_change'],
+            'level'                     =>  $request['level'],
             'class'                     =>  $request['class'],
             'stream'                    =>  $request['stream'],
             'application_type'          =>  $request['application_type'],

@@ -167,7 +167,7 @@ export default {
             }
         },
         
-        change_tab(nextclass){ 
+        change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
             $('.'+nextclass+' >a').addClass('active');
