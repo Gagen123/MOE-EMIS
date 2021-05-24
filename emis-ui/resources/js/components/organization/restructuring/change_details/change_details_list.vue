@@ -1,45 +1,39 @@
 <template>
     <div>
-        <table id="bifurcation-table" class="table table-bordered text-sm table-striped">
+        <table id="disciplinary-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th>SL#</th>
-                    <th>School Name</th>
-                    <th>Change Request</th>
-                    <th>Status</th>
-                    <th>Action</th> 
+                    <th >SL#</th>
+                    <th >Application No.</th>
+                    <th >Application For</th>
+                    <th >Status</th>
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in bifurcationList" :key="index">
+                <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.level}}</td>
-                    <td>{{ item.status == 1 ? "Active" : "Inactive"}} </td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewBifurcationList(item.id)"><i class="fas fa-edit"></i ></a>
-                        </div>
-                    </td>
+                    <td>{{ item.application_no}}</td>
+                    <td>{{ item.establishment_type}}</td>
+                    <td>{{ item.status}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </template>
-
 <script>
 export default {
     data(){
         return{
-            bifurcationList:[],
+            id:'2',
+            dataList:[], 
         }
     },
     methods:{
-        loadBifurcationList(uri = 'organization/getschoolDetials'){
+        loadDataList(uri='organization/loadOrgChangeApplications'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.bifurcationList =  data.data.data;
+                this.dataList =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -47,18 +41,18 @@ export default {
                 }
             });
             setTimeout(function(){
-                $("#bifurcation-table").DataTable({
+                $("#disciplinary-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
                 }); 
             }, 3000);  
         },
-        viewBifurcationList(data){
-            this.$router.push({name:'BifurcationAdd',query: {data:data}});
+        showedit(data){
+            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
         },
     },
     mounted(){
-        this.loadBifurcationList();
+        this.loadDataList();
     },
 }
 </script>

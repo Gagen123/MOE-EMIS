@@ -257,6 +257,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
             $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
             $router->get('/loadOrgApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);
+            $router->get('/loadOrgChangeApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgChangeApplications']);
             $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);

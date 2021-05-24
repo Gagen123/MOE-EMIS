@@ -371,6 +371,10 @@ class EstablishmentController extends Controller
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','submitted')->get());
     }
 
+    public function loadOrgChangeApplications($user_id=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
     /**
      * method to load organization details
      */

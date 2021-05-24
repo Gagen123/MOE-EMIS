@@ -187,6 +187,11 @@ class EstablishmentController extends Controller
         return $loadOrgApplications;
     }
 
+    public function loadOrgChangeApplications(){
+        $loadOrgChangeApplications = $this->apiService->listData('emis/organization/establishment/loadOrgChangeApplications/'.$this->userId() );
+        return $loadOrgChangeApplications;
+    }
+
     public function loadOrganizationDetails(){        
         $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->userId() );
         return $loadOrganizationDetails;
