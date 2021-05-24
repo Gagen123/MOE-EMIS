@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ApplicationClassStream extends Model
 {
     use HasFactory, Uuid;
-    protected $table="application_class_streams";
+    protected $table="application_class_stream";
 
     /**
      * The attributes that are mass assignable.
@@ -17,6 +17,9 @@ class ApplicationClassStream extends Model
      * @var array
      */
     protected $fillable = [
-        'id','applicationNo','parent_for','classId','streamId','created_by','updated_by'
+        'id',
+        'ApplicationDetailsId',
+        'classId',
+        'streamId'
     ];
 }

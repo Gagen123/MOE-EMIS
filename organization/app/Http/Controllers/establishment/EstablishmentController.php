@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Carbon;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\DB;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
 use App\Models\Masters\RoadType;
@@ -31,9 +32,6 @@ use App\Models\establishment\HeadQuaterDetails;
 use App\Models\OrgProfile;
 
 
-use Illuminate\Support\Facades\DB;
-
-
 class EstablishmentController extends Controller
 {
     use ApiResponser;
@@ -55,164 +53,276 @@ class EstablishmentController extends Controller
     }
 
     /**
-     * method to save sport details
+     * method to save new establishment details
      */
     public function saveEstablishment(Request $request){
         $id = $request->id;
-        $feedingModality=null;
-        if($request['isfeedingschool']=="1"){
-            $feedingModality=implode(',',$request['feeding']);
+
+        /**
+         * First Fill in the application details table and get id
+         * Application Details Table Id will be foreign key to other tables
+         * 
+         * Does not use insertData function as we need the last insert id
+         */
+
+        $application_details_data = $this->extractApplicationDetailsData($request);
+
+        $inserted_application_data = ApplicationDetails::create($application_details_data);
+        $applicationDetailsId = $inserted_application_data->id;
+
+        switch($request['establishment_type']){
+            case "public_school" : {
+                    $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
+                    $dataModel = 'ApplicationEstPublic';
+                    break;
+                }
+            case "private_school" : {
+                    $establishment_data = $this->extractPrivateEstDetailsData($request, $applicationDetailsId);
+                    $dataModel = 'ApplicationEstPrivate';
+                    break;
+                }
+            case "public_eccd" : {
+                    $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
+                    $dataModel = 'ApplicationEstPublic';
+                    break;
+                }
+            case "private_eccd" : {
+                    $establishment_data = $this->extractPrivateEstDetailsData($request, $applicationDetailsId);
+                    $dataModel = 'ApplicationEstPrivate';
+                    break;
+                }
+            case "public_ecr" : {
+                    $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
+                    $dataModel = 'ApplicationEstPublic';
+                    break;
+                }
+            default : {
+                
+                break;
+            }
         }
-        if($id != null){
-            $estd = [
-                'proposedName'                  =>  $request['proposedName'],
-                'category'                      =>  $request['category'],
-                'levelId'                       =>  $request['level'],
-                'dzongkhagId'                   =>  $request['dzongkhag'],
-                'gewogId'                       =>  $request['gewog'],
-                'chiwogId'                      =>  $request['chiwog'],
-                'isfeedingschool'               =>  $request['isfeedingschool'],
-                'feeding'                       =>  $feedingModality,
-                'locationId'                    =>  $request['locationType'],
-                'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
-                'isSenSchool'                   =>  $request['senSchool'],
-                'parentSchoolId'                =>  $request['parentSchool'],
-                'isColocated'                   =>  $request['design'],
-                'status'                        =>  $request['status'],
-                'service'                       =>  "New Establishment",
-                'updated_by'                    =>  $request->user_id,
-                'created_at'                    =>  date('Y-m-d h:i:s')
-            ];
 
-            // update proprietor details if category is private
-            if($request['category'] == 0){
-                $pvtDetails = [
-                    'applicationId'            =>  1,
-                    'cid'                      =>  $request['cid'],
-                    'fullName'                 =>  $request['name'],
-                    'phoneNo'                  =>  $request['phoneNo'],
-                    'email'                    =>  $request['email'],
-                    'updated_by'               =>  $request->user_id,
-                    'created_at'               =>  date('Y-m-d h:i:s')
-                ];
+        // $feedingModality=null;
+        // if($request['isfeedingschool']=="1"){
+        //     $feedingModality=implode(',',$request['feeding']);
+        // }
 
-                $establishment = ApplicationProprietorDetails::where('applicationId', 1)->update($pvtDetails);
-            }
-            $establishment = ApplicationDetails::where('id', $id)->update($estd);
-            return $this->successResponse($establishment, Response::HTTP_CREATED);
-        }else{
-            $last_seq=ApplicationSequence::where('service_name','New Establishment')->first();
-            if($last_seq==null || $last_seq==""){
-                $last_seq=1;
-                $app_details = [
-                    'service_name'                  =>  'New Establishment',
-                    'last_sequence'                 =>  $last_seq,
-                ];
-                ApplicationSequence::create($app_details);
-            }
-            else{
-                $last_seq=$last_seq->last_sequence+1;
-                $app_details = [
-                    'last_sequence'                 =>  $last_seq,
-                ];
-                ApplicationSequence::where('service_name', 'New Establishment')->update($app_details);
-            }
-            $application_no='Estb-';
-            if(strlen($last_seq)==1){
-                $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
-            }
-            else if(strlen($last_seq)==2){
-                $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
-            }
-            else if(strlen($last_seq)==3){
-                $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
-            }
-            else if(strlen($last_seq)==4){
-                $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
-            }
+        $response_data = $this->insertData($establishment_data, $dataModel);
 
-            $estd = [
-                'proposedName'                  =>  $request['proposedName'],
-                'category'                      =>  $request['category'],
-                'levelId'                       =>  $request['level'],
-                'dzongkhagId'                   =>  $request['dzongkhag'],
-                'gewogId'                       =>  $request['gewog'],
-                'chiwogId'                      =>  $request['chiwog'],
-                'isfeedingschool'               =>  $request['isfeedingschool'],
-                'feeding'                       =>  $feedingModality,
-                'locationId'                    =>  $request['locationType'],
-                'isGeopoliticallyLocated'       =>  $request['geopolicaticallyLocated'],
-                'isSenSchool'                   =>  $request['senSchool'],
-                'parentSchoolId'                =>  $request['parentSchool'],
-                'isColocated'                   =>  $request['coLocatedParent'],
-                'status'                        =>  "Pending",
-                'applicationNo'                 =>  $application_no,
-                'service'                       =>  "New Establishment",
-                'created_by'                    =>  $request->user_id,
-                'created_at'                    =>  date('Y-m-d h:i:s')
-            ];
-            $establishment = ApplicationDetails::create($estd);
-            // save proprietor details if category is private
-            if($request['category'] == 0){
-                $pvtDetails = [
-                    'applicationId'            =>  $establishment->id,
-                    'cid'                      =>  $request['cid'],
-                    'fullName'                 =>  $request['name'],
-                    'phoneNo'                  =>  $request['phoneNo'],
-                    'email'                    =>  $request['email'],
-                    'created_by'               =>  $request->user_id,
-                    'created_at'               =>  date('Y-m-d h:i:s')
-                ];
-                $establishment = ApplicationProprietorDetails::create($pvtDetails);
-            }
-            return $this->successResponse($establishment, Response::HTTP_CREATED);
-        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    /**
+     * Extract the Basic Application Details
+     */
+
+    private function extractApplicationDetailsData($request){
+        $data =[
+            'application_no'       =>  $this->generateApplicationNo(),
+            'establishment_type'   =>  $request['proposed_establishment'],
+            'category'             =>  $request['category'],
+            'dzongkhagId'          =>  $request['dzongkhag'],
+            'gewogId'              =>  $request['gewog'],
+            'chiwogId'             =>  $request['chiwog'],
+            'application_type'     =>  $request['level'],
+            'year'                 =>  $request['year'],
+            'status'               =>  $request['status'],
+            'remarks'              =>  $request['remarks'],
+            'created_by'           =>  $request['user_id']
+        ];
+
+        return $data;
+        
+    }
+
+    /**
+     * Extract Application Details for public establishments
+     */
+
+    private function extractPublicEstDetailsData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'         =>  $applicationDetailsId,
+            'proposedName'                 =>  $request['proposedName'],
+            'initiated_by'                 =>  $request['initiatedBy'],
+            'level'                        =>  $request['level'],
+            'locationTypeId'               =>  $request['locationType'],
+            'isGeoPoliticallyLocated'      =>  $request['geopoliticallyLocated'],
+            'isSenSchool'                  =>  $request['senSchool'],
+            'isFeedingschool'              =>  $request['isfeedingschool']
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Extract Application Details for private establishments
+     */
+
+    private function extractPrivateEstDetailsData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'         =>  $applicationDetailsId,
+            'proposedName'                 =>  $request['proposedName'],
+            'proprietorName'               =>  $request['proprietorName'],
+            'proprietorCid'                =>  $request['proprietorCid'],
+            'proprietorPhone'              =>  $request['proprietorPhone'],
+            'proprietorMobile'             =>  $request['proprietorMobile'],
+            'proprietorEmail'              =>  $request['proprietorEmail'],
+            'totalLand'                    =>  $request['totalLand'],
+            'enrollmentBoys'               =>  $request['enrollmentBoys'],
+            'enrollmentGirls'              =>  $request['enrollmentGirls'],
+            'proposedLocation'             =>  $request['proposedLocation'],
+            'typeOfSchool'                 =>  $request['typeOfSchool'],
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Extract Application Details for no of meals
+     */
+
+    private function extractNoMealsData($request){
+        $data =[
+            //enter data
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Function to insert data into the respective tables
+     */
+
+    private function insertData($data, $databaseModel){
+        
+        $modelName = "App\\Models\\establishment\\"."$databaseModel"; 
+        $model = new $modelName();
+
+        $response_data = $model::create($data);
+        
+        return $response_data;
+    }
+
+
+    /**
+     * Generate the application no
+     */
+
+    private function generateApplicationNo(){
+        $last_seq=ApplicationSequence::where('service_name','New Establishment')->first();
+
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'New Establishment',
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::where('service_name', 'New Establishment')->update($app_details);
+        }
+        $application_no='Estb-';
+        if(strlen($last_seq)==1){
+            $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
+        }
+
+        return $application_no;
+    }
+
+
+
 
     /**
      * method to save class and stream
      */
     public function saveClassStream(Request $request){
+
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
-        $application_details=  ApplicationDetails::where('created_by',$request->user_id)->where('service', 'New Establishment')->where('status', 'pending')->first();
-        // return $application_details;
-        if($request->stream!="" && sizeof($request->stream)>0){
-            foreach ($request->stream as $stm){
-                foreach ($classes as $cls){
-                    if(explode('##',$stm)[0]==$cls){
-                        $classStream = [
-                            'applicationNo'     => $application_details->applicationNo,
-                            'classId'           => $cls,
-                            'streamId'          => explode('##',$stm)[1],
-                            'created_by'        => $request->user_id,
-                            'created_at'        => date('Y-m-d h:i:s'),
-                        ];
-                        if(strpos($inserted_class,$cls)===false){
-                            $inserted_class.=$cls;
-                        }
-                        $class = ApplicationClassStream::create($classStream);
-                    }
-                }
-            }
-        }
-        foreach ($classes as $cls){
-            if(strpos($inserted_class,$cls)===false){
+        $application_details=  ApplicationDetails::where('created_by',$request->user_id)
+                                                    ->where('establishment_type', $request->proposed_establishment)
+                                                    ->where('status', 'pending')
+                                                    ->first();
+
+        foreach($request->class as $key => $classId){
+            $stream_exists = $this->checkStreamExists($classId);
+            
+            if(empty($stream_exists)){
+
                 $classStream = [
-                    'applicationNo'     => $application_details->applicationNo,
-                    'classId'           => $cls,
-                    'created_by'        => $request->user_id,
-                    'created_at'        => date('Y-m-d h:i:s'),
+                    'ApplicationDetailsId'  => $application_details->application_no,
+                    'classId'               => $classId,
+                    'streamId'              => '',
+                    'created_by'            => $request->user_id,
+                    'created_at'            => date('Y-m-d h:i:s'),
                 ];
-                if($classStream != ""){
-                    $class = ApplicationClassStream::create($classStream);
-                }
+                
+                $class = ApplicationClassStream::create($classStream);
+
+            } 
+        }
+
+        foreach($request->stream as $key2 => $classStreamId){
+            $class_stream_data = $this->getClassStreamId($classStreamId);
+
+            foreach($class_stream_data as $v){
+                $classStream = [
+                    'ApplicationDetailsId'  => $application_details->application_no,
+                    'classId'               => $v->classId,
+                    'streamId'              => $v->streamId,
+                    'created_by'            => $request->user_id,
+                    'created_at'            => date('Y-m-d h:i:s'),
+                ];
+                $class = ApplicationClassStream::create($classStream);
             }
         }
+        
         $array = ['status' => $request->status];
-        DB::table('application_details')->where('applicationNo',$application_details->applicationNo)->update($array);
+        DB::table('application_details')->where('application_no',$application_details->application_no)->update($array);
         return $this->successResponse($application_details, Response::HTTP_CREATED);
+    }
+
+    /**
+     * Check whether a class has streams or not
+     */
+    private function checkStreamExists($classId){
+        $data = DB::table('class_stream_mappings')
+                ->select('streamId', 'classId')
+                ->where('classId', $classId)
+                ->get()
+                ->toArray();
+
+        return $data;
+
+    }
+
+    /**
+     * Get class and stream id based on id
+     */
+    private function getClassStreamId($id){
+        $data = DB::table('class_stream_mappings')
+                ->select('classId', 'streamId')
+                ->where('id', $id)
+                ->get()
+                ->toArray();
+
+        return $data;
+
     }
 
     /**
@@ -233,7 +343,7 @@ class EstablishmentController extends Controller
      * method to load organization details
      */
     public function loadOrganizationDetails($user_id=""){
-        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','Pending')->first());
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','pending')->first());
     }
 
     /**
@@ -427,6 +537,20 @@ class EstablishmentController extends Controller
         return $this->successResponse($response_data);
     }
 
+    public function loadorgs($type=""){
+        $response_data="";
+        if($type=="Org"){
+            $response_data=OrganizationDetails::all();
+        }
+        if($type=="Dzongkhag"){
+            $response_data=HeadQuaterDetails::where('organizationType',2)->select('agencyName AS name','id')->get();
+        }
+        if($type=="Ministry"){
+            $response_data=HeadQuaterDetails::where('organizationType',1)->select('agencyName AS name','id')->get();
+        }
+        return $this->successResponse($response_data);
+    }
+
     //Used in NFE-MIS
     public function loadorgbygewogId($gewog_id){
       $response_data=OrganizationDetails::where('gewogId',$gewog_id)->get();
@@ -446,6 +570,7 @@ class EstablishmentController extends Controller
     public function getOrgList($dzo_id=""){
         $response_data=OrganizationDetails::where('dzongkhagId',$dzo_id)->get();
         return $this->successResponse($response_data);
+        
     }
     public function getClassByOrg($id=""){
         $classSection=OrganizationClassStream::where('organizationId',$id)->where('streamId',null)->groupBy('classId')->get();
