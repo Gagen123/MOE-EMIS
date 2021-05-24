@@ -17,9 +17,11 @@
                         Nomination 
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link id="service" to="/nomination_selection" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Selection & Nomination
+
+                <!-- This menu should be static as its checked through the user id -->
+                <li class="nav-item active pr-1" style="display:none" id="feedback_link">
+                    <router-link id="service" to="/leadership_feedback" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Feedback
                     </router-link>
                 </li>
             </ul>
@@ -48,6 +50,20 @@ export default {
                 console.log(error);
             });
         },
+
+        checkfeedbackMenu(){
+            let uri = '/staff/staffLeadershipSerivcesController/checkforfeedbackLink'
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!=""){
+                    $('#feedback_link').show();
+                }
+            })
+            .catch(function (error) { 
+                console.log(error);
+            });
+        },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});
         },
@@ -56,6 +72,7 @@ export default {
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
+        this.checkfeedbackMenu();
     },
 }
 </script>

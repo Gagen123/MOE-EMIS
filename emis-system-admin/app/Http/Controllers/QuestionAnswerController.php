@@ -211,6 +211,12 @@ class QuestionAnswerController extends Controller{
             }
             return $this->successResponse($questionlist);
         }
+        if(strpos($type,"loadServices_")!==false || strpos($type,"loadcategoryType_")!==false){ //services and categoy type by type 
+            $databaseModel=explode("_",$type)[2]; 
+            $modelName = "App\\Models\\question_answer\\"."$databaseModel"; 
+            $model = new $modelName();
+            return $this->successResponse($model::where("type",explode("_",$type)[1])->get());
+        }
     }
     
     public function saveAnswers(Request $request){
