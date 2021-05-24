@@ -227,7 +227,7 @@ export default {
                 status:'pending', establishment_type:'private_eccd'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted'
+                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted',applicaiton_number:'',
             }) 
         } 
     },
@@ -473,6 +473,7 @@ export default {
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.applicaiton_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }

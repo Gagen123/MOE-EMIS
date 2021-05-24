@@ -30,6 +30,9 @@ use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\establishment\HeadQuaterDetails;
 use App\Models\establishment\ApplicationEstPublic;
+use App\Models\establishment\ApplicationEstPrivate;
+use App\Models\establishment\ApplicationVerification;
+use App\Models\establishment\ApplicationVerificationTeam;
 use App\Models\OrgProfile;
 use App\Models\establishment\ApplicationAttachments;
 
@@ -257,15 +260,15 @@ class EstablishmentController extends Controller
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
-        // $application_details=  ApplicationDetails::where('created_by',$request->user_id) //updated by tshewang after sending application number
-        //                                             ->where('establishment_type', $request->proposed_establishment)
-        //                                             ->where('status', 'pending')
-        //                                             ->first();
+        $application_details= ApplicationDetails::where('created_by',$request->user_id) 
+                                                    ->where('application_no', $request->applicaiton_number)
+                                                    ->where('status', 'pending')
+                                                    ->first();
         foreach($request->class as $key => $classId){
             $stream_exists = $this->checkStreamExists($classId);
             if(empty($stream_exists)){
                 $classStream = [
-                    'ApplicationDetailsId'  => $request->applicaiton_number,
+                    'ApplicationDetailsId'  => $application_details->id,
                     'classId'               => $classId,
                     'streamId'              => '',
                     'created_by'            => $request->user_id,
@@ -289,7 +292,7 @@ class EstablishmentController extends Controller
         //         ];
         //         $class = ApplicationClassStream::create($classStream);
 
-        
+
          //this above is commented with conflict   
 
         if($request->stream!=null && $request->stream!=""){
@@ -298,7 +301,7 @@ class EstablishmentController extends Controller
     
                 foreach($class_stream_data as $v){
                     $classStream = [
-                        'ApplicationDetailsId'  => $application_details->application_no,
+                        'ApplicationDetailsId'  => $application_details->id,
                         'classId'               => $v->classId,
                         'streamId'              => $v->streamId,
                         'created_by'            => $request->user_id,
@@ -311,7 +314,6 @@ class EstablishmentController extends Controller
 
         $array = ['status' => $request->status];
         DB::table('application_details')->where('application_no',$request->applicaiton_number)->update($array);
-        $application_details=  ApplicationDetails::where('application_no',$request->applicaiton_number)->first();
         return $this->successResponse($application_details, Response::HTTP_CREATED);
     }
 
@@ -388,7 +390,16 @@ class EstablishmentController extends Controller
         if($response_data->establishment_type=="Public School"){
             $response_data->org_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
         }
-        $response_data->org_class_stream=ApplicationClassStream::where('ApplicationDetailsId',$appNo)->get();
+        if($response_data->establishment_type=="Private School"){
+            $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
+        }
+        $response_data->org_class_stream=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->get();
+        $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        $response_data->app_verification=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
+        $id=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
+        if($id!=null && $id!=""){
+            $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$id->id)->get();
+        }
         
         // $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
         // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
@@ -403,12 +414,42 @@ class EstablishmentController extends Controller
     }
 
     public function updateEstablishment(Request $request){
-        $estd =[
-            'status'                       =>   $request->status,
-            'updated_remarks'              =>   $request->remarks,
-            'updated_by'                   =>   $request->user_id,
-        ];
-        $establishment = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
+        if($request->update_type=="tentative"){
+            $verification =[
+                'ApplicationDetailsId'        =>   $request->id,
+                'verifyingAgency'             =>   $request->verifying_agency,
+                'tentativeDate'               =>   $request->tentative_date,
+                'remarks'                     =>   $request->remarks,
+                'created_by'                  =>   $request->user_id,
+                'created_by'                  =>   date('Y-m-d h:i:s'),
+            ];
+            $establishment=ApplicationVerification::create($verification);
+        }
+        else if($request->update_type=="team_verification"){
+            if(sizeof($request->nomi_staffList)>0 ){
+                foreach($request->nomi_staffList as $nomi){
+                    $verification =[
+                        'ApplicationVerificationId'     =>   $request->id,
+                        'agency'                        =>   $nomi['org_id'],
+                        'teamMember'                    =>   $nomi['staff_id'],
+                        'verificationDate'              =>   date('Y-m-d h:i:s'),
+                        'remarks'                       =>   $request->remarks,
+                        'created_by'                    =>   $request->user_id,
+                        'created_by'                    =>   date('Y-m-d h:i:s'),
+                    ];
+                    $establishment=ApplicationVerificationTeam::create($verification);
+                }
+            }
+        }
+        else{
+            $estd =[
+                'status'                       =>   $request->status,
+                'remarks'                        =>   $request->remarks,
+                'updated_by'                   =>   $request->user_id,
+                'updated_at'                   =>   date('Y-m-d h:i:s'),
+            ]; 
+            $establishment = ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+        }
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
 

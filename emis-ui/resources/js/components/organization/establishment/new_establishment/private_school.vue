@@ -255,7 +255,7 @@ export default {
                 enrollmentBoys:'', enrollmentGirls:'', typeOfSchool:'', establishment_type:'private_school', status:'pending'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted'
+                id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',applicaiton_number:'',
             }) 
         } 
     },
@@ -501,6 +501,7 @@ export default {
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.applicaiton_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
