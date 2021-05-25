@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFoodReleasesTable extends Migration
+class CreateCeaQuarterTypeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateFoodReleasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('food_releases', function (Blueprint $table) {
+        Schema::create('cea_quarter_type', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->date('dateOfrelease')->nullable(false);
-            $table->char('dzongkhag_id',36)->nullable(false);
-            $table->char('org_id',36)->nullable(false);
-            $table->char('quarter_id',36)->nullable(false);
-            $table->string('remarks')->nullable(true);
+            $table->string('name');
+            $table->string('description');
+            $table->tinyInteger('status');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();
@@ -33,6 +31,6 @@ class CreateFoodReleasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('food_releases');
+        Schema::dropIfExists('cea_quarter_type');
     }
 }

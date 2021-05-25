@@ -36,13 +36,13 @@ class MessManagementController extends Controller
             'dateOfrelease'            =>  'required',
             'dzongkhag'                =>  'required',
             'organizaiton'             =>  'required',
-            'term'                     =>  'required',
+            'quarter'                  =>  'required',
         ];
         $customMessages = [
             'dateOfrelease.required'    =>  'dateOfrelease is required',
             'dzongkhag.required'        =>  'dzongkhag is required',
             'organizaiton.required'     =>  'organizaiton  is required',
-            'term.required'             =>  'term is required',
+            'quarter.required'          =>  'quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
@@ -50,13 +50,13 @@ class MessManagementController extends Controller
             'dateOfrelease'            =>  $request['dateOfrelease'],
             'dzongkhag'                =>  $request['dzongkhag'],
             'organizaiton'             =>  $request['organizaiton'],
-            'term'                     =>  $request['term'],
+            'quarter'                  =>  $request['quarter'],
             'remarks'                  =>  $request['remarks'],
             'id'                       =>  $request['id'],
             'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
         ];  
-        // dd($foodrelease);
+       //  dd($foodrelease);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
             //dd($response_data);
