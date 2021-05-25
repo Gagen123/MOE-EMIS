@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
+use App\Models\ClassXiAdmission;
+use App\Models\EnrolledStudent;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
@@ -16,7 +18,7 @@ use App\Models\Students\ApplicationSequence;
 class StudentAdmissionController extends Controller
 {
     use ApiResponser;
-    public $database="emis_student_db";
+    public $database="student_db";
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
@@ -124,7 +126,7 @@ class StudentAdmissionController extends Controller
 
     //function for student portal
     public function saveStudentDetailsFromPortal(Request $request){
-        dd($request);
+        // dd($request);
         $rules = [
             'snationality'              => 'required',
             'cid_passport'              => 'required',
@@ -388,9 +390,78 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    //this funtion used for student portal
+
+    public function  savedetailsClassXi(Request $request){
+        // dd($request);
+
+        $rules = [
+            // 'dzongkhag'                 => 'required',
+            // 'school'                    => 'required',
+            // 'class'                     => 'required',
+            // 'stream'                    => 'required',
+            'dateOfapply'               => 'required',
+        ];
+        $customMessages = [
+            // 'dzongkhag.required'          => 'This field is required',
+            // 'school.required'             => 'This field is required',
+            // 'class.required'              => 'This field is required',
+            // 'stream.required'             => 'This field is required',
+            'dateOfapply.required'        => 'This field is required',
+        ];
+        
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'dzongkhag'                  =>  $request->dzongkhag,
+            'school'                     =>  $request->school,
+            'class'                      =>  $request->class,
+            'stream'                     =>  $request->stream,
+            'dateOfapply'                =>  $request->dateOfapply,
+            'remarks'                    =>  $request->remarks,
+        ];
+            $response_data = ClassXiAdmission::create($data);
+        
+        
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+
+    public function  savedetailsEnrolledStd(Request $request){
+        // dd($request);
+
+        $rules = [
+            // 'dzongkhag'                 => 'required',
+            // 'school'                    => 'required',
+            // 'class'                     => 'required',
+            'dateOfapply'               => 'required',
+        ];
+        $customMessages = [
+            // 'dzongkhag.required'          => 'This field is required',
+            // 'school.required'             => 'This field is required',
+            // 'class.required'              => 'This field is required',
+            'dateOfapply.required'        => 'This field is required',
+        ];
+        
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'dzongkhag'                  =>  $request->dzongkhag,
+            'school'                     =>  $request->school,
+            'class'                      =>  $request->class,
+            'dateOfapply'                =>  $request->dateOfapply,
+            'remarks'                    =>  $request->remarks,
+        ];
+            $response_data = EnrolledStudent::create($data);
+        
+        
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
     
     
+   
     public function saveStudentClassDetails(Request $request){
+
+        // dd($request);
         $rules = [
             'student_type'                      => 'required',
             'no_meals'                          => 'required',
@@ -586,6 +657,12 @@ class StudentAdmissionController extends Controller
             $response_data=StudentClassDetails::where('StdStudentId',$std_id)->first();
         }  
         return $this->successResponse($response_data);
+    }
+
+    public function getEnrolledStudents($std_id=""){
+        $response_data=ClassXiAdmission::where('id',$std_id)->first();
+        return $this->successResponse($response_data); 
+
     }
     
 }
