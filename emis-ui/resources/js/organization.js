@@ -238,7 +238,7 @@ const routes = [
     
     { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
       children:[
-        { path: '/new_establishment_index', 
+        { path: '/new_establishment_index',  name:'establishment_index',
           component: require('./components/organization/establishment/new_establishment/new_establishment_index.vue').default ,
           children: [
             { path: '',name:"establishment_index_list", component: require('./components/organization/establishment/new_establishment/establishment_index_list.vue').default },
@@ -343,7 +343,18 @@ const routes = [
           name:'change_details_index', component: require('./components/organization/restructuring/change_details/change_details_index.vue').default,
             children: [
               { path: '',name:'change_details_index', component: require('./components/organization/restructuring/change_details/change_details_list.vue').default },
-              { path: '/change_details_add',name:'change_details_add', component: require('./components/organization/restructuring/change_details/change_details_add.vue').default },
+              { path: '/change_details_add',
+                  component: require('./components/organization/restructuring/change_details/change_details_add.vue').default,
+                  children: [
+                      { path: '/change_name',name:"change_name", component: require('./components/organization/restructuring/change_details/change_name.vue').default },
+                      { path: '/change_level',name:"change_level", component: require('./components/organization/restructuring/change_details/change_level.vue').default },
+                      { path: '/change_feeding_details', name:'change_feeding_details', component: require('./components/organization/restructuring/change_details/change_feeding_details.vue').default },
+                      { path: '/change_sen_details', name:'change_sen_details', component: require('./components/organization/restructuring/change_details/change_sen_details.vue').default },
+                      { path: '/change_proprietor_details', name:'change_proprietor_details', component: require('./components/organization/restructuring/change_details/change_proprietor_details.vue').default },
+                      { path: '/change_all_details', name:'change_all_details', component: require('./components/organization/restructuring/change_details/change_all_details.vue').default },
+                    ]
+              },
+
               { path: '/change_details_edit', name:'change_details_edit', component: require('./components/organization/restructuring/change_details/change_details_edit.vue').default },
               { path: '/change_details_list', name:'change_details_list', component: require('./components/organization/restructuring/change_details/change_details_list.vue').default },
             ]  
@@ -374,7 +385,7 @@ const routes = [
     // Organisational Routes (structural facility route)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
-        { path: '/infrastructure_index', 
+        { path: '/infrastructure_index', name:'structural_index',
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [
             { path: '',name:'infrastructure_index', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_list.vue').default },

@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models\staff_leadership;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Traits\Uuid;
+use Illuminate\Database\Eloquent\Model;
+class NominationDetails extends Model{
+    use HasFactory, Uuid;
+    protected $table="staff_leadership_nomination_detials";
+    public $timestamps = false;
+    protected $fillable = [
+        'id',
+        'leadership_id',
+        'staff_id',
+        'dzongkhag_id',
+        'org_id',
+    ];
+}

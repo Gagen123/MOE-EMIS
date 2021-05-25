@@ -14,6 +14,9 @@ use App\Models\EnrolledStudent;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
+use App\Models\Students\StudentAboard;
+
+
 
 class StudentAdmissionController extends Controller
 {

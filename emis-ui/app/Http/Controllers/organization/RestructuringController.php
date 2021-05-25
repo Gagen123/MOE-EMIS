@@ -20,7 +20,7 @@ class RestructuringController extends Controller
     public $table_name="application_details";
     public $bif_table_name="bifurcations";
 
-    public $service_name="Change Basic Details";
+    public $service_name=" ";
     public $service_name_closure="Closure";
     public $merge_service_name="Merger";
     public $bif_service_name="Bifurcation";
@@ -30,51 +30,51 @@ class RestructuringController extends Controller
     }
 
     public function saveChangeBasicDetails(Request $request){
-        $rules = [
-            'name'          =>  'required',
-            'level'                 =>  'required',
-            'category'              =>  'required',
-            'dzongkhag'             =>  'required',
-            'gewog'                 =>  'required',
-            'chiwog'                =>  'required',
-            'locationType'          =>  'required',
-            'senSchool'             =>  'required',
-        ];
-        $customMessages = [
-            'proposedName.required'         => 'Proposed Name is required',
-            'level.required'                => 'Level is required',
-            'category.required'             => 'Category is required',
-            'dzongkhag.required'            => 'Dzongkhag is required',
-            'gewog.required'                => 'Gewog is required',
-            'chiwog.required'               => 'Chiwog is required',
-            'locationType.required'         => 'Location Type  is required',
-            'senSchool.required'            => 'Sen School is required',
-            
-        ];
+        $this->service_name = $request['application_for'];
+
+        switch($request['application_type']){
+            case "name_change" : {
+                    $validation = $this->validateNameChangeFields($request);
+                    $establishment_data = $this->setNameChangeFields($request);
+                    break;
+                }
+            case "feeding_change" : {
+                    $validation = $this->validateGeneralChange($request);
+                    $establishment_data = $this->setFeedingChange($request);
+                    break;
+                }
+            case "level_change" : {
+                    $validation = $this->validateChangeInLevel($request);
+                    $establishment_data = $this->setChangeInLevel($request);
+                    break;
+                }
+            case "proprietor_change" : {
+                    $validation = $this->validateChangeInProprietor($request);
+                    $establishment_data = $this->setChangeInProprietor($request);
+                    break;
+                }
+            case "sen_change" : {
+                    $validation = $this->validateGeneralChange($request);
+                    $establishment_data = $this->setSenChange($request);
+                    break;
+                }
+            case "all_details" : {
+                    $validation = $this->validateAllChangesFields($request);
+                    $establishment_data = $this->setAllChangesFields($request);
+                    break;
+                }
+            default : {
+                
+                break;
+            }
+        }
+
+        $rules = $validation['rules'];
+        $customMessages = $validation['messages'];
+
         $this->validate($request, $rules, $customMessages);
-        $change =[
-            'organizationId'            =>  $this->getWrkingAgencyId(),
-            'name'                      =>  $request['name'],
-            'level'                     =>  $request['level'],
-            'category'                  =>  $request['category'],
-            'dzongkhag'                 =>  $request['dzongkhag'],
-            'gewog'                     =>  $request['gewog'],
-            'chiwog'                    =>  $request['chiwog'],
-            'locationType'              =>  $request['locationType'],
-            'geoLocated'                =>  $request['geoLocated'],
-            'senSchool'                 =>  $request['senSchool'],
-            'geoLocated'                =>  $request['geoLocated'],
-            'coLocatedParent'           =>  $request['coLocatedParent'],
-            'parentSchool'              =>  $request['parentSchool'],
-            'cid'                       =>  $request['cid'],
-            'fullName'                  =>  $request['fullName'],
-            'phoneNo'                   =>  $request['phoneNo'],
-            'email'                     =>  $request['email'],
-            'status'                    =>  $request['status'],   
-            'id'                        =>  $request['id'],
-            'user_id'                   =>  $this->userId() 
-        ];
-        $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $change);
+
+        $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         return $response_data;
     }
 
@@ -561,5 +561,265 @@ class RestructuringController extends Controller
         return $loadBifurcationDetails;
     }
     
+
+    /**
+     * Validation Rules for different types of changes
+     */
     
+    private function validateNameChangeFields($request){
+        $rules = [
+            'proposedName'                =>  'required',
+            'initiatedBy'                 =>  'required',
+            'organizationId'              =>  'required'
+        ];
+        $customMessages = [
+            'proposedName.required'         => 'Proposed Name is required',
+            'initiatedBy.required'          => 'Initiated By is required',
+            'organizationId.required'       => 'Organization is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validateChangeInLevel($request){
+        $rules = [
+            'level'                       =>  'required',
+            'organizationId'              =>  'required'
+        ];
+        $customMessages = [
+            'level.required'                => 'New Level is required',
+            'organizationId.required'       => 'Organization is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    //this is used to validate both SEN and Feeding
+
+    private function validateGeneralChange($request){
+        $rules = [
+            'organizationId'              =>  'required'
+        ];
+        $customMessages = [
+            'organizationId.required'       => 'Organization is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validateChangeInProprietor($request){
+        $rules = [
+            'proprietorName'              =>  'required',
+            'proprietorCid'               =>  'required',
+            'proprietorPhone'             =>  'required',
+            'proprietorEmail'             =>  'required',
+            'proprietorMobile'            =>  'required',
+            'organizationId'              =>  'required'
+        ];
+        $customMessages = [
+            'proprietorName.required'           => 'Proprietor Name is required',
+            'proprietorCid.required'            => 'Proprietor CID is required',
+            'proprietorPhone.required'          => 'Phone No. is required',
+            'proprietorMobile.required'         => 'Mobile No.  is required',
+            'proprietorEmail.required'         => 'Email  is required',
+            'organizationId.required'       => 'Organization is required'
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+        
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+    
+    
+    private function validateAllChangesFields($request){
+
+        $rules = [
+            'name'                  =>  'required',
+            'level'                 =>  'required',
+            'category'              =>  'required',
+            'dzongkhag'             =>  'required',
+            'gewog'                 =>  'required',
+            'chiwog'                =>  'required',
+            'locationType'          =>  'required',
+            'senSchool'             =>  'required',
+        ];
+        $customMessages = [
+            'name.required'         => 'Proposed Name is required',
+            'level.required'                => 'Level is required',
+            'category.required'             => 'Category is required',
+            'dzongkhag.required'            => 'Dzongkhag is required',
+            'gewog.required'                => 'Gewog is required',
+            'chiwog.required'               => 'Chiwog is required',
+            'locationType.required'         => 'Location Type  is required',
+            'senSchool.required'            => 'Sen School is required',
+            
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    /**
+     * Setting the data fields to be saved
+     */
+
+    private function setNameChangeFields($request){
+        /**
+         * organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change', 
+         *  application_for:'Change in Name', action_type:'add', status:'pending'
+         */
+
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'proposedName'              =>  $request['proposedName'],
+            'initiatedBy'               =>  $request['initiatedBy'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['chiwog'],  
+            'id'                        =>  $request['status'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+
+    private function setChangeInLevel($request){
+        /**
+         * organizationId:'', application_type:'level_change', class:[], stream:[],
+         * application_for:'Change in Level', action_type:'add', status:'pending'
+         */
+
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'level_change'              =>  $request['level_change'],
+            'level'                     =>  $request['level'],
+            'class'                     =>  $request['class'],
+            'stream'                    =>  $request['stream'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+
+    private function setFeedingChange($request){
+        /**
+         * organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
+         * application_for:'Change in Feeding Details', action_type:'add', status:'pending'
+         */
+
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'feeding'                   =>  $request['feeding'],
+            'isfeedingschool'           =>  $request['isfeedingschool'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+
+    private function setSenChange($request){
+        /**
+         * organizationId:'', application_type:'sen_change', senSchool:'0',
+         * application_for:'Change in SEN details', action_type:'add', status:'pending'
+         */
+
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'senSchool'                 =>  $request['senSchool'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+
+    private function setChangeInProprietor($request){
+        /**
+         * organizationId:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
+         *   application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'pending'
+         */
+
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'proprietorName'            =>  $request['proprietorName'],
+            'proprietorCid'             =>  $request['proprietorCid'],
+            'proprietorPhone'           =>  $request['proprietorPhone'],
+            'proprietorMobile'          =>  $request['proprietorMobile'],
+            'proprietorEmail'           =>  $request['proprietorEmail'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+
+    private function setAllChangesFields($request){
+
+        $change =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'name'                      =>  $request['name'],
+            'level'                     =>  $request['level'],
+            'category'                  =>  $request['category'],
+            'dzongkhag'                 =>  $request['dzongkhag'],
+            'gewog'                     =>  $request['gewog'],
+            'chiwog'                    =>  $request['chiwog'],
+            'locationType'              =>  $request['locationType'],
+            'geoLocated'                =>  $request['geoLocated'],
+            'senSchool'                 =>  $request['senSchool'],
+            'geoLocated'                =>  $request['geoLocated'],
+            'coLocatedParent'           =>  $request['coLocatedParent'],
+            'parentSchool'              =>  $request['parentSchool'],
+            'cid'                       =>  $request['cid'],
+            'fullName'                  =>  $request['fullName'],
+            'phoneNo'                   =>  $request['phoneNo'],
+            'email'                     =>  $request['email'],
+            'status'                    =>  $request['status'],   
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
 }

@@ -64,7 +64,7 @@ class ClassStreamController extends Controller
         $data = DB::table('classes')
                 ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
                 ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
-                ->select('class_stream_mappings.*', 'classes.class', 'streams.stream')
+                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
                 ->orderBy('classes.displayOrder', 'asc')
                 ->get();
 

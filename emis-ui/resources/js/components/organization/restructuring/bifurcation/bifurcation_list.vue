@@ -37,7 +37,7 @@ export default {
         }
     },
     methods:{
-        loadBifurcationList(uri = 'organization/getschoolDetials'){
+        loadBifurcationList(uri = 'organization/getOrgList'){
             axios.get(uri)
             .then(response => {
                 let data = response;
