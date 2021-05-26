@@ -258,6 +258,14 @@
                             Organization Profile
                         </router-link>
                     </li>
+                    <li class="nav-item" id="organization_list" @click="setclass('organizationlink','','organization_list')">
+                        <router-link to="/organization_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Organization List
+                            </p>
+                        </router-link> 
+                    </li>
                     <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
                         <router-link to="/establishment_index" class="nav-link">
                             <p>
@@ -270,15 +278,7 @@
                         <router-link to="/restructuring_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Restructuring
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/restructuring_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Change in Detail
+                                Change in Details
                             </p>
                         </router-link>
                     </li>
@@ -294,7 +294,7 @@
                         <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                General Information
+                                Other Information
                             </p>
                         </router-link>
                     </li>

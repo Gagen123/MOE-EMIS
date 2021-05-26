@@ -16,7 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
                     <td>{{ item.establishment_type}}</td>
-                    <td>{{ item.created_at.substring(0,10)}}</td>
+                    <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
                     <td>{{ item.status}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -40,6 +40,11 @@ export default {
         }
     },
     methods:{
+        reverseDate(dateData){
+            const reverse =
+                dateData.split("-").reverse().join("-");
+            return reverse;
+        },
         loadDataList(uri='organization/loadOrgApplications'){
             axios.get(uri)
             .then(response => {
