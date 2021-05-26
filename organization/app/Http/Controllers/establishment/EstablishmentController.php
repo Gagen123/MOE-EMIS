@@ -114,7 +114,18 @@ class EstablishmentController extends Controller
 
         $response_data = $this->insertData($establishment_data, $dataModel);
         $response_data->applicaiton_details=$inserted_application_data;
-
+        if($request->isfeedingschool==1 && sizeof($request->feeding)>0 ){
+            foreach($request->feeding as $feed){
+                $data =[
+                    'noOfMeals'                 =>  $feed,
+                    'foreignKeyFor'             => 'application_est_public',
+                    'foreignKeyId'              =>  $response_data->id,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                $this->insertData($data, 'ApplicationNoMeals');
+            }
+        }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -268,41 +279,28 @@ class EstablishmentController extends Controller
                                                     ->where('application_no', $request->applicaiton_number)
                                                     ->where('status', 'pending')
                                                     ->first();
-        foreach($request->class as $key => $classId){
-            $stream_exists = $this->checkStreamExists($classId);
-            if(empty($stream_exists)){
-                $classStream = [
-                    'ApplicationDetailsId'  => $application_details->id,
-                    'classId'               => $classId,
-                    'streamId'              => '',
-                    'created_by'            => $request->user_id,
-                    'created_at'            => date('Y-m-d h:i:s'),
-                ];
-                
-                $class = ApplicationClassStream::create($classStream);
-
-            } 
+        if($request->class){
+            foreach($request->class as $key => $classId){
+                $stream_exists = $this->checkStreamExists($classId);
+                if(empty($stream_exists)){
+                    $classStream = [
+                        'ApplicationDetailsId'  => $application_details->id,
+                        'classId'               => $classId,
+                        'streamId'              => '',
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    
+                    $class = ApplicationClassStream::create($classStream);
+    
+                } 
+            }
         }
-
-        // foreach($request->stream as $key2 => $classStreamId){
-        //     $class_stream_data = $this->getClassStreamId($classStreamId);
-        //     foreach($class_stream_data as $v){
-        //         $classStream = [
-        //             'ApplicationDetailsId'  => $request->applicaiton_number,
-        //             'classId'               => $v->classId,
-        //             'streamId'              => $v->streamId,
-        //             'created_by'            => $request->user_id,
-        //             'created_at'            => date('Y-m-d h:i:s'),
-        //         ];
-        //         $class = ApplicationClassStream::create($classStream);
-
-
-         //this above is commented with conflict   
 
         if($request->stream!=null && $request->stream!=""){
             foreach($request->stream as $key2 => $classStreamId){
                 $class_stream_data = $this->getClassStreamId($classStreamId);
-    
+            //    return $class_stream_data;
                 foreach($class_stream_data as $v){
                     $classStream = [
                         'ApplicationDetailsId'  => $application_details->id,
@@ -311,6 +309,7 @@ class EstablishmentController extends Controller
                         'created_by'            => $request->user_id,
                         'created_at'            => date('Y-m-d h:i:s'),
                     ];
+                    // return $classStream;
                     $class = ApplicationClassStream::create($classStream);
                 }
             }
@@ -391,10 +390,10 @@ class EstablishmentController extends Controller
     public function loadEstbDetailsForVerification($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         $response_data->application_date=date_format(Carbon::parse($response_data->action_date), 'Y-m-d h:i:s');
-        if($response_data->establishment_type=="Public School"){
+        if($response_data->establishment_type=="Public School" || $response_data->establishment_type=="Public ECCD" || $response_data->establishment_type=="ECR"){
             $response_data->org_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
         }
-        if($response_data->establishment_type=="Private School"){
+        if($response_data->establishment_type=="Private School" || $response_data->establishment_type=="Private ECCD"){
             $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
         $response_data->org_class_stream=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->get();
@@ -418,6 +417,21 @@ class EstablishmentController extends Controller
     }
 
     public function updateEstablishment(Request $request){
+        if($request->attachment_details!="" ){
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $request->update_type,
+                    ];
+                    $doc = ApplicationAttachments::create($attach);
+                }
+            }
+        }
         if($request->update_type=="tentative"){
             $verification =[
                 'ApplicationDetailsId'        =>   $request->id,
@@ -691,11 +705,12 @@ class EstablishmentController extends Controller
             foreach($request->attachment_details as $att){
                 $application_details=  ApplicationDetails::where('application_no',$att['applicaiton_number'])->first();
                 $attach =[
-                    'ApplicationDetailsId'       =>  $application_details->id,
-                    'path'                   =>  $att['path'],
+                    'ApplicationDetailsId'      =>  $application_details->id,
+                    'path'                      =>  $att['path'],
+                    'user_defined_file_name'    =>  $att['user_defined_name'],
                     'name'                      =>  $att['original_name'],
+                    'updoad_type'               =>  'Applicant',
                 ];
-
                 $doc = ApplicationAttachments::create($attach);
             }
         }
