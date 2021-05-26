@@ -1,3 +1,5 @@
+in the classes table:
+    added category
 in organization_details:
     added typeOfSchool  with comments
     changed the length of locationId
@@ -5,4 +7,10 @@ in organization_details:
 
 in the application_details:
     added registered_org_code 
-    
+
+in the applicaiton_attachments
+    added user_defined_file_name
+
+in the application_attachments
+    added upload_type 
+

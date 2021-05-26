@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
@@ -29,19 +33,20 @@
                         <label class="mb-0"><i><u>Proprietor Details</u></i></label>
                         <p>
                         <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                <has-error :form="form" field="proprietorCid"></has-error>
+                            </div> 
+                        </div>
+                        <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
                                 <has-error :form="form" field="proprietorName"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="number" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
-                                <has-error :form="form" field="proprietorCid"></has-error>
-                            </div>
-                        </div>
+                        
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -196,13 +201,31 @@
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
+                                    <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">
+                                    <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                </span>  
+                            </span> 
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <!-- <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <br>
                                 <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                        <br>
-                                        <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                    </span>
+                                <span v-if="item.class=='Class 11' || item.class=='Class 12'">
+                                    Here we are taking the class stream mapping id. Do not need to use padding
+                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
+                                </span>
+                            </span>  -->
+                            <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> 
+                                    <label class="pr-3"> 
+                                        {{ item.class }} 
+                                        <span v-if="item.stream"> - 
+                                            {{  item.stream  }}
+                                        </span>
+                                    </label>
+                                </span>  
                             </span> 
                         </div>
                         <hr>
@@ -637,44 +660,60 @@ export default {
                 console.log("Error......"+error);
             });
         },
-        
+        getDetailsbyCID(fieldId){
+            axios.get('getpersonbycid/'+ $('#'+fieldId).val())
+            .then(response => {
+                if (JSON.stringify(response.data)!='{}'){
+                    let personal_detail = response.data.citizenDetail[0];
+                    this.form.proprietorName = personal_detail.firstName + " " + personal_detail.lastName;
+                }else{
+                    Swal.fire({
+                        html: "No data found for this CID",
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch((exception) => {
+                console.log(exception);
+            });
+        },
         /**
          * method to load organization details
          */
-         loaddOrganizationDetails(){
-            axios.get('organization/loadOrganizationDetails')
-            .then((response) => {  
-                let data=response.data.data;
-                this.form.id  =   data.id;
-                this.form.proposedName  =   data.proposedName;
-                this.form.level         =   data.levelId;
-                $('#level').val(data.levelId).trigger('change');
-                this.form.category      =   data.category;
-                this.form.locationType  =   data.locationId;
-                $('#locationType').val(data.locationId).trigger('change');
+        //  loaddOrganizationDetails(){
+        //     axios.get('organization/loadOrganizationDetails')
+        //     .then((response) => {  
+        //         let data=response.data.data;
+        //         this.form.id  =   data.id;
+        //         this.form.proposedName  =   data.proposedName;
+        //         this.form.level         =   data.levelId;
+        //         $('#level').val(data.levelId).trigger('change');
+        //         this.form.category      =   data.category;
+        //         this.form.locationType  =   data.locationId;
+        //         $('#locationType').val(data.locationId).trigger('change');
                 
-                //to populate proprietor details if category is private
-                if(data.category == 0){
-                    this.showprivatedetails('private');
-                    this.loadProprietorDetails();
-                }
-                $('#dzongkhag').val(JSON.parse(response.data.dzongkhag).data.id).trigger('change');
-                this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
-                this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
-                this.form.gewog = JSON.parse(response.data.gewog).data.id;
-                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
-                this.form.chiwog = data.chiwogId;
+        //         //to populate proprietor details if category is private
+        //         if(data.category == 0){
+        //             this.showprivatedetails('private');
+        //             this.loadProprietorDetails();
+        //         }
+        //         $('#dzongkhag').val(JSON.parse(response.data.dzongkhag).data.id).trigger('change');
+        //         this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
+        //         this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
+        //         this.form.gewog = JSON.parse(response.data.gewog).data.id;
+        //         this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+        //         this.form.chiwog = data.chiwogId;
 
-                this.form.geopoliticallyLocated   =   data.isGeopoliticallyLocated;
-                this.form.senSchool                 =   data.isSenSchool;
-                this.form.parentSchool              =   data.parentSchoolId;
-                this.form.coLocated                 =   data.isColocated;
+        //         this.form.geopoliticallyLocated   =   data.isGeopoliticallyLocated;
+        //         this.form.senSchool                 =   data.isSenSchool;
+        //         this.form.parentSchool              =   data.parentSchoolId;
+        //         this.form.coLocated                 =   data.isColocated;
                 
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error......"+error);
+        //     });
+        // },
 
         // getScreenAccess(){
         //     axios.get('common/getSessionDetail')
@@ -708,10 +747,24 @@ export default {
         //         console.log("Error: "+error);
         //     });
         // },
+        getScreenAccess(){
+            axios.get('common/getScreenAccess/workflow__establishment__private_school')
+            .then(response => {
+                let data = response.data[0].total_count;
+                if(data<1){
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                    $('#message').html('This page is not accessible to you. Please contact system administrator for further assistant<br> Thank you');
+                }
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        },
     },
     
     created(){
-        // this.getScreenAccess();
+        this.getScreenAccess();
         this.getLevel();
         this.getLocation();
         // this.checkPendingApplication();
@@ -747,7 +800,6 @@ export default {
         this.getLevel();
         this.getLocation();
         // this.loadactivedzongkhagList();
-        this.loaddOrganizationDetails();
         this.getOrgList();
         this.loadpendingdetails('Private_School');
     }, 

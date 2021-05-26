@@ -140,17 +140,19 @@
                                         <thead>
                                             <tr>
                                                 <th>Attachment Name</th> 
+                                                <th>Attachment</th> 
                                                 <th>File</th> 
                                             </tr>
                                         </thead> 
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                                <td> 
-                                                    {{attach.name}}
-                                                </td>
-                                                <td>    
-                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                </td>
+                                                <template v-if="attach.upload_type == null || attach.upload_type=='Applicant'">
+                                                    <td> {{attach.user_defined_file_name}} </td>
+                                                    <td>  {{attach.name}}</td>
+                                                    <td>    
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </template>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -165,88 +167,156 @@
                         </div>
                     </div> 
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams</label>
-                            </div>
-                        </div> 
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  class_section" :key="index">
-                                <br>
-                                <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}</label>
-                                <span v-if="item.streamId!=''">
-                                    <br>
-                                    <label class="pr-3"> {{ streamArray[item.streamId]  }}</label>
-                                </span>
-                            </span> 
-
-                            <!-- <span v-for="(item, index) in  class_section" :key="index">
-                                <br>
-                                <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}</label>
-                                 <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                    <span v-if="item.classId==stm.classId">
+                        <div class="callout callout-success">
+                            <h4><u>Select classes and streams</u></h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                    <span v-for="(item, index) in  class_section" :key="index">
                                         <br>
-                                        <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                    </span>
-                                </span> 
-                            </span>  -->
-                        </div>
-                        <Workflow
-                            :appNo="applicationdetails.applicationNo"
-                        />
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0"><ul>Site Visit and Verification Details</ul></label>
-                            </div>
-                        </div> 
-                        <div class="row form-group">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Verifying Agency:</label> 
-                                <input type="text" name="verifying_agency" v-model="form.verifying_agency" id="verifying_agency" class="form-control">
-                                <span class="text-danger" id="verifying_agency_err"></span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Tentative Date:</label> 
-                                <input type="date" name="tentative_date" v-model="form.tentative_date" id="tentative_date" class="form-control">
-                                <span class="text-danger" id="tentative_date_err"></span>
+                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
+                                    </span> 
+                                </div> 
                             </div>
                         </div>
-                        <div class="row form-group" id="verifier_team" style="display:none">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
-                                <label>Enter the Members CID:</label> 
-                                <input type="text" name="emp_deails" id="emp_deails" class="form-control">
-                                <span class="text-danger" id="emp_deails_err"></span>
+                        <div class="callout callout-success">
+                            <h4><u>Site Visit and Verification Details</u></h4>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Verifying Agency:</label> 
+                                    <input type="text" name="verifying_agency" v-model="form.verifying_agency" id="verifying_agency" class="form-control">
+                                    <span class="text-danger" id="verifying_agency_err"></span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Tentative Date:</label> 
+                                    <input type="date" name="tentative_date" v-model="form.tentative_date" id="tentative_date" class="form-control">
+                                    <span class="text-danger" id="tentative_date_err"></span>
+                                </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-2" v-if="showsearch">
-                                <button type="button" @click="getEmpDetails()" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Search</button>
+                            <div class="row pb-2" style="display:none" id="tentativeAttachment">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h5><u>Attachments</u></h5>
+                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Attachment Name</th> 
+                                                <th>Attachment</th> 
+                                                <th>File</th> 
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                <template v-if="attach.upload_type=='tentative'">
+                                                    <td>  {{attach.user_defined_file_name}}</td>
+                                                    <td>  {{attach.name}}</td>
+                                                    <td>    
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </template>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
-                                <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>CID/Passport</th>
-                                            <th>Position Title</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for='(user, index) in form.nomi_staffList' :key="index">
-                                            <td> {{user.name}}</td>
-                                            <td> {{user.cid}}</td>
-                                            <td> {{user.po_title}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="5">
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId" 
-                                                @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <span id="nminees_error" class="text-danger"></span>
-                                </table>
+                            <hr>
+                            <div id="verifier_team" style="display:none">
+                                <h5><u>Team Verification</u></h5>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
+                                        <label>Enter the Members CID:</label> 
+                                        <input type="text" name="emp_deails" id="emp_deails" class="form-control">
+                                        <span class="text-danger" id="emp_deails_err"></span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-2" v-if="showsearch">
+                                        <button type="button" @click="getEmpDetails()" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Search</button>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
+                                        <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>CID/Passport</th>
+                                                    <th>Position Title</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(user, index) in form.nomi_staffList' :key="index">
+                                                    <td> {{user.name}}</td>
+                                                    <td> {{user.cid}}</td>
+                                                    <td> {{user.po_title}}</td>
+                                                </tr>
+                                                <tr id="removeBtn">
+                                                    <td colspan="5">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId" 
+                                                        @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <span id="nminees_error" class="text-danger"></span>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row pb-2" style="display:none" id="team_verificationAttachment">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h5><u>Attachments</u></h5>
+                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Attachment Name</th> 
+                                                <th>Attachment</th> 
+                                                <th>File</th> 
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                <template v-if="attach.upload_type=='team_verification'">
+                                                    <td>{{attach.user_defined_file_name}} </td>
+                                                    <td>  {{attach.name}}</td>
+                                                    <td>    
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </template>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                        
+                         <div class="callout callout-success">
+                            <h4><u>Attachments</u></h4>
+                            <div class="form-group row">
+                                <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Upload File</th>                     
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
+                                                <td>
+                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                </td>
+                                                <td>                                
+                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                </td>
+                                            </tr> 
+                                            <tr>
+                                                <td colspan="5"> 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                            </tr>                                          
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
@@ -278,6 +348,7 @@ export default {
     },
     data(){
         return{ 
+            count:1,
             showsearch:false,
             proprietorList:[],
             class_section:[],
@@ -293,12 +364,18 @@ export default {
             }),
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:'',verifying_agency:'',tentative_date:'',update_type:'',servicename:'',
-                nomi_staffList:[]
+                nomi_staffList:[],fileUpload: [],
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }), 
         } 
     },
     methods:{
         loadestablishmentapplicationdetails(appId,type){
+            
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
@@ -319,6 +396,7 @@ export default {
                     $('#approveId').hide();
                 }
                 else{
+                    $('#tentativeAttachment').show();
                     this.form.verifying_agency=data.app_verification.verifyingAgency;
                     this.form.id=data.app_verification.id;
                     $('#verifying_agency').prop('readonly',true);
@@ -335,16 +413,16 @@ export default {
                     }
                     else{
                         this.showsearch=false;
+                        this.form.update_type='final_verification';
+                        $('#removeBtn').hide();
+                        $('#team_verificationAttachment').show();
                         for(let i=0;i<data.app_verification_team.length;i++){
                             this.form.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
-                             name:data.name,
-                              cid:data.cid_work_permit,
-                               po_title:data.position_title,
-                                org_id:data.agency,
-                                org:data.working_agency,
-                                })
+                                name:data.app_verification_team[i].name,
+                                cid:data.app_verification_team[i].cid,
+                                po_title:data.app_verification_team[i].po_title,
+                            })
                         }
-                        
                     }
                 }
                 this.applicationdetails=data;
@@ -361,6 +439,31 @@ export default {
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
+        addMore: function(){
+            this.count++;
+            this.form.fileUpload.push({file_name:'', file_upload:''})
+        },
+        /**
+         * method to remove fields
+         */
+        remove(index){    
+             if(this.form.fileUpload.length>1){
+                this.count--;
+                this.form.fileUpload.splice(index,1); 
+            }
+        },
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            } 
+        },
+
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -431,8 +534,32 @@ export default {
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
                         if (result.isConfirmed) {
-                            this.form.actiontype=nextclass;
-                            this.form.post('organization/updateNewEstablishmentApplication')
+                            const config = {
+                                headers: {
+                                    'content-type': 'multipart/form-data'
+                                }
+                            }
+                            let formData = new FormData();
+                            formData.append('id', this.form.id);
+                            formData.append('actiontype', nextclass);
+                            formData.append('applicationNo', this.form.applicationNo);
+                            formData.append('remarks', this.form.remarks);
+                            formData.append('verifying_agency', this.form.verifying_agency);
+                            formData.append('tentative_date', this.form.tentative_date);
+                            formData.append('update_type', this.form.update_type);
+                            formData.append('servicename', this.form.servicename);
+                            // for(let i=0;i<this.form.nomi_staffList.length;i++){
+                            //     alert( JSON.stringify(this.form.nomi_staffList[i]));
+                               
+                            // }
+                            formData.append('nomi_staffList', JSON.stringify(this.form.nomi_staffList));
+                            formData.append('ref_docs[]', this.form.ref_docs);
+                            for(let i=0;i<this.form.ref_docs.length;i++){
+                                formData.append('attachments[]', this.form.ref_docs[i].attach);
+                                formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                            }
+
+                            axios.post('organization/updateNewEstablishmentApplication', formData, config)
                             .then((response) => {
                                 if(response!=""){
                                     Toast.fire({  
