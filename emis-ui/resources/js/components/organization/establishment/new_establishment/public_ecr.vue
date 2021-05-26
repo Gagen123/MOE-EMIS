@@ -394,7 +394,7 @@ export default {
          * method to get class stream in checkbox
          */
         getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping')
+            axios.get('/masters/loadClassStreamMapping/school')
               .then(response => {
                 this.classStreamList = response.data.data;
             });

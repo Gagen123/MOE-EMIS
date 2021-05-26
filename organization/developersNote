@@ -1,0 +1,8 @@
+in organization_details:
+    added typeOfSchool  with comments
+    changed the length of locationId
+    changed categroy to char 36
+
+in the application_details:
+    added registered_org_code 
+    

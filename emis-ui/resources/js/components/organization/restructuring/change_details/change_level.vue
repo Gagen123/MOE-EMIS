@@ -80,7 +80,7 @@ export default {
             classStreamList:[],
             form: new form({
                 organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
-                application_for:'Change in Level', action_type:'add', status:'pending'
+                application_for:'Change in Level', action_type:'add', status:'pending',organization_type:''
             })
         } 
     },
@@ -119,11 +119,19 @@ export default {
         async changefunction(id){
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();
+                this.getorgdetials($('#organizationId').val()); 
             }
 
             if(id=="level"){
                 this.form.level=$('#level').val();
             }
+        },
+
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.organizationType;
+            });
         },
 
         /**

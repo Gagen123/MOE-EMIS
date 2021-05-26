@@ -4,7 +4,7 @@
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
-        <div class="card card-primary card-outline" id="mainform">
+        <div class="card" id="mainform">
             <div class="card-body" >
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -47,121 +47,114 @@
                 <!-- for private category -->
                 <div id="org_details" style="display:none">
                     <div class="callout callout-success">
-                        <h4><u>Organization Details</u></h4>
+                        <h5><u>Organization Details</u></h5>
                         <div class="form-group row"> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Proposed Name:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.proposedName}}</span>
+                                <span class="text-blue text-bold">{{proposedName}}</span>
                             </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Level:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.level}}</span>
+                                <span class="text-blue text-bold">{{levelArray[orgLevel]}}</span>
                             </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Category:</label>
-                                <span class="text-blue text-bold">
-                                    {{ applicaitondetailsform.category  == 1 ? "public" :  "private"}}
-                                </span>
+                                <span class="text-blue text-bold"> {{ applicaitondetails.establishment_type }}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Dzongkhag:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.dzongkhag}}</span>
+                                <span class="text-blue text-bold">{{applicaitondetails.dzongkhag}}</span>
                             </div>  
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Gewog:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.gewog}}</span>
+                                <span class="text-blue text-bold">{{applicaitondetails.gewog}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Chiwog:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.village}}</span>
+                                <span class="text-blue text-bold">{{applicaitondetails.village}}</span>
                             </div>                 
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0">Location Type:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.locationType}}</span>
-                            </div>   
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0">Geopolitically Located:</label>
-                                <span class="text-blue text-bold">
-                                    {{ applicaitondetailsform.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}
-                                </span>
-                            </div> 
-                        </div>
 
-                        <div class="form-group row" v-if="applicaitondetailsform.senSchool==1">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
-                                <label class="mb-0">Parent School:</label>
-                                <span class="text-blue text-bold">{{applicaitondetailsform.parentSchool}}</span>
-                            </div>   
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0">Co-located with Parent School</label>
-                                <span class="text-blue text-bold">
-                                    {{ applicaitondetailsform.coLocated  == 1 ? "Yes" :  "No"}}
-                                </span>
-                            </div> 
-                        </div>
-                        <div v-if="applicaitondetailsform.category==0">
-                            <div class="row pb-2">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h4><u>Proprietor Details</u></h4>
+                        <div v-if="applicaitondetails.establishment_type=='Private School'">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Propose Location:</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proposedLocation}}</span>
+                                </div>   
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Total Proposed Land:</label>
+                                    <span class="text-blue text-bold"> {{ applicaitondetails.org_details.totalLand }}</span>
+                                </div> 
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Type of School:</label>
+                                    <span class="text-blue text-bold"> {{ applicaitondetails.org_details.typeOfSchool == 1 ? "Day" :  "Boarding" }}</span>
                                 </div>
                             </div>
-                            <div v-for="(pro, index) in applicaitondetailsform.proprietorList" :key="index">
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">CID:</label>
-                                        <span class="text-blue text-bold">{{pro.cid}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{pro.fullName}}</span>
-                                    </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Expected Enrollment (Boys):</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.enrollmentBoys}}</span>
+                                </div>   
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Expected Enrollment (Girls):</label>
+                                    <span class="text-blue text-bold"> {{ applicaitondetails.org_details.enrollmentGirls }}</span>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Phone No:</label>
-                                        <span class="text-blue text-bold">{{pro.phoneNo}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Email:</label>
-                                        <span class="text-blue text-bold">{{pro.email}}</span>
-                                    </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h5><u>Proprietor Details</u></h5>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">CID:</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorCid}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Full Name:</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proposedName}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Mobile No:</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorMobile}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Phone No:</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorPhone}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Email:</label>
+                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorEmail}}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="callout callout-success">
-                        <h4><u>Class Section Details</u></h4>
+                        <h5><u>Class Section Details</u></h5>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, index) in  applicaitondetailsform.class_section" :key="index">
+                            <span v-for="(item, index) in  org_class_details" :key="index">
                                 <br>
-                                <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                <span v-for="(stm, key, index) in applicaitondetailsform.sectionList" :key="index" >
-                                    <span v-if="item.classId==stm.classId">
-                                        <br>
-                                        <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                    </span>
-                                </span>
+                                <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                             </span> 
-                        </div>
+                        </div> 
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
                                 <textarea class="form-control" @change="remove_error('remarks')" v-model="applicaitondetailsform.remarks" id="remarks"></textarea>
                                 <span class="text-danger" id="remarks_err"></span>
-                            </div>
+                            </div> 
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
+            <div class="card-footer" style="display:none" id="register_footer">
                 <div class="row form-group fa-pull-right">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <!-- <button type="button" class="btn btn-flat btn-danger" id="reset" @click="reset()"><i class="fa fa-ban"></i> Reset</button> -->
-                        <button type="button" class="btn btn-flat btn-primary" @click="savedetails()"> <i class="fa fa-save"></i> Save</button>                                                
+                        <button type="button" class="btn btn-flat btn-primary" @click="savedetails()"> <i class="fa fa-save"></i> Register</button>                                                
                     </div>
                 </div> 
             </div>
@@ -174,15 +167,25 @@ export default {
     data(){
         return{
             orgList:[],
+            levelArray:{},
+            classStreamList:[],
+            calssArray:{},
+            streamArray:{},
+            orgLevel:'',
+            proposedName:'',
+            applicaitondetails:[],
+            org_class_details:[],
             applicaitondetailsform: new form({
-                category:'1',yearestb:'',zestcode:'',organizationid:'',applicationNo:'',application_date:'',
-                service:'',proposedName:'',dzongkhagId:'',dzongkhag:'',gewogId:'',gewog:'',isColocated:'',
-                levelId:'',level:'',chiwogId:'',village:'',locationId:'',locationType:'',parentSchoolId:'',
-                isGeopoliticallyLocated:'',senSchool:'0',parentSchool:'',
-                coLocatedParent:'0',cid:'',name:'',phoneNo:'',email:'',status:'',remarks:'',isSenSchool:'',
-                proprietorList:[],
-                class_section:[],
-                sectionList:[],
+                // organizationid:'',applicationNo:'',application_date:'',
+                // service:'',proposedName:'',dzongkhagId:'',dzongkhag:'',gewogId:'',gewog:'',isColocated:'',
+                // levelId:'',level:'',chiwogId:'',village:'',locationId:'',locationType:'',parentSchoolId:'',
+                // isGeopoliticallyLocated:'',senSchool:'0',parentSchool:'',
+                // coLocatedParent:'0',cid:'',name:'',phoneNo:'',email:'',status:'',isSenSchool:'',
+                // proprietorList:[],
+                // class_section:[],
+                // sectionList:[],
+                yearestb:'',category:'1',zestcode:'',remarks:'',
+                applicaitondetails:[]
             }),
         }
     },
@@ -197,6 +200,31 @@ export default {
                 this.loadApproveSchoolname();
                 $("#approved_schol_list").show();
             }
+        },
+        // getClassStream:function(){
+        //     axios.get('/masters/loadClassStreamMapping')
+        //       .then(response => {
+        //         this.classStreamList = response.data.data;
+        //     });
+        // },
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
+            });
+        },
+
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.streamArray[data[i].id] = data[i].stream; 
+                }
+            });
         },
         loadApproveSchoolname(){
             axios.get('organization/loadApprovedOrgs')
@@ -235,27 +263,34 @@ export default {
             axios.get('organization/getApprovedOrgDetails/'+type+'/'+key)
             .then((response) => {  
                 let data=response.data.data;
-                // this.applicaitondetailsform.category                =data.category;
-                this.applicaitondetailsform.applicationNo           =data.applicationNo;
-                this.applicaitondetailsform.dzongkhagId             =data.dzongkhagId;
-                this.applicaitondetailsform.dzongkhag               =data.dzongkhag;
-                this.applicaitondetailsform.gewogId                 =data.gewogId;
-                this.applicaitondetailsform.gewog                   =data.gewog;
-                this.applicaitondetailsform.chiwogId                =data.chiwogId;
-                this.applicaitondetailsform.village                 =data.village;
-                this.applicaitondetailsform.locationId              =data.locationId;
-                this.applicaitondetailsform.locationType            =data.locationType;
-                this.applicaitondetailsform.levelId                 =data.levelId;
-                this.applicaitondetailsform.level                   =data.level;
-                this.applicaitondetailsform.proposedName            =data.proposedName;
-                this.applicaitondetailsform.parentSchoolId          =data.parentSchoolId;
-                this.applicaitondetailsform.isGeopoliticallyLocated =data.isGeopoliticallyLocated;
-                this.applicaitondetailsform.isColocated             =data.isColocated;
-                this.applicaitondetailsform.isSenSchool             =data.isSenSchool;
-                this.applicaitondetailsform.proprietorList          =data.proprietor;
-                this.applicaitondetailsform.class_section           =data.class_section;
-                this.applicaitondetailsform.sectionList             =data.sections;
+                if(type==0){
+                    this.applicaitondetails=data;
+                    this.orgLevel=data.org_details.levelId;
+                    this.proposedName=data.org_details.proposedName;
+                    this.org_class_details=data.org_class_stream;
+                    
+                    // this.applicaitondetailsform.applicationNo           =data.application_no;
+                    // this.applicaitondetailsform.dzongkhagId             =data.dzongkhagId;
+                    // // this.applicaitondetailsform.dzongkhag               =data.dzongkhag;
+                    // this.applicaitondetailsform.gewogId                 =data.gewogId;
+                    // this.applicaitondetailsform.gewog                   =data.gewog;
+                    // this.applicaitondetailsform.village                 =data.village;
+                    // // this.applicaitondetailsform.locationId              =data.locationId;
+                    // // this.applicaitondetailsform.locationType            =data.locationType;
+                    // this.applicaitondetailsform.levelId                 =data.levelId;
+                    // this.applicaitondetailsform.level                   =data.level;
+                    // this.applicaitondetailsform.proposedName            =data.proposedName;
+                    // this.applicaitondetailsform.parentSchoolId          =data.parentSchoolId;
+                    // this.applicaitondetailsform.isGeopoliticallyLocated =data.isGeopoliticallyLocated;
+                    // this.applicaitondetailsform.isColocated             =data.isColocated;
+                    // this.applicaitondetailsform.isSenSchool             =data.isSenSchool;
+                    // this.applicaitondetailsform.proprietorList          =data.proprietor;
+                    // this.applicaitondetailsform.class_section           =data.class_section;
+                    // this.applicaitondetailsform.sectionList             =data.sections;
+                }
                 $("#org_details").show();
+                $("#register_footer").show();
+                
             })
             .catch((error) =>{  
                 $("#org_details").hide();
@@ -272,15 +307,15 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) => {
                 if (result.isConfirmed) {
+                    this.applicaitondetailsform.applicaitondetails=this.applicaitondetails;
                     this.applicaitondetailsform.post('organization/registerOrganizationDetails')
                     .then((response) => {
                         if(response!=""){
-                            let message="You have registered New Organization for <b>"+this.applicaitondetailsform.proposedName+"</b>. <br>Thank You !";
-                            this.$router.push({name:'acknowledgement',params: {data:message}});
                             Toast.fire({  
                                 icon: 'success',
-                                title: 'Establishment is saved successfully'
+                                title: "New organization details has been registered. Thank You !"
                             });
+                            this.$router.push({name:'list_register'});
                         } 
                     })
                     .catch((err) => {
@@ -304,9 +339,22 @@ export default {
             .catch(errors => { 
                 console.log(errors)
             });
-        }
+        },
+         getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
     },
     mounted() {
+        this.getLevel();
+        // this.getClassStream();
+        this.getClass();
+        this.getStream();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

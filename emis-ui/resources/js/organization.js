@@ -272,11 +272,15 @@ const routes = [
           ] 
         },
         { path: '/register', 
-          component: require('./components/organization/establishment/register/register.vue').default ,
+          component: require('./components/organization/establishment/register/register_index.vue').default ,
           children: [
-            { path: '/register',name:'register', component: require('./components/organization/establishment/register/register.vue').default },
+            { path: '/',name:'register', component: require('./components/organization/establishment/register/register_list.vue').default },
+            { path: '/list_register',name:'list_register', component: require('./components/organization/establishment/register/register_list.vue').default },
+            { path: '/create_register',name:'create_register', component: require('./components/organization/establishment/register/register.vue').default },
+            { path: '/edit_register',name:'edit_register', component: require('./components/organization/establishment/register/edit_register.vue').default },
           ] 
         },
+        { path: '/establishment_acknowledgement', name:'establishment_acknowledgement', component: require('./components/organization/establishment/acknowledgement.vue').default },
       ] 
     },
 
