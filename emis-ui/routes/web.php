@@ -74,7 +74,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/getClassStream', [App\Http\Controllers\AdministrationController::class, 'getClassStream'])->name('getClassStream');
 
     Route::post('/saveClassStreamMapping', [App\Http\Controllers\AdministrationController::class, 'saveClassStreamMapping'])->name('saveClassStreamMapping');
-    Route::get('/loadClassStreamMapping', [App\Http\Controllers\AdministrationController::class, 'loadClassStreamMapping'])->name('loadClassStreamMapping');
+    Route::get('/loadClassStreamMapping/{type}', [App\Http\Controllers\AdministrationController::class, 'loadClassStreamMapping'])->name('loadClassStreamMapping');
 
     Route::post('/saveElectricitySource', [App\Http\Controllers\AdministrationController::class, 'saveElectricitySource'])->name('saveElectricitySource');
     Route::get('/loadElectricitySource', [App\Http\Controllers\AdministrationController::class, 'loadElectricitySource'])->name('loadElectricitySource');

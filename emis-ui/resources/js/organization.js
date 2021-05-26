@@ -238,7 +238,7 @@ const routes = [
     
     { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
       children:[
-        { path: '/new_establishment_index', 
+        { path: '/new_establishment_index',  name:'establishment_index',
           component: require('./components/organization/establishment/new_establishment/new_establishment_index.vue').default ,
           children: [
             { path: '',name:"establishment_index_list", component: require('./components/organization/establishment/new_establishment/establishment_index_list.vue').default },
@@ -272,11 +272,15 @@ const routes = [
           ] 
         },
         { path: '/register', 
-          component: require('./components/organization/establishment/register/register.vue').default ,
+          component: require('./components/organization/establishment/register/register_index.vue').default ,
           children: [
-            { path: '/register',name:'register', component: require('./components/organization/establishment/register/register.vue').default },
+            { path: '/',name:'register', component: require('./components/organization/establishment/register/register_list.vue').default },
+            { path: '/list_register',name:'list_register', component: require('./components/organization/establishment/register/register_list.vue').default },
+            { path: '/create_register',name:'create_register', component: require('./components/organization/establishment/register/register.vue').default },
+            { path: '/edit_register',name:'edit_register', component: require('./components/organization/establishment/register/edit_register.vue').default },
           ] 
         },
+        { path: '/establishment_acknowledgement', name:'establishment_acknowledgement', component: require('./components/organization/establishment/acknowledgement.vue').default },
       ] 
     },
 
@@ -385,7 +389,7 @@ const routes = [
     // Organisational Routes (structural facility route)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
-        { path: '/infrastructure_index', 
+        { path: '/infrastructure_index', name:'structural_index',
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [
             { path: '',name:'infrastructure_index', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_list.vue').default },

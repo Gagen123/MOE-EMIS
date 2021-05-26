@@ -74,8 +74,43 @@ class RestructuringController extends Controller
 
         $this->validate($request, $rules, $customMessages);
 
+        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        $screen_id="";
+        $status="";
+        $app_role="";
+        
+        foreach($workflowdet as $work){
+            if($work->Establishment_type==$request->organization_type){
+                $screen_id=$work->SysSubModuleId;
+                $status=$work->Sequence;
+                $app_role=$work->SysRoleId;
+            }
+        }
+        if($screen_id==null || $screen_id==""){
+            return 'No Screen';
+        }
+
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
-        return $response_data;
+        $service_name=json_decode($response_data)->data->establishment_type;
+
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,//service name 
+            'application_number'=>json_decode($response_data)->data->application_no,
+            'screen_id'         =>$screen_id,
+            'status_id'         =>$status,
+            'remarks'           =>null,
+            'app_role_id'       => $app_role,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
+        // return $response_data;
     }
 
     public function saveChangeClass(Request $request){
@@ -699,8 +734,8 @@ class RestructuringController extends Controller
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
             'action_type'               =>  $request['action_type'],
-            'status'                    =>  $request['chiwog'],  
-            'id'                        =>  $request['status'],
+            'status'                    =>  $request['status'], 
+            'id'                        =>  $request['id'], 
             'user_id'                   =>  $this->userId() 
         ];
 

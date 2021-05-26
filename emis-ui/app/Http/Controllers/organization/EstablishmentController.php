@@ -136,7 +136,6 @@ class EstablishmentController extends Controller
             'user_id'               =>  $this->userId() ,
         ];
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-
         //get submitter role
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
         $screen_id="";
@@ -258,9 +257,17 @@ class EstablishmentController extends Controller
     }
 
     public function updateNewEstablishmentApplication(Request $request){
-        $workflowdet=$this->getcurrentworkflowStatusForUpdate('new establishment');
-        $work_status=$workflowdet['status'];
-        $org_status='Under Process';
+        $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
+        $w_status_screen=[];
+        $screen_id="";
+        $service_name=$request->servicename;
+        foreach($work_status as $i=> $work){
+            if($work->Establishment_type==str_replace (' ', '_',strtolower($request->servicename))){
+                $screen_id=$work->SysSubModuleId;
+                $work_status=$work->Sequence;
+            }
+        }
+        $org_status='Verified';
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -268,28 +275,35 @@ class EstablishmentController extends Controller
         if($request->actiontype=="approve"){
             $org_status="Approved";
         }
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,
-            'application_number'=>$request->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$work_status,
-            'remarks'           =>$request->remarks,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        if($request->actiontype!="update"){
+            $workflow_data=[
+                'service_name'      =>$service_name,//service name 
+                'screen_id'         =>$screen_id,
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'application_number'=>$request->applicationNo,
+                'status_id'         =>$work_status,
+                'remarks'           =>$request->remarks,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
+            'id'                            =>   $request->id,
             'remarks'                      =>   $request->remarks,
+            'verifying_agency'             =>   $request->verifying_agency,
+            'tentative_date'               =>   $request->tentative_date,
+            'update_type'                  =>   $request->update_type,
+            'nomi_staffList'               =>   $request->nomi_staffList,
             'user_id'                      =>   $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
-        return $work_response_data;
+        return $response_data;
     }
     
     public function loadApprovedOrgs(){  
@@ -313,29 +327,32 @@ class EstablishmentController extends Controller
             'category'                  =>$request->category,
             'yearestb'                  =>$request->yearestb,
             'zestcode'                  =>$request->zestcode,
-            'organizationid'            =>$request->organizationid,
-            'applicationNo'             =>$request->applicationNo,
-            'application_date'          =>$request->application_date,
-            'service'                   =>$request->service,
-            'proposedName'              =>$request->proposedName,
-            'dzongkhagId'               =>$request->dzongkhagId,
-            'gewogId'                   =>$request->gewogId,
-            'chiwogId'                  =>$request->chiwogId,
-            'isColocated'               =>$request->isColocated,
-            'levelId'                   =>$request->levelId,
-            'locationId'                =>$request->locationId,
-            'parentSchoolId'            =>$request->parentSchoolId,
-            'isGeopoliticallyLocated'   =>$request->isGeopoliticallyLocated,
-            'senSchool'                 =>$request->senSchool,
-            'parentSchool'              =>$request->parentSchool,
-            'coLocatedParent'           =>$request->coLocatedParent,
-            'isSenSchool'               =>$request->isSenSchool,
-            'remarks'                   =>$request->remarks,
-            'proprietorList'            =>$request->proprietorList,
-            'class_section'             =>$request->class_section,
-            'sectionList'               =>$request->sectionList,
+            'applicaitondetails'        =>$request->applicaitondetails,
+            
+            // 'organizationid'            =>$request->organizationid,
+            // 'applicationNo'             =>$request->applicationNo,
+            // 'application_date'          =>$request->application_date,
+            // 'service'                   =>$request->service,
+            // 'proposedName'              =>$request->proposedName,
+            // 'dzongkhagId'               =>$request->dzongkhagId,
+            // 'gewogId'                   =>$request->gewogId,
+            // 'chiwogId'                  =>$request->chiwogId,
+            // 'isColocated'               =>$request->isColocated,
+            // 'levelId'                   =>$request->levelId,
+            // 'locationId'                =>$request->locationId,
+            // 'parentSchoolId'            =>$request->parentSchoolId,
+            // 'isGeopoliticallyLocated'   =>$request->isGeopoliticallyLocated,
+            // 'senSchool'                 =>$request->senSchool,
+            // 'parentSchool'              =>$request->parentSchool,
+            // 'coLocatedParent'           =>$request->coLocatedParent,
+            // 'isSenSchool'               =>$request->isSenSchool,
+            // 'remarks'                   =>$request->remarks,
+            // 'proprietorList'            =>$request->proprietorList,
+            // 'class_section'             =>$request->class_section,
+            // 'sectionList'               =>$request->sectionList,
             'action_by'                 =>$this->userId()
         ];
+        // dd($estd);
         $response_data= $this->apiService->createData('emis/organization/establishment/registerOrganizationDetails', $estd);
         $estd =[
             'status'                       =>   'Registered',

@@ -200,11 +200,25 @@ class QuestionAnswerController extends Controller{
 
         if(strpos($type,"withwhere_")!==false){
             $questionlist = DB::table('question_details as q')
-                ->join('question_category as c', 'q.parent_id', '=', 'c.id')
-                ->select('q.name', 'q.id', 'q.code','q.answer_type')
+                ->join('question_category as c', 'q.category_id', '=', 'c.id')
+                ->select('q.name', 'q.id', 'q.answer_type')
                 ->where('q.status', '=', 1)
                 // ->where('c.name', '=', '%' . Input::get('name') . '%')
                 ->where('c.name', 'LIKE',explode("_",$type)[1]. '%')
+                ->groupby('q.id')->get();
+            foreach($questionlist as $ques){
+                $ques->ans_list=Answer::where('parent_id',$ques->id)->get();
+            }
+            return $this->successResponse($questionlist);
+        }
+        if(strpos($type,"getleadership_")!==false){
+            $questionlist = DB::table('question_details as q')
+                ->join('category_type as c', 'q.category_type_id', '=', 'c.id')
+                ->join('question_service as s', 'q.service_id', '=', 's.id')
+                ->select('q.name', 'q.id', 'q.answer_type')
+                ->where('q.status', '=', 1)
+                ->where('c.id',  explode("_",$type)[2])
+                ->where('s.id', explode("_",$type)[1])
                 ->groupby('q.id')->get();
             foreach($questionlist as $ques){
                 $ques->ans_list=Answer::where('parent_id',$ques->id)->get();

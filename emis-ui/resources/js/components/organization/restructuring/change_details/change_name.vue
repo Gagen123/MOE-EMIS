@@ -65,7 +65,7 @@ export default {
             streamList:[],
             form: new form({
                 organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change', 
-                application_for:'Change in Name', action_type:'add', status:'pending'
+                application_for:'Change in Name', action_type:'add', status:'pending',organization_type:'',
             }),
         } 
     },
@@ -107,7 +107,7 @@ export default {
                                 if(response.data=="No Screen"){
                                     Toast.fire({  
                                         icon: 'error',
-                                        title: 'Technical Errors: please contact system admimnistrator for further details'
+                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
@@ -149,9 +149,16 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
+                this.form.organizationId=$('#organizationId').val();  
+                this.getorgdetials($('#organizationId').val()); 
             }
             
+        },
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.organizationType;
+            });
         },
 
         applyselect2(){

@@ -65,7 +65,7 @@ export default {
             streamList:[],
             form: new form({
                 organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
-                application_for:'Change in Feeding Details', action_type:'add', status:'pending'
+                application_for:'Change in Feeding Details', action_type:'add', status:'pending',organization_type:'',
             }),
         } 
     },
@@ -109,8 +109,16 @@ export default {
             }
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();   
+                this.getorgdetials($('#organizationId').val()); 
             }
             
+        },
+
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.organizationType;
+            });
         },
 
         /**

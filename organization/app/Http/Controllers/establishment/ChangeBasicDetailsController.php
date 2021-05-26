@@ -81,7 +81,7 @@ class ChangeBasicDetailsController extends Controller
             }
         }
 
-        return $this->successResponse($change_details_data, Response::HTTP_CREATED);
+        return $this->successResponse($inserted_application_data, Response::HTTP_CREATED);
 
         //UGYEN'S OLD FUNCTION
 
@@ -453,22 +453,39 @@ class ChangeBasicDetailsController extends Controller
     }
 
     public function loadChangeDetailForVerification($appNo=""){
-        $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
-        $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
-        $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
-        if($response_data->id!=null && $response_data->id!=""){
-            $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            if($response_data->application_type=="name_change"){
+                $response_data->change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
+            }
+            if($response_data=="Change in Feeding Details"){
+                
+            }
+            if($response_data=="Change in Level"){
+                
+            }
+            if($response_data=="Change in Proprietor"){
+                
+            }
+            if($response_data=="Change in SEN details"){
+                
+            }
         }
-        $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
-        $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
-        foreach($classSection as $cls){
-            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        }
-        foreach($sections as $sec){
-            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        }
-        $response_data->class_section=$classSection;
-        $response_data->sections=$sections;
+        // $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
+        // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
+        // if($response_data->id!=null && $response_data->id!=""){
+        //     $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        // }
+        // $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
+        // $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
+        // foreach($classSection as $cls){
+        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        // }
+        // foreach($sections as $sec){
+        //     $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        // }
+        // $response_data->class_section=$classSection;
+        // $response_data->sections=$sections;
         return $this->successResponse($response_data); 
     }
 

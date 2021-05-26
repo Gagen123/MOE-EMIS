@@ -27,61 +27,75 @@
                                     <label><u>Previous Details</u></label>
                                 </div>
                             </div>
+                            
                             <div class="form-group row">
-                                <input type="hidden" class="form-control" v-model="appicationDetailsForm.organizationId"/>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.name}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.name}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Level:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.level}}</span>
+                                    <span class="text-blue text-bold">{{levelArray[existing_details.levelId]}}</span>
+                                </div>
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category:</label>
+                                    <span class="text-blue text-bold">{{existing_details.organizationType == 'public_school' ? "Public" : existing_details.organizationType == 'public_eccd' ? "sss" : "Private"}}</span>
+                                </div> -->
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Year of Establishment:</label>
+                                    <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Zest Code:</label>
+                                    <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.category == 1 ? "Public" : "Private"}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.category == 1 ? "Public" : "Private"}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.dzongkhag}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.dzongkhag}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Gewog:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.gewog}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.gewog}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Chiwog:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.chiwog}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.chiwog}}</span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
+                            </div> -->
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Location Type:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.locationType}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.locationType}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Geopolitically Located:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.geoLocated == 1 ? "Yes" : "No"}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.geoLocated == 1 ? "Yes" : "No"}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>SEN School:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.isSenSchool == 1 ? "Yes" : "No"}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.isSenSchool == 1 ? "Yes" : "No"}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row" v-if="previousDetailsForm.isSenSchool == 1">
+                            <div class="form-group row" v-if="existing_details.isSenSchool == 1">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Co-located with Parent School:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.isColocated == 1 ? "Yes" : "No"}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.isColocated == 1 ? "Yes" : "No"}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Parent School:</label>
-                                    <span class="text-blue text-bold">{{previousDetailsForm.parentSchoolId}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.parentSchoolId}}</span>
                                 </div>
                             </div>
-                           
-                            <div v-if="previousDetailsForm.category==0">
+                            -->
+                            <div v-if="existing_details.category==0">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <h4><u>Proprietor Details</u></h4>
@@ -120,21 +134,13 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Application Number:</label>
-                                    <span class="text-blue text-bold">{{appicationDetailsForm.applicationNo}}</span>
+                                    <span class="text-blue text-bold">{{appicationDetails.application_no}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" v-if="appicationDetails.application_type=='name_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Name:</label>
-                                    <span class="text-blue text-bold">{{appicationDetailsForm.appName}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Level:</label>
-                                    <span class="text-blue text-bold">{{appicationDetailsForm.appLevel}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Category:</label>
-                                    <span class="text-blue text-bold">{{appicationDetailsForm.appCategory == 1 ? "Public" : "Private"}}</span>
+                                    <label>Propose New Name:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.change_details.proposedChange}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -298,12 +304,9 @@ export default {
             sectionList:[],
             class_section1:[],
             sectionList1:[],
-            previousDetailsForm:new form({
-                id:'',name:'',level:''
-                ,category:'',dzongkhag:'',gewog:'',chiwog:'',locationType:'',geoLocated:''
-                ,senSchool:'', parentSchool:'',coLocatedParent:'',cid:'',fullName:'',phoneNo:''
-                ,email:'',
-            }),
+            existing_details:'',
+            levelArray:{},
+            appicationDetails:[],
             appicationDetailsForm:new form({
                 id:'',organizationId:'',appName:'',appLevel:'',appCategory:'',appDzongkhag:'',appGewog:'',
                 appChiwog:'',appLocationType:'',appGeoLocated:'',appSenSchool:'', appParentSchool:'',
@@ -322,28 +325,28 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
+         /**
+         * method to get level in dropdown
+         */
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
         /**
          * method to load previous org details
          */
-        loadPriviousOrgDetails(){
-            axios.get('organization/getFullSchoolDetials/' +this.appicationDetailsForm.organizationId)
-            .then((response) => {  
-                let data=response.data.data;
-                this.previousDetailsForm.name            =   data.name;
-                this.previousDetailsForm.level           =   data.level;
-                this.previousDetailsForm.category        =   data.category;
-                this.previousDetailsForm.locationType    =   data.locationType;
-                this.previousDetailsForm.dzongkhag       =   data.dzongkhag;
-                this.previousDetailsForm.gewog           =   data.gewog;
-                this.previousDetailsForm.chiwog          =   data.village;
-                this.previousDetailsForm.geoLocated      =   data.isGeopoliticallyLocated;
-                this.previousDetailsForm.senSchool       =   data.isSenSchool;
-                this.class_section1                      =   data.class_section;
-                this.sectionList1                        =   data.sections;
-                this.proprietorList1                     =   data.proprietor;
+        loadPriviousOrgDetails(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.existing_details=response.data.data;
             })
             .catch((error) => {  
-                console.log("Error......"+error);
+                console.log("Error: "+error);
             });
         },
         /**
@@ -353,22 +356,23 @@ export default {
             axios.get('organization/loadChangeDetailForVerification/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
-                this.appicationDetailsForm.organizationId       =   data.organizationId;
-                this.appicationDetailsForm.applicationNo        =   data.applicationNo;
-                this.appicationDetailsForm.appName              =   data.proposedName;
-                this.appicationDetailsForm.appLevel             =   data.level;
-                this.appicationDetailsForm.appCategory          =   data.category;
-                this.appicationDetailsForm.appCategory          =   data.category;
-                this.appicationDetailsForm.appDzongkhag         =   response.data.dzongkhag;
-                this.appicationDetailsForm.appGewog             =   response.data.gewog;
-                this.appicationDetailsForm.appChiwog            =   response.data.village;
-                this.appicationDetailsForm.appLocationType      =   data.locationType;
-                this.appicationDetailsForm.appGeoLocated        =   data.isGeopoliticallyLocated;
-                this.appicationDetailsForm.appSenSchool         =   data.isSenSchool;
-                this.appicationDetailsForm.appCoLocatedParent   =   data.isColocated;
-                this.class_section                              =   data.class_section;
-                this.sectionList                                =   data.sections;
-                this.loadPriviousOrgDetails();
+                // this.appicationDetailsForm.organizationId       =   data.organizationId;
+                // this.appicationDetailsForm.applicationNo        =   data.applicationNo;
+                // this.appicationDetailsForm.appName              =   data.proposedName;
+                // this.appicationDetailsForm.appLevel             =   data.level;
+                // this.appicationDetailsForm.appCategory          =   data.category;
+                // this.appicationDetailsForm.appCategory          =   data.category;
+                // this.appicationDetailsForm.appDzongkhag         =   response.data.dzongkhag;
+                // this.appicationDetailsForm.appGewog             =   response.data.gewog;
+                // this.appicationDetailsForm.appChiwog            =   response.data.village;
+                // this.appicationDetailsForm.appLocationType      =   data.locationType;
+                // this.appicationDetailsForm.appGeoLocated        =   data.isGeopoliticallyLocated;
+                // this.appicationDetailsForm.appSenSchool         =   data.isSenSchool;
+                // this.appicationDetailsForm.appCoLocatedParent   =   data.isColocated;
+                // this.class_section                              =   data.class_section;
+                // this.sectionList                                =   data.sections;
+                this.loadPriviousOrgDetails(data.change_details.organizationId);
+                this.appicationDetails=data;
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
@@ -443,6 +447,7 @@ export default {
     mounted(){
         this.appicationDetailsForm.applicationNo=this.$route.params.data.application_number;
         this.loadChangeBasicApplicationDetails(this.$route.params.data.application_number,this.$route.params.type);
+        this.getLevel();
     }
 }
 </script>

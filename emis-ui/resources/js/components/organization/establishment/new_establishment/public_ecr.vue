@@ -217,7 +217,7 @@ export default {
                 coLocatedParent:'0', proposedLocation:'', establishment_type:'public_ecr', status:'pending'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Public ECR', status:'submitted'
+                id: '',class:[], stream:[], proposed_establishment:'Public ECR', status:'submitted',applicaiton_number:'',
             }) 
         } 
     },
@@ -394,7 +394,7 @@ export default {
          * method to get class stream in checkbox
          */
         getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping')
+            axios.get('/masters/loadClassStreamMapping/school')
               .then(response => {
                 this.classStreamList = response.data.data;
             });
@@ -463,6 +463,7 @@ export default {
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.applicaiton_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }

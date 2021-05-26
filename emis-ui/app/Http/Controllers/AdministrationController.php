@@ -785,8 +785,8 @@ class AdministrationController extends Controller{
 
     }
 
-    public function loadClassStreamMapping(){
-        $loadClassStream = $this->apiService->listData('emis/masters/classStreamMapping/loadClassStreamMapping');
+    public function loadClassStreamMapping($type=""){
+        $loadClassStream = $this->apiService->listData('emis/masters/classStreamMapping/loadClassStreamMapping/'.$type);
         return $loadClassStream;
     }
 

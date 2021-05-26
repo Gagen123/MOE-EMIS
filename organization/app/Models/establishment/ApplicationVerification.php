@@ -21,6 +21,10 @@ class ApplicationVerification extends Model
         'ApplicationDetailsId',
         'verifyingAgency',
         'tentativeDate',
-        'remarks'
+        'remarks',
+        'updated_by',
+        'created_by',
+        'created_at',
+        'updated_at'
     ];
 }

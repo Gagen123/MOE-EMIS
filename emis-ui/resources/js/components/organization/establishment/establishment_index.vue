@@ -11,7 +11,6 @@
                     {{ item.screen_name}}
                 </router-link>
             </li>
-
             <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                 <router-link id="regularstaff" to="/school_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>

@@ -174,11 +174,11 @@
                             <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <br>
                                 <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                        <br>
-                                        <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                    </span>
+                                <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                    <br>
+                                    <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
+                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
+                                </span>
                             </span> 
                         </div>
                         <hr>
@@ -408,7 +408,7 @@ export default {
          * method to get class stream in checkbox
          */
         getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping')
+            axios.get('/masters/loadClassStreamMapping/school')
               .then(response => {
                 this.classStreamList = response.data.data;
             });

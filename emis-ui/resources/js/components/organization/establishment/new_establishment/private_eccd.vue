@@ -163,7 +163,7 @@
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
+                                <label class="mb-0">Select Age Group:<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
@@ -227,7 +227,7 @@ export default {
                 status:'pending', establishment_type:'private_eccd'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted'
+                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted',applicaiton_number:'',
             }) 
         } 
     },
@@ -404,7 +404,7 @@ export default {
          * method to get class stream in checkbox
          */
         getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping')
+            axios.get('/masters/loadClassStreamMapping/eccd')
               .then(response => {
                 this.classStreamList = response.data.data;
             });
@@ -473,6 +473,7 @@ export default {
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.applicaiton_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }

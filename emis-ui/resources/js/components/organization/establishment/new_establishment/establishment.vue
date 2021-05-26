@@ -66,9 +66,8 @@ export default {
     },
     
     created(){
-        this.getScreenAccess();
-        this.getLevel();
-        this.getLocation();
+        // this.getLevel();
+        // this.getLocation();
         // this.checkPendingApplication();
     },
     mounted() {
