@@ -5,8 +5,10 @@
                 <tr>
                     <th >SL#</th>
                     <th >Application No.</th>
-                    <th >Application For</th>
+                    <th >Type of Establishment</th>
+                    <th >Date of Application</th>
                     <th >Status</th>
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -14,7 +16,16 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
                     <td>{{ item.establishment_type}}</td>
+                    <td>{{ item.created_at.substring(0,10)}}</td>
                     <td>{{ item.status}}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-secondary btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
+                        </div>
+                        <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>

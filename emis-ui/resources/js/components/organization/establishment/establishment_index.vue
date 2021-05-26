@@ -1,7 +1,7 @@
 <template>
 <div>
     <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-        <li class="form-inline "><h5>E</h5><h6 class="pt-1">STABLISHMENT</h6></li>
+        <li class="form-inline "><h5 class="pt-1">Establishment</h5></li>
     </ol>
     <div class="container-fluid"> 
         <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
