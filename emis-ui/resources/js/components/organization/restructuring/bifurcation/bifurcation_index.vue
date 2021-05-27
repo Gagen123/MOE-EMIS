@@ -25,5 +25,9 @@ export default {
             }
 		},
     },
+
+    mounted(){
+        // this.getScreenAccess();
+    }
 }
 </script>

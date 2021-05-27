@@ -39,7 +39,7 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Level:</label>
-                                <span class="text-blue text-bold">{{data.level}}</span>
+                                <span class="text-blue text-bold">{{levelArray[data.level]}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Dzongkhag:</label>
@@ -412,6 +412,7 @@ export default {
             data:'',
             orgList:'',
             levelList:[],
+            levelArray:{},
             locationList:[],
             locationList1:[],
             levelList1:[],
@@ -453,7 +454,11 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data;
+                alert(data);
                 this.levelList = data;
+                for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].class; 
+                }
             });
         },
         /**
@@ -714,7 +719,8 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
         getOrgDetails(id){
-            axios.get('organization/getFullSchoolDetials/'+id)
+            // axios.get('organization/getFullSchoolDetials/'+id)
+            axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
             .then((response) => {  
                 let data=response.data.data;
                 this.form.parent_id=data.id;

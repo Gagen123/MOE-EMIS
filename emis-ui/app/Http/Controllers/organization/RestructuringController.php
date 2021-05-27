@@ -148,7 +148,6 @@ class RestructuringController extends Controller
         ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         return $work_response_data;
-        
     }
 
     public function loadChangeDetailForVerification($appNo="",$type=""){
@@ -165,12 +164,14 @@ class RestructuringController extends Controller
         $sequence="";
         $workflowstatus="";
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
 
         $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
+        // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
-            if(strpos(strtolower($work->Status_Name),'change')===false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            if(strpos(strtolower($work->screenName),'change')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -181,6 +182,7 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
         }
+        // dd($loadOrganizationDetails);
         // $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
     }
@@ -259,6 +261,7 @@ class RestructuringController extends Controller
             'user_id'                      =>   $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
+        // dd($response_data);
         return $work_response_data;
     }
 

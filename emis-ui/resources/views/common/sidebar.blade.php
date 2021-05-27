@@ -267,7 +267,7 @@
                         </router-link> 
                     </li>
                     <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
-                        <router-link to="/establishment_index" class="nav-link">
+                        <router-link to="/newEstablishment_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Create New Organization
@@ -291,7 +291,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
-                        <router-link to="/general_index" class="nav-link">
+                        <router-link to="/otherOrgInfo_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Other Information
