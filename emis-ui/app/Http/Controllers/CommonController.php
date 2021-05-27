@@ -58,20 +58,19 @@ class CommonController extends Controller{
         $w_status_screen=[];
         foreach($work_status as $i=> $work){
             if($work->Sequence>1){
-                array_push($w_status_screen,$work->SysSubModuleId.'SSS'.($work->Sequence - 1));
+                array_push($w_status_screen,$work->SysSubModuleId.'SSS'.($work->Sequence - 1).'SSS'.$work->Establishment_type);
             }
         }
         return $w_status_screen;
     }
     public function getTaskList($type=""){
         $work_status=$this->getApprovalWorkStatus();
+        // dd($work_status);
         $param="NA";
-        $param="";
-        $param2="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
             // dd($response_data);
-            if($response_data!=null){
+            if($response_data!=null && $response_data!=[]){
                 foreach($response_data as $work){
                     $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
                 }
@@ -82,12 +81,16 @@ class CommonController extends Controller{
                 $param.=$work.'OUTSEP';
             }
         }
-        if($param!="NA"){
-            $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
-        }
+        $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         // dd($type.'/'.$this->userId().'/'.$param.'/'.$param2);
-        $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
-        return $response_data;
+        if($param!="NA"){
+            $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
+            return $response_data;
+        }
+        else{
+            return null;
+        }
+        
     }
     public function getTaskcount(){
         $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));

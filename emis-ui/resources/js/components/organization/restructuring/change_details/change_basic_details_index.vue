@@ -65,11 +65,10 @@ export default {
         },
     },
     
-    created(){
-        this.getScreenAccess();
+    created(){ 
         this.getLevel();
         this.getLocation();
-        // this.checkPendingApplication();
+        // this.checkPendingApplication();  
     },
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();

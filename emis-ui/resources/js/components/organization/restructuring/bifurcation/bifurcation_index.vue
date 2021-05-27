@@ -46,7 +46,7 @@ export default {
     },
 
     mounted(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
     }
 }
 </script>
