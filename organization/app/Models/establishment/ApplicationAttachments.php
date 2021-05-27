@@ -22,6 +22,10 @@ class ApplicationAttachments extends Model
         'name',
         'user_defined_file_name',
         'upload_type',
-        'path'
+        'path',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
     ];
 }

@@ -264,7 +264,7 @@ class EstablishmentController extends Controller
             } 
         }
         foreach($workflowdet as $work){
-            if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            if(strpos(strtolower($work->Status_Name),'establishment')===false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
                 $workflowstatus=$work->Status_Name;
             }
         }

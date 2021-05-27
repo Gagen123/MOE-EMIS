@@ -12,5 +12,10 @@ in the applicaiton_attachments
     added user_defined_file_name
 
 in the application_attachments
-    added upload_type 
+    added upload_type
+
+in the application-est_details_chages
+    added initiatedBy
+
+created new table called organization_details_history, 
 

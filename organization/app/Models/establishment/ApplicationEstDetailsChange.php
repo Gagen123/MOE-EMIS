@@ -22,6 +22,7 @@ class ApplicationEstDetailsChange extends Model
         'organizationId',
         'change_type',
         'proposedChange',
+        'initiatedBy',
         'changeInDetails'
     ];
 }

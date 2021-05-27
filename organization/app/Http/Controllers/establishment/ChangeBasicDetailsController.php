@@ -11,6 +11,7 @@ use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationEstDetailsChange;
 use App\Models\OrganizationDetails;
+use App\Models\HistoryForOrganizaitonDetail;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\ApplicationSequence;
@@ -18,6 +19,8 @@ use App\Models\Masters\Level;
 use App\Models\Masters\Location;
 use App\Models\Masters\Classes;
 use App\Models\Masters\Stream;
+use App\Models\establishment\ApplicationAttachments;
+use App\Models\establishment\ApplicationNoMeals;
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller
@@ -235,11 +238,12 @@ class ChangeBasicDetailsController extends Controller
 
     private function extractNameChangeData($request, $applicationDetailsId){
         $data =[
-            'ApplicationDetailsId'      => $applicationDetailsId,
-            'organizationId'            =>  $request['organizationId'],
+            'ApplicationDetailsId'     =>  $applicationDetailsId,
+            'organizationId'           =>  $request['organizationId'],
             'change_type'              =>  $request['application_for'],
-            'proposedChange'               =>  $request['proposedName'],
-            'created_by'                   =>  $request['user_id']  
+            'proposedChange'           =>  $request['proposedName'],
+            'initiatedBy'              =>  $request['initiatedBy'],
+            'created_by'               =>  $request['user_id']  
         ];
 
         $changeDetails = ApplicationEstDetailsChange::create($data);
@@ -257,6 +261,18 @@ class ChangeBasicDetailsController extends Controller
         ];
 
         $changeDetails = ApplicationEstDetailsChange::create($data);
+        if($request->isfeedingschool==1 && sizeof($request->feeding)>0 ){
+            foreach($request->feeding as $feed){
+                $data =[
+                    'noOfMeals'                 =>  $feed,
+                    'foreignKeyFor'             => 'application_est_public',
+                    'foreignKeyId'              =>  $changeDetails->id,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                ApplicationNoMeals::create($data);
+            }
+        }
 
         return $changeDetails;
 
@@ -455,21 +471,24 @@ class ChangeBasicDetailsController extends Controller
     public function loadChangeDetailForVerification($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         if($response_data!="" && $response_data!=null){
-            if($response_data->application_type=="name_change"){
-                $response_data->change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
+            // $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->whereIn('upload_type', ['Verification','Approval'])->get();
+            // if($response_data->application_type=="name_change"){
+            $change_det=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
+            $response_data->change_details= $change_det;
+            $response_data->category=OrganizationDetails::where('id',$response_data->change_details->organizationId)->first()->category;
+            // }
+            if($response_data->application_type=="feeding_change"){ 
+                $response_data->change_feeding=ApplicationNoMeals::where('foreignKeyId',$change_det->id)->get();
             }
-            if($response_data=="Change in Feeding Details"){
+            // if($response_data=="Change in Level"){
                 
-            }
-            if($response_data=="Change in Level"){
+            // }
+            // if($response_data=="Change in Proprietor"){
                 
-            }
-            if($response_data=="Change in Proprietor"){
+            // }
+            // if($response_data=="Change in SEN details"){
                 
-            }
-            if($response_data=="Change in SEN details"){
-                
-            }
+            // }
         }
         // $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
         // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
@@ -512,45 +531,59 @@ class ChangeBasicDetailsController extends Controller
     }
 
     public function updateChangeBasicDetails(Request $request){
-        $appDetails = ApplicationDetails::where('applicationNo', $request->application_number)->first();
-        $orgDetail=OrganizationDetails::where('id',$appDetails->organizationId)->first();
-        $classSection=OrganizationClassStream::where('organizationId',$appDetails->organizationId)->get();
-        if(sizeof($classSection)>0){
-            OrganizationClassStream::where('organizationId',$appDetails->organizationId)->delete();
-        }
-        $appclassDetails=ApplicationClassStream::where('applicationNo',$request->application_number)->get();
-       
-        foreach($appclassDetails as $appclas){
-            $appclas =[
-                'organizationId'            =>  $appDetails->organizationId,
-                'classId'                   =>  $appclas->classId,
-                'streamId'                  =>  $appclas->streamId,
-                'updated_by'                =>  $request->user_id,
-            ];
-            OrganizationClassStream::create($appclas);
-        }
         $estd =[
-            'status'                       =>   $request->status,
-            'updated_remarks'              =>   $request->remarks,
-            'updated_by'                   =>   $request->user_id, 
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id, 
         ];
-        $establishment = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
-        $appdetialsfororg =[
-            'name'            =>  $appDetails->proposedName,
-            'category'                   =>  $appDetails->category,
-            'levelId'                  =>  $appDetails->levelId,
-            'dzongkhagId'                =>  $request->dzongkhagId,
-            'gewogId'                =>  $request->gewogId,
-            'chiwogId'                =>  $request->chiwogId,
-            'locationId'                =>  $request->locationId,
-            'isGeopoliticallyLocated'    =>  $request->isGeopoliticallyLocated,
-            'isSenSchool'                =>  $request->isSenSchool,
-            'parentSchoolId'                =>  $request->parentSchoolId,
-            'isColocated'                 =>  $request->isColocated,
-            'updated_by'                =>  $request->user_id,
-        ];
-        $establishment = OrganizationDetails::where('id', $appDetails->organizationId)->update($appdetialsfororg);
-        return $this->successResponse($establishment, Response::HTTP_CREATED);
+        ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+       
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id, 
+                    ];
+                    $doc = ApplicationAttachments::create($attach);
+                }
+            }
+        }
+
+        $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
+        if($request->status=="Approved"){
+            if($app_details->application_type=="name_change"){
+                //keep history
+                $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
+                $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
+                $org_data =[
+                    'id'                        =>  $org_details->id,
+                    'name'                      =>  $org_details->name,
+                    'updated_by'                =>  $org_details->updated_by,
+                    'updated_at'                =>  $org_details->updated_at,
+                    'recorded_on'               =>  date('Y-m-d h:i:s'),
+                    'recorded_for'              =>  'Name Change', 
+                    'recorded_by'               =>  $request->user_id, 
+                ];
+                HistoryForOrganizaitonDetail::create($org_data);
+                $org_update_data =[
+                    'name'                      =>  $change_details->proposedChange,
+                    'updated_by'                =>  date('Y-m-d h:i:s'),
+                    'updated_at'                =>  $request->user_id, 
+                ];
+                $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+            }
+        }
+        return $this->successResponse($app_details, Response::HTTP_CREATED);
     }
 
     /**
