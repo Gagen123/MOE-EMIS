@@ -27,19 +27,20 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
-                                <has-error :form="form" field="proprietorName"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="number" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                    <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
                                     <has-error :form="form" field="proprietorCid"></has-error>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
+                                    <has-error :form="form" field="proprietorName"></has-error>
+                                </div>
+                            </div>
+                            
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
                                 <div class="col-lg-3 col-md-3 col-sm-3">
@@ -109,6 +110,23 @@ export default {
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
+            });
+        },
+        getDetailsbyCID(fieldId){
+            axios.get('getpersonbycid/'+ $('#'+fieldId).val())
+            .then(response => {
+                if (JSON.stringify(response.data)!='{}'){
+                    let personal_detail = response.data.citizenDetail[0];
+                    this.form.proprietorName = personal_detail.firstName + " " + personal_detail.lastName;
+                }else{
+                    Swal.fire({
+                        html: "No data found for this CID",
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch((exception) => {
+                console.log(exception);
             });
         },
 

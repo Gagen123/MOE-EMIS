@@ -16,6 +16,7 @@ class OrganizationProprietorDetails extends Model
         'cid',
         'fullName',
         'phoneNo',
+        'mobileNo',
         'email',
         'created_by',
         'updated_by'
