@@ -90,7 +90,7 @@ export default {
             streamList:[],
             form: new form({
                 organizationId:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
-                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'pending'
+                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'pending',organization_type:'',
             }),
         } 
     },
@@ -175,9 +175,17 @@ export default {
             }
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();   
+                 this.getorgdetials($('#organizationId').val());
             }
             
         },
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.organizationType;
+            });
+        },
+
 
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){

@@ -115,22 +115,40 @@ const routes = [
         { path: '/training_type_list', name:'StudentTrainingTypeList', component: require('./components/masters/student_masters/trainings/training_type_list.vue').default },
       ]    
     },
-    { path: '/scout_index', 
-    component: require('./components/masters/student_masters/scouts/scout_index.vue').default ,
+    { path: '/scout_section_index', 
+    component: require('./components/masters/student_masters/scouts/scout_section_index.vue').default ,
       children: [
-        { path: '', name:'scout_index', component: require('./components/masters/student_masters/scouts/scout_index.vue').default },
-        { path: '/scout_add', name:'scout_add', component: require('./components/masters/student_masters/scouts/scout_add.vue').default },
-        { path: '/scout_edit', name:'scout_edit', component: require('./components/masters/student_masters/scouts/scout_edit.vue').default },
-        { path: '/scout_list', name:'scout_list', component: require('./components/masters/student_masters/scouts/scout_list.vue').default },
+        { path: '', name:'scout_section_index', component: require('./components/masters/student_masters/scouts/scout_section_index.vue').default },
+        { path: '/scout_section_add', name:'scout_section_add', component: require('./components/masters/student_masters/scouts/scout_section_add.vue').default },
+        { path: '/scout_section_edit', name:'scout_section_edit', component: require('./components/masters/student_masters/scouts/scout_section_edit.vue').default },
+        { path: '/scout_section_list', name:'scout_section_list', component: require('./components/masters/student_masters/scouts/scout_section_list.vue').default },
       ]    
     },
-    { path: '/scout_type_index', 
-    component: require('./components/masters/student_masters/scouts/scout_type_index.vue').default ,
+    { path: '/scout_badge_index', 
+    component: require('./components/masters/student_masters/scouts/scout_badge_index.vue').default ,
       children: [
-        { path: '', name:'scout_type_index', component: require('./components/masters/student_masters/scouts/scout_type_index.vue').default },
-        { path: '/scout_type_add', name:'scout_type_add', component: require('./components/masters/student_masters/scouts/scout_type_add.vue').default },
-        { path: '/scout_type_edit', name:'scout_type_edit', component: require('./components/masters/student_masters/scouts/scout_type_edit.vue').default },
-        { path: '/scout_type_list', name:'scout_type_list', component: require('./components/masters/student_masters/scouts/scout_type_list.vue').default },
+        { path: '', name:'scout_badge_index', component: require('./components/masters/student_masters/scouts/scout_section_index.vue').default },
+        { path: '/scout_badge_add', name:'scout_badge_add', component: require('./components/masters/student_masters/scouts/scout_badge_add.vue').default },
+        { path: '/scout_badge_edit', name:'scout_badge_edit', component: require('./components/masters/student_masters/scouts/scout_badge_edit.vue').default },
+        { path: '/scout_badge_list', name:'scout_badge_list', component: require('./components/masters/student_masters/scouts/scout_badge_list.vue').default },
+      ]    
+    },
+    { path: '/scout_leader_index', 
+    component: require('./components/masters/student_masters/scouts/scout_leader_index.vue').default ,
+      children: [
+        { path: '', name:'scout_leader_index', component: require('./components/masters/student_masters/scouts/scout_leader_index.vue').default },
+        { path: '/scout_leader_add', name:'scout_leader_add', component: require('./components/masters/student_masters/scouts/scout_leader_add.vue').default },
+        { path: '/scout_leader_edit', name:'scout_leader_edit', component: require('./components/masters/student_masters/scouts/scout_leader_edit.vue').default },
+        { path: '/scout_leader_list', name:'scout_leader_list', component: require('./components/masters/student_masters/scouts/scout_leader_list.vue').default },
+      ]    
+    },
+    { path: '/scout_section_level_index', 
+    component: require('./components/masters/student_masters/scouts/scout_section_level_index.vue').default ,
+      children: [
+        { path: '', name:'scout_section_level_index', component: require('./components/masters/student_masters/scouts/scout_section_level_index.vue').default },
+        { path: '/scout_section_level_add', name:'scout_section_level_add', component: require('./components/masters/student_masters/scouts/scout_section_level_add.vue').default },
+        { path: '/scout_section_level_edit', name:'scout_section_level_edit', component: require('./components/masters/student_masters/scouts/scout_section_level_edit.vue').default },
+        { path: '/scout_section_level_list', name:'scout_section_level_list', component: require('./components/masters/student_masters/scouts/scout_section_level_list.vue').default },
       ]    
     },
     { path: '/training_index', 

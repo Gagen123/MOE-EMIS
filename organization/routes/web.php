@@ -125,7 +125,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'masters/classStreamMapping'], function () use ($router) {
         // class route
         $router->post('/saveClassStreamMapping', 'Masters\ClassStreamController@saveClassStreamMapping');
-        $router->get('/loadClassStreamMapping', 'Masters\ClassStreamController@loadClassStreamMapping');
+        $router->get('/loadClassStreamMapping/{type}', 'Masters\ClassStreamController@loadClassStreamMapping');
     });
 
     $router->group(['prefix' => 'masters/electricitySource'], function () use ($router) {
@@ -312,7 +312,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
         
         $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
-        $router->get('/getOrgProfile/{id}', ['uses' => 'establishment\EstablishmentController@getOrgProfile']);
+       
         
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
@@ -320,5 +320,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
+        $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
     });
 });

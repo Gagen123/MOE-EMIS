@@ -4,6 +4,8 @@ import VueRouter from 'vue-router';
 import VueCharts from 'vue-chartjs';
 import VTooltip from 'v-tooltip';
 import vDatepicker from 'vuejs-datepicker';
+import moment from 'moment';
+
 Vue.use(VueRouter);
 Vue.use(VTooltip)
 //vue select

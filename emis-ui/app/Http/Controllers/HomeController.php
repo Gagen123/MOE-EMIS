@@ -32,7 +32,7 @@ class HomeController extends Controller{
                 // dd(json_decode($user_Det)->system_id);
                 $role_riv=$this->apiService->listData('getprivilleges/'.json_decode($user_Det)->system_id, [], $headers);
                 $role_riv=json_decode($role_riv);
-                $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.json_decode($user_Det)->system_id, [], $headers);
+                // $role_workflow_submitter=$this->apiService->listData('getworkflows/submitter/'.json_decode($user_Det)->system_id, [], $headers);
                 // dd($role_riv);
                 $module=[];
                 $mod_ids="";
@@ -90,43 +90,43 @@ class HomeController extends Controller{
                 // $sub_modules = collect($sub_modules)->sortBy('Sequence')->toArray();
                 
                 // dd($role_workflow_submitter);
-                if($role_workflow_submitter!=null){
-                    foreach(json_decode($role_workflow_submitter) as $i=> $work){
-                        if($work->moduleName != "" && strpos($mod_ids,$work->mod_id)===false){
-                            $mod_ids.=$work->mod_id.',';
-                            $mod=[
-                                'mod_id'=> $work->mod_id,
-                                'mod_name' => $work->moduleName,
-                                'module_icon'=>$work->module_icon,
-                                'module_route'=>$work->module_route,
-                            ];
-                            array_push($module,$mod);
-                        }
-                        if($work->sub_mod_name != "" && strpos($sub_mod_ids,$work->sub_mod_id)===false){
-                            $sub_mod_ids.=$work->sub_mod_id.',';
-                            $sub_mod=[
-                                'mod_id'=> $work->mod_id,
-                                'sub_mod_id'=> $work->sub_mod_id,
-                                'sub_mod_name' => $work->sub_mod_name,
-                                'submod_icon'=>$work->submod_icon,
-                                'submod_route' =>$work->sub_mod_route,
-                            ];
-                            array_push($sub_modules,$sub_mod);
-                        }
-                        // dd($sub_modules);
-                        $screen=[
-                            'mod_id'=> $work->mod_id,
-                            'sub_mod_id'=> $work->sub_mod_id,
-                            'screen_id' => $work->screen_id,
-                            'screen_name' => $work->screen_name,
-                            'route' =>$work->Route,
-                            'screen_icon'=>$work->screen_icon,
-                            'work_flow_status'=>$work->Sequence,
-                            'actions' => 'null'
-                        ];
-                        array_push($screens,$screen);
-                    }
-                }
+                // if($role_workflow_submitter!=null){
+                //     foreach(json_decode($role_workflow_submitter) as $i=> $work){
+                //         if($work->moduleName != "" && strpos($mod_ids,$work->mod_id)===false){
+                //             $mod_ids.=$work->mod_id.',';
+                //             $mod=[
+                //                 'mod_id'=> $work->mod_id,
+                //                 'mod_name' => $work->moduleName,
+                //                 'module_icon'=>$work->module_icon,
+                //                 'module_route'=>$work->module_route,
+                //             ];
+                //             array_push($module,$mod);
+                //         }
+                //         if($work->sub_mod_name != "" && strpos($sub_mod_ids,$work->sub_mod_id)===false){
+                //             $sub_mod_ids.=$work->sub_mod_id.',';
+                //             $sub_mod=[
+                //                 'mod_id'=> $work->mod_id,
+                //                 'sub_mod_id'=> $work->sub_mod_id,
+                //                 'sub_mod_name' => $work->sub_mod_name,
+                //                 'submod_icon'=>$work->submod_icon,
+                //                 'submod_route' =>$work->sub_mod_route,
+                //             ];
+                //             array_push($sub_modules,$sub_mod);
+                //         }
+                //         // dd($sub_modules);
+                //         $screen=[
+                //             'mod_id'=> $work->mod_id,
+                //             'sub_mod_id'=> $work->sub_mod_id,
+                //             'screen_id' => $work->screen_id,
+                //             'screen_name' => $work->screen_name,
+                //             'route' =>$work->Route,
+                //             'screen_icon'=>$work->screen_icon,
+                //             'work_flow_status'=>$work->Sequence,
+                //             'actions' => 'null'
+                //         ];
+                //         array_push($screens,$screen);
+                //     }
+                // }
 
                 //dd($screen);
                 $roles=json_decode($user_Det)->user_details->roles;
@@ -152,17 +152,19 @@ class HomeController extends Controller{
                 ];
 
                 // dd($user_details);
-                $role_workflow=$this->apiService->listData('getworkflows/all/'.json_decode($user_Det)->system_id, [], $headers);
+                // $role_workflow=$this->apiService->listData('getworkflows/all/'.json_decode($user_Det)->system_id, [], $headers);
                 Session::put('User_Details', $user_details);
                 Session::put('User_Token', $token);
 
                 //dd(json_decode($role_workflow));
                 Session::put('role_priv', $role_riv);
-                Session::put('role_workflow', $role_workflow);
+                // Session::put('role_workflow', $role_workflow);
                 
                 if($user->org_organization_id!=null){
-                    $org_profile=$this->apiService->listData('emis/organization/getOrgProfile/'.$user->org_organization_id);
-                    Session::put('org_profile', json_decode($org_profile)->data);
+                    $org_profile=json_decode($this->apiService->listData('emis/common_services/getOrgProfile/'.$user->org_organization_id))->data;
+                    if($org_profile!=null && $org_profile!="" && $org_profile!="null"){
+                        Session::put('org_profile', $org_profile);
+                    }
                 }
                 return redirect()->route('dashboard');
             }

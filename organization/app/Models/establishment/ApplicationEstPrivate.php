@@ -20,6 +20,7 @@ class ApplicationEstPrivate extends Model
         'id',
         'ApplicationDetailsId',
         'proposedName',
+        'levelId',
         'proprietorName',
         'proprietorCid',
         'proprietorPhone',

@@ -1,7 +1,7 @@
 <template>
 <div>
     <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-        <li class="form-inline "><h5>E</h5><h6 class="pt-1">STABLISHMENT</h6></li>
+        <li class="form-inline "><h5 class="pt-1">Creation of A New Establishment</h5></li>
     </ol>
     <div class="container-fluid"> 
         <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
@@ -11,37 +11,30 @@
                     {{ item.screen_name}}
                 </router-link>
             </li>
-
-            <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                <router-link id="regularstaff" to="/school_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    <span class=""></span>
-                    School List
-                </router-link>
-            </li>
             <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
-                <router-link id="/new_establishment_index" to="/new_establishment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link id="new_establishment_index" to="/new_establishment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                    New Establishment
                 </router-link>
             </li> 
-            <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
-                <router-link to ="/register" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item pr-1" @click="activatelink('register')">
+                <router-link to ="/register" id="register" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     Register
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('nomination')">
-                <router-link to="/head_quater_office" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item pr-1" @click="activatelink('head_quater_office')">
+                <router-link to="/head_quater_office" id="head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     New HQ/Dzongkhag Office
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('nomination1')">
-                <router-link to="/list_head_quater_office" id="nomination1" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+            <li class="nav-item pr-1" @click="activatelink('list_head_quater_office')">
+                <router-link to="/list_head_quater_office" id="list_head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     List HQ/Dzongkhag Office
                 </router-link>
-            </li> -->
+            </li>
         </ul>
         <router-view></router-view>
     </div>

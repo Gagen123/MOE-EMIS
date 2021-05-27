@@ -20,6 +20,12 @@ class ApplicationAttachments extends Model
         'id',
         'ApplicationDetailsId',
         'name',
-        'path'
+        'user_defined_file_name',
+        'upload_type',
+        'path',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
     ];
 }

@@ -156,7 +156,7 @@
                 if(data.service_name.includes('Bifur')){
                     this.$router.push({name:"bifurcation_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Change Basic Details')){
+                if(data.application_number.includes('Ch')){
                     this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Closure')){

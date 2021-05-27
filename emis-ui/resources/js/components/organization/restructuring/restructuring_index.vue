@@ -12,9 +12,29 @@
                     </router-link>
                 </li>
 
-                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link id="regularstaff" to="/change_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Change Details
+                        Change In Name
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="regularstaff" to="/change_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change In Level
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="regularstaff" to="/change_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change SEN Details
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="regularstaff" to="/change_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change Feeding School Details
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="regularstaff" to="/change_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change All Details
                     </router-link>
                 </li>
                 <li class="nav-item pr-1"  @click="activatelink('volunteer')">
@@ -31,7 +51,7 @@
                     <router-link to="/closure_list" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Closure
                     </router-link>
-                </li> -->
+                </li>
             </ul>
             <router-view></router-view>
         </div>
