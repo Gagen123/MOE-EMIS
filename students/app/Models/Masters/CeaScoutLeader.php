@@ -13,7 +13,7 @@ class CeaScoutLeader extends Model
 
     protected $fillable = [
         'id',
-        'name',
+        'Name',
         'description', 
         'status'
     ];

@@ -28,7 +28,7 @@ class GeneralStudentController extends Controller
         $id = $param;
         
         return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
-                            ->get(['id', 'Name', 'student_cod']));
+                            ->get(['id', 'Name', 'student_code']));
     }
 
     /**

@@ -8,10 +8,23 @@
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Scout Section:<span class="text-danger">*</span></label> 
+                        <select v-model="form.scout_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('scout_type') }" class="form-control select2" name="scout_type" id="scout_type">
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                    </select>
+                    <has-error :form="form" field="scout_type"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
                     </div>
+                </div>  
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -45,7 +58,7 @@ export default {
         }
     },
     methods: {
-        loadActiveScoutList(uri="masters/loadActiveStudentMasters/scout_section_level"){
+        loadActiveScoutList(uri="masters/loadActiveStudentMasters/scout_section"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -66,8 +79,8 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="scout_section_level"){
-                this.form.scout_section_level=$('#scout_section_level').val();
+            if(id=="scout_type"){
+                this.form.scout_type=$('#scout_type').val();
             }
         },
 		formaction: function(type){
@@ -83,7 +96,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/scout_badge_list');
+                    this.$router.push('/scout_section_level_list');
                 })
                 .catch(() => {
                     console.log("Error......")
