@@ -241,6 +241,8 @@
                 </li>
                 <li class="nav-item has-treeview" id="organizationlink">
             </li>
+
+            <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-home"></i>
@@ -252,15 +254,23 @@
                 <ul class="nav nav-treeview">
                     <li class="nav-item has-treeview" >
                         <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-users nav-icon"></i>
+                        <i class="fa fa-angle-double-right nav-icon"></i>
                             Organization Profile
                         </router-link>
+                    </li>
+                    <li class="nav-item" id="organization_list" @click="setclass('organizationlink','','organization_list')">
+                        <router-link to="/organization_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Organization List
+                            </p>
+                        </router-link> 
                     </li>
                     <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
                         <router-link to="/establishment_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Establishment
+                                Create New Organization
                             </p>
                         </router-link> 
                     </li>
@@ -268,7 +278,7 @@
                         <router-link to="/restructuring_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Restructuring
+                                Change in Details
                             </p>
                         </router-link>
                     </li>
@@ -284,12 +294,13 @@
                         <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                General Information
+                                Other Information
                             </p>
                         </router-link>
                     </li>
                 </ul>
             </li>
+            <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="staff-transaction">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-users"></i>
@@ -341,7 +352,7 @@
                     </li>
                 </ul>
             </li>
-           
+            <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-user-graduate"></i>
@@ -403,7 +414,7 @@
                     </li>
                 </ul>
             </li>
-
+            <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fa fa-adjust"></i>

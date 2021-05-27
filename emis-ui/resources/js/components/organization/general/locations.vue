@@ -7,110 +7,126 @@
         <form class="bootbox-form" id="mainform">
             <div class="card card-primary card-outline">
                 <div class="card-body">
-                    <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                    <input type="hidden" class="form-control" v-model="form.id"/>
-                    <!-- <div class="form-group row">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>School:</label>
-                                <span class="text-indigo-600" id="scode">&nbsp; YangchenPhug</span>
+                    <form class="form-horizontal">
+                        <div class="row invoice-info">
+                            <div class="col-sm-2 invoice-col">
+                                <label class="mb-0"><i><u>Ownership Details</u></i></label>
+                            </div>
+                            <div class="col-sm-9 invoice-col">
+                                <input type="hidden" class="form-control" v-model="form.organizationId"/>
+                                <input type="hidden" class="form-control" v-model="form.id"/>
+                                <p>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Ownership:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 pt-2">
+                                        <label><input v-model="form.landOwnership" type="radio" value="1"/> Public</label>
+                                        <label><input v-model="form.landOwnership" type="radio" value="0" /> Private</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name of Owner:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
+                                        <input type="text" v-model="form.name" class="form-control editable_fields" id="nameOwner"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID of Owner:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
+                                        <input type="text" v-model="form.cid" class="form-control editable_fields" id="cidOfOwner"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Thram No:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-8 col-md-8 col-sm-8">
+                                        <input type="text" name="thramNo" v-model="form.thramNo" :class="{ 'is-invalid': form.errors.has('thramNo') }" class="form-control editable_fields" @change="remove_err('thramNo')" id="thramNo"/>
+                                        <has-error :form="form" field="thramNo"></has-error>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 invoice-col">
+                                <label class="mb-0"><i><u>Geo-Position Details</u></i></label>
+                            </div>
+                            <div class="col-sm-9 invoice-col">
+                                <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Longitude:</label>
+                                <div class="col-lg-2 col-md-2 col-sm-2">
+                                    <input type="text" v-model="form.longitude" class="form-control editable_fields" id="longitude" />
+                                </div>
+                                <label class="col-lg-1 col-md-1 col-sm-1 col-form-label">Lat:</label>
+                                <div class="col-lg-2 col-md-2 col-sm-1">
+                                    <input type="text" v-model="form.latitude" class="form-control editable_fields" id="latitude" />
+                                </div>
+                                <label class="col-lg-1 col-md- col-sm-1 col-form-label">Alt:</label>
+                                <div class="col-lg-2 col-md-2 col-sm-1">
+                                    <input type="text" v-model="form.altitude" class="form-control editable_fields" id="altitude" />
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" style="padding:25px">
+                                    <input type="button" value="Get Value" @click="getLat()" class="bt btn-primary form-control" />
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 invoice-col">
+                                <label class="mb-0"><i><u>Other Information</u></i></label>
+                            </div>
+                            <div class="col-sm-9 invoice-col">
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Compound Fencing:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 pt-2">
+                                        <label><input v-model="form.compoundFencing" type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="form.compoundFencing" type="radio" value="0" /> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Entrance Gate:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 pt-2">
+                                        <label><input v-model="form.entranceGate" type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="form.entranceGate" type="radio" value="0" /> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Compound Fencing:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 pt-2">
+                                        <label><input v-model="form.compoundFencing" type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="form.compoundFencing" type="radio" value="0" /> No</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Compound Area:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-5 col-md-5 col-sm-5 pt-2">
+                                        <input type="text" v-model="form.compoundArea" :class="{ 'is-invalid': form.errors.has('compoundArea') }" @change="remove_err('compoundArea')" class="form-control editable_fields" id="compoundArea"/>
+                                        <has-error :form="form" field="compoundArea"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Disaster Area:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-5 col-md-5 col-sm-3">
+                                        <span v-for="(item, index) in  form.disasterList" :key="index">
+                                            <input type="checkbox" :id="'disasterRisk'+(index)" v-model="item.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Dzongkhag:</label>
-                                <span class="text-indigo-600" id="scode">&nbsp; Thimphu</span>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Gewog:</label>
-                                <span class="text-indigo-600" id="scode">&nbsp;Thimphu throm</span>
-                        </div>
-                    </div> -->
+                    </form>
                     <div class="form-group row">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label class="required">Land Ownership:<span class="text-danger">*</span></label>
-                            <br>
-                            <label><input v-model="form.landOwnership" type="radio" value="1"/> Public</label>
-                            <label><input v-model="form.landOwnership" type="radio" value="0" /> Private</label>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><label class="mb-0"><i><u>Attachments</u></i></label>
+                            <table id="attachmentTable" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>File</th>
+                                        <th>Remark</th>                            
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in form.attachment_details" :key="index">
+                                        <td><input type="text" :id="'fileName'+(index+1)" class="form-control" v-model="item.name" readonly/></td>
+                                        <td><input type="file"  :id="'attach'+(index+1)" v-on:change="onChangeFileUpload"></td>
+                                        <td><input type="text" :id="'remarks'+(index+1)" name="remarks" class="form-control" v-model="item.remarks"/></td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label class="required">Compound Fencing:<span class="text-danger">*</span></label>
-                            <br>
-                            <label><input v-model="form.compoundFencing" type="radio" value="1"/> Yes</label>
-                            <label><input v-model="form.compoundFencing" type="radio" value="0" /> No</label>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            
-                            <label class="required">Entrance Gate:<span class="text-danger">*</span></label>
-                            <br>
-                            <label><input v-model="form.entranceGate" type="radio" value="1"/> Yes</label>
-                            <label><input v-model="form.entranceGate" type="radio" value="0" /> No</label>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Longitude:</label>
-                            <input type="text" v-model="form.longitude" class="form-control editable_fields" id="longitude" />
-                        </div> 
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Latitude:</label>
-                            <input type="text" v-model="form.latitude" class="form-control editable_fields" id="latitude" />
-                        </div> 
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Altitude:</label>
-                            <input type="text" v-model="form.altitude" class="form-control editable_fields" id="altitude" />
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12" style="padding:25px">
-                            <input type="button" value="Get Value" @click="getLat()" class="bt btn-primary form-control" />
-                        </div>
-                    </div>
-                                        
-                    <div class="form-group row">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Thram No:<span class="text-danger">*</span></label>
-                            <input type="text" name="thramNo" v-model="form.thramNo" :class="{ 'is-invalid': form.errors.has('thramNo') }" class="form-control editable_fields" @change="remove_err('thramNo')" id="thramNo"/>
-                            <has-error :form="form" field="thramNo"></has-error>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>CID No. of Owner:</label>
-                            <input type="text" v-model="form.cid" class="form-control editable_fields" id="cidOfOwner"/>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Name of Owner:</label>
-                            <input type="text" v-model="form.name" class="form-control editable_fields" id="nameOwner"/>
-                        </div> 
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Compound Area:<span class="text-danger">*</span></label>
-                            <input type="text" v-model="form.compoundArea" :class="{ 'is-invalid': form.errors.has('compoundArea') }" @change="remove_err('compoundArea')" class="form-control editable_fields" id="compoundArea"/>
-                            <has-error :form="form" field="compoundArea"></has-error>
-                        </div> 
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                            <label >Disaster risks:</label><br>
-                            <span v-for="(item, index) in  form.disasterList" :key="index">
-                                <input type="checkbox" :id="'disasterRisk'+(index)" v-model="item.disaster" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><b>&nbsp;&nbsp; Attachments</b><br><br>
-                        <table id="attachmentTable" class="table table-sm table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>File</th>
-                                    <th>Remark</th>                            
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in form.attachment_details" :key="index">
-                                    <td><input type="text" :id="'fileName'+(index+1)" class="form-control" v-model="item.name" readonly/></td>
-                                    <td><input type="file"  :id="'attach'+(index+1)" v-on:change="onChangeFileUpload"></td>
-                                    <td><input type="text" :id="'remarks'+(index+1)" name="remarks" class="form-control" v-model="item.remarks"/></td>
-                                </tr> 
-                            </tbody>
-                        </table>
-                    </div>
                     </div>
                 </div>
             </div>
