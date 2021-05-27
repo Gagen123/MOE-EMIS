@@ -39,48 +39,49 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Attachments</label>
-                                <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th> 
-                                            <th>File</th> 
-                                        </tr>
-                                    </thead> 
-                                    <tbody>
-                                        <tr v-for='(attach,count) in release_attachments' :key="count+1">
-                                            <td> 
-                                                <input type="text" class="form-control" readonly :value="attach.user_defined_name">
-                                            </td>
-                                            <td>    
-                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
-                                            </td>
-                                        </tr>
-                                        <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                            <td>
-                                                <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                            </td>
-                                            <td>                                
-                                                <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                            </td>
-                                        </tr> 
-                                        <tr>
-                                            <td colspan="3"> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                                @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
-                                                @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
-                                            </td>
-                                        </tr> 
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0.5">Attachments</label>
+                            <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Attachment Name</th> 
+                                        <th>File</th> 
+                                    </tr>
+                                </thead> 
+                                <tbody>
+                                    <tr v-for='(attach,count) in release_attachments' :key="count+1">
+                                        <td> 
+                                            <input type="text" class="form-control" readonly :value="attach.user_defined_name">
+                                        </td>
+                                        <td>    
+                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
+                                        </td>
+                                    </tr>
+                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>                                
+                                            <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                    </tr> 
+                                    <tr>
+                                        <td colspan="3"> 
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                            @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                            @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
+                    </div>
+                    
             <div class="card">
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -203,18 +204,52 @@ export default {
             if(type=="reset"){
                 this.restForm();
             }
+            // if(type=="save"){
+            //         this.form.post('/mess_manage/saveFoodRelease',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Food release detail is added successfully'
+            //         })
+            //         this.$router.push('/foodrelease_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......");
+            //         this.applyselect();
+            //     })
+            // }
             if(type=="save"){
-                    this.form.post('/mess_manage/saveFoodRelease',this.form)
+                const config = { 
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('id', this.form.id);
+                formData.append('dateOfrelease', this.form.dateOfrelease);
+                formData.append('dzongkhag', this.form.dzongkhag);
+                formData.append('organizaiton', this.form.organizaiton);
+                formData.append('quarter', this.form.quarter);
+                formData.append('remarks', this.form.remarks);
+               
+                formData.append('ref_docs[]', this.form.ref_docs);
+                for(let i=0;i<this.form.ref_docs.length;i++){
+                    formData.append('attachments[]', this.form.ref_docs[i].attachment);
+                    // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
+                    formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
+                }
+
+                axios.post('/mess_manage/saveFoodRelease', formData, config)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food release detail is added successfully'
+                        title: 'Food Release Note is added successfully'
                     })
-                    this.$router.push('/foodrelease_list');
+                    
+                   this.$router.push('/foodrelease_list');
                 })
                 .catch(() => {
-                    console.log("Error......");
-                    this.applyselect();
+                    console.log("Error......")
                 })
             }
 		},

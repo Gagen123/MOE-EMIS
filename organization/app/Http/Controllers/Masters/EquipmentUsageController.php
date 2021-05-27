@@ -44,6 +44,7 @@ class EquipmentUsageController extends Controller
         if( $id != null){
             $equ = [
                 'name'          => $request['equipmentUsageName'],
+                'description'    =>  $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
@@ -51,7 +52,7 @@ class EquipmentUsageController extends Controller
 
             $data = EquipmentUsage::find($request['id']);
 
-            $messs_det='equipmentUsageName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='equipmentUsageName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $equipment = EquipmentUsage::where('id', $id)->update($equ);
@@ -59,6 +60,7 @@ class EquipmentUsageController extends Controller
         }else{
             $equ = [
                 'name'          => $request['equipmentUsageName'],
+                'description'    =>  $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

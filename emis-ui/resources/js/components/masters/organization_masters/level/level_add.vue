@@ -9,7 +9,10 @@
                         <input class="form-control" v-model="form.levelName" :class="{ 'is-invalid': form.errors.has('lev_name') }" id="levelName" @change="remove_err('levelName')" type="text" tabindex="1" autofocus="true">
                         <has-error :form="form" field="lev_name"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -35,6 +38,7 @@ export default {
             form: new form({
                 id: '',
                 levelName: '',
+                description:'',
                 status: 1,
                 action_type:'add',
             })
@@ -50,6 +54,7 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.levelName= '';
+                this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){

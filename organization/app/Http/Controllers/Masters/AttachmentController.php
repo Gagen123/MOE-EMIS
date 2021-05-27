@@ -26,12 +26,13 @@ class AttachmentController extends Controller
         if( $id != null){
             $cla = [
                 'name'           => $request['attachmentName'],
+                'description'    =>  $request['description'],
                 'status'         => $request['status'],
                 'updated_by'     => $request['user_id'],
                 'created_at'     => date('Y-m-d h:i:s'),
             ];
             $data = Attachment::find($request['id']);
-            $messs_det='attachmentName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='attachmentName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','attachment','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $class = Attachment::where('id', $id)->update($cla);
@@ -40,6 +41,7 @@ class AttachmentController extends Controller
 
             $cla = [
                 'name'                    => $request['attachmentName'],
+                'description'             =>  $request['description'],
                 'status'                  => $request['status'],
                 'created_by'              => $request['user_id'],
                 'created_at'              => date('Y-m-d h:i:s'),

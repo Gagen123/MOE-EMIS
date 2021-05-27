@@ -16,6 +16,6 @@ class EquipmentType extends Model
      * @var array
      */
     protected $fillable = [
-        'id','name','status','created_by','updated_by'
+        'id','name','description','status','created_by','updated_by'
     ];
 }

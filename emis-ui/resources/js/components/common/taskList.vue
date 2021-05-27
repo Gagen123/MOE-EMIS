@@ -146,7 +146,8 @@
                 });
             }
             else{
-                if(data.service_name.includes('New Establishment')){
+
+                if(data.application_number.includes('Estb')){
                     this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Merge')){

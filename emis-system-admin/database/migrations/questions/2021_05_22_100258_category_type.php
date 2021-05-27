@@ -12,6 +12,7 @@ class CategoryType extends Migration
             $table->char('parent_id',36)->nullable(false);
             $table->string('name',150)->nullable(false);
             $table->boolean('status')->default(1);
+            $table->string('type',100)->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',50)->nullable(true);
             $table->timestamp('created_at')->nullable();

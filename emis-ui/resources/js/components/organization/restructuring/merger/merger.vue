@@ -1,9 +1,5 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="existmessage"></div>
-        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
@@ -677,21 +673,21 @@ export default {
             }
         },
 
-        getScreenAccess(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                let data = response.data.data.acess_level;
-                if(data == "Org" || data == "Ministry"){
-                    $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
-                    $('#existmessage').html('You have no access to this page.');
-                }
+        // getScreenAccess(){
+        //     axios.get('common/getSessionDetail')
+        //     .then(response => {
+        //         let data = response.data.data.acess_level;
+        //         if(data == "Org" || data == "Ministry"){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have no access to this page.');
+        //         }
                 
-            })    
-            .catch(errors => { 
-                console.log(errors)
-            });
-        }
+        //     })    
+        //     .catch(errors => { 
+        //         console.log(errors)
+        //     });
+        // }
 
         /**
          * method to check pending status
@@ -713,7 +709,6 @@ export default {
     },
     
     mounted() {
-        this.getScreenAccess();
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
         this.form.year=current_year;

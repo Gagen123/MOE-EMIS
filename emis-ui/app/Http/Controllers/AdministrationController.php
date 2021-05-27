@@ -359,11 +359,13 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $loc =[
             'locationName'  =>  $request['locationName'],
-            'status'    =>  $request['status'],
+            'description'   =>  $request['description'],
+            'status'        =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'id'            =>  $request['id'],
+            'user_id'       =>$this->userId()
         ];
+        //dd('loc');
         try{
             $response_data= $this->apiService->createData('emis/masters/location/saveLocation', $loc);
             return $response_data;
@@ -389,11 +391,12 @@ class AdministrationController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
         $dis =[
-            'disasterName'  =>  $request['disasterName'],
-            'status'    =>  $request['status'],
-            'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'disasterName'   =>  $request['disasterName'],
+            'description'    =>  $request['description'],
+            'status'         =>  $request['status'],
+            'actiontype'     =>  $request['action_type'],
+            'id'             =>  $request['id'],
+            'user_id'        =>$this->userId()
         ];
         try{
             $response_data= $this->apiService->createData('emis/masters/disaster/saveDisaster', $dis);
@@ -421,11 +424,11 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $cat =[
             'structureCategoryName'  =>  $request['structureCategoryName'],
-            'description'  =>  $request['description'],
-            'status'    =>  $request['status'],
-            'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'description'            =>  $request['description'],
+            'status'                 =>  $request['status'],
+            'actiontype'             =>  $request['action_type'],
+            'id'                     =>  $request['id'],
+            'user_id'                =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
         return $response_data;
@@ -448,9 +451,10 @@ class AdministrationController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
         $cat =[
-            'levelName'  =>  $request['levelName'],
-            'status'    =>  $request['status'],
-            'actiontype'    =>  $request['action_type'],
+            'levelName'       =>  $request['levelName'],
+            'description'    =>  $request['description'],
+            'status'         =>  $request['status'],
+            'actiontype'     =>  $request['action_type'],
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
@@ -504,6 +508,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $cat =[
             'equipmentTypeName'  =>  $request['equipmentTypeName'],
+            'description'    =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
@@ -531,6 +536,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $cat =[
             'equipmentUsageName'  =>  $request['equipmentUsageName'],
+            'description'    =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
@@ -558,11 +564,13 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $cat =[
             'sportFacilityName'  =>  $request['sportFacilityName'],
-            'status'    =>  $request['status'],
-            'actiontype'    =>  $request['action_type'],
-            'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'description'        =>  $request['description'],
+            'status'             =>  $request['status'],
+            'actiontype'         =>  $request['action_type'],
+            'id'                 =>  $request['id'],
+            'user_id'            =>$this->userId()
         ];
+       // dd( $cat);
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
 
@@ -585,6 +593,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $cat =[
             'sportSupporterName'  =>  $request['sportSupporterName'],
+            'description'        =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
@@ -616,12 +625,14 @@ class AdministrationController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
         $cat =[
-            'sportFacility'  =>  $request['sportFacility'],
-            'subtypeName'  =>  $request['subtypeName'],
-            'status'    =>  $request['status'],
-            'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'sportFacility'     =>  $request['sportFacility'],
+            'description'       =>  $request['description'],
+            'subtypeName'       =>  $request['subtypeName'],
+            'status'            =>  $request['status'],
+            'id'                =>  $request['id'],
+            'user_id'           =>$this->userId()
         ];
+      //  dd($cat);
         $response_data= $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
         return $response_data;
 
@@ -700,17 +711,20 @@ class AdministrationController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
         $class =[
-            'className'  =>  $request['className'],
-            'status'  =>  $request['status'],
-            'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'className'      =>  $request['className'],
+            'description'    =>  $request['description'],
+            'status'         =>  $request['status'],
+            'id'             =>  $request['id'],
+            'user_id'        =>$this->userId()
         ];
+      //  dd($class);
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
 
     }
 
     public function loadClass(Request $request){
+        //dd('m here');
         $loadClass = $this->apiService->listData('emis/masters/class/loadClass');
         return $loadClass;
     }
@@ -737,6 +751,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $stream =[
             'streamName'    =>  $request['streamName'],
+            'description'   =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
@@ -802,6 +817,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $source =[
             'sourceName'    =>  $request['sourceName'],
+            'description'   =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
@@ -833,6 +849,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $source =[
             'supplyName'    =>  $request['supplyName'],
+            'description'   =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
@@ -862,10 +879,11 @@ class AdministrationController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
         $source =[
-            'roadType'    =>  $request['roadType'],
-            'status'        =>  $request['status'],
-            'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'roadType'       =>  $request['roadType'],
+            'description'    =>  $request['description'],
+            'status'         =>  $request['status'],
+            'id'             =>  $request['id'],
+            'user_id'        =>$this->userId()
         ];
 
         $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
@@ -892,6 +910,7 @@ class AdministrationController extends Controller{
         $source =[
             'serviceType'    =>  $request['serviceType'],
             'serviceName'    =>  $request['serviceName'],
+            'description'    =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
@@ -908,18 +927,21 @@ class AdministrationController extends Controller{
     public function saveStructureDesigner(Request $request){
         $rules = [
             'designerName'  =>  'required',
+            'description'   =>  'required',
             'status'        =>  'required',
         ];
         $customMessages = [
             'designerName.required' => 'Designer Name is required',
+            'description.required'  => 'Description is required',
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $source =[
             'designerName'    =>  $request['designerName'],
-            'status'        =>  $request['status'],
-            'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'description'     =>  $request['description'],
+            'status'          =>  $request['status'],
+            'id'              =>  $request['id'],
+            'user_id'         =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
         return $response_data;
@@ -942,6 +964,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $source =[
             'contactName'    =>  $request['contactName'],
+            'description'    =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
             'user_id'       =>$this->userId()
@@ -967,6 +990,7 @@ class AdministrationController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $attachment =[
             'attachmentName'    =>  $request['attachmentName'],
+            'description'       =>  $request['description'],
             'status'            =>  $request['status'],
             'id'                =>  $request['id'],
             'user_id'           =>$this->userId()

@@ -10,6 +10,10 @@
                         <has-error :form="form" field="streamName"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
@@ -34,6 +38,7 @@ export default {
             form: new form({
                 id: '',
                 streamName: '',
+                description: '',
                 status: 1,
             })
         }
@@ -47,6 +52,7 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.streamName= '';
+                this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -77,6 +83,7 @@ export default {
     },
     mounted(){
         this.form.streamName=this.$route.params.data.stream;
+        this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     }

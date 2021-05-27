@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Category</th>
                     <th>Sub Category</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
                     <th>Action</th> 
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.structureCategory}}</td>
                     <td>{{ item.subCategoryName}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
@@ -35,6 +37,7 @@ export default {
     data(){
         return{
             strSubCategoryList:[],
+            subcat:'',
         }
     },
 
@@ -65,6 +68,16 @@ export default {
 
     mounted(){
         this.loadStrSubCategoryList();
+        this.subcat =  $("#subCategory-table").DataTable();
+    
+    },
+    watch: {
+        strSubCategoryList(){
+            this.subcat.destroy();
+            this.$nextTick(() => {
+                this.subcat =  $("#subCategory-table").DataTable()
+            });
+        }
     },
 }
 </script>

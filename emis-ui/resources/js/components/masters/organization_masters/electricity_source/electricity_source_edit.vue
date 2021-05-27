@@ -9,7 +9,10 @@
                         <input class="form-control" v-model="form.sourceName" :class="{ 'is-invalid': form.errors.has('sourceName') }" id="sourceName" @change="remove_err('sourceName')" type="text" tabindex="1" autofocus="true">
                         <has-error :form="form" field="sourceName"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -34,6 +37,7 @@ export default {
             form: new form({
                 id: '',
                 sourceName: '',
+                description:'',
                 status: 1,
             })
         }
@@ -48,6 +52,7 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.disasterName= '';
+                this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -68,6 +73,7 @@ export default {
 
     created() {
         this.form.sourceName=this.$route.params.data.name;
+        this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     },

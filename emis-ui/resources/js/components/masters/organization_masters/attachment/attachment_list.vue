@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Attachment Name</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -13,6 +14,7 @@
                 <tr v-for="(item, index) in attachmentList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -61,14 +63,14 @@ export default {
     },
     mounted(){
         this.loadAttachmentList();
-        this.dt =  $("#transfer-table").DataTable()
+        this.dt =  $("#attachment-table").DataTable()
     },
     
     watch: {
         attachmentList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#transfer-table").DataTable()
+                this.dt =  $("#attachment-table").DataTable()
             });
         }
     },

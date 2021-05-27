@@ -8,7 +8,11 @@
                         <input class="form-control" v-model="form.supplyName" :class="{ 'is-invalid': form.errors.has('supplyName') }" id="supplyName" @change="remove_err('supplyName')" type="text" tabindex="1" autofocus="true">
                         <has-error :form="form" field="supplyName"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
+
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -33,6 +37,7 @@ export default {
             form: new form({
                 id: '',
                 supplyName: '',
+                description:'',
                 status: 1,
             })
         }
@@ -46,6 +51,7 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.supplyName= '';
+                this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
