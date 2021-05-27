@@ -253,6 +253,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
             $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
             $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
+
+            //route for student portal
+            $router->get('/loadOrganizationDetailsbyOrgId/{id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetailsbyOrgId']);
+
             $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
             $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);

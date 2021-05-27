@@ -366,6 +366,13 @@ class EstablishmentController extends Controller
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','pending')->first());
     }
 
+    //function used in student portal
+    public function loadOrganizationDetailsbyOrgId($id){
+        $response_data=OrganizationDetails::where('id',$id)->first();
+        return $this->successResponse($response_data);
+        
+    }
+
     /**
      * method to load organization applications
      */

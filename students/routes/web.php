@@ -54,10 +54,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->group(['prefix' => 'admission'], function () use ($router) {
             $router->post('/saveStudentDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentDetails']);
 
-            $router->post('/saveStudentDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentDetailsFromPortal']);
+            $router->post('/saveStudentDetailsFromPortal', ['uses' => 'Students\StudentAdmissionController@saveStudentDetailsFromPortal']);
             $router->post('/saveStudentGardianDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentGardianDetails']);
             
-            $router->post('/savedetailsClassXi', ['uses' => 'Students\StudentAdmissionController@savedetailsClassXi']);
+            $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
 
             
@@ -65,6 +65,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+
+            //getting student details by cid number
+            $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
+
+            $router->get('/getAllStudentCid',['uses' => 'Students\StudentAdmissionController@getAllStudentCid']);
             $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
            
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);

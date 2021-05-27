@@ -1,16 +1,16 @@
 const routes = [  
     { path: '/OrganizationMasterIndex',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterIndex.vue').default,
-        children:[
-            { path: '/location_index', 
-                component: require('./components/masters/organization_masters/location/location_index.vue').default ,
-                children: 
-                [
-                    { path: '',name:'location_index', component: require('./components/masters/organization_masters/location/location_list.vue').default },
-                    { path: '/location_add', name:'LocationAdd', component: require('./components/masters/organization_masters/location/location_add.vue').default },
-                    { path: '/location_edit', name:'LocationEdit', component: require('./components/masters/organization_masters/location/location_edit.vue').default },
-                    { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
-                ]    
-            },
+          children:[
+              { path: '/location_index', 
+                  component: require('./components/masters/organization_masters/location/location_index.vue').default ,
+                  children: 
+                  [
+                      { path: '',name:'location_index', component: require('./components/masters/organization_masters/location/location_list.vue').default },
+                      { path: '/location_add', name:'LocationAdd', component: require('./components/masters/organization_masters/location/location_add.vue').default },
+                      { path: '/location_edit', name:'LocationEdit', component: require('./components/masters/organization_masters/location/location_edit.vue').default },
+                      { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
+                  ]    
+              },
             { path: '/disaster_index', 
                 component: require('./components/masters/organization_masters/disaster/disaster_index.vue').default ,
                 children: 
