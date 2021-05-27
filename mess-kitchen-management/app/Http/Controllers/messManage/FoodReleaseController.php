@@ -25,7 +25,7 @@ class FoodReleaseController extends Controller
             'dateOfrelease'             =>  $request['dateOfrelease'],
             'dzongkhag_id'              =>  $request['dzongkhag'],
             'org_id'                    =>  $request['organizaiton'],
-            'term_id'                   =>  $request['term'],
+            'quarter_id'                =>  $request['quarter'],
             'remarks'                   =>  $request['remarks'],
             'updated_by'                =>  $request->user_id,
             'created_at'                =>  date('Y-m-d h:i:s')
@@ -56,7 +56,7 @@ class FoodReleaseController extends Controller
         $list = DB::table('food_releases')
         ->select( 'dateOfrelease as dateOfrelease',
          'dzongkhag_id as dzongkhag','org_id as organization',
-         'term_id as term','remarks as remarks','id'
+         'quarter_id as quarter','remarks as remarks','id'
          )->get();
         return $list;
     }

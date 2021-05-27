@@ -64,7 +64,7 @@ export default {
             });
         },
         loadeditpage(itme){ 
-            this.$router.push({name:"open_feedback",params:{data:itme.id}});
+            this.$router.push({name:"open_feedback",params:{nomination_id:itme.id}});
         },
     },
     mounted(){

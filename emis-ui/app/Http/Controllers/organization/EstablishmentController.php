@@ -76,7 +76,7 @@ class EstablishmentController extends Controller
         $customMessages = $validation['messages'];
 
         $this->validate($request, $rules, $customMessages);
-
+        // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
         return $response_data;
     }
@@ -120,13 +120,13 @@ class EstablishmentController extends Controller
 
 
     public function saveClassStream(Request $request){
-        $rules = [
-            'class'          =>  'required',
-        ];
-        $customMessages = [
-            'class.required'         => 'Class is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
+        // $rules = [
+        //     'class'          =>  'required',
+        // ];
+        // $customMessages = [
+        //     'class.required'         => 'Class is required',
+        // ];
+        // $this->validate($request, $rules, $customMessages);
         $classStream =[
             'class'                 =>  $request['class'],
             'stream'                =>  $request['stream'],
@@ -136,6 +136,7 @@ class EstablishmentController extends Controller
             'user_id'               =>  $this->userId() ,
         ];
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
+        // dd( $response_data);
         //get submitter role
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
         $screen_id="";
@@ -248,8 +249,25 @@ class EstablishmentController extends Controller
             'user_id'           =>  $this->userId(),
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
-        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        // $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        $workflowstatus="";
+        $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
+        
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
+        $service_name=$loadOrganizationDetails->data->establishment_type;
+        if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
+            foreach($loadOrganizationDetails->data->app_verification_team as $vteam){
+                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
+                $vteam->name=$response_data->name;
+                $vteam->cid=$response_data->cid_work_permit;
+                $vteam->po_title=$response_data->position_title;
+            } 
+        }
+        foreach($workflowdet as $work){
+            if(strpos(strtolower($work->Status_Name),'establishment')===false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                $workflowstatus=$work->Status_Name;
+            }
+        }
         if($loadOrganizationDetails!=null){
             $loadOrganizationDetails->app_stage=$workflowstatus;
         }
@@ -261,6 +279,33 @@ class EstablishmentController extends Controller
         $w_status_screen=[];
         $screen_id="";
         $service_name=$request->servicename;
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'OrganizationVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'applicaiton_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
         foreach($work_status as $i=> $work){
             if($work->Establishment_type==str_replace (' ', '_',strtolower($request->servicename))){
                 $screen_id=$work->SysSubModuleId;
@@ -291,17 +336,20 @@ class EstablishmentController extends Controller
             ];
             $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
+       
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
-            'id'                            =>   $request->id,
+            'id'                           =>   $request->id,
             'remarks'                      =>   $request->remarks,
             'verifying_agency'             =>   $request->verifying_agency,
             'tentative_date'               =>   $request->tentative_date,
             'update_type'                  =>   $request->update_type,
-            'nomi_staffList'               =>   $request->nomi_staffList,
+            'nomi_staffList'               =>   json_decode($request->nomi_staffList),
+            'attachment_details'           =>  $attachment_details,
             'user_id'                      =>   $this->userId() 
         ];
+        
         $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $response_data;
     }
@@ -327,29 +375,32 @@ class EstablishmentController extends Controller
             'category'                  =>$request->category,
             'yearestb'                  =>$request->yearestb,
             'zestcode'                  =>$request->zestcode,
-            'organizationid'            =>$request->organizationid,
-            'applicationNo'             =>$request->applicationNo,
-            'application_date'          =>$request->application_date,
-            'service'                   =>$request->service,
-            'proposedName'              =>$request->proposedName,
-            'dzongkhagId'               =>$request->dzongkhagId,
-            'gewogId'                   =>$request->gewogId,
-            'chiwogId'                  =>$request->chiwogId,
-            'isColocated'               =>$request->isColocated,
-            'levelId'                   =>$request->levelId,
-            'locationId'                =>$request->locationId,
-            'parentSchoolId'            =>$request->parentSchoolId,
-            'isGeopoliticallyLocated'   =>$request->isGeopoliticallyLocated,
-            'senSchool'                 =>$request->senSchool,
-            'parentSchool'              =>$request->parentSchool,
-            'coLocatedParent'           =>$request->coLocatedParent,
-            'isSenSchool'               =>$request->isSenSchool,
-            'remarks'                   =>$request->remarks,
-            'proprietorList'            =>$request->proprietorList,
-            'class_section'             =>$request->class_section,
-            'sectionList'               =>$request->sectionList,
+            'applicaitondetails'        =>$request->applicaitondetails,
+            
+            // 'organizationid'            =>$request->organizationid,
+            // 'applicationNo'             =>$request->applicationNo,
+            // 'application_date'          =>$request->application_date,
+            // 'service'                   =>$request->service,
+            // 'proposedName'              =>$request->proposedName,
+            // 'dzongkhagId'               =>$request->dzongkhagId,
+            // 'gewogId'                   =>$request->gewogId,
+            // 'chiwogId'                  =>$request->chiwogId,
+            // 'isColocated'               =>$request->isColocated,
+            // 'levelId'                   =>$request->levelId,
+            // 'locationId'                =>$request->locationId,
+            // 'parentSchoolId'            =>$request->parentSchoolId,
+            // 'isGeopoliticallyLocated'   =>$request->isGeopoliticallyLocated,
+            // 'senSchool'                 =>$request->senSchool,
+            // 'parentSchool'              =>$request->parentSchool,
+            // 'coLocatedParent'           =>$request->coLocatedParent,
+            // 'isSenSchool'               =>$request->isSenSchool,
+            // 'remarks'                   =>$request->remarks,
+            // 'proprietorList'            =>$request->proprietorList,
+            // 'class_section'             =>$request->class_section,
+            // 'sectionList'               =>$request->sectionList,
             'action_by'                 =>$this->userId()
         ];
+        // dd($estd);
         $response_data= $this->apiService->createData('emis/organization/establishment/registerOrganizationDetails', $estd);
         $estd =[
             'status'                       =>   'Registered',

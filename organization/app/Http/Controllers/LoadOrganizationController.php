@@ -8,9 +8,12 @@ use Illuminate\Support\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\Level;
 use App\Models\OrganizationDetails;
+use App\Models\OrganizationClassStream;
+use App\Models\OrganizationProprietorDetails;
 use App\Models\establishment\HeadQuaterDetails;
 use App\Models\generalInformation\SectionDetails;
 use Illuminate\Support\Facades\DB;
+use App\Models\OrgProfile;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -30,7 +33,12 @@ class LoadOrganizationController extends Controller{
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="allorganizationList"){
-            $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->all();
+            if($id=="allData"){
+                $response_data=OrganizationDetails::all();
+            }
+            else{
+                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
+            }
         }
         return $this->successResponse($response_data);
     }
@@ -38,6 +46,13 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_login_access_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
+        }
+        if($type=="fullOrgDetbyid"){
+            $response_data=OrganizationDetails::where('id',$id)->first();
+            $response_data->classes=OrganizationClassStream::where('organizationId',$response_data->id)->get();
+            if($response_data->category=="private_school"){
+                $response_data->proprioter=OrganizationProprietorDetails::where('organizationId',$response_data->id)->first();
+            }
         }
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->first();
@@ -62,5 +77,15 @@ class LoadOrganizationController extends Controller{
         JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id 
         LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
         return $section;
+    }
+
+    public function getOrgProfile($id=""){
+        $response_data =OrgProfile::where('org_id',$id)->first();
+        if($response_data!=""){
+            $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+            $response_data->orgName=$org_det->name;
+            $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
+        }
+        return $this->successResponse($response_data);
     }
 }

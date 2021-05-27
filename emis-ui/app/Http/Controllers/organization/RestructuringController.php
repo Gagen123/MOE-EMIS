@@ -68,14 +68,49 @@ class RestructuringController extends Controller
                 break;
             }
         }
-
+        // dd($establishment_data);
         $rules = $validation['rules'];
         $customMessages = $validation['messages'];
 
         $this->validate($request, $rules, $customMessages);
 
+        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        $screen_id="";
+        $status="";
+        $app_role="";
+        
+        foreach($workflowdet as $work){
+            if($work->Establishment_type==$request->organization_type){
+                $screen_id=$work->SysSubModuleId;
+                $status=$work->Sequence;
+                $app_role=$work->SysRoleId;
+            }
+        }
+        if($screen_id==null || $screen_id==""){
+            return 'No Screen';
+        }
+
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
-        return $response_data;
+        $service_name=json_decode($response_data)->data->establishment_type;
+
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,//service name 
+            'application_number'=>json_decode($response_data)->data->application_no,
+            'screen_id'         =>$screen_id,
+            'status_id'         =>$status,
+            'remarks'           =>null,
+            'app_role_id'       => $app_role,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $work_response_data;
+        // return $response_data;
     }
 
     public function saveChangeClass(Request $request){
@@ -124,9 +159,29 @@ class RestructuringController extends Controller
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
        
-        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        // $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id); 
+        $workflowstatus="";
+        $screen_id="";
+        $sequence="";
+        $workflowstatus="";
+        $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
-        $loadOrganizationDetails->app_stage=$workflowstatus;
+
+        $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
+        foreach($workflowdet as $work){
+            //check with screen name and then type of organization
+            if(strpos(strtolower($work->Status_Name),'change')===false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                $workflowstatus=$work->Status_Name;
+                $screen_id=$work->SysSubModuleId;
+                $sequence=$work->Sequence;
+            }
+        }
+        if($loadOrganizationDetails!=null){
+            $loadOrganizationDetails->app_stage=$workflowstatus;
+            $loadOrganizationDetails->screen_id=$screen_id;
+            $loadOrganizationDetails->sequence=$sequence;
+        }
+        // $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
     }
     public function loadPriviousOrgDetails($orgId=""){
@@ -135,9 +190,18 @@ class RestructuringController extends Controller
     }
 
     public function updateChangeBasicDetailApplication(Request $request){
-        $workflowdet=$this->getcurrentworkflowStatusForUpdate('change');
-        $work_status=$workflowdet['status'];
-        $org_status='Under Process';
+        // $workflowdet=$this->getcurrentworkflowStatusForUpdate('change');
+        // $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
+        // $w_status_screen=[];
+        // $screen_id="";
+        // foreach($work_status as $i=> $work){
+        //     if($work->Establishment_type==$request->category){
+        //         $screen_id=$work->SysSubModuleId;
+        //         $work_status=$work->Sequence;
+        //     }
+        // }
+        
+        $org_status='Verified';
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -148,25 +212,53 @@ class RestructuringController extends Controller
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,
+            'service_name'      =>$request->service_name,
             'application_number'=>$request->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$work_status,
+            'screen_id'         =>$request->screen_id,//pulled while loading details for verification
+            'status_id'         =>$request->sequence,//pulled while loading details for verification
             'remarks'           =>$request->remarks,
             'user_dzo_id'       =>$this->getUserDzoId(),
             'access_level'      =>$this->getAccessLevel(),
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
+        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'ChangeVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'applicaiton_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
             'remarks'                      =>   $request->remarks,
+            'attachment_details'           =>   $attachment_details,
             'user_id'                      =>   $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
-        // dd($response_data);
         return $work_response_data;
     }
 
@@ -699,8 +791,8 @@ class RestructuringController extends Controller
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
             'action_type'               =>  $request['action_type'],
-            'status'                    =>  $request['chiwog'],  
-            'id'                        =>  $request['status'],
+            'status'                    =>  $request['status'], 
+            'id'                        =>  $request['id'], 
             'user_id'                   =>  $this->userId() 
         ];
 

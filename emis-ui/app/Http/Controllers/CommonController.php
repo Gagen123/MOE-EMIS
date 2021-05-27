@@ -65,10 +65,11 @@ class CommonController extends Controller{
     }
     public function getTaskList($type=""){
         $work_status=$this->getApprovalWorkStatus();
+        $param="NA";
         $param="";
+        $param2="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
-            $param="NA";
             // dd($response_data);
             if($response_data!=null){
                 foreach($response_data as $work){
@@ -80,12 +81,16 @@ class CommonController extends Controller{
             foreach($work_status as $work){
                 $param.=$work.'OUTSEP';
             }
-            if($param!="NA"){
-                $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
-                $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
-                return $response_data;
-            }
         }
+        if($param!="NA"){
+            $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        }
+        // dd($type.'/'.$this->userId().'/'.$param.'/'.$param2);
+        $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
+        return $response_data;
+    }
+    public function getTaskcount(){
+        $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
     }
     
     public function getSessionDetail($applicationId=""){
@@ -105,10 +110,13 @@ class CommonController extends Controller{
         return $this->apiService->getListData('emis/common/getGewogNameById/'.$id);
     }
     
-    
+    public function getScreenAccess($type=""){
+        $work_status=$this->apiService->getListData('system/getScreenAccess/'.$type.'/'.$this->getRoleIds('roleIds'));
+        return $work_status;
+    }
+
     public function releaseApplication($application_number=""){
         $work_status=$this->apiService->getListData('emis/common/releaseApplication/'.$application_number);
         return $work_status;
     }
-   
 }

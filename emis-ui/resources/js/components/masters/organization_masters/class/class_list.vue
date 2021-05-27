@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Class</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -13,6 +14,7 @@
                 <tr v-for="(item, index) in classList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.class}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -29,7 +31,9 @@
 export default {
     data(){
         return{
-            classList:[]
+            classList:[],
+            dt:'',
+
         }
     },
     methods:{
@@ -59,6 +63,15 @@ export default {
 
     mounted(){
         this.loadClassList();
+        this.dt =  $("#class-table").DataTable();
+    },
+    watch: {
+        classList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#class-table").DataTable()
+            });
+        }
     },
 }
 </script>

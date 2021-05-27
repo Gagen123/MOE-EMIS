@@ -5,8 +5,8 @@
                 <tr>
                     <th>SL#</th>
                     <th>Structure</th>
+                    <th>Description</th> 
                     <th>Status</th>
-                    <!-- <th>Created Date</th> -->
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -14,6 +14,7 @@
                 <tr v-for="(item, index) in structureCategoryList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
@@ -32,6 +33,7 @@ export default {
     data(){
         return{
             structureCategoryList:[],
+            cat:'',
         }
     },
 
@@ -61,6 +63,15 @@ export default {
     },
     mounted(){
         this.loadStructureCategoryList();
-    }
+        this.cat =  $("#structureCategory-table").DataTable();
+    },
+    watch: {
+        structureCategoryList(){
+            this.cat.destroy();
+            this.$nextTick(() => {
+                this.cat =  $("#structureCategory-table").DataTable()
+            });
+        }
+    },
 }
 </script>

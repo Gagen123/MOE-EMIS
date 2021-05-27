@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Road Type</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -13,6 +14,7 @@
                 <tr v-for="(item, index) in roadTypeList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -30,6 +32,7 @@ export default {
     data(){
         return{
             roadTypeList:[],
+            rdty:'',
         }
     },
     methods:{
@@ -58,6 +61,16 @@ export default {
     },
     mounted(){
         this.loadRoadTypeList();
+        this.rdty =  $("#road-table").DataTable()
     },
+    watch: {
+        roadTypeList(){
+            this.rdty.destroy();
+            this.$nextTick(() => {
+                this.rdty =  $("#road-table").DataTable()
+            });
+        }
+    },
+
 }
 </script>

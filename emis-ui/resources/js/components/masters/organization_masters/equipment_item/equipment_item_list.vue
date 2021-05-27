@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Equipment Item</th>
                     <th>Equipment Type</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
                     <th>Action</th> 
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.equipmentItem}}</td>
                     <td>{{ item.equipmentType}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
@@ -34,6 +36,7 @@ export default {
     data(){
         return{
             equipmentItemList:[],
+            dt:'',
         }
     },
 
@@ -64,6 +67,15 @@ export default {
 
     mounted(){
         this.loadEquipmentItemList();
+        this.dt =  $("#equipmentItem-table").DataTable();
+    },
+    watch: {
+        equipmentItemList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#equipmentItem-table").DataTable()
+            });
+        }
     },
 }
 </script>

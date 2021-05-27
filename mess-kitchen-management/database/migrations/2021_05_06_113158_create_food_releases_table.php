@@ -18,7 +18,7 @@ class CreateFoodReleasesTable extends Migration
             $table->date('dateOfrelease')->nullable(false);
             $table->char('dzongkhag_id',36)->nullable(false);
             $table->char('org_id',36)->nullable(false);
-            $table->char('term_id',36)->nullable(false);
+            $table->char('quarter_id',36)->nullable(false);
             $table->string('remarks')->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);

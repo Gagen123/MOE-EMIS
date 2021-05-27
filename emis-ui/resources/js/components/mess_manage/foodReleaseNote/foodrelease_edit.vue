@@ -26,11 +26,11 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                       <label class="">Term:<span class="text-danger">*</span></label> 
-                       <select name="term" id="term" class="form-control select2" v-model="form.term" :class="{ 'is-invalid': form.errors.has('term') }" @change="remove_err('term')">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                       <label class="">Quarter:<span class="text-danger">*</span></label> 
+                       <select name="quarter" id="term" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> 
+                        <has-error :form="form" field="quarter"></has-error> 
                     </div>
                 </div>
             <div class="card">
@@ -116,7 +116,7 @@ export default {
             items_released: [],
           
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',term: '', remarks: '',
+                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',quarter: '', remarks: '',
                  items_released:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
@@ -135,7 +135,7 @@ export default {
             this.form.dateOfrelease= '';
             this.form.dzongkhag= '';
             this.form.organizaiton= '';
-            this.form.term= '';
+            this.form.quarter= '';
             this.form.remarks='';
             let formReset =this.form.items_released;
             formReset.splice(0, formReset.length);
@@ -166,8 +166,8 @@ export default {
 		},
 
         applyselect(){
-            if(!$('#term').attr('class').includes('select2-hidden-accessible')){
-                $('#term').addClass('select2-hidden-accessible');
+            if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
+                $('#quarter').addClass('select2-hidden-accessible');
             }
             if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
                 $('#dzongkhag').addClass('select2-hidden-accessible');
@@ -191,20 +191,19 @@ export default {
         /**
          * method to get term in dropdown
          */
-       loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+       loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.termList =  data.data.data;
+                this.quarterList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
-        remove_error(field_id){
+        remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
             }
         },
 
@@ -263,8 +262,8 @@ export default {
                 this.form.dzongkhag=$('#dzongkhag').val();
                 this.allOrgList($('#dzongkhag').val());
             }
-            if(id=="term"){
-                this.form.term=$('#term').val();
+            if(id=="quarter"){
+                this.form.quarter=$('#quarter').val();
             }
             if(id=="organizaiton"){
                 this.form.organizaiton=$('#organizaiton').val();
@@ -343,14 +342,16 @@ export default {
         });
        
         this.loadactivedzongkhagList();
-        this.loadActiveTermList();
+        this.loadActiveQuarterList();
         this.loadActiveItemList();
         this.loadActiveUnitList(); 
-         this.form.dateOfrelease=this.$route.params.data.dateOfrelease;
+        this.form.dateOfrelease=this.$route.params.data.dateOfrelease;
         this.form.dzongkhag= this.$route.params.data.dzongkhag_id;
         this.form.organizaiton= this.$route.params.data.org_id;
-        this.form.term= this.$route.params.data.term_id;
-       
+        this.form.quarter= this.$route.params.data.quarter_id;
+        this.form.items_released.item = this.$$route.params.data.item_id;
+        this.form.items_released.quantity = this.$$route.params.data.quantity;
+
 
     }
 }

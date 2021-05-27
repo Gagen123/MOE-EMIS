@@ -152,6 +152,8 @@ class StaffLeadershipSerivcesController extends Controller{
     }
     
     public function checkforfeedbackLink($id=""){
+        // return FeedbackProviderDetails::where('staff_id',$id)->get();
+        // dd($id);
         $respomse_data=DB::table('staff_leadership_nominee_feedback_detials as f')
         ->join('staff_leadership_detials as l', 'f.leadership_id', '=', 'l.id')
         ->join('master_stf_position_title as p', 'l.position_title', '=', 'p.id')
@@ -162,7 +164,7 @@ class StaffLeadershipSerivcesController extends Controller{
         ->select('l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type',
         'n.id','n.staff_id','s.name AS nominee_name','np.name AS nominee_position_title','n.dzongkhag_id','n.org_id')
         ->where('f.staff_id', $id)
-        ->where('l.to_date','>',date('Y-m-d'))
+        ->where('l.to_date','>=',date('Y-m-d'))
         ->where('l.status', 'created')->get();
         return $this->successResponse($respomse_data);
     }
@@ -175,10 +177,10 @@ class StaffLeadershipSerivcesController extends Controller{
         ->leftjoin('stf_staff as s', 's.id', '=', 'n.staff_id')
         ->join('master_stf_position_title as np', 's.position_title_id', '=', 'np.id')
 
-        ->select('l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type',
+        ->select('l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type','f.feedback_id',
         'n.staff_id','s.name AS nominee_name','np.name AS nominee_position_title','n.dzongkhag_id','n.org_id')
         ->where('n.id', $id)
-        ->where('l.to_date','>',date('Y-m-d'))
+        ->where('l.to_date','>=',date('Y-m-d'))
         ->where('l.status', 'created')->first();
         return $this->successResponse($respomse_data);
     }

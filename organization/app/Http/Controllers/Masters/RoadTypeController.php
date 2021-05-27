@@ -33,6 +33,7 @@ class RoadTypeController extends Controller
         if( $id != null){
             $loc = [
                 'name'          => $request['roadType'],
+                'description'   =>  $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
@@ -40,7 +41,7 @@ class RoadTypeController extends Controller
 
             $data = RoadType::find($request['id']);
 
-            $messs_det='roadType:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='roadType:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','road_types','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
             
             $location = RoadType::where('id', $id)->update($loc);
@@ -49,6 +50,7 @@ class RoadTypeController extends Controller
 
             $loc = [
                 'name'          => $request['roadType'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

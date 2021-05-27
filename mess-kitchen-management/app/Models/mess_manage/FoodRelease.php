@@ -15,7 +15,7 @@ class FoodRelease extends Model
         'dateOfrelease',
         'dzongkhag_id',
         'org_id',
-        'term_id',
+        'quarter_id',
         'remarks',
         'created_by',
         'updated_by'

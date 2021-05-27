@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Service Type</th>
                     <th>Service Provider</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -15,6 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.serviceType == 1 ? "Internet" : "Telephone"}}</td>
                     <td>{{ item.name}}</td>
+                    <td> {{item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -32,6 +34,7 @@ export default {
     data(){
         return{
             serviceList:[],
+            srvpdv:'',
         }
     },
 
@@ -61,6 +64,16 @@ export default {
     },
     mounted(){
         this.loadServiceList();
+        this.srvpdv =  $("#service-table").DataTable()
+    
+    },
+    watch: {
+        serviceList(){
+            this.srvpdv.destroy();
+            this.$nextTick(() => {
+            this.srvpdv =  $("#service-table").DataTable()
+            });
+        }
     },
 }
 </script>

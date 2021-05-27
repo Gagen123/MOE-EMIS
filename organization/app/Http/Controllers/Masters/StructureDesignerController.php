@@ -29,6 +29,7 @@ class StructureDesignerController extends Controller
         if( $id != null){
             $src = [
                 'name'          => $request['designerName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
@@ -44,6 +45,7 @@ class StructureDesignerController extends Controller
 
             $dis = [
                 'name'          => $request['designerName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

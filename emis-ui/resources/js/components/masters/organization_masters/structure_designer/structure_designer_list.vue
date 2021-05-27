@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Designer Name</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -13,6 +14,7 @@
                 <tr v-for="(item, index) in designerList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -30,6 +32,7 @@ export default {
     data(){
         return{
             designerList:[],
+            des: '',
         }
     },
 
@@ -59,6 +62,16 @@ export default {
     },
     mounted(){
         this.loadDesignerList();
+        this.des =  $("#designer-table").DataTable();
+
+    },
+    watch: {
+        designerList(){
+            this.des.destroy();
+            this.$nextTick(() => {
+                this.des =  $("#designer-table").DataTable()
+            });
+        }
     },
 }
 </script>

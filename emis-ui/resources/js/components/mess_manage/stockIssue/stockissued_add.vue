@@ -16,6 +16,7 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
+                                  <th>Quantity Available</th>          
                                   <th>Quantity Issued</th>
                                   <th>Unit</th>
                                   <th>Damage/Loss Quantity(kg)</th>
@@ -25,7 +26,7 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                   <td>
-                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
+                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @onchange="getquantity()">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                       </select>
                                       <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
@@ -35,7 +36,10 @@
                                          <option value="onion">onion</option>
                                      </select>-->
                                   </td>
-                                  <td>                                
+                                   <td>                                
+                                     {{item.quantityfromrcpt}}
+                                 </td>
+                                   <td>                                
                                      <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                  </td>
                                  <td>
@@ -90,7 +94,7 @@ export default {
                 id: '', dateOfissue: '', 
                 item_issue:
                 [{
-                    item:'',quantity:'',unit:'', damagequantity:'',remarks:'',
+                    item:'',quantityfromrcpt:'', quantity:'',unit:'', damagequantity:'',remarks:'',
                 }],
             })
         }
@@ -105,7 +109,7 @@ export default {
             this.form.dateOfissue= '';
             let formReset =this.form.item_issue;
             formReset.splice(0, formReset.length);
-            this.form.item_issue.push({item:'',quantity:'',unit:'',damagequantity:'',remarks:''})
+            this.form.item_issue.push({item:'',quantityfromrcpt:'',quantity:'',unit:'',damagequantity:'',remarks:''})
         },
 
         /**
@@ -177,7 +181,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.item_issue.push({
-                item:'',quantity:'',unit:'',damagequantity:'',remarks:''})    
+                item:'',quantityfromrcpt:'',quantity:'',unit:'',damagequantity:'',remarks:''})    
         }, 
         /**
          * method to remove fields
