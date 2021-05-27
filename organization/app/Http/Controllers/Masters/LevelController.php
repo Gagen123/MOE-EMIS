@@ -43,6 +43,7 @@ class LevelController extends Controller
         if( $id != null){
             $lev = [
                 'name'          => $request['levelName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
@@ -51,7 +52,7 @@ class LevelController extends Controller
             $data = Level::find($request['id']);
 
             //audit trail
-            $messs_det='levelName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='levelName:'.$data->name.'; description:'.$data->description.';status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','level','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $level = Level::where('id', $id)->update($lev);
@@ -59,6 +60,7 @@ class LevelController extends Controller
         }else{
             $lev = [
                 'name'          => $request['levelName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

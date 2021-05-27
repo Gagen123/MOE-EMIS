@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Structure Facility</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
                     <th>Action</th> 
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in structureFacilityList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
@@ -32,6 +34,7 @@ export default {
     data(){
         return{
             structureFacilityList:[],
+            stru:'',
         }
     },
     methods:{
@@ -60,6 +63,15 @@ export default {
     },
     mounted(){
         this.loadstructureFacilityList();
+        this.stru =  $("#structureFacility-table").DataTable();
+    },
+    watch: {
+        structureFacilityList(){
+            this.stru.destroy();
+            this.$nextTick(() => {
+                this.stru =  $("#structureFacility-table").DataTable()
+            });
+        }
     },
 }
 </script>

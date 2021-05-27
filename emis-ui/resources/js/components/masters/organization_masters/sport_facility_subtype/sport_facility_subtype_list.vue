@@ -35,6 +35,7 @@ export default {
     data(){
         return{
             sportFacilityList:[],
+            spfac:'',
         }
     },
 
@@ -65,6 +66,16 @@ export default {
 
     mounted(){
         this.loadSportFacilitySubtypeList();
+        this.spfac =  $("#sportFacility-table").DataTable()
+    
+    },
+    watch: {
+        sportFacilityList(){
+            this.spfac.destroy();
+            this.$nextTick(() => {
+                this.spfac =  $("#sportFacility-table").DataTable()
+            });
+        }
     },
 }
 </script>

@@ -250,8 +250,10 @@ export default {
                             month='0'+month;
                         }
                         let year =date_of_birth .getFullYear();
+                     //   this.form.dob = month+ "-"+day + "-" + year;
+                     //    $('#dob').val(month+ "-"+day + "-" + year);
                         this.form.dob = year+ "-"+month + "-" + day;
-                         $('#dob').val(year+ "-"+month + "-" + day);
+                         $('#dob').val(year+ "-"+month + "-" + day); 
                         if(personal_detail.gender=="M"){
                              personal_detail.gender="male";
                         }

@@ -5,6 +5,7 @@
             <tr>
                 <th>SL#</th>
                 <th>Level</th>
+                <th>Description</th>
                 <th>Status</th>
                 <!-- <th>Created Date</th> -->
                 <th>Action</th> 
@@ -14,6 +15,7 @@
             <tr v-for="(item, index) in levelList" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td>{{ item.name}}</td>
+                <td>{{ item.description}}</td>
                 <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                 <!-- <td>{{ item.Created_At }}</td> -->
                 <td>
@@ -32,6 +34,7 @@ export default {
     data(){
         return{
             levelList:[],
+            lev:'',
         }
     },
 
@@ -61,6 +64,15 @@ export default {
     },
     mounted(){
         this.loadLevelList();
+        this.lev =  $("#level-table").DataTable()
+    },
+    watch: {
+        levelList(){
+            this.lev.destroy();
+            this.$nextTick(() => {
+                this.lev =  $("#level-table").DataTable()
+            });
+        }
     },
 }
 </script>

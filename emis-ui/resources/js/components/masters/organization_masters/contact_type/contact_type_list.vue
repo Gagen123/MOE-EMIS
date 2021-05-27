@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Contact Name</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -13,6 +14,7 @@
                 <tr v-for="(item, index) in contactList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -30,6 +32,7 @@ export default {
     data(){
         return{
             contactList:[],
+            dt:'',
         }
     },
 
@@ -59,6 +62,15 @@ export default {
     },
     mounted(){
         this.loadContactList();
+        this.dt =  $("#contactType-table").DataTable();
+    },
+    watch: {
+        contactList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#contactType-table").DataTable()
+            });
+        }
     },
 }
 </script>

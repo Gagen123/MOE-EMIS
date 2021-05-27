@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Sport Supporter</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
                     <th>Action</th> 
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in sportSupporterList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
@@ -33,6 +35,7 @@ export default {
     data(){
         return{
             sportSupporterList:[],
+            dt:'',
         }
     },
 
@@ -62,6 +65,15 @@ export default {
     },
     mounted(){
         this.loadSportSupporterList();
+        this.dt =  $("#sportSupporter-table").DataTable();
+    },
+    watch: {
+        sportSupporterList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#sportSupporter-table").DataTable()
+            });
+        }
     },
 }
 </script>

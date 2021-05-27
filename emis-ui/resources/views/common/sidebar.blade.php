@@ -275,7 +275,7 @@
                         </router-link> 
                     </li>
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/restructuring_index" class="nav-link">
+                        <router-link to="/restructuringnew_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Change in Details

@@ -45,12 +45,13 @@ class SportSupporterController extends Controller
             $equ = [
                 'name'          => $request['sportSupporterName'],
                 'status'        => $request['status'],
+                'description'   => $request['description'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
             $data = SportSupporter::find($request['id']);
 
-            $messs_det='sportSupporterName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='sportSupporterName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','sport_supporter','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $equipment = SportSupporter::where('id', $id)->update($equ);
@@ -58,6 +59,7 @@ class SportSupporterController extends Controller
         }else{
             $equ = [
                 'name'          => $request['sportSupporterName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

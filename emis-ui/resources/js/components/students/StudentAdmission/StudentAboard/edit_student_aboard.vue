@@ -315,6 +315,7 @@ export default {
         this.form.fulladdress=this.$route.params.data.fulladdress;
         this.form.country=this.$route.params.data.country;
         this.form.city=this.$route.params.data.city;
+        this.form.organizationId=this.$route.params.data.organizationId;
     }
 }
 </script>
