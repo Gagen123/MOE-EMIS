@@ -65,6 +65,7 @@ class StudentDisciplinaryController extends Controller
     }
 
     public function loadStudentRecords($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_records = $this->apiService->listData('emis/students/loadStudentRecords/'.$param);
         return $student_records;
     }

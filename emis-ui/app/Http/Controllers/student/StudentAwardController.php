@@ -61,6 +61,7 @@ class StudentAwardController extends Controller
     }
 
     public function loadStudentAwards($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_awards = $this->apiService->listData('emis/students/loadStudentAwards/'.$param);
         return $student_awards;
     }

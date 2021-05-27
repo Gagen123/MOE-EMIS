@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Session;
 use GuzzleHttp\Client;
-use App\Helper\EmisSe   rvice;
+use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
 use Illuminate\Http\Request;
@@ -795,7 +795,7 @@ class AdministrationController extends Controller{
             'user_id'=>$this->userId()
         ];
 
-        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStream', $class);
+        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
         return $response_data;
 
     }
