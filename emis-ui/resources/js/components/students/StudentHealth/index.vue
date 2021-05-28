@@ -22,12 +22,12 @@
                     Supplementation 
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('vaccination_link')">
+            <!-- <li class="nav-item pr-1" @click="activatelink('vaccination_link')">
                 <router-link to="/std_vaccination" id="vaccination_link" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fas fa-syringe"></span>
                     Vaccination
                 </router-link>
-            </li>
+            </li> -->
             <li class="nav-item pr-1" @click="activatelink('bmi_link')">
                 <router-link to="/std_bmi" id="bmi_link" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fas fa-notes-medical"></span>

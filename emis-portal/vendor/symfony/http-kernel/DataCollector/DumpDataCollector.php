@@ -178,13 +178,8 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         $charset = array_pop($this->data);
         $fileLinkFormat = array_pop($this->data);
         $this->dataCount = \count($this->data);
-        foreach ($this->data as $dump) {
-            if (!\is_string($dump['name']) || !\is_string($dump['file']) || !\is_int($dump['line'])) {
-                throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
-            }
-        }
 
-        self::__construct($this->stopwatch, \is_string($fileLinkFormat) || $fileLinkFormat instanceof FileLinkFormatter ? $fileLinkFormat : null, \is_string($charset) ? $charset : null);
+        self::__construct($this->stopwatch, $fileLinkFormat, $charset);
     }
 
     public function getDumpsCount(): int
@@ -194,7 +189,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
 
     public function getDumps($format, $maxDepthLimit = -1, $maxItemsPerDepth = -1): array
     {
-        $data = fopen('php://memory', 'r+');
+        $data = fopen('php://memory', 'r+b');
 
         if ('html' === $format) {
             $dumper = new HtmlDumper($data, $this->charset);
@@ -257,7 +252,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         }
     }
 
-    private function doDump(DataDumperInterface $dumper, Data $data, string $name, string $file, int $line)
+    private function doDump(DataDumperInterface $dumper, $data, string $name, string $file, int $line)
     {
         if ($dumper instanceof CliDumper) {
             $contextDumper = function ($name, $file, $line, $fmt) {

@@ -695,7 +695,7 @@ trait HasAttributes
     {
         // First we will check for the presence of a mutator for the set operation
         // which simply lets the developers tweak the attribute as it is set on
-        // this model, such as "json_encoding" a listing of data for storage.
+        // the model, such as "json_encoding" an listing of data for storage.
         if ($this->hasSetMutator($key)) {
             return $this->setMutatedAttributeValue($key, $value);
         }
@@ -779,13 +779,9 @@ trait HasAttributes
     {
         [$key, $path] = explode('->', $key, 2);
 
-        $value = $this->asJson($this->getArrayAttributeWithValue(
+        $this->attributes[$key] = $this->asJson($this->getArrayAttributeWithValue(
             $path, $key, $value
         ));
-
-        $this->attributes[$key] = $this->isEncryptedCastable($key)
-                    ? $this->castAttributeAsEncryptedString($key, $value)
-                    : $value;
 
         return $this;
     }
@@ -848,15 +844,8 @@ trait HasAttributes
      */
     protected function getArrayAttributeByKey($key)
     {
-        if (! isset($this->attributes[$key])) {
-            return [];
-        }
-
-        return $this->fromJson(
-            $this->isEncryptedCastable($key)
-                    ? $this->fromEncryptedString($this->attributes[$key])
-                    : $this->attributes[$key]
-        );
+        return isset($this->attributes[$key]) ?
+                    $this->fromJson($this->attributes[$key]) : [];
     }
 
     /**
@@ -1323,16 +1312,6 @@ trait HasAttributes
     }
 
     /**
-     * Get all of the current attributes on the model for an insert operation.
-     *
-     * @return array
-     */
-    protected function getAttributesForInsert()
-    {
-        return $this->getAttributes();
-    }
-
-    /**
      * Set the array of model attributes. No checking is done.
      *
      * @param  array  $attributes
@@ -1535,7 +1514,7 @@ trait HasAttributes
     }
 
     /**
-     * Get the attributes that have been changed since the last sync.
+     * Get the attributes that have been changed since last sync.
      *
      * @return array
      */

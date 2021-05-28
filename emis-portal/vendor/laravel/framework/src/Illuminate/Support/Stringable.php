@@ -4,13 +4,11 @@ namespace Illuminate\Support;
 
 use Closure;
 use Illuminate\Support\Traits\Macroable;
-use Illuminate\Support\Traits\Tappable;
-use JsonSerializable;
 use Symfony\Component\VarDumper\VarDumper;
 
-class Stringable implements JsonSerializable
+class Stringable
 {
-    use Macroable, Tappable;
+    use Macroable;
 
     /**
      * The underlying string value.
@@ -321,21 +319,10 @@ class Stringable implements JsonSerializable
     }
 
     /**
-     * Convert GitHub flavored Markdown into HTML.
-     *
-     * @param  array  $options
-     * @return static
-     */
-    public function markdown(array $options = [])
-    {
-        return new static(Str::markdown($this->value, $options));
-    }
-
-    /**
      * Get the string matching the given pattern.
      *
      * @param  string  $pattern
-     * @return static
+     * @return static|null
      */
     public function match($pattern)
     {
@@ -363,17 +350,6 @@ class Stringable implements JsonSerializable
         }
 
         return collect($matches[1] ?? $matches[0]);
-    }
-
-    /**
-     * Determine if the string matches the given pattern.
-     *
-     * @param  string  $pattern
-     * @return bool
-     */
-    public function test($pattern)
-    {
-        return $this->match($pattern)->isNotEmpty();
     }
 
     /**
@@ -424,17 +400,6 @@ class Stringable implements JsonSerializable
     }
 
     /**
-     * Call the given callback and return a new string.
-     *
-     * @param  callable  $callback
-     * @return static
-     */
-    public function pipe(callable $callback)
-    {
-        return new static(call_user_func($callback, $this));
-    }
-
-    /**
      * Get the plural form of an English word.
      *
      * @param  int  $count
@@ -465,29 +430,6 @@ class Stringable implements JsonSerializable
     public function prepend(...$values)
     {
         return new static(implode('', $values).$this->value);
-    }
-
-    /**
-     * Remove any occurrence of the given string in the subject.
-     *
-     * @param  string|array<string>  $search
-     * @param  bool  $caseSensitive
-     * @return static
-     */
-    public function remove($search, $caseSensitive = true)
-    {
-        return new static(Str::remove($search, $this->value, $caseSensitive));
-    }
-
-    /**
-     * Repeat the string.
-     *
-     * @param  int  $times
-     * @return static
-     */
-    public function repeat(int $times)
-    {
-        return new static(Str::repeat($this->value, $times));
     }
 
     /**
@@ -641,7 +583,7 @@ class Stringable implements JsonSerializable
     }
 
     /**
-     * Returns the portion of the string specified by the start and length parameters.
+     * Returns the portion of string specified by the start and length parameters.
      *
      * @param  int  $start
      * @param  int|null  $length
@@ -662,7 +604,7 @@ class Stringable implements JsonSerializable
      */
     public function substrCount($needle, $offset = null, $length = null)
     {
-        return Str::substrCount($this->value, $needle, $offset ?? 0, $length);
+        return Str::substrCount($this->value, $needle, $offset, $length);
     }
 
     /**
@@ -745,23 +687,6 @@ class Stringable implements JsonSerializable
     }
 
     /**
-     * Execute the given callback if the string is not empty.
-     *
-     * @param  callable  $callback
-     * @return static
-     */
-    public function whenNotEmpty($callback)
-    {
-        if ($this->isNotEmpty()) {
-            $result = $callback($this);
-
-            return is_null($result) ? $this : $result;
-        }
-
-        return $this;
-    }
-
-    /**
      * Limit the number of words in a string.
      *
      * @param  int  $words
@@ -771,16 +696,6 @@ class Stringable implements JsonSerializable
     public function words($words = 100, $end = '...')
     {
         return new static(Str::words($this->value, $words, $end));
-    }
-
-    /**
-     * Get the number of words a string contains.
-     *
-     * @return int
-     */
-    public function wordCount()
-    {
-        return str_word_count($this->value);
     }
 
     /**
@@ -805,16 +720,6 @@ class Stringable implements JsonSerializable
         $this->dump();
 
         exit(1);
-    }
-
-    /**
-     * Convert the object to a string when JSON encoded.
-     *
-     * @return string
-     */
-    public function jsonSerialize()
-    {
-        return $this->__toString();
     }
 
     /**

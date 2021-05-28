@@ -39,8 +39,8 @@ class AdminstratorController extends Controller
     }
 
     public function getOrgList($dzoId=""){
-        $loadBifurcationDetails = $this->apiService->listData('emis/organization/getOrgList/'.$dzoId);
-        return $loadBifurcationDetails;
+        $param="dzongkhagwise";
+        return $this->apiService->getListData('emis/common_services/loadOrgList/'.$param.'/'.$dzoId);
     }
 
     public function getClassByOrganizationId($orgId = ""){
