@@ -18,6 +18,7 @@ class ApplicationClassStream extends Model
      */
     protected $fillable = [
         'id',
+        'foreignKeyFor',
         'ApplicationDetailsId',
         'classId',
         'streamId'

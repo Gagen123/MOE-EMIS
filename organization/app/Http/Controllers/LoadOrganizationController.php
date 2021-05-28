@@ -14,6 +14,7 @@ use App\Models\establishment\HeadQuaterDetails;
 use App\Models\generalInformation\SectionDetails;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrgProfile;
+use App\Models\Masters\Classes;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -29,8 +30,8 @@ class LoadOrganizationController extends Controller{
         if($type=="gewoggwise"){
             $response_data=OrganizationDetails::where('gewogId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
         }
-        if($type=="dzongkhagwise"){
-            $response_data=OrganizationDetails::where('dzongkhagId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
+        if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
         }
         if($type=="allorganizationList"){
             if($id=="allData"){
@@ -44,10 +45,10 @@ class LoadOrganizationController extends Controller{
     }
     public function loadOrgDetails($type="", $id=""){
         $response_data="";
-        if($type=="Orgbyid" || $type=="user_login_access_id"){
+        if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
         }
-        if($type=="fullOrgDetbyid"){
+        if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
             $response_data->classes=OrganizationClassStream::where('organizationId',$response_data->id)->get();
             if($response_data->category=="private_school"){
@@ -87,5 +88,9 @@ class LoadOrganizationController extends Controller{
             $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
         }
         return $this->successResponse($response_data);
+    }
+    
+    public function getClassByType($type=""){
+        return Classes::where('status',1)->where('category',$type)->orderBy('displayOrder', 'asc')->get();
     }
 }
