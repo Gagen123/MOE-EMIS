@@ -281,13 +281,25 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                <label><input  type="radio" @change="show_feeding_details(true)" v-model="form.isfeedingschool" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" @change="show_feeding_details(false)" v-model="form.isfeedingschool" value="0" tabindex=""/> No</label>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"  id="feedingDetails" style="display:none">
+                                <label class="mb-0">Feeding Modality:</label><br>
+                                <label><input  type="checkbox" v-model="form.feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
+                                <label><input  type="checkbox" v-model="form.feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
+                                <label><input  type="checkbox" v-model="form.feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                            </div>
+                        </div>
 
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Select classes and streams</label>
                             </div>
                         </div>
-                        <br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <span v-for="(item, key, index) in  classList" :key="index">
                                 <br>
@@ -324,6 +336,7 @@ export default {
             form: new form({
                 id: '',
                 orgId1:'',
+                isfeedingschool:'',feeding:[],
                 orgId2:'',
                 year:'',
                 proposedName:'',
@@ -357,7 +370,7 @@ export default {
         /**
          * method to get current school unbder current user
          */
-        getOrgList(uri = '/organization/getOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
@@ -407,7 +420,14 @@ export default {
                 });
             }
         },
-
+        show_feeding_details(param){
+            if(param){
+                $('#feedingDetails').show();
+            }
+            else{
+                $('#feedingDetails').hide();
+            }
+        },
         /**
          * method to get other category if the category is 'ECCD'
          */
@@ -477,8 +497,14 @@ export default {
         /**
          * method to get class in checkbox
          */
+        // getClass:function(){
+        //     axios.get('/organization/getClass')
+        //       .then(response => {
+        //         this.classList = response.data;
+        //     });
+        // },
         getClass:function(){
-            axios.get('/organization/getClass')
+            axios.get('/loadCommons/getClassByType/school')
               .then(response => {
                 this.classList = response.data;
             });
@@ -606,7 +632,7 @@ export default {
                         this.form.post('organization/saveMerger')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'restr_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',

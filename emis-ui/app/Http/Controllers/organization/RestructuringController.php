@@ -333,27 +333,43 @@ class RestructuringController extends Controller
             'year'                     =>       $request['year'],
             'class'                    =>       $request['class'],
             'stream'                   =>       $request['stream'],
+            'isfeedingschool'          =>       $request['isfeedingschool'],
+            'feeding'                  =>       $request['feeding'],
             'id'                       =>       $request['id'],
             'user_id'                  =>  $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/merger/saveMerger', $merger);
-        
-        $workflowdet=$this->getsubmitterStatus('merge');
+        // dd($response_data);
+        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
+        $screen_id="";
+        $status="";
+        $app_role="";
+        foreach($workflowdet as $work){
+            if(strpos(strtolower($work->screenName),'merge')!==false){
+                $screen_id=$work->SysSubModuleId;
+                $status=$work->Sequence;
+                $app_role=$work->SysRoleId;
+            }
+        }
+        // $workflowdet=$this->getsubmitterStatus('merge');
         $workflow_data=[
             'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$this->merge_service_name,
-            'application_number'=>json_decode($response_data)->data->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$workflowdet['status'],
+            'table_name'        =>$this->bif_table_name,
+            'service_name'      =>'Merger',
+            'application_number'=>json_decode($response_data)->data->application_no,
+            'screen_id'         => $screen_id,
+            'status_id'         =>$status,
+            'app_role_id'       => $app_role,
             'remarks'           =>null,
             'user_dzo_id'       =>$this->getUserDzoId(),
             'access_level'      =>$this->getAccessLevel(),
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
+        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        return $response_data;
+        return $work_response_data;
     }
 
     public function loadMergerForVerification($appNo="",$type=""){
@@ -363,15 +379,31 @@ class RestructuringController extends Controller
             'user_id'           =>  $this->userId(),
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
-        $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        // $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/merger/loadMergerForVerification/'.$appNo));
-        $loadOrganizationDetails->app_stage=$workflowstatus;
+        // dd($loadOrganizationDetails);
+        $workflowstatus="";
+        $screen_id="";
+        $sequence="";
+        $workflowstatus="";
+        $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
+        foreach($workflowdet as $work){
+            if(strpos(strtolower($work->screenName),'merge')!==false && $work->Sequence!=1 && $work->Establishment_type==null){
+                $workflowstatus=$work->Status_Name;
+                $screen_id=$work->SysSubModuleId;
+                $sequence=$work->Sequence;
+            }
+        }
+        if($loadOrganizationDetails!=null){
+            $loadOrganizationDetails->app_stage=$workflowstatus;
+            $loadOrganizationDetails->screen_id=$screen_id;
+            $loadOrganizationDetails->sequence=$sequence;
+        }
         return json_encode($loadOrganizationDetails);
     }
     public function updateMergerApplication(Request $request){
-        $workflowdet=$this->getcurrentworkflowStatusForUpdate('merge');
-        $work_status=$workflowdet['status'];
-        $org_status='Under Process';
+        $work_status=$request->work_status;
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -381,10 +413,10 @@ class RestructuringController extends Controller
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$this->merge_service_name,
+            'table_name'        =>$this->bif_table_name,
+            'service_name'      =>$this->bif_service_name,
             'application_number'=>$request->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
+            'screen_id'         =>$request->screen_id,
             'status_id'         =>$work_status,
             'remarks'           =>$request->remarks,
             'user_dzo_id'       =>$this->getUserDzoId(),
@@ -392,6 +424,7 @@ class RestructuringController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
+        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         $estd =[
             'status'                       =>   $org_status,
@@ -399,7 +432,8 @@ class RestructuringController extends Controller
             'remarks'                      =>   $request->remarks,
             'user_id'                      =>   $this->userId() 
         ];
-        $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
+        $response_data= $this->apiService->createData('emis/organization/merger/updateMergerApplication', $estd);
+        // dd($response_data);
         return $work_response_data;
     }
 

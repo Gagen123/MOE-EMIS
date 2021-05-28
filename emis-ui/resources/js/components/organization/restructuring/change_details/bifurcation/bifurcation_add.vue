@@ -776,7 +776,7 @@ export default {
         },
 
     },
-    created(){
+    created(){ 
         // this.getOrgDetails();
         this.getOrgList();
         this.getLevel();
