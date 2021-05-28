@@ -371,7 +371,7 @@ class EstablishmentController extends Controller
 
     //used in portal
     public function loadOrganizationDetailsbyOrgId($org_id){
-        $response_data=OrganizationDetails::where('id',$org_id)->first();
+        $response_data=ApplicationDetails::where('id',$org_id)->first();
         return $this->successResponse($response_data); 
 
 
