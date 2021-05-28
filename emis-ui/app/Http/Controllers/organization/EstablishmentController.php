@@ -506,10 +506,10 @@ class EstablishmentController extends Controller
 
         $rules = [
             'proprietorName'        =>  'required',
-            'proprietorCid'         =>  'required',
-            'proprietorPhone'       =>  'required',
-            'proprietorMobile'      =>  'required',
-            'proprietorEmail'       =>  'required',
+            'proprietorCid'         =>  'required|min:11|max:11',
+            'proprietorPhone'       =>  'required|min:6|max:6',
+            'proprietorMobile'      =>  'required|min:8|max:8',
+            'proprietorEmail'       =>  'required|email',
             'totalLand'             =>  'required',
             'enrollmentBoys'        =>  'required',
             'enrollmentGirls'       =>  'required',
@@ -577,11 +577,11 @@ class EstablishmentController extends Controller
     private function validatePrivateEccdFields($request){
 
         $rules = [
-            'proprietorName'            =>  'required',
-            'proprietorCid'             =>  'required',
-            'proprietorPhone'           =>  'required',
-            'proprietorMobile'          =>  'required',
-            'proprietorEmail'           =>  'required',
+            'proprietorName'        =>  'required',
+            'proprietorCid'         =>  'required|min:11|max:11',
+            'proprietorPhone'       =>  'required|min:6|max:6',
+            'proprietorMobile'      =>  'required|min:8|max:8',
+            'proprietorEmail'       =>  'required|email',
             'proposedInfrastructure'    =>  'required',
             'proposedName'              =>  'required',
             'proposedLocation'          =>  'required',

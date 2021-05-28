@@ -105,7 +105,7 @@ class StudentHealthController extends Controller
 
     public function loadDewormingRecords($param=""){
 
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
+        $id =$param;
 
         $records = DB::table('std_health_deworming')
                     ->join('std_health_term', 'std_health_deworming.StdHealthTermId', '=', 'std_health_term.id')
@@ -302,8 +302,8 @@ class StudentHealthController extends Controller
 
     public function loadHealthScreeningRecords($param=""){
 
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
-
+        $id = $param;
+        
         $records = DB::table('std_health_screening')
                     ->join('std_health_screening_type', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
                     ->select('std_health_screening.*', 'std_health_screening_type.name AS screening_type')
