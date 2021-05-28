@@ -1,31 +1,41 @@
 <template>
     <div>
-        <table id="location-table" class="table table-bordered text-sm table-striped">
-            <thead>
-                <tr>
-                    <th>SL#</th>
-                    <th>School Name</th>
-                    <th>category</th>
-                    <th>Level</th>
-                    <th>Status</th>
-                    <th>Action</th> 
-                </tr>
-            </thead>
-            <tbody id="locationdata">
-                <tr v-for="(item, index) in locationList" :key="index">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ item.organization}}</td>
-                    <td>{{item.category  == 1 ? "public" :  "private"}}</td>
-                    <td>{{ item.level}}</td>
-                    <td>{{ item.status}} </td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewLocationList(item.id)"><i class="fas fa-edit"></i ></a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+            <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                    <strong>Owner</strong>
+                    <address>
+                    <ul>
+                        <li v-for="(item, index) in locationList" :key="index">
+                            {{item.landOwnership  == 1 ? "Public" :  "Private"}}
+                        </li>
+                    </ul>
+                    </address>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    <strong>Location</strong>
+                    <address>
+                        <ul>
+                            <li v-for="(item, index) in locationList" :key="index">
+                                Latitude: {{item.latitude}}<br>
+                                Longitude: {{item.longitude}}<br>
+                                Altitude: {{item.altitude}}<br>
+                            </li>
+                        </ul>
+                    </address>
+                </div>
+                <div class="col-sm-4 invoice-col">
+                    <strong>Others</strong>
+                    <address>
+                    <ul>
+                            <li v-for="(item, index) in locationList" :key="index">
+                                Compound Area: {{item.latitude}}<br>
+                                Entrance Gate: {{item.longitude}}<br>
+                                Fencing: {{item.altitude}}<br>
+                            </li>
+                        </ul>
+                    </address>
+                </div>
+            </div>
     </div>
 </template>
 
@@ -38,7 +48,7 @@ export default {
         }
     },
     methods:{
-        loadLocationList(uri = 'organization/getOrgList'){
+        loadLocationList(uri = 'organization/getLocationDetails'){
             axios.get(uri)
             .then(response => {
                 let data = response;

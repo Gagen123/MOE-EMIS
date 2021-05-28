@@ -128,27 +128,6 @@
                             </table>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><b>&nbsp;&nbsp; Attachments</b><br><br>
-                         <table id="attachmentTable" class="table table-sm table-bordered table-striped">
-                             <thead>
-                                   <tr>
-                                        <th>Title</th>
-                                        <th>File</th>
-                                        <th>Remark</th>                            
-                                  </tr>
-                               </thead>
-                              <tbody>
-                                  <tr v-for="(item, index) in form.attachment_details" :key="index">
-                                     <td><input type="text" :id="'fileName'+(index+1)" class="form-control" v-model="item.name" readonly/></td>
-                                     <td><input type="file"  :id="'attach'+(index+1)" v-on:change="onChangeFileUpload"></td>
-                                     <td><input type="text" :id="'remarks'+(index+1)" name="remarks" class="form-control" v-model="item.remarks"/></td>
-                                  </tr> 
-                              </tbody>
-                          </table>
-                       </div>
-                    </div>
                 </div>
             </div>
             <div class="card-footer text-right">

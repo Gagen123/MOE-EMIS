@@ -122,7 +122,6 @@ class StudentMasterController extends Controller
      */
 
     private function insertData($data, $databaseModel){
-        
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
 
@@ -257,7 +256,7 @@ class StudentMasterController extends Controller
                     $databaseModel = "CeaScoutSectionLevel";
                     if($type =='data'){
                         $additional_data = [
-                            'CeaScoutSectionId' => $request->scout_id,
+                            'CeaScoutSectionId' => $request['scout_type'],
                         ];
                         $data = $data + $additional_data;
                     }

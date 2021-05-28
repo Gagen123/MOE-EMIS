@@ -90,6 +90,7 @@ class StudentAwardController extends Controller
                 ->join('std_student', 'cea_student_award.StdStudentId', '=', 'std_student.id')
                 ->join('cea_award', 'cea_student_award.CeaAwardId', '=', 'cea_award.id')
                 ->select('cea_student_award.*', 'std_student.Name','cea_award.name AS award_name')
+                ->where('std_student.OrgOrganizationId', $id)
                 ->get();
         
         return $this->successResponse($awards);

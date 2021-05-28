@@ -27,8 +27,6 @@ class ClassStreamController extends Controller
      */
 
     public function saveClassStreamMapping(Request $request){
-
-        
         $id = $request->id;
         if( $id != null){
             $cla = [

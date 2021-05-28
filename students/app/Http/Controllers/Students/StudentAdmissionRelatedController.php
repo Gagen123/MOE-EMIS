@@ -120,18 +120,19 @@ class StudentAdmissionRelatedController extends Controller
                 'Remarks'           =>  $request['remarks'],
             ];
 
-            CeaSchoolScoutMembers::where('id', $request['id'])->update($app_data);
+            StdSchoolLeaving::where('id', $request['id'])->update($app_data);
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    public function loadStudentTransfers($param1){
-        $id =$param1;
+    public function loadStudentTransfers($param){
+        $id =$param;
 
         $awards = DB::table('std_student_school_leaving')
                 ->join('std_student', 'std_student_school_leaving.StdStudentId', '=', 'std_student.id')
                 ->select('std_student_school_leaving.*', 'std_student.Name')
+                ->where('std_student.OrgOrganizationId', $id)
                 ->get();
         
         return $this->successResponse($awards);

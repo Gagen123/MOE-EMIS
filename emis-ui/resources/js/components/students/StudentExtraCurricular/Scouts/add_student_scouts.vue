@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Scout:<i class="text-danger">*</i></label>
                     <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="scout"></has-error>
                 </div> 
@@ -48,7 +48,7 @@ export default {
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/scout"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/scout_section"){
             axios.get(uri)
             .then(response => {
                 let data = response;
