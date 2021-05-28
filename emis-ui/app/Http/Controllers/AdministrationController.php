@@ -376,7 +376,6 @@ class AdministrationController extends Controller{
     }
 
     public function loadLocation(Request $request){
-       // dd('form UI');
         $dis = $this->apiService->listData('emis/masters/location/loadLocation');
         return $dis;
     }
@@ -796,7 +795,7 @@ class AdministrationController extends Controller{
             'user_id'=>$this->userId()
         ];
 
-        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
+        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStream', $class);
         return $response_data;
 
     }
