@@ -3,7 +3,6 @@
 namespace Illuminate\Database\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\ConfigurationUrlParser;
 use Symfony\Component\Process\Process;
 use UnexpectedValueException;
 
@@ -58,10 +57,6 @@ class DbCommand extends Command
             throw new UnexpectedValueException("Invalid database connection [{$db}].");
         }
 
-        if (! empty($connection['url'])) {
-            $connection = (new ConfigurationUrlParser)->parseConfiguration($connection);
-        }
-
         return $connection;
     }
 
@@ -88,7 +83,7 @@ class DbCommand extends Command
     {
         $driver = ucfirst($connection['driver']);
 
-        if (method_exists($this, "get{$driver}Environment")) {
+        if (method_exists($this, "get{$driver}Env")) {
             return $this->{"get{$driver}Environment"}($connection);
         }
 

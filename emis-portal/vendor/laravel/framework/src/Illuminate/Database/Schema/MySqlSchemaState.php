@@ -71,9 +71,7 @@ class MySqlSchemaState extends SchemaState
     {
         $command = 'mysql '.$this->connectionString().' --database="${:LARAVEL_LOAD_DATABASE}" < "${:LARAVEL_LOAD_PATH}"';
 
-        $process = $this->makeProcess($command)->setTimeout(null);
-
-        $process->mustRun(null, array_merge($this->baseVariables($this->connection->getConfig()), [
+        $this->makeProcess($command)->mustRun(null, array_merge($this->baseVariables($this->connection->getConfig()), [
             'LARAVEL_LOAD_PATH' => $path,
         ]));
     }
@@ -146,12 +144,6 @@ class MySqlSchemaState extends SchemaState
             if (Str::contains($e->getMessage(), ['column-statistics', 'column_statistics'])) {
                 return $this->executeDumpProcess(Process::fromShellCommandLine(
                     str_replace(' --column-statistics=0', '', $process->getCommandLine())
-                ), $output, $variables);
-            }
-
-            if (Str::contains($e->getMessage(), ['set-gtid-purged'])) {
-                return $this->executeDumpProcess(Process::fromShellCommandLine(
-                    str_replace(' --set-gtid-purged=OFF', '', $process->getCommandLine())
                 ), $output, $variables);
             }
 

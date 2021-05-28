@@ -916,7 +916,7 @@ export default {
 
           },
          getschoolList(id){
-            //  alert(id)
+             alert(id)
              let dzoId=$('#s_dzongkhag').val();
                  if(id!=""){
                  dzoId=id;
@@ -962,17 +962,19 @@ export default {
         },
 
         async changefunction(id){
+            alert(id);
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
+            } 
              
             if(id=="s_dzongkhag"){
                 this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
                 this.getschoolList($('#s_dzongkhag').val());
+                
             }
-            if(id=="s_school"){
+            if(id=="s_school"){ 
                 this.school_form.s_school=$('#s_school').val();
                 this.getclassList($('#s_school').val());
             }
@@ -1437,8 +1439,10 @@ export default {
         // this.getschoolList();
         // this.getDetailsbyCID();
         // this.getclassList();
-         
-        $('.select2').select2();
+        // $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
@@ -1450,7 +1454,7 @@ export default {
 
      created() { 
          this.getdzongkhagList();
-         this.getschoolList();
+        //  this.getschoolList();
          this.getclassList();
         }
 
