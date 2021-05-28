@@ -632,10 +632,10 @@
                                     <td>How are the faecal sludge(septic tanks) managed?</td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="tanks"  value="1"> Yes, Safely Buried/covered
+                                            <input type="radio" name="tanks"  value="1"> Yes, savely Buried/covered
                                         </div>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="tanks"  value="2"> Yes, Safely Transported to a treatment plant
+                                            <input type="radio" name="tanks"  value="2"> Yes, savely Transported to a treatment plant
                                         </div>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <input type="radio" name="tanks"  value="3"> No proper management

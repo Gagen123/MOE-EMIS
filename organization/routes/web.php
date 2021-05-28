@@ -179,6 +179,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             // section route
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
+            $router->get('/getseatdetailsbyOrgId/{orgId}', 'generalInformation\SectionController@getseatdetailsbyOrgId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
 			$router->get('/getclassSections/{orgId}', 'generalInformation\SectionController@getclassSections');

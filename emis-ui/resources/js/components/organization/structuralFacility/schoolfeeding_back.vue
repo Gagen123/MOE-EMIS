@@ -162,7 +162,7 @@ export default {
             form: new form({
                 kitchen_status:[
                     {question:'Adequate size of the kitchen for the number of students?',value:'1'},
-                    {question:'Safe water connecion inside the kitchen?',value:'1'},
+                    {question:'save water connecion inside the kitchen?',value:'1'},
                     {question:'Continuous water supply throughout the year in the kitchen?',value:'1'},
                     {question:'Separate dish washing space in the kitchen?',value:'1'},
                     {question:'wash basin with water connection for handwashing?',value:'1'},

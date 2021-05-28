@@ -918,7 +918,7 @@ export default {
                     );
                 }else{
                     Swal.fire({
-                        text: "Are you sure you wish to safe this staff details ?",
+                        text: "Are you sure you wish to save this staff details ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',

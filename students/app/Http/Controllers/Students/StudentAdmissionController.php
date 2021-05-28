@@ -396,7 +396,6 @@ class StudentAdmissionController extends Controller
     }
 
     //this funtion used for student portal
-
     public function  savedetailsNotEnrolledStd(Request $request){
         // dd($request);
         $rules = [
@@ -423,7 +422,7 @@ class StudentAdmissionController extends Controller
             'Remarks'                    =>$request->remarks,
         ];
 
-        // dd($data);
+        dd($data);
 
             $response_data = std_admission::create($data);
            
