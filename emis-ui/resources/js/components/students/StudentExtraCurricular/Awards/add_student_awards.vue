@@ -61,7 +61,7 @@ export default {
         return {
             studentList:[],
             awardList:[],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            id:'3',
 
             student_award_form: new form({
                 id:'',

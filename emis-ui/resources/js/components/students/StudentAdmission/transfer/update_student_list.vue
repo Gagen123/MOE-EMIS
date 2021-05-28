@@ -5,7 +5,7 @@
                 <tr>
 
                      <th >No.</th>
-                     <th >Student CID</th>
+                     <th >Student Code</th>
                      <th >Student Name</th>
                      <th >Gender</th>
                      <th >Action</th>
