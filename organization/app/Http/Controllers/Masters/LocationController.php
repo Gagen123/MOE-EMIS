@@ -35,6 +35,7 @@ class LocationController extends Controller
         // return $this->successResponse($location);
     }
 
+    
     /** 
      * method to save or update disaster type
     */

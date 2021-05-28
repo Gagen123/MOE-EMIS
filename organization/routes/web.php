@@ -206,6 +206,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'location'], function () use ($router) {
             // locations route
             $router->post('/saveLocation', 'generalInformation\LocationsController@saveLocation');
+            $router->get('/getLocationDetails/{orgId}', 'generalInformation\LocationsController@getLocationDetails');
             $router->get('/getDisasterListInCheckbox', 'generalInformation\LocationsController@getDisasterListInCheckbox');
 
         });
