@@ -83,7 +83,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/reportStudents',['uses' => 'Students\StudentAdmissionRelatedController@reportStudents']);
         $router->get('/loadUnreportedStudents/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadUnreportedStudents']);
         $router->post('/saveStudentTransfer',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentTransfer']);
-        $router->get('/loadStudentTransfers/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
+        $router->get('/loadStudentTransfers/{param}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
         $router->post('/saveStudentWhereabouts',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentWhereabouts']);
         $router->get('/loadStudentWhereabouts/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentWhereabouts']);
 

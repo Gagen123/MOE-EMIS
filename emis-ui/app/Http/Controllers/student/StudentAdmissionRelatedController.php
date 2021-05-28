@@ -90,8 +90,9 @@ class StudentAdmissionRelatedController extends Controller
     }
 
     public function loadStudentTransfers($param=""){
-        $student_awards = $this->apiService->listData('emis/students/loadStudentTransfers/'.$param);
-        return $student_awards;
+        $param= $this->getWrkingAgencyId();
+        $data = $this->apiService->listData('emis/students/loadStudentTransfers/'.$param);
+        return $data;
     }
 
     public function saveStudentWhereabouts(Request $request){

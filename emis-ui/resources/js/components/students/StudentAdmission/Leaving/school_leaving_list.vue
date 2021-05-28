@@ -5,7 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Student Name</th>
-                    <th >Student Id</th>
+                    <th >Student Code</th>
                     <th >Class</th>
                     <th >Section</th>
                     <th >Action</th> 
