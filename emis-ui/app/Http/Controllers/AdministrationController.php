@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Session;
 use GuzzleHttp\Client;
-use App\Helper\EmisSe   rvice;
+use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
 use Illuminate\Http\Request;
@@ -376,6 +376,7 @@ class AdministrationController extends Controller{
     }
 
     public function loadLocation(Request $request){
+       // dd('form UI');
         $dis = $this->apiService->listData('emis/masters/location/loadLocation');
         return $dis;
     }
@@ -717,7 +718,7 @@ class AdministrationController extends Controller{
             'id'             =>  $request['id'],
             'user_id'        =>$this->userId()
         ];
-      //  dd($class);
+        dd($class);
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
 

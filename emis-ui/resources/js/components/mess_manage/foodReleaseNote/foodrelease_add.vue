@@ -487,17 +487,17 @@ export default {
                 this.form.items_released.splice(index,1); 
             }
         },
-        // addMoreattachments: function(){
-        //     this.filecount++;
-        //     this.form.attachments.push({file_name:'',attachment:''})
-        // },
-        // removeattachments(index){    
-        //     if(this.form.attachments.length>1){
-        //         this.filecount--;
-        //         this.form.attachments.pop(); 
-        //         this.form.ref_docs.pop();
-        //     }
-        // },
+        addMoreattachments: function(){
+            this.filecount++;
+            this.form.attachments.push({file_name:'',attachment:''})
+        },
+        removeattachments(index){    
+            if(this.form.attachments.length>1){
+                this.filecount--;
+                this.form.attachments.pop(); 
+                this.form.ref_docs.pop();
+            }
+        },
        
     },
      mounted() { 
