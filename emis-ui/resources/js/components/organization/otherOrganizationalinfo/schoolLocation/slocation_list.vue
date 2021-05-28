@@ -1,41 +1,82 @@
 <template>
     <div>
-            <div class="row invoice-info">
-                <div class="col-sm-4 invoice-col">
-                    <strong>Owner</strong>
-                    <address>
-                    <ul>
-                        <li v-for="(item, index) in locationList" :key="index">
-                            {{item.landOwnership  == 1 ? "Public" :  "Private"}}
-                        </li>
-                    </ul>
-                    </address>
-                </div>
-                <div class="col-sm-4 invoice-col">
-                    <strong>Location</strong>
-                    <address>
-                        <ul>
-                            <li v-for="(item, index) in locationList" :key="index">
-                                Latitude: {{item.latitude}}<br>
-                                Longitude: {{item.longitude}}<br>
-                                Altitude: {{item.altitude}}<br>
-                            </li>
-                        </ul>
-                    </address>
-                </div>
-                <div class="col-sm-4 invoice-col">
-                    <strong>Others</strong>
-                    <address>
-                    <ul>
-                            <li v-for="(item, index) in locationList" :key="index">
-                                Compound Area: {{item.latitude}}<br>
-                                Entrance Gate: {{item.longitude}}<br>
-                                Fencing: {{item.altitude}}<br>
-                            </li>
-                        </ul>
-                    </address>
-                </div>
+        <h5 class="text"><u>Location Details</u></h5><br>
+        <div class="row invoice-info">
+            <div v-if="locationList.OrgOrganizationId === ''">
+                <strong>Details have not been entered. Please enter the Location Details of the Organization</strong>
             </div>
+            <div class="col-sm-4 invoice-col">
+                <strong>Ownership Details</strong>
+                <address>
+                    {{locationList.category  == 0 ? "Public Organization" :  "Private Owned"}}
+                </address>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong><i class="fas fa-map-marker-alt mr-1"></i>Geo-Position Location</strong>
+                <address>
+                    Latitude: {{locationList.latitude}}<br>
+                    Longitude: <br>
+                    Altitude: <br>
+                </address>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong><i class="fas fa-building mr-1"></i>Others</strong>
+                <address>
+                    Compound Area: {{locationList.compundArea}}<br>
+                    Entrance Gate: <br>
+                    Compound Fencing: {{locationList.compoundFencing}}<br>
+                        
+                </address>
+            </div>
+        </div>
+        <hr>
+        <h5 class="text"><u>Connectivity Details</u></h5><br>
+         <div class="row invoice-info">
+            <div v-if="locationList.OrgOrganizationId === ''">
+                <strong>Details have not been entered. Please enter the Location Details of the Organization</strong>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong>Road Connectivity</strong>
+                <address>
+                    {{locationList.category  == 0 ? "Public Organization" :  "Private Owned"}}
+                </address>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong>Electricity</strong>
+                <address>
+                    Latitude: {{locationList.latitude}}<br>
+                    Longitude: <br>
+                    Altitude: <br>
+                </address>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong>Internet</strong>
+                <address>
+                    Compound Area: {{locationList.compundArea}}<br>
+                    Entrance Gate: <br>
+                    Compound Fencing: {{locationList.compoundFencing}}<br>
+                        
+                </address>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong>Telephone Service</strong>
+                <address>
+                    Compound Area: {{locationList.compundArea}}<br>
+                    Entrance Gate: <br>
+                    Compound Fencing: {{locationList.compoundFencing}}<br>
+                        
+                </address>
+            </div>
+            <div class="col-sm-4 invoice-col">
+                <strong>Contact Info</strong>
+                <address>
+                    Compound Area: {{locationList.compundArea}}<br>
+                    Entrance Gate: <br>
+                    Compound Fencing: {{locationList.compoundFencing}}<br>
+                        
+                </address>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -43,7 +84,7 @@
 export default {
     data(){
         return{
-            locationList:[],
+            locationList:'',
             dt:'',
         }
     },
@@ -52,7 +93,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.locationList =  data.data.data;
+                this.locationList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

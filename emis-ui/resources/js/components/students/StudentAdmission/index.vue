@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="form-inline"><h5>S</h5><h6 class="pt-1">TUDENT ADMISSION</h6>&nbsp;&nbsp;<h5>S</h5><h6 class="pt-1">ERVICES</h6></li>
+            <li class="form-inline"><h5>Student Admission</h5></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
@@ -12,51 +12,51 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item active pr-1">
-                    <router-link to="/student_new_admission" id="admission" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('student_new_admission')">
+                    <router-link to="/student_new_admission" id="student_new_admission" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Admission
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link to="/student_admission_apply" id="apply_admission" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('student_admission_apply')">
+                    <router-link to="/student_admission_apply" id="student_admission_apply" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Apply for Admission
                     </router-link>
                 </li>
 
-                <li class="nav-item active pr-1">
-                    <router-link to="/student_admission_request" id="admission_request" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('student_admission_request')">
+                    <router-link to="/student_admission_request" id="student_admission_request" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Admission Request
                     </router-link>
                 </li>
-                <li class="nav-item pr-1">
-                    <router-link id="reporting" to="/student_reporting" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('student_reporting')">
+                    <router-link id="student_reporting" to="/student_reporting" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fa fa-user-clock"></span>
                     Reporting
                     </router-link>
                 </li> 
-                <li class="nav-item pr-1">
-                    <router-link to ="/student_leaving" id="transfer" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('student_leaving')">
+                    <router-link to ="/student_leaving" id="student_leaving" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
                         Transfer/Leave
                     </router-link>
                 </li>
-                <li class="nav-item pr-1">
-                    <router-link to="/student_updates" id="updates" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('student_updates')">
+                    <router-link to="/student_updates" id="student_updates" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Updates
                     </router-link>
                 </li>
-                <li class="nav-item pr-1">
-                    <router-link to="/student_transfers" id="updates" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('student_transfers')"> 
+                    <router-link to="/student_transfers" id="student_transfers" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Admit Transferer
                     </router-link>
                 </li>
-                <li class="nav-item pr-1">
-                    <router-link to="/abroad_student" id="updates" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('abroad_student')">
+                    <router-link to="/abroad_student" id="abroad_student" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Student Residing Abroad 
                     </router-link>
