@@ -66,6 +66,11 @@ class SectionController extends Controller
          return $class;
     }
 
+    public function getseatdetailsbyOrgId($orgId){
+        
+
+    }
+
     /**
      * method to get stream by class Id
      */
