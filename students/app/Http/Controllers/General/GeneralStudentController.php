@@ -26,9 +26,8 @@ class GeneralStudentController extends Controller
 
     public function loadStudentList($param=""){
         $id = $param;
-        
         return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
-                            ->get(['id', 'Name', 'student_code', 'CmnSexId', 'DateOfBirth']));
+                            ->get(['id', 'Name', 'student_code']));
     }
 
     /**
