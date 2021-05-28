@@ -93,10 +93,10 @@
                                                   
                          <div class="form-group col-md-4">
                                 <label>School <span class="text-danger">*</span></label>
-                                    <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
-                                         <option value="">--- Please Select ---</option>
-                                         <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                                    </select>
+                                  <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                                  </select>
                           </div>
 
                              <div class="form-group col-md-4" id="seat">
@@ -163,8 +163,9 @@
                 getSeats:'',
                 dzongkhagId:'null',
                 gewogId:'null',
+                form:new form({
 
-
+                }),
                   student_form: new form({
                     id:'',
                     cid_passport:'',
@@ -252,10 +253,10 @@
                  if(id!=""){
                  dzoId=id;
               
-            } 
+                } 
               axios.get('/masters/getOrgList/' +dzoId)
-              .then(Response =>{
-                let data = Response.data.data;
+              .then(response =>{
+                let data = response.data.data;
                 this.schoolList = data;
               })
 
@@ -344,7 +345,7 @@
                  $('#stream').addClass('select2-hidden-accessible');
                 }
             },
-             removeerror(fieldid,errid){
+          removeerror(fieldid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
                 $('#'+errid).html(''); 
@@ -393,7 +394,7 @@
         
         created() { 
             this.getdzongkhagList();
-            this.getschoolList();
+            // this.getschoolList();
             this.getclassList();
             this.getstreamList();
             this.getseatdetailsbyOrgId();
@@ -405,7 +406,6 @@
             this.student_form.gender=this.$route.query.data[0].CmnSexId;
             this.student_form.DateOfBirth=this.$route.query.data[0].DateOfBirth; 
             this.student_form.address=this.$route.query.data[0].Address;
-
             this.getOrgDetails(this.$route.query.data[0].OrgOrganizationId);
             
   },

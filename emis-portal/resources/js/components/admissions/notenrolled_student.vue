@@ -28,13 +28,13 @@
                                     <input type="radio" name="snationality" v-model="student_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
                                     <span class="text-danger" id="snationality_err"></span>
                                 </div>
-                                <div class="row form-group col-lg-10 col-md-10 col-sm-10">
+                                <div class="row form-group col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                     <div class="card card-primary">
                                         <div class="card-body">
                                             <div class="row form-group">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <label id="level_name"></label>
-                                                    <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @blur="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': student_form.errors.has('cid_passport') }" id="cid_passport" v-model="student_form.cid_passport" placeholder="Identification No">
+                                                    <input type="text" class="form-control" @keyup.enter="getChildDetailsbyCID('cid_passport','std')" @blur="getChildDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': student_form.errors.has('cid_passport') }" id="cid_passport" v-model="student_form.cid_passport" placeholder="Identification No">
                                                     <has-error :form="student_form" field="cid_passport"></has-error>
                                                 </div>
                                             </div>
@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <hr>
-                             <div class="form-group">
+                            <div class="form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Upload Photo</label>
                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload">
@@ -702,192 +702,83 @@ export default {
         onChangeFileUpload(e){
             this.student_form.attachments = e.target.files[0];
         },
-        getDetailsbyCID(fieldId,type){
-            let selectedVal="";
-            let selected ="";
-            if(type=="std"){
-                selected = $("input[type='radio'][name='snationality']:checked");
+        getChildDetailsbyCID(cid,type){
+            this.getPersonalDetailsbyCID(cid,type);
+            let fatherCid="";
+            let motherCid="";
+            if(type=='std'){
+                axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
+                .then(response => {
+                    fatherCid=response.data[0].fatherCID;
+                    motherCid=response.data[0].motherCID;
+                    this.getPersonalDetailsbyCID(fatherCid,'father');
+                    this.getPersonalDetailsbyCID(motherCid,'mother');
+                });
             }
-            
-            if(type=="father"){
-                selected = $("input[type='radio'][name='father_nationality']:checked");
-            }
-            if(type=="mother"){
-                selected = $("input[type='radio'][name='mother_nationality']:checked");
-            }
-            if(type=="gardain"){
-                selected = $("input[type='radio'][name='gardain_nationality']:checked");
-            }
-            if(selected.length > 0) {
-                selectedVal=selected.val();
-            }
-            else{
-                Swal.fire({
-                    html: "Please select nationality",
-                    icon: 'error'
-                }); 
-            }
-            if(selectedVal.includes('Bhutan')){
-                if ($('#'+fieldId).val().length != 11){
-                    Swal.fire({
-                        html: "Please enter 11 digit CID",
-                        icon: 'error'
-                    });
-                }
-                else{
-                    axios.get('getpersonbycid/'+ $('#'+fieldId).val())
-                    .then(response => {
-                        if (JSON.stringify(response.data)!='{}'){
-                            let student_detail = response.data.citizenDetail[0];
-                            if(type=="std"){
-                                this.student_form.first_name = student_detail.firstName;
-                                $('#first_name').prop('readonly',true);
-                                this.student_form.middle_name=student_detail.middleName;
-                                $('#middle_name').prop('readonly',true);
-                                this.student_form.last_name=student_detail.lastName;
-                                $('#last_name').prop('readonly',true);
-                                let date_of_birth = new Date(student_detail.dob);
-                                let month =(date_of_birth .getMonth() + 1);
-                                let day = date_of_birth .getDate();
-                                if(day<10){
-                                    day='0'+day;
-                                }
-                                if(month<10){
-                                    month='0'+month;
-                                }
-                                let year =date_of_birth .getFullYear();
-                                this.student_form.dob = year+ "-"+month + "-" + day;
-                                $('#dob').val(year+ "-"+month + "-" + day);
-                                $('#dob').prop('readonly',true);
-                                if(student_detail.genter=="M"){
-                                    student_detail.genter="male";
-                                }
-                                else if(student_detail.genter=="F"){
-                                    student_detail.genter="female";
-                                }
-                                else{
-                                    student_detail.genter="others";
-                                }
-                                for(let i=0; i<this.sex_idList.length;i++){
-                                    if(this.sex_idList[i].name.toLowerCase()==student_detail.genter){
-                                        $('#sex_id').val(this.sex_idList[i].id).trigger('change');
-                                        this.student_form.sex_id =  this.sex_idList[i].id;
-                                        $('#sex_id').prop('disabled',true);
-                                    }  
-                                }
-                                this.student_form.dzongkhag =student_detail.dzongkhagId;
-                                $('#dzongkhag').val(student_detail.dzongkhagId).trigger('change');
-                                $('#dzongkhag').prop('disabled',true);
-                                this.getgewoglist(student_detail.dzongkhagId,'std');
-                                this.student_form.gewog = student_detail.gewogId;
-                                $('#gewog').prop('disabled',true);
-                                this.getvillagelist(student_detail.gewogId,'std');
-                                $('#village_id').val(student_detail.villageSerialNo).trigger('change');
-                                this.student_form.village_id = student_detail.villageSerialNo;
-                                $('#village_id').prop('disabled',true);
-                            }
-                            
-                            if(type=="father"){
-                                if(student_detail.genter=="F"){
-                                    Swal.fire({
-                                        html: "Genter of this person Female. Please provide correct CID",
-                                        icon: 'error'
-                                    });
-                                    this.guardian_form.father_first_name = "";
-                                    this.guardian_form.father_dzongkhag ="";
-                                    this.guardian_form.father_gewog = "";
-                                    this.guardian_form.father_village_id = "";
-                                }
-                                else{
-                                    let full_name=student_detail.firstName;
-                                    if(student_detail.middleName!="" && student_detail.middleName!=null){
-                                        full_name+=' '+student_detail.middleName;
-                                    }
-                                    full_name+=' '+student_detail.lastName;
-                                    this.guardian_form.father_first_name = full_name;
-                                    $('#father_first_name').prop('readonly',true);
-                                    this.guardian_form.father_dzongkhag =student_detail.dzongkhagId;
-                                    $('#father_dzongkhag').val(student_detail.dzongkhagId).trigger('change');
-                                    $('#father_dzongkhag').prop('disabled',true);
-                                    this.getgewoglist(student_detail.dzongkhagId,'p_father');
-                                    this.guardian_form.father_gewog = student_detail.gewogId;
-                                    $('#father_gewog').val(student_detail.gewogId).trigger('change');
-                                    $('#father_gewog').prop('disabled',true);
-                                    this.getvillagelist(student_detail.gewogId,'p_father');
-                                    this.guardian_form.father_village_id = student_detail.villageSerialNo;
-                                    $('#father_village_id').val(student_detail.villageSerialNo).trigger('change');
-                                    $('#father_village_id').prop('disabled',true);
-                                }
-                            }
-                            if(type=="mother"){
-                                if(student_detail.genter=="M"){
-                                    Swal.fire({
-                                        html: "Genter of this person is Male. Please provide correct CID",
-                                        icon: 'error'
-                                    });
-                                    this.guardian_form.mother_first_name = "";
-                                    this.guardian_form.mother_dzongkhag ="";
-                                    this.guardian_form.mother_gewog = "";
-                                    this.guardian_form.mother_village_id = "";
-                                }
-                                else{
-                                    let full_name=student_detail.firstName;
-                                    if(student_detail.middleName!="" && student_detail.middleName!=null){
-                                        full_name+=' '+student_detail.middleName;
-                                    }
-                                    full_name+=' '+student_detail.lastName;
-                                    this.guardian_form.mother_first_name = full_name;
-                                    $('#mother_first_name').prop('readonly',true);
-                                    this.guardian_form.mother_dzongkhag =student_detail.dzongkhagId;
-                                    $('#mother_dzongkhag').val(student_detail.dzongkhagId).trigger('change');
-                                    $('#mother_dzongkhag').prop('disabled',true);
-                                    this.getgewoglist(student_detail.dzongkhagId,'p_mother');
-                                    this.guardian_form.mother_gewog = student_detail.gewogId;
-                                    $('#mother_gewog').val(student_detail.gewogId).trigger('change');
-                                    $('#mother_gewog').prop('disabled',true);
-                                    this.getvillagelist(student_detail.gewogId,'p_mother');
-                                    this.guardian_form.mother_village_id = student_detail.villageSerialNo;
-                                    $('#mother_village_id').val(student_detail.villageSerialNo).trigger('change');
-                                    $('#mother_village_id').prop('disabled',true);
-                                }
-                                
-                            }
-                            if(type=="gardain"){
-                                let full_name=student_detail.firstName;
-                                if(student_detail.middleName!="" && student_detail.middleName!=null){
-                                    full_name+=' '+student_detail.middleName;
-                                }
-                                full_name+=' '+student_detail.lastName;
-                                this.guardian_form.gardain_first_name = full_name;
-                                $('#gardain_first_name').prop('readonly',true);
-                                this.guardian_form.gardain_dzongkhag =student_detail.dzongkhagId;
-                                $('#gardain_dzongkhag').val(student_detail.dzongkhagId).trigger('change');
-                                $('#gardain_dzongkhag').prop('disabled',true);
-                                this.getgewoglist(student_detail.dzongkhagId,'p_gardain');
-                                this.guardian_form.gardain_gewog = student_detail.gewogId;
-                                $('#gardain_gewog').val(student_detail.gewogId).trigger('change');
-                                $('#gardain_gewog').prop('disabled',true);
-                                this.getvillagelist(student_detail.gewogId,'p_gardain');
-                                this.guardian_form.gardain_village_id = student_detail.villageSerialNo;
-                                $('#gardain_village_id').val(student_detail.villageSerialNo).trigger('change');
-                                $('#gardain_village_id').prop('disabled',true);
-                            }
-                            
-                        }else{
-                            Swal.fire({
-                                html: "No data found for this CID",
-                                icon: 'error'
-                            });
+        },
+        getPersonalDetailsbyCID(cid,type){
+            axios.get('adminstratorController/getpersonbycid/'+ cid)
+            .then(res => {
+                if(JSON.stringify(res.data)!='{}'){
+                    if(type=="std"){
+                        this.student_form.cid_passport = cid;
+                        $('#cid_passport').prop('readonly',true);
+                        let student_detail = res.data.citizenDetail[0];
+                        this.student_form.first_name = student_detail.firstName;
+                        $('#first_name').prop('readonly',true);
+                        this.student_form.middle_name=student_detail.middleName;
+                        $('#middle_name').prop('readonly',true);
+                        this.student_form.last_name=student_detail.lastName;
+                        $('#last_name').prop('readonly',true);
+                        let date_of_birth = new Date(student_detail.dob);
+                        let month =(date_of_birth .getMonth() + 1);
+                        let day = date_of_birth .getDate();
+                        if(day<10){
+                            day='0'+day;
                         }
-                    })
-                    .catch((exception) => {
-                        Swal.fire({
-                            html: "No data found for matching CID/service down"+exception,
-                            icon: 'error'
-                        });
-                    });
+                        if(month<10){
+                            month='0'+month;
+                        }
+                        let year =date_of_birth .getFullYear();
+                        this.student_form.dob = year+ "-"+month + "-" + day;
+                        $('#dob').val(year+ "-"+month + "-" + day);
+                        $('#dob').prop('readonly',true);
+                        if(student_detail.genter=="M"){
+                            student_detail.genter="male";
+                        }
+                        else if(student_detail.genter=="F"){
+                            student_detail.genter="female";
+                        }
+                        else{
+                            student_detail.genter="others";
+                        }
+                        for(let i=0; i<this.sex_idList.length;i++){
+                            if(this.sex_idList[i].name.toLowerCase()==student_detail.genter){
+                                $('#sex_id').val(this.sex_idList[i].id).trigger('change');
+                                this.student_form.sex_id =  this.sex_idList[i].id;
+                                $('#sex_id').prop('disabled',true);
+                            }  
+                        }
+                        this.student_form.dzongkhag =student_detail.dzongkhagId;
+                        $('#dzongkhag').val(student_detail.dzongkhagId).trigger('change');
+                        $('#dzongkhag').prop('disabled',true);
+                        this.getgewoglist(student_detail.dzongkhagId,'std');
+                        this.student_form.gewog = student_detail.gewogId;
+                        $('#gewog').prop('disabled',true);
+                        this.getvillagelist(student_detail.gewogId,'std');
+                        $('#village_id').val(student_detail.villageSerialNo).trigger('change');
+                        this.student_form.village_id = student_detail.villageSerialNo;
+                        $('#village_id').prop('disabled',true);
+                    }
+                    if(type=="father"){
+                        
+                    }
+                    if(type=="mother"){
+                        
+                    }
                 }
-            }
+                    
+            });
         },
         
         loadAllActiveMasters(type){
@@ -916,7 +807,7 @@ export default {
 
           },
          getschoolList(id){
-            //  alert(id)
+             alert(id)
              let dzoId=$('#s_dzongkhag').val();
                  if(id!=""){
                  dzoId=id;
@@ -962,17 +853,19 @@ export default {
         },
 
         async changefunction(id){
+            alert(id);
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
+            } 
              
             if(id=="s_dzongkhag"){
                 this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
                 this.getschoolList($('#s_dzongkhag').val());
+                
             }
-            if(id=="s_school"){
+            if(id=="s_school"){ 
                 this.school_form.s_school=$('#s_school').val();
                 this.getclassList($('#s_school').val());
             }
@@ -1435,10 +1328,11 @@ export default {
         this.loadAllActiveMasters('all_active_dzongkhag');
         this.getdzongkhagList();
         // this.getschoolList();
-        // this.getDetailsbyCID();
         // this.getclassList();
-         
-        $('.select2').select2();
+        // $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
@@ -1449,8 +1343,10 @@ export default {
     },
 
      created() { 
+         let cid=this.$route.query.cid;
+         this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
-         this.getschoolList();
+        //  this.getschoolList();
          this.getclassList();
         }
 

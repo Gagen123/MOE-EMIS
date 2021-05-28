@@ -45,6 +45,30 @@ class MessManagementController extends Controller
             'quarter.required'          =>  'quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
+        
+        $files = $request->attachments;
+        // dd($files);
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopment';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'        =>  $file_store_path,
+                            'original_name'           =>  $file_name,
+                            'user_defined_name'       =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
@@ -52,6 +76,7 @@ class MessManagementController extends Controller
             'organizaiton'             =>  $request['organizaiton'],
             'quarter'                  =>  $request['quarter'],
             'remarks'                  =>  $request['remarks'],
+            'attachment_details'       =>  $attachment_details,
             'id'                       =>  $request['id'],
             'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()

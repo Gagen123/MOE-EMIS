@@ -18,21 +18,21 @@
                         Admission
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('student_admission_apply')">
-                    <router-link to="/student_admission_apply" id="student_admission_apply" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <!-- <li class="nav-item active pr-1">
+                    <router-link to="/student_admission_apply" id="apply_admission" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Apply for Admission
                     </router-link>
-                </li>
+                </li> -->
 
-                <li class="nav-item active pr-1" @click="activatelink('student_admission_request')">
-                    <router-link to="/student_admission_request" id="student_admission_request" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <!-- <li class="nav-item active pr-1">
+                    <router-link to="/student_admission_request" id="admission_request" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Admission Request
                     </router-link>
-                </li>
-                <li class="nav-item pr-1" @click="activatelink('student_reporting')">
-                    <router-link id="student_reporting" to="/student_reporting" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                </li> -->
+                <li class="nav-item pr-1">
+                    <router-link id="reporting" to="/student_reporting" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fa fa-user-clock"></span>
                     Reporting
                     </router-link>

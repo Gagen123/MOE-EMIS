@@ -17,9 +17,8 @@ class AdminstratorController extends Controller
     }
 
     public function getpersonbycid($cid){
-        // dd($cid);
-        $person = json_decode($this->apiService->listData('/getcensusdata'. $cid));
-        if ($person->citizenDetailsResponse) {
+        $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
+        if ($person->citizenDetailsResponse){
             $response_data = $person->citizenDetailsResponse;
             return  response()->json($response_data);
         }else {
@@ -27,6 +26,11 @@ class AdminstratorController extends Controller
         }
     }
 
+    public function getchildDetailsOncid($cid=""){
+        $personal_data=$this->apiService->listData('getchildDetailsOncid/'. $cid);
+        return json_decode($personal_data)->parentDetailResponse->parentDetail;
+    }
+    
 
     public function loadGlobalMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
@@ -39,8 +43,8 @@ class AdminstratorController extends Controller
     }
 
     public function getOrgList($dzoId=""){
-        $loadBifurcationDetails = $this->apiService->listData('emis/organization/getOrgList/'.$dzoId);
-        return $loadBifurcationDetails;
+        $param="dzongkhagwise";
+        return $this->apiService->getListData('emis/common_services/loadOrgList/'.$param.'/'.$dzoId);
     }
 
     public function getClassByOrganizationId($orgId = ""){
@@ -50,7 +54,7 @@ class AdminstratorController extends Controller
 
 
     public function loadOrganizationDetailsbyOrgId($id){        
-        $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetailsbyOrgId/'.$id );
+        $loadOrganizationDetails = $this->apiService->listData('emis/common_services/loadOrgDetails/fullOrgDetbyid/'.$id );
         return $loadOrganizationDetails;
     }
 
