@@ -68,6 +68,7 @@ class ServiceProviderController extends Controller
     */
     
     public function loadServiceProvider(){
+        return 'response from servies';
         $loadServiceProvider = ServiceProvider::all();
         return $loadServiceProvider;
     }

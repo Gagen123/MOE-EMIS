@@ -109,7 +109,7 @@
                                 </div>
                             </div>
                             <hr>
-                             <div class="form-group">
+                            <div class="form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Upload Photo</label>
                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload">
