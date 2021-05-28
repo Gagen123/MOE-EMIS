@@ -796,7 +796,7 @@ class AdministrationController extends Controller{
             'user_id'=>$this->userId()
         ];
 
-        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStream', $class);
+        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
         return $response_data;
 
     }

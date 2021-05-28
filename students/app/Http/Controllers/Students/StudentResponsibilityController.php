@@ -77,7 +77,8 @@ class StudentResponsibilityController extends Controller
         $roles = DB::table('std_role_student')
                 ->join('std_student', 'std_role_student.StdStudentId', '=', 'std_student.id')
                 ->join('std_role', 'std_role_student.StdRoleId', '=', 'std_role.id')
-                ->select('std_role_student.*', 'std_student.Name','std_role.name AS role_name')
+                ->select('std_role_student.*', 'std_student.Name','std_student.OrgOrganizationId','std_role.name AS role_name')
+                ->where('std_student.OrgOrganizationId', $id)
                 ->get();
         
         return $this->successResponse($roles);

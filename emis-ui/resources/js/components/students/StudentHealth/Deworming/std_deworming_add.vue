@@ -6,7 +6,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Term:</label>
                         <select v-model="student_form.term_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('term_id') }" class="form-control select2" name="term_id" id="term_id">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="term_id"></has-error>
                     </div> 
@@ -55,7 +55,7 @@
                                 <tr v-for="(student, index) in studentList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> get SEX </td>
+                                    <td> {{student.CmnSexId}} </td>
                                         <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
@@ -109,7 +109,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.termList =  data.data;
+                this.termList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

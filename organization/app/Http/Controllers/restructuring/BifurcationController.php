@@ -90,9 +90,10 @@ class BifurcationController extends Controller
         if($request->class!="" && sizeof($request->class)>0){
             foreach ($request->class as $cls){
                 $class_data = [
-                    'applicationNo'     => $application_no,
+                    // 'applicationNo'     => $application_no,
+                    'foreignKeyFor'     => 'Bifurcation1',
+                    'ApplicationDetailsId'     =>$bifurcation->id,
                     'classId'           => $cls,
-                    'parent_for'        => '1',
                     'created_by'        => $request->user_id,
                     'created_at'        => date('Y-m-d h:i:s'),
                 ];
@@ -105,9 +106,9 @@ class BifurcationController extends Controller
                 foreach ($request->class as $cls){
                     if(explode('##',$stm)[0]==$cls){
                         $stream_data = [
-                            'applicationNo'     => $application_no,
+                            'foreignKeyFor'     => 'Bifurcation1',
+                            'ApplicationDetailsId'     =>$bifurcation->id,
                             'classId'           => $cls,
-                            'parent_for'        => '1',
                             'streamId'          => explode('##',$stm)[1],
                             'created_by'        => $request->user_id,
                             'created_at'        => date('Y-m-d h:i:s'),
@@ -123,9 +124,9 @@ class BifurcationController extends Controller
         if($request->class1!="" && sizeof($request->class1)>0){
             foreach ($request->class1 as $cls){
                 $class_data = [
-                    'applicationNo'     => $application_no,
+                    'foreignKeyFor'     => 'Bifurcation2',
+                    'ApplicationDetailsId'     =>$bifurcation->id,
                     'classId'           => $cls,
-                    'parent_for'        => '2',
                     'created_by'        => $request->user_id,
                     'created_at'        => date('Y-m-d h:i:s'),
                 ];
@@ -138,9 +139,9 @@ class BifurcationController extends Controller
                 foreach ($request->class1 as $cls){
                     if(explode('##',$stm)[0]==$cls){
                         $stream_data = [
-                            'applicationNo'     => $application_no,
+                            'foreignKeyFor'     => 'Bifurcation2',
+                            'ApplicationDetailsId'     =>$bifurcation->id,
                             'classId'           => $cls,
-                            'parent_for'        => '2',
                             'streamId'          => explode('##',$stm)[1],
                             'created_by'        => $request->user_id,
                             'created_at'        => date('Y-m-d h:i:s'),
@@ -165,31 +166,40 @@ class BifurcationController extends Controller
         $response_data->new2Level=Level::where('id',$response_data->new2Level)->first()->name;
         $response_data->new1Location=Location::where('id',$response_data->new1Location)->first()->name;
         $response_data->new2Location=Location::where('id',$response_data->new2Location)->first()->name;
-        $response_data->parent_school1=OrganizationDetails::where('id',$response_data->new1ParentSchool)->first()->name;
-        $response_data->parent_school2=OrganizationDetails::where('id',$response_data->new2ParentSchool)->first()->name;
+        if($response_data->new1ParentSchool!=null && $response_data->new2ParentSchool!=""){
+            $response_data->parent_school1=OrganizationDetails::where('id',$response_data->new1ParentSchool)->first()->name;
+        }
+        
+        if($response_data->new2ParentSchool!=null && $response_data->new2ParentSchool!=""){
+            $response_data->parent_school2=OrganizationDetails::where('id',$response_data->new2ParentSchool)->first()->name;
+        }
         
         // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        $class1=ApplicationClassStream::where('applicationNo',$appNo)->where('parent_for','1')->groupBy('classId')->get();
-        $stream1=ApplicationClassStream::where('applicationNo',$appNo)->where('parent_for','1')->where('streamId','!=',null)->get();
+        $class1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->groupBy('classId')->get();
+        $stream1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->where('streamId','!=',null)->get();
         foreach($class1 as $cls){
             $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
         }
-        foreach($stream1 as $sec){
-            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        }
         $response_data->class_det_1=$class1;
-        $response_data->strm_set_1=$stream1;
+        if($stream1!="" && sizeof($stream1)>0){
+            foreach($stream1 as $sec){
+                $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+            }
+            $response_data->strm_set_1=$stream1;
+        }
 
-        $class2=ApplicationClassStream::where('applicationNo',$appNo)->where('parent_for','2')->groupBy('classId')->get();
-        $stream2=ApplicationClassStream::where('applicationNo',$appNo)->where('parent_for','2')->where('streamId','!=',null)->get();
-        foreach($class2 as $cls){
-            $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        }
-        foreach($stream2 as $sec){
-            $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        }
-        $response_data->class_det_2=$class2;
-        $response_data->strm_set_2=$stream2;
+        // $class2=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation2')->groupBy('classId')->get();
+        // $stream2=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation2')->where('streamId','!=',null)->get();
+        // foreach($class2 as $cls){
+        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        // }
+        // $response_data->class_det_2=$class2;
+        // if($stream2!="" && sizeof($stream2)>0){
+        //     foreach($stream2 as $sec){
+        //         $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        //     }
+        //     $response_data->strm_set_2=$stream2;
+        // }
         return $this->successResponse($response_data); 
     }
     /**
@@ -199,4 +209,31 @@ class BifurcationController extends Controller
     //     $orgDetails = OrganizationDetails::all();
     //     return $orgDetails;
     // }
+
+    public function updateBifurcation(Request $request){
+        // if($request->attachment_details!="" ){
+        //     if(sizeof($request->attachment_details)>0){
+        //         $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+        //         foreach($request->attachment_details as $att){
+        //             $attach =[
+        //                 'ApplicationDetailsId'      =>  $application_details->id,
+        //                 'path'                      =>  $att['path'],
+        //                 'user_defined_file_name'    =>  $att['user_defined_name'],
+        //                 'name'                      =>  $att['original_name'],
+        //                 'upload_type'               =>  $request->update_type,
+        //             ];
+        //             $doc = ApplicationAttachments::create($attach);
+        //         }
+        //     }
+        // }
+        $estd =[
+            'status'                       =>   $request->status,
+            'remarks'                      =>   $request->remarks,
+            'updated_by'                   =>   $request->user_id,
+            'updated_at'                   =>   date('Y-m-d h:i:s'),
+        ]; 
+        $establishment = Bifurcation::where('applicationNo', $request->application_number)->update($estd);
+        //update the main organizaiton 
+        return $this->successResponse($establishment, Response::HTTP_CREATED);
+    }
 }

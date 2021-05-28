@@ -1,19 +1,20 @@
 <template>
     <div>
-        <ol class="mb-1 ml-xl-n3 mr-xl-n2 pl-3" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h6 class="pt-1">Bifurcation Application Verification/Approval</h6></li>
-        </ol>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Existing Organization Details </label>                              
+                            <label class="mb-0.5">Current Organization Details </label>                              
                         </a>
                     </li>
-                    <li class="nav-item proposed-org-tab" @click="shownexttab('proposed-org-tab')">
+                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Proposed Organization Details </label>
+                            <label class="mb-0.5">Bifurcation Details </label>
                         </a>
                     </li>
                 </ul>
@@ -21,394 +22,790 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <h4><u>Application Details</u></h4>
-                            <div class="form-group row"> 
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Application Number:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.applicationNo}}</span>
-                                </div> 
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Submitted Date:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.application_date}}</span>
-                                </div> 
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Service Name:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.service}}</span>
-                                </div> 
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label>Select Org:</label>
+                                <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="parent_id"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Code:</label>
+                                <span class="text-blue text-bold">{{data.code}}</span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Name:</label>
+                                <span class="text-blue text-bold" id="name">{{data.name}}</span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Category:</label>
+                                <span class="text-blue text-bold">{{ data.category == 1 ? "Public" :  "private & Other"}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Level:</label>
+                                <span class="text-blue text-bold">{{levelArray[data.levelId]}}</span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Dzongkhag:</label>
+                                <span class="text-blue text-bold">{{dzongkhagarray[data.dzongkhagId]}}</span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Gewog:</label>
+                                <span class="text-blue text-bold">{{selected_gewog}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Geopolitically Located:</label>
+                                <span class="text-blue text-bold"> {{ data.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>SEN School:</label>
+                                <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
+                            </div>
+                        </div> 
+                        <!-- <div class="form-group row" v-if="data.senSchool==1">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                                <label class="mb-0">Parent School:</label>
+                                <span class="text-blue text-bold">{{data.parentSchool}}</span>
+                            </div>   
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0">Co-located with Parent School</label>
+                                <span class="text-blue text-bold">
+                                    {{ data.coLocated  == 1 ? "Yes" :  "No"}}
+                                </span>
+                            </div> 
+                        </div> -->
+                       <div v-if="data.category==0">
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h4><u>Proprietor Details</u></h4>
+                                </div>
+                            </div>
+                            <div v-for="(pro, index) in data.proprietor" :key="index">
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">CID:</label>
+                                        <span class="text-blue text-bold">{{pro.cid}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Full Name:</label>
+                                        <span class="text-blue text-bold">{{pro.fullName}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Phone No:</label>
+                                        <span class="text-blue text-bold">{{pro.phoneNo}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Email:</label>
+                                        <span class="text-blue text-bold">{{pro.email}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="callout callout-success">
-                            <h4><u>Existing Organization Details</u></h4>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="card card-primary card-outline">
-                                        <div class="card-body">
-                                            <h3 class="card-title">School/ECR/ECCD 1</h3>
-                                            <hr>
-                                            <div class="form-group row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Code:</label>
-                                                    <span class="text-blue text-bold" id="mergerCode1">{{org1_details.code}}</span>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Name:</label>
-                                                    <span class="text-blue text-bold" id="mergerName1">{{org1_details.name}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Category:</label>
-                                                    <span class="text-blue text-bold" id="megerCategory1">{{org1_details.category  == 1 ? "public" :  "private"}}</span>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Level:</label>
-                                                    <span class="text-blue text-bold" id="mergerLevel1">{{org1_details.level}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Dzongkhag:</label>
-                                                    <span class="text-blue text-bold" id="mergerDzongkhag1">{{org1_details.dzongkhag}}</span>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Gewog:</label>
-                                                    <span class="text-blue text-bold" id="mergerGewog1">{{org1_details.gewog}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Chiwog:</label>
-                                                    <span class="text-blue text-bold" id="mergerChiwog1">{{org1_details.village}}</span>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Location Type:</label>
-                                                    <span class="text-blue text-bold" id="mergerLocationtype1">{{org1_details.locationType}}</span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>Geopolitically Located:</label>
-                                                    <span class="text-blue text-bold" id="mergerGeoLocated1">{{org1_details.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label>SEN School:</label>
-                                                    <span class="text-blue text-bold" id="mergerSen1">{{org1_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <h4><u>Class Section Details</u></h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, index) in  data.classes" :key="index">
+                                   <br>
+                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
+                                </span> 
                             </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 fa-pull-right">
-                                <button class="btn btn-primary" @click="shownexttab('proposed-org-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="proposed-org-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <h4><u>Proposed Organization Details</u></h4>
-                        <div class="callout callout-success">
-                             <div class="form-group row">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="card card-primary card-outline">
-                                        <div class="card-body">
-                                            <h3 class="card-title">School/ECR/ECCD 1</h3>
-                                            <hr>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Proposed Name:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Name}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Level:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Level}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Category:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Category == 1 ? "Public" :  "Private" }}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Dzongkhag:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Dzongkhagname}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Gewog:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Gewogname}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Village:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Chiwogname}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Location Type:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1Location}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Geopolitically Located:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1IsGeoLocated == 1 ? "Yes" :  "No"}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Is SEN School:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1IsSenSchool == 1 ? "Yes" :  "No"}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Co-located with Parent School:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new1IsCoLocated == 1 ? "Yes" :  "No"}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Parent School:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.parent_school1}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                    <label class="mb-0">Select classes and streams</label>
+                    
+                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">School/ECR/ECCD 1</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <input type="text" class="form-control" id="name" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" @change="remove_error('name')"/>
+                                                    <has-error :form="form" field="name"></has-error>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                                <span v-for="(item, index) in  applicaitondetails.class_det_1" :key="index">
-                                                    <br>
-                                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                                    <span v-for="(stm, key, index) in applicaitondetails.strm_set_1" :key="index" >
-                                                        <span v-if="item.classId==stm.classId">
-                                                            <br>
-                                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                                        </span>
-                                                    </span>
-                                                </span> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <div class="card card-primary card-outline">
-                                        <div class="card-body">
-                                            <h3 class="card-title">School/ECR/ECCD 2</h3>
-                                            <hr>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Proposed Name:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Name}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Level:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Level}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Category:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Category == 1 ? "Public" :  "Private" }}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Dzongkhag:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Dzongkhagname}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Gewog:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Gewogname}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Village:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Chiwogname}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Location Type:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2Location}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Geopolitically Located:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2IsGeoLocated == 1 ? "Yes" :  "No"}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Is SEN School:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2IsSenSchool == 1 ? "Yes" :  "No"}}</span>
-                                                </div>  
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Co-located with Parent School:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.new2IsCoLocated == 1 ? "Yes" :  "No"}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group row"> 
-                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                    <label class="mb-0">Parent School:</label>
-                                                    <span class="text-blue text-bold">{{applicaitondetails.parent_school2}}</span>
-                                                </div>  
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                    <label class="mb-0">Select classes and streams</label>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control" @change="getCategory(),remove_error('level')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="level"></has-error>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                                <span v-for="(item, index) in  applicaitondetails.class_det_2" :key="index">
-                                                    <br>
-                                                    <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                                    <span v-for="(stm, key, index) in applicaitondetails.strm_set_2" :key="index" >
-                                                        <span v-if="item.classId==stm.classId">
-                                                            <br>
-                                                            <input type="checkbox" checked="true"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                                        </span>
-                                                    </span>
-                                                </span> 
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input type="radio" v-model="form.category"  value="1" tabindex="" @change="showprivatedetails('public')"/> Public</label>
+                                                    <label><input type="radio" v-model="form.category"  value="0"  tabindex="" @change="showprivatedetails('private')"/> Private</label>
+                                                    <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                                    <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
+                                                </div>
                                             </div>
-                                        </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select name="locationCategory" v-model="form.location" :class="{ 'is-invalid': form.errors.has('location') }" id="location" class="form-control editable_fields" @change="remove_error('location')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="location"></has-error>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input type="radio" v-model="form.geoLocated" value="1" tabindex=""/> Yes</label>
+                                                    <label><input type="radio" v-model="form.geoLocated" value="0" tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input  type="radio" v-model="form.coLocated" value="1" tabindex=""/> Yes</label>
+                                                <label><input  type="radio" v-model="form.coLocated" value="0"  tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select name="category" id="cparentSchool" v-model="form.parentSchool" class="form-control currentDetails">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <label class="mb-0"><i><u>Other Details</u></i></label>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag" @change="remove_error('dzongkhag')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="dzongkhag"></has-error>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog" @change="remove_error('gewog')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="gewog"></has-error>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog" @change="remove_error('chiwog')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="chiwog"></has-error>
+                                                </div>
+                                            </div>
+                                            <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                                    <span v-for="(item, key, index) in  classList" :key="index">
+                                                        <br>
+                                                        <input type="checkbox" v-model="form.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                                        <span v-for="(stm, key, index) in streamList" :key="index" >
+                                                            <span v-if="item.class=='XI' || item.class=='XII'">
+                                                                <br>
+                                                                <input type="checkbox" v-model="form.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                                            </span>
+                                                        </span>
+                                                    </span> 
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
-                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Remarks</label>
-                                <textarea class="form-control" @change="remove_error('remarks')" v-model="applicaitondetailsform.remarks" id="remarks"></textarea>
-                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="card card-primary card-outline">
+                                    <div class="card-header">
+                                        <h3 class="card-title">School/ECR/ECCD 2</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <input type="text" class="form-control currentDetails" id="name1" v-model="form.name1" :class="{ 'is-invalid': form.errors.has('name1') }" @change="remove_error('name1')"/>
+                                                    <has-error :form="form" field="name1"></has-error>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                                    <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="level1"></has-error>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
+                                                    <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
+                                                    <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                                    <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="location1"></has-error>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input  type="radio" v-model="form.geoLocated1" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.geoLocated1" value="0"  tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <label class="mb-0"><i><u>Other Details</u></i></label>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select v-model="form.dzongkhag1" :class="{ 'is-invalid': form.errors.has('dzongkhag1') }" class="form-control select2" name="dzongkhag1" id="dzongkhag1">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in dzongkhagList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="dzongkhag1"></has-error>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select v-model="form.gewog1" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog1') }" class="form-control select2" name="gewog1" id="gewog1">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in gewog_list1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="gewog1"></has-error>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:<span class="text-danger">*</span></label>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                    <select v-model="form.chiwog1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog1') }" class="form-control select2" name="chiwog1" id="chiwog1">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in villageList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <has-error :form="form" field="chiwog1"></has-error>
+                                                </div>
+                                            </div>
+                                            <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                                    <span v-for="(item, key, index) in  classList" :key="index">
+                                                        <br>
+                                                        <input type="checkbox" v-model="form.class1" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                                        <span v-for="(stm, key, index) in streamList" :key="index" >
+                                                            <span v-if="item.class=='XI' || item.class=='XII'">
+                                                                <br>
+                                                                <input type="checkbox" v-model="form.stream1"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
+                                                            </span>
+                                                        </span>
+                                                    </span> 
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
     </div>
 </template>
 <script>
 export default {
-    components: {
-    },
     data(){
         return{ 
-            proprietorList:[],
-            class_section:[],
-            sectionList:[],
-            org1_details:'',
-            applicaitondetails:'',
-            applicaitondetailsform: new form({
-                id: '',applicationNo:'',application_date:'',service:'',status:'',remarks:'',actiontype:''
-            }),
+            data:'',
+            orgList:'',
+            levelList:[],
+            levelArray:{},
+            locationList:[],
+            locationList1:[],
+            levelList1:[],
+            dzongkhagList:[],
+            dzongkhagList1:[],
+            dzongkhagarray:{},
+            gewog_list:[],
+            gewog_list_array:{},
+            selected_gewog:'',
+            villageList:[],
+            gewog_list1:[],
+            villageList1:[],
+            classList:[],
+            streamList:[],
+            calssArray:{},
+            streamArray:{},
+
+            form: new form({
+                id: '',parent_id:'',name:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',location:'',
+                geoLocated:'0',senSchool:'0',coLocated:'0',parentSchool:''
+                ,name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
+                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:''
+                ,class:[],stream:[],class1:[],stream1:[],class2:[],stream2:[]
+                
+            }), 
         } 
     },
-    methods:{
-        loadestablishmentapplicationdetails(appId,type){
-            axios.get('organization/loadbifurcationForVerification/'+appId+'/'+type)
-            .then((response) => {  
-                let data=response.data.data;
-                this.getOrgDetails(data.parentOrgId);
-                this.applicaitondetailsform.applicationNo               =   data.applicationNo;
-                this.applicaitondetailsform.application_date            =   data.application_date;
-                this.applicaitondetailsform.service                     =   data.service;
-                this.applicaitondetails=data;
-                this.class_section                                      =   data.class_section;
-                this.sectionList                                        =   data.sections;
-                if(response.data.app_stage.toLowerCase().includes('verifi')){
-                    $('#verifyId').show();
-                }
-                if(response.data.app_stage.toLowerCase().includes('approve')){
-                    $('#approveId').show();
-                }
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
-        getOrgDetails(id){
-            let uri = '/organization/loadCurrentOrgDetails/'+id;
-            axios.get(uri)
-            .then(response =>{
-                this.org1_details=response.data.data;
-                this.org1_details.village=response.data.data.village.data.name;
-                this.org1_details.gewog=response.data.data.gewog.data.name; 
-                this.org1_details.dzongkhag=response.data.data.dzongkhag.data.name;
-            });
-        },
+    methods: {
+
+        /**
+         * method to remove error
+         */
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
         }, 
-        shownexttab(nextclass){
-            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
-                let action=true;
-                if(nextclass=="reject" && this.applicaitondetailsform.remarks==""){
-                    $('#remarks_err').html('Please mention remarks');
-                    $('#remarks').addClass('is-invalid');
-                    action=false;
+
+        /**
+         * method to get level in dropdown
+         */
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+                for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
                 }
-                if(action){
-                    Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
-                        icon: 'info',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes!',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.applicaitondetailsform.actiontype=nextclass;
-                            this.applicaitondetailsform.post('organization/updateBifurcationApplication')
-                            .then((response) => {
-                                if(response!=""){
-                                    Toast.fire({  
-                                        icon: 'success',
-                                        title: 'Application details has been updated.'
-                                    });
-                                    this.$router.push({path:'/tasklist'});
-                                } 
-                            })
-                            .catch((err) => {
-                                Swal.fire(
-                                    'error!',
-                                    'Not able to update this application details. Please contact system administrator.Error: '+err,
-                                    'error',
-                                ); 
-                                console.log("Error:"+err)
-                            })
-                        }
-                    });
-                }
+            });
+        },
+        /**
+         * method to get location in dropdown
+         */
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.locationList = data;
+            });
+        },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getCategory(){
+            let level = $('#level option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd").show();
             }
             else{
-                $('#tabhead >li >a').removeClass('active');
-                $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-                $('.'+nextclass+' >a').addClass('active');
-                $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-                $('.'+nextclass+' >a').removeClass('disabled');
-                $('.tab-content-details').hide();
-                $('#'+nextclass).show().removeClass('fade');
+                $(".eccd").hide();
             }
         },
+
+        /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getCategory1(){
+            let level = $('#level1 option:selected').text();
+            if(level == "ECCD"){
+                $(".eccd1").show();
+            }
+            else{
+                $(".eccd1").hide();
+            }
+        },
+
+        /**
+         * method to get level in dropdown
+         */
+        getLevel1(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList1 = data;
+            });
+        },
+        /**
+         * method to get location in dropdown
+         */
+        getLocation1(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.locationList1 = data;
+            });
+        },
+
+        /**
+         * method to get active dzongkhag list
+         */
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.dzongkhagList =  data.data;
+                for(let i=0;i<data.data.length;i++){
+                    this.dzongkhagarray[data.data[i].id] = data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("dzo fetch err: "+error)
+            });
+        },
+
+        /**
+         * method to get active dzongkhag list
+         */
+        loadactivedzongkhagList1(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.dzongkhagList1 =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get gewog list
+         */
+        async getgewoglist(id){
+            let dzoId=$('#dzongkhag').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        /**
+         * method to get gewog1 list in dropdown
+         */
+        async getgewoglist1(id){
+            let dzoId=$('#dzongkhag1').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list1 = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        async getgewogarray(dzo_id,gewog_id){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzo_id;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                for(let i=0;i<data.data.length;i++){
+                    this.gewog_list_array[data.data[i].id] = data.data[i].name; 
+                }
+                this.selected_gewog=gewog_list_array[gewog_id];
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        
+        /**
+         * method to get village list
+         */
+        async getvillagelist(id){
+            let gewogId=$('#gewog').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        /**
+         * method to get village1 list
+         */
+        async getvillagelist1(id){
+            let gewogId=$('#gewog1').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList1 = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        /**
+         * method to get class in checkbox
+         */
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                this.classList = response.data;
+                let data=response.data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
+            });
+        },
+        getClass:function(){
+            axios.get('/loadCommons/getClassByType/school')
+              .then(response => {
+                this.classList = response.data;
+                let data=response.data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
+            });
+        },
+        /**
+         * method to get stream in checkbox
+         */
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                this.streamList = response.data;
+                let data=response.data;
+                for(let i=0;i<data.length;i++){
+                    this.streamArray[data[i].id] = data[i].stream; 
+                }
+            });
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if(id=="parent_id"){
+                this.form.parent_id=$('#parent_id').val();
+                this.getOrgDetails($('#parent_id').val());
+            }
+            if(id=="dzongkhag"){
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.getgewoglist();
+            }
+            if(id=="dzongkhag1"){
+                this.form.dzongkhag1=$('#dzongkhag1').val();
+                this.getgewoglist1();
+            }
+            if(id=="gewog"){
+                this.form.gewog=$('#gewog').val();
+                this.getvillagelist();
+            }
+            if(id=="gewog1"){
+                this.form.gewog1=$('#gewog1').val();
+                this.getvillagelist1();
+            }
+            if(id=="chiwog"){
+                this.form.chiwog=$('#chiwog').val();
+            }
+            if(id=="chiwog1"){
+                this.form.chiwog1=$('#chiwog1').val();
+            }
+            
+        },
+
+        /**
+         * method to show next and previous tab
+         */
+        shownexttab(nextclass){ 
+            if(nextclass=="final-tab"){ 
+                Swal.fire({
+                    text: "Are you sure you wish to save this details ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.form.post('organization/saveBifurcation')
+                        .then((response) => {
+                            if(response!=""){
+                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'restr_acknowledgement',params: {data:message}});
+                                Toast.fire({  
+                                    icon: 'success',
+                                    title: 'Bifurcation details has been submitted for further action.'
+                                }); 
+                            } 
+                            
+                        })
+                        .catch((er) => {
+                            console.log("Error:"+er)
+                     })
+                    }
+                });
+            }
+            else{
+                this.change_tab(nextclass);
+            }
+        },
+        /**
+         * method to change tabs
+         */
+        change_tab(nextclass){
+            $('#tabhead >li >a').removeClass('active');
+            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').addClass('active');
+            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').removeClass('disabled');
+            $('.tab-content-details').hide();
+            $('#'+nextclass).show().removeClass('fade');
+        },
+        getOrgDetails(org_id){
+            axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.parent_id=data.id;
+                this.getgewogarray(data.dzongkhagId,data.gewogId);
+                this.data=data;
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
+            axios.get(uri)
+            .then(response => {
+                this.orgList = response.data.data;
+            });
+        },
+
     },
+    created(){ 
+        // this.getOrgDetails();
+        this.getOrgList();
+        this.getLevel();
+        this.getLocation();
+        this.getLevel1();
+        this.getLocation1();
+       
+        
+    },
+
     mounted(){
-        this.applicaitondetailsform.applicationNo=this.$route.params.data.application_number;
-        this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+
+        this.getClass();
+        this.getStream();
+        this.loadactivedzongkhagList();
+        this.loadactivedzongkhagList1();
+        // this.checkPendingApplication();
     }
 }
 </script>

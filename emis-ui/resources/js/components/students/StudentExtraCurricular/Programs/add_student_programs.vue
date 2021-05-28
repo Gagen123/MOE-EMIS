@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Program/Club:<i class="text-danger">*</i></label>
                     <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
                 </div> 
@@ -19,7 +19,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Supported By:<span class="text-danger">*</span></label> 
                     <select v-model="student_form.supporter" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('supporter') }" class="form-control select2" name="supporter" id="supporter">
-                        <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="supporter"></has-error>
                 </div>
@@ -54,7 +54,7 @@
                                     <td>                                
                                         <select name="role" id="role" class="form-control" v-model="role.role" :class="{ 'is-invalid': student_form.errors.has('role') }">
                                             <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                         </select>
                                     </td>
                                     <td>                                

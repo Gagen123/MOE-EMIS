@@ -254,7 +254,8 @@ export default {
                 this.levelList = data;
             });
         },
-        getOrgList(uri = '/organization/getOrgList'){
+        //getOrgList(uri = '/organization/getOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
@@ -438,7 +439,7 @@ export default {
         shownexttab(nextclass){ 
             if(nextclass=="final-tab"){ 
                 Swal.fire({
-                    text: "Are you sure you wish to safe this details ?",
+                    text: "Are you sure you wish to save this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

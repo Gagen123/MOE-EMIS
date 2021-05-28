@@ -117,4 +117,13 @@ class LocationsController extends Controller
     public function getDisasterListInCheckbox(){
         return Disaster::where('status',1)->get();
     }
+
+    /**
+     * get the location details
+     */
+
+    public function getLocationDetails($orgId){
+        $location = Locations::where('organizationId',$orgId)->first();
+        return $location;
+    }
 }
