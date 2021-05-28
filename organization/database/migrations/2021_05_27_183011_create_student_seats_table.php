@@ -16,8 +16,8 @@ class CreateStudentSeatsTable extends Migration
         Schema::create('student_seats', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('OrgOrganizationId',36);
-            $table->string('year');
-            $table->string('no_of seats');
+            $table->char('year');
+            $table->char('no_of seats');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();
