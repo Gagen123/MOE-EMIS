@@ -117,7 +117,8 @@ export default {
             });
         },
 
-        getOrgList(uri = '/organization/getOrgList'){
+        //getOrgList(uri = '/organization/getOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;

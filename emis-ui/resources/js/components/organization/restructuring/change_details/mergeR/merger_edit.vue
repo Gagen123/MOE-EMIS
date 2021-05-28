@@ -357,7 +357,8 @@ export default {
         /**
          * method to get current school unbder current user
          */
-        getOrgList(uri = '/organization/getOrgList'){
+        //getOrgList(uri = '/organization/getOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;

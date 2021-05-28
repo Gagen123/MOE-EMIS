@@ -318,7 +318,7 @@ export default {
                 id: '',class:[], stream:[], status:'submitted'
             }),
             form: new form({
-                id: '',applicationNo:'',actiontype:'',remarks:''
+                id: '',applicationNo:'',actiontype:'',remarks:'',screen_id:'',work_status:'',
             }), 
         } 
     },
@@ -327,9 +327,10 @@ export default {
             axios.get('organization/loadMergerForVerification/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
-                this.getOrgDetails(data.oldOrganizationId1,1);
-                this.getOrgDetails(data.oldOrganizationId2,2);
-                this.applicaitondetailsform.applicationNo               =   data.applicationNo;
+                this.getOrgDetails(data.merger.oldOrganizationId,1);
+                this.getOrgDetails(data.merger.oldOrganizationId2,2);
+                this.applicaitondetailsform.applicationNo               =   data.application_no;
+                this.form.applicationNo                                =   data.application_no;
                 this.applicaitondetailsform.application_date            =   data.application_date;
                 this.applicaitondetailsform.service                     =   data.service;
                 this.applicaitondetailsform.proposedName                =   data.proposedName;
@@ -345,13 +346,15 @@ export default {
                 this.applicaitondetailsform.coLocated                   =   data.isColocated;
                 this.proprietorList                                     =   data.proprietor;
                 this.class_section                                      =   data.class_section;
-                this.sectionList                                        =   data.sections;
+                this.form.screen_id                                          =   response.data.screen_id;
+                this.form.work_status                                        =   response.data.sequence;
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
+               
             })
             .catch((error) => {  
                 console.log("Error......"+error);

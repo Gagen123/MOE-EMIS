@@ -306,6 +306,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
             $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
+            $router->post('/updateMergerApplication', 'restructuring\MergerController@updateMergerApplication');
 
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
