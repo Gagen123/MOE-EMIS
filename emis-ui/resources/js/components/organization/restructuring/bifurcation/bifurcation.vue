@@ -9,7 +9,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Current Details </label>                              
+                            <label class="mb-0.5">Current Organization Details </label>                              
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
@@ -730,7 +730,8 @@ export default {
                 console.log("Error:"+error);
             }); 
         },
-        getOrgList(uri = '/organization/getOrgList'){
+        //getOrgList(uri = '/organization/getOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;

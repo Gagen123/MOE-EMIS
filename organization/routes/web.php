@@ -301,12 +301,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveBifurcation', 'restructuring\BifurcationController@saveBifurcation');
             $router->get('/loadbifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadbifurcationForVerification']);
             // $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
-
+            $router->post('/updateBifurcation', 'restructuring\BifurcationController@updateBifurcation');
         });
 
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
             $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
+            $router->post('/updateMergerApplication', 'restructuring\MergerController@updateMergerApplication');
 
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
@@ -326,5 +327,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
         $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
+        $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
+        
     });
 });

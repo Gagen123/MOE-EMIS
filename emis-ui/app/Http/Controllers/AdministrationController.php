@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 use Session;
 use GuzzleHttp\Client;
-use App\Helper\EmisSe   rvice;
+use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
 use Illuminate\Http\Request;
