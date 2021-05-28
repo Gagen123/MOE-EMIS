@@ -319,7 +319,7 @@ export default {
             }
             else if(nextclass=="final-tab"){
                 Swal.fire({
-                    text: "Are you sure you wish to safe this details ?",
+                    text: "Are you sure you wish to save this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
