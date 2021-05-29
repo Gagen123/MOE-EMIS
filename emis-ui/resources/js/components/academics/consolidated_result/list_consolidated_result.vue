@@ -64,9 +64,9 @@ export default {
                     classSections.forEach(item1 => {
                         if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
                             studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
-                            studentsConsolidatedResult[index].class = item1.class
-                            studentsConsolidatedResult[index].stream = item1.stream
-                            studentsConsolidatedResult[index].section = item1.section
+                            studentsConsolidatedResult[index].class = item1.org_class_id
+                            studentsConsolidatedResult[index].stream = item1.org_stream_id
+                            studentsConsolidatedResult[index].section = item1.org_section_id
                             //   if(!studentsConsolidatedResult[index].class_stream_section){
                             //     studentsConsolidatedResult[index].class_stream_section = item1.class + ' ' + item1.stream + ' ' + item1.section
                             // }
