@@ -61,6 +61,6 @@ class LoadOrganizationController extends Controller{
         t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1 
         JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id 
         LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
-        return $section;
+        return $this->successResponse($section);
     }
 }

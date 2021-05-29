@@ -31,8 +31,8 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
-                                <td>{{item3.roll_no}}</td>
-                                <td>{{ item3.name }}</td>
+                                <td>{{item3.CidNo}}</td>
+                                <td>{{ item3.Name }}</td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
                                      {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
                                     <!-- <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)"> -->
@@ -169,7 +169,7 @@
         this.dt = $("#view-consolidated-result-table").DataTable({
             scrollX: true,
             scrollCollapse: true,
-            fixedColumns:   {
+            "fixedColumns":   {
                 leftColumns: 2
             },
             columnDefs: [

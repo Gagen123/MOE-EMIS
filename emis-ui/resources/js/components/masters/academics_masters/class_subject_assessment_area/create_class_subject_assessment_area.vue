@@ -1,20 +1,22 @@
 <template>
     <div>
         <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
-            <div class="ml-2 row form-group">
+            <div class="ml-0 row form-group">
                 <div class="mr-3">
-                    <strong>Class: </strong> {{ class_name}} {{stream_name}}
+                    <strong>Class: </strong> {{ class_stream }} 
                 </div>
                 <div class="mr-3">
-                    <strong>Term: </strong> {{term_name}}
+                    <strong>Term: </strong> {{term_name}} 
+                    <span v-if="sub_dzo_name && term_dzo_name">( {{term_dzo_name}} )</span>
                 </div>
                 <div class="mr-3">
                     <strong>Subject: </strong> {{sub_name}}
+                    <span v-if="sub_dzo_name">( {{sub_dzo_name}} )</span>
                 </div>
             </div>      
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="class_subject_assessment_area-create-table" class="table table-sm table-bordered table-striped">
+                    <table id="class_subject_assessment_area-create-table" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Assessment Area</th>
@@ -28,7 +30,7 @@
                                     <div class="form-check">
                                         <input v-model="classSubAssessmentList[index].assmt_area_selected" :value="item.aca_assmt_area_id" class="form-check-input" type="checkbox" id="assessment_area">
                                         <label class="form-check-label" for="assessment_area">
-                                            {{item.assessment_area}}
+                                            {{item.assessment_area}} <span v-if="item.dzo_name">( {{item.dzo_name}} )</span>
                                         </label>
                                     </div>
                                 </td>
@@ -64,10 +66,11 @@ export default {
             org_stream_id:'',
             aca_sub_id:'',
             aca_assmt_term_id:'',
-            class_name:'',
-            stream_name:'',
+            class_stream:'',
             term_name:'',
             sub_name:'',
+            sub_dzo_name:'',
+            term_dzo_name:'',
             input_type:'',
             classSubAssessmentList:[],
             dt:''
@@ -95,7 +98,7 @@ export default {
         },
         save(){
             let selectedclassSubAssessment = this.classSubAssessmentList.filter(classSubAssessment=>classSubAssessment.assmt_area_selected)
-            axios.post('/masters/saveclassSubjectAssessment', {aca_assmt_term_id:this.aca_assmt_term_id,aca_sub_id:this.aca_sub_id, org_class_id:this.org_class_id,org_stream_id:this.org_stream_id,data:selectedclassSubAssessment})
+            axios.post('/masters/saveclassSubjectAssessment', {aca_assmt_term_id:this.aca_assmt_term_id,aca_sub_id:this.aca_sub_id,class_stream:this.class_stream, org_class_id:this.org_class_id,org_stream_id:this.org_stream_id,data:selectedclassSubAssessment})
                  .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -115,13 +118,16 @@ export default {
         
     },
     created() {
+        
         this.org_class_id=this.$route.params.data.org_class_id;
         this.org_stream_id=this.$route.params.data.org_stream_id;
         this.aca_sub_id=this.$route.params.data.aca_sub_id;
         this.aca_assmt_term_id = this.$route.params.data.aca_assmt_term_id
-        this.class_name=this.$route.params.data.class;
-        this.stream_name=this.$route.params.data.stream;
+        this.class_stream = this.$route.params.data.class_stream;
         this.sub_name = this.$route.params.data.sub_name;
+        this.sub_dzo_name = this.$route.params.data.sub_dzo_name;
+        this.term_dzo_name = this.$route.params.data.term_dzo_name;
+        this.term_name = this.$route.params.data.term_name;
         this.term_name = this.$route.params.data.term_name;
         this.input_type = this.$route.params.data.input_type;
     },

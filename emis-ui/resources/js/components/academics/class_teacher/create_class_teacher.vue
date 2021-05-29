@@ -18,12 +18,12 @@
                                     <input v-model="classTeacherList[index].org_class_id" class="form-control" type="hidden">
                                     <input v-model="classTeacherList[index].org_stream_id" class="form-control" type="hidden">
                                     <input v-model="classTeacherList[index].org_section_id" class="form-control" type="hidden">
-                                    {{ item.class }} {{item.stream}} {{ item.section }}
+                                    {{ item.class_stream_section }}
                                 </td>                                                                              
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <select  v-model="classTeacherList[index].stf_staff_id" class="form-control editable_fields" id="class_teacher_id"> 
-                                            <option selected value="">--SELECT--</option>
+                                        <select v-model="classTeacherList[index].stf_staff_id" class="form-control editable_fields" id="class_teacher_id"> 
+                                            <option selected="selected" value="">---SELECT CLASS TEACHER---</option>
                                             <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span> 
                                                 {{ item1.name }}, {{item1.position_title}}
@@ -77,6 +77,7 @@ export default {
                     finalTeachers.push(obj);
                 }))
                 this.teacherList = finalTeachers
+                // console.log(this.teacherList);
             }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -85,20 +86,36 @@ export default {
         },
         async classTeacher(){ 
             try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
+                let finalClassStreamsSection = [];
+                let renameId = []
+                classSections.forEach((item => {
+                    if(item.stream && item.section){
+                       renameId['class_stream_section'] = item.class+' '+item.stream+' '+item.section
+                    }else if(item.stream){
+                        renameId['class_stream_section'] = item.class+' '+item.stream
+                    }else{
+                        renameId['class_stream_section'] = item.class
+                    }
+                    renameId['org_class_id'] = item.org_class_id;
+                    renameId['org_stream_id'] = item.org_stream_id;
+                    renameId["org_section_id"] = item.org_section_id;
+                    renameId['org_id'] = item.org_id;
+                    renameId['stf_staff_id'] = "";
+                    const obj = {...renameId};
+                    finalClassStreamsSection.push(obj);
+                }))
                 let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
 
-                classSections.forEach((classSection,index) => {
-                    classSection.org_class_id = classSection.class
-                    classSection.org_stream_id = classSection.stream
-                    classSection.org_section_id = classSection.section
+                finalClassStreamsSection.forEach((classSection,index) => {
                     classTeachers.forEach(item => {
                         if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
-                            classSections[index].stf_staff_id = item.stf_staff_id
+                            finalClassStreamsSection[index].stf_staff_id = item.stf_staff_id
                         }
                     })
                 })
-                this.classTeacherList = classSections
+                this.classTeacherList = finalClassStreamsSection
+
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -124,7 +141,7 @@ export default {
         this.classTeacher();
         this.getTeacher();
         this.dt = $("#class-teacher-table").DataTable({
-              columnDefs: [
+            columnDefs: [
                 { width: 50, targets: 0},
             ],
         })

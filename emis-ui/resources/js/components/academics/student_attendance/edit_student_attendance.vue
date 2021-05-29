@@ -1,147 +1,131 @@
 <template>
-    <div>
-        <form @submit.prevent="save" class="bootbox-form" id="student_attendance">
-             <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                         <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
-                    </div>
-                    <div class="mt-2 col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                       <label for="attendance_date" class="mb-1">Date:</label>
-                        <input id="attendance_date" v-model="attendance_date" type="date" class="form-control">
-                        <has-error :form="form" field="display_order"></has-error>
-                    </div>
-                </div>   
-            <div class="form-group row">
+   <div>
+        <form @submit.prevent="save" class="bootbox-form">
+            <div class="ml-0 row form-inline">
+                <div class="mr-3">
+                    <strong>Class: </strong> {{ class_stream_section }} 
+                </div>
+                <div>
+                    <strong>Date:</strong>
+                    <input v-model="attendance_date" type="date" class="form-control form-control-sm" id="dateInput">
+                </div>
+            </div>  
+            <div v-if="studentList.length" class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="edit-student-attendance-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                    <table id="student-attendance-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Roll No</th>
+                                <th>Student Code</th>
                                 <th>Name</th>
                                 <th>Present</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
-                            <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{item1.roll_no}}</td>
-                                <td>{{ item1.name }}</td>
-                                <td v-for="(item2, index2) in assessmentAreaList" :key="index2">
-                                    <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
-                                    <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
-                                    <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.1" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
-                                    <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control" id="assmt_area" type="text">
-                                    <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control  editable_fields" :id="item1.assessment_area"> 
-                                        <option selected value="">--SELECT--</option>
-                                        <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
-                                    </select>
+                            <tr v-for="(item, index) in studentList" :key="index">
+                                <td>{{ item.CidNo }}</td>
+                                <td>
+                                    <input v-model='studentList[index].std_student_id' type="hidden">
+                                    {{ item.Name }}
                                 </td>
+                                <td>
+                                    <div class="form-check">
+                                        <input  v-model="item.is_present" class="form-check-input" type="checkbox" id="present">
+                                    </div>
+                                </td>                                                                             
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <div class="card-footer text-right">
-                <button type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize</button>
-            </div>
+                <button v-if="studentList.length" type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button v-if="studentList.length" type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+            </div>        
         </form>
-    </div>  
-
+    </div>     
 </template>
- <script>
- export default {
+
+<script>
+export default {
     data(){
-        return{
-            studentAttendanceList:[],
-            dt:''
+        return {
+            studentList:[],
+            class_stream_section:'',
+            attendance_date:'',
+            dt:'',
+            action:'edit'
         }
     },
     methods:{
-        async loadStudentAttendance(){
-            let uri = 'academics/loadStudentAssessments'
-            uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&classId='+this.classId)
-            if(this.streamId !== null){
+        getStudents(){
+           let uri = 'academics/getStudentsForAttendance'
+           uri += ('?classId='+this.classId)
+           if(this.streamId !== null){
                     uri += ('&streamId='+this.streamId)
                 }
-            if(this.sectionId !== null){
-                uri += ('&sectionId='+this.sectionId)
-            }
-            try{
-                let studentAssesssments = await axios.get(uri).then(response => response.data)
-                this.assessmentAreaList = studentAssesssments.assessmentAreas
-                this.ratingList = studentAssesssments.ratings
-                this.studentAssessmentList = studentAssesssments.studentAssessments
-            }catch(e){
-                if(e.toString().includes("500")){
-                $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                if(this.sectionId !== null){
+                    uri += ('&sectionId='+this.sectionId)
                 }
-            }                    
-        },
-        save(action=""){
-            let params = {org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,aca_sub_id:this.aca_sub_id, aca_assmt_term_id:this.aca_assmt_term_id,data:this.studentAssessmentList};
-            if(action == "finalize"){
-                params.finalize = 1
-                Swal.fire({
-                    title: 'You cannot edit the result after finalizing. Are you sure you want to finalize?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes',
-                    }).then((result) => {
-                        if(result.isConfirmed) {
-                            axios.post('/academics/saveStudentAssessment', params)
-                                .then(() => {
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Data saved successfully.'
-                                    })
-                                    this.$router.push('/list-term-result');
-                                })
-                                .catch(function(error){
-                                this.errors = error;
-                            });
-                        }
-                    })
-                }else{
-                    axios.post('/academics/saveStudentAssessment', params)
-                        .then(() => {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Data saved successfully.'
-                            })
-                            this.$router.push('/list-term-result');
+                axios.get(uri)
+                .then(response => {
+                    let students = response.data.student
+                    let studentAttendanceDetail = response.data.studentAttendanceDetail
+                    console.log(studentAttendanceDetail);
+                    
+                    students.forEach((item,index)=>{
+                        students[index].is_present = 1
+                        studentAttendanceDetail.forEach((attendanceDetail)=>{
+                            if(item.std_student_id == attendanceDetail.std_student_id){
+                                students[index].is_present = 0
+                            }
                         })
-                        .catch(function(error){
-                        this.errors = error;
-                    });
-                }
-            }
-        },
-        mounted(){ 
-            this.loadStudentAttendance()
-            $('#attendance_date').datepicker({
-                daysOfWeekDisabled: [0]
-            });
-            this.dt = $("#assessment-term-table").DataTable()
-        },
-        created() {
-            this.classId=this.$route.params.data.org_class_id;
-            this.streamId=this.$route.params.data.org_stream_id;
-            this.sectionId=this.$route.params.data.org_section_id;
-            this.className=this.$route.params.data.class;
-            this.streamName=this.$route.params.data.stream;
-            this.section=this.$route.params.data.section;
-        },
-        watch: {
-            studentAttendanceList(val) {
-                this.dt.destroy();
-                this.$nextTick(() => {
-                    this.dt = $("#edit-student-attendance-table").DataTable()
+                    })
+                   this.studentList = students
+
+                }).catch(function (error) {
+                    if(error.toString().includes("500")){
+                        $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                    }
                 });
-            }
+        },
+        save(){
+            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,attendance_date:this.attendance_date,data:this.studentList})
+                .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved successfully.'
+                    })
+                    this.$router.push('/list-student-attendance');
+                })
+                .catch(function(error){
+                this.errors = response.error;
+            });
         }
+       
+    },
+    mounted(){
+        this.getStudents()
+        this.dt = $("#student-attendance-table").DataTable({
+            columnDefs: [
+                { width: 20, targets: 0},
+            ],
+        })
+    }, 
+    created() {
+        this.class_stream_section =this.$route.params.data.class_stream_section;
+        this.attendance_date = this.$route.params.data.attendance_date;
+        this.classId=this.$route.params.data.org_class_id;
+        this.streamId=this.$route.params.data.org_stream_id;
+        this.sectionId=this.$route.params.data.org_section_id;
+        this.id=this.$route.params.data.id;
+    },
+    watch: {
+        studentList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#student-attendance-table").DataTable()
+            });
+        }
+    }
 }
 </script>
-

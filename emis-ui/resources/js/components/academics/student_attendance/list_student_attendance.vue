@@ -8,13 +8,15 @@
                             <tr>
                                 <th>Sl#</th>
                                 <th>Class</th>
+                                <th>Attendance Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in classStremSectionList" :key="index">
-                                 <td>{{ index+1 }}</td>
-                                 <td> {{ item.org_class_id }} {{ item.org_stream_id }}  {{ item.org_section_id}} </td>
+                                <td>{{ index+1 }}</td>
+                                <td> {{ item.class_stream_section}}</td>
+                                <td> {{ item.attendance_date}}</td>
                                 <td>
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
                                 </td>                                                                               
@@ -42,22 +44,22 @@ export default {
         },
         async loadClassStreamSection(){
              try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let studentAttendance = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
-                studentAttendance.forEach((classTeacher,index) => {
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
+                let studentsAttendance = await axios.get('academics/loadStudentAttendance').then(response => response.data.data)
+                studentsAttendance.forEach((attendance,index) => {
                     classSections.forEach(item => {
-                        if(classTeacher.org_class_id == item.class && (classTeacher.org_stream_id == item.stream || (classTeacher.org_stream_id == null && item.stream == null)) && (classTeacher.org_section_id == item.org_section_id || (classTeacher.section == null && item.section == null))){
-                            classTeachers[index].org_class_id = item.class;
-                            classTeachers[index].org_stream_id = item.stream
-                            classTeachers[index].org_section_id = item.section
-                            // classTeachers[index].class = item.class;
-                            // classTeachers[index].stream = item.stream
-                            // classTeachers[index].section = item.section
+                        if(attendance.org_class_id == item.org_class_id && (attendance.org_stream_id == item.org_stream_id || (attendance.org_stream_id == null && item.org_stream_id == null)) && (attendance.org_section_id == item.org_section_id || (attendance.org_section_id == null && item.org_section_id == null))){
+                            if(item.stream && item.section){
+                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
+                            }else if(item.stream){
+                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream
+                            }else{
+                                studentsAttendance[index]['class_stream_section'] = item.class
+                            }
                         }
                     })
                 });
-                this.classStremSectionList = classTeachers
-                console.log(this.classStremSectionList)
+                this.classStremSectionList = studentsAttendance
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -72,7 +74,11 @@ export default {
     },
     mounted(){ 
         this.loadClassStreamSection();
-        this.dt = $("#list-student-attendence-table").DataTable()
+        this.dt = $("#list-student-attendence-table").DataTable({
+               columnDefs: [
+                { width: 2, targets: 0},
+            ],
+        })
     },
     watch: {
         classStremSectionList(val) {

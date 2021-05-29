@@ -19,15 +19,16 @@
                                     <input v-model="subjectTeacherList[index].org_class_id" class="form-control" type="hidden">
                                     <input v-model="subjectTeacherList[index].org_stream_id" class="form-control" type="hidden">
                                     <input v-model="subjectTeacherList[index].org_section_id" class="form-control" type="hidden">
-                                    {{ item.class }} {{item.stream}} {{ item.section }}
+                                    {{ item.class_stream_section }} 
                                 </td> 
                                 <td>
                                     <input v-model="subjectTeacherList[index].aca_sub_id" class="form-control" type="hidden">
                                     {{ item.subject }}
+                                    <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
                                 </td>                                                                               
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <select  v-model="subjectTeacherList[index].stf_staff_id" class="form-control  editable_fields" id="class_teacher_id"> 
+                                        <select v-model="subjectTeacherList[index].stf_staff_id" class="form-control editable_fields" id="class_teacher_id"> 
                                             <option  selected="selected" value="">NOT OFFERRED IN THE SCHOOL</option>
                                             <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span> 
@@ -92,35 +93,37 @@ export default {
          async getsubjectTeachers(){
              let finalSubjectTeachers =[];
              try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data)
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data.data)
                 let subjectTeachers = await axios.get('academics/getSubjectTeacher').then(response => response.data.data)
-
                 classSections.forEach((classSection) => {
-                    classSection.org_class_id = classSection.class
-                    classSection.org_stream_id = classSection.stream
-                    classSection.org_section_id = classSection.section
                     subjectTeachers["classSubjects"].forEach(item => {
                         let aa = [];
-                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
+                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null))){
+                            if(classSection.stream && classSection.section){
+                                aa['class_stream_section'] = classSection.class+' '+classSection.stream+' '+classSection.section
+                            }else if(classSection.stream){
+                                aa['class_stream_section'] = classSection.class+' '+classSection.stream
+                            }else{
+                                aa['class_stream_section'] = classSection.class
+                            }
                             aa["org_class_id"] = classSection.org_class_id;
                             aa["org_stream_id"] = classSection.org_stream_id;
                             aa["org_section_id"] = classSection.org_section_id;
                             aa["aca_sub_id"] = item.aca_sub_id;
-                            aa["class"] = classSection.class;
                             aa["org_id"] = classSection.org_id;
-                            aa["stream"] = classSection.stream;
-                            aa["section"] = classSection.section;
                             aa["subject"] = item.name;
+                            aa["dzo_name"] = item.dzo_name;
                             aa["stf_staff_id"] = "";
                             const obj = {...aa};
                             finalSubjectTeachers.push(obj);
                         }
                     });
                 });
+                console.log(finalSubjectTeachers);
                 finalSubjectTeachers.forEach((finalSubjectTeacher,index) => {
                     subjectTeachers["classSubjectTeachers"].forEach(classSubjectTeacher => {
                         if(finalSubjectTeacher.aca_sub_id == classSubjectTeacher.aca_sub_id && finalSubjectTeacher.org_class_id == classSubjectTeacher.org_class_id && (finalSubjectTeacher.org_stream_id == classSubjectTeacher.org_stream_id || (finalSubjectTeacher.org_stream_id == null && classSubjectTeacher.org_stream_id == null)) && (finalSubjectTeacher.org_section_id == classSubjectTeacher.org_section_id || (finalSubjectTeacher.org_section_id == null && classSubjectTeacher.org_section_id == null))){
-                            finalSubjectTeachers[index].stf_staff_id = classSubjectTeacher.stf_staff_id
+                               finalSubjectTeachers[index].stf_staff_id = classSubjectTeacher.stf_staff_id
                         }
                     });
                 });
@@ -149,7 +152,12 @@ export default {
     mounted(){ 
         this.getsubjectTeachers();
         this.getTeacher();
-        this.dt = $("#subject-teacher-table").DataTable()
+        this.dt = $("#subject-teacher-table").DataTable({
+            columnDefs: [
+                { width: 2, targets: 0},
+                { width: 200, targets: [1,2]},
+            ],
+        })
 
         
     },

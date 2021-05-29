@@ -3,7 +3,7 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject Name:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="aca_sub_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }">
                             <option value=""> --Select--</option>
@@ -11,14 +11,24 @@
                         </select> 
                         <has-error :form="form" field="aca_sub_category_id"></has-error>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Assessment Area:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Dzongkha Assessment Area:</label>
+                        <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('dzo_name') }" id="dzo_name" @change="remove_err('dzo_name')" type="text">
+                        <has-error :form="form" field="dzo_name"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Assessment Area Code:<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Rating Type:</label> 
                          <select v-model="form.aca_rating_type_id" class="form-control select2" id="aca_rating_type_id" :class="{ 'is-invalid': form.errors.has('aca_rating_type_id') }"> -->
                             <option value=""> --Select--</option>
@@ -26,14 +36,14 @@
                         </select>
                         <has-error :form="form" field="aca_sub_group_id"></has-error>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
-                        <input class="form-control text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
+                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
                         <has-error :form="form" field="order"></has-error>
                     </div>
                 </div>  
                 <div class="row form-group">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br> 
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
@@ -58,6 +68,8 @@ export default {
                 aca_sub_id:'',
                 aca_rating_type_id:'',
                 name: '',
+                dzo_name:'',
+                code:'',
                 display_order:'',
                 status: 1,
                 record_type:'assessment_area',
@@ -98,9 +110,14 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
+                this.form.aca_sub_id = '';
+                this.form.aca_rating_type_id = '';
+                this.form.name = '';
+                this.form.dzo_name = '';
+                this.form.name = '';
+                this.form.code = '';
+                this.form.display_order = '';
                 this.form.status= 1;
-                this.form.display_order=''
             }
             if(type=="save"){
                 this.form.post('/masters/saveAcademicMasters',this.form)
@@ -141,6 +158,9 @@ export default {
         this.form.aca_rating_type_id=this.$route.params.data.aca_rating_type_id;
         this.form.display_order = this.$route.params.data.display_order;
         this.form.name=this.$route.params.data.assessment_area_name;
+        this.form.dzo_name =this.$route.params.data.area_dzo_name;
+        this.form.code = this.$route.params.data.assessment_area_name
+        this.form.code =this.$route.params.data.code;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     },

@@ -6,7 +6,6 @@ use Exception;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use AcaResultConsolidatedDetail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\academics\ClassTeacher;
@@ -16,6 +15,9 @@ use App\Models\academics\ResultConsolidated;
 use App\Models\academics\StudentElectiveSubject;
 use App\Models\academics\StudentAssessmentDetail;
 use App\Models\academics\ResultConsolidatedDetail;
+use App\Models\academics\StudentAttendance;
+use App\Models\academics\StudentAttendanceDetail;
+
 
 
 class AcademicController extends Controller
@@ -55,9 +57,6 @@ class AcademicController extends Controller
         DB::transaction(function() use($request) {
             $query = 'DELETE FROM aca_class_subject_teacher WHERE org_id = ?';
             DB::delete($query, [$request['data'][0]['org_id']]);
-            try{
-
-          
             foreach($request['data'] as $subjectTeacher){
                 if(array_key_exists("stf_staff_id", $subjectTeacher) && array_key_exists("aca_sub_id", $subjectTeacher) && $subjectTeacher["stf_staff_id"] && $subjectTeacher["aca_sub_id"]){
                     $subjectTeacher['created_by'] =  $request['user_id'];
@@ -66,15 +65,13 @@ class AcademicController extends Controller
                     SubjectTeacher::create($subjectTeacher);
                 }
             }
-        }catch(Exception $e){
-           dd($e);
-        }
+    
         });
         return $this->successResponse(1, Response::HTTP_CREATED);
        
     }
     public function getSubjectTeacher($orgId){
-        $classSubjects = DB::select('SELECT t1.org_class_id, t1.org_stream_id, t1.aca_sub_id,t2.name FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t2.assessed_by_class_teacher<>1');
+        $classSubjects = DB::select('SELECT t1.org_class_id, t1.org_stream_id, t1.aca_sub_id,t2.name, t2.dzo_name FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t2.assessed_by_class_teacher<>1');
         $classSubjectTeachers = DB::select('SELECT org_id, stf_staff_id, org_class_id, org_stream_id,org_section_id, aca_sub_id FROM aca_class_subject_teacher WHERE org_id = ?',[$orgId]);
         return $this->successResponse(["classSubjects"=>$classSubjects, "classSubjectTeachers"=>$classSubjectTeachers]);
     }
@@ -84,7 +81,7 @@ class AcademicController extends Controller
         ); 
     }   
     public function getElectiveSubjects($classId, $streamId=""){
-        $query = 'SELECT t1.aca_sub_id,t2.name AS subject FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t1.is_elective = 1 AND t1.org_class_id = ?';
+        $query = 'SELECT t1.aca_sub_id,t2.name AS subject, t2.dzo_name FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t1.is_elective = 1 AND t1.org_class_id = ?';
         $params = [$classId];
         if($streamId){
           $query .= ' AND t1.org_stream_id = ?';
@@ -113,6 +110,73 @@ class AcademicController extends Controller
                 }
             }
         });
+        return $this->successResponse(1, Response::HTTP_CREATED);
+    }
+    private function saveAttendance($request){
+        DB::transaction(function() use($request) {
+            $attendance = [
+                'org_id' => $request['org_id'],
+                'org_class_id' => $request['org_class_id'],
+                'org_stream_id' => $request['org_stream_id'],
+                'org_section_id' => $request['org_section_id'],
+                'class_stream_section' => $request['class_stream_section'],
+                'attendance_date' => $request['attendance_date'],
+                'created_by' => $request['user_id'],
+                'created_at' => date('Y-m-d h:i:s')
+            ];
+            $stdAttendance = StudentAttendance::create($attendance);
+            foreach($request["data"] as $studentAttendance){
+                if($studentAttendance['is_present']=="0"){
+                    StudentAttendanceDetail::create(
+                        ['aca_std_attendance_id' => $stdAttendance->id,
+                        'std_student_id' => $studentAttendance['std_student_id'],
+                        'created_by' => $request['user_id'],
+                        'created_at' => date('Y-m-d h:i:s')]
+                    );
+                }
+            }
+        });
+    }
+    public function saveStudentAttendance(Request $request){
+            $rules = [
+                'org_class_id' => 'required',
+                'org_stream_id' => 'required',
+                'org_section_id' => 'required',
+                'class_stream_section' => 'required',
+                'attendance_date' => 'required|unique:aca_student_attendance',
+                'data.*.CidNo' => 'required',
+                'data.*.Name' => 'required',
+                'data.*.std_student_id' => 'required',
+            ];
+            $customMessages = [
+                'org_class_id.required' => 'This field is required',
+                'org_stream_id.required' => 'This field is required',
+                'org_section_id.required' => 'This field is required',
+                'class_stream_section.required' => 'This field is required',
+                'attendance_date.required' => 'This field is required',
+                'data.*.CidNo.required' => 'This field is required',
+                'data.*.Name.required' => 'This field is required',
+                'data.*.std_student_id.required' => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+
+            if($request['action']=="add"){
+                $this->saveAttendance($request->all());
+            }
+            if($request['action']=="edit"){
+                $query = 'DELETE FROM aca_student_attendance WHERE org_id = ? AND org_class_id = ? AND attendance_date = ?';
+                $params = [$request->org_id,$request->org_class_id,$request->attendance_date];
+                if($request->org_stream_id){
+                    $query .= ' AND org_stream_id = ?';
+                    array_push($params, $request->org_stream_id);
+                }
+                if($request->org_section_id){
+                    $query .= ' AND org_section_id = ?';
+                    array_push($params, $request->org_section_id);
+                }
+                DB::delete($query, $params);
+                $this->saveAttendance($request->all());
+            }
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     public function loadStudentAssessmentList($staffId, $orgId){
@@ -191,21 +255,28 @@ class AcademicController extends Controller
         $isElectiveQ = DB::select($query, $param);
         return $isElectiveQ[0]->is_elective;
     }
-    public function laodStudentAttendance($orgId,$staffId,Request $request){
-        $query ='SELECT  t1.org_id,t2.std_student_id, t1.org_class_id, t1.org_class_id, t1.org_stream_id, t1.org_section_id, t1.attendance_date,  t2.is_present
-                 FROM aca_student_attendance t1
-                 JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id WHERE t1.org_id = ? AND t1.org_class_id';
-        $param = [$orgId,$staffId,$request->org_class_id];
+    public function loadStudentAttendance($orgId,$staffId){
+        $studentAttendance =  DB::select("SELECT t1.org_id,t1.org_class_id, t1.org_stream_id, t1.org_section_id,t1.attendance_date
+                FROM aca_student_attendance t1 
+            LEFT JOIN aca_class_teacher t2 ON t1.org_id = t2.org_id AND t1.org_class_id = t2.org_class_id AND (t1.org_stream_id = t2.org_stream_id OR (t1.org_stream_id IS NULL AND t2.org_stream_id IS NULL)) AND (t1.org_section_id = t2.org_section_id OR (t1.org_section_id IS NULL AND t2.org_section_id IS NULL)) AND t2.stf_staff_id = ?
+            WHERE t1.org_id = ? AND t2.stf_staff_id = ? ORDER BY t1.attendance_date DESC",[$staffId, $orgId, $staffId]);
+
+        return $this->successResponse($studentAttendance);
+    }
+    public function loadStudentAttendanceDetail($orgId,Request $request){
+        $query = "SELECT (t2.id IS NOT NULL) AS absent, t1.org_id,t1.org_class_id, t1.org_stream_id, t1.org_section_id,t1.attendance_date,t2.std_student_id
+                        FROM aca_student_attendance t1 
+                    JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id WHERE t1.org_id = ? AND t1.org_class_id = ?";
+        $params = [$orgId,$request->org_class_id];
         if($request->org_stream_id){
             $query .= ' AND t1.org_stream_id = ?';
-            array_push($param, $request->org_stream_id);
+            array_push($params, $request->org_stream_id);
         }
         if($request->org_section_id){
             $query .= ' AND t1.org_section_id = ?';
-            array_push($param, $request->org_section_id);
+            array_push($params, $request->org_section_id);
         }
-        $studentAttendance = DB::select("$query ORDER BY t1.attendance_date DESC", $param);
-        return $this->successResponse($studentAttendance);
+        return $this->successResponse(DB::select($query,$params));
     }
     public function saveStudentAssessment(Request $request){
         $rules = [
@@ -236,6 +307,7 @@ class AcademicController extends Controller
                 'org_section_id'=> $request['org_section_id'],
                 'aca_sub_id'=>$request['aca_sub_id'],
                 'aca_assmt_term_id' =>  $request['aca_assmt_term_id'],
+                'class_stream_section' =>  $request['class_stream_section'],
                 'created_by' =>  $request['user_id'],
                 'created_at'=>   date('Y-m-d h:i:s'),
             ];
@@ -243,22 +315,42 @@ class AcademicController extends Controller
                 $result['finalized'] = 1;
                 $result['finalized_date'] = date('Y-m-d h:i:s');
             }
-            $studentAssessment = StudentAssessment::create($result);
-            foreach($request['data'] as $studentAssessmentDetail){
-                foreach($studentAssessmentDetail as $value){
-                    if(gettype($value)=="array"){
-                           StudentAssessmentDetail::create(
-                           ['aca_student_assmt_id' => $studentAssessment->id,
-                            'std_student_id' => $studentAssessmentDetail['std_student_id'],
-                            'aca_assmt_area_id'=>$value['aca_assmt_area_id'],
-                            'aca_rating_type_id'=>$value['aca_rating_type_id'],
-                            'score'=> array_key_exists("score", $value) ? $value['score'] : 0,
-                            'created_by' => $request['user_id'],
-                            'created_at' => date('Y-m-d h:i:s')]
-                        );
-                    } 
+            try{
+                $studentAssessment = StudentAssessment::create($result);
+                foreach($request['data'] as $studentAssessmentDetail){
+                    foreach($studentAssessmentDetail as $value){
+                        if(gettype($value)=="array"){
+                               StudentAssessmentDetail::create(
+                               ['aca_student_assmt_id' => $studentAssessment->id,
+                                'std_student_id' => $studentAssessmentDetail['std_student_id'],
+                                'aca_assmt_area_id'=>$value['aca_assmt_area_id'],
+                                'aca_rating_type_id'=>$value['aca_rating_type_id'],
+                                'score'=> array_key_exists("score", $value) ? $value['score'] : 0,
+                                'created_by' => $request['user_id'],
+                                'created_at' => date('Y-m-d h:i:s')]
+                            );
+                        } 
+                    }
                 }
+            }catch(Exception $e){
+                dd($e);
             }
+            // $studentAssessment = StudentAssessment::create($result);
+            // foreach($request['data'] as $studentAssessmentDetail){
+            //     foreach($studentAssessmentDetail as $value){
+            //         if(gettype($value)=="array"){
+            //                StudentAssessmentDetail::create(
+            //                ['aca_student_assmt_id' => $studentAssessment->id,
+            //                 'std_student_id' => $studentAssessmentDetail['std_student_id'],
+            //                 'aca_assmt_area_id'=>$value['aca_assmt_area_id'],
+            //                 'aca_rating_type_id'=>$value['aca_rating_type_id'],
+            //                 'score'=> array_key_exists("score", $value) ? $value['score'] : 0,
+            //                 'created_by' => $request['user_id'],
+            //                 'created_at' => date('Y-m-d h:i:s')]
+            //             );
+            //         } 
+            //     }
+            // }
         });
         return $this->successResponse(1, Response::HTTP_CREATED);
     }

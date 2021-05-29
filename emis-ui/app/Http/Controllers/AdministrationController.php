@@ -245,16 +245,16 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
-        if($request['record_type'] == 'national_holiday') {
-            $rules = [
-                'holiday_date'  =>  'required',
-                'description' => 'required',
-            ];
-            $customMessages = [
-                'holiday_date.required' => 'This field is required',
-                'description.required' => 'This field is required',
-            ];
-        }
+        // if($request['record_type'] == 'national_holiday') {
+        //     $rules = [
+        //         'holiday_date'  =>  'required',
+        //         'description' => 'required',
+        //     ];
+        //     $customMessages = [
+        //         'holiday_date.required' => 'This field is required',
+        //         'description.required' => 'This field is required',
+        //     ];
+        // }
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();
         $data = $request->all();
@@ -753,11 +753,6 @@ class AdministrationController extends Controller{
     public function loadStream(Request $request){
         $loadStream = $this->apiService->listData('emis/masters/stream/loadStream');
         return $loadStream;
-    }
-
-    public function getClassStream(){
-        $getClassStream = $this->apiService->listData('emis/masters/classstream/getClassStream');
-        return $getClassStream;
     }
 
     public function saveClassStreamMapping(Request $request){

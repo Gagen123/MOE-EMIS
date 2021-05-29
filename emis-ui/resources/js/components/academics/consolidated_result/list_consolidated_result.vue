@@ -58,7 +58,7 @@ export default {
     methods:{
         async loadConsolidatedResultList(){
             try{
-                let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
                 let studentsConsolidatedResult = await axios.get('academics/loadConsolidatedResultList').then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
                     classSections.forEach(item1 => {
@@ -67,6 +67,9 @@ export default {
                             studentsConsolidatedResult[index].class = item1.class
                             studentsConsolidatedResult[index].stream = item1.stream
                             studentsConsolidatedResult[index].section = item1.section
+                            //   if(!studentsConsolidatedResult[index].class_stream_section){
+                            //     studentsConsolidatedResult[index].class_stream_section = item1.class + ' ' + item1.stream + ' ' + item1.section
+                            // }
                         }
                     })
             })

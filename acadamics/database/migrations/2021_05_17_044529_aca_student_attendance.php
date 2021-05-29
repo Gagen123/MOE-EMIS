@@ -20,10 +20,14 @@ class AcaStudentAttendance extends Migration
             $table->char('org_class_id',36)->index();
             $table->char('org_stream_id',36)->index()->nullable();
             $table->char('org_section_id',36)->index()->nullable();
-            $table->date('attendance_date');
+            $table->string('class_stream_section',100);
+            $table->date('attendance_date')->unique();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
+
+            $table->unique(['org_class_id', 'org_stream_id','org_section_id','attendance_date'],'unique_class_stream_attendance_date');
+
         });
     }
 

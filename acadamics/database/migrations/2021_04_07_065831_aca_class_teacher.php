@@ -20,6 +20,7 @@ class AcaClassTeacher extends Migration
             $table->char('org_stream_id',36)->nullable()->index();
             $table->char('org_section_id',36)->nullable()->index();
             $table->char('stf_staff_id',36)->index();
+            $table->string('class_stream_section',100);
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();

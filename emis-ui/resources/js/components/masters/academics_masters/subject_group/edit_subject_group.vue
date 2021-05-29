@@ -5,21 +5,28 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject Group Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('dzongkhag_name')" type="text">
+                        <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('dzongkhag_name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Dzongkha Name:</label> 
+                        <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
-                        <input class="form-control text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
+                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
                         <has-error :form="form" field="display_order"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                </div>  
+                 <div class="row form-group">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">status:</label>
                         <br>
                         <label><input v-model="form.status" type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
+                </div>        
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -35,6 +42,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                dzo_name:'',
                 display_order:'',
                 status:'',
                 record_type:'subject_group',
@@ -50,8 +58,9 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
-                this.form.display_order=''
+                this.form.name = '';
+                this.form.dzo_name = '';
+                this.form.display_order = '';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -71,6 +80,7 @@ export default {
     },
     created() {
         this.form.name=this.$route.params.data.name;
+        this.form.dzo_name=this.$route.params.data.dzo_name;
         this.form.display_order = this.$route.params.data.display_order
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;

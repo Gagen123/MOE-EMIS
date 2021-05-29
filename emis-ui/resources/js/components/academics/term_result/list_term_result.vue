@@ -15,7 +15,7 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in classSubjectTermList" :key="index">
-                            <td>{{ item.class }} {{item.stream}} {{item.section}}</td>
+                            <td>{{ item.class_stream_section }}</td>
                             <td>{{ item.sub_name }}</td>
                             <td>{{item.term_name}}</td>
                             <td>
@@ -62,16 +62,21 @@ export default {
     methods:{
         async classSubjectTerm(){
             try{
-                let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
                 let classSubjectTerms = await axios.get('academics/loadStudentAssessmentList').then(response => {
                     return response.data.data
                 })
                 classSubjectTerms.forEach((classSubjectTerm,index) => {
                     classSections.forEach(item => {
                         if(classSubjectTerm.org_class_id == item.org_class_id && (classSubjectTerm.org_stream_id == item.org_stream_id || (classSubjectTerm.org_stream_id == null && item.org_stream_id == null)) && (classSubjectTerm.org_section_id == item.org_section_id || (classSubjectTerm.org_section_id == null && item.org_section_id == null))){
-                            classSubjectTerms[index].section = item.section
-                            classSubjectTerms[index].class = item.class
-                            classSubjectTerms[index].stream  = item.stream
+                            if(item.stream && item.section){
+                                classSubjectTerms[index].class_stream_section = item.class+' '+item.stream+' '+item.section
+                            }else if(item.stream){
+                                classSubjectTerms[index].class_stream_section = item.class+' '+item.stream
+                            }else{
+                                classSubjectTerms[index].class_stream_section = item.class
+                            }
+                            
                         }
                     })
                 })
