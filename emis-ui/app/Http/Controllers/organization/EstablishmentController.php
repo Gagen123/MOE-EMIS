@@ -182,8 +182,8 @@ class EstablishmentController extends Controller
         return $streamInCheckbox;
     }
 
-    public function loadOrgApplications(){
-        $loadOrgApplications = $this->apiService->listData('emis/organization/establishment/loadOrgApplications/'.$this->userId() );
+    public function loadOrgApplications($type=""){
+        $loadOrgApplications = $this->apiService->listData('emis/organization/establishment/loadOrgApplications/'.$this->userId().'/'.$type );
         return $loadOrgApplications;
     }
 
@@ -718,6 +718,11 @@ class EstablishmentController extends Controller
     public function loaddraftApplication($type=""){  
         $response_data = $this->apiService->listData('emis/organization/establishment/loaddraftApplication/'.$type.'/'.$this->userId());
         // dd($response_data);
+        return $response_data;
+    }
+
+    public function loadEstablishmentApplciaiton($record_id=""){  
+        $response_data = $this->apiService->listData('emis/organization/establishment/loadEstablishmentApplciaiton/'.$record_id);
         return $response_data;
     }
 

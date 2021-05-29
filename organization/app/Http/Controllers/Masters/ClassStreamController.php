@@ -58,14 +58,23 @@ class ClassStreamController extends Controller
     }
 
     public function loadClassStreamMapping($type=""){
-
-        $data = DB::table('classes')
-                ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
-                ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
-                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
-                ->where('category',$type)
-                ->orderBy('classes.displayOrder', 'asc')
-                ->get();
+        if($type!="NA"){
+            $data = DB::table('classes')
+            ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
+            ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
+            ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+            ->where('category',$type)
+            ->orderBy('classes.displayOrder', 'asc')
+            ->get();
+        }
+        else{
+            $data = DB::table('classes')
+            ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
+            ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
+            ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+            ->orderBy('classes.displayOrder', 'asc')
+            ->get();
+        }
 
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
