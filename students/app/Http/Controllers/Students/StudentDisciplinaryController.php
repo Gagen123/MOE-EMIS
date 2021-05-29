@@ -93,8 +93,6 @@ class StudentDisciplinaryController extends Controller
 
     public function loadStudentRecords($param=""){
 
-        $id ="2fea1ad2-824b-434a-a608-614a482e66c1";
-
         $records = DB::table('std_student_disciplinary')
                 ->join('std_student', 'std_student_disciplinary.StdStudentId', '=', 'std_student.id')
                 ->join('std_disciplinary_action_type', 'std_student_disciplinary.StdDisciplinaryActionTypeId', '=', 'std_disciplinary_action_type.id')
@@ -102,6 +100,7 @@ class StudentDisciplinaryController extends Controller
                 ->join('std_disciplinary_severity', 'std_student_disciplinary.StdDisciplinarySeverityId', '=', 'std_disciplinary_severity.id')
                 ->select('std_student_disciplinary.*', 'std_student.Name','std_disciplinary_action_type.name AS action_type', 
                             'std_disciplinary_offence_type.name AS offence_type', 'std_disciplinary_severity.name AS severity')
+                ->where('std_student.OrgOrganizationId', $param)
                 ->get();
         
         return $this->successResponse($records);

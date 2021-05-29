@@ -29,13 +29,14 @@ class ContactTypeController extends Controller
         if( $id != null){
             $src = [
                 'name'          => $request['contactName'],
+                'description'   =>  $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
 
             $data = ContactType::find($request['id']);
-            $messs_det='contactName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='contactName:'.$data->name.'; description:'.$data->description.';  status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','contact_types','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $source = ContactType::where('id', $id)->update($src);
@@ -44,6 +45,7 @@ class ContactTypeController extends Controller
 
             $dis = [
                 'name'          => $request['contactName'],
+                'description'   =>  $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

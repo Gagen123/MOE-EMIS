@@ -4,21 +4,24 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >School Name</th>
-                    <th >Category</th>
-                    <th >Level</th>
+                    <th >Application No.</th>
+                    <th >Type of Establishment</th>
+                    <th >Date of Application</th>
                     <th >Status</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.application_no}}</td>
+                    <td>{{ item.establishment_type}}</td>
+                    <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
+                    <td>{{ item.status}}</td>
                     <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-secondary btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
+                        </div>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                         </div>
@@ -37,7 +40,12 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentRecords/'+this.id){
+        reverseDate(dateData){
+            const reverse =
+                dateData.split("-").reverse().join("-");
+            return reverse;
+        },
+        loadDataList(uri='organization/loadOrgApplications'){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -10,6 +10,9 @@ use App\Traits\ApiResponser;
 use App\Models\Students\Student;
 use App\Models\Students\StdSchoolLeaving;
 use App\Models\Students\StdSeparatedWhereabouts;
+use App\Models\Students\StudentAboard;
+
+
 
 class StudentAdmissionRelatedController extends Controller
 {
@@ -117,18 +120,19 @@ class StudentAdmissionRelatedController extends Controller
                 'Remarks'           =>  $request['remarks'],
             ];
 
-            CeaSchoolScoutMembers::where('id', $request['id'])->update($app_data);
+            StdSchoolLeaving::where('id', $request['id'])->update($app_data);
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    public function loadStudentTransfers($param1){
-        $id =$param1;
+    public function loadStudentTransfers($param){
+        $id =$param;
 
         $awards = DB::table('std_student_school_leaving')
                 ->join('std_student', 'std_student_school_leaving.StdStudentId', '=', 'std_student.id')
                 ->select('std_student_school_leaving.*', 'std_student.Name')
+                ->where('std_student.OrgOrganizationId', $id)
                 ->get();
         
         return $this->successResponse($awards);
@@ -200,5 +204,67 @@ class StudentAdmissionRelatedController extends Controller
                 ->get();
         
         return $this->successResponse($awards);
+    }
+
+    /// student Aboard 
+
+    public function loadAboardList($orgId=""){
+        // try{
+        //     $list = DB::table('student_aboards')
+        //     ->select('id', 'first_name', 'middle_name', 'last_name', 'dob', 'country')
+        //     ->where('organizationId',$orgId)->get();
+           
+        // return $list;
+            
+
+        //     } catch(\Illuminate\Database\QueryException $ex){
+        //         dd($ex->getMessage());
+        //         // Note any method of class PDOException can be called on $ex.
+        //     }
+
+         $list = DB::table('student_aboards')
+             ->select('id', 'first_name', 'middle_name', 'last_name', 'dob', 'country')
+             ->where('organizationId',$orgId)->get();
+         return $list;
+    }
+    /**
+     * method to save student aboard details
+     */
+    public function saveStudentAboard(Request $request){
+      //  dd($request);
+            // $rules = [
+            //  //   'organizationId'        =>  'required',
+            //     'cid_passport'          =>  'required',
+            //     // 'dob'                   =>  'required',
+            //     // 'sex_id'                =>  'required',
+            //     // 'mother_tongue'         =>  'required',
+            //     // 'status'                =>  'required',
+            //     // 'fulladdress'           =>  'required',
+            //     // 'country'               =>  'required',
+            //     // 'city'                  =>  'required',
+            // ];
+            // $this->validate($request, $rules);
+        
+            $data =[
+                'id'                      =>  $request->id,
+            'organizationId'            =>  $request->organizationId,
+            'cid_passport'              =>  $request->cid_passport,
+            'first_name'                =>  $request->first_name,
+            'middle_name'               =>  $request->middle_name,
+            'last_name'                 =>  $request->last_name,
+            'dob'                       =>  $request->dob,
+            'sex_id'                    =>  $request->sex_id,
+            'mother_tongue'             =>  $request->mother_tongue,
+            'status'                    =>  $request->status,
+            'fulladdress'               =>  $request->fulladdress,
+            'country'                   =>  $request->country,
+            'city'                      =>  $request->city,
+        ];
+        // dd($data);
+      //  dd('m here from services');                   
+        $persondata = StudentAboard::create($data);
+
+        return $this->successResponse($persondata, Response::HTTP_CREATED);
+       // dd($persondata);
     }
 }

@@ -60,7 +60,8 @@ class StudentMasterController extends Controller
         }
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+        $modelName = "App\\Models\\Masters\\"."$databaseModel";
+        
         $model = new $modelName();
         if(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
@@ -73,6 +74,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
+      //  dd('from services');
        
         if($param == 'program_teacher_roles'){
             $status = '1';
@@ -120,7 +122,6 @@ class StudentMasterController extends Controller
      */
 
     private function insertData($data, $databaseModel){
-        
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
 
@@ -246,20 +247,38 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "scout_type" : {
-                    $databaseModel = "CeaScoutType";
+            case "scout_section" : {
+                    $databaseModel = "CeaScoutSection";
                     break;
                 }
-            case "scout" : {
-                    $databaseModel = "CeaScout";
+
+            case "scout_section_level" : {
+                    $databaseModel = "CeaScoutSectionLevel";
                     if($type =='data'){
                         $additional_data = [
-                            'CeaScoutTypeId'  =>  $request['scout_type'],
+                            'CeaScoutSectionId' => $request['scout_type'],
                         ];
                         $data = $data + $additional_data;
                     }
                     break;
                 }
+
+            case "scout_badge" : {
+                    $databaseModel = "CeaScoutBadge";
+                    if($type =='data'){
+                        $additional_data = [
+                            'CeaScoutSectionLevelId' => $request->scout_level_id,
+                        ];
+                        $data = $data + $additional_data;
+                    }
+                    break;
+                }
+
+            case "scout_leader" : {
+                    $databaseModel = "CeaScoutLeader";
+                    break;
+                }
+
             case "program_role" : {
                     $databaseModel = "CeaRole";
                     if($type =='data'){

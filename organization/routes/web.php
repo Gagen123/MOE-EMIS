@@ -125,7 +125,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'masters/classStreamMapping'], function () use ($router) {
         // class route
         $router->post('/saveClassStreamMapping', 'Masters\ClassStreamController@saveClassStreamMapping');
-        $router->get('/loadClassStreamMapping', 'Masters\ClassStreamController@loadClassStreamMapping');
+        $router->get('/loadClassStreamMapping/{type}', 'Masters\ClassStreamController@loadClassStreamMapping');
     });
 
     $router->group(['prefix' => 'masters/electricitySource'], function () use ($router) {
@@ -179,6 +179,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             // section route
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
+            $router->get('/getseatdetailsbyOrgId/{orgId}', 'generalInformation\SectionController@getseatdetailsbyOrgId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
 			$router->get('/getclassSections/{orgId}', 'generalInformation\SectionController@getclassSections');
@@ -206,6 +207,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'location'], function () use ($router) {
             // locations route
             $router->post('/saveLocation', 'generalInformation\LocationsController@saveLocation');
+            $router->get('/getLocationDetails/{orgId}', 'generalInformation\LocationsController@getLocationDetails');
             $router->get('/getDisasterListInCheckbox', 'generalInformation\LocationsController@getDisasterListInCheckbox');
 
         });
@@ -250,10 +252,18 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
+            $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
+            $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
             $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
+
+            //route for student portal
+            $router->get('/loadOrganizationDetailsbyOrgId/{id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetailsbyOrgId']);
+
             $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
             $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
+            $router->get('/loadOrgApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);
+            $router->get('/loadOrgChangeApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgChangeApplications']);
             $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
@@ -292,12 +302,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveBifurcation', 'restructuring\BifurcationController@saveBifurcation');
             $router->get('/loadbifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadbifurcationForVerification']);
             // $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
-
+            $router->post('/updateBifurcation', 'restructuring\BifurcationController@updateBifurcation');
         });
 
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
             $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
+            $router->post('/updateMergerApplication', 'restructuring\MergerController@updateMergerApplication');
 
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
@@ -308,7 +319,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
         
         $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
-        $router->get('/getOrgProfile/{id}', ['uses' => 'establishment\EstablishmentController@getOrgProfile']);
+       
         
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
@@ -316,5 +327,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
+        $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
+        $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
+        
     });
 });

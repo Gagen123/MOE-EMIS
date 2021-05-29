@@ -66,13 +66,12 @@ class StudentMasterController extends Controller{
             $data = $data + $additional_data;
         }
 
-        if($request->record_type == 'scout'){
+        if($request->record_type == 'scout_section_level' || $request->record_type == 'scout_badge'){
             $additional_data = [
                 'scout_type' => $request->scout_type
             ];
             $data = $data + $additional_data;
-        } 
-
+        }
         
         try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);

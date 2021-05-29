@@ -146,16 +146,17 @@
                 });
             }
             else{
-                if(data.service_name.includes('New Establishment')){
+
+                if(data.application_number.includes('Estb')){
                     this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Merge')){
+                if(data.application_number.includes('Mer')){
                     this.$router.push({name:"merger_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Bifur')){
+                if(data.application_number.includes('Bif')){
                     this.$router.push({name:"bifurcation_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Change Basic Details')){
+                if(data.application_number.includes('Ch')){
                     this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Closure')){
@@ -164,7 +165,7 @@
                 if(data.service_name.includes('Transfer')){
                     this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Leave')){
+                if(data.service_name.includes('Leave')){ 
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
                 }
             }   

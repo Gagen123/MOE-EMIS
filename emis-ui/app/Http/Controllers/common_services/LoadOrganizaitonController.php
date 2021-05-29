@@ -18,7 +18,7 @@ class LoadOrganizaitonController extends Controller{
         $param="";
         //type=allorganizationList: to list entire organization
         if($type=="allorganizationList"){
-            $param="NA";
+            $param=$id;
         }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
@@ -40,12 +40,13 @@ class LoadOrganizaitonController extends Controller{
         if($type=="gewoggwise"){
             $param=$id;
         }
-
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
     //type can be Orgbyid,Headquarterbyid,user_login_access_id, orgcode etc and id shoulb be their respective values
     public function loadOrgDetails($type="",$id=""){
-       
+        if($type=="full_user_logedin_dzo_id"){
+            $id=$this->getUserDzoId();
+        }
         return $this->apiService->getListData('emis/common_services/loadOrgDetails/'.$type.'/'.$id);
     }
 
@@ -80,5 +81,9 @@ class LoadOrganizaitonController extends Controller{
         }
         return $this->apiService->getListData('emis/common_services/loadClassStreamSection/'.$type.'/'.$id);
     }
+    public function getClassByType($type=""){
+        return $this->apiService->getListData('emis/common_services/getClassByType/'.$type);
+    }
+    
 
 }

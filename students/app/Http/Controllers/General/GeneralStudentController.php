@@ -26,9 +26,8 @@ class GeneralStudentController extends Controller
 
     public function loadStudentList($param=""){
         $id = $param;
-        
         return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
-                            ->get(['id', 'Name', 'student_cod']));
+                            ->get(['id', 'Name', 'student_code']));
     }
 
     /**
@@ -41,26 +40,5 @@ class GeneralStudentController extends Controller
         return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
                             ->get(['id', 'Name', 'DateOfBirth']));
     }
-    public function getStudents($org_id,Request $request){
-        $query = "SELECT t1.CidNo, t1.Name, t1.id AS std_student_id, t2.org_id, t2.org_class_id, t2.org_stream_id,t2.org_section_id
-                    FROM std_student t1 
-                    LEFT JOIN std_class_detils t2 ON t1.id = t2.student_id  
-                  WHERE t2.org_id = ? AND t2.org_class_id = ?";
-        $params = [$org_id,$request->classId];
-      
-        if($request->streamId !== null){
-            $query .= " AND t2.org_stream_id = ?";
-            array_push($params,$request->streamId);
-        }
-        if($request->sectionId !== null){
-            $query .=" AND t2.org_section_id = ?";
-            array_push($params,$request->sectionId);
-
-        }
-
-         
-        $response_data = DB::select($query,$params);
-        return $this->successResponse($response_data);
-        
-    }
+    
 }

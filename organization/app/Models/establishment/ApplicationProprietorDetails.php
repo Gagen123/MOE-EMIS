@@ -17,6 +17,12 @@ class ApplicationProprietorDetails extends Model
      * @var array
      */
     protected $fillable = [
-        'id','applicationId','cid','fullName','phoneNo','email','created_by','updated_by'
+        'id',
+        'ApplicationEstDetailsChangeId',
+        'proposedName',
+        'proprietorCid',
+        'proprietorMobile',
+        'proprietorPhone',
+        'proprietorEmail'
     ];
 }

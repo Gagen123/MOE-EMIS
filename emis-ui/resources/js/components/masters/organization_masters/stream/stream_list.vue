@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Stream</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -13,6 +14,7 @@
                 <tr v-for="(item, index) in streamList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.stream}}</td>
+                     <td>{{ item.description}} </td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -29,7 +31,8 @@
 export default {
     data(){
         return{
-            streamList:[]
+            streamList:[],
+            str:'',
         }
     },
     methods:{
@@ -58,6 +61,15 @@ export default {
     },
      mounted(){
         this.loadStreamList();
+        this.str =  $("#stream-table").DataTable();
+    },
+    watch: {
+        streamList(){
+            this.str.destroy();
+            this.$nextTick(() => {
+                this.str =  $("#stream-table").DataTable()
+            });
+        }
     },
 }
 </script>

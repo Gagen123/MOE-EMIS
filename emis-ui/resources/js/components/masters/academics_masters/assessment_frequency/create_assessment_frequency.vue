@@ -74,7 +74,7 @@ export default {
         },
          async classAssessmentFrequency(){
              try{
-                let classStreams = await axios.get('masters/loadClassStreamMapping').then(response => {return  response.data.data })
+                let classStreams = await axios.get('masters/loadClassStreamMapping/NA').then(response => {return  response.data.data })
                 let finalClassStreams = [];
                 let renameId = []
                 classStreams.forEach((item => {

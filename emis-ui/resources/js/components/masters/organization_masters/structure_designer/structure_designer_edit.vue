@@ -34,6 +34,7 @@ export default {
             form: new form({
                 id: '',
                 designerName: '',
+                description:'',
                 status: 1,
             })    
         }
@@ -48,6 +49,7 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.designerName= '';
+                this.from.description='';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -68,6 +70,7 @@ export default {
 
     created() {
         this.form.designerName=this.$route.params.data.name;
+        this.from.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
         // this.form.action_type=this.$route.params.data.action;

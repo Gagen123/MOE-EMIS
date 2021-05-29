@@ -108,9 +108,9 @@ class StaffController extends Controller{
         }
     }
     
-    // public function loadpersonalDetails($status="",$id=""){
-    //     return $this->successResponse(PersonalDetails::where('id',$id)->where('status',$status)->first());
-    // }
+    public function checkThisCid($cid=""){
+        return $this->successResponse(PersonalDetails::where('cid_work_permit',$cid)->first());
+    }
 
     public function savequalificationDetails(Request $request){
         $response_data=[];
@@ -300,62 +300,6 @@ class StaffController extends Controller{
         }
     }
 
-    public function saveTransferWindow(Request $request){
-        $response_data=[];
-        $rules = [
-            'from_date'                         =>  'required',
-            'to_date'                           =>  'required | date | after:from_date',
-        ];
-        $customMessages = [
-            'from_date.required'                => 'Please select from date',
-            'to_date.required'                  => 'Please select to date',
-        ];
-        if($request->action_type=="add"){
-            $rules=array_merge($rules,
-                array(
-                'year'                              =>  'required |unique:stf_transfer_window',)
-            );
-            $customMessages=array_merge($customMessages,
-                array(
-                    'year.required'                     => 'Current Year is required',
-                    'year.unique'                       => 'Current Year is already recorded',
-                )
-            );
-        }
-        $this->validate($request, $rules,$customMessages);
-        
-        $data =[
-            'year'                              =>  $request->year,
-            'from_date'                         =>  $request->from_date,
-            'to_date'                           =>  $request->to_date,
-            'remarks'                           =>  $request->remarks,
-            'status'                            =>  $request->status,
-        ];
-        if($request->action_type=="add"){
-            $data=array_merge($data,
-                array('created_by'            =>  $request->user_id,
-                      'created_at'            =>  date('Y-m-d h:i:s')
-                )
-            );
-            $response_data = TransferWindow::create($data);
-        }
-        else if($request->action_type=="edit"){
-            $data=array_merge($data,
-                array('updated_by'            =>  $request->user_id,
-                      'updated_at'            =>  date('Y-m-d h:i:s')
-                )
-            );
-            $act_det = TransferWindow::where ('id', $request->id)->firstOrFail();
-            $act_det->fill($data);
-            $response_data=$act_det->save();
-        }
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
-    }
-    
-    public function loadTransferWindow(){
-        return $this->successResponse(TransferWindow::all());
-    }
-    
     // public function loadStaff($type="",$param=""){
     //     if($type=="workingagency"){
     //         return $this->successResponse(PersonalDetails::where('working_agency_id',$param)->get());

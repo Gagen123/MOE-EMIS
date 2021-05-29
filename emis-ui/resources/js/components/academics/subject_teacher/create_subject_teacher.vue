@@ -93,7 +93,7 @@ export default {
          async getsubjectTeachers(){
              let finalSubjectTeachers =[];
              try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data.data)
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data)
                 let subjectTeachers = await axios.get('academics/getSubjectTeacher').then(response => response.data.data)
                 classSections.forEach((classSection) => {
                     subjectTeachers["classSubjects"].forEach(item => {

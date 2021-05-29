@@ -16,6 +16,7 @@ class CreateDisasterTable extends Migration
         Schema::create('disaster', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
+            $table->string('description');
             $table->tinyInteger('status');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);

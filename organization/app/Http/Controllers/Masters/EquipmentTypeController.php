@@ -43,19 +43,21 @@ class EquipmentTypeController extends Controller
         if( $id != null){
             $equ = [
                 'name'          => $request['equipmentTypeName'],
+                'description'    =>  $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
             $data = EquipmentType::find($request['id']);
 
-            $messs_det='equipmentTypeName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='equipmentTypeName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_type','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
             $equipment = EquipmentType::where('id', $id)->update($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);
         }else{
             $equ = [
                 'name'          => $request['equipmentTypeName'],
+                'description'    =>  $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

@@ -16,9 +16,9 @@ class ClassStreamController extends Controller
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-// Function by Chimi thinley
+
     public function getClassStream(){
-        $data = DB::select('SELECT t1.classId AS org_class_id, t1.streamId AS org_stream_id, t2.class, t3.stream FROM class_stream_mappings AS t1 JOIN classes AS t2 ON t1.classId=t2.id LEFT JOIN streams AS t3 ON t1.streamId = t3.id and t3.status=1 WHERE t2.status = 1 ORDER BY t2.class');
+        $data = DB::select('SELECT t1.classId AS org_class_id, t1.streamId AS org_stream_id, t2.class, t3.stream FROM class_streams AS t1 JOIN classes AS t2 ON t1.classId=t2.id LEFT JOIN streams AS t3 ON t1.streamId = t3.id and t3.status=1 WHERE t2.status = 1 ORDER BY t2.class');
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
 
@@ -27,8 +27,6 @@ class ClassStreamController extends Controller
      */
 
     public function saveClassStreamMapping(Request $request){
-
-        
         $id = $request->id;
         if( $id != null){
             $cla = [
@@ -59,12 +57,13 @@ class ClassStreamController extends Controller
         }
     }
 
-    public function loadClassStreamMapping(){
+    public function loadClassStreamMapping($type=""){
 
         $data = DB::table('classes')
                 ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
                 ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
-                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId','streams.stream', 'streams.id AS streamId')
+                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+                ->where('category',$type)
                 ->orderBy('classes.displayOrder', 'asc')
                 ->get();
 

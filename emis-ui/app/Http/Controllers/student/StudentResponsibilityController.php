@@ -51,6 +51,7 @@ class StudentResponsibilityController extends Controller
     }
 
     public function loadStudentResponsibilities($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_roles = $this->apiService->listData('emis/students/loadStudentResponsibilities/'.$param);
         return $student_roles;
     }

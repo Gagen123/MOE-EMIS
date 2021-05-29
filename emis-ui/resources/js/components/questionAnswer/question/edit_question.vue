@@ -3,7 +3,7 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Module:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="grant_parent_field" v-model="form.grant_parent_field" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('grant_parent_field') }">
                             <option value=""> --Select--</option>
@@ -11,7 +11,7 @@
                         </select> 
                         <has-error :form="form" field="grant_parent_field"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Service:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="parent_field" v-model="form.parent_field" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parent_field') }">
                             <option value=""> --Select--</option>
@@ -19,13 +19,21 @@
                         </select> 
                         <has-error :form="form" field="parent_field"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Category:<span class="text-danger">*</span></label>
                         <select class="form-control select2" id="category" v-model="form.category" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select> 
                         <has-error :form="form" field="category"></has-error>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Category Type:</label>
+                        <select class="form-control select2" id="category_type" v-model="form.category_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type') }">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in category_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select> 
+                        <has-error :form="form" field="category_type"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -76,11 +84,13 @@ export default {
             module_list:[],
             service_list:[],
             category_list:[],
+            category_type_list:[],
             form: new form({
                 id: '',
                 grant_parent_field:'',
                 parent_field:'',
                 category:'',
+                category_type:'',
                 name: '',
                 answer_type:'',
                 code:'',
@@ -128,6 +138,34 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        getdropdowns(id,type){
+            if(type=="Service"){
+                this.service_list=[];
+            }
+            if(type=="Category"){
+                this.category_list=[];
+            }
+            if(type=="CategoryType"){
+                this.category_type_list=[];
+            }
+            let uri = 'questionAnswers/loadQuestionaries/actlistbyparent_'+type+'_'+id;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                if(type=="Service"){
+                    this.service_list = data.data.data;
+                }
+                if(type=="Category"){
+                    this.category_list = data.data.data;
+                }
+                if(type=="CategoryType"){
+                    this.category_type_list=data.data.data;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
@@ -154,18 +192,23 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="grant_parent_field"){
-                this.getservicelist($('#grant_parent_field').val());
+                this.getdropdowns($('#grant_parent_field').val(),'Service');
+                this.getdropdowns($('#grant_parent_field').val(),'CategoryType');
                 this.form.grant_parent_field=$('#grant_parent_field').val();
             }
             if(id=="parent_field"){
+                this.getdropdowns($('#parent_field').val(),'Category');
                 this.form.parent_field=$('#parent_field').val();
-            }  
+            } 
             if(id=="category"){
                 this.form.category=$('#category').val();
             }
+            if(id=="category_type"){
+                this.form.category_type=$('#category_type').val();
+            }
             if(id=="answer_type"){
                 this.form.answer_type=$('#answer_type').val();
-            }          
+            }           
         }
     },
     mounted(){ 
@@ -176,10 +219,12 @@ export default {
         this.loadmodulelist();
 
         this.getservicelist(this.$route.params.data.service.parent_id);
+        
         this.form.grant_parent_field=this.$route.params.data.service.parent_id;
         this.getCategoryList(this.$route.params.data.service.id);
+        this.getdropdowns(this.$route.params.data.service.parent_id,'CategoryType');
+        this.form.category_type=this.$route.params.data.category_type_id;
         this.form.parent_field=this.$route.params.data.service.id;
-        this.form.category=this.$route.params.data.category.id;
         this.form.name=this.$route.params.data.name;
         this.form.answer_type=this.$route.params.data.answer_type;
         $('#answer_type').val(this.$route.params.data.answer_type).trigger('change');

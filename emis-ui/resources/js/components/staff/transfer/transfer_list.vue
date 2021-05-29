@@ -35,6 +35,7 @@ export default {
         return{ 
             totle:0,
             transfer_window_list:[],
+            dt:''
         } 
     },
     methods: {
@@ -53,10 +54,15 @@ export default {
     },
     mounted() {
         this.loadtransferwindow();
-        $("#training-table").DataTable({
-            "responsive": true,
-            "autoWidth": true,
-        }); 
+        this.dt =  $("#training-table").DataTable()
+    },
+    watch: {
+        transfer_list(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#training-table").DataTable()
+            });
+        }
     },
     
 }

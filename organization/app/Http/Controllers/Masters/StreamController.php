@@ -45,12 +45,13 @@ class StreamController extends Controller
         if( $id != null){
             $cla = [
                 'stream'         => $request['streamName'],
+                'description'    => $request['description'],
                 'status'         => $request['status'],
                 'updated_by'     =>$request['user_id'],
                 'created_at'     =>date('Y-m-d h:i:s'),
             ];
             $data = Stream::find($request['id']);
-            $messs_det='streamName:'.$data->stream.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='streamName:'.$data->stream.'; description:'.$data->description.';status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','stream','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $class = Stream::where('id', $id)->update($cla);
@@ -59,6 +60,7 @@ class StreamController extends Controller
 
             $cla = [
                 'stream'         => $request['streamName'],
+                'description'    => $request['description'],
                 'status'         => $request['status'],
                 'created_by'     =>$request['user_id'],
                 'created_at'     =>date('Y-m-d h:i:s'),

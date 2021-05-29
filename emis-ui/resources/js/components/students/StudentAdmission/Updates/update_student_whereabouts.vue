@@ -74,7 +74,7 @@ export default {
     methods: {
         //need to get the organisation id and pass it as a parameter
         
-        loadStudentList(uri='students/loadStudentList/'+this.org_id){
+        loadStudentList(uri='students/loadStudentTransfers/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;

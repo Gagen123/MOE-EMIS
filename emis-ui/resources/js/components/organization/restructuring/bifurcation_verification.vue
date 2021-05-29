@@ -34,7 +34,7 @@
                                 </div> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetailsform.service}}</span>
+                                    <span class="text-blue text-bold">Bifurcation</span>
                                 </div> 
                             </div>
                         </div>
@@ -317,7 +317,7 @@ export default {
             org1_details:'',
             applicaitondetails:'',
             applicaitondetailsform: new form({
-                id: '',applicationNo:'',application_date:'',service:'',status:'',remarks:'',actiontype:''
+                id: '',applicationNo:'',application_date:'',status:'',remarks:'',actiontype:'',service:'bifurcation',screen_id:'',work_status:''
             }),
         } 
     },
@@ -329,8 +329,8 @@ export default {
                 this.getOrgDetails(data.parentOrgId);
                 this.applicaitondetailsform.applicationNo               =   data.applicationNo;
                 this.applicaitondetailsform.application_date            =   data.application_date;
-                this.applicaitondetailsform.service                     =   data.service;
-                this.applicaitondetails=data;
+                this.applicaitondetailsform.screen_id            =   response.data.screen_id;
+                this.applicaitondetailsform.work_status            =   response.data.sequence;
                 this.class_section                                      =   data.class_section;
                 this.sectionList                                        =   data.sections;
                 if(response.data.app_stage.toLowerCase().includes('verifi')){

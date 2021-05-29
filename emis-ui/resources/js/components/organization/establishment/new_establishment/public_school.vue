@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
@@ -81,8 +85,8 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Geopolitically Located:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6 pt-3">
-                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="1" tabindex=""/> Yes</label>
-                                <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
+                                <label><input  type="radio" v-model="form.geopoliticallyLocated" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.geopoliticallyLocated" value="0" tabindex=""/> No</label>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -109,7 +113,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -131,14 +135,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr id="record1" v-for='(role, index) in file_form.fileUpload' :key="index">
-                                                <td>                                
-                                                    <input type="text" name="file_name" id="file_name" class="form-control" v-model="role.file_name" :class="{ 'is-invalid': file_form.errors.has('file_name') }" @change="remove_err('file_name')" placeholder="File Name"/>
-                                                    <has-error :file_form="form" field="file_name"></has-error>
+                                            <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
+                                                <td>
+                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>                                
-                                                    <input type="file" name="file_upload" id="file_upload" class="form-control" v-on:change="onChangeFileUpload" :class="{ 'is-invalid': file_form.errors.has('file_upload') }" @change="remove_err('file_upload')"/>
-                                                    <has-error :file_form="form" field="file_upload"></has-error>
+                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
                                             <tr>
@@ -158,7 +162,7 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')"> Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -170,15 +174,32 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classList" :key="index">
+                            <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
+                                    <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">
+                                    <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                </span>  
+                            </span> 
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <!-- <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <br>
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                <span v-for="(stm, key, index) in streamList" :key="index" >
-                                    <span v-if="item.class=='XI' || item.class=='XII'">
-                                        <br>
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
-                                    </span>
+                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                <span v-if="item.class=='Class 11' || item.class=='Class 12'">
+                                    Here we are taking the class stream mapping id. Do not need to use padding
+                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
                                 </span>
+                            </span>  -->
+                            <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> 
+                                    <label class="pr-3"> 
+                                        {{ item.class }} 
+                                        <span v-if="item.stream"> - 
+                                            {{  item.stream  }}
+                                        </span>
+                                    </label>
+                                </span>  
                             </span> 
                         </div>
                         <hr>
@@ -207,26 +228,31 @@ export default {
             orgList:[],
             classList:[],
             streamList:[],
+            classStreamList:[],
             fileUpload: [],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            draft_data:[],
+            // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             file_form: new form({
                 id:'',
-                program: '',
-                year: '',
-                supporter:'',
-                remarks:'',
+                file_name: '',
                 fileUpload: [],
-                record_type:'add'
+                record_type:'add',
+                applicaiton_number:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
 
             form: new form({
                 id: '',initiatedBy:'', proposedName:'',level:'',category:'1',dzongkhag:this.dzongkhag, gewog:'',chiwog:'0',locationType:'',
-                geopolicaticallyLocated:'0',senSchool:'0', isfeedingschool:'0',feeding:[], 
+                geopoliticallyLocated:'0',senSchool:'0', isfeedingschool:'0',feeding:[], 
                 establishment_type:'public_school', status:'pending'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], status:'submitted'
+                id: '',class:[], stream:[], proposed_establishment:'Public School', status:'submitted',applicaiton_number:'',
             }) 
         } 
     },
@@ -251,7 +277,8 @@ export default {
                 this.levelList = data;
             });
         },
-        getOrgList(uri = '/organization/getOrgList'){
+        //getOrgList(uri = '/organization/getOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
@@ -323,7 +350,7 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.file_form.fileUpload.push({role:'', remarks:''})
+            this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
         addMoreStudents: function(){
             this.count++;
@@ -348,7 +375,7 @@ export default {
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
-                this.form.ref_docs.push({name:$('#fileName'+currentcount).val(), attach: e.target.files[0],remarks:$('#remarks'+currentcount).val()});
+                this.file_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
                 $('#fileName'+currentcount).prop('readonly',true);
             }
             else{
@@ -400,6 +427,16 @@ export default {
         },
 
         /**
+         * method to get class stream in checkbox
+         */
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping/school')
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
+
+        /**
          * method to get class in checkbox
          */
         getClass:function(){
@@ -425,7 +462,7 @@ export default {
         shownexttab(nextclass){ 
             if(nextclass=="final-tab"){ 
                 Swal.fire({
-                    text: "Are you sure you wish to safe this details ?",
+                    text: "Are you sure you wish to save this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -438,12 +475,12 @@ export default {
                             if(response.data=="No Screen"){
                                 Toast.fire({  
                                     icon: 'error',
-                                    title: 'Technical Errors: please contact system admimnistrator for further details'
+                                    title: 'Technical Errors: please contact system administrator for further details'
                                 });
                             }
                             if(response!="" && response!="No Screen"){
                                 let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'acknowledgement',params: {data:message}});
+                                this.$router.push({name:'estb_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
                                     title: 'Application for new establishment has been submitted for further action'
@@ -461,6 +498,9 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
+                            this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -471,7 +511,23 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    this.form.post('organization/saveEstablishment',this.form)
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    }
+                    let formData = new FormData();
+                    formData.append('id', this.file_form.id);
+                    formData.append('ref_docs[]', this.file_form.ref_docs);
+                    for(let i=0;i<this.file_form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                        // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
+                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                    }
+                    formData.append('applicaiton_number', this.file_form.applicaiton_number);
+                    
+                    axios.post('organization/saveUploadedFiles', formData, config)
+                    // this.file_form.post('organization/saveUploadedFiles',this.form)
                     .then((response) => {
                         if(response.data!=""){
                             this.change_tab(nextclass);
@@ -487,7 +543,12 @@ export default {
                 }
             }
         },
-
+        loadpendingdetails(type){
+            axios.get('organization/loaddraftApplication/'+type)
+              .then(response => {
+                this.draft_data = response.data.data;
+            });
+        },
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -498,12 +559,13 @@ export default {
             if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
                 $('#gewog').addClass('select2-hidden-accessible');
             }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
             if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
                 $('#locationType').addClass('select2-hidden-accessible');
             }
+            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+                $('#chiwog').addClass('select2-hidden-accessible');
+            }
+           
         },
 
         /**
@@ -576,60 +638,44 @@ export default {
         },
         
         /**
-         * method to load organization details
+         * method to load organization details for the draft
          */
-         loaddOrganizationDetails(){
-            axios.get('organization/loadOrganizationDetails')
-            .then((response) => {  
-                let data=response.data.data;
-                this.form.id  =   data.id;
-                this.form.proposedName  =   data.proposedName;
-                this.form.level         =   data.levelId;
-                $('#level').val(data.levelId).trigger('change');
-                this.form.category      =   data.category;
-                this.form.locationType  =   data.locationId;
-                $('#locationType').val(data.locationId).trigger('change');
+        // loadOrganizationDetails(){
+        //     axios.get('organization/loadOrganizationDetails')
+        //     .then((response) => {  
+        //         let data=response.data.data;
+        //         this.form.id  =   data.id;
+        //         this.form.proposedName  =   data.proposedName;
+        //         this.form.level         =   data.levelId;
+        //         $('#level').val(data.levelId).trigger('change');
+        //         this.form.category      =   data.category;
+        //         this.form.locationType  =   data.locationId;
+        //         $('#locationType').val(data.locationId).trigger('change');
                 
-                //to populate proprietor details if category is private
-                if(data.category == 0){
-                    this.showprivatedetails('private');
-                    this.loadProprietorDetails();
-                }
-                $('#dzongkhag').val(JSON.parse(response.data.dzongkhag).data.id).trigger('change');
-                this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
-                this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
-                this.form.gewog = JSON.parse(response.data.gewog).data.id;
-                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
-                this.form.chiwog = data.chiwogId;
-
-                this.form.geopolicaticallyLocated   =   data.isGeopoliticallyLocated;
-                this.form.senSchool                 =   data.isSenSchool;
-                this.form.parentSchool              =   data.parentSchoolId;
-                this.form.coLocated                 =   data.isColocated;
-                
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
-
-        // getScreenAccess(){
-        //     axios.get('common/getSessionDetail')
-        //     .then(response => {
-        //         let data = response.data.data.acess_level;
-        //         if(data == "Org" || data == "Ministry"){
-        //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
-        //             $('#existmessage').html('You have no access to this page.');
+        //         //to populate proprietor details if category is private
+        //         if(data.category == 0){
+        //             this.showprivatedetails('private');
+        //             this.loadProprietorDetails();
         //         }
-                
-        //     })    
-        //     .catch(errors => { 
-        //         console.log(errors)
-        //     });
-        // }
+        //         $('#dzongkhag').val(JSON.parse(response.data.dzongkhag).data.id).trigger('change');
+        //         this.form.dzongkhag = JSON.parse(response.data.dzongkhag).data.id;
+        //         this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
+        //         this.form.gewog = JSON.parse(response.data.gewog).data.id;
+        //         this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+        //         this.form.chiwog = data.chiwogId;
 
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+        //         this.form.geopoliticallyLocated   =   data.isGeopoliticallyLocated;
+        //         this.form.senSchool                 =   data.isSenSchool;
+        //         this.form.parentSchool              =   data.parentSchoolId;
+        //         this.form.coLocated                 =   data.isColocated;
+                
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error......"+error);
+        //     });
+        // },
+
+
 
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/establishment')
@@ -645,6 +691,20 @@ export default {
         //         console.log("Error: "+error);
         //     });
         // },
+        getScreenAccess(){
+            axios.get('common/getScreenAccess/workflow__establishment__public_school')
+            .then(response => {
+                let data = response.data[0].total_count;
+                if(data<1){
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                    $('#message').html('This page is not accessible to you. Please contact system administrator for further assistant<br> Thank you');
+                }
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        },
     },
     
     created(){
@@ -680,11 +740,12 @@ export default {
        
         this.getClass();
         this.getStream();
+        this.getClassStream();
         this.getLevel();
         this.getLocation();
-        this.loadactivedzongkhagList();
-        this.loaddOrganizationDetails();
+        // this.loadactivedzongkhagList();
         this.getOrgList();
+        // this.loadpendingdetails('Public_School');
     }, 
 }
 </script>

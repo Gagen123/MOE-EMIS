@@ -32,7 +32,7 @@
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
                                     <span class="text-danger" id="snationality_err"></span>
                                 </div>
-                                <div class="row form-group col-lg-9 col-md-9 col-sm-9">
+                                <div class="row form-group col-lg-10 col-md-10 col-sm-10">
                                     <div class="card card-primary">
                                         <div class="card-body">
                                             <div class="row form-group">
@@ -109,9 +109,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <span class="text-danger">*All fields will be auto-completed depending on CID No.</span><br> -->
                                 </div>
                             </div>
+                            
                             <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
                                     <label>Student Code:</label>
@@ -189,13 +189,6 @@
                                                 <has-error :form="guardian_form" field="father_first_name"></has-error>
                                             </div>
                                         </div>
-                                        <!-- <div class="row form-group" id="father_type" style="display:none">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label >Please Specify Type:</label>
-                                                <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
-                                                <has-error :form="guardian_form" field="type"></has-error>
-                                            </div>
-                                        </div> -->
                                         <div class="row form-group" id="father_dzo_gewog_village">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
@@ -324,13 +317,7 @@
                                                 <has-error :form="guardian_form" field="mother_first_name"></has-error>
                                             </div>
                                         </div>
-                                        <!-- <div class="row form-group" id="father_type" style="display:none">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label >Please Specify Type:</label>
-                                                <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
-                                                <has-error :form="guardian_form" field="type"></has-error>
-                                            </div>
-                                        </div> -->
+                                      
                                         <div class="row form-group" id="mothers_dzo_gewog_village">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
@@ -785,21 +772,6 @@ export default {
                 gardain_cntct_no:'',
                 
             }),
-            class_form: new form({
-                student_id:'',
-                type:'add',
-                class:'',
-                stream:'',
-                class_stream_id:'',
-                section:'',
-                student_type:'',
-                no_meals:'',
-                scholarship:[],
-                special_benifit:[],
-                disability:'',
-                meal_type:'',
-                feeding_type:'',
-            }),
         }
     },
     methods: {
@@ -1144,18 +1116,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadclasses(id){
-            let uri = 'organization/getFullSchoolDetials/sessionDet';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.clasList=data.data.data.class_section;
-                this.streamList=data.data.data.sections;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
+      
         
         shownexttab(nextclass){
             if(nextclass=="basic-tabs"){
@@ -1183,7 +1144,6 @@ export default {
                 formData.append('fulladdress', this.personal_form.fulladdress);
                 formData.append('attachments', this.personal_form.attachments);
                 formData.append('type','add');
-                //this.personal_form.post('students/admission/saveStudentDetials',formData.serialize(), config)
                 axios.post('students/admission/saveStudentDetails',formData, config)
                 .then((response) => {
                     this.guardian_form.student_id=response.data.data.id;
@@ -1351,20 +1311,6 @@ export default {
                 }
                 if(!$('#gardain_occupation').attr('class').includes('select2-hidden-accessible')){
                     $('#gardain_occupation').addClass('select2-hidden-accessible');
-                }
-            }
-            if(type=="class"){
-                if(!$('#class').attr('class').includes('select2-hidden-accessible')){
-                    $('#class').addClass('select2-hidden-accessible');
-                }
-                if(!$('#stream').attr('class').includes('select2-hidden-accessible')){
-                    $('#stream').addClass('select2-hidden-accessible');
-                }
-                if(!$('#section').attr('class').includes('select2-hidden-accessible')){
-                    $('#section').addClass('select2-hidden-accessible');
-                }
-                if(!$('#student_type').attr('class').includes('select2-hidden-accessible')){
-                    $('#student_type').addClass('select2-hidden-accessible');
                 }
             }
             

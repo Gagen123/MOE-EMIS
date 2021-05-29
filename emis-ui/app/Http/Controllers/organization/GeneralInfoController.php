@@ -185,6 +185,7 @@ class GeneralInfoController extends Controller
     }
 
     public function saveLocation(Request $request){
+
         $orgId = $request->organizationId;
         if($orgId != "undefined" && $orgId != null){
             $orgId = $orgId;
@@ -251,6 +252,12 @@ class GeneralInfoController extends Controller
         // dd($loc);
         $response_data= $this->apiService->createData('emis/organization/location/saveLocation', $loc);
         return $response_data;
+    }
+
+    public function getLocationDetails(){
+        $org_id = $this->getWrkingAgencyId();
+        $dis = $this->apiService->listData('emis/organization/location/getLocationDetails/'.$org_id);
+        return $dis;
     }
 
     public function getDisasterListInCheckbox(){

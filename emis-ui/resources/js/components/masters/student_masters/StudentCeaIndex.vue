@@ -30,14 +30,24 @@
                     Project Type 
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('scout_type_list')">
-                    <router-link to="/scout_type_list" id="scout_type_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    Scout Type 
+                <li class="nav-item active pr-1" @click="activatelink('scout_section_list')">
+                    <router-link to="/scout_section_list" id="scout_section_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Scout Section
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('scout_list')">
-                    <router-link to="/scout_list" id="scout_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    Scout 
+                <li class="nav-item active pr-1" @click="activatelink('scout_section_level_list')">
+                    <router-link to="/scout_section_level_list" id="scout_section_level_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Scout Section Level
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('scout_badge_list')">
+                    <router-link to="/scout_badge_list" id="scout_badge_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Scout Proficiency Badge
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('scout_leader_list')">
+                    <router-link to="/scout_leader_list" id="scout_leader_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Scout Leader
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('training_type_list')">

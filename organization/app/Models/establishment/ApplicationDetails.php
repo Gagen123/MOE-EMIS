@@ -17,9 +17,20 @@ class ApplicationDetails extends Model
      * @var array
      */
     protected $fillable = [
-        'id','proposedName','category','levelId','dzongkhagId','gewogId','chiwogId','locationId',
-        'isGeopoliticallyLocated','isSenSchool','parentSchoolId','isColocated','status',
-        'applicationNo', 'service','organizationId','reason','remark','year',
-        'created_by','updated_by','updated_remarks','isfeedingschool','feeding'
+        'id',
+        'application_no',
+        'establishment_type',
+        'category',
+        'dzongkhagId',
+        'gewogId',
+        'chiwogId',
+        'application_type',
+        'year',
+        'status',
+        'remarks',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 }

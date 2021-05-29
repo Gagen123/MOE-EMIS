@@ -53,23 +53,36 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
     $router->group(['prefix' => 'students'], function () use ($router) {
         $router->group(['prefix' => 'admission'], function () use ($router) {
             $router->post('/saveStudentDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentDetails']);
+            $router->post('/saveStudentDetailsFromPortal', ['uses' => 'Students\StudentAdmissionController@saveStudentDetailsFromPortal']);
             $router->post('/saveStudentGardianDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentGardianDetails']);
+            
+            $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
+            $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
+
+            
+            
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+
+            //getting student details by cid number
+            $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
+
+            $router->get('/getAllStudentCid',['uses' => 'Students\StudentAdmissionController@getAllStudentCid']);
             $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
+           
+            $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
         });  
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
-		//getStudents
-        $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
+		$router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 
         $router->post('/reportStudents',['uses' => 'Students\StudentAdmissionRelatedController@reportStudents']);
         $router->get('/loadUnreportedStudents/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadUnreportedStudents']);
         $router->post('/saveStudentTransfer',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentTransfer']);
-        $router->get('/loadStudentTransfers/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
+        $router->get('/loadStudentTransfers/{param}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
         $router->post('/saveStudentWhereabouts',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentWhereabouts']);
         $router->get('/loadStudentWhereabouts/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentWhereabouts']);
 
@@ -124,6 +137,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadProgramActionPlan/{param}', ['uses' => 'Students\StudentProgramController@loadProgramActionPlan']);
         $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);
         $router->get('/loadProgramInventory/{param}', ['uses' => 'Students\StudentProgramController@loadProgramInventory']);
+        
+        $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);
+        $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
+
     }); 
 
 });

@@ -19,8 +19,8 @@
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
                             <td> {{dzongkhagList[item.dzongkhag]}}</td>                      
-                            <td> {{orgList[item.organization]}}</td>                   
-                            <td> {{termList[item.term]}}</td>
+                            <td> {{orgList[item.organizaiton]}}</td>                   
+                            <td> {{quarterList[item.quarter]}}</td>
                             <td> {{ item.remarks}}</td>
                               
                             <td> 
@@ -64,11 +64,11 @@
                            <div class="form-group row">
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">School Name: </label>
-                                 <span class="text-indigo-600">{{orgList[displayItem.organization]}}</span>
+                                 <span class="text-indigo-600">{{orgList[displayItem.organizaiton]}}</span>
                                </div> 
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Quarter: </label>
-                                 <span class="text-indigo-600">{{termList[displayItem.term]}}</span>
+                                 <span class="text-indigo-600">{{quarterList[displayItem.quarter]}}</span>
                               </div>
                           </div>
                       </div>
@@ -119,6 +119,8 @@ export default {
             orgList:{},
             unitList:{},
             itemList:{},
+            quarterList:{},
+            
            
         } 
     },
@@ -193,12 +195,12 @@ export default {
             });
         },
 
-        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.termList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.quarterList[data.data.data[i].id] = data.data.data[i].name; 
                 }
             })
             .catch(function (error) {
@@ -234,7 +236,7 @@ export default {
     mounted(){
         this.loadactivedzongkhagList();
         this.allOrgList();
-        this.loadActiveTermList();
+        this.loadActiveQuarterList();
         this.loadFoodReleaseList();
         this.loadActiveItemList();
         this.loadActiveUnitList();

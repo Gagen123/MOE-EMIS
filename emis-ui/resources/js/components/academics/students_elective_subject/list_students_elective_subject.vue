@@ -39,7 +39,7 @@ export default {
         getClassStreamList(uri = 'loadCommons/loadClassStreamSection/userworkingagency/NA'){
             axios.get(uri)
             .then(response => {
-                let datas = response.data.data;
+                let datas = response.data;
                 let classStreamSection = []
                 let renameId = [] 
                 datas.forEach(element => {

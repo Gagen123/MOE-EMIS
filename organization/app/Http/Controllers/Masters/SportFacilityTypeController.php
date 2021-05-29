@@ -43,13 +43,14 @@ class SportFacilityTypeController extends Controller
         if( $id != null){
             $equ = [
                 'name'          => $request['sportFacilityName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
             $data = SportFacilityType::find($request['id']);
 
-            $messs_det='sportFacilityName:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='sportFacilityName:'.$data->name.';description:'.$data->description.';  status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','sport_facility_type','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
 
             $equipment = SportFacilityType::where('id', $id)->update($equ);
@@ -57,6 +58,7 @@ class SportFacilityTypeController extends Controller
         }else{
             $equ = [
                 'name'          => $request['sportFacilityName'],
+                'description'   => $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),

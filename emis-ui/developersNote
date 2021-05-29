@@ -27,5 +27,9 @@ Setting up the system administration, and user management:
 
     6) - for the workflow configuration, you need to check workflow radio while adding screens. then to configure, click on workflow management and proceed.
 
+    *********Leadership selection setup********
+    For the leadership selection, you need to add type as Leadership in the table (category_type,question_service) to appear required data in the 
+    leadership nomination form setup
+
 
 

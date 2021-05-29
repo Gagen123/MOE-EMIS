@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Location</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
                     <th>Action</th> 
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in locationList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -32,6 +34,7 @@ export default {
     data(){
         return{
             locationList:[],
+            loc:'',
         }
     },
 
@@ -61,6 +64,15 @@ export default {
     },
     mounted(){
         this.loadLocationList();
+        this.loc =  $("#location-table").DataTable()
+    },
+    watch: {
+        locationList(){
+            this.loc.destroy();
+            this.$nextTick(() => {
+                this.loc =  $("#location-table").DataTable()
+            });
+        }
     },
 }
 </script>

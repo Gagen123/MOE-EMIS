@@ -23,7 +23,7 @@
                                     <td>{{ item.itemreceived}}</td>
                                     <td>{{ item.localproduce}}</td>
                                     <td>{{ item.othersource}}
-                                    <td>{{ item.itenissued}}
+                                    <td>{{ item.itemissued}}
                                     <td>{{ item.itemavailable }}</td>
                                    
                                 </tr>
@@ -40,17 +40,27 @@
 export default {
     data(){
         return{
-           stockInventory :[],
+            stockInventory:[],
         }
     },
     methods:{
         /**
          * method to load organization/school list
          */
-        
+        loadInventory(){
+            axios.get('mess_manage/getinventoryDetials')
+            .then(response => {
+                let data = response;
+                this.stockInventory = data.data.data;
+            });
+        },
+        showbasicdetails(id){
+            this.$router.push({name:'mess_details',query: {data:id}});
+        },
+       
     },
     created(){
-       
+        this.loadInventory();
     }
 }
 </script>

@@ -86,7 +86,7 @@ export default {
         },
         async classTeacher(){ 
             try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let finalClassStreamsSection = [];
                 let renameId = []
                 classSections.forEach((item => {

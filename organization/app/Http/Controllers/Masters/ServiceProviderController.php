@@ -34,6 +34,7 @@ class ServiceProviderController extends Controller
             $loc = [
                 'serviceType'          => $request['serviceType'],
                 'name'                 => $request['serviceName'],
+                'description'          => $request['description'],
                 'status'               => $request['status'],
                 'updated_by'           =>$request['user_id'],
                 'created_at'           =>date('Y-m-d h:i:s'),
@@ -41,7 +42,7 @@ class ServiceProviderController extends Controller
 
             $data = ServiceProvider::find($request['id']);
 
-            $messs_det='serviceType:'.$data->serviceType.'; name:'.$data->serviceName.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='serviceType:'.$data->serviceType.'; name:'.$data->serviceName.';description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','service_providers','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
             
             $location = ServiceProvider::where('id', $id)->update($loc);
@@ -51,6 +52,7 @@ class ServiceProviderController extends Controller
             $loc = [
                 'serviceType'          => $request['serviceType'],
                 'name'                 => $request['serviceName'],
+                'description'          => $request['description']
                 'status'               => $request['status'],
                 'created_by'           =>$request['user_id'],
                 'created_at'           =>date('Y-m-d h:i:s'),
@@ -66,6 +68,7 @@ class ServiceProviderController extends Controller
     */
     
     public function loadServiceProvider(){
+        return 'response from servies';
         $loadServiceProvider = ServiceProvider::all();
         return $loadServiceProvider;
     }

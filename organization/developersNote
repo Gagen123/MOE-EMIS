@@ -1,0 +1,28 @@
+in the classes table:
+    added category
+in organization_details:
+    added typeOfSchool  with comments
+    changed the length of locationId
+    changed category to char 36
+    added isFeedingSchool
+
+in the application_details:
+    added registered_org_code 
+
+in the applicaiton_attachments
+    added user_defined_file_name
+
+in the application_attachments
+    added upload_type
+
+in the application-est_details_chages
+    added initiatedBy
+
+created new table called organization_details_history, 
+created new table called organization_proprietor_details_history
+created new organization_feeding_detials
+
+in organization_proprietor_details
+    added mobileNo
+in bifurcation : added remarks
+

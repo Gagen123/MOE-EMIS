@@ -9,19 +9,24 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
+use App\Models\std_admission;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
+use App\Models\Students\StudentAboard;
+
+
 
 class StudentAdmissionController extends Controller
 {
     use ApiResponser;
-    public $database="emis_student_db";
+    public $database="student_db";
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
 
     public function saveStudentDetails(Request $request){
+        // dd($request);
         $rules = [
             'snationality'              => 'required',
             'cid_passport'              => 'required',
@@ -121,8 +126,51 @@ class StudentAdmissionController extends Controller
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    //function for student portal
+    public function saveStudentDetailsFromPortal(Request $request){
+        // dd($request);
+        $rules = [
+            'snationality'              => 'required',
+            'cid_passport'              => 'required',
+            'first_name'                => 'required',
+            'dob'                       => 'required',
+            'sex_id'                    => 'required',
+            
+        ];
+        $customMessages = [
+            'snationality.required'             => 'This field is required',
+            'cid_passport.required'             => 'This field is required',
+            'first_name.required'               => 'This field is required',
+            'dob.required'                      => 'This field is required',
+            'sex_id.required'                   => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'application_id'            =>  $request->application_id,
+            'snationality'              =>  $request->snationality,
+            'student_id'                =>  $request->student_id,
+            'CidNo'                     =>  $request->cid_passport,
+            'first_name'                =>  $request->first_name,
+            'middle_name'               =>  $request->middle_name,
+            'last_name'                 =>  $request->last_name,
+            'DateOfBirth'               => $request->dob,
+            'CmnSexId'                  =>  $request->sex_id,
+            'dzongkhag'                 =>  $request->dzongkhag, 
+            'CmnGewogId'                =>  $request->gewog, 
+            'village_id'                =>  $request->village_id, 
+            'address'                   =>  $request->fulladdress,
+            'attachments'               =>  $request->attachments, 
+            'student_type'              =>  $request->type, 
+        ];
+        $response_data = std_admission::create($data);
+        return $response_data;
+    }
+    
     
     public function saveStudentGardianDetails(Request $request){
+        // dd($request);
         $rules = [
             'merital_status'                        => 'required',
             'primary_contact'                       => 'required',
@@ -277,15 +325,11 @@ class StudentAdmissionController extends Controller
         }
         
         $this->validate($request, $rules, $customMessages);
-        // $update_data = StudentPersonalDetails::where('id',$request->student_id)->where('status','pending')->where('created_by',$request->user_id)->first();
         $update_data =[
             'CmnParentsMaritalStatusId'     =>  $request->merital_status,
             'PrimaryContact'           =>  $request->primary_contact,
         ];
-        // if( $request->type=="edit"){
-            
-        //     $procid=DB::select("CALL emis_std_detils_audit_proc('".$request->student_id."','".$request->user_id."','guardain')");
-        // }
+      
         $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
         $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
@@ -350,8 +394,78 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    //this funtion used for student portal
+    public function  savedetailsNotEnrolledStd(Request $request){
+        // dd($request);
+        $rules = [
+            'dateOfapply'               => 'required',
+           
+        ];
+        $customMessages = [
+          
+            'dateOfapply.required'        => 'This field is required',
+        ];
+        
+        $this->validate($request, $rules, $customMessages);
+        $data =[    
+            'CidNo'                      =>$request->cid_passport,
+            'first_name'                 =>$request->Name,
+            'OrgOrganizationId'          =>$request->OrgOrganizationId, 
+            'CmnSexId'                   =>$request->gender,
+            'student_type'               =>$request->student_type,
+            'dzongkhag'                  =>$request->dzongkhag,
+            'school'                     =>$request->school,
+            'class'                      =>$request->class,
+            'stream'                     =>$request->stream,
+            'dateOfapply'                =>$request->dateOfapply,
+            'Remarks'                    =>$request->remarks,
+        ];
+
+        dd($data);
+
+            $response_data = std_admission::create($data);
+           
+        
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
     
+
+    public function  savedetailsEnrolledStd(Request $request){
+        // dd($request);
+
+        $rules = [
+            // 'dzongkhag'                 => 'required',
+            // 'school'                    => 'required',
+            // 'class'                     => 'required',
+            'dateOfapply'               => 'required',
+        ];
+        $customMessages = [
+            // 'dzongkhag.required'          => 'This field is required',
+            // 'school.required'             => 'This field is required',
+            // 'class.required'              => 'This field is required',
+            'dateOfapply.required'        => 'This field is required',
+        ];
+        
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'dzongkhag'                  =>  $request->dzongkhag,
+            'school'                     =>  $request->school,
+            'class'                      =>  $request->class,
+            'dateOfapply'                =>  $request->dateOfapply,
+            'remarks'                    =>  $request->remarks,
+        ];
+            $response_data = std_admission::create($data);
+        
+        
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    
+   
     public function saveStudentClassDetails(Request $request){
+
+        // dd($request);
         $rules = [
             'student_type'                      => 'required',
             'no_meals'                          => 'required',
@@ -535,10 +649,23 @@ class StudentAdmissionController extends Controller
         return $this->successResponse($response_data);
     }
     
-    public function getStudentDetails($std_id=""){
-        $response_data=Std_Students::where('id',$std_id)->first();
+    public function getStudentDetails(){
+    
+        $response_data=Std_Students::all();
         return $this->successResponse($response_data);
     }
+    public function getAllStudentCid(){
+        $response_data=Std_Students::select('CidNo')->get();
+        return $this->successResponse($response_data);
+    }
+ 
+    //getting student details std_student table using cid number
+    public function getstudentdetailsbyCid($cid){
+        // dd("dsadsd");
+        $response_data=Std_Students::where('CidNo',$cid)->get();
+        return $this->successResponse($response_data);
+    }
+
     public function getstudentGuardainClassDetails($std_id="",$type=""){
         if($type=="guardian"){
             $response_data=StudentGuardainDetails::where('student_id',$std_id)->get();
@@ -547,6 +674,12 @@ class StudentAdmissionController extends Controller
             $response_data=StudentClassDetails::where('StdStudentId',$std_id)->first();
         }  
         return $this->successResponse($response_data);
+    }
+
+    public function getEnrolledStudents($std_id=""){
+        $response_data=std_admission::where('id',$std_id)->first();
+        return $this->successResponse($response_data); 
+
     }
     
 }
