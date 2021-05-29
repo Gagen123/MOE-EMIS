@@ -238,7 +238,17 @@ const routes = [
     
     { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
       children:[
-        { path: '',name:"establishment_index", component: require('./components/organization/establishment/new_establishment/establishment_index.vue').default },
+        { path: '',name:"establishment_index", component: require('./components/organization/establishment/public_school/list_public_school.vue').default },
+        { path: '/public_school_index', 
+          component: require('./components/organization/establishment/public_school/public_school_index.vue').default,
+          children: [ 
+            { path: '/', name:'public_school_index', component: require('./components/organization/establishment/public_school/list_public_school.vue').default },
+            { path: '/list_public_school', name:'list_public_school', component: require('./components/organization/establishment/public_school/list_public_school.vue').default },
+            { path: '/create_public_school',name:"create_public_school", component: require('./components/organization/establishment/public_school/create_public_school.vue').default },
+            { path: '/edit_public_school',  name:'edit_public_school',component: require('./components/organization/establishment/public_school/edit_school_details.vue').default },
+            { path: '/acknowledgement_public_school',  name:'acknowledgement_public_school',component: require('./components/organization/establishment/public_school/acknowledgement.vue').default },
+          ] 
+        },
         { path: '/new_establishment_index',  name:'establishment_index',
           component: require('./components/organization/establishment/new_establishment/new_establishment_index.vue').default ,
           children: [
@@ -246,7 +256,7 @@ const routes = [
             { path: '/establishment',name:"establishment", 
                 component: require('./components/organization/establishment/new_establishment/establishment.vue').default,
                 children: [
-                    { path: '/public_school',name:"public_school", component: require('./components/organization/establishment/new_establishment/public_school.vue').default },
+                    // { path: '/public_school',name:"public_school", component: require('./components/organization/establishment/new_establishment/public_school.vue').default },
                     { path: '/private_school',name:"private_school", component: require('./components/organization/establishment/new_establishment/private_school.vue').default },
                     { path: '/public_eccd', name:'public_eccd', component: require('./components/organization/establishment/new_establishment/public_eccd.vue').default },
                     { path: '/private_eccd',name:"private_eccd", component: require('./components/organization/establishment/new_establishment/private_eccd.vue').default },

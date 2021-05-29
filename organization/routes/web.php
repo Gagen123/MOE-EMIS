@@ -253,6 +253,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
             $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
+            $router->get('/loadEstablishmentApplciaiton/{record_id}', 'establishment\EstablishmentController@loadEstablishmentApplciaiton');
             $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
             $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
 
@@ -262,7 +263,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
             $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
-            $router->get('/loadOrgApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);
+            $router->get('/loadOrgApplications/{user_id}/{type}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);
             $router->get('/loadOrgChangeApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgChangeApplications']);
             $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');

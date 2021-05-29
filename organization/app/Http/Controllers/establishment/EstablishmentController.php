@@ -372,8 +372,8 @@ class EstablishmentController extends Controller
     /**
      * method to load organization applications
      */
-    public function loadOrgApplications($user_id=""){
-        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','submitted')->get());
+    public function loadOrgApplications($user_id="",$type=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','<>','pending')->where('establishment_type',str_replace('_',' ',$type))->get());
     }
 
     public function loadOrgChangeApplications($user_id=""){
@@ -745,8 +745,6 @@ class EstablishmentController extends Controller
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }
 
-    
-    
     public function loaddraftApplication($type="",$user_id=""){
         $app_details=  ApplicationDetails::where('status','pending')->where('created_by',$user_id)->where('establishment_type',$type)->first();
         if($app_details!=""){
@@ -754,4 +752,18 @@ class EstablishmentController extends Controller
         }
         return $this->successResponse($app_details);
     }
+    public function loadEstablishmentApplciaiton($record_id=""){
+        $app_details=  ApplicationDetails::where('id',$record_id)->first();
+        if($app_details!="" && $app_details->establishment_type=="Public School"){
+            $appDetails=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
+            $app_details->estb_details= $appDetails;
+            if($appDetails->isFeedingSchool==1){
+                $app_details->feeding_modality=ApplicationNoMeals::where('foreignKeyId',$appDetails->id)->get();
+            }
+        }
+        $app_details->estb_class=ApplicationClassStream::where('ApplicationDetailsId',$app_details->id)->get();
+        
+        return $this->successResponse($app_details);
+    }
+    
 }

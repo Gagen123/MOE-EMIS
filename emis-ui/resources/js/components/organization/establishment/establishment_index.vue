@@ -12,11 +12,18 @@
                 </router-link>
             </li>
             <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/public_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                   New Establishment (Public)
+                </router-link>
+            </li> 
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
                 <router-link id="new_establishment_index" to="/new_establishment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                    New Establishment
                 </router-link>
             </li> 
+           
             <li class="nav-item pr-1" @click="activatelink('register')">
                 <router-link to ="/register" id="register" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>

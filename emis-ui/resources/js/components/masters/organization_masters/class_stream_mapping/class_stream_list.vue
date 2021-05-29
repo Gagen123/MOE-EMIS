@@ -33,7 +33,7 @@ export default {
         }
     },
     methods:{
-        loadClassList(uri = 'masters/loadClassStreamMapping'){
+        loadClassList(uri = 'masters/loadClassStreamMapping/NA'){
             axios.get(uri)
             .then(response => {
                 let data = response;
