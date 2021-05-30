@@ -245,9 +245,18 @@ class StudentHealthController extends Controller
         unset($data['std_screened']);
         unset($data['std_referred']);
 
+        try{
+            StudentHealthScreening::create($data);
+
+            } catch(\Illuminate\Database\QueryException $ex){ 
+                dd($ex->getMessage()); 
+                // Note any method of class PDOException can be called on $ex.
+            }
+			
+
         $response_data = StudentHealthScreening::create($data);
         $lastInsertId = $response_data->id;
-        
+
         if(!empty($std_screened)){
             foreach($std_screened as $index => $screened){
                 if($screened == NULL || $screened == false){
@@ -303,7 +312,7 @@ class StudentHealthController extends Controller
     public function loadHealthScreeningRecords($param=""){
 
         $id = $param;
-        
+
         $records = DB::table('std_health_screening')
                     ->join('std_health_screening_type', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
                     ->select('std_health_screening.*', 'std_health_screening_type.name AS screening_type')
@@ -344,6 +353,41 @@ class StudentHealthController extends Controller
         $response_data=StudentHealthScreening::where('id',$id)->first();
         $response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
         return $this->successResponse($response_data); 
+    }
+
+    public function getHealthScreeningDetails($param=""){
+        $id = $param;
+
+        $records = DB::table('std_health_screening_type')
+                    ->select('std_health_screening.id', 'std_health_screening.date', 'std_health_screening.class', 
+                                'std_health_screening.section', 'std_health_screening.stream', 'std_health_screening_type.name AS screening_type',
+                                'std_screening_endorsed_by.Name AS endorsed_by', 'std_screening_position_title.Name AS position')
+                    ->join('std_health_screening', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
+                    ->leftjoin('std_screening_position_title', 'std_health_screening.StdScreeningPositionTitleId', '=', 'std_screening_position_title.id')
+                    ->leftjoin('std_screening_endorsed_by', 'std_health_screening.StdScreeningEndorsedById', '=', 'std_screening_endorsed_by.id')
+                    ->where('std_health_screening.id', $id)
+                    ->get();
+        return $this->successResponse($records); 
+    }
+
+    public function getStudentScreenedDetails($param=""){
+        $id = $param;
+
+        $records = DB::table('std_health_not_screened')
+                    ->select('StdStudentId')
+                    ->where('StdHealthScreeningId', $id)
+                    ->get();
+        return $this->successResponse($records); 
+    }
+
+    public function getStudentReferredDetails($param=""){
+        $id = $param;
+
+        $records = DB::table('std_health_referred')
+                    ->select('StdStudentId')
+                    ->where('StdHealthScreeningId', $id)
+                    ->get();
+        return $this->successResponse($records); 
     }
 
     /*

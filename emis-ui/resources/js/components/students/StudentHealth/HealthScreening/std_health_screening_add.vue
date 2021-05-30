@@ -69,8 +69,14 @@
                                     <th>Name</th> 
                                     <th>Sex</th>
                                     <th>Age</th>
-                                    <th>Screened</th>
-                                    <th>Referred</th>
+                                    <th>
+                                        Screened
+                                        <input type="checkbox" name="height" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
+                                    </th>
+                                    <th>
+                                        Referred
+                                        <input type="checkbox" name="height" class="form-control-input" id="refferedid" @change="checkall('refferedcheck','refferedid')"/>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
@@ -81,10 +87,10 @@
                                         <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="checkbox" name="height" class="form-control-input" v-model="student_form.std_screened[index]"/>
+                                        <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/>
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="weight" class="form-control-input" v-model="student_form.std_referred[index]"/>
+                                        <input type="checkbox" name="weight" class="form-control-input refferedcheck" v-model="student_form.std_referred[index]"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -242,6 +248,14 @@ export default {
             }
             
         },
+        checkall(class_to_check,id){
+            if($('#'+id).prop('checked')){
+                $("."+class_to_check).prop("checked",true);
+            }
+            else{
+                $("."+class_to_check).prop("checked",false);
+            }
+        }
     },
     mounted() {
         $('.select2').select2()

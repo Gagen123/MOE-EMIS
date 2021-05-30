@@ -13,19 +13,21 @@
               </div>
             </div>          
             <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
+                    <table id="term-result-view-table" cellspacing="0" width="100%" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>Student Code</th>
                                 <th>Name</th>
-                                <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} <span v-if="item.input_type==1">({{item.weightage}}%)</span></th>
-                                <th v-if="totalWeightage>0">Total ({{totalWeightage}}%)</th>
+                                <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
+
+                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} <span v-if="item.input_type==1">({{item.weightage}}%)</span></th>
+                                <th v-if="totalWeightage>-1">Total ({{totalWeightage}}%)</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{item1.CidNo}}<input type="hidden" :value="totalScore =0"/></td>
+                                <td>{{item1.CidNo}}<input type="hidden" :value="totalScore = 0"></td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                    {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}}
@@ -53,9 +55,9 @@
         }
     },
     methods:{
-        // rating(rating_type_id){
-        //      return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
-        // },
+        rating(rating_type_id){
+             return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
+        },
        async loadStudentAssessments(){
          let uri = 'academics/loadStudentAssessments'
           uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&classId='+this.classId)
@@ -68,7 +70,6 @@
             try{
                 let studentAssesssments = await axios.get(uri).then(response => response.data)
                 this.assessmentAreaList = studentAssesssments.assessmentAreas
-                console.log(this.assessmentAreaList);
                 this.ratingList = studentAssesssments.ratings
                 this.studentAssessmentList = studentAssesssments.studentAssessments
             }catch(e){
@@ -80,12 +81,14 @@
     },
     computed:{
         totalWeightage(){
-           let totalWeightage = 0
-           this.assessmentAreaList.forEach((item) => {
-               if(item.input_type==1){
-                return totalWeightage+=(item.weightage)
-               }
-            })
+           let totalWeightage = 0;
+           if(this.assessmentAreaList.length>0){
+                this.assessmentAreaList.forEach((item) => {
+                    if(item.input_type==1){
+                        return totalWeightage+=(item.weightage)
+                    }
+                })
+           }
            return totalWeightage
         },
         // totalScore(){
