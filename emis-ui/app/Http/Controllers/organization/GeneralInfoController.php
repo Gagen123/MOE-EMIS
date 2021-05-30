@@ -266,18 +266,20 @@ class GeneralInfoController extends Controller
     }
 
     public function saveClassMapping(Request $request){
-        $rules = [
-            'school'         =>  'required',
-            'class'          =>  'required',
-        ];
-        $customMessages = [
-            'school.required'        => 'School is required',
-            'class.required'         => 'Class is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
+        // $rules = [
+        //     'school'         =>  'required',
+        //     'class'          =>  'required',
+        // ];
+        // $customMessages = [
+        //     'school.required'        => 'School is required',
+        //     'class.required'         => 'Class is required',
+        // ];
+        // $this->validate($request, $rules, $customMessages);
         $loc =[
             'school'        =>  $request['school'],
             'class'         =>  $request['class'],
+            'stream'        =>  $request['stream'],
+            'user_id'       =>  $this->userId(),
             'id'            =>  $request['id'],
         ];
         try{
@@ -287,6 +289,10 @@ class GeneralInfoController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+    public function getCurrentClassStream($school_id = ""){
+        $itemList = $this->apiService->listData('emis/organization/classMapping/getCurrentClassStream/'.$school_id);
+        return $itemList;
     }
 
     public function getClassByOrganizationId($orgId = ""){

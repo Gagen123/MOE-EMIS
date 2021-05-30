@@ -4,7 +4,7 @@
             <div class="row form-group">
               <div class="ml-3 row form-group">
               <div class="mr-3">
-                <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
+                <strong>Class: </strong> {{ class_stream_section}}
               </div>
             </div>  
             </div>  
@@ -13,19 +13,22 @@
                     <table id="students-elective-subject-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Roll No</th>
+                                <th>Student Code</th>
                                 <th>Name</th>
-                                <th v-for="(item0, index0) in electiveSubjectList" :key="index0">{{item0.subject}}</th>
+                                <th v-for="(item0, index0) in electiveSubjectList" :key="index0">
+                                    {{item0.subject}}
+                                    <span v-if="item0.dzo_name" class="text-center">( {{item0.dzo_name}} )</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in studentElectiveSubjectList" :key="index">
                                 <td>
-                                    {{ item.roll_no }}
+                                    {{ item.CidNo }}
                                 </td> 
                                   <td>
                                     <input v-model="studentElectiveSubjectList[index].std_student_id" class="form-control" type="hidden">
-                                    {{ item.name}}
+                                    {{ item.Name}}
                                 </td> 
                                 <td v-for="(item1, index1) in electiveSubjectList" :key="index1">
                                     <input type="checkbox" v-model="studentElectiveSubjectList[index][item1.aca_sub_id]" :true-value="item1.aca_sub_id" :false-value="false">
@@ -92,15 +95,18 @@ export default {
     },
     mounted(){ 
         this.studentElectiveSubject();
-        this.dt = $("#students-elective-subject-table").DataTable()
+        this.dt = $("#students-elective-subject-table").DataTable({
+            columnDefs: [
+                { width: 20, targets: 0},
+                { width: 50, targets: 1},
+            ],
+        })
     },
     created() {
-        this.className=this.$route.params.data.class;
+        this.class_stream_section =this.$route.params.data.class_stream_section;
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.section_id=this.$route.params.data.org_section_id;
-        this.streamName=this.$route.params.data.stream;
-        this.section=this.$route.params.data.section;
         this.id=this.$route.params.data.id;
     },
     watch: {

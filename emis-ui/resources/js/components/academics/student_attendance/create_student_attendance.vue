@@ -1,87 +1,166 @@
 <template>
-    <div>
-        <div class="card-body">
-            <div class="row" id="student-attendance">
+   <div>
+        <form @submit.prevent="save" class="bootbox-form">
+            <!-- <div id='message' v-if="message" class="alert alert-info" role="alert">
+                <i class="fa fa-info-circle"></i>{{ message }}</div> -->
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Select Class:<span class="text-danger">*</span></label> 
+                    <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id">
+                        <option selected="selected" value="">---SELECT CLASS---</option>
+                        <option selected v-for="(item, index) in classTecherClass" :key="index" :value="[item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                            {{ item.class_stream_section }}
+                        </option>
+                    </select> 
+                </div>
+                <div v-if="!studentList.length" class="col-auto pt-1 mt-4">
+                    <button type="button" class="btn btn-primary btn-sm btn-flat" @click="getStudents()"><i class="fa fa-download"></i> Load Student </button>
+                </div>
+                <div class="ml-4 col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Date:<span class="text-danger">*</span></label>
+                    <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  type="date">
+                </div>
+            </div>
+            <div v-if="studentList.length" class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <form>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Class: <span class="text-danger">*</span></label>
-                                 <span></span>
-                                <select class="form-control" id="system_role" @change="removeerror('system_role','system_role_err')" v-model="form.system_role">
-                                    <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                                </select>
-                                <span class="text-danger" id="system_role_err"></span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 mt-4 pt-2">
-                                <button class="btn btn-primary btn-sm btn-flat" @click="generatescreens()" type="button"> <span class="fa fa-download"></span> Load Details</button>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Select Module: <span class="text-danger">*</span></label> 
-                                <select class="form-control" id="module_name" @change="removeerror('module_name','module_name_err'),loadsubmodule()" v-model="form.module_name">
-                                    <option v-bind:value="'No_Module'">No Module & Sub Module</option>
-                                    <option v-for="(item, index) in moduleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                                </select>
-                                <span class="text-danger" id="module_name_err"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="table-responsive overflow-auto">
-                                    <table id="priveleges_table" class="table table-sm table-bordered table-striped" style="width: 100%;">
-                                        <thead class="table-secondary">
-                                            <tr>
-                                                <th>Roll No.</th>
-                                                <th>Name</th>
-                                                <th>Present</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, index) in classStremSectionList" :key="index">
-                                                <td>{{ index+1 }}</td>
-                                                <td> {{ item.class }} </td>
-                                                <td> {{ item.stream }}  </td>
-                                                <td> {{ item.section }} </td>
-                                                <td>
-                                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
-                                                </td>                                                                               
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                    <table id="student-attendance-table" class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student Code</th>
+                                <th>Name</th>
+                                <th>Present</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            <tr v-for="(item, index) in studentList" :key="index">
+                                <td>{{ item.CidNo }}</td>
+                                <td>
+                                    <input v-model='studentList[index].std_student_id' type="hidden">
+                                    {{ item.Name }}
+                                </td>
+                                <td>
+                                    <div class="form-check">
+                                        <input  v-model="studentList[index].is_present" class="form-check-input" type="checkbox" value="" id="present">
+                                    </div>
+                                </td>                                                                             
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <div class="row form-group fa-pull-right">
-                <div class="col-md-12">
-                    <a href="dashboard">
-                        <button type="button" class="btn btn-flat btn-danger"> <i class="fa fa-ban"></i> Cancel</button>
-                    </a>
-                    <button type="button" class="btn btn-flat btn-primary" @click="updateprivileges()"> <i class="fa fa-edit"></i> Update</button>
-                </div>
-            </div>
-        </div>
-    </div>
+            <div class="card-footer text-right">
+                <button v-if="studentList.length" type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button v-if="studentList.length" type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+            </div>        
+        </form>
+    </div>     
 </template>
 
 <script>
 export default {
     data(){
-        return {}
+        return {
+            classTecherClass:[],
+            studentList:[],
+            class_stream_section_id:'',
+            attendance_date:new Date().toISOString().substr(0, 10),
+            message:'',
+            action:'add',
+            dt:'',
+        }
     },
-
     methods:{
-      
+        remove_err(field_id){
+            if($('#' + field_id).val()!=""){
+                $('#' + field_id).removeClass('is-invalid')
+            }
+        },
+        async getClassTeacherClasss(){
+            try{
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                let classTeachers = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
+                classTeachers.forEach((classTeacher,index) => {
+                    classSections.forEach(item => {
+                        if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || (classTeacher.org_stream_id == null && item.org_stream_id == null)) && (classTeacher.org_section_id == item.org_section_id || (classTeacher.org_section_id == null && item.org_section_id == null))){
+                            classTeachers[index].org_class_id = item.org_class_id;
+                            classTeachers[index].org_stream_id = item.org_stream_id
+                            classTeachers[index].org_section_id = item.org_section_id
+                            if(item.stream && item.section){
+                                classTeachers[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
+                            }else if(item.stream){
+                                classTeachers[index]['class_stream_section'] = item.class+' '+item.stream
+                            }else{
+                                classTeachers[index]['class_stream_section'] = item.class
+                            }
+                        }
+                    })
+                });
+                this.classTecherClass = classTeachers
+
+             }catch(e){
+                if(e.toString().includes("500")){
+                  $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+             }
+        },
+        getStudents(){
+           let uri = 'academics/getStudentsForAttendance'
+           uri += ('?classId='+this.class_stream_section_id[0])
+           if(this.class_stream_section_id[1] !== null){
+                    uri += ('&streamId='+this.class_stream_section_id[1])
+                }
+                if(this.class_stream_section_id[2] !== null){
+                    uri += ('&sectionId='+this.class_stream_section_id[2])
+                }
+                axios.get(uri)
+                .then(response => {
+                    let studentList = response.data.student
+                    let aa = []
+                    studentList.forEach((item)=>{
+                        aa['CidNo'] = item.CidNo
+                        aa['Name'] = item.Name
+                        aa['std_student_id'] = item.std_student_id
+                        aa['is_present'] = 1 
+                        const obj = {...aa};
+                        this.studentList.push(obj);
+                    })
+
+                }).catch(function (error) {
+                    if(error.toString().includes("500")){
+                        $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                    }
+                });
+        },
+        save(){
+                axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.class_stream_section_id[0],org_stream_id:this.class_stream_section_id[1],org_section_id:this.class_stream_section_id[2],class_stream_section:this.class_stream_section_id[3],attendance_date:this.attendance_date,data:this.studentList})
+                    .then(() => {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved successfully.'
+                        })
+                        this.$router.push('/list-student-attendance');
+                    })
+                    .catch(function(error){
+                    console.log( error);
+                });
        
+        },
     },
     mounted(){
-    
+        this.getClassTeacherClasss()
+        this.dt = $("#student-attendance-table").DataTable({
+            columnDefs: [
+                { width: 20, targets: 0},
+            ],
+        })
+    }, 
+    watch: {
+        studentList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#student-attendance-table").DataTable()
+            });
+        }
     }
 }
 </script>

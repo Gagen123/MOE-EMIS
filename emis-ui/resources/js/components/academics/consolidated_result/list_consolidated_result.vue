@@ -13,7 +13,7 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in studentConsolidatedResultList" :key="index">
-                            <td>{{ item.class }} {{item.stream}} {{item.section}}</td>
+                            <td>{{ item.class_stream_section }}</td>
                             <td>{{ item.term }}</td>
                             <td>
                                 <span v-if="item.pubblished">
@@ -58,15 +58,21 @@ export default {
     methods:{
         async loadConsolidatedResultList(){
             try{
-                let classSections = await axios.get('academics/getclassSections').then(response => { return response.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let studentsConsolidatedResult = await axios.get('academics/loadConsolidatedResultList').then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
                     classSections.forEach(item1 => {
                         if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
                             studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
-                            studentsConsolidatedResult[index].class = item1.class
-                            studentsConsolidatedResult[index].stream = item1.stream
-                            studentsConsolidatedResult[index].section = item1.section
+                            if(item1.stream && item1.section){
+                                 studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
+                            }else if(item1.stream){
+                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
+                            }
+                            else{
+                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class
+                            }
+                         
                         }
                     })
             })

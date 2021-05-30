@@ -76,7 +76,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
-		$router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
+		//route by chimi to get temporary
+        $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 
         $router->post('/reportStudents',['uses' => 'Students\StudentAdmissionRelatedController@reportStudents']);

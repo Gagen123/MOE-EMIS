@@ -7,17 +7,13 @@
                         <tr>
                          <th>SL#</th>
                         <th>Class</th>
-                        <th>Stream</th>
-                        <th>Section</th>
                         <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in classesStreamSectionList" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.class }}</td>
-                            <td>{{item.stream}}</td>
-                            <td>{{item.section}}</td>
+                            <td>{{ item.class_stream_section }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
@@ -40,11 +36,28 @@ export default {
         }
     },
     methods:{
-        getClassStreamList(uri = 'academics/getclassSections'){
+        getClassStreamList(uri = 'loadCommons/loadClassStreamSection/userworkingagency/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response 
-                this.classesStreamSectionList = data.data;
+                let datas = response.data;
+                let classStreamSection = []
+                let renameId = [] 
+                datas.forEach(element => {
+                    if(element.stream && element.section){
+                       renameId['class_stream_section'] = element.class+' '+element.stream+' '+element.section
+                    }else if(element.stream){
+                        renameId['class_stream_section'] = element.class+' '+element.stream
+                    }
+                    else{
+                        renameId['class_stream_section'] = element.class
+                    }
+                    renameId['org_class_id'] = element.org_class_id
+                    renameId['org_stream_id'] = element.org_stream_id
+                    renameId['org_section_id'] = element.org_section_id
+                    const obj = {...renameId};
+                    classStreamSection.push(obj);
+                });
+                this.classesStreamSectionList = classStreamSection;
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
@@ -58,7 +71,11 @@ export default {
     },
     mounted(){ 
         this.getClassStreamList();
-        this.dt = $("#student-elective-subject-table").DataTable()
+        this.dt = $("#student-elective-subject-table").DataTable({
+             columnDefs: [
+                { width: 5, targets: 0},
+            ],
+        })
     },
     watch: {
         classesStreamSectionList(val) {

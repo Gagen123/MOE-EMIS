@@ -51,7 +51,7 @@
                                 </div>  
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Level:</label>
-                                    <span class="text-blue text-bold">{{levelList[applicationOrgdetails.level]}}</span>
+                                    <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
                                 </div>  
                             </div>
                             <div class="form-group row">
@@ -80,17 +80,17 @@
                                     </span>
                                 </div> 
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Feeding School:</label>
-                                    <span class="text-blue text-bold">{{ applicationdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
                                 </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Is SEN School:</label>
-                                    <span class="text-blue text-bold">
-                                        {{ applicationdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
-                                    </span>
-                                </div> 
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationOrgdetails.isFeedingSchool  == 1">
+                                    <label class="mb-0">Feeding Modality:</label><br>
+                                    <label><input  type="checkbox" v-model="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                </div>
                             </div>
                             <div v-if="applicationdetails.establishment_type=='Private School'">
                                 <div class="row pb-2">
@@ -358,6 +358,7 @@ export default {
             applicationdetails:[],
             levelList:{},
             locationList:[],
+            feeding:[],
             applicationOrgdetails:{locationTypeId:'', level:'', proposedName:'', initiated_by:''},
             classStreamForm: new form({
                 id: '',class:[], stream:[], status:'submitted'
@@ -382,6 +383,14 @@ export default {
                 this.form.applicationNo=data.application_no;
                 this.form.servicename=data.establishment_type;
                 this.form.id=data.id;
+                if(data.org_details.isFeedingSchool==1){
+                    for(let i=0;i<data.feeding_modality.length;i++){
+                        if(data.feeding_modality[i].noOfMeals!=undefined){
+                            $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
+                        }
+                    }
+                    $('#feedingDetails').show();
+                }
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }

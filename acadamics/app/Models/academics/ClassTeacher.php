@@ -18,6 +18,7 @@ class ClassTeacher extends Model
         'org_stream_id',
         'org_section_id',
         'stf_staff_id',
+        'class_stream_section',
         'created_by',
         'created_at',
         'updated_by',

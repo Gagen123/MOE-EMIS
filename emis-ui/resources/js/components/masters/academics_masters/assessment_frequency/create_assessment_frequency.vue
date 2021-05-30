@@ -8,7 +8,6 @@
                             <tr>
                                 <th>SL#</th>
                                 <th>Class</th>
-                                <th>Stream</th>
                                 <th>Assessment Frequency</th>
                             </tr>
                         </thead>
@@ -16,21 +15,21 @@
                             <tr  v-for="(item, index) in classAssessmentFrequencyList" :key="index">
                                 <td class="text-right">{{ index + 1 }}</td>
                                 <td>
-                                    <input v-model="classAssessmentFrequencyList[index].org_class_id" class="form-control" type="hidden">
-                                    {{ item.class }}
+                                    <!-- <input v-model="classAssessmentFrequencyList[index].org_class_id" class="form-control" type="hidden"> -->
+                                    {{ item.class_stream }}
                                 </td>                                                                              
-                                <td>
+                                <!-- <td>
                                     <input v-model="classAssessmentFrequencyList[index].org_stream_id" class="form-control" type="hidden">
                                     {{ item.stream }}
-                                </td>
+                                </td> -->
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <!-- :class="{ 'is-invalid': classAssessmentFrequencyList.errors.data.has('aca_assmnt_frequency_id') }"  @change="remove_err('aca_assmnt_frequency_id')" -->
                                         <select v-model="classAssessmentFrequencyList[index].aca_assmt_frequency_id" class="form-control  editable_fields" id="aca_assmnt_frequency_id" > 
                                             <option selected value="">--SELECT--</option>
-                                            <option v-for="(item, index) in assesmentFrequencyList" :key="index" :value="item.id">{{ item.name }}</option>
+                                            <option v-for="(item1, index1) in assesmentFrequencyList" :key="index1" :value="item1.id">{{ item1.name }}</option>
                                         </select>
-                                        {{errMessage}}
+                                        <!-- {{errMessage}} -->
                                         <!-- {{classAssessmentFrequencyList}}------error -->
                                         <!-- <has-error :form="classAssessmentFrequencyList[index]" field="aca_assmnt_frequency_id"></has-error> -->
                                     </div>
@@ -53,7 +52,6 @@ export default {
         return {
             classAssessmentFrequencyList: [],
             assesmentFrequencyList:[],
-            errMessage:'',
             dt:''
         }
     },
@@ -76,20 +74,34 @@ export default {
         },
          async classAssessmentFrequency(){
              try{
-                let classStreams = await axios.get('masters/getClassStream').then(response => {
-                    return  response.data.data
-                })
-                let classAssessmentFrequencies = await axios.get('masters/getClassAssessmentFrequency').then(response => {
-                    return  response.data.data
-                })
-                classStreams.forEach((classStream,index) => {
+                let classStreams = await axios.get('masters/loadClassStreamMapping/NA').then(response => {return  response.data.data })
+                let finalClassStreams = [];
+                let renameId = []
+                classStreams.forEach((item => {
+                    if(item.stream){
+                       renameId['class_stream'] = item.class+' '+item.stream
+                    }else{
+                        renameId['class_stream'] = item.class
+                    }
+                    renameId['org_class_id'] = item.classId;
+                    renameId['org_stream_id'] = item.streamId;
+                    const obj = {...renameId};
+                    finalClassStreams.push(obj);
+                }))
+                let classAssessmentFrequencies = await axios.get('masters/getClassAssessmentFrequency').then(response => {return  response.data.data})
+        
+                finalClassStreams.forEach((classStream,index) => {
                     classAssessmentFrequencies.forEach(item => {
+                          // if(!studentsConsolidatedResult[index].class_stream_section){
+                            //     studentsConsolidatedResult[index].class_stream_section = item1.class + ' ' + item1.stream + ' ' + item1.section
+                            // }
                         if(classStream.org_class_id == item.org_class_id && (classStream.org_stream_id == item.org_stream_id || classStream.org_stream_id == null)){
-                            classStreams[index].aca_assmt_frequency_id = item.aca_assmt_frequency_id
+                            finalClassStreams[index].aca_assmt_frequency_id = item.aca_assmt_frequency_id
+                           
                         }
                     })
                 })
-                this.classAssessmentFrequencyList = classStreams
+                this.classAssessmentFrequencyList = finalClassStreams
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -120,7 +132,7 @@ export default {
         this.dt =  $("#class-assessment-frequency-table").DataTable({
             columnDefs: [
                     { width: 2, targets: 0},
-                    { width: 80, targets:[2,3]},
+                    // { width: 80, targets:[2,3]},
                 ],
         })
     },
