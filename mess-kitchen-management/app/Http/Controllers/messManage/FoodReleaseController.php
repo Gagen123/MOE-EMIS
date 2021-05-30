@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\FoodRelease;
 use App\Models\mess_manage\ItemReleasedNote; 
+use App\Models\mess_manage\FoodReleaseDocuments; 
 use Illuminate\Support\Facades\DB;
 
 class FoodReleaseController extends Controller
@@ -35,32 +36,32 @@ class FoodReleaseController extends Controller
 
        // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
         // dd($request->items_release);
-        foreach ($request->items_released as $i => $item){
-            $itemreleasednote = array(
-              //  'foodreleaseId'              =>  $releasId[0], 
-                'foodreleaseId'              =>  $foodrel->id,
-                'item_id'                    =>  $item['item'],
-                'quantity'                   =>  $item['quantity'],
-                'unit_id'                    =>  $item['unit'],
-                'remark'                     =>  $item['remarks'],
-                'updated_by'                 =>  $request->user_id,
-                'created_at'                 =>  date('Y-m-d h:i:s')
-            );
-            ItemReleasedNote::create($itemreleasednote);
-        }
-        foreach($request->attachment_details as $att){
-            $doc_data = array(
-              //  'foodreleaseId'              =>  $releasId[0], 
-                'foodreleaseId'              =>  $foodrel->id,
-                'attachment_for'             =>  'Food Release Note',
-                'path'                       =>  $att['path'],
-                'original_name'              =>  $att['original_name'],
-                'user_defined_name'          =>  $item['user_defined_name'],
-                'updated_by'                 =>  $request->user_id,
-                'created_at'                 =>  date('Y-m-d h:i:s')
-            );
-            FoodReleaseDocuments::create($doc_data);
-        }
+        // foreach ($request->items_released as $i => $item){
+        //     $itemreleasednote = array(
+        //       //  'foodreleaseId'              =>  $releasId[0], 
+        //         'foodreleaseId'              =>  $foodrel->id,
+        //         'item_id'                    =>  $item['item'],
+        //         'quantity'                   =>  $item['quantity'],
+        //         'unit_id'                    =>  $item['unit'],
+        //         'remark'                     =>  $item['remarks'],
+        //         'updated_by'                 =>  $request->user_id,
+        //         'created_at'                 =>  date('Y-m-d h:i:s')
+        //     );
+        //     ItemReleasedNote::create($itemreleasednote);
+        // }
+        // foreach($request->attachment_details as $att){
+        //     $doc_data = array(
+        //       //  'foodreleaseId'              =>  $releasId[0], 
+        //         'foodreleaseId'              =>  $foodrel->id,
+        //         'attachment_for'             =>  'Food Release Note',
+        //         'path'                       =>  $att['path'],
+        //         'original_name'              =>  $att['original_name'],
+        //         'user_defined_name'          =>  $item['user_defined_name'],
+        //         'updated_by'                 =>  $request->user_id,
+        //         'created_at'                 =>  date('Y-m-d h:i:s')
+        //     );
+        //     FoodReleaseDocuments::create($doc_data);
+        // }
         return $this->successResponse($foodrel, Response::HTTP_CREATED);
        // dd($foodrel);
     }

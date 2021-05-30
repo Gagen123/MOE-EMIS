@@ -188,8 +188,10 @@
                     dateOfapply:'',
                     remarks:'',
                     CidNo:'',
+                    std_decission:'',
                    
                 })
+                
             }
         },
         methods:{
@@ -227,8 +229,11 @@
                 formData.append('stream', this.student_form.stream);
                 formData.append('dateOfapply', this.student_form.dateOfapply); 
                 formData.append('remarks', this.student_form.remarks); 
+                formData.append('status', 'pending'); 
+                formData.append('snationality', 'bhutaness');
+                formData.append('std_decission', 'pending'); 
 
-                axios.post('/savedetailsNotEnrolledStd',formData,config)
+                axios.post('/savedetailsEnrolledStd',formData,config)
                 .then(()=>{
                     Toast.fire({
                         icon: 'success',
@@ -284,7 +289,7 @@
               axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
               .then(Response =>{
                 let data = Response.data.data;
-                this.getSeats = data;
+                this.getSeats = data;data
               })
               
 

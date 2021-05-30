@@ -864,6 +864,7 @@ export default {
                             }
                             
                             if(type=="father"){
+                                
                                 if(personal_detail.genter=="F"){
                                     Swal.fire({
                                         html: "Genter of this person Female. Please provide correct CID",

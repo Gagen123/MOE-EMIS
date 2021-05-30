@@ -9,9 +9,9 @@ class CreateStdAdmissionsTable extends Migration
     public function up()
     {
         Schema::create('std_admissions', function (Blueprint $table) {
-            $table->uuid('application_id')->nullable();
-            $table->uuid('id')->primary();
-            $table->char('OrgOrganizationId')->nullable();
+            $table->char('id',36)->primary();
+            $table->uuid('application_id');
+            $table->char('OrgOrganizationId',36);
             $table->string('snationality');
             $table->char('student_code',36)->nullable();
             $table->char('CidNo',11)->nullable(false);
@@ -25,7 +25,7 @@ class CreateStdAdmissionsTable extends Migration
             $table->char('stream_id')->nullable();
             $table->char('student_type')->nullable();
             $table->char('dateOfapply')->nullable();
-            $table->char('Remarks')->nullable();
+            // $table->char('Remarks')->nullable();
             $table->char('CmnCountryId',36)->nullable();
             $table->char('CmnGewogId',36)->nullable();
             $table->char('CmnChiwogId',36)->nullable();
