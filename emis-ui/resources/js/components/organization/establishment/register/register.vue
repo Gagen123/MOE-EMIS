@@ -19,14 +19,27 @@
                         <input type="text" class="form-control" id="yearOfEst" v-model="applicaitondetailsform.yearestb" name="yearOfEst"/>
                     </div>   
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="zest_code_section">
-                        <label>ZEST Working Agency Code:<span class="text-danger">*</span></label>
+                        <!-- <label>ZEST Working Agency Code:<span class="text-danger">*</span></label>
                         <div class="input-group">
                             <input type="text" id="workingAgencyCode" class="form-control" v-model="applicaitondetailsform.zestcode" @change="remove_error('workingAgencyCode')"/>
                             <div class="input-group-append">
                                 <span type="button" class="col-md-12 btn  btn-primary" @click="getApprovedOrgDetails('1')"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div>
                         </div>
-                        <span id="workingAgencyCode_err" class="text-danger"></span>
+                        <span id="workingAgencyCode_err" class="text-danger"></span> -->
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
+                                <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
+                                <select name="organizationid" id="organizationid" v-model="applicaitondetailsform.organizationid" :class="{ 'is-invalid': applicaitondetailsform.errors.has('organizationid') }" class="form-control select2">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in publicorgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
+                                </select>
+                            </div> 
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                                <br/>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('0')"><i class="fa fa-search">&nbsp;Search</i></span>
+                            </div> 
+                        </div>
                     </div>
                     <span class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="approved_schol_list" style="display:none">  
                         <div class="row">
@@ -53,7 +66,7 @@
                                 <label class="mb-0">Proposed Name:</label>
                                 <span class="text-blue text-bold">{{proposedName}}</span>
                             </div>  
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicaitondetails.establishment_type=='Private School' || applicaitondetails.establishment_type=='Public School'">
                                 <label class="mb-0">Level:</label>
                                 <span class="text-blue text-bold">{{levelArray[orgLevel]}}</span>
                             </div>  
@@ -167,6 +180,7 @@ export default {
     data(){
         return{
             orgList:[],
+            publicorgList:[],
             levelArray:{},
             classStreamList:[],
             calssArray:{},
@@ -195,9 +209,9 @@ export default {
             $("#approved_schol_list").hide();
             if(this.applicaitondetailsform.category == 1){
                $("#zest_code_section").show();
-
+                this.loadApproveSchoolname('Public');
             }else{
-                this.loadApproveSchoolname();
+                this.loadApproveSchoolname('Private');
                 $("#approved_schol_list").show();
             }
         },
@@ -226,11 +240,16 @@ export default {
                 }
             });
         },
-        loadApproveSchoolname(){
-            axios.get('organization/loadApprovedOrgs')
+        loadApproveSchoolname(type){
+            axios.get('organization/loadApprovedOrgs/'+type)
             .then((response) => {  
                 let data=response.data.data;
-                this.orgList   =   data;
+                if(type=="Private"){
+                    this.orgList   =   data;
+                }
+                else{
+                    this.publicorgList   =   data;
+                }
             })
             .catch((error) => {  
                 console.log("Error:"+error);
@@ -351,6 +370,7 @@ export default {
         },
     },
     mounted() {
+        this.loadApproveSchoolname('Public');
         this.getLevel();
         // this.getClassStream();
         this.getClass();

@@ -40,8 +40,8 @@ class StudentHealthController extends Controller
             'std_section'           => $request->std_section,
             'std_id'                => $request->std_id,
             'std_screened'          => $request->std_screened,
-
-            //'user_id'        => $this->user_id() 
+            'organization_id'       => $this->getWrkingAgencyId(),
+            'user_id'               =>  $this->userId() 
         ];
 
 
@@ -86,8 +86,8 @@ class StudentHealthController extends Controller
             'std_section'           => $request->std_section,
             'std_id'                => $request->std_id,
             'std_screened'          => $request->std_screened,
-
-            //'user_id'        => $this->user_id() 
+            'organization_id'       => $this->getWrkingAgencyId(),
+            'user_id'               =>  $this->userId() 
         ];
 
         try{
@@ -144,9 +144,10 @@ class StudentHealthController extends Controller
             'std_id'                => $request->std_id,
             'std_screened'          => $request->std_screened,
             'std_referred'          => $request->std_referred,
-
-            //'user_id'        => $this->user_id()
+            'organization_id'       => $this->getWrkingAgencyId(),
+            'user_id'               =>  $this->userId() 
         ];
+        dd($data);
 
         try{
             $response_data= $this->apiService->createData('emis/students/addHealthScreeningRecords', $data);
@@ -172,6 +173,21 @@ class StudentHealthController extends Controller
     public function getHealthScreeningSummary($param=""){
         $param = $this->getWrkingAgencyId();
         $student_records = $this->apiService->listData('emis/students/getHealthScreeningSummary/'.$param);
+        return $student_records;
+    }
+
+    public function getHealthScreeningDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getHealthScreeningDetails/'.$param);
+        return $student_records;
+    }
+
+    public function getStudentScreenedDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getStudentScreenedDetails/'.$param);
+        return $student_records;
+    }
+
+    public function getStudentReferredDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getStudentReferredDetails/'.$param);
         return $student_records;
     }
 
@@ -201,9 +217,9 @@ class StudentHealthController extends Controller
             'std_id'            => $request->std_id,
             'height'                => $request->height,
             'weight'          => $request->weight,
-            'remarks'        => $request->remarks
-
-            //'user_id'        => $this->user_id() 
+            'remarks'        => $request->remarks,
+            'organization_id'       => $this->getWrkingAgencyId(),
+            'user_id'               =>  $this->userId() 
         ];
 
         try{

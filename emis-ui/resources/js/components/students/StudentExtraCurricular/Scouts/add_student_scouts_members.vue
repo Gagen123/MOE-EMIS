@@ -9,11 +9,22 @@
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div>
+            </div>
+            <div class="form-group row">
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label> Scout</label>
+                        <label> Scout Section</label>
                         <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
-                        <option v-for="(item, index) in scoutList" :key="index" v-bind:value="item.id">{{ item.scout_name }}</option>
+                        <option v-for="(item, index) in scoutSectionList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                    </select>
+                    <has-error :form="student_form" field="scout"></has-error>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label> Scout Level</label>
+                        <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
+                        <option v-for="(item, index) in scoutList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="scout"></has-error>
                     </div>
@@ -42,6 +53,7 @@ export default {
         return {
             studentList:[],
             scoutList:[],
+            scoutSectionList:[],
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
@@ -76,11 +88,11 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveRoleList(uri="masters/loadActiveStudentMasters/program_role"){
+        loadActiveRoleList(uri="masters/loadActiveStudentMasters/scout_section"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.roleList =  data.data.data;
+                this.scoutSectionList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

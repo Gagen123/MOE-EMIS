@@ -12,11 +12,42 @@
                 </router-link>
             </li>
             <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/public_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                   Public School
+                </router-link>
+            </li> 
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/public_eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Public ECCD 
+                </router-link>
+            </li>
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/private_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Private School 
+                </router-link>
+            </li>
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/private_eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Private ECCD 
+                </router-link>
+            </li>
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/ecr_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Public ECR
+                </router-link>
+            </li>
+            <!-- <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
                 <router-link id="new_establishment_index" to="/new_establishment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                    New Establishment
                 </router-link>
             </li> 
+            -->
             <li class="nav-item pr-1" @click="activatelink('register')">
                 <router-link to ="/register" id="register" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
@@ -24,17 +55,17 @@
                 </router-link>
             </li>
             <li class="nav-item pr-1" @click="activatelink('head_quater_office')">
-                <router-link to="/head_quater_office" id="head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link to="/headquaters_index" id="head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     New HQ/Dzongkhag Office
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('list_head_quater_office')">
+            <!-- <li class="nav-item pr-1" @click="activatelink('list_head_quater_office')">
                 <router-link to="/list_head_quater_office" id="list_head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     List HQ/Dzongkhag Office
                 </router-link>
-            </li>
+            </li> -->
         </ul>
         <router-view></router-view>
     </div>

@@ -270,6 +270,9 @@
         data(){
             return{
                 orgDetails:'',
+                orgStudentDetails:[],
+                orgStaffDetails:[],
+
                 isprofile:false,
                 form: new form({
                     org_id: '',
@@ -281,9 +284,6 @@
             }
         },
         methods:{
-            onChangeFileUpload(e){
-                this.form.attachments = e.target.files[0];
-            },
             getorgProfile(rogId){
                 axios.get('organization/getOrgProfile/'+rogId)
                 .then(response => {
@@ -301,31 +301,17 @@
                     console.log(errors)
                 });
             },
-            updateorg(){
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
+            getOrgStaffDetails(orgId){
+                axios.get('loadCommons/getOrgStaffDetails'+orgId)
+                .then(response => {
+                    let data = response;
+                    this.dataList =  data.data.data;
+                })
+                .catch(function (error) {
+                    if(error.toString().includes("500")){
+                        $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                     }
-                } 
-                let formData = new FormData();
-                formData.append('org_id', this.form.org_id);
-                formData.append('vission', this.form.vission);
-                formData.append('profile_path', this.form.profile_path);
-                formData.append('mission', this.form.mission);
-                formData.append('attachments', this.form.attachments);
-                axios.post('organization/udpateOrgProfile',formData, config)
-                .then((response) => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Profile Details has been saved successfully'
-                    })
-                })
-                .catch((error) => {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Unexpected error occured:'+error
-                    });
-                })
+                });
             }
         },
         mounted(){

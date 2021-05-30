@@ -15,10 +15,12 @@ class AcaResultConsolidated extends Migration
     {
         Schema::create('aca_result_consolidated', function (Blueprint $table) {
             $table->char('id',36)->primary();
+            $table->char('org_id',36)->index();
             $table->char('aca_assmt_term_id',36)->index()->nullable()->comment('Null for final/annual result');
             $table->char('org_class_id',36)->index();
             $table->char('org_stream_id',36)->index()->nullable();
             $table->char('org_section_id',36)->index()->nullable();
+            $table->string('class_stream_section',100);
             $table->unsignedTinyInteger('finalized')->nullable()->default(0)->index();
             $table->dateTime('finalized_date')->nullable();
             $table->unsignedTinyInteger('published')->nullable()->default(0)->index();

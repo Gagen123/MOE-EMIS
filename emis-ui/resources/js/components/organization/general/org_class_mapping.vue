@@ -1,32 +1,45 @@
 <template>
     <div>
-        <form class="bootbox-form" id="classMappingId">
-            <div class="card card-primary card-outline">
-                <div class="card-body">
-                    <div class="row form-group">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>School:<span class="text-danger">*</span></label> 
-                            <select name="class" id="class" class="form-control" v-model="form.school" :class="{ 'is-invalid': form.errors.has('spo_name') }"  @change="remove_err('school')">
-                                <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
-                            <has-error :form="form" field="str_name"></has-error>
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
+        <div id="mainformid">
+            <form class="bootbox-form" id="classMappingId">
+                <div class="card card-primary card-outline">
+                    <div class="card-body">
+                        <div class="row form-group pl-5">
+                           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                    <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
+                                        <input type="checkbox" name="orgclass" v-model="form.class" :value="item.classId" :id="item.classId">
+                                        <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                    </span>  
+                                </span> 
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                    <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                        <input type="checkbox" name="classStream" v-model="form.stream"  :id="item.id" :value="item.id"> 
+                                        <label class="pr-3"> 
+                                            {{ item.class }} 
+                                            <span v-if="item.stream"> - 
+                                                {{  item.stream  }}
+                                            </span>
+                                        </label>
+                                    </span>  
+                                </span> 
+                            </div>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Class:<span class="text-danger">*</span></label> <br>
-                            <span v-for="(item, key, index) in  classList" :key="index">
-                                <input type="checkbox" v-model="form.class" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                            </span>
-                            <has-error :form="form" field="str_name"></has-error>
-                        </div>
-                    </div>  
+                    </div>
                 </div>
-            </div>
-            <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div>
-        </form>
+                <div class="card-footer text-right">
+                    <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                </div>
+            </form>
+        </div>
+        
     </div>
 </template>
 
@@ -36,17 +49,17 @@ export default {
         return{
             classList:[],
             schoolList:[],
+            classStreamList:[],
             form: new form({
-                id: '',school:'',class:[],
+                id: '',school:'',class:[], stream:[],
             })
         }
     },
 
     methods:{
-
-        getschoolDetials(uri = 'organization/getschoolDetials'){
+        getschoolDetials(uri = 'loadCommons/loadOrgList/userworkingagency'){
             axios.get(uri)
-            .then(response => {
+            .then(response => { 
                 let data = response;
                 this.schoolList =  data.data.data;
             })
@@ -73,6 +86,17 @@ export default {
                 this.form.class= '';
             }
             if(type=="save"){
+                this.form.class=[];
+                let clasArray=[];
+                $("input[name='orgclass']:checked").each( function () {
+                    clasArray.push($(this).val());
+                });
+                this.form.class=clasArray;
+                let calss_strm=[];
+                $("input[name='classStream']:checked").each( function () {
+                    calss_strm.push($(this).val());
+                });
+                this.form.stream=calss_strm;
                 this.form.post('/organization/saveClassMapping',this.form)
                     .then(() => {
                     Toast.fire({
@@ -88,18 +112,48 @@ export default {
         /**
          * method to get class in checkbox
          */
-        getClass:function(){
-            axios.get('/organization/getClass')
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping/school')
               .then(response => {
-                  let data = response.data;
-                  this.classList = data;
+                this.classStreamList = response.data.data;
+            });
+        },
+        getCurrentClassStream(schoolId){
+            axios.get('/organization/getCurrentClassStream/'+schoolId)
+              .then(response => {
+                let response_data = response.data;
+                for(let i=0;i<response_data.length;i++){
+                    if(response_data[i].streamId!=""){
+                        $('#'+response_data[i].classStreamId).prop('checked',true);
+                    }
+                    else{
+                        $('#'+response_data[i].classId).prop('checked',true);
+                    }
+                }
             });
         },
     },
 
     mounted(){
-        this.getClass();
+        this.getClassStream();
+        
         this.getschoolDetials();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.form.school=data['Agency_Code'];
+                this.getCurrentClassStream(data['Agency_Code']);
+            }
+            else{
+                $('#screenPermission').show();
+                $('#mainformid').hide();
+                $('#message').html('This page is not accessible to you');
+            }
+        })    
+        .catch(errors => { 
+            console.log(errors)
+        });
     }
 }
 </script>

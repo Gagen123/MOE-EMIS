@@ -45,11 +45,8 @@
                                         <label>Department:</label>
                                          <select v-model="form.department" :class="{ 'is-invalid': form.errors.has('department') }" class="form-control select2" name="department" id="department">
                                             <option value="">--- Please Select ---</option>
-                                            <option value="Directorate">Directorate</option>
-                                            <option value="Department of School Education">Department of School Education</option>
-                                            <option value="Policy And Planning Division">Policy And Planning Division</option>
-                                            <option value="Human Resource Division">Human Resource Division</option>
-                                        </select> 
+                                            <option v-for="(item, index) in department_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>  
                                         <!-- <input type="text" class="form-control" v-model="form.parentAgency"/> -->
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -125,13 +122,13 @@
                                             </select>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="phone" class="form-control" v-model="contact.phone"/>
+                                            <input type="number" name="phone" class="form-control" v-model="contact.phone"/>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="mobile" class="form-control" v-model="contact.mobile"/>
+                                            <input type="number" name="mobile" class="form-control" v-model="contact.mobile"/>
                                         </td>
                                         <td>                                
-                                            <input type="text" name="email" class="form-control" v-model="contact.email"/>
+                                            <input type="email" name="email" class="form-control" v-model="contact.email"/>
                                         </td>
                                     </tr> 
                                     <tr>
@@ -149,7 +146,7 @@
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                            <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
+                            <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save </button>
                         </div>
                     </div>
                     </div>
@@ -166,9 +163,10 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
+            department_list:[],
             form: new form({
                 id: '',organizationId:'',workingAgencyCode:'',agencyCode:'',agencyName:'',parentAgency:'',dzongkhag:'',
-                gewog:'',chiwog:'',agencyType:'',status:'pending',department:''
+                gewog:'',chiwog:'',agencyType:'',status:'pending',department:'',action_type:'add'
             }),
 
             form1: new form({
@@ -296,16 +294,6 @@ export default {
                 $('#workingAgencyCode_error').html('Please enter zest working agency code.');
                 $('#workingAgencyCode').focus();
                 $('#workingAgencyCode').removeClass('is-invalid');
-            }else{
-                this.form.agencyCode                = '00001';
-                this.form.agencyName                = 'SPPD';
-                this.form.parentAgency              = 'MOE';
-                this.form.dzongkhag                 =  1;
-                $('#dzongkhag').val(1).trigger('change');
-                this.getgewoglist(1);
-                this.form.gewog                     = 1;
-                this.getvillagelist(1);
-                this.form.chiwog                    = 1;
             }
         },
 
@@ -337,7 +325,7 @@ export default {
                         this.form1.post('organization/saveContactDetails')
                         .then(() => {
                             let message="Head Quater details has been added: <br><b>Thank You !</b>";
-                            this.$router.push({name:'estb_acknowledgement',params: {data:message}});
+                            this.$router.push({name:'acknowledgement_headquarters',params: {data:message}});
                             Toast.fire({
                                 icon: 'success',
                                 title: 'Data is saved successfully'
@@ -422,6 +410,14 @@ export default {
                 console.log("Error......"+error);
             });
         },
+        
+        getdepartment(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/DepartmentMaster'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.department_list = data;
+            });
+        },
 
     },
 
@@ -440,6 +436,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.getdepartment();
         this.loadactivedzongkhagList();
         this.getContactTypeDropdown();
         this.loadBasicDetails();

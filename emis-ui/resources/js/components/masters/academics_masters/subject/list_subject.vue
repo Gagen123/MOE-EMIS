@@ -18,7 +18,7 @@
                             <td class="text-right">{{ item.display_order}}</td>
                             <td>{{item.sub_category_name}}</td>
                             <td>{{item.sub_group_name}}</td>
-                            <td>{{ item.sub_name }}</td>
+                            <td>{{ item.sub_name }} <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span></td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">

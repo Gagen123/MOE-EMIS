@@ -16,6 +16,7 @@ class Subject extends Model
         'aca_sub_category_id',
         'aca_sub_group_id',
         'name',
+        'dzo_name',
         'display_order',
         'status',
         'assessed_by_class_teacher',

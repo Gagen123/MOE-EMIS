@@ -19,6 +19,7 @@ class StudentAssessment extends Model
         'org_section_id',
         'aca_sub_id',
         'aca_assmt_term_id',
+        'class_stream_section',
         'finalized',
         'finalized_date',
         'remarks',

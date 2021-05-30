@@ -29,7 +29,7 @@
                             <td>{{ item.referred}}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                                    <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
                                 </div>
                             </td>
                         </tr>
@@ -67,6 +67,9 @@ export default {
                     "autoWidth": true,
                 }); 
             }, 3000);  
+        },
+        showview(data){
+            this.$router.push({name:'std_health_screening_view',params: {data:data}});
         },
         showedit(data){
             this.$router.push({name:'std_health_screening_edit',params: {data:data}});

@@ -506,6 +506,22 @@ const routes = [
                 { path: '/edit_student_scouts_members', name:'edit_student_scouts_members', component: require('./components/students/StudentExtraCurricular/Scouts/edit_student_scouts_members.vue').default },
             ] 
         },
+        { path: '/scouts_badge', component: require('./components/students/StudentExtraCurricular/Scouts/scouts_badge.vue').default,
+            children: [
+                { path: '/', name:'scouts_badge', component: require('./components/students/StudentExtraCurricular/Scouts/scouts_badge_list.vue').default },
+                { path: '/scouts_badge_list', name:'scouts_badge_list', component: require('./components/students/StudentExtraCurricular/Scouts/scouts_badge_list.vue').default },
+                { path: '/add_scouts_badge', name:'add_scouts_badge', component: require('./components/students/StudentExtraCurricular/Scouts/add_scouts_badge.vue').default },
+                { path: '/edit_scouts_badge', name:'edit_scouts_badge', component: require('./components/students/StudentExtraCurricular/Scouts/edit_scouts_badge.vue').default },
+            ] 
+        },
+        { path: '/scouts_leader', component: require('./components/students/StudentExtraCurricular/Scouts/scouts_leader.vue').default,
+            children: [
+                { path: '/', name:'scouts_leader', component: require('./components/students/StudentExtraCurricular/Scouts/scouts_leader_list.vue').default },
+                { path: '/scouts_leader_list', name:'scouts_leader_list', component: require('./components/students/StudentExtraCurricular/Scouts/scouts_leader_list.vue').default },
+                { path: '/add_scouts_leader', name:'add_scouts_leader', component: require('./components/students/StudentExtraCurricular/Scouts/add_scouts_leader.vue').default },
+                { path: '/edit_scouts_leader', name:'edit_scouts_leader', component: require('./components/students/StudentExtraCurricular/Scouts/edit_scouts_leader.vue').default },
+            ] 
+        },
     ] 
     },
 
@@ -542,16 +558,18 @@ const routes = [
                 { path: '/std_health_screening_list', name:'std_health_screening_list', component: require('./components/students/StudentHealth/HealthScreening/std_health_screening_list.vue').default },
                 { path: '/std_health_screening_add', name:'std_health_screening_add', component: require('./components/students/StudentHealth/HealthScreening/std_health_screening_add.vue').default },
                 { path: '/std_health_screening_edit', name:'std_health_screening_edit', component: require('./components/students/StudentHealth/HealthScreening/std_health_screening_edit.vue').default },
+                { path: '/std_health_screening_view', name:'std_health_screening_view', component: require('./components/students/StudentHealth/HealthScreening/std_health_screening_view.vue').default },
             ]    
         },
         // Deworming
         { path: '/std_deworming', 
         component: require('./components/students/StudentHealth/Deworming/std_deworming.vue').default,
             children: [
-            { path: '/', name:'std_deworming', component: require('./components/students/StudentHealth/Deworming/std_deworming_list.vue').default },
-            { path: '/std_deworming_list', name:'std_deworming_list', component: require('./components/students/StudentHealth/Deworming/std_deworming_list.vue').default },
-            { path: '/std_deworming_add', name:'std_deworming_add', component: require('./components/students/StudentHealth/Deworming/std_deworming_add.vue').default },
-            { path: '/std_deworming_edit', name:'std_deworming_edit', component: require('./components/students/StudentHealth/Deworming/std_deworming_edit.vue').default },
+                { path: '/', name:'std_deworming', component: require('./components/students/StudentHealth/Deworming/std_deworming_list.vue').default },
+                { path: '/std_deworming_list', name:'std_deworming_list', component: require('./components/students/StudentHealth/Deworming/std_deworming_list.vue').default },
+                { path: '/std_deworming_add', name:'std_deworming_add', component: require('./components/students/StudentHealth/Deworming/std_deworming_add.vue').default },
+                { path: '/std_deworming_edit', name:'std_deworming_edit', component: require('./components/students/StudentHealth/Deworming/std_deworming_edit.vue').default },
+                { path: '/std_deworming_view', name:'std_deworming_view', component: require('./components/students/StudentHealth/Deworming/std_deworming_view.vue').default },
             ]    
         },
 
@@ -559,30 +577,33 @@ const routes = [
         { path: '/std_supplementation', 
         component: require('./components/students/StudentHealth/Supplementation/std_supplementation.vue').default,
             children: [
-            { path: '/', name:'std_supplementation', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_list.vue').default },
-            { path: '/std_supplementation_list', name:'std_supplementation_list', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_list.vue').default },
-            { path: '/std_supplementation_add', name:'std_supplementation_add', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_add.vue').default },
-            { path: '/std_supplementation_edit', name:'std_supplementation_edit', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_edit.vue').default },
+                { path: '/', name:'std_supplementation', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_list.vue').default },
+                { path: '/std_supplementation_list', name:'std_supplementation_list', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_list.vue').default },
+                { path: '/std_supplementation_add', name:'std_supplementation_add', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_add.vue').default },
+                { path: '/std_supplementation_edit', name:'std_supplementation_edit', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_edit.vue').default },
+                { path: '/std_supplementation_view', name:'std_supplementation_view', component: require('./components/students/StudentHealth/Supplementation/std_supplementation_view.vue').default },
             ] 
         },
         //vaccination
         { path: '/std_vaccination', 
         component: require('./components/students/StudentHealth/Vaccination/std_vaccination.vue').default,
             children: [
-            { path: '/', name:'std_vaccination', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_list.vue').default },
-            { path: '/std_vaccination_list', name:'std_vaccination_list', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_list.vue').default },
-            { path: '/std_vaccination_add', name:'std_vaccination_add', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_add.vue').default },
-            { path: '/std_vaccination_edit', name:'std_vaccination_edit', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_edit.vue').default },
+                { path: '/', name:'std_vaccination', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_list.vue').default },
+                { path: '/std_vaccination_list', name:'std_vaccination_list', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_list.vue').default },
+                { path: '/std_vaccination_add', name:'std_vaccination_add', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_add.vue').default },
+                { path: '/std_vaccination_edit', name:'std_vaccination_edit', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_edit.vue').default },
+                { path: '/std_vaccination_view', name:'std_vaccination_view', component: require('./components/students/StudentHealth/Vaccination/std_vaccination_view.vue').default },
             ] 
         },
         //BMI link
         { path: '/std_bmi', 
         component: require('./components/students/StudentHealth/BMI/std_bmi.vue').default,
             children: [
-            { path: '/', name:'std_bmi', component: require('./components/students/StudentHealth/BMI/std_bmi_list.vue').default },
-            { path: '/std_bmi_list', name:'std_bmi_list', component: require('./components/students/StudentHealth/BMI/std_bmi_list.vue').default },
-            { path: '/std_bmi_add', name:'std_bmi_add', component: require('./components/students/StudentHealth/BMI/std_bmi_add.vue').default },
-            { path: '/std_bmi_edit', name:'std_bmi_edit', component: require('./components/students/StudentHealth/BMI/std_bmi_edit.vue').default },
+                { path: '/', name:'std_bmi', component: require('./components/students/StudentHealth/BMI/std_bmi_list.vue').default },
+                { path: '/std_bmi_list', name:'std_bmi_list', component: require('./components/students/StudentHealth/BMI/std_bmi_list.vue').default },
+                { path: '/std_bmi_add', name:'std_bmi_add', component: require('./components/students/StudentHealth/BMI/std_bmi_add.vue').default },
+                { path: '/std_bmi_edit', name:'std_bmi_edit', component: require('./components/students/StudentHealth/BMI/std_bmi_edit.vue').default },
+                { path: '/std_bmi_view', name:'std_bmi_view', component: require('./components/students/StudentHealth/BMI/std_bmi_view.vue').default },
             ] 
         },
     ] 
