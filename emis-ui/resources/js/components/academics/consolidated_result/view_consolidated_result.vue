@@ -3,7 +3,7 @@
         <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
             <div class="ml-1 row form-group">
               <div class="mr-3">
-                <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
+                <strong>Class: </strong> {{class_stream_section }}
               </div>
             </div>          
             <div class="form-group row">
@@ -184,9 +184,7 @@
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.sectionId=this.$route.params.data.org_section_id;
-        this.className=this.$route.params.data.class;
-        this.streamName=this.$route.params.data.stream;
-        this.section=this.$route.params.data.section;
+        this.class_stream_section=this.$route.params.data.class_stream_section;
     },
     watch: {
         consolidatedResultList(val) {

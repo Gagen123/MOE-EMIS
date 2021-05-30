@@ -44,7 +44,7 @@ export default {
         },
         async loadClassStreamSection(){
              try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let studentsAttendance = await axios.get('academics/loadStudentAttendance').then(response => response.data.data)
                 studentsAttendance.forEach((attendance,index) => {
                     classSections.forEach(item => {

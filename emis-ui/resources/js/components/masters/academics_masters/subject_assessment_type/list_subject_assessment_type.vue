@@ -36,7 +36,7 @@ export default {
         }
     },
     methods:{
-        getClassStreamList(uri = 'masters/loadClassStreamMapping'){
+        getClassStreamList(uri = 'masters/loadClassStreamMapping/NA'){
             axios.get(uri)
             .then(response => {
                 let datas = response.data.data;

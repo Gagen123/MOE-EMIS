@@ -70,8 +70,6 @@ export default {
                 .then(response => {
                     let students = response.data.student
                     let studentAttendanceDetail = response.data.studentAttendanceDetail
-                    console.log(studentAttendanceDetail);
-                    
                     students.forEach((item,index)=>{
                         students[index].is_present = 1
                         studentAttendanceDetail.forEach((attendanceDetail)=>{

@@ -18,7 +18,7 @@
                 </div>
                 <div class="ml-4 col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label>
-                    <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  :class="{ 'is-invalid': errors.has('attendance_date') }" @change="remove_err('attendance_date')" type="date">
+                    <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  type="date">
                 </div>
             </div>
             <div v-if="studentList.length" class="form-group row">
@@ -77,7 +77,7 @@ export default {
         },
         async getClassTeacherClasss(){
             try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let classTeachers = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
                 classTeachers.forEach((classTeacher,index) => {
                     classSections.forEach(item => {
@@ -141,7 +141,7 @@ export default {
                         this.$router.push('/list-student-attendance');
                     })
                     .catch(function(error){
-                    this.errors = error;
+                    console.log( error);
                 });
        
         },

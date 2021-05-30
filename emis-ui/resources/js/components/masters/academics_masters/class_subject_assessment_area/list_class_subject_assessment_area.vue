@@ -44,7 +44,7 @@ export default {
     methods:{
         async classSubAssmtFrequency(){
             try{
-                let classStreams = await axios.get('masters/loadClassStreamMapping').then(response => {
+                let classStreams = await axios.get('masters/loadClassStreamMapping/NA').then(response => {
                     return response.data.data
                 })
                 let classSubAssmtFrequencies = await axios.get('masters/loadclassSubAssmtFrequency').then(response => {

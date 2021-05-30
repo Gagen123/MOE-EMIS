@@ -398,22 +398,5 @@ class AcademicController extends Controller
         $response_data = $this->apiService->createData('emis/academics/saveConsolidatedResut', $data);
         return $response_data;
     }
-    // public function getStudentsForAttendance(Request $request){
-
-    //     $org_id = $this->getWrkingAgencyId();
-
-    //     $uri = 'emis/academics/loadConsolidatedResult/'.$org_id;
-
-    //     $uri .= ('?&org_class_id='.$request->classId);
-
-    //     if($request->streamId !== null){
-    //         $uri .= (('&org_stream_id='.$request->streamId));
-    //     }
-    //     if($request->sectionId !== null){
-    //         $uri .= (('&org_section_id='.$request->sectionId));
-    //     }
-    //     $students = $this->getStudents($org_id,$request->classId,$request->streamId,$request->sectionId);
-    //     return  $students;
-
-    // }
+  
 }

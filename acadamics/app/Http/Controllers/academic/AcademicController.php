@@ -32,7 +32,7 @@ class AcademicController extends Controller
         return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id FROM aca_class_teacher WHERE org_id = ?', [$orgId]));
     }
     public function getClassTeacherClasss($orgId,$staffId){
-        return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id FROM aca_class_teacher WHERE stf_staff_id = ? AND org_id = ?', [$staffId,$orgId]));
+        return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id,class_stream_section FROM aca_class_teacher WHERE org_id = ? AND stf_staff_id = ?', [$orgId,$staffId]));
     }
     public function saveClassTeacher(Request $request){
         $rules = [
@@ -224,7 +224,7 @@ class AcademicController extends Controller
         $assessmentAreas = DB::select($query." ORDER BY IFNULL(t1.display_order,t2.display_order)",$params);
         $ratings = DB::select('SELECT id, aca_rating_type_id, name, score FROM aca_rating WHERE status=1 ORDER BY score');
         return $this->successResponse (["assessmentAreas" =>$assessmentAreas, "ratings"=>$ratings]); 
-    }
+    }       
   
     public function loadStudentAssessments($org_id,Request $request){
         $studentsTakingElective = false;
@@ -266,7 +266,7 @@ class AcademicController extends Controller
     public function loadStudentAttendanceDetail($orgId,Request $request){
         $query = "SELECT (t2.id IS NOT NULL) AS absent, t1.org_id,t1.org_class_id, t1.org_stream_id, t1.org_section_id,t1.attendance_date,t2.std_student_id
                         FROM aca_student_attendance t1 
-                    JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id WHERE t1.org_id = ? AND t1.org_class_id = ?";
+                   LEFT JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id WHERE t1.org_id = ? AND t1.org_class_id = ?";
         $params = [$orgId,$request->org_class_id];
         if($request->org_stream_id){
             $query .= ' AND t1.org_stream_id = ?';

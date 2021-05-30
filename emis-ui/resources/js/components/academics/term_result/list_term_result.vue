@@ -62,7 +62,7 @@ export default {
     methods:{
         async classSubjectTerm(){
             try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data.data})
+                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let classSubjectTerms = await axios.get('academics/loadStudentAssessmentList').then(response => {
                     return response.data.data
                 })
