@@ -193,7 +193,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'classMapping'], function () use ($router) {
             // section route
             $router->post('/saveClassMapping', 'generalInformation\ClassMappingController@saveClassMapping');
-
+            $router->get('/getCurrentClassStream/{school_id}', 'generalInformation\ClassMappingController@getCurrentClassStream');
         });
 
         $router->group(['prefix' => 'connectivity'], function () use ($router) {
@@ -268,7 +268,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
             $router->get('/loadApprovedOrgs/{type}', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
             $router->get('/loadOrgApplications/{user_id}/{type}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);
-            $router->get('/loadOrgChangeApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgChangeApplications']);
+            $router->get('/loadOrgChangeApplications/{user_id}/{type}', ['uses' => 'establishment\EstablishmentController@loadOrgChangeApplications']);
             $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
