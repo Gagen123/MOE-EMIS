@@ -127,7 +127,8 @@
                                         <thead>
                                             <tr>
                                                 <th>File Name</th>
-                                                <th>Upload File</th>                     
+                                                <th>Upload File</th>   
+                                                <th>Action</th>                   
                                             </tr>
                                         </thead>
                                         <tbody>

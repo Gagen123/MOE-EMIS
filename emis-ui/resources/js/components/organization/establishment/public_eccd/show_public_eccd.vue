@@ -81,12 +81,12 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Co-located with Parent School:</label>
-                                    <span class="text-blue text-bold">{{ applicationdetails.coLocatedParent  == 1 ? "Yes" :  "No"}}</span>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.coLocatedParent  == 1 ? "Yes" :  "No"}}</span>
                                 </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.coLocatedParent==1">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationOrgdetails.coLocatedParent==1">
                                     <label class="mb-0">Parent School:</label>
                                     <span class="text-blue text-bold">
-                                        {{ applicationdetails.parentSchool}}
+                                        {{ orgArray[applicationOrgdetails.parentSchool]}}
                                     </span>
                                 </div> 
                             </div>
@@ -129,6 +129,14 @@
                         <div class="callout callout-success">
                             <h4><u>Site Visit and Verification Details</u></h4>
                             <div class="row pb-2" style="display:none" id="tentativeAttachment">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Verifying Agency:</label>
+                                    <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
+                                </div>   
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Tentative Date:</label>
+                                    <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
+                                </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -172,12 +180,6 @@
                                                     <td> {{user.cid}}</td>
                                                     <td> {{user.po_title}}</td>
                                                 </tr>
-                                                <tr id="removeBtn">
-                                                    <td colspan="5">
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId" 
-                                                        @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
-                                                    </td>
-                                                </tr>
                                             </tbody>
                                             <span id="nminees_error" class="text-danger"></span>
                                         </table>
@@ -198,6 +200,31 @@
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='team_verification'">
+                                                    <td>{{attach.user_defined_file_name}} </td>
+                                                    <td>  {{attach.name}}</td>
+                                                    <td>    
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </template>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h5><u>Attachments for Final Approval</u></h5>
+                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Attachment Name</th> 
+                                                <th>Attachment</th> 
+                                                <th>File</th> 
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                <template v-if="attach.upload_type=='final_verification'">
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
                                                     <td>    
@@ -256,6 +283,8 @@ export default {
             applicationOrgdetails:'',
             class_section:[],
             nomi_staffList:[],
+            orgArray:{},
+            verification:'',
         } 
     },
     methods:{
@@ -266,8 +295,14 @@ export default {
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
                 this.class_section=data.org_class_stream;
-                if(data.app_verification_team.length!=undefined){
-                     for(let i=0;i<data.app_verification_team.length;i++){
+                this.verification=data.app_verification;
+                if(data.app_verification!=""){
+                    $('#tentativeAttachment').show();
+                }
+                if(data.app_verification_team.length>0){
+                    $('#team_verificationAttachment').show();
+                    $('#verifier_team').show();
+                    for(let i=0;i<data.app_verification_team.length;i++){
                         this.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
                             name:data.app_verification_team[i].name,
                             cid:data.app_verification_team[i].cid,
@@ -344,12 +379,21 @@ export default {
                 }
             });
         },
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
+            axios.get(uri)
+            .then(response => {
+                for(let i=0;i<response.data.data.length;i++){
+                    this.orgArray[response.data.data[i].id] = response.data.data[i].stream; 
+                }
+            });
+        },
     },
     mounted(){
         this.getLevel();
         this.getLocation();
         this.getClassStream();
         this.getClass();
+        this.getOrgList();
         this.getstream();
         this.loadestablishmentapplicationdetails(this.$route.query.id);
     }

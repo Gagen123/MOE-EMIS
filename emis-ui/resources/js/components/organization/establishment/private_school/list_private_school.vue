@@ -61,7 +61,7 @@ export default {
             this.$router.push({name:'edit_private_school',params: {id:data.id}});
         },
         showview(data){
-            this.$router.push({name:'show_public_school',query: {id:data.application_no}});
+            this.$router.push({name:'show_private_school',query: {id:data.application_no}});
         },
         
     },

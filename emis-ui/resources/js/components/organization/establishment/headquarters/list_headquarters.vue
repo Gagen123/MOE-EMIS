@@ -11,21 +11,21 @@
                         <table id="training-table" class="table w-100 table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Sl#</th>
-                                    <th>Name</th>
-                                    <th>Agency Type</th>    
-                                    <th>Status</th> 
-                                    <th width="10%"></th>
+                                    <th style="width;5%">Sl#</th>
+                                    <th style="width;30%">Name</th>
+                                    <th style="width;40%">Agency Type</th>    
+                                    <th style="width;15%">Status</th> 
+                                    <th width="20%"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                <tr v-for="(item, index) in orgList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ item.agencyName }}</td>
-                                    <td>{{ item.organizationType  == 1 ? "Agency in HQ" :  "Dzongkhag Education Office"}}</td>
+                                    <td>{{ item.organizationType  == 1 ? "Agency/Office in HQ" :  "Dzongkhag Education Office"}}</td>
                                     <td>{{ item.status }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-flat btn-primary" @click="showfulldetails(item.id)"> <i class="fa fa-eye"></i> View</button>                                                
+                                        <button type="button" class="btn btn-success btn-sm" @click="showfulldetails(item.id)"> <i class="fa fa-edit"></i> View/Edit</button>                                                
                                     </td>
                                 </tr>
                             </tbody>
@@ -46,14 +46,14 @@ export default {
     },
     methods:{
         loadSchool(){
-            axios.get('organization/getsAgencyList/session')
+            axios.get('organization/getsAgencyList/all')
             .then(response => {
                 let data = response;
                 this.orgList = data.data.data;
             });
         },
         showfulldetails(id){
-            this.$router.push({name:'org_details',query: {data:id}});
+            this.$router.push({name:'edit_headquaters',query: {data:id}});
         },
         getScreenAccess(){
             axios.get('common/getSessionDetail')
@@ -64,7 +64,6 @@ export default {
                     $('#screenPermission').show();
                     $('#existmessage').html('You have no access to this page.');
                 }
-                
             })    
             .catch(errors => { 
                 console.log(errors)
