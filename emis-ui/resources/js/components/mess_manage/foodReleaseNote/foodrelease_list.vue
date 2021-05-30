@@ -24,10 +24,10 @@
                             <td> {{ item.remarks}}</td>
                               
                             <td> 
-                              <div class="btn-group btn-group-sm">
+                              <!-- <div class="btn-group btn-group-sm">
                                    
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewfoodreleasenote(item)"><i class="fas fa-eye"></i ></a>
-                               </div>
+                               </div> -->
                                <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewFoodReleaseList(item)"><i class="fas fa-edit"></i ></a>
                                     

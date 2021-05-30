@@ -9,6 +9,7 @@
                             <th>Date of Stock Issued</th>
                             <th>item</th>
                             <th>Quantity</th>
+                            <th>Unit</th>
                             <th>Action</th>                      
                         </tr>
                     </thead> 
@@ -18,10 +19,11 @@
                             <td> {{item.dateOfissue}}</td>
                             <td> {{itemList[item.item]}}</td>
                             <td> {{item.quantity}}</td>
+                            <td> {{unitList[item.unit]}}
                             <td> 
-                              <div class="btn-group btn-group-sm">
+                              <!-- <div class="btn-group btn-group-sm">
                                   <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewstockissue(item)"><i class="fas fa-eye"></i ></a>
-                              </div>
+                              </div> -->
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockIssuedList(item)"><i class="fas fa-edit"></i ></a>
                                </div>
@@ -151,6 +153,18 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         viewStockIssuedList(data){
             data.action='edit';
             this.$router.push({name:'StockIssuedEdit',params: {data:data}});
@@ -158,6 +172,7 @@ export default {
     },
     mounted(){
         this.loadActiveItemList();
+        this.loadActiveUnitList();
         this.loadStockIssuedList();
         this.dt =  $("#stockissued-table").DataTable();
 

@@ -93,7 +93,7 @@ class MessManagementController extends Controller
     }
 
 
-    //local Procurement
+    // //local Procurement
 
     public function loadLocalProcure(){
      //return json_encode('from UI');  
@@ -163,15 +163,15 @@ class MessManagementController extends Controller
         }
     }
 
-    // public function loadFoodReleaseListing($orgId=""){
-    //     if($orgId=="null" || $orgId==""){
-    //         $orgId=$this->getWrkingAgencyId();
-    //     }
-    //    // dd('m here');
-    //     $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
-    //     return $list;
-    //    // dd($list);
-    // }
+    public function loadFoodReleaseListing($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+       // dd('m here');
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+        return $list;
+       // dd($list);
+    }
     //     $response_data= $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
     //     return $response_data;
     // }
@@ -182,15 +182,15 @@ class MessManagementController extends Controller
         return $itemList;
     }
 
-    public function loadFoodReleaseListing($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
-        }
-       // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
-        return $list;
-       // dd($list);
-    }
+    // public function loadFoodReleaseListing($org_Id=""){
+    //     if($org_Id=="null" || $org_Id==""){
+    //         $org_Id=$this->getWrkingAgencyId();
+    //     }
+    //    // dd('m here');
+    //     $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$org_Id);
+    //     return $list;
+    //    // dd($list);
+    // }
 
     //just added
     public function getStockReceivedDetails($stockreceivedId=""){
@@ -199,11 +199,11 @@ class MessManagementController extends Controller
     }
 
  
-    // public function getfoodreleasedetailbyquarter($quarter_id="",$foodreleaseId=""){
-    //   //  dd('m here');
-    //     $response_data= $this->apiService->listData('emis/messManagement/getfoodreleasedetailbyquarter/'.$quarter_id."/".$foodreleaseId.'/'.$this->getWrkingAgencyId());
-    //     return $response_data;
-    // }
+    // // public function getfoodreleasedetailbyquarter($quarter_id="",$foodreleaseId=""){
+    // //   //  dd('m here');
+    // //     $response_data= $this->apiService->listData('emis/messManagement/getfoodreleasedetailbyquarter/'.$quarter_id."/".$foodreleaseId.'/'.$this->getWrkingAgencyId());
+    // //     return $response_data;
+    // // }
 
     // Stock Issued
     public function loadStockIssuedList(){
