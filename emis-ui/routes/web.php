@@ -30,6 +30,12 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveLocation', [App\Http\Controllers\AdministrationController::class, 'saveLocation'])->name('saveLocation');
     Route::get('/loadLocation', [App\Http\Controllers\AdministrationController::class, 'loadLocation'])->name('loadLocation');
 
+    Route::prefix('organizationMasterController')->group(function (){
+        Route::post('/saveOrganizationMaster', [App\Http\Controllers\organization\OrganizationMasterController::class, 'saveOrganizationMaster'])->name('saveOrganizationMaster');
+        Route::get('/loadOrganizaitonmasters/{type}/{model}', [App\Http\Controllers\organization\OrganizationMasterController::class, 'loadOrganizaitonmasters'])->name('loadOrganizaitonmasters');
+        
+    });
+    
     Route::post('/saveDisaster', [App\Http\Controllers\AdministrationController::class, 'saveDisaster'])->name('saveDisaster');
     Route::get('/loadDisaster', [App\Http\Controllers\AdministrationController::class, 'loadDisaster'])->name('loadDisaster');
 
@@ -199,7 +205,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/loadProprietorDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadProprietorDetails'])->name('loadProprietorDetails');
     Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrgApplications'])->name('loadOrgApplications');
     Route::get('/loadOrgChangeApplications', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrgChangeApplications'])->name('loadOrgChangeApplications');
-    Route::get('/loadApprovedOrgs', [App\Http\Controllers\organization\EstablishmentController::class, 'loadApprovedOrgs'])->name('loadApprovedOrgs');
+    Route::get('/loadApprovedOrgs/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadApprovedOrgs'])->name('loadApprovedOrgs');
     Route::get('/getApprovedOrgDetails/{type}/{key}', [App\Http\Controllers\organization\EstablishmentController::class, 'getApprovedOrgDetails'])->name('getApprovedOrgDetails');
     Route::post('/registerOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'registerOrganizationDetails'])->name('registerOrganizationDetails');
     Route::get('/getschoolDetials', [App\Http\Controllers\organization\EstablishmentController::class, 'getschoolDetials'])->name('getschoolDetials');
@@ -219,6 +225,8 @@ Route::prefix('organization')->group(function () {
 
     // head quater office route
     Route::post('/saveBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveBasicDetails'])->name('saveBasicDetails');
+    Route::get('/loadheadQuarterDetails/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadheadQuarterDetails'])->name('loadheadQuarterDetails');
+    
     Route::post('/saveContactDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'saveContactDetails'])->name('saveContactDetails');
     Route::get('/loadBasicDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadBasicDetails'])->name('loadBasicDetails');
     Route::get('/getsAgencyList/{param}', [App\Http\Controllers\organization\EstablishmentController::class, 'getsAgencyList'])->name('getsAgencyList');
@@ -372,7 +380,7 @@ Route::prefix('common')->group(function () {
     Route::get('/getTaskList/{type}', [App\Http\Controllers\CommonController::class, 'getTaskList'])->name('getTaskList');
     Route::get('/commonLeaveOthers/{type}', [App\Http\Controllers\CommonController::class, 'commonLeaveOthers'])->name('commonLeaveOthers');
     Route::get('/releaseApplication/{application_number}', [App\Http\Controllers\CommonController::class, 'releaseApplication'])->name('releaseApplication');
-
+    Route::get('/getScreenAccess/{type}',[App\Http\Controllers\CommonController::class, 'getScreenAccess'])->name('getScreenAccess');
     Route::get('/getSessionDetail', [App\Http\Controllers\CommonController::class, 'getSessionDetail'])->name('getSessionDetail');
     Route::get('/getDzoNameById/{id}', [App\Http\Controllers\CommonController::class, 'getDzoNameById'])->name('getDzoNameById');
     Route::get('/getGewogNameById/{id}', [App\Http\Controllers\CommonController::class, 'getGewogNameById'])->name('getGewogNameById');

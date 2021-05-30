@@ -18,6 +18,10 @@ $router->get('/', function () use ($router) {
 });
 
 $router->group(['prefix' => 'api'], function () use ($router) {
+    $router->group(['prefix' => 'organizationMasterController'], function () use ($router) {
+        $router->post('/saveOrganizationMaster', 'OrganizationMasterController@saveOrganizationMaster');
+        $router->get('/loadOrganizaitonmasters/{type}/{model}', 'OrganizationMasterController@loadOrganizaitonmasters');
+    }); 
 
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {
         // disaster route
@@ -262,7 +266,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
             $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
-            $router->get('/loadApprovedOrgs', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
+            $router->get('/loadApprovedOrgs/{type}', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
             $router->get('/loadOrgApplications/{user_id}/{type}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);
             $router->get('/loadOrgChangeApplications/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrgChangeApplications']);
             $router->get('/getApprovedOrgDetails/{type}/{key}', ['uses' => 'establishment\EstablishmentController@getApprovedOrgDetails']);
@@ -281,6 +285,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveContactDetails', 'establishment\HeadQuaterController@saveContactDetails');
             $router->post('/saveBasicDetails', 'establishment\HeadQuaterController@saveBasicDetails');
             $router->get('/loadBasicDetails/{user_id}', ['uses' => 'establishment\HeadQuaterController@loadBasicDetails']);
+            $router->get('/loadheadQuarterDetails/{id}', ['uses' => 'establishment\HeadQuaterController@loadheadQuarterDetails']);
             $router->get('/getsAgencyList/{param}', ['uses' => 'establishment\HeadQuaterController@getsAgencyList']);
             $router->get('/getHeadQuarterDetails/{id}', ['uses' => 'establishment\HeadQuaterController@getHeadQuarterDetails']);
 

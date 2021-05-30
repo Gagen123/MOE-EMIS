@@ -42,7 +42,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgApplications/ECR'){
+        loadDataList(uri='organization/loadOrgApplications/Public_ECR'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -61,7 +61,7 @@ export default {
             this.$router.push({name:'edit_ecr',params: {id:data.id}});
         },
         showview(data){
-            this.$router.push({name:'show_public_school',query: {id:data.application_no}});
+            this.$router.push({name:'show_ecr',query: {id:data.application_no}});
         },
         
     },

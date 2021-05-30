@@ -53,7 +53,7 @@
                                 </div>  
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Level:</label>
-                                    <span class="text-blue text-bold">{{levelList[applicationOrgdetails.level]}}</span>
+                                    <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
                                 </div>  
                             </div>
                             <div class="form-group row">
@@ -78,19 +78,27 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
-                                        {{ applicationdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
+                                        {{ applicationOrgdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
                                 </div> 
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Feeding School:</label>
-                                    <span class="text-blue text-bold">{{ applicationdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
                                 </div>   
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Feeding Modality:</label><br>
+                                    <label><input  type="checkbox" v-model="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                </div> 
+                            </div>
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is SEN School:</label>
                                     <span class="text-blue text-bold">
-                                        {{ applicationdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
+                                        {{ applicationOrgdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
                                 </div> 
                             </div>
@@ -130,9 +138,19 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="callout callout-success">
                             <h4><u>Site Visit and Verification Details</u></h4>
                             <div class="row pb-2" style="display:none" id="tentativeAttachment">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Verifying Agency:</label>
+                                    <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
+                                </div>   
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Tentative Date:</label>
+                                    <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
+                                </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -176,12 +194,6 @@
                                                     <td> {{user.cid}}</td>
                                                     <td> {{user.po_title}}</td>
                                                 </tr>
-                                                <tr id="removeBtn">
-                                                    <td colspan="5">
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId" 
-                                                        @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
-                                                    </td>
-                                                </tr>
                                             </tbody>
                                             <span id="nminees_error" class="text-danger"></span>
                                         </table>
@@ -202,6 +214,31 @@
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='team_verification'">
+                                                    <td>{{attach.user_defined_file_name}} </td>
+                                                    <td>  {{attach.name}}</td>
+                                                    <td>    
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </template>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h5><u>Attachments for Final Approval</u></h5>
+                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Attachment Name</th> 
+                                                <th>Attachment</th> 
+                                                <th>File</th> 
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                <template v-if="attach.upload_type=='final_verification'">
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
                                                     <td>    
@@ -260,6 +297,8 @@ export default {
             applicationOrgdetails:'',
             class_section:[],
             nomi_staffList:[],
+            feeding:[],
+            verification:'',
         } 
     },
     methods:{
@@ -270,8 +309,23 @@ export default {
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
                 this.class_section=data.org_class_stream;
-                if(data.app_verification_team.length!=undefined){
-                     for(let i=0;i<data.app_verification_team.length;i++){
+                this.verification=data.app_verification;
+               
+                if(data.org_details.isFeedingSchool==1){
+                    for(let i=0;i<data.feeding_modality.length;i++){
+                        if(data.feeding_modality[i].noOfMeals!=undefined){
+                            $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
+                        }
+                    }
+                    $('#feedingDetails').show();
+                }
+                if(data.app_verification!=""){
+                    $('#tentativeAttachment').show();
+                }
+                if(data.app_verification_team.length>0){
+                    $('#team_verificationAttachment').show();
+                    $('#verifier_team').show();
+                    for(let i=0;i<data.app_verification_team.length;i++){
                         this.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
                             name:data.app_verification_team[i].name,
                             cid:data.app_verification_team[i].cid,
@@ -281,7 +335,7 @@ export default {
                 }
             })
             .catch((error) => {  
-                console.log("Error......"+error);
+                console.log("Error: "+error);
             });
         },
         openfile(file){ 

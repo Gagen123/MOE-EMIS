@@ -26,11 +26,12 @@ class HeadQuaterController extends Controller
      * method to save basic details in draft
      */
     public function saveBasicDetails(Request $request){
+        //'action_type'       =>  $request['action_type'],
         $id = $request->id;
         if($id != null){
             $basic = [
-                'organizationId'         =>  $request['department'],
                 'zestAgencyCode'         =>  $request['agencyCode'],
+                'departmentId'           =>  $request['department'],
                 'agencyName'             =>  $request['agencyName'],
                 'dzongkhagId'            =>  $request['dzongkhag'],
                 'gewogId'                =>  $request['gewog'],
@@ -39,13 +40,13 @@ class HeadQuaterController extends Controller
                 'status'                 =>  $request['status'],
                 'updated_by'             =>  $request->user_id,
                 'created_at'             =>  date('Y-m-d h:i:s')
-                ];
-                HeadQuaterDetails::where('id', $id)->update($basic);
-                $basicDetails = HeadQuaterDetails::where('id', $id)->first();
-                return $this->successResponse($basicDetails, Response::HTTP_CREATED);
+            ];
+            HeadQuaterDetails::where('id', $id)->update($basic);
+            $basicDetails = HeadQuaterDetails::where('id', $id)->first();
+            return $this->successResponse($basicDetails, Response::HTTP_CREATED);
         }else{
             $basic = [
-                'organizationId'         =>  $request['department'],
+                'departmentId'           =>  $request['department'],
                 'zestAgencyCode'         =>  $request['agencyCode'],
                 'agencyName'             =>  $request['agencyName'],
                 'dzongkhagId'            =>  $request['dzongkhag'],
@@ -67,12 +68,19 @@ class HeadQuaterController extends Controller
     public function loadBasicDetails($user_id=""){
         return $this->successResponse(HeadQuaterDetails::where('created_by',$user_id)->where('status','Pending')->first());
     }
+    
+    public function loadheadQuarterDetails($id=""){
+        $response_data=HeadQuaterDetails::where('id',$id)->first();
+        $response_data->contact=ContactDetails::where('organizationId',$id)->get();
+        return $this->successResponse($response_data);
+    }
 
     /**
      * method to save contact details
      */
     public function saveContactDetails(Request $request){
         $contactDetails = $request->contactdetails;
+        ContactDetails::where('organizationId',$request->organizationId)->delete();
         foreach ($contactDetails as $con){
             $contact = array(
                 'organizationId'    =>  $request->organizationId,
@@ -80,8 +88,8 @@ class HeadQuaterController extends Controller
                 'phone'             =>  $con['phone'],
                 'mobile'            =>  $con['mobile'],
                 'email'             =>  $con['email'],
-                'type'              =>  1
-            );            
+            );
+            // dd($contact);            
             $conn = ContactDetails::create($contact);
             $array = ['status' => 'Active'];
             DB::table('head_quater_details')->where('created_by',$request->user_id)->update($array);
