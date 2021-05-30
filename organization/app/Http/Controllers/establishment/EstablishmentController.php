@@ -32,6 +32,7 @@ use App\Models\establishment\HeadQuaterDetails;
 use App\Models\establishment\ApplicationEstPublic;
 use App\Models\establishment\ApplicationEstPrivate;
 use App\Models\establishment\ApplicationVerification;
+use App\Models\establishment\ApplicationNoMeals;
 use App\Models\establishment\ApplicationVerificationTeam;
 
 use App\Models\establishment\ApplicationAttachments;
@@ -69,64 +70,68 @@ class EstablishmentController extends Controller
          * 
          * Does not use insertData function as we need the last insert id
          */
-
-        $application_details_data = $this->extractApplicationDetailsData($request);
-
-        $inserted_application_data = ApplicationDetails::create($application_details_data);
-        $applicationDetailsId = $inserted_application_data->id;
-
-        switch($request['establishment_type']){
-            case "public_school" : {
-                    $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
-                    $dataModel = 'ApplicationEstPublic';
-                    break;
-                }
-            case "private_school" : {
-                    $establishment_data = $this->extractPrivateEstDetailsData($request, $applicationDetailsId);
-                    $dataModel = 'ApplicationEstPrivate';
-                    break;
-                }
-            case "public_eccd" : {
-                    $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
-                    $dataModel = 'ApplicationEstPublic';
-                    break;
-                }
-            case "private_eccd" : {
-                    $establishment_data = $this->extractPrivateEstDetailsData($request, $applicationDetailsId);
-                    $dataModel = 'ApplicationEstPrivate';
-                    break;
-                }
-            case "public_ecr" : {
-                    $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
-                    $dataModel = 'ApplicationEstPublic';
-                    break;
-                }
-            default : {
-                
-                break;
-            }
+        if($request['action_type']=="edit"){
+            return $this->editEstablishment($request);
         }
+        else{
+            $application_details_data = $this->extractApplicationDetailsData($request);
+            $inserted_application_data = ApplicationDetails::create($application_details_data);
+            $applicationDetailsId = $inserted_application_data->id;
 
-        // $feedingModality=null;
-        // if($request['isfeedingschool']=="1"){
-        //     $feedingModality=implode(',',$request['feeding']);
-        // }
-
-        $response_data = $this->insertData($establishment_data, $dataModel);
-        $response_data->applicaiton_details=$inserted_application_data;
-        if($request->isfeedingschool==1 && sizeof($request->feeding)>0 ){
-            foreach($request->feeding as $feed){
-                $data =[
-                    'noOfMeals'                 =>  $feed,
-                    'foreignKeyFor'             => 'application_est_public',
-                    'foreignKeyId'              =>  $response_data->id,
-                    'created_by'                =>  $request->user_id,
-                    'created_at'                =>  date('Y-m-d h:i:s')
-                ];
-                $this->insertData($data, 'ApplicationNoMeals');
+            switch($request['establishment_type']){
+                case "public_school" : {
+                        $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
+                        $dataModel = 'ApplicationEstPublic';
+                        break;
+                    }
+                case "private_school" : {
+                        $establishment_data = $this->extractPrivateEstDetailsData($request, $applicationDetailsId);
+                        $dataModel = 'ApplicationEstPrivate';
+                        break;
+                    }
+                case "public_eccd" : {
+                        $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
+                        $dataModel = 'ApplicationEstPublic';
+                        break;
+                    }
+                case "private_eccd" : {
+                        $establishment_data = $this->extractPrivateEstDetailsData($request, $applicationDetailsId);
+                        $dataModel = 'ApplicationEstPrivate';
+                        break;
+                    }
+                case "public_ecr" : {
+                        $establishment_data = $this->extractPublicEstDetailsData($request, $applicationDetailsId);
+                        $dataModel = 'ApplicationEstPublic';
+                        break;
+                    }
+                default : {
+                    
+                    break;
+                }
             }
+
+            // $feedingModality=null;
+            // if($request['isfeedingschool']=="1"){
+            //     $feedingModality=implode(',',$request['feeding']);
+            // }
+        
+            $response_data = $this->insertData($establishment_data, $dataModel);
+            $response_data->applicaiton_details=$inserted_application_data;
+            if($request->isfeedingschool==1 && sizeof($request->feeding)>0 ){
+                foreach($request->feeding as $feed){
+                    $data =[
+                        'noOfMeals'                 =>  $feed,
+                        'foreignKeyFor'             => 'application_est_public',
+                        'foreignKeyId'              =>  $response_data->id,
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s')
+                    ];
+                    $this->insertData($data, 'ApplicationNoMeals');
+                }
+            }
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
         }
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
+        
     }
 
     /**
@@ -152,6 +157,51 @@ class EstablishmentController extends Controller
         return $data;
         
     }
+     /**
+     * edit Application Details
+     */
+
+    private function editEstablishment($request){
+        $data =[
+            'establishment_type'   =>  $request['proposed_establishment'],
+            'category'             =>  $request['category'],
+            'dzongkhagId'          =>  $request['dzongkhag'],
+            'gewogId'              =>  $request['gewog'],
+            'chiwogId'             =>  $request['chiwog'],
+            'application_type'     =>  $request['level'],
+            'updated_by'           =>  $request['user_id'],
+            'updated_at'           =>  date('Y-m-d h:i:s')
+        ];
+        ApplicationDetails::where('application_no',$request['application_number'])->update($data);
+        $response_data=ApplicationDetails::where('application_no',$request['application_number'])->first();
+
+        $org_data=[
+            'proposedName'                  =>  $request['proposedName'],
+            'initiated_by'                  =>  $request['initiatedBy'],
+            'levelId'                       =>  $request['level'],               //edited from 'level'     =>  $request['level']
+            'locationId'                    =>  $request['locationType'],        //edited from 'locationTypeId'    =>  $request['locationType'],
+            'isGeoPoliticallyLocated'       =>  $request['geopoliticallyLocated'],
+            'isSenSchool'                   =>  $request['senSchool'],
+            'isFeedingschool'               =>  $request['isfeedingschool'],
+            'updated_at'                    =>  date('Y-m-d h:i:s'),
+        ];
+        ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->update($org_data);
+        $app_det=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
+        ApplicationNoMeals::where('foreignKeyFor','application_est_public')->where('foreignKeyId',$app_det->id)->delete();
+        if($request['isfeedingschool']==1){
+            foreach($request->feeding as $feed){
+                $data =[
+                    'noOfMeals'                 =>  $feed,
+                    'foreignKeyFor'             => 'application_est_public',
+                    'foreignKeyId'              =>  $app_det->id,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                ApplicationNoMeals::create($data);
+            }
+        }
+        return $app_det;
+    }
 
     /**
      * Extract Application Details for public establishments
@@ -167,7 +217,9 @@ class EstablishmentController extends Controller
             'isGeoPoliticallyLocated'      =>  $request['geopoliticallyLocated'],
             'isSenSchool'                  =>  $request['senSchool'],
             'isFeedingschool'              =>  $request['isfeedingschool'],
-            'created_at'           =>  date('Y-m-d h:i:s')
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'parentSchool'                 =>  $request['parentSchool'],
+            'created_at'                   =>  date('Y-m-d h:i:s')
         ];
 
         return $data;
@@ -271,14 +323,13 @@ class EstablishmentController extends Controller
      * method to save class and stream
      */
     public function saveClassStream(Request $request){
-
         $classes=$request->class;
         $classStream='';
         $inserted_class="";
-        $application_details= ApplicationDetails::where('created_by',$request->user_id) 
-                                                    ->where('application_no', $request->applicaiton_number)
-                                                    ->where('status', 'pending')
-                                                    ->first();
+        $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
+        if($request['action_type']=="edit"){
+            ApplicationClassStream::where('ApplicationDetailsId', $application_details->id)->delete();
+        }                                          
         if($request->class){
             foreach($request->class as $key => $classId){
                 $stream_exists = $this->checkStreamExists($classId);
@@ -316,7 +367,7 @@ class EstablishmentController extends Controller
         }
 
         $array = ['status' => $request->status];
-        DB::table('application_details')->where('application_no',$request->applicaiton_number)->update($array);
+        DB::table('application_details')->where('application_no',$request->application_number)->update($array);
         return $this->successResponse($application_details, Response::HTTP_CREATED);
     }
 
@@ -699,11 +750,10 @@ class EstablishmentController extends Controller
     }
     
     public function saveUploadedFiles(Request $request){
-        
         $doc;
         if($request->attachment_details!=null && $request->attachment_details!=""){
+            $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
             foreach($request->attachment_details as $att){
-                $application_details=  ApplicationDetails::where('application_no',$att['applicaiton_number'])->first();
                 $attach =[
                     'ApplicationDetailsId'      =>  $application_details->id,
                     'path'                      =>  $att['path'],
@@ -762,7 +812,8 @@ class EstablishmentController extends Controller
             }
         }
         $app_details->estb_class=ApplicationClassStream::where('ApplicationDetailsId',$app_details->id)->get();
-        
+        $app_details->estb_attachments=ApplicationAttachments::where('ApplicationDetailsId',$app_details->id)->get();
+        $app_details->estb_classStream=ApplicationClassStream::where('ApplicationDetailsId',$app_details->id)->get();
         return $this->successResponse($app_details);
     }
     

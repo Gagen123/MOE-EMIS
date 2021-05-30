@@ -53,9 +53,9 @@
         }
     },
     methods:{
-        rating(rating_type_id){
-             return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
-        },
+        // rating(rating_type_id){
+        //      return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
+        // },
        async loadStudentAssessments(){
          let uri = 'academics/loadStudentAssessments'
           uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&classId='+this.classId)
@@ -68,6 +68,7 @@
             try{
                 let studentAssesssments = await axios.get(uri).then(response => response.data)
                 this.assessmentAreaList = studentAssesssments.assessmentAreas
+                console.log(this.assessmentAreaList);
                 this.ratingList = studentAssesssments.ratings
                 this.studentAssessmentList = studentAssesssments.studentAssessments
             }catch(e){
@@ -81,14 +82,26 @@
         totalWeightage(){
            let totalWeightage = 0
            this.assessmentAreaList.forEach((item) => {
-               if(item.input_type==1) 
-               return totalWeightage+=(item.weightage)
+               if(item.input_type==1){
+                return totalWeightage+=(item.weightage)
+               }
             })
            return totalWeightage
         },
         // totalScore(){
         //  let totalScore = 0
         // }
+    },
+
+    created() {
+        this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
+        this.aca_sub_id = this.$route.params.data.aca_sub_id
+        this.classId=this.$route.params.data.org_class_id;
+        this.streamId=this.$route.params.data.org_stream_id;
+        this.sectionId=this.$route.params.data.org_section_id;
+        this.class_stream_section=this.$route.params.data.class_stream_section;
+        this.subject=this.$route.params.data.sub_name;
+        this.term=this.$route.params.data.term_name;
     },
     mounted(){ 
         this.loadStudentAssessments()
@@ -101,18 +114,8 @@
         })
 
     },
-    created() {
-        this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
-        this.aca_sub_id = this.$route.params.data.aca_sub_id
-        this.classId=this.$route.params.data.org_class_id;
-        this.streamId=this.$route.params.data.org_stream_id;
-        this.sectionId=this.$route.params.data.org_section_id;
-        this.class_stream_section=this.$route.params.data.class_stream_section;
-        this.subject=this.$route.params.data.sub_name;
-        this.term=this.$route.params.data.term_name;
-    },
     watch: {
-        studentAssessmentList(val) {
+        studentAssessmentList() {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt = $("#term-result-view-table").DataTable()

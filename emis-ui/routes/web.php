@@ -193,6 +193,8 @@ Route::prefix('organization')->group(function () {
     Route::get('/getStream', [App\Http\Controllers\organization\EstablishmentController::class, 'getStream'])->name('getStream');
     Route::get('/loadOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
     Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+    Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
+    
     Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\organization\EstablishmentController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
     Route::get('/loadProprietorDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadProprietorDetails'])->name('loadProprietorDetails');
     Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrgApplications'])->name('loadOrgApplications');

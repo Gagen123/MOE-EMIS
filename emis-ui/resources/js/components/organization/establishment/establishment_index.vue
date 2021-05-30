@@ -14,7 +14,13 @@
             <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
                 <router-link to="/public_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                   New Establishment (Public)
+                   Public School
+                </router-link>
+            </li> 
+            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+                <router-link to="/public_eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Public ECCD 
                 </router-link>
             </li> 
             <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
