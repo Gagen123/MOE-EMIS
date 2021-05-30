@@ -24,11 +24,11 @@
                         <has-error :form="form" field="organizaiton"></has-error>
                     </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                       <label class="">Term:<span class="text-danger">*</span></label> 
-                       <select name="term" id="term" class="form-control select2" v-model="form.term" :class="{ 'is-invalid': form.errors.has('term') }" @change="remove_err('term')">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                       <label class="">Quarter:<span class="text-danger">*</span></label> 
+                       <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="term"></has-error> 
+                        <has-error :form="form" field="quarter"></has-error> 
                             <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
                             <option value="">---Please Select---</option> 
                             <option value="1st quarter">1st quarter</option>
@@ -120,14 +120,14 @@ export default {
           //  quarterList:[],
             itemList:[],
             unitList:[],
-            termList:[],
+            quarterList:[],
           //  dzongkhagList:[],
           //  dzongkhag:'',
         //    organizaiton:'',
           //  itemrelease:[],
             items_received: [],
             form: new form({
-                 id: '', dateOfreceived: '', term: '', remarks: '',
+                 id: '', dateOfreceived: '', quarter: '', remarks: '',
                  items_received:
                 [{
                     item:'',quantity:'',unit:'', remarks:'',
@@ -143,7 +143,7 @@ export default {
          */
         restForm(){
             this.form.dateOfreceived= '';
-            this.form.term= '';
+            this.form.quarter= '';
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
@@ -172,10 +172,38 @@ export default {
                 })
             }
 		},
+        // just added
+        getStockReceivedDetails(stockreceivedId){
+            axios.get('mess_manage/getStockReceivedDetails/'+stockreceivedId)
+            .then((response) => {  
+                let data=response.data.data;
+
+                this.form.dateOfreceived        =    data.dateOfreceived;
+                this.form.quarter           =    data.quarter;
+                this.form.remarks           =    data.remarks;
+                this.form.id                    =    data.id;
+                let prop=data.stockreceived;
+                let stockreceivedDetails=[];
+                for(let i=0;i<prop.length;i++){
+                    stockreceivedDetails.push({stockreceived:
+                    prop[i].item_id,item
+                    :prop[i].unit_id,unit
+                    :prop[i].quantity,quantity
+                    :prop[i].unit_id,unit
+                    :prop[i].remarks,remarks});
+                }
+                this.count=data.length;
+                this.form.items_received=stockreceivedDetails;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
 
         applyselect(){
-            if(!$('#term').attr('class').includes('select2-hidden-accessible')){
-                $('#term').addClass('select2-hidden-accessible');
+            if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
+                $('#quarter').addClass('select2-hidden-accessible');
             }
         },
 
@@ -191,15 +219,20 @@ export default {
         /**
          * method to get term in dropdown
          */
-       loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.termList =  data.data.data;
+                this.quarterList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
@@ -245,8 +278,8 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="term"){
-                this.form.term=$('#term').val();
+            if(id=="quarter"){
+                this.form.quarter=$('#quarter').val();
             }
         },
 
@@ -287,9 +320,12 @@ export default {
         });
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
-        this.loadActiveTermList();
+        this.loadActiveQuarterList();
+       // this.getStockReceivedDetails(this.$route.params.data.id);
         this.form.dateOfreceived = this.$route.params.data.dateOfreceived;
-        this.form.term = this.$route.params.data.term_id;
+        this.form.quarter = this.$route.query.data[0].quarter_id;
+        this.items_received.item = this.$route.
+         this.student_form.gender=this.$route.query.data[0].CmnSexId;
        
     }
 }

@@ -5,7 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Date of Stock Received</th>
-                    <th>Term</th>
+                    <th>Quarter</th>
                     <th>Remarks</th>
                     <th>Action</th> 
                 </tr>
@@ -14,7 +14,7 @@
                 <tr v-for="(item, index) in stockReceivedList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.dateOfreceived}}</td>
-                    <td>{{ termList[item.term]}} </td>
+                    <td>{{ quarterList[item.quarter]}} </td>
                     <td>{{ item.remarks}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -24,6 +24,7 @@
                 </tr>
             </tbody>
         </table>
+        <!-- for display  -->
     </div>
 </template>
 
@@ -32,7 +33,7 @@ export default {
     data(){
         return{
             stockReceivedList:[],
-            termList:{},
+            quarterList:{},
         }
     },
 
@@ -59,23 +60,41 @@ export default {
             data.action='edit';
             this.$router.push({name:'StockReceivedEdit',params: {data:data}});
         },
-        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.termList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.quarterList[data.data.data[i].id] = data.data.data[i].name; 
                 }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+
+        // loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //        for(let i=0;i<data.data.data.length;i++){
+        //             this.termList[data.data.data[i].id] = data.data.data[i].name; 
+        //         }
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
        
     },
     
     mounted(){
-        this.loadActiveTermList();
+        this.loadActiveQuarterList();
         this.loadFoodReleaseListing();
         
     },

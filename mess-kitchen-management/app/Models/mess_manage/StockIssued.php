@@ -14,7 +14,7 @@ class StockIssued extends Model
         'id',   
         'organizationId',                         
         'dateOfissue',
-        'item',
+        'item_id',
         'quantity',
         'unit',
         'damagequantity',
