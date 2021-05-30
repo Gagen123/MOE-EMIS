@@ -5,17 +5,22 @@
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
-                
-                <li class="nav-item pr-1" @click="activatelink('student_scouts')">
-                    <router-link to="/student_scouts" id="student_scouts" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-check"></span>
-                        Scouts
-                    </router-link>
-                </li>
                 <li class="nav-item pr-1" @click="activatelink('student_scouts_members')">
                     <router-link to="/student_scouts_members" id="student_scouts_members" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Scouts Members
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('scouts_badge')">
+                    <router-link to="/scouts_badge" id="scouts_badge" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Award Scout Proficiency Badge
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('scouts_leader')">
+                    <router-link to="/scouts_leader" id="scouts_leader" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Scouts Leaders
                     </router-link>
                 </li>
             </ul>

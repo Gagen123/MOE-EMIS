@@ -48,7 +48,9 @@
                                     <th>Name</th> 
                                     <th>Sex</th>
                                     <th>Age</th>
-                                    <th>Given</th>
+                                    <th>Given
+                                        <input type="checkbox" name="height" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
@@ -59,7 +61,7 @@
                                         <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="checkbox" name="screened" class="form-control-input" v-model="student_form.std_screened[index]"/>
+                                        <input type="checkbox" name="screened" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -189,6 +191,14 @@ export default {
                 //this.studentList = [{Name:"A"}, {Name:"B"}, {Name:"C"}, {Name:"d"}];
             }
         },
+        checkall(class_to_check,id){
+            if($('#'+id).prop('checked')){
+                $("."+class_to_check).prop("checked",true);
+            }
+            else{
+                $("."+class_to_check).prop("checked",false);
+            }
+        }
     },
     mounted() {
         $('.select2').select2()

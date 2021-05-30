@@ -70,12 +70,13 @@
                                     <th>Sex</th>
                                     <th>Age</th>
                                     <th>
-                                        <input type="checkbox" name="height" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
                                         Screened
+                                        <input type="checkbox" name="height" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
                                     </th>
                                     <th>
+                                        Referred
                                         <input type="checkbox" name="height" class="form-control-input" id="refferedid" @change="checkall('refferedcheck','refferedid')"/>
-                                        Referred</th>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
