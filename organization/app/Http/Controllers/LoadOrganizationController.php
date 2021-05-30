@@ -93,4 +93,38 @@ class LoadOrganizationController extends Controller{
     public function getClassByType($type=""){
         return Classes::where('status',1)->where('category',$type)->orderBy('displayOrder', 'asc')->get();
     }
+
+    public function loadClassList($org_id){
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class')
+                    ->where('organizationId', $org_id)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
+    public function loadStreamList($org_id){
+
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class')
+                    ->where('organizationId', $org_id)
+                    ->where('streamId', '!=', 'NULL')
+                    ->get();
+
+        return $this->successResponse($response_data);
+    } 
+
+    public function loadSectionList($org_id){
+
+        $response_data = DB::table('section_details')
+                    ->join('organization_class_streams', 'section_details.classSectionId', '=', 'organization_class_streams.id')
+                    ->select('organization_class_streams.*', 'section_details.section AS section')
+                    ->where('organizationId', $org_id)
+                    ->groupBy('section_details.section')
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }  
 }

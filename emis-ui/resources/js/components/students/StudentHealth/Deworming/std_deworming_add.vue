@@ -138,6 +138,13 @@ export default {
                 this.student_form.girls_given= '';
             }
             if(type=="save"){
+                this.student_form.std_screened=[];
+                let screenedArray=[];
+                $("input[name='height']:checked").each( function () {
+                    screenedArray.push($(this).val());
+                });
+                this.student_form.std_screened=screenedArray;
+                
                 this.student_form.post('/students/addDewormingRecords',this.student_form)
                     .then(() => {
                     Toast.fire({
