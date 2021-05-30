@@ -15,19 +15,19 @@ class NotenrolledController extends Controller
     public function saveStudentDetails(Request $request){
         // dd($request);
         $rules = [
-            'snationality'              => 'required',
-            'cid_passport'              => 'required',
-            'first_name'                => 'required',
-            'dob'                       => 'required',
-            'sex_id'                    => 'required',
+            'snationality'                    => 'required',
+            'cid_passport'                    => 'required',
+            'first_name'                      => 'required',
+            'dob'                             => 'required',
+            'sex_id'                          => 'required',
             
         ];
         $customMessages = [
-            'snationality.required'             => 'This field is required',
-            'cid_passport.required'             => 'This field is required',
-            'first_name.required'               => 'This field is required',
-            'dob.required'                      => 'This field is required',
-            'sex_id.required'                   => 'This field is required',
+            'snationality.required'            => 'This field is required',
+            'cid_passport.required'            => 'This field is required',
+            'first_name.required'              => 'This field is required',
+            'dob.required'                     => 'This field is required',
+            'sex_id.required'                  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -42,22 +42,7 @@ class NotenrolledController extends Controller
             move_uploaded_file($file,$file_store_path.'/'.$file_name);
             $path=$file_store_path.'/'.$file_name;
         }
-        
-        $data =[
-            'snationality'              =>  $request->snationality,
-            'student_id'                =>  $request->student_id,
-            'cid_passport'              =>  $request->cid_passport,
-            'first_name'                =>  $request->first_name,
-            'middle_name'               =>  $request->middle_name,
-            'last_name'                 =>  $request->last_name,
-            'dob'                       =>  $request->dob,
-            'sex_id'                    =>  $request->sex_id,
-            'dzongkhag'                 =>  $request->dzongkhag, 
-            'gewog'                     =>  $request->gewog, 
-            'village_id'                =>  $request->village_id, 
-            'type'                      =>  $request->type, 
-            'attachments'               =>  $path, 
-        ];
+        $data = $request->all();
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetails', $data);
         return $response_data;
 
