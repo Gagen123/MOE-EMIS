@@ -28,9 +28,21 @@ use App\Http\Controllers\NotenrolledController;
     Route::get('/getClassByOrganizationId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getClassByOrganizationId'])->name('getClassByOrganizationId');
     Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
 });
-\
 
+Route::prefix('adminstratorController')->group(function () {
+    Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
     Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getpersonbycid'])->name('getpersonbycid');
+});
+
+//Track Application Controller
+Route::prefix('TrackApplicationController')->group(function () {
+    Route::get('/applicationListsbyCid/{cid}', [App\Http\Controllers\TrackApplicationController::class, 'applicationListsbyCid'])->name('applicationListsbyCid');
+    Route::post('/acceptApplication', [App\Http\Controllers\TrackApplicationController::class, 'acceptApplication'])->name('acceptApplication');
+});
+
+    
+    
+    
     Route::get('/load_dzongkhag_details_by_id/{dzo_id}', [App\Http\Controllers\AdminstratorController::class, 'load_dzongkhag_details_by_id'])->name('load_dzongkhag_details_by_id');
     Route::get('/load_gewog_details_by_id/{gewog_id}', [App\Http\Controllers\AdminstratorController::class, 'load_gewog_details_by_id'])->name('load_gewog_details_by_id');
  
@@ -48,8 +60,8 @@ use App\Http\Controllers\NotenrolledController;
     //pulling all cid of students
     Route::get('/getAllStudentCid', [App\Http\Controllers\NotenrolledController::class, 'getAllStudentCid'])->name('getAllStudentCid');
 
-    Route::post('/savedetailsNotEnrolledStd', [App\Http\Controllers\ClassXIController::class, 'savedetailsNotEnrolledStd'])->name('savedetailsNotEnrolledStd');
-    Route::post('/savedetailsEnrolledStd', [App\Http\Controllers\EnrolledStudentController::class, 'savedetailsEnrolledStd'])->name('savedetailsEnrolledStd');
+    Route::post('/savedetailsEnrolledStd', [App\Http\Controllers\ClassXIController::class, 'savedetailsEnrolledStd'])->name('savedetailsEnrolledStd');
+    Route::post('/savedetailsNotEnrolledStd', [App\Http\Controllers\EnrolledStudentController::class, 'savedetailsEnrolledStd'])->name('savedetailsEnrolledStd');
 
 
     Route::prefix('enrolled_student')->group(function () {

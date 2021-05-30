@@ -25,44 +25,6 @@
               </p>
             </router-link>
           </li>
-      <!-- <li class="nav-item has-treeview">
-        <a href="#" class="nav-link">
-        <i class="fa fa-users nav-icon blue"></i>
-          <p>
-            Admissions
-            <i class="right fas fa-angle-left"></i>
-          </p>
-        </a>
-
-        <ul class="nav nav-treeview">
-
-          <li class="nav-item">
-            <router-link to="/enrolled_student" class="nav-link">
-            <i class="fa fa-users nav-icon white"></i>
-              <p>
-              Enrolled in School
-              </p>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/notenrolled_student" class="nav-link">
-            <i class="fa fa-users nav-icon white"></i>
-              <p>
-               Not Enrolled in School
-              </p>
-            </router-link>
-          </li>
-          
-          <li class="nav-item">
-            <router-link to="/classxi_student" class="nav-link">
-            <i class="fa fa-users nav-icon white"></i>
-              <p>
-               Class XI Admissions
-              </p>
-            </router-link>
-          </li>
-        </ul>
-      </li> -->
 
       @endcan
 
@@ -73,8 +35,17 @@
             <p>Result</p>
           </router-link>
         </li>
-      @endcan
 
+      <li class="nav-item">
+            <router-link to="/track_application" class="nav-link">
+            <i class="fa fa-search nav-icon blue"></i>
+              <p>
+              Track application
+              </p>
+            </router-link>
+          </li>
+
+      @endcan
 
       <li class="nav-item">
         <a href="#" class="nav-link" onclick="event.preventDefault();

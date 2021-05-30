@@ -15,7 +15,7 @@ class ClassXIController extends Controller
         $this->apiService = $apiService;
     }
     //
-    public function savedetailsNotEnrolledStd(Request $request){
+    public function savedetailsEnrolledStd(Request $request){
         // dd($request);
         $rules = [
             // 'dzongkhag'                 => 'required',
@@ -36,20 +36,8 @@ class ClassXIController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
 
-        $data =[
-            'OrgOrganizationId'          =>$request->OrgOrganizationId,
-            'cid_passport'               =>$request->cid_passport,
-            'gender'                     =>$request->gender,
-            'Name'                        =>$request->Name,
-            'student_type'               =>$request->student_type,
-            'dzongkhag'                  =>  $request->dzongkhag,
-            'school'                     =>  $request->school,
-            'class'                      =>  $request->class,
-            'stream'                     =>  $request->stream,
-            'dateOfapply'                =>  $request->dateOfapply,
-            'remarks'                    =>  $request->remarks,
-        ];
-        $response_data= $this->apiService->createData('emis/students/admission/savedetailsNotEnrolledStd', $data);
+        $data = $request->all();
+        $response_data= $this->apiService->createData('emis/students/admission/savedetailsEnrolledStd', $data);
         return $response_data;
 
     }

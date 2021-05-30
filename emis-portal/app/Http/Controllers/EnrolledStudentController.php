@@ -17,7 +17,7 @@ class EnrolledStudentController extends Controller
     }
 
     public function savedetailsEnrolledStd(Request $request){
-        // dd($request);
+        dd($request);
         $rules = [
             // 'dzongkhag'                 => 'required',
             // 'school'                    => 'required',

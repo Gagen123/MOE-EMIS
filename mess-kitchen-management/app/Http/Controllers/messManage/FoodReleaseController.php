@@ -48,6 +48,19 @@ class FoodReleaseController extends Controller
             );
             ItemReleasedNote::create($itemreleasednote);
         }
+        foreach($request->attachment_details as $att){
+            $doc_data = array(
+              //  'foodreleaseId'              =>  $releasId[0], 
+                'foodreleaseId'              =>  $foodrel->id,
+                'attachment_for'             =>  'Food Release Note',
+                'path'                       =>  $att['path'],
+                'original_name'              =>  $att['original_name'],
+                'user_defined_name'          =>  $item['user_defined_name'],
+                'updated_by'                 =>  $request->user_id,
+                'created_at'                 =>  date('Y-m-d h:i:s')
+            );
+            FoodReleaseDocuments::create($doc_data);
+        }
         return $this->successResponse($foodrel, Response::HTTP_CREATED);
        // dd($foodrel);
     }
