@@ -17,6 +17,7 @@ class SubjectTeacher extends Model
         'org_class_id',
         'org_stream_id',
         'org_section_id',
+        'class_stream_section',
         'aca_sub_id',
         'stf_staff_id',
         'remarks',

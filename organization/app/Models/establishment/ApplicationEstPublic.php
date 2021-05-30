@@ -26,6 +26,8 @@ class ApplicationEstPublic extends Model
         'isGeoPoliticallyLocated',
         'isSenSchool',
         'isFeedingSchool',
+        'coLocatedParent',
+        'parentSchool',
         'locationTypeId',
         'proposedLocation'
     ];

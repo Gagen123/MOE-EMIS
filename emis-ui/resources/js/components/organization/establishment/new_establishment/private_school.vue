@@ -264,7 +264,7 @@ export default {
                 file_name: '',
                 fileUpload: [],
                 record_type:'add',
-                applicaiton_number:'',
+                saveapplication_number:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -278,7 +278,7 @@ export default {
                 enrollmentBoys:'', enrollmentGirls:'', typeOfSchool:'', establishment_type:'private_school', status:'pending'
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',applicaiton_number:'',
+                id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',saveapplication_number:'',
             }) 
         } 
     },
@@ -524,8 +524,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.applicaiton_number=response.data.data.applicaiton_details.application_no;
-                            this.classStreamForm.applicaiton_number=response.data.data.applicaiton_details.application_no;
+                            this.file_form.saveapplication_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.saveapplication_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
@@ -550,7 +550,7 @@ export default {
                         // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
                         formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
                     }
-                    formData.append('applicaiton_number', this.file_form.applicaiton_number);
+                    formData.append('saveapplication_number', this.file_form.saveapplication_number);
                     
                     axios.post('organization/saveUploadedFiles', formData, config)
                     // this.file_form.post('organization/saveUploadedFiles',this.form)

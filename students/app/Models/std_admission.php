@@ -34,7 +34,6 @@ class std_admission extends Model
         'Address',
         'attachments',
         'parent_marital_status',
-        
         'PrimaryContact',
         'dzongkhag',
         'school',
@@ -47,7 +46,7 @@ class std_admission extends Model
         'CmnChiwogId',
         'CmnLanguageId',
         'Status',
-        'Remarks',
+        // 'Remarks',
         'created_by',
         'created_at',
         'updated_by',

@@ -7,7 +7,9 @@
                         <label>Subject Category:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="subject_category_id" v-model="form.aca_sub_category_id" :class="{ 'is-invalid': form.errors.has('aca_sub_category_id') }"  @change="remove_err('subject_category_id')">
                             <option value=""> --Select--</option>
-                            <option v-for="(item, index) in subject_category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in subject_category_list" :key="index" v-bind:value="item.id">{{ item.name }} 
+                                <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
+                            </option>
                         </select> 
                         <has-error :form="form" field="aca_sub_category_id"></has-error>
                     </div>
@@ -15,19 +17,26 @@
                         <label>Subject Group:</label> 
                          <select v-model="form.aca_sub_group_id" class="form-control select2" id="aca_sub_group_id">
                             <option value=""> --Select--</option>
-                            <option v-for="(item, index) in subject_group_list" :key="index" :value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in subject_group_list" :key="index" :value="item.id">{{ item.name }}
+                                 <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
+                            </option>
                         </select> 
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject Name:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Dzongkha Name:</label>
+                        <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
-                        <input class="form-control text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
+                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
                         <has-error :form="form" field="display_order"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -36,11 +45,13 @@
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Aessessed by Class Teacher:</label>
                         <br> 
-                        <label><input v-model="form.assessedByClassTeacher"  type="radio" value="1" />Yes</label>
-                        <label><input v-model="form.assessedByClassTeacher"  type="radio" value="0" />No</label>
+                        <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="1" />Yes</label>
+                        <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="0" />No</label>
                     </div>
                 </div>          
             </div>
@@ -62,9 +73,10 @@ export default {
                 aca_sub_category_id:'',
                 aca_sub_group_id:'',
                 name: '',
+                dzo_name:'',
                 display_order:'',
                 status: 1,
-                assessedByClassTeacher:0,
+                assessed_by_class_teacher:0,
                 record_type:'subject',
                 action_type:'add',
             })
@@ -100,6 +112,9 @@ export default {
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
+                this.form.dzo_name = '';
+                this.form.display_order = '';
+                this.assessed_by_class_teacher= 0;
                 this.form.status= 1;
             }
             if(type=="save"){

@@ -21,6 +21,7 @@ class AcaClassSubjectTeacher extends Migration
             $table->char('org_section_id',36)->nullable()->index();
             $table->char('aca_sub_id',36)->index();
             $table->char('stf_staff_id',36)->index();
+            $table->string('class_stream_section',100);
             $table->string('remarks', 200)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();

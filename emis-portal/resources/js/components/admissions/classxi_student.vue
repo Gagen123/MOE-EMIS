@@ -93,7 +93,6 @@
                                                   
                          <div class="form-group col-md-4">
                                 <label>School <span class="text-danger">*</span></label>
-                                {{schoolList}}
                                   <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
@@ -189,8 +188,10 @@
                     dateOfapply:'',
                     remarks:'',
                     CidNo:'',
+                    std_decission:'',
                    
                 })
+                
             }
         },
         methods:{
@@ -228,8 +229,11 @@
                 formData.append('stream', this.student_form.stream);
                 formData.append('dateOfapply', this.student_form.dateOfapply); 
                 formData.append('remarks', this.student_form.remarks); 
+                formData.append('status', 'pending'); 
+                formData.append('snationality', 'bhutaness');
+                formData.append('std_decission', 'pending'); 
 
-                axios.post('/savedetailsNotEnrolledStd',formData,config)
+                axios.post('/savedetailsEnrolledStd',formData,config)
                 .then(()=>{
                     Toast.fire({
                         icon: 'success',
@@ -258,7 +262,6 @@
               axios.get('/masters/getOrgList/' +dzoId)
               .then(response =>{
                 let data = response.data.data;
-                alert(data);
                 this.schoolList = data;
               })
 
@@ -286,7 +289,7 @@
               axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
               .then(Response =>{
                 let data = Response.data.data;
-                this.getSeats = data;
+                this.getSeats = data;data
               })
               
 
@@ -408,7 +411,6 @@
             this.student_form.gender=this.$route.query.data[0].CmnSexId;
             this.student_form.DateOfBirth=this.$route.query.data[0].DateOfBirth; 
             this.student_form.address=this.$route.query.data[0].Address;
-
             this.getOrgDetails(this.$route.query.data[0].OrgOrganizationId);
             
   },

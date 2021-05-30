@@ -26,3 +26,7 @@ in organization_proprietor_details
     added mobileNo
 in bifurcation : added remarks
 
+in the application_est_public
+    added  'coLocatedParent',
+        'parentSchool',
+

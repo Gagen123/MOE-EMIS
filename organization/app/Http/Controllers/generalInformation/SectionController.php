@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\generalInformation\Section;
 use App\Models\generalInformation\SectionDetails;
+use App\Models\student_seats;
 use Illuminate\Support\Facades\DB;
 
 class SectionController extends Controller
@@ -66,10 +67,12 @@ class SectionController extends Controller
          return $class;
     }
 
-    public function getseatdetailsbyOrgId($orgId){
-        
+    public function getseatdetailsbyOrgId($orgId=""){
+         $response_data=student_seats::where('OrgOrganizationId',$orgId)->first();
+            return $this->successResponse($response_data); 
+    
+        }
 
-    }
 
     /**
      * method to get stream by class Id

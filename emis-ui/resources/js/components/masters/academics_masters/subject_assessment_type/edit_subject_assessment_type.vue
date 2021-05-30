@@ -3,7 +3,7 @@
         <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
             <div class="ml-0 row form-group">
                 <div class="mr-3">
-                    <strong>Class: </strong> {{ className}} {{streamName}} 
+                    <strong>Class: </strong> {{ class_stream }} 
                 </div>
             </div>  
             <div class="form-group row">
@@ -23,7 +23,8 @@
                                     <div class="form-check">
                                         <input v-model="classSubjects[index].sub_selected" :value="item.aca_sub_id" class="form-check-input" type="checkbox" id="subject">
                                         <label class="form-check-label" for="subject">
-                                            {{item.subject}}
+                                            {{item.subject}} 
+                                            <span v-if="item.sub_dzo_name">( {{item.sub_dzo_name}} )</span>
                                         </label>
                                     </div>
                                 </td>
@@ -78,8 +79,7 @@ export default {
             rating_type_list:[],
             classId:'',
             streamId:'',
-            className:'',
-            streamName:'',
+            class_stream:'',
             classSubjects: [],
             dt:'',
         }
@@ -122,7 +122,7 @@ export default {
         },
         save(){
             let selectedSujects = this.classSubjects.filter((classSuject)=>classSuject.sub_selected)
-            axios.post('/masters/saveClassSubject', {org_class_id:this.classId,org_stream_id:this.streamId,data:selectedSujects})
+            axios.post('/masters/saveClassSubject', {class_stream:this.class_stream,org_class_id:this.classId,org_stream_id:this.streamId,data:selectedSujects})
                  .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -142,10 +142,9 @@ export default {
         this.dt =  $("#subject-assessment-type-table").DataTable();
     },
     created() {
-        this.className=this.$route.params.data.class;
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
-        this.streamName=this.$route.params.data.stream;
+        this.class_stream =this.$route.params.data.class_stream;
         this.id=this.$route.params.data.id;
     },
     watch: {

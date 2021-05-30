@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\masters\Subject;
 use Illuminate\Support\Facades\DB;
-// use TheSeer\Tokenizer\Exception;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\masters\AssessmentArea;
@@ -25,11 +24,12 @@ class AcademicMastersController extends Controller
 {
     use ApiResponser;
 
-    public $audit_table="system_admin";
+    public $audit_table="system_db";
 
     public $database="academic_db";
 
     public function saveAcademicMasters(Request $request) {
+
         if($request['record_type']=="subject_group"){
             if($request['action_type'] =="add"){
                 $rules = [
@@ -45,6 +45,7 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
                     $data = [
                         'name'  =>  $request['name'],
+                        'dzo_name' => $request['dzo_name'],
                         'display_order'=> $request['display_order'],
                         'status'    =>  $request['status'],
                         'created_by' =>  $request['user_id'],
@@ -65,10 +66,10 @@ class AcademicMastersController extends Controller
                 ];
                 $this->validate($request, $rules,  $customMessages);
                 $data = SubjectGroup::find($request['id']);
-
-                $messs_det='name:'.$data->name.'; display_order'.$data->display_order.'; status:'.$data->status;
+                $messs_det='name:'.$data->name.'; dzo_name:'.$data->dzo_name.'; display_order:'.$data->display_order.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject_group','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->name = $request['name'];
+                $data->dzo_name = $request['dzo_name'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->update();
@@ -98,6 +99,7 @@ class AcademicMastersController extends Controller
                     'aca_sub_category_id' => $request['aca_sub_category_id'],
                     'aca_sub_group_id' => $request['aca_sub_group_id'],
                     'name'  =>  $request['name'],
+                    'dzo_name' => $request['dzo_name'],
                     'display_order'=> $request['display_order'],
                     'status'    =>  $request['status'],
                     'created_by' =>  $request['user_id'],
@@ -111,25 +113,27 @@ class AcademicMastersController extends Controller
                     'name'    =>  'required',
                     'display_order' => 'required',
                     'status'    =>  'required',
-                    'assessedByClassTeacher' => 'required'
+                    'assessed_by_class_teacher' => 'required'
                 ];
                 $customMessages = [
                     'aca_sub_category_id.required' => 'This field is required',
                     'name.required' => 'This field is required',
                     'display_order.required' => 'This field is required',
                     'status.required' => 'This field is required',
-                    'assessedByClassTeacher.required' => 'This field is required',
+                    'assessed_by_class_teacher.required' => 'This field is required',
 
                 ];
                 
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = Subject::find($request['id']);
-                $messs_det='aca_sub_category_id:'.$data->aca_sub_category_id.'; aca_sub_group_id:'.$data->aca_sub_group_id.'; name'.$data->name.'; display_order'.$data->display_order.'; status:'.$data->status;
+                $messs_det='aca_sub_category_id:'.$data->aca_sub_category_id.'; aca_sub_group_id:'.$data->aca_sub_group_id.'; name:'.$data->name.'; dzo_name:'.$data->dzo_name.'; assessed_by_class_teacher:'.$data->assessed_by_class_teacher.'; display_order:'.$data->display_order.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->aca_sub_category_id = $request['aca_sub_category_id'];
                 $data->aca_sub_group_id = $request['aca_sub_group_id'];
                 $data->name = $request['name'];
+                $data->dzo_name = $request['dzo_name'];
+                $data->assessed_by_class_teacher = $request['assessed_by_class_teacher'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->update();
@@ -157,6 +161,7 @@ class AcademicMastersController extends Controller
                     'aca_sub_id' => $request['aca_sub_id'],
                     'aca_rating_type_id' => $request['aca_rating_type_id'],
                     'name'  =>  $request['name'],
+                    'dzo_name'  =>  $request['dzo_name'],
                     'code'  =>  $request['code'],
                     'display_order' => $request['display_order'],
                     'status'    =>  $request['status'],
@@ -184,52 +189,14 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = AssessmentArea::find($request['id']);
-                $messs_det='aca_sub_id:'.$data->aca_sub_id.'; aca_rating_type_id:'.$data->aca_rating_type_id.'; display_order'.$data->display_order.'; name'.$data->name.'; code'.$data->code.'; status:'.$data->status;
+                $messs_det='aca_sub_id:'.$data->aca_sub_id.'; aca_rating_type_id:'.$data->aca_rating_type_id.'; display_order'.$data->display_order.'; name'.$data->name.'; dzo_name'.$data->dzo_name.'; code'.$data->code.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_assessment_area','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->aca_rating_type_id = $request['aca_rating_type_id'];
                 $data->name = $request['name'];
+                $data->dzo_name = $request['dzo_name'];
                 $data->code = $request['code'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
-                $data->update();
-                $responsedata = $data;
-            }
-        }
-         
-        if($request['record_type'] == 'national_holiday') {
-            if($request['action_type'] =="add"){
-                $rules = [
-                    'holiday_date'  =>  'required',
-                    'description' => 'required',
-                ];
-                $customMessages = [
-                    'holiday_date.required' => 'This field is required',
-                    'description.required' => 'This field is required',
-                ];
-                $data = [
-                    'holiday_date' => $request['holiday_date'],
-                    'description' => $request['description'],
-                    'created_by' =>  $request['user_id'],
-                    'created_at'=>   date('Y-m-d h:i:s'),
-                ];
-                $responsedata= AssessmentArea::create($data);
-            }
-            if($request['action_type'] =="edit"){
-                $rules = [
-                    'holiday_date'  =>  'required',
-                    'description' => 'required',
-                ];
-                $customMessages = [
-                    'holiday_date.required' => 'This field is required',
-                    'description.required' => 'This field is required',
-                ];
-                $this->validate($request, $rules,  $customMessages);
-
-                $data = AssessmentArea::find($request['id']);
-                $messs_det='holiday_date:'.$data->holiday_date.'; description:'.$data->description;
-                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_national_holiday','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
-                $data->holiday_date = $request['holiday_date'];
-                $data->description = $request['description'];
                 $data->update();
                 $responsedata = $data;
             }
@@ -238,10 +205,6 @@ class AcademicMastersController extends Controller
 
     }
     public function loadAcademicMasters($param=""){
-        if($param == "all_national_holiday"){
-            $national_holiday = DB::select("SELECT holiday_date, description FROM aca_national_holiday");
-            return $this->successResponse($national_holiday);
-        }
         if($param == "all_subject_group"){
             $subject = DB::select('SELECT * FROM aca_subject_group ORDER BY display_order');
             return $this->successResponse($subject);
@@ -255,7 +218,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse($active_subject_category);
         }
         if($param == "all_subject"){
-            $subject = DB::select("SELECT t1.id, t1.display_order, t2.name AS sub_category_name, t1.aca_sub_category_id,t1.aca_sub_group_id, t3.name AS sub_group_name, t1.name AS sub_name, t1.status, t1.assessed_by_class_teacher FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id LEFT JOIN aca_subject_group t3 ON t1.aca_sub_group_id = t3.id ORDER BY display_order");
+            $subject = DB::select("SELECT t1.id, t1.display_order, t2.name AS sub_category_name, t1.aca_sub_category_id,t1.aca_sub_group_id, t3.name AS sub_group_name, t1.name AS sub_name, t1.dzo_name,t1.status, t1.assessed_by_class_teacher FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id LEFT JOIN aca_subject_group t3 ON t1.aca_sub_group_id = t3.id ORDER BY display_order");
             return $this->successResponse($subject);
         }
         if($param == "all_active_subject"){
@@ -266,7 +229,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse(RatingType::where ('status', '1')->get());
         }
         if($param == "all_assessment_area"){
-            $assessment_area = DB::select('SELECT t1.id,t1.display_order, t2.name AS sub_name, t1.aca_sub_id, t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.code,t1.status FROM aca_assessment_area t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order');
+            $assessment_area = DB::select('SELECT t1.id,t1.display_order, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id, t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order');
             return $this->successResponse($assessment_area);
         }
         if($param == "all_assessment_frequency"){
@@ -275,7 +238,7 @@ class AcademicMastersController extends Controller
         }
     }
     public function loadClassSubject($class_id="",$stream_id=""){
-        $query = 'SELECT (t2.id IS NOT NULL) AS sub_selected, trim(t2.pass_score)+0 AS pass_score, t1.id AS aca_sub_id, t1.name AS subject,t2.aca_rating_type_id, t2.is_elective FROM aca_subject t1 LEFT JOIN aca_class_subject t2 ON t1.id=t2.aca_sub_id AND t2.org_class_id = ?';
+        $query = 'SELECT (t2.id IS NOT NULL) AS sub_selected, trim(t2.pass_score)+0 AS pass_score, t1.id AS aca_sub_id, t1.name AS subject,t1.dzo_name AS sub_dzo_name,t2.aca_rating_type_id, t2.is_elective FROM aca_subject t1 LEFT JOIN aca_class_subject t2 ON t1.id=t2.aca_sub_id AND t2.org_class_id = ?';
         $params = [$class_id];
         if($stream_id){
           $query .= ' AND t2.org_stream_id = ?';
@@ -302,6 +265,7 @@ class AcademicMastersController extends Controller
         DB::transaction(function() use($request, $query, $params) {
             DB::delete($query, $params);
             foreach($request['data'] as $classSubject){
+                $classSubject['class_stream'] =  $request['class_stream'];
                 $classSubject['org_class_id'] =  $request['org_class_id'];
                 $classSubject['org_stream_id'] =  $request['org_stream_id'];
                 $classSubject['created_by'] =  $request['user_id'];
@@ -335,11 +299,11 @@ class AcademicMastersController extends Controller
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     public function loadclassSubAssmtFrequency(){
-        return $this->successResponse(DB::select('SELECT t1.org_class_id, t1.org_stream_id, t1.aca_sub_id, t4.id AS aca_assmt_term_id, t2.name AS sub_name, t4.name AS term_name, t5.input_type
+        return $this->successResponse(DB::select('SELECT t1.org_class_id, t1.org_stream_id, t1.aca_sub_id, t4.id AS aca_assmt_term_id,t1.class_stream, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t4.name AS term_name, t4.dzo_name AS term_dzo_name, t5.input_type
         FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id JOIN aca_class_assessment_frequency t3 ON t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id is null AND t3.org_stream_id is null)) JOIN aca_assessment_term t4 ON t3.aca_assmt_frequency_id = t4.aca_assmt_frequency_id JOIN aca_rating_type t5 ON t1.aca_rating_type_id = t5.id WHERE t2.status = 1 AND t5.status = 1')); 
     }
     public function loadclassSubjectAssessment($term_id,$sub_id,$class_id, $stream_id=""){
-        $query = 'SELECT (t2.id IS NOT NULL) AS assmt_area_selected,t1.id AS aca_assmt_area_id, t1.name AS assessment_area, trim(t2.weightage)+0 AS weightage, t3.input_type, IFNULL(t2.display_order,t1.display_order) AS display_order
+        $query = 'SELECT (t2.id IS NOT NULL) AS assmt_area_selected,t1.id AS aca_assmt_area_id, t1.name AS assessment_area, t1.dzo_name, trim(t2.weightage)+0 AS weightage, t3.input_type, IFNULL(t2.display_order,t1.display_order) AS display_order
         FROM aca_assessment_area t1
             LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id=t3.id
             LEFT JOIN aca_class_subject_assessment t2 ON t1.id=t2.aca_assmt_area_id AND t1.aca_sub_id = t2.aca_sub_id AND t2.aca_sub_id = ? AND t2.aca_assmt_term_id = ? AND t2.org_class_id =? ';
@@ -349,8 +313,8 @@ class AcademicMastersController extends Controller
           array_push($params,$stream_id);
         } 
         array_push($params,$sub_id);
+        return $this->successResponse(DB::select($query.' WHERE t1.aca_sub_id = ?', $params)); 
 
-        return $this->successResponse (DB::select($query.' WHERE t1.aca_sub_id = ?', $params)); 
     }
     public function saveclassSubjectAssessment(Request $request){ 
         $rules = [
@@ -378,15 +342,21 @@ class AcademicMastersController extends Controller
         } 
         DB::transaction(function() use($request, $query,  $params ) {
             DB::delete($query,$params);
-            foreach($request['data'] as $classSubjectAssessment){
-                $classSubjectAssessment['org_class_id'] = $request['org_class_id'];
-                $classSubjectAssessment['org_stream_id'] = $request['org_stream_id'];
-                $classSubjectAssessment['aca_sub_id'] = $request['aca_sub_id'];
-                $classSubjectAssessment['aca_assmt_term_id'] = $request['aca_assmt_term_id'];
-                $classSubjectAssessment['created_by'] =  $request['user_id'];
-                $classSubjectAssessment['created_at'] =   date('Y-m-d h:i:s');
-                // dd($classSubjectAssessment);
-                ClassSubjectAssessment::create($classSubjectAssessment);
+            try{
+                foreach($request['data'] as $classSubjectAssessment){
+                    $classSubjectAssessment['class_stream'] = $request['class_stream'];
+                    $classSubjectAssessment['org_class_id'] = $request['org_class_id'];
+                    $classSubjectAssessment['org_stream_id'] = $request['org_stream_id'];
+                    $classSubjectAssessment['aca_sub_id'] = $request['aca_sub_id'];
+                    $classSubjectAssessment['aca_assmt_term_id'] = $request['aca_assmt_term_id'];
+                    $classSubjectAssessment['created_by'] =  $request['user_id'];
+                    $classSubjectAssessment['created_at'] =   date('Y-m-d h:i:s');
+                    
+                    ClassSubjectAssessment::create($classSubjectAssessment);
+                    
+                }
+            }catch(Exception $e){
+                dd($e);
             }
         });
         return $this->successResponse(1, Response::HTTP_CREATED);

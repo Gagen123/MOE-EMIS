@@ -19,6 +19,7 @@ class AcaAssessmentArea extends Migration
             $table->char('id',36)->primary();
             $table->char('aca_sub_id', 36)->index();
             $table->string('name',100);
+            $table->string('dzo_name',255)->nullable();
             $table->string('code',10);
             $table->char('aca_rating_type_id',36)->index()->nullable();
             $table->unsignedTinyInteger('display_order')->index();

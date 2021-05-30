@@ -18,6 +18,7 @@ class ClassSubjectAssessment extends Model
         'org_class_id',
         'org_stream_id',
         'aca_assmt_area_id',
+        'class_stream',
         'weightage',
         'display_order',
         'created_by',

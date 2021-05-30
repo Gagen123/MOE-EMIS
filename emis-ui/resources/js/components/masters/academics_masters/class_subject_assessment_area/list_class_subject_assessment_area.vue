@@ -13,9 +13,13 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in classSubAssmtFrequencyList" :key="index">
-                            <td><strong>{{ item.class }} {{item.stream}}</strong></td>
-                            <td>{{ item.sub_name }}</td>
-                            <td>{{item.term_name}}</td>
+                            <td><strong>{{ item.class_stream }} </strong></td>
+                            <td>{{ item.sub_name }}
+                                <span v-if="item.sub_dzo_name">( {{ item.sub_dzo_name}} )</span>
+                            </td>
+                            <td>{{item.term_name}}
+                                <span v-if="item.sub_dzo_name && item.term_dzo_name">( {{ item.term_dzo_name}} )</span>
+                            </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
@@ -40,7 +44,7 @@ export default {
     methods:{
         async classSubAssmtFrequency(){
             try{
-                let classStreams = await axios.get('masters/getClassStream').then(response => {
+                let classStreams = await axios.get('masters/loadClassStreamMapping/NA').then(response => {
                     return response.data.data
                 })
                 let classSubAssmtFrequencies = await axios.get('masters/loadclassSubAssmtFrequency').then(response => {
@@ -48,11 +52,12 @@ export default {
                 })
                 classSubAssmtFrequencies.forEach((classSubAssmtFrequency,index) => {
                     classStreams.forEach(item => {
-                        if(classSubAssmtFrequency.org_class_id == item.org_class_id && (classSubAssmtFrequency.org_stream_id == item.org_stream_id || classSubAssmtFrequency.org_stream_id == null)){
-                            classSubAssmtFrequencies[index].org_class_id = item.org_class_id
-                            classSubAssmtFrequencies[index].org_stream_id  = item.org_stream_id
-                            classSubAssmtFrequencies[index].class = item.class
-                            classSubAssmtFrequencies[index].stream  = item.stream
+                        if(!classSubAssmtFrequencies[index].class_stream){
+                            if(classSubAssmtFrequency.org_class_id == item.classId && (classSubAssmtFrequency.org_stream_id == item.classId || classSubAssmtFrequency.org_stream_id == null)){
+                                classSubAssmtFrequencies[index].org_class_id = item.classId
+                                classSubAssmtFrequencies[index].org_stream_id  = item.streamId
+                                classSubAssmtFrequencies[index].class_stream = item.class + ' ' + item.stream
+                            }
                         }
                     })
                 })
@@ -73,10 +78,10 @@ export default {
             rowGroup: {
                     dataSrc: 0 
                 },
-            columnDefs: [{
-                targets:  0,
-                visible: false
-            }]
+                columnDefs: [{
+                    targets:  0,
+                    visible: false
+                }]
          }) 
     },
     watch: {

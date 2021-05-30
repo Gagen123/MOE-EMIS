@@ -17,8 +17,12 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in assessmentAreaList" :key="index">
                             <td class="text-right">{{ item.display_order }}</td>
-                            <td>{{item.sub_name}}</td>
-                            <td>{{ item.assessment_area_name }}</td>
+                            <td>{{item.sub_name}}
+                                <span v-if="item.sub_dzo_name">( {{item.sub_dzo_name}} )</span>
+                            </td>
+                            <td>{{ item.assessment_area_name }}
+                                <span v-if="item.area_dzo_name">( {{item.area_dzo_name}} )</span>
+                            </td>
                             <td>{{ item.code }}</td>
                             <td>{{item.rating_type_name}}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
@@ -64,7 +68,9 @@ export default {
         this.dt =  $("#assessment-area-table").DataTable({
             columnDefs: [
                     { width: 2, targets: 0},
-                    { width: 80, targets:[1,3]},
+                    { width: 150, targets:1},
+                    { width: 40, targets:3},
+                    { width: 10, targets:5},
                 ],
         });
     },

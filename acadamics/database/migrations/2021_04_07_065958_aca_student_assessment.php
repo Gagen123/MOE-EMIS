@@ -21,13 +21,15 @@ class AcaStudentAssessment extends Migration
             $table->char('org_section_id',36)->index()->nullable();
             $table->char('aca_sub_id',36)->index();
             $table->char('aca_assmt_term_id',36)->index();
+            $table->string('class_stream_section',100);finalized_date
+            $table->date('finalized_date')->nullable();
             $table->unsignedTinyInteger('finalized')->default(0)->index();
-            $table->string('remarks',1000);
+            $table->string('remarks',1000)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
 
-            $table->foreign('aca_sub_id')->references('id')->on('aca_class_subject');
+            $table->foreign('aca_sub_id')->references('id')->on('aca_subject');
             $table->foreign('aca_assmt_term_id')->references('id')->on('aca_assessment_term');
 
         });

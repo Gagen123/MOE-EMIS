@@ -3,7 +3,7 @@
         <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
             <div class="ml-1 row form-group">
               <div class="mr-3">
-                <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
+                <strong>Class: </strong> {{ class_stream_section }}
               </div>
               <div class="mr-3">
                 <strong>Term: </strong> {{term}}
@@ -13,19 +13,19 @@
               </div>
             </div>          
             <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                     <table id="assessment-term-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th>Roll No</th>
+                                <th>Student Code</th>
                                 <th>Name</th>
                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} <span v-if="item.input_type==1">({{item.weightage}}%)</span></th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{item1.roll_no}}</td>
-                                <td>{{ item1.name }}</td>
+                                <td>{{item1.CidNo}}</td>
+                                <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2">
                                     <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
                                     <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
@@ -85,7 +85,7 @@
             }                    
         },
         save(action=""){
-            let params = {org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,aca_sub_id:this.aca_sub_id, aca_assmt_term_id:this.aca_assmt_term_id,data:this.studentAssessmentList};
+            let params = {class_stream_section:this.class_stream_section,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,aca_sub_id:this.aca_sub_id, aca_assmt_term_id:this.aca_assmt_term_id,data:this.studentAssessmentList};
             if(action == "finalize"){
                 params.finalize = 1
                 Swal.fire({
@@ -142,9 +142,7 @@
             this.classId=this.$route.params.data.org_class_id;
             this.streamId=this.$route.params.data.org_stream_id;
             this.sectionId=this.$route.params.data.org_section_id;
-            this.className=this.$route.params.data.class;
-            this.streamName=this.$route.params.data.stream;
-            this.section=this.$route.params.data.section;
+            this.class_stream_section=this.$route.params.data.class_stream_section;
             this.subject=this.$route.params.data.sub_name;
             this.term=this.$route.params.data.term_name;
         },
