@@ -30,13 +30,13 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff4')">
-                    <router-link id="regularstaff4" to="/sections_add" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link id="regularstaff4" to="/section_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Sections
                     </router-link>
                 </li> 
                  
-                 <li class="nav-item active pr-1" @click="activatelink('regularstaff3')">
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff3')">
                     <router-link id="regularstaff3" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Class Mapping

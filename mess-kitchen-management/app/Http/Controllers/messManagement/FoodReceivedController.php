@@ -23,7 +23,7 @@ class FoodReceivedController extends Controller
      //   dd('m here at my service');
       $stockreceive = [
         'dateOfreceived'           =>  $request['dateOfreceived'],
-        'term_id'                  =>  $request['term'],
+        'quarter_id'               =>  $request['quarter'],
         'organizationId'           =>  $request['organizationId'],
         'updated_by'               =>  $request->user_id,
         'created_at'               =>  date('Y-m-d h:i:s')
@@ -52,7 +52,7 @@ class FoodReceivedController extends Controller
     public function loadFoodReleaseListing($org_Id=""){
       //  return 'from service of mine';
          $stckrecive = DB::table('stock_receiveds')
-        ->select('dateOfreceived as dateOfreceived', 'term_id as term')->where('organizationId', $org_Id)->get();
+        ->select('dateOfreceived as dateOfreceived', 'quarter_id as quarter', 'remarks as remarks')->where('organizationId', $org_Id)->get();
         return $stckrecive;
         // $response_data=StockReceived::where('organizationId',$org_id)->get();
         // return $this->successResponse($response_data);

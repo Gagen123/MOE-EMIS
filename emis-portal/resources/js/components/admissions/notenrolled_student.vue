@@ -743,6 +743,7 @@ export default {
                         this.student_form.dob = year+ "-"+month + "-" + day;
                         $('#dob').val(year+ "-"+month + "-" + day);
                         $('#dob').prop('readonly',true);
+                        
                         if(student_detail.genter=="M"){
                             student_detail.genter="male";
                         }
@@ -759,20 +760,52 @@ export default {
                                 $('#sex_id').prop('disabled',true);
                             }  
                         }
+
                         this.student_form.dzongkhag =student_detail.dzongkhagId;
                         $('#dzongkhag').val(student_detail.dzongkhagId).trigger('change');
                         $('#dzongkhag').prop('disabled',true);
+
                         this.getgewoglist(student_detail.dzongkhagId,'std');
                         this.student_form.gewog = student_detail.gewogId;
                         $('#gewog').prop('disabled',true);
+
                         this.getvillagelist(student_detail.gewogId,'std');
                         $('#village_id').val(student_detail.villageSerialNo).trigger('change');
                         this.student_form.village_id = student_detail.villageSerialNo;
                         $('#village_id').prop('disabled',true);
                     }
                     if(type=="father"){
-                        
-                    }
+                        if(personal_detail.genter=="F"){
+                            Swal.fire({
+                                html: "Genter of this person Female. Please provide correct CID",
+                                icon: 'error'
+                            });
+                            this.guardian_form.father_first_name = "";
+                            this.guardian_form.father_dzongkhag ="";
+                            this.guardian_form.father_gewog = "";
+                            this.guardian_form.father_village_id = "";
+                        }
+                        else{
+                            let full_anme=personal_detail.firstName;
+                            if(personal_detail.middleName!="" && personal_detail.middleName!=null){
+                                full_anme+=' '+personal_detail.middleName;
+                            }
+                            full_anme+=' '+personal_detail.lastName;
+                            this.guardian_form.father_first_name = full_anme;
+                            $('#father_first_name').prop('readonly',true);
+                            this.guardian_form.father_dzongkhag =personal_detail.dzongkhagId;
+                            $('#father_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                            $('#father_dzongkhag').prop('disabled',true);
+                            this.getgewoglist(personal_detail.dzongkhagId,'p_father');
+                            this.guardian_form.father_gewog = personal_detail.gewogId;
+                            $('#father_gewog').val(personal_detail.gewogId).trigger('change');
+                            $('#father_gewog').prop('disabled',true);
+                            this.getvillagelist(personal_detail.gewogId,'p_father');
+                            this.guardian_form.father_village_id = personal_detail.villageSerialNo;
+                            $('#father_village_id').val(personal_detail.villageSerialNo).trigger('change');
+                            $('#father_village_id').prop('disabled',true);
+                        }
+                            }
                     if(type=="mother"){
                         
                     }
@@ -1023,12 +1056,10 @@ export default {
                 formData.append('dzongkhag', this.student_form.dzongkhag);
                 formData.append('gewog', this.student_form.gewog);
                 formData.append('village_id', this.student_form.village_id);
-                formData.append('attachments', this.student_form.attachments);
-                // formData.append('s_dzongkhag', this.school_form.s_dzongkhag);
-                // formData.append('s_school', this.school_form.s_school);
-                // formData.append('s_class', this.school_form.s_class);
                 formData.append('type','new');
+                formData.append('Status', 'pending'); 
                 axios.post('/saveStudentDetails',formData, config)
+
                 .then((response) => {
                     this.guardian_form.student_id=response.data.id;
                     Toast.fire({

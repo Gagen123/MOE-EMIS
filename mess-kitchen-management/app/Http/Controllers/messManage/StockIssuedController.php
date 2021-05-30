@@ -41,13 +41,18 @@ class StockIssuedController extends Controller
          $stckiss = StockIssued::create($item);
           // dd('stockissue');
         }
-         //  dd('m here');
+         //  dd('m here'); 
         return $this->successResponse($item, Response::HTTP_CREATED);
     }
     public function loadStockIssuedList(){
      //return 'from service of mine';
         $list = DB::table('stock_issueds')
-        ->select( 'dateOfissue as dateOfissue',)->get();
+        ->select( 'dateOfissue as dateOfissue','item_id as item', 'quantity as quantity','unit_id as unit')->get();
         return $list;
     }
+    public function getStockIssueItem($org_Id=''){
+        $list = DB::table('stock_issueds')
+        ->select( 'dateOfissue as dateOfissue','item_id as item','quantity as quantity','unit as unit','damagequantity as damageqty','remarks as remarks')->where('organizationId',$org_Id)->get();
+        return $list;
+      }
 }

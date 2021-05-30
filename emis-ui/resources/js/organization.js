@@ -378,8 +378,20 @@ const routes = [
                     { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
                 ]    
             },
+            //section routes
+            { path: '/section_index', 
+              component: require('./components/organization/general/section/section_index.vue').default ,
+              children: [
+                { path: '',name:'section_index', component: require('./components/organization/general/section/list_section.vue').default },
+                { path: '/list_section', name:'list_section', component: require('./components/organization/general/section/list_section.vue').default },
+                { path: '/create_section', name:'create_section', component: require('./components/organization/general/section/create_section.vue').default },
+                { path: '/edit_section', name:'edit_section', component: require('./components/organization/general/section/edit_section.vue').default },
+                
+              ] 
+            }, 
+
             { path: '/sections_add', name:'sections_add', 
-                component: require('./components/organization/general/section/sections_add.vue').default,
+                // component: require('./components/organization/general/section/sections_add.vue').default,
                 children: 
                 [
                     { path: '',name:'location_index', component: require('./components/masters/organization_masters/location/location_list.vue').default },
@@ -627,15 +639,7 @@ const routes = [
   //         { path: '/equipment&furniture_list', name:'Equipment&FurnitureList', component: require('./components/organization/otherOrganizationalinfo/equipment&furniture/equipment&furniture_list.vue').default },
   //       ] 
   //     },
-  //     { path: '/section_index', 
-  //       component: require('./components/organization/otherOrganizationalinfo/section/section_index.vue').default ,
-  //       children: [
-  //         { path: '',name:'section_index', component: require('./components/organization/otherOrganizationalinfo/section/section_list.vue').default },
-  //         { path: '/section_add', name:'SectionAdd', component: require('./components/organization/otherOrganizationalinfo/section/section_add.vue').default },
-  //         { path: '/section_edit', name:'SectionEdit', component: require('./components/organization/otherOrganizationalinfo/section/section_edit.vue').default },
-  //         { path: '/section_list', name:'SectionList', component: require('./components/organization/otherOrganizationalinfo/section/section_list.vue').default },
-  //       ] 
-  //     },  
+   
   //     { path: '/classMapping_index', 
   //       component: require('./components/organization/otherOrganizationalinfo/class&sectionMapping/classMapping_index.vue').default ,
   //       children: [

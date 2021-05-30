@@ -106,7 +106,7 @@
       <b>Version</b> 1.0.0
     </div>
     {{-- Default to the left --}}
-    <strong>Copyright &copy; 2021 <a href="#">Emis Student Portal</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2021 <a href="#">Emis Portal</a>.</strong> All rights reserved.
   </footer>
 </div>
 {{-- ./wrapper --}}

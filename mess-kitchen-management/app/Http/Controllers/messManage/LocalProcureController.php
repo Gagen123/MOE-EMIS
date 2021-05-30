@@ -43,7 +43,7 @@ class LocalProcureController extends Controller
     public function loadLocalProcure(){
         //   return 'from service of mine';
         $list = DB::table('local_procures')
-        ->select( 'dateOfprocure as dateOfprocure', 'item_id as item')->get();
+        ->select( 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->get();
         return $list;
     }
 }

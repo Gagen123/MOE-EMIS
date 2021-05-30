@@ -1,5 +1,8 @@
 export default [
 
+    
+
+    { path: '/track_application', component: require('./components/admissions/track_application.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/Userprofile', component: require('./components/Profile/Userprofile.vue').default },
@@ -16,5 +19,12 @@ export default [
             { path: '/classxi_student',name:'classxi_student', component: require('./components/admissions/classxi_student.vue').default },
            
              ]
-}
+    },
+
+    { path: '/track_application',  name:'track_application',  component: require('./components/admissions/track_application.vue').default ,
+    children:[
+           { path: '/applicationLists',name:'applicationLists', component: require('./components/admissions/applicationLists.vue').default },
+          
+            ]
+   }
 ];
