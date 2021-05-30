@@ -193,6 +193,12 @@ export default {
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
         this.form.dateOfissue = this.$route.params.data.dateOfissue;
+        this.item_issue.item = this.$$route.query.data[0].item_id;
+        this.item_issue.quantity = this.$$route.query.data[0].quantity;
+        this.item_issue.unit = this.$$route.query.data[0].unit_id;
+        this.item_issue.damagequantity = this.$$route.query.data[0].damagequantity;
+        this.item_issue.remarks = this.$$route.query.data[0].remarks;
+       
        
     }
 }

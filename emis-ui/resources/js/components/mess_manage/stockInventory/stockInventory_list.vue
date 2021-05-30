@@ -11,21 +11,19 @@
                                     <th>Item</th>
                                     <th>Stock Received</th>
                                     <th>Locally Procured</th>    
-                                    <th>Other</th>    
                                     <th>Stock Issued</th> 
-                                    <th>Stock Available</th>
+                                    <th>Unit</th>
+                                  
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in stockInventory" :key="index">
                                     <td>{{ index + 1 }}</td>
-                                    <td>{{ item.item }}</td>
-                                    <td>{{ item.itemreceived}}</td>
-                                    <td>{{ item.localproduce}}</td>
-                                    <td>{{ item.othersource}}
-                                    <td>{{ item.itemissued}}
-                                    <td>{{ item.itemavailable }}</td>
-                                   
+                                    <td>{{ itemList[item.item_id]}}</td>
+                                    <td>{{ item.stock_received_quantity}}</td>
+                                    <td>{{ item.local_procured_quantity}}</td>
+                                    <td>{{ item.stock_issed_quantity}}</td>
+                                    <td>{{unitList[item.unit_id]}} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -41,26 +39,55 @@ export default {
     data(){
         return{
             stockInventory:[],
+            itemList:{},
+            unitList:{},
         }
     },
     methods:{
         /**
          * method to load organization/school list
          */
-        loadInventory(){
-            axios.get('mess_manage/getinventoryDetials')
+        getInventoryList(uri = 'mess_manage/getInventoryList/null'){
+            axios.get(uri)
             .then(response => {
                 let data = response;
                 this.stockInventory = data.data.data;
             });
         },
-        showbasicdetails(id){
-            this.$router.push({name:'mess_details',query: {data:id}});
+        // showbasicdetails(id){
+        //     this.$router.push({name:'mess_details',query: {data:id}});
+        // },
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
        
     },
-    created(){
-        this.loadInventory();
+    mounted(){
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
+        this.getInventoryList();
     }
 }
 </script>

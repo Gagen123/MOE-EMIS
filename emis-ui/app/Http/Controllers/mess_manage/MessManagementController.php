@@ -35,7 +35,7 @@ class MessManagementController extends Controller
         $rules = [
             'dateOfrelease'            =>  'required',
             'dzongkhag'                =>  'required',
-            'organizaiton'             =>  'required',
+            'organizaiton'             =>  'required', 
             'quarter'                  =>  'required',
         ];
         $customMessages = [
@@ -46,29 +46,29 @@ class MessManagementController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         
-        $files = $request->attachments;
-        // dd($files);
-        $filenames = $request->attachmentname;
-        $attachment_details=[];
-        $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopment';
-        if($files!=null && $files!=""){
-            if(sizeof($files)>0 && !is_dir($file_store_path)){
-                mkdir($file_store_path,0777,TRUE);
-            }
-            if(sizeof($files)>0){
-                foreach($files as $index => $file){
-                    $file_name = time().'_' .$file->getClientOriginalName();
-                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
-                    array_push($attachment_details,
-                        array(
-                            'path'        =>  $file_store_path,
-                            'original_name'           =>  $file_name,
-                            'user_defined_name'       =>  $filenames[$index],
-                        )
-                    );
-                }
-            }
-        }
+    //     $files = $request->attachments;
+    //    //  dd($files);
+    //     $filenames = $request->attachmentname;
+    //     $attachment_details=[];
+    //     $file_store_path=config('services.constant.file_stored_base_path').'MessManagement';
+    //     if($files!=null && $files!=""){
+    //         if(sizeof($files)>0 && !is_dir($file_store_path)){
+    //             mkdir($file_store_path,0777,TRUE);
+    //         }
+    //         if(sizeof($files)>0){
+    //             foreach($files as $index => $file){
+    //                 $file_name = time().'_' .$file->getClientOriginalName();
+    //                 move_uploaded_file($file,$file_store_path.'/'.$file_name);
+    //                 array_push($attachment_details,
+    //                     array(
+    //                         'path'                    =>  $file_store_path,
+    //                         'original_name'           =>  $file_name,
+    //                         'user_defined_name'       =>  $filenames[$index],
+    //                     )
+    //                 );
+    //             }
+    //         }
+    //     }
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
@@ -76,9 +76,9 @@ class MessManagementController extends Controller
             'organizaiton'             =>  $request['organizaiton'],
             'quarter'                  =>  $request['quarter'],
             'remarks'                  =>  $request['remarks'],
-            'attachment_details'       =>  $attachment_details,
+          //  'attachment_details'       =>  $attachment_details,
             'id'                       =>  $request['id'],
-            'items_released'           =>  $request->items_released,
+          //  'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
         ];  
        //  dd($foodrelease);
@@ -135,25 +135,25 @@ class MessManagementController extends Controller
     public function saveStockReceived(Request $request){
         $rules = [
             'dateOfreceived'          =>  'required',
-            'term'                    =>  'required',
+            'quarter'                 =>  'required',
         ];
         $customMessages = [
             'dateOfreceived.required'       => 'dateOfreceived is required',
-            'term.required'                 => 'Term is required',
+            'quarter.required'              => 'Quarter is required',
 
         ];
         $this->validate($request, $rules, $customMessages);
         $stockreceived =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
             'dateOfreceived'                =>  $request['dateOfreceived'],
-            'term'                          =>  $request['term'],
+            'quarter'                       =>  $request['quarter'],
             'remarks'                       =>  $request['remarks'],
             'id'                            =>  $request['id'],
             'items_received'                =>  $request->items_received,
             'user_id'                       =>  $this->userId()
 
         ];
-         dd($stockreceived);
+     //   dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -161,6 +161,25 @@ class MessManagementController extends Controller
         catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+
+    // public function loadFoodReleaseListing($orgId=""){
+    //     if($orgId=="null" || $orgId==""){
+    //         $orgId=$this->getWrkingAgencyId();
+    //     }
+    //    // dd('m here');
+    //     $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+    //     return $list;
+    //    // dd($list);
+    // }
+    //     $response_data= $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+    //     return $response_data;
+    // }
+    
+    public function getfoodreleaseditemList($foodreleaseId=""){
+        //dd('m here');
+        $itemList = $this->apiService->listData('emis/messManagement/getfoodreleaseditemList/'.$foodreleaseId);
+        return $itemList;
     }
 
     public function loadFoodReleaseListing($orgId=""){
@@ -172,24 +191,19 @@ class MessManagementController extends Controller
         return $list;
        // dd($list);
     }
-    //     $response_data= $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+
+    //just added
+    public function getStockReceivedDetails($stockreceivedId=""){
+        $receivedDetails = $this->apiService->listData('emis/messManagement/getStockReceivedDetails/'.$stockreceivedId);
+        return $receivedDetails;
+    }
+
+ 
+    // public function getfoodreleasedetailbyquarter($quarter_id="",$foodreleaseId=""){
+    //   //  dd('m here');
+    //     $response_data= $this->apiService->listData('emis/messManagement/getfoodreleasedetailbyquarter/'.$quarter_id."/".$foodreleaseId.'/'.$this->getWrkingAgencyId());
     //     return $response_data;
     // }
-    
-    public function getfoodreleaseditemList($foodreleaseId=""){
-        //dd('m here');
-        $itemList = $this->apiService->listData('emis/messManagement/getfoodreleaseditemList/'.$foodreleaseId);
-        return $itemList;
-    }
- 
-    public function getfoodreleasedetailbyquarter($quarter_id="",$foodreleaseId=""){
-      //  dd('m here');
-        $response_data= $this->apiService->listData('emis/messManagement/getfoodreleasedetailbyquarter/'.$quarter_id."/".$foodreleaseId.'/'.$this->getWrkingAgencyId());
-        return $response_data;
-    }
-       
-
-
 
     // Stock Issued
     public function loadStockIssuedList(){
@@ -223,6 +237,27 @@ class MessManagementController extends Controller
          catch(GuzzleHttp\Exception\ClientException $e){
           return $e;
         }
+    }
+
+    public function getInventoryList($org_Id=""){
+         //  dd('m here');
+        if($org_Id=="null" || $org_Id==""){
+            $org_Id=$this->getWrkingAgencyId();
+        }
+        $list = $this->apiService->listData('emis/messManagement/getInventoryList/'.$org_Id);
+        return $list;
+    }
+
+    
+
+    public function getStockIssueItem($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+       // dd('m here');
+        $list = $this->apiService->listData('emis/messManagement/getStockIssueItem/'.$orgId);
+        return $list;
+       // dd($list);
     }
 
 }
