@@ -15,6 +15,7 @@ class ClassAssessmentFrequency extends Model
         'id',
         'org_class_id',
         'org_stream_id', 
+        'class_stream',
         'aca_assmt_frequency_id',
         'created_by',
         'created_at',

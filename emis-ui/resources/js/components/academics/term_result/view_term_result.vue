@@ -3,7 +3,7 @@
         <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
             <div class="ml-1 row form-group">
               <div class="mr-3">
-                <strong>Class: </strong> {{ className}} {{streamName}} {{section}}
+                <strong>Class: </strong> {{ class_stream_section }}
               </div>
               <div class="mr-3">
                 <strong>Term: </strong> {{term}}
@@ -17,7 +17,7 @@
                     <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th>Roll No</th>
+                                <th>Student Code</th>
                                 <th>Name</th>
                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} <span v-if="item.input_type==1">({{item.weightage}}%)</span></th>
                                 <th v-if="totalWeightage>0">Total ({{totalWeightage}}%)</th>
@@ -25,8 +25,8 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{item1.roll_no}}<input type="hidden" :value="totalScore =0"/></td>
-                                <td>{{ item1.name }}</td>
+                                <td>{{item1.CidNo}}<input type="hidden" :value="totalScore =0"/></td>
+                                <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                    {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}}
                                     <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)">
@@ -53,9 +53,9 @@
         }
     },
     methods:{
-        rating(rating_type_id){
-             return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
-        },
+        // rating(rating_type_id){
+        //      return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
+        // },
        async loadStudentAssessments(){
          let uri = 'academics/loadStudentAssessments'
           uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&classId='+this.classId)
@@ -68,6 +68,7 @@
             try{
                 let studentAssesssments = await axios.get(uri).then(response => response.data)
                 this.assessmentAreaList = studentAssesssments.assessmentAreas
+                console.log(this.assessmentAreaList);
                 this.ratingList = studentAssesssments.ratings
                 this.studentAssessmentList = studentAssesssments.studentAssessments
             }catch(e){
@@ -81,13 +82,26 @@
         totalWeightage(){
            let totalWeightage = 0
            this.assessmentAreaList.forEach((item) => {
-               if(item.input_type==1) return totalWeightage+=(item.weightage)
+               if(item.input_type==1){
+                return totalWeightage+=(item.weightage)
+               }
             })
            return totalWeightage
         },
         // totalScore(){
         //  let totalScore = 0
         // }
+    },
+
+    created() {
+        this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
+        this.aca_sub_id = this.$route.params.data.aca_sub_id
+        this.classId=this.$route.params.data.org_class_id;
+        this.streamId=this.$route.params.data.org_stream_id;
+        this.sectionId=this.$route.params.data.org_section_id;
+        this.class_stream_section=this.$route.params.data.class_stream_section;
+        this.subject=this.$route.params.data.sub_name;
+        this.term=this.$route.params.data.term_name;
     },
     mounted(){ 
         this.loadStudentAssessments()
@@ -100,20 +114,8 @@
         })
 
     },
-    created() {
-        this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
-        this.aca_sub_id = this.$route.params.data.aca_sub_id
-        this.classId=this.$route.params.data.org_class_id;
-        this.streamId=this.$route.params.data.org_stream_id;
-        this.sectionId=this.$route.params.data.org_section_id;
-        this.className=this.$route.params.data.class;
-        this.streamName=this.$route.params.data.stream;
-        this.section=this.$route.params.data.section;
-        this.subject=this.$route.params.data.sub_name;
-        this.term=this.$route.params.data.term_name;
-    },
     watch: {
-        studentAssessmentList(val) {
+        studentAssessmentList() {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt = $("#term-result-view-table").DataTable()

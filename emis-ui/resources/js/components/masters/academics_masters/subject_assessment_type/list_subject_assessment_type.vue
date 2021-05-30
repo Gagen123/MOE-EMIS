@@ -7,15 +7,14 @@
                         <tr>
                          <th>SL#</th>
                         <th>Class</th>
-                        <th>Stream</th>
                         <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in classesStreamsList" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.class }}</td>
-                            <td>{{item.stream}}</td>
+                            <td>{{ item.class_stream }}</td>
+                          
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
@@ -37,11 +36,24 @@ export default {
         }
     },
     methods:{
-        getClassStreamList(uri = 'masters/getClassStream'){
+        getClassStreamList(uri = 'masters/loadClassStreamMapping/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response 
-                this.classesStreamsList =  data.data.data;
+                let datas = response.data.data;
+                let classStreams = []
+                let renameId = [] 
+                datas.forEach(element => {
+                    if(element.stream){
+                       renameId['class_stream'] = element.class+' '+element.stream
+                    }else{
+                        renameId['class_stream'] = element.class
+                    }
+                    renameId['org_class_id'] = element.classId
+                    renameId['org_stream_id'] = element.streamId
+                     const obj = {...renameId};
+                    classStreams.push(obj);
+                });
+                this.classesStreamsList = classStreams
             })
             .catch(function (error){
                 if(error.toString().includes("500")){

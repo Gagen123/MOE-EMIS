@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 return [
     'constant' => [
@@ -6,3 +7,12 @@ return [
     ],
 
 ];
+=======
+<?php
+return [
+    'constant' => [
+        'auditdb' => env('AUDIT_DB'),
+    ],
+
+];
+>>>>>>> db244ab202f4d25e09e31f671939958aff4dee2e

@@ -8,17 +8,15 @@
                             <tr>
                                 <th>Sl#</th>
                                 <th>Class</th>
-                                <th>Stream</th>
-                                <th>Section</th>
+                                <th>Attendance Date</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in classStremSectionList" :key="index">
-                                 <td>{{ index+1 }}</td>
-                                 <td> {{ item.class }} </td>
-                                 <td> {{ item.stream }}  </td>
-                                 <td> {{ item.section }} </td>
+                                <td>{{ index+1 }}</td>
+                                <td> {{ item.class_stream_section}}</td>
+                                <td> {{ item.attendance_date}}</td>
                                 <td>
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
                                 </td>                                                                               
@@ -47,20 +45,21 @@ export default {
         async loadClassStreamSection(){
              try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
-
-                classSections.forEach((classSection,index) => {
-                    classSection.org_class_id = classSection.class
-                    classSection.org_stream_id = classSection.stream
-                    classSection.org_section_id = classSection.section
-                    classTeachers.forEach(item => {
-                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
-                            classSections[index].stf_staff_id = item.stf_staff_id
+                let studentsAttendance = await axios.get('academics/loadStudentAttendance').then(response => response.data.data)
+                studentsAttendance.forEach((attendance,index) => {
+                    classSections.forEach(item => {
+                        if(attendance.org_class_id == item.org_class_id && (attendance.org_stream_id == item.org_stream_id || (attendance.org_stream_id == null && item.org_stream_id == null)) && (attendance.org_section_id == item.org_section_id || (attendance.org_section_id == null && item.org_section_id == null))){
+                            if(item.stream && item.section){
+                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
+                            }else if(item.stream){
+                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream
+                            }else{
+                                studentsAttendance[index]['class_stream_section'] = item.class
+                            }
                         }
                     })
-                })
-                this.classStremSectionList = classSections
-                console.log(this.classStremSectionList)
+                });
+                this.classStremSectionList = studentsAttendance
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -75,7 +74,11 @@ export default {
     },
     mounted(){ 
         this.loadClassStreamSection();
-        this.dt = $("#list-student-attendence-table").DataTable()
+        this.dt = $("#list-student-attendence-table").DataTable({
+               columnDefs: [
+                { width: 2, targets: 0},
+            ],
+        })
     },
     watch: {
         classStremSectionList(val) {

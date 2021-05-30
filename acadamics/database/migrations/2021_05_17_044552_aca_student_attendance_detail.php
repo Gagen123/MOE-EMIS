@@ -17,7 +17,7 @@ class AcaStudentAttendanceDetail extends Migration
             $table->char('id',36)->primary();
             $table->char('aca_std_attendance_id',36)->index();
             $table->char('std_student_id',36)->index();
-            $table->unsignedTinyInteger('is_present')->index()->default(0);
+            // $table->unsignedTinyInteger('is_present')->index()->default(1)->comment('0 - Absent, 1 - Present');
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
