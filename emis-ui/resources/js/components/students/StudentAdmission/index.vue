@@ -12,6 +12,12 @@
                     </router-link>
                 </li>
 
+                <li class="nav-item active pr-1" @click="activatelink('student_new_registration')">
+                    <router-link to="/student_new_registration" id="student_new_registration" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-clock"></span>
+                        Registration
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('student_new_admission')">
                     <router-link to="/student_new_admission" id="student_new_admission" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>

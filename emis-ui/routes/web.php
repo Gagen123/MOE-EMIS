@@ -416,6 +416,7 @@ Route::prefix('students')->group(function () {
         Route::post('/saveStudentGardianDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
         Route::post('/saveStudentClassDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentClassDetails'])->name('saveStudentClassDetails');
         Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentList'])->name('loadStudentList');
+        Route::get('/loadStudentAdmissionList', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentAdmissionList'])->name('loadStudentAdmissionList');
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
