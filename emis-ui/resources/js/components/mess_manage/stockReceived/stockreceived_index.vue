@@ -7,7 +7,7 @@
                 </span>
                 <span class="fa-pull-right pr-2">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="loadpage('StockReceivedList')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="loadpage('StockReceivedAdd')"><i class="fa fa-plus"></i> Add New </button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="loadpage('StockReceivedAdd')"><i class="fa fa-plus"></i> Receive Stock </button>
                 </span>
             </div>
             <div class="card-body">  

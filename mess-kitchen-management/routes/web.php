@@ -34,20 +34,37 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'stockissue'], function () use ($router) {
             $router->get('/loadStockIssuedList', 'messManage\StockIssuedController@loadStockIssuedList');
             $router->post('/saveStockIssued', 'messManage\StockIssuedController@saveStockIssued');
+<<<<<<< HEAD
+=======
+            $router->get('/getStockIssueItem/{org_Id}', 'messManage\StockIssuedController@getStockIssueItem');
+>>>>>>> 9443d0eb5ad5224111516b3c61541c170c2a25f2
         });
 
 
         $router->group(['prefix' => 'stockreceived'], function () use ($router) {
             $router->get('/loadFoodReleaseListing/{org_Id}', 'messManagement\FoodReceivedController@loadFoodReleaseListing');
             $router->post('/saveStockReceived', 'messManage\StockReceivedController@saveStockReceived');
+<<<<<<< HEAD
              // $router->get('/getfoodreleaseditemList/{foodreleaseId}', 'messManage\StockReceivedController@getfoodreleaseditemList');
+=======
+            //just added 
+            $router->get('/getStockReceivedDetails/{stockreceivedId}', 'messManage\StockReceivedController@getStockReceivedDetails');
+>>>>>>> 9443d0eb5ad5224111516b3c61541c170c2a25f2
          //     $router->get('/loadStockReceivedList', 'messManage\StockReceivedController@loadStockReceivedList');
            // $router->get('/saveStockReceived', 'messManage\StockReceiveController@saveStockReceived')
         });
         // $router->group(['prefix' => 'foodreleased'], function () use ($router) {
         //    $router->post('/saveFoodRelease', 'messManagement\FoodReleasedController@saveFoodRelease');
         // });
+<<<<<<< HEAD
     });
+=======
+        $router->get('/getInventoryList/{org_Id}', 'messManage\StockInventoryController@getInventoryList');
+       // dd('from microseervices');
+
+    });
+
+>>>>>>> 9443d0eb5ad5224111516b3c61541c170c2a25f2
 });
     
    

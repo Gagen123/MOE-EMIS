@@ -23,6 +23,16 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
+                            <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                            <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
+                                <option value="">--- Please Select ---</option>
+                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <has-error :form="form" field="parent_id"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Code:</label>
                                 <span class="text-blue text-bold">{{data.code}}</span>
@@ -39,11 +49,11 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Level:</label>
-                                <span class="text-blue text-bold">{{levelArray[data.level]}}</span>
+                                <span class="text-blue text-bold">{{levelArray[data.levelId]}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Dzongkhag:</label>
-                                <span class="text-blue text-bold">{{data.dzongkhag}}</span>
+                                <span class="text-blue text-bold">{{dzongkhagArray[data.dzongkhagId]}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Gewog:</label>
@@ -52,12 +62,8 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Chiwog:</label>
-                                <span class="text-blue text-bold">{{data.village}}</span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Location Type:</label>
-                                <span class="text-blue text-bold">{{data.locationType}}</span>
+                                <span class="text-blue text-bold">{{locationArray[data.locationId]}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Geopolitically Located:</label>
@@ -414,9 +420,11 @@ export default {
             levelList:[],
             levelArray:{},
             locationList:[],
+            locationArray:{},
             locationList1:[],
             levelList1:[],
             dzongkhagList:[],
+            dzongkhagArray:{},
             dzongkhagList1:[],
             gewog_list:[],
             villageList:[],
@@ -454,11 +462,11 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                alert(data);
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].class; 
+                    this.levelArray[data[i].id] = data[i].name; 
                 }
+                
             });
         },
         /**
@@ -469,6 +477,9 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.locationList = data;
+                for(let i=0;i<data.length;i++){
+                    this.locationArray[data[i].id] = data[i].name; 
+                }
             });
         },
 
@@ -525,8 +536,11 @@ export default {
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
-                let data = response.data;
-                this.dzongkhagList =  data.data;
+                let data = response.data.data;
+                this.dzongkhagList =  data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -646,6 +660,10 @@ export default {
          * method to populate dropdown
          */
         async changefunction(id){
+            if(id=="parent_id"){
+                this.form.parent_id=$('#parent_id').val();
+                this.getOrgDetails($('#parent_id').val());
+            }
             if(id=="dzongkhag"){
                 this.form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
@@ -688,7 +706,7 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'restr_acknowledgement',params: {data:message}});
+                                this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
                                     title: 'Bifurcation details has been submitted for further action.'
@@ -764,7 +782,18 @@ export default {
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
-        this.getOrgDetails(this.$route.query.data);
+        
+        this.getOrgList();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.getOrgDetails(data['Agency_Code']);
+            }
+        })    
+        .catch(errors => { 
+            console.log(errors)
+        });
         this.getOrgList();
     },
 

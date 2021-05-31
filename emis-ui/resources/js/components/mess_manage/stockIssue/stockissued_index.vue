@@ -7,7 +7,7 @@
                 </span>
                 <span class="fa-pull-right pr-2">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="loadpage('StockIssuedList')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="loadpage('StockIssuedAdd')"><i class="fa fa-plus"></i> Add New </button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="loadpage('StockIssuedAdd')"><i class="fa fa-plus"></i> Issue Item </button>
                 </span>
             </div>
             <div class="card-body">  

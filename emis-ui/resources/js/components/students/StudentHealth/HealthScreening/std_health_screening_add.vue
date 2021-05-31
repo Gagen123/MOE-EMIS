@@ -113,6 +113,10 @@ export default {
             screeningList:[],
             screeningTitle:[],
             screeningEndorser:[],
+            classStreamSections:[],
+            // classList:[],
+            // sectionList:[],
+            // streamList:[],
 
             //temporary definition
             classList:[{class:"7"}, {class:"8"}, {class:"9"}, {class:"10"}, {class:"11"}, {class:"12"}],
@@ -169,6 +173,36 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        loadClassList(uri="loadCommons/loadClassList"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadSectionList(uri="loadCommons/loadSectionList"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.sectionList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadStreamList(uri="loadCommons/loadStreamList"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.streamList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
@@ -190,6 +224,20 @@ export default {
                 this.student_form.date='';
             }
             if(type=="save"){
+                this.student_form.std_screened=[];
+                let screenedArray=[];
+                $("input[name='height']:checked").each( function () {
+                    screenedArray.push($(this).val());
+                });
+                this.student_form.std_screened=screenedArray;
+                
+                this.student_form.std_referred=[];
+                let referredArray=[];
+                $("input[name='weight']:checked").each( function () {
+                    referredArray.push($(this).val());
+                });
+                this.student_form.std_referred=referredArray;
+
                 this.student_form.post('/students/addHealthScreeningRecords',this.student_form)
                     .then(() => {
                     Toast.fire({
@@ -279,7 +327,9 @@ export default {
         this.loadActiveScreeningTitleList();
         this.loadActiveScreeningEndorserList();
         //Fix this when the classes are loaded in database
-        //this.loadClassList();
+        // this.loadClassList();
+        // this.loadSectionList();
+        // this.loadStreamList();
     },
     
 }

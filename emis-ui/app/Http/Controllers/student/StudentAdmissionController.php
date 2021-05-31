@@ -325,6 +325,16 @@ class StudentAdmissionController extends Controller{
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$param);
         return $student_list;
     }
+
+    /**
+     * to load the list of students for admission from the portal
+     */
+
+    public function loadStudentAdmissionList(){
+        $org_id = $this->getWrkingAgencyId(),
+        $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$org_id);
+        return $student_list;
+    }
     
     public function loadStudentListwithsearch(Request $request){
         $rules = [

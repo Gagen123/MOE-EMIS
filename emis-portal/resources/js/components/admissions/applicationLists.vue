@@ -62,7 +62,7 @@
                  axios.get('TrackApplicationController/applicationListsbyCid/' +cid)
                     .then(response => {
                     let data = response;
-                    this.applicationList =  data.data.data;
+                    this.applicationList = data.data.data;
                     // let orgId = response.data.data.OrgOrganizationId
                     // this.getDetailsByOrgId(orgId)
                 });
@@ -80,7 +80,7 @@
 
             StudentDecission(id, actionType){
               Swal.fire({
-                  text: 'Are you sure, you want to ' +actionType+'?',
+                  text: 'Are you sure, you want to ' +actionType+ '?',
                   showCancelButton: true,
                   confirmButtonColor: '#d33',
                   cancelButtonColor: '#3085d6',
@@ -89,25 +89,22 @@
                     if (result.value) {
                         this.std_decission.id=id;
                         this.std_decission.type=actionType;
-                        this.std_decission.post('TrackApplicationController/acceptApplication').then(()=>{
-                            if(actionType = 'accept'){
-                                Swal.fire(
-                                'Accepted!',
-                                'Your application has been forwarded.',
-                                'success'
-                                );
-                                this.loadApplication();
-                                }
-                             else{
-                                Swal.fire(
-                                'Accepted!',
-                                'Your application has been cancelled.',
-                                'success'
-                                );
-                              this.loadApplication();
 
+                        this.std_decission.post('TrackApplicationController/acceptApplication').then(()=>{
+                            if( this.std_decission.type == 'Accept'){
+                                Swal.fire(
+                                'Accepted!',
+                                'Your application has been forwarded successfully.',
+                                'success'
+                                );
+                                }
+                            else if( this.std_decission.type == 'Cancel'){
+                                Swal.fire(
+                                'Accepted!',
+                                'Your application has been cancelled successfully.',
+                                'success'
+                                );
                             }
-                           
                             
                         })
                     }

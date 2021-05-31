@@ -104,6 +104,7 @@ class StudentAdmissionRelatedController extends Controller
         
         if($request->action_type=="add"){
             $response_data = StdSchoolLeaving::create($data);
+            $updated_status = $this->updateStudentStatus('school_leaving', $request->student);
 
         } else if($request->action_type=="edit"){
 
@@ -266,5 +267,25 @@ class StudentAdmissionRelatedController extends Controller
 
         return $this->successResponse($persondata, Response::HTTP_CREATED);
        // dd($persondata);
+    }
+
+    private function updateStudentStatus($type, $student_id){
+       
+        if($type == 'school_leaving'){
+            $app_data = [
+                'IsTransferred' => 1,
+            ];
+            try{
+                Student::where('id', $student_id)->update($app_data);
+    
+                } catch(\Illuminate\Database\QueryException $ex){ 
+                    dd($ex->getMessage()); 
+                    // Note any method of class PDOException can be called on $ex.
+                }
+                
+
+                Student::where('id', $student_id)->update($app_data);
+        }
+        return;
     }
 }

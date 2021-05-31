@@ -140,7 +140,7 @@
                         </div>
 
 
-                        <div class="callout callout-success">
+                        <div class="callout callout-success" v-if="verification.verifyingAgency!=null">
                             <h4><u>Site Visit and Verification Details</u></h4>
                             <div class="row pb-2" style="display:none" id="tentativeAttachment">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

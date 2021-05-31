@@ -4,63 +4,52 @@
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
-        <form class="bootbox-form" id="mainform">
-            <div class="card card-primary card-outline">
-                <div class="card-body">
-                    <div class="row form-group">
-                        <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                        <input type="hidden" class="form-control" v-model="form.id"/>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>School:<span class="text-danger">*</span></label> 
-                            <select name="school" id="school" class="form-control select2" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }">
-                                <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
-                            <has-error :form="form" field="school"></has-error>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Class:<span class="text-danger">*</span></label> 
-                            <select name="classes" id="classes" class="form-control select2" :class="{ 'is-invalid': form.errors.has('classes') }" v-model="form.classes">
-                                <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in classList" :key="index" v-bind:value="item.record_id">{{ item.class }}</option>
-                            </select>
-                            <has-error :form="form" field="classes"></has-error>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="stream_section">
-                            <label>Stream:<span class="text-danger"></span></label> 
-                            <select name="stream" id="stream" class="form-control select2" v-model="form.stream">
-                                <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.record_id">{{ item.stream }}</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>No. of Sections:<span class="text-danger">*</span></label> 
-                            <input type="number" class="form-control" @keyup.enter="secSections()" @blur="secSections()" id="nosec" name="nosec"/>
-                        </div> 
-                    </div> 
-                    <div class="row form-group mb-0">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label>Sections:<span class="text-danger">*</span></label>
-                        </div>
-                    </div>
-                    <div class="row form-group">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 pt-2" v-for='(user, index) in form.users' :key="index">
-                            <input type="text" readonly class="form-control section" id="section" v-model="user.section"/>
-                        </div> 
-                    </div> 
-                    <!-- <div class="form-group row">
-                        <div class="col-4">
-                            <button type="button" class=" btn btn-flat btn-sm btn-primary"
-                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                            <button type="button" class=" btn btn-flat btn-sm btn-danger" value="Remove"
-                            @click="remove()" ><i class="fa fa-trash"></i> Remove</button>
-                        </div>
-                    </div> -->
+        <form class="bootbox-form" id="mainformid">
+            <div class="row form-group">
+                <input type="hidden" class="form-control" v-model="form.organizationId"/>
+                <input type="hidden" class="form-control" v-model="form.id"/>
+                <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <label>School:<span class="text-danger">*</span></label> 
+                    <select name="school" id="school" class="form-control select2" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }">
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <has-error :form="form" field="school"></has-error>
+                </div> -->
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <label>Class:<span class="text-danger">*</span></label> 
+                    <select name="classes" id="classes" class="form-control select2" :class="{ 'is-invalid': form.errors.has('classes') }" v-model="form.classes">
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.record_id">{{ item.class }}</option>
+                    </select>
+                    <has-error :form="form" field="classes"></has-error>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="stream_section">
+                    <label>Stream:<span class="text-danger"></span></label> 
+                    <select name="stream" id="stream" class="form-control select2" v-model="form.stream">
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.record_id">{{ item.stream }}</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <label>No. of Sections:<span class="text-danger">*</span></label> 
+                    <input type="number" class="form-control" @keyup.enter="secSections()" @blur="secSections()" id="nosec" name="nosec"/>
+                </div> 
+            </div> 
+            <div class="row form-group mb-0">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <label>Sections:<span class="text-danger">*</span></label>
                 </div>
             </div>
-            <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+            <div class="row form-group">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 pt-2" v-for='(user, index) in form.users' :key="index">
+                    <input type="text" readonly class="form-control section" id="section" v-model="user.section"/>
+                </div> 
+            </div>
+            <hr>
+            <div class="form-group fa-pull-right">
+                <button type="button" @click="formaction('reset')" class="btn btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -119,16 +108,8 @@ export default {
                 this.schoolList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#closure-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
 
         /**
@@ -238,6 +219,7 @@ export default {
             axios.get('/organization/getStreamByClassId/'+classid)
               .then(response => {
                 let data = response.data;
+                alert(data);
                 if(data==""){
                     this.form.class_stream_id=classid;
                     $('#stream_section').hide();
@@ -311,27 +293,11 @@ export default {
             }
         },
 
-        getScreenAccess(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                let data = response.data.data.acess_level;
-                if(data != "Org"){
-                    $('#mainform').hide();
-                    $('#screenPermission').show();
-                    $('#existmessage').html('You have no access to this page.');
-                }
-                
-            })    
-            .catch(errors => { 
-                console.log(errors)
-            });
-        }
     },
 
     mounted(){
-        // this.getScreenAccess();
         this.form.organizationId = this.$route.query.orgId; 
-        this.getschoolDetials();
+        // this.getschoolDetials();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
@@ -339,6 +305,24 @@ export default {
         
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
+        });
+
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.form.school=data['Agency_Code'];
+                this.getClassByOrganizationId();
+                this.getCurrentClassStream(data['Agency_Code']);
+            }
+            else{
+                $('#screenPermission').show();
+                $('#mainformid').hide();
+                $('#existmessage').html('This page is not accessible to you');
+            }
+        })    
+        .catch(errors => { 
+            console.log(errors)
         });
     }
 }
