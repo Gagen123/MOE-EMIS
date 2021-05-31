@@ -689,9 +689,16 @@ class StudentAdmissionController extends Controller
  
     //getting student details std_student table using cid number
     public function getstudentdetailsbyCid($cid){
-        // dd("dsadsd");
-        $response_data=Std_Students::where('CidNo',$cid)->get();
-        return $this->successResponse($response_data);
+        
+        if($cid!="" || $cid!="null" || $cid!="undefined"){ 
+            $response_data=Std_Students::where('CidNo',$cid)->get();
+            return $this->successResponse($response_data);
+        }
+        // else if($cid!="" || $cid!="null" || $cid!="undefined"){
+        //     $response_data1=Std_Students::where('CidNo',$cid)->get();
+        //     return $this->successResponse($response_data1);
+        // }
+
     }
 
     public function getstudentGuardainClassDetails($std_id="",$type=""){
