@@ -82,21 +82,21 @@ class ClosureController extends Controller
             'id'                       =>  $request['id'],
         ];
         // dd($closure);
-        $cls = ApplicationDetails::create($closure);
+        $closure_data = ApplicationDetails::create($closure);
         // save proprietor details if category is private
-        if($request['category'] == 0){
-            $pvtDetails = [
-                'applicationId'            =>  $cls->id,
-                'cid'                      =>  $request['cid'],
-                'fullName'                 =>  $request['fullName'],
-                'phoneNo'                  =>  $request['phoneNo'],
-                'email'                    =>  $request['email'],
-                'created_by'               =>  $request->user_id,
-                'created_at'               =>  date('Y-m-d h:i:s')
-                ];
-            $cls = ApplicationProprietorDetails::create($pvtDetails);
-        }
-        return $this->successResponse($cls, Response::HTTP_CREATED);
+        // if($request['category'] == 0){
+        //     $pvtDetails = [
+        //         'applicationId'            =>  $cls->id,
+        //         'cid'                      =>  $request['cid'],
+        //         'fullName'                 =>  $request['fullName'],
+        //         'phoneNo'                  =>  $request['phoneNo'],
+        //         'email'                    =>  $request['email'],
+        //         'created_by'               =>  $request->user_id,
+        //         'created_at'               =>  date('Y-m-d h:i:s')
+        //         ];
+        //     $cls = ApplicationProprietorDetails::create($pvtDetails);
+        // }
+        return $this->successResponse($closure_data, Response::HTTP_CREATED);
     }
 
     /**

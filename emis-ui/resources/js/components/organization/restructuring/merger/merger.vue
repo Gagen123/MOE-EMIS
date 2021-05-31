@@ -479,7 +479,7 @@ export default {
          * method to get class in checkbox
          */
         getClass:function(){
-            axios.get('/organization/getClass')
+            axios.get('/loadCommons/getClassByType/school')
               .then(response => {
                 this.classList = response.data;
             });
