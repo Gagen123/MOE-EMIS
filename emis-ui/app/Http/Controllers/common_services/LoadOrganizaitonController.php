@@ -84,6 +84,30 @@ class LoadOrganizaitonController extends Controller{
     public function getClassByType($type=""){
         return $this->apiService->getListData('emis/common_services/getClassByType/'.$type);
     }
-    
+
+    /**
+     * function to get the class stream section by organization
+     * params is Class, Stream and Section separated by __ (double underscore)
+     */
+
+    public function getClassStreamSection($params){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getClassStreamSection/'.$params.'/'.$org_id);
+    }
+
+    public function loadClassList(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getClassStreamSection/'.$org_id);
+    }
+
+    public function loadStreamList(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/loadStreamList/'.$org_id);
+    } 
+
+    public function loadSectionList(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/loadSectionList/'.$org_id);
+    }    
 
 }

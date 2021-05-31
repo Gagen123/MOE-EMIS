@@ -278,5 +278,4 @@ class NotenrolledController extends Controller
         $response_data= $this->listData('emis/students/admission/getAllStudentCid/');
         return $response_data;
     }
-   
 }

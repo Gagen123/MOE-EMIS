@@ -43,6 +43,7 @@ class StudentHealthController extends Controller
             'organization_id'       => $this->getWrkingAgencyId(),
             'user_id'               =>  $this->userId() 
         ];
+        dd($data);
 
 
         try{
@@ -89,6 +90,7 @@ class StudentHealthController extends Controller
             'organization_id'       => $this->getWrkingAgencyId(),
             'user_id'               =>  $this->userId() 
         ];
+        dd($data);
 
         try{
             $response_data= $this->apiService->createData('emis/students/addSupplementationRecords', $data);

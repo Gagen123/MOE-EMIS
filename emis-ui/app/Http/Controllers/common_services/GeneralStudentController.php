@@ -28,6 +28,7 @@ class GeneralStudentController extends Controller{
 
     /**
      * Get the student list by stream and section (id, name, student code, class, section, stream)
+     * the param is class, stream and section separated by __ (double underscore)
      */
 
     public function loadStudentBySection($param1=""){

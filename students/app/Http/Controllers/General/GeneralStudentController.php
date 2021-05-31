@@ -26,7 +26,7 @@ class GeneralStudentController extends Controller
 
     public function loadStudentList($param=""){
         $id = $param;
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
+        return $this->successResponse(Student::where('OrgOrganizationId',$id)->where('IsTransferred','0')
                             ->get(['id', 'Name', 'student_code']));
     }
 
@@ -37,9 +37,10 @@ class GeneralStudentController extends Controller
     public function loadStudentBySection($param1){
         $id = $param1;
         
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
+        return $this->successResponse(Student::where('OrgOrganizationId',$id)->where('IsTransferred','0')
                             ->get(['id', 'Name', 'DateOfBirth']));
     }
+
     public function getStudents($org_id,Request $request){
         $query = "SELECT t1.org_id, t2.id AS std_student_id, t2.Name, t2.CidNo, t1.org_class_id, t1.org_stream_id, t1.org_section_id
                 FROM std_class_detils t1 

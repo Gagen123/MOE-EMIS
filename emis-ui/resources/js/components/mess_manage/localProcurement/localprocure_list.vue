@@ -8,6 +8,9 @@
                             <th>Sl#</th>
                             <th>Date of Procurement</th>
                             <th>Item Procured </th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Amount</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
@@ -16,6 +19,9 @@
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfprocure}}</td>
                             <td> {{itemList[item.item]}}</td>
+                            <td> {{item.quantity}}</td>
+                            <td> {{unitList[item.unit]}} </td>
+                            <td> {{item.amount}}</td>
                             <td> 
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><i class="fas fa-edit"></i></a>
@@ -35,6 +41,7 @@ export default {
             totle:0,
             localprocure_list:[],
             itemList:{},
+            unitList:{},
         } 
     },
     methods: {
@@ -76,9 +83,22 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+               for(let i=0;i<data.data.data.length;i++){
+                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
     },
     mounted(){
         this.loadActiveItemList();
+        this.loadActiveUnitList();
         this.loadLocalProcure();
        
     },

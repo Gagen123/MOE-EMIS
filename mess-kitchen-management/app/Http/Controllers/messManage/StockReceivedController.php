@@ -23,7 +23,11 @@ class StockReceivedController extends Controller
         //dd('m here');
        $stockreceived = [
            'dateOfreceived'             =>  $request['dateOfreceived'],
+<<<<<<< HEAD
            'term_id'                    =>  $request['term'],
+=======
+           'quarter_id'                 =>  $request['quarter'],
+>>>>>>> 9443d0eb5ad5224111516b3c61541c170c2a25f2
            'remarks'                    =>  $request['remarks'],
            'organizationId'             =>  $request['organizationId'],
            'updated_by'                 =>  $request->user_id,
@@ -59,10 +63,19 @@ class StockReceivedController extends Controller
       // return $this->successResponse($response_data);
     }
 
+<<<<<<< HEAD
     // public function getfoodreleaseditemList($stockreceivedId){
     //     $foodreleaseitem = DB::table('item_released_notes')
     //     ->select('item_id', 'quantity', 'unit_id')->where('stockreceivedId', $stockreceivedId)->get();
     //     return $foodreleaseitem;
     // }
+=======
+//just added 
+    public function getStockReceivedDetails($stockreceivedId=""){
+        $response_data=StockReceived::where('id',$stockreceivedId)->first();
+        $response_data->stockreceived=StockReceivedItem::where('stockreceivedId',$response_data->id)->get();
+        return $this->successResponse($response_data); 
+    }
+>>>>>>> 9443d0eb5ad5224111516b3c61541c170c2a25f2
 
 }

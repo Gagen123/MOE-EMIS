@@ -666,6 +666,16 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data);
     }
+
+    /**
+     * load the list of students who have applied for admission
+     */
+    
+    public function loadStudentAdmissionList($org_id=""){
+        $records = DB::table('std_admissions')
+                    ->where('OrgOrganizationId', $org_id)
+                    ->get();
+    }
     
     public function getStudentDetails(){
     
