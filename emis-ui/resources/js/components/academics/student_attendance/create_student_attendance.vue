@@ -8,7 +8,7 @@
                     <label>Select Class:<span class="text-danger">*</span></label> 
                     <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id">
                         <option selected="selected" value="">---SELECT CLASS---</option>
-                        <option selected v-for="(item, index) in classTecherClass" :key="index" :value="[item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                        <option selected v-for="(item, index) in classTecherClass" :key="index" :value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                             {{ item.class_stream_section }}
                         </option>
                     </select> 
@@ -85,10 +85,13 @@ export default {
                             classTeachers[index].org_class_id = item.org_class_id;
                             classTeachers[index].org_stream_id = item.org_stream_id
                             classTeachers[index].org_section_id = item.org_section_id
+                            classTeachers[index].OrgClassStreamId = item.OrgClassStreamId
                             if(item.stream && item.section){
                                 classTeachers[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
                             }else if(item.stream){
                                 classTeachers[index]['class_stream_section'] = item.class+' '+item.stream
+                            }else if(item.section){
+                                classTeachers[index]['class_stream_section'] = item.class+' '+item.section
                             }else{
                                 classTeachers[index]['class_stream_section'] = item.class
                             }
@@ -105,12 +108,12 @@ export default {
         },
         getStudents(){
            let uri = 'academics/getStudentsForAttendance'
-           uri += ('?classId='+this.class_stream_section_id[0])
+            uri += ('?OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
            if(this.class_stream_section_id[1] !== null){
-                    uri += ('&streamId='+this.class_stream_section_id[1])
+                    uri += ('&streamId='+this.class_stream_section_id[2])
                 }
                 if(this.class_stream_section_id[2] !== null){
-                    uri += ('&sectionId='+this.class_stream_section_id[2])
+                    uri += ('&sectionId='+this.class_stream_section_id[3])
                 }
                 axios.get(uri)
                 .then(response => {
@@ -132,7 +135,7 @@ export default {
                 });
         },
         save(){
-                axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.class_stream_section_id[0],org_stream_id:this.class_stream_section_id[1],org_section_id:this.class_stream_section_id[2],class_stream_section:this.class_stream_section_id[3],attendance_date:this.attendance_date,data:this.studentList})
+                axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4],attendance_date:this.attendance_date,data:this.studentList})
                     .then(() => {
                         Toast.fire({
                             icon: 'success',
