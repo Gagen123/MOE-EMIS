@@ -634,6 +634,11 @@ export default {
                 s_school:'',
                 s_class:'',
             }),
+            personal_detail: new form({
+                s_dzongkhag:'',
+                s_school:'',
+                s_class:'',
+            }),
 
             guardian_form: new form({
                 student_id:'',
@@ -1342,8 +1347,6 @@ export default {
     },
 
     mounted() {
-        // this.getschoolList();
-        // this.getclassList();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'

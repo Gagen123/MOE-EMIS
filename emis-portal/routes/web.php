@@ -42,6 +42,11 @@ Route::prefix('TrackApplicationController')->group(function () {
     Route::post('/acceptApplication', [App\Http\Controllers\TrackApplicationController::class, 'acceptApplication'])->name('acceptApplication');
 });
 
+//Admission request controller
+Route::prefix('RequestadmissionController')->group(function () {
+    Route::post('/savedrequestadmission', [App\Http\Controllers\RequestadmissionController::class, 'savedrequestadmission'])->name('savedrequestadmission');
+});
+
     
     
     

@@ -98,7 +98,7 @@
                       <label>Seats available </label>
                         <input v-model="student_form.seats" id="seat" type="text" name="seats" 
                         class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }"  disabled="true" />
-                        <has-error :student_form="form" field="seat"></has-error>
+                        <has-error :student_form="student_form.seats" field="seat"></has-error>
                 </div>
             </div>
             <div class="row md-12">
@@ -119,7 +119,7 @@
                 <div class="form-group col-md-4">
                             <label>Apply Date:<span class="text-danger">*</span></label>
                               <input type="date" class="form-control" @change="removeerror('dateOfapply')" :class="{ 'is-invalid': student_form.errors.has('dateOfapply') }" id="dateOfapply" v-model="student_form.dateOfapply" placeholder="Date of apply">
-                              <has-error :student_form="form" field="date"></has-error>
+                              <has-error :student_form="student_form.dateOfapply" field="date"></has-error>
                 </div>
             </div>
               <hr>                        
@@ -173,7 +173,6 @@
                   std_decission:'',
                    
                 })
-                
             }
         },
         methods:{
@@ -189,7 +188,6 @@
             $('#stream').hide();
             }
             },
-           
             submitForm(){
                   const config = {
                     headers: {
@@ -387,12 +385,12 @@
             this.getdzongkhagName();
             this.getgewogName();
            
-            this.student_form.cid_passport=this.$route.query.data[0].CidNo;
-            this.student_form.Name=this.$route.query.data[0].Name;
-            this.student_form.gender=this.$route.query.data[0].CmnSexId;
-            this.student_form.DateOfBirth=this.$route.query.data[0].DateOfBirth; 
-            this.student_form.address=this.$route.query.data[0].Address;
-            this.getOrgDetails(this.$route.query.data[0].OrgOrganizationId);
+            this.student_form.cid_passport=this.$route.query.data.CidNo;
+            this.student_form.Name=this.$route.query.data.Name;
+            this.student_form.gender=this.$route.query.data.CmnSexId;
+            this.student_form.DateOfBirth=this.$route.query.data.DateOfBirth; 
+            this.student_form.address=this.$route.query.data.Address;
+            this.getOrgDetails(this.$route.query.data.OrgOrganizationId);
             
   },
     }
