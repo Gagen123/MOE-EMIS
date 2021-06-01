@@ -638,9 +638,13 @@ class EstablishmentController extends Controller
         $caegory=str_replace(' ','_', strtolower($request->applicaitondetails['establishment_type']));
        
         $org_details=$request->applicaitondetails['org_details'];
+        
+        // 
+
         $org_data = [
             'category'                  =>$caegory,
             'yearOfEstablishment'       =>$request->yearestb,
+            'dateOfEstablishment'       =>date('Y-m-d h:i:s'),
             'zestAgencyCode'            =>$request->zestcode,
             'code'                      =>$org_code,
             'name'                      =>$org_details['proposedName'],
@@ -651,13 +655,16 @@ class EstablishmentController extends Controller
             'remarks'                   =>$request->remarks,
             'created_by'                =>$request->action_by,
         ];
+        $application_data="";
         if($caegory=="public_school"){
+            $application_data= ApplicationEstPublic::where('ApplicationDetailsId',$request->applicaitondetails['id'])->first();
+            // dd($application_data);
             $org_data = $org_data+[
-                'levelId'                   =>$org_details['levelId'],
-                'locationId'                =>$org_details['locationId'],
-                'isGeopoliticallyLocated'   =>$org_details['isGeopoliticallyLocated'],
-                'isSenSchool'               =>$org_details['isSenSchool'],
-                'isFeedingSchool'           =>$org_details['isFeedingSchool'],
+                'levelId'                   =>$application_data->levelId,
+                'locationId'                =>$application_data->locationId,
+                'isGeopoliticallyLocated'   =>$application_data->isGeoPoliticallyLocated,
+                'isSenSchool'               =>$application_data->isSenSchool,
+                'isFeedingSchool'           =>$application_data->isFeedingSchool,
             ];
         }
         if($caegory=="private_school"){
@@ -669,7 +676,8 @@ class EstablishmentController extends Controller
         }
         // dd($org_data);
         $establishment = OrganizationDetails::create($org_data);
-        if($caegory=="public_school" && $org_details['isFeedingSchool']==1){
+        
+        if($caegory=="public_school" && $application_data->isFeedingSchool==1){
             $feeding_modality=ApplicationNoMeals::where('foreignKeyId',$org_details['id'])->get();
             if($feeding_modality!="" && sizeof($feeding_modality)>0){
                 foreach($feeding_modality as $modality){
@@ -696,9 +704,9 @@ class EstablishmentController extends Controller
             ];
             $porp_response_data = OrganizationProprietorDetails::create($prop_details);
         }
-        
-        if($request->applicaitondetails['org_class_stream'] && sizeof($request->applicaitondetails['org_class_stream'])>0){
-            foreach($request->applicaitondetails['org_class_stream'] as $cls){
+        $application_calss_data=ApplicationClassStream::where('ApplicationDetailsId',$request->applicaitondetails['id'])->get();
+        if($application_calss_data && sizeof($application_calss_data)>0){
+            foreach($application_calss_data as $cls){
                 if($caegory=="public_school" || $caegory=="public_ecr" || $caegory=="private_school"){
                     $strm_details = [
                         'organizationId'          =>  $establishment->id,

@@ -581,6 +581,7 @@ class ChangeBasicDetailsController extends Controller
     }
 
     public function updateChangeBasicDetails(Request $request){
+        // dd($app_details->application_type);
         $estd =[
             'status'                        =>   $request->status,
             'remarks'                       =>   $request->remarks,
@@ -610,11 +611,11 @@ class ChangeBasicDetailsController extends Controller
         }
 
         $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
-
+        // return $app_details;
         if($request->status=="Approved"){
             $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
             $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
-
+            $change_details_data="";
             switch($app_details->application_type){
                 case "name_change" : {
                     $change_details_data = $this->updateNameChange($change_details,  $org_details, $request);
@@ -645,10 +646,11 @@ class ChangeBasicDetailsController extends Controller
                 }
             }
         }
-        return $this->successResponse($app_details, Response::HTTP_CREATED);
+        return $this->successResponse($change_details_data, Response::HTTP_CREATED);
     }
 
-    private function updateNameChange($change_details, $org_details){
+    private function updateNameChange($change_details, $org_details,$request){
+        // return $change_details->proposedChange;
         $org_data =[
             'id'                        =>  $org_details->id,
             'name'                      =>  $org_details->name,

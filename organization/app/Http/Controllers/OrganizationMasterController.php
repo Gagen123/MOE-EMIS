@@ -37,7 +37,18 @@ class OrganizationMasterController extends Controller{
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
-
+        if($request->model=="DocumentType"){
+            $master_data =$master_data+[
+                'applicableTo'              =>  implode($request->addfield_1,', '),
+            ];
+        }
+        if($request->model=="FinancialInformation"){
+            $master_data =$master_data+[
+                'applicableTo'              =>  $request->addfield_1,
+            ];
+        }
+        
+        
         if($request->action_type=="add"){
             $master_data =$master_data+[
                 'created_by'        =>  $request->user_id,
