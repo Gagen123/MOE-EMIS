@@ -111,7 +111,7 @@ class LoadOrganizationController extends Controller{
         return $this->successResponse($response_data);
     }
 
-    public function loadStreamList($id){
+    public function loadStreamList($org_id){
 
         $response_data = DB::table('organization_class_streams')
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')

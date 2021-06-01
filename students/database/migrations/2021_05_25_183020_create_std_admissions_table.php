@@ -21,6 +21,7 @@ class CreateStdAdmissionsTable extends Migration
             $table->string('DateOfBirth',10)->nullable(false);
             $table->char('CmnSexId',36)->nullable(false);
             $table->char('dzongkhag')->nullable();
+            $table->char('school')->nullable();
             $table->char('class_id')->nullable();
             $table->char('stream_id')->nullable();
             $table->char('student_type')->nullable();
@@ -58,6 +59,7 @@ class CreateStdAdmissionsTable extends Migration
             $table->string('DateOfBirth',10)->nullable(false);
             $table->char('CmnSexId',36)->nullable(false);
             $table->char('dzongkhag')->nullable();
+            $table->char('school')->nullable();
             $table->char('class_id')->nullable();
             $table->char('stream_id')->nullable();
             $table->char('student_type')->nullable();

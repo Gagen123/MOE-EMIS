@@ -5,7 +5,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h5><b>Request Admission</b></h5>
+              <h5><b>Request For Admission</b></h5>
             </div>
           </div>
         </div>
@@ -29,30 +29,25 @@
                                 <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                           </select>
                   </div>
-                  <div class="form-group col-md-4" id="seat">
-                        <label>Available </label>
-                          <input v-model="student_form.seats" id="seat" type="text" name="seats" 
-                            class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }"  disabled="true" />
-                          <has-error :student_form="form" field="seat"></has-error>
-                  </div>
-              </div>
-              <div class="row md-12">
-                    <div class="form-group col-md-4">
+                  <div class="form-group col-md-4">
                         <label>Class<span class="text-danger">*</span></label>
                           <select v-model="student_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
                               <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.class}}</option>
                           </select>
-                    </div>
-                    <div class="form-group col-md-4" id="stream">
-                          <label>stream<span class="text-danger">*</span></label>
-                              <select v-model="student_form.stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('stream') }" class="form-control select2" name="stream" id="stream">
-                                  <option value="">--- Please Select ---</option>
-                                  <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{item.stream}}</option>
-                              </select>
-                    </div>
+                  </div>
+                 
+              </div>
+              <div class="row md-12">
+                    <div class="form-group col-md-4" >
+                        <label>Reason <span class="text-danger">*</span><span class="text-danger"></span></label>
+                          <input v-model="student_form.reasons" id="reasons" type="text" name="reasons" 
+                            class="form-control" :class="{ 'is-invalid': student_form.errors.has('reasons') }"   />
+                          <has-error :student_form="form" field="reasons"></has-error>
+                   </div>
+                   
                     <div class="form-group col-md-4">
-                          <label>Apply Date:<span class="text-danger">*</span></label>
+                          <label>Request Date:<span class="text-danger">*</span></label>
                             <input type="date" class="form-control" @change="removeerror('dateOfapply')" :class="{ 'is-invalid': student_form.errors.has('dateOfapply') }" id="dateOfapply" v-model="student_form.dateOfapply" placeholder="Date of apply">
                               <has-error :student_form="form" field="date"></has-error>
                     </div>
@@ -60,7 +55,7 @@
                 <hr>                        
                 <div class="footer float-right" >
                     <button type="button" v-on:click="resetForm" class="btn btn-danger"><i class="fas fa-redo"></i> Reset</button>
-                    <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Apply</button>
+                    <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Request</button>
                 </div>
         </form>
       </div>
@@ -81,7 +76,7 @@
                 schoolList:[],
                 classList:[],
                 streamList:[],
-                getSeats:'',
+                getreasons:'',
                 dzongkhagId:'null',
                 gewogId:'null',
                 form:new form({
@@ -89,34 +84,18 @@
                 }),
                   student_form: new form({
                     id:'',
-                    cid_passport:'',
-                    student_id:'',
-                    student_type:'',
-                    student_code:'',
-                    Name:'',
-                    orgId:'',
-                    DateOfBirth:'',
-                    gender:'',
-                    address:'',
-                    school_code:'',
-                    school_name:'',
-                    dzongkhag_name:'',
-                    gewog:'',
                     dzongkhag:'',
                     school:'',
                     class:'',
                     stream:'',
                     dateOfapply:'',
-                    remarks:'',
-                    CidNo:'',
-                    std_decission:'',
+                    reasons:'',
                    
                 })
                 
             }
         },
         methods:{
-            
             resetForm: function(event){
                 this.student_form.reset();
             },
@@ -138,27 +117,20 @@
                 }
                 this.$Progress.start();
                 let formData = new FormData();
-                formData.append('student_type', this.student_form.student_type);
-                formData.append('cid_passport', this.student_form.cid_passport);
-                formData.append('Name', this.student_form.Name);
-                formData.append('OrgOrganizationId',this.$route.query.data[0].OrgOrganizationId);
-                formData.append('gender', this.student_form.gender );
-                formData.append('student_id', this.student_form.student_id);
                 formData.append('dzongkhag', this.student_form.dzongkhag);
                 formData.append('school', this.student_form.school);
                 formData.append('class', this.student_form.class);
                 formData.append('stream', this.student_form.stream);
                 formData.append('dateOfapply', this.student_form.dateOfapply); 
-                formData.append('remarks', this.student_form.remarks); 
+                formData.append('reasons', this.student_form.reasons); 
                 formData.append('status', 'pending'); 
                 formData.append('snationality', 'bhutaness');
-                formData.append('std_decission', 'pending'); 
 
-                axios.post('/savedetailsEnrolledStd',formData,config)
+                axios.post('/RequestadmissionController/savedrequestadmission',formData,config)
                 .then(()=>{
                     Toast.fire({
                         icon: 'success',
-                        title: 'Data  saved successfully'
+                        title: 'you have applied successfully'
                     })
                 })
                 .catch(()=>{console.log("Error.....")})
@@ -218,15 +190,15 @@
           },
 
 
-         getseatdetailsbyOrgId(id){
+         getreasondetailsbyOrgId(id){
                let orgId=$('#school').val();
                 if(id!=""){
                  orgId=id;
             } 
-              axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
+              axios.get('/masters/getreasondetailsbyOrgId/' +orgId)
               .then(Response =>{
                 let data = Response.data.data;
-                this.getSeats = data;data
+                this.getreasons = data;data
               })
               
 
@@ -323,13 +295,13 @@
 
         },
         mounted() {
-            $('.select2').select2();
-            $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'));
+           $('.select2').select2();
            $('.select2').select2({
             theme: 'bootstrap4'
-        }); 
-        });
+          });
+          $('.select2').on('select2:select', function (el){
+              Fire.$emit('changefunction',$(this).attr('id')); 
+          });
         
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
@@ -339,13 +311,11 @@
         
         created() { 
             this.getdzongkhagList();
-            // this.getschoolList();
             this.getclassList();
             this.getstreamList();
-            this.getseatdetailsbyOrgId();
+            this.getreasondetailsbyOrgId();
             this.getdzongkhagName();
             this.getgewogName();
-           
             this.student_form.cid_passport=this.$route.query.data[0].CidNo;
             this.student_form.Name=this.$route.query.data[0].Name;
             this.student_form.gender=this.$route.query.data[0].CmnSexId;
