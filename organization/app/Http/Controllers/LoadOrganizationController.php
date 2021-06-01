@@ -37,7 +37,8 @@ class LoadOrganizationController extends Controller{
             if($id=="allData"){
                 $response_data=OrganizationDetails::all();
             }
-            else{
+            else{        // dd($request);
+
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
             }
         }
