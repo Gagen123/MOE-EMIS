@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table id="award-list-table" class="table table-bordered text-sm table-striped">
+        <table id="transfer-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -49,7 +49,7 @@ export default {
                 }
             });
             setTimeout(function(){
-                $("#award-list-table").DataTable({
+                $("#transfer-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
                 }); 

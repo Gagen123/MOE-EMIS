@@ -138,26 +138,22 @@ class AcademicController extends Controller
         });
     }
     public function saveStudentAttendance(Request $request){
-            $rules = [
-                'org_class_id' => 'required',
-                'org_stream_id' => 'required',
-                'org_section_id' => 'required',
-                'class_stream_section' => 'required',
-                'attendance_date' => 'required|unique:aca_student_attendance',
-                'data.*.CidNo' => 'required',
-                'data.*.Name' => 'required',
-                'data.*.std_student_id' => 'required',
-            ];
-            $customMessages = [
-                'org_class_id.required' => 'This field is required',
-                'org_stream_id.required' => 'This field is required',
-                'org_section_id.required' => 'This field is required',
-                'class_stream_section.required' => 'This field is required',
-                'attendance_date.required' => 'This field is required',
-                'data.*.CidNo.required' => 'This field is required',
-                'data.*.Name.required' => 'This field is required',
-                'data.*.std_student_id.required' => 'This field is required',
-            ];
+        $rules = [
+            'org_class_id' => 'required',
+            'class_stream_section' => 'required',
+            'attendance_date' => 'required',
+            'data.*.CidNo' => 'required',
+            'data.*.Name' => 'required',
+            'data.*.std_student_id' => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'class_stream_section.required' => 'This field is required',
+            'attendance_date.required' => 'This field is required',
+            'data.*.CidNo.required' => 'This field is required',
+            'data.*.Name.required' => 'This field is required',
+            'data.*.std_student_id.required' => 'This field is required',
+        ];
             $this->validate($request, $rules, $customMessages);
 
             if($request['action']=="add"){

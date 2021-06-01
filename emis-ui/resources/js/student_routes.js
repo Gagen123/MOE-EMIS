@@ -305,6 +305,10 @@ const routes = [
             },
         ] 
     },
+    //Student List and Profile Related Routes
+    { path: '/student_profile',name:'student_profile', component: require('./components/students/General/student_profile.vue').default },
+    { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
+    
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
         children: [

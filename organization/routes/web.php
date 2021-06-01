@@ -334,9 +334,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
 
-        $router->get('/loadClassList/{org_id}', ['uses' => 'LoadOrganizationController@loadClassList']);
-        $router->get('/loadStreamList/{org_id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
-        $router->get('/loadSectionList/{org_id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
+        $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);
+        $router->get('/loadStreamList/{id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
+        $router->get('/loadSectionList/{id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
+        $router->get('/getClassArray/{org_id}', ['uses' => 'LoadOrganizationController@getClassArray']);
+        $router->get('/getStreamArray/{org_id}', ['uses' => 'LoadOrganizationController@getStreamArray']);
+        $router->get('/getSectionArray/{org_id}', ['uses' => 'LoadOrganizationController@getSectionArray']);
 
 
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);

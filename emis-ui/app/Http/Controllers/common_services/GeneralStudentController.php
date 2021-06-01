@@ -27,12 +27,21 @@ class GeneralStudentController extends Controller{
     }
 
     /**
+     * Get the basic details student list (id, name, student code, class, section, stream)
+     */
+
+    public function loadBasicStudentList($param=""){
+        $param = $this->getWrkingAgencyId();
+        $student_list = $this->apiService->listData('emis/students/loadStudentList/'.$param);
+        return $student_list;
+    }
+
+    /**
      * Get the student list by stream and section (id, name, student code, class, section, stream)
      * the param is class, stream and section separated by __ (double underscore)
      */
 
     public function loadStudentBySection($param1=""){
-        $param1 = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1);
         return $student_list;
     }
