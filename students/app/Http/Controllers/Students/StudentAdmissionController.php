@@ -10,6 +10,7 @@ use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
+use App\Models\requestForAdmission; 
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
@@ -419,6 +420,7 @@ class StudentAdmissionController extends Controller
                     'first_name'                     =>  $request->Name,
                     'student_type'                   =>  $request->student_type,
                     'dzongkhag'                      =>  $request->dzongkhag,
+                    'school'                         =>  $request->school,
                     'class_id'                       =>  $request->class,
                     'stream_id'                      =>  $request->stream,
                     'dateOfapply'                    =>  $request->dateOfapply,
@@ -451,15 +453,9 @@ class StudentAdmissionController extends Controller
 
     public function  savedetailsNotEnrolledStd(Request $request){
             $rules = [
-                // 'dzongkhag'                 => 'required',
-                // 'school'                    => 'required',
-                // 'class'                     => 'required',
                 'dateOfapply'               => 'required',
             ];
             $customMessages = [
-                // 'dzongkhag.required'          => 'This field is required',
-                // 'school.required'             => 'This field is required',
-                // 'class.required'              => 'This field is required',
                 'dateOfapply.required'        => 'This field is required',
             ];
         
@@ -685,14 +681,17 @@ class StudentAdmissionController extends Controller
     }
  
     //getting student details std_student table using cid number
-
     public function getstudentdetailsbyCid($cid){
-
-        $response_data=Std_Students::where('CidNo',$cid)->get();
+        $response_data = std_admission:: where ('CidNo', $cid)->first();
+        // dd($response_data);
+        if($response_data==""){
+            $response_data1=Std_Students::where('CidNo',$cid)->first();
+            return $this->successResponse($response_data1);
+        }
         return $this->successResponse($response_data);
-           
 
     }
+
     public function getstudentGuardainClassDetails($std_id="",$type=""){
         if($type=="guardian"){
             $response_data=StudentGuardainDetails::where('student_id',$std_id)->get();
@@ -717,6 +716,32 @@ class StudentAdmissionController extends Controller
             })->get();
         return $this->successResponse($response_data);
 
+
+    }
+
+    public function savedrequestadmission(Request $request){
+        // dd($request);
+        $rules = [
+            'dateOfapply'               => 'required',
+            
+        ];
+        $customMessages = [
+            'dateOfapply.required'      => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'dzongkhag'                  =>  $request->dzongkhag,
+            'school'                     =>  $request->school,
+            'class'                      =>  $request->class,
+            'stream'                     =>  $request->stream,
+            'dateOfapply'                =>  $request->dateOfapply,
+            'reasons'                    =>  $request->reasons,
+            'snationality'               =>  $request->snationality,
+        ];
+        // dd($data);
+         $response_data = requestForAdmission::create($data);
+         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
     
