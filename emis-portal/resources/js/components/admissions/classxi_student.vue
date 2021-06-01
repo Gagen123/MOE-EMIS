@@ -117,7 +117,7 @@
                                  <label>Class<span class="text-danger">*</span></label>
                                     <select v-model="student_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
                                         <option value="">--- Please Select ---</option>
-                                         <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.name}}</option>
+                                         <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.class}}</option>
                                     </select>
                            </div>
 
@@ -125,7 +125,7 @@
                                   <label>stream<span class="text-danger">*</span></label>
                                       <select v-model="student_form.stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('stream') }" class="form-control select2" name="stream" id="stream">
                                          <option value="">--- Please Select ---</option>
-                                         <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                                         <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{item.stream}}</option>
                                       </select>
                             </div>
 
@@ -259,6 +259,7 @@
                  dzoId=id;
               
                 } 
+
               axios.get('/masters/getOrgList/' +dzoId)
               .then(response =>{
                 let data = response.data.data;
@@ -273,13 +274,28 @@
                 if(id!=""){
                  orgId=id;
             } 
-              axios.get('/masters/getClassByOrganizationId/' +orgId)
+              axios.get('/masters/loadClassStreamSection/NA/' +orgId)
               .then(Response =>{
-                let data = Response.data.data;
+                let data = Response.data;
+                // console.log(data);
                 this.classList = data;
               })
 
           },
+          getstreamListByid(id){
+             let classId=$('#class').val();
+                if(id!=""){
+                 classId=id;
+            } 
+              axios.get('/masters/getStreamByclassId/' +classId)
+              .then(Response =>{
+                let data = Response.data;
+                // console.log(data);
+                this.classList = data;
+              })
+
+          },
+
 
          getseatdetailsbyOrgId(id){
                let orgId=$('#school').val();
@@ -374,7 +390,7 @@
             }
             if(id=="class"){
                 this.student_form.class=$('#class').val();
-                  this.getstreamList($('#class').val());
+                  this.getstreamListByid($('#class').val());
                 
             }
             if(id=="stream"){
@@ -388,7 +404,10 @@
         mounted() {
             $('.select2').select2();
             $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
+           $('.select2').select2({
+            theme: 'bootstrap4'
+        }); 
         });
         
         Fire.$on('changefunction',(id)=> {

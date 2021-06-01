@@ -75,6 +75,7 @@ class RestructuringController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        // dd( $workflowdet,$request->organization_type);
         $screen_id="";
         $status="";
         $app_role="";
@@ -470,17 +471,26 @@ class RestructuringController extends Controller
         ];
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
         // dd($response_data);
-        $workflowdet=$this->getsubmitterStatus('closure');
-        if($workflowdet['screen_id']=="0"){
-            return "No Screen";
+        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
+        $screen_id="";
+        $status="";
+        $app_role="";
+        foreach($workflowdet as $work){
+            if(strpos(strtolower($work->screenName),'closure')!==false){
+                $screen_id=$work->SysSubModuleId;
+                $status=$work->Sequence;
+                $app_role=$work->SysRoleId;
+            }
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name_closure,
+            'service_name'      =>'$this->service_name_closure',
             'application_number'=>json_decode($response_data)->data->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$workflowdet['status'],
+            'screen_id'         =>$screen_id,
+            'status_id'         =>$status,
+            'app_role_id'       => $app_role,
             'remarks'           =>null,
             'user_dzo_id'       =>$this->getUserDzoId(),
             'access_level'      =>$this->getAccessLevel(),

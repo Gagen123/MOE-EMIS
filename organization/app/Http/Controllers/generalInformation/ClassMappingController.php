@@ -106,7 +106,7 @@ class ClassMappingController extends Controller
         $response_data = OrganizationClassStream::where('organizationId',$school_id)->get();
         if($response_data!=null && $response_data!=""){
             foreach($response_data as $class_stream){
-                if($class_stream['streamId']!=""){
+                if($class_stream['streamId']!=null && $class_stream['streamId']!=""){
                     // dd($this->getmappingId($class_stream['classId'],$class_stream['streamId'])->id);
                     $class_stream->classStreamId= $this->getmappingId($class_stream['classId'],$class_stream['streamId'])->id;
                 }

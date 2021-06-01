@@ -25,6 +25,10 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <label>Org Type: {{form.organization_type}}</label>
+                                </div>
+                                
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
@@ -200,6 +204,7 @@ export default {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
                 this.form.organizationId=data['Agency_Code'];
+                this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
             }
         })    

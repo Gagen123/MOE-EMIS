@@ -63,7 +63,6 @@
                     .then(response => {
                     let data = response;
                     this.applicationList = data.data.data;
-                    alert(data.data.data.school)
                     // let orgId = response.data.data.OrgOrganizationId
                     // this.getDetailsByOrgId(orgId)
                 });

@@ -61,8 +61,10 @@ export default {
             }
         },      
         async studentElectiveSubject(){
+            
           let uri = 'academics/getStudentElectiveSubjects'
-          uri += ('?classId='+this.classId)
+            uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
+
           if(this.streamId !== null){
                 uri += ('&streamId='+this.streamId)
             }
@@ -105,6 +107,7 @@ export default {
     created() {
         this.class_stream_section =this.$route.params.data.class_stream_section;
         this.classId=this.$route.params.data.org_class_id;
+        this.OrgClassStreamId = this.$route.params.data.OrgClassStreamId;
         this.streamId=this.$route.params.data.org_stream_id;
         this.section_id=this.$route.params.data.org_section_id;
         this.id=this.$route.params.data.id;

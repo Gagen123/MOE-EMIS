@@ -95,6 +95,7 @@ export default {
              try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data)
                 let subjectTeachers = await axios.get('academics/getSubjectTeacher').then(response => response.data.data)
+                console.log(classSections)
                 classSections.forEach((classSection) => {
                     subjectTeachers["classSubjects"].forEach(item => {
                         let aa = [];
@@ -103,6 +104,8 @@ export default {
                                 aa['class_stream_section'] = classSection.class+' '+classSection.stream+' '+classSection.section
                             }else if(classSection.stream){
                                 aa['class_stream_section'] = classSection.class+' '+classSection.stream
+                            } else if(classSection.section){
+                                aa['class_stream_section'] = classSection.class+' '+classSection.section
                             }else{
                                 aa['class_stream_section'] = classSection.class
                             }
@@ -119,7 +122,6 @@ export default {
                         }
                     });
                 });
-                console.log(finalSubjectTeachers);
                 finalSubjectTeachers.forEach((finalSubjectTeacher,index) => {
                     subjectTeachers["classSubjectTeachers"].forEach(classSubjectTeacher => {
                         if(finalSubjectTeacher.aca_sub_id == classSubjectTeacher.aca_sub_id && finalSubjectTeacher.org_class_id == classSubjectTeacher.org_class_id && (finalSubjectTeacher.org_stream_id == classSubjectTeacher.org_stream_id || (finalSubjectTeacher.org_stream_id == null && classSubjectTeacher.org_stream_id == null)) && (finalSubjectTeacher.org_section_id == classSubjectTeacher.org_section_id || (finalSubjectTeacher.org_section_id == null && classSubjectTeacher.org_section_id == null))){

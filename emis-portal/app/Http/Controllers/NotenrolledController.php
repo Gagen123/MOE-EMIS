@@ -268,7 +268,6 @@ class NotenrolledController extends Controller
     }
 
     public function getstudentdetailsbyCid($cid=""){
-        // dd("dsdsad");
         $response_data= $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);
         return $response_data;
     }
@@ -278,5 +277,4 @@ class NotenrolledController extends Controller
         $response_data= $this->listData('emis/students/admission/getAllStudentCid/');
         return $response_data;
     }
-   
 }

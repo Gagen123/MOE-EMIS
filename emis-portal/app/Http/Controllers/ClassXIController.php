@@ -35,8 +35,8 @@ class ClassXIController extends Controller
             'student_type.required'       => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-
         $data = $request->all();
+        
         $response_data= $this->apiService->createData('emis/students/admission/savedetailsEnrolledStd', $data);
         return $response_data;
 

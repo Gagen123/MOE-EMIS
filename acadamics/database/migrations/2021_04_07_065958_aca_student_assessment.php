@@ -21,7 +21,7 @@ class AcaStudentAssessment extends Migration
             $table->char('org_section_id',36)->index()->nullable();
             $table->char('aca_sub_id',36)->index();
             $table->char('aca_assmt_term_id',36)->index();
-            $table->string('class_stream_section',100);finalized_date
+            $table->string('class_stream_section',100);
             $table->date('finalized_date')->nullable();
             $table->unsignedTinyInteger('finalized')->default(0)->index();
             $table->string('remarks',1000)->nullable();

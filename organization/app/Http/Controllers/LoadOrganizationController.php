@@ -73,7 +73,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadClassStreamSection($type="", $id=""){
-        $section = DB::select('SELECT t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
+        $section = DB::select('SELECT t1.id AS OrgClassStreamId, t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
         t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1 
         JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id 
         LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
@@ -113,9 +113,9 @@ class LoadOrganizationController extends Controller{
     public function loadStreamList($id){
 
         $response_data = DB::table('organization_class_streams')
-                    ->join('streams', 'organization_class_streams.streamId', '=', 'streams.id')
-                    ->select('organization_class_streams.*', 'streams.stream AS stream', 'streams.id AS stream_id')
-                    ->where('classId', $id)
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class')
+                    ->where('organizationId', $org_id)
                     ->where('streamId', '<>', 'NULL')
                     ->get();
 

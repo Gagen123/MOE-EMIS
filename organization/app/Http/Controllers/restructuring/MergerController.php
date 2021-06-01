@@ -163,7 +163,7 @@ class MergerController extends Controller{
         $response_data->locationType=Location::where('id',$merger->locationId)->first()->name;
         // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
         $classSection=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->groupBy('classId')->get();
-        $sections=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->where('streamId','!=',null)->get();
+        $sections=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->where('streamId','<>',null)->get();
         foreach($classSection as $cls){
             $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
         }

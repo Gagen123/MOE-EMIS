@@ -20,12 +20,14 @@ use App\Http\Controllers\NotenrolledController;
     return view('home');
 });
 
-//Global Controller
+//Global Controller 
     Route::prefix('masters')->group(function () {
     Route::get('/loadGlobalMasters/{param}', [App\Http\Controllers\AdminstratorController::class, 'loadGlobalMasters'])->name('loadGlobalMasters');
     Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdminstratorController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
     Route::get('/getOrgList/{dzoId}', [App\Http\Controllers\AdminstratorController::class, 'getOrgList'])->name('getOrgList');
-    Route::get('/getClassByOrganizationId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getClassByOrganizationId'])->name('getClassByOrganizationId');
+
+    Route::get('/loadClassStreamSection/{type}{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
+    Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
     Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
 });
 
