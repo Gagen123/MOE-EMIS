@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Name of Organization</label>                              
+                            <label class="mb-0.5">Change for Proprietor</label>                              
                         </a>
                     </li>
                 </ul>
@@ -66,7 +66,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
                                 </div>
                             </div>
                         </div>

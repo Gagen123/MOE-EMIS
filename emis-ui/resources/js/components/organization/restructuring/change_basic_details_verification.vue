@@ -132,7 +132,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Proposal Initiated Bye:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.change_details.initiatedBy}}</span>
+                                    <span class="text-blue text-bold">{{proposed_by_list[appicationDetails.change_details.initiatedBy]}}</span>
                                 </div>
                             </div>
                             <div class="form-group row" v-if="appicationDetails.application_type=='feeding_change'">
@@ -355,6 +355,7 @@ export default {
             gewogArray:{},
             calssArray:{},
             streamArray:{},
+            proposed_by_list:{},
             selected_gewog:'',
             selected_village:'',
             appicationDetails:[],
@@ -598,9 +599,22 @@ export default {
                 }
             });
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.proposed_by_list[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
     },
 
     mounted(){
+        this.loadproposedBy();
         this.getLevel();
         this.getClass();
         this.getStream();

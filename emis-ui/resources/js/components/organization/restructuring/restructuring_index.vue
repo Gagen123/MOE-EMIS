@@ -37,6 +37,22 @@
                         Proprietor Change
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="regularstaff" to="/autonomus_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Autonumous
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="location_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Location Type Change
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link id="expension_index" to="/expension_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Expension
+                    </router-link>
+                </li>
+                
                 <li class="nav-item pr-1"  @click="activatelink('volunteer')">
                     <router-link id="volunteer" to="/bifurcation_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Bifurcation

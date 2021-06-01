@@ -58,6 +58,16 @@ class RestructuringController extends Controller
                     $establishment_data = $this->setSenChange($request);
                     break;
                 }
+            case "autonomus_change" : {
+                $validation = $this->validateGeneralChange($request);
+                $establishment_data = $this->setAutonomous($request);
+                break;
+            }
+            case "expension_change" : {
+                $validation = $this->validateGeneralChange($request);
+                $establishment_data = $this->setAutonomous($request);
+                break;
+            }
             case "all_details" : {
                     $validation = $this->validateAllChangesFields($request);
                     $establishment_data = $this->setAllChangesFields($request);
@@ -227,7 +237,7 @@ class RestructuringController extends Controller
             'action_by'         =>$this->userId(),
         ];
         // dd($workflow_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -263,7 +273,7 @@ class RestructuringController extends Controller
             'user_id'                      =>   $this->userId() 
         ];
         $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
-        // dd($response_data);
+        dd($response_data);
         return $work_response_data;
     }
 
@@ -932,6 +942,22 @@ class RestructuringController extends Controller
         $change =[
             'organizationId'            =>  $request['organizationId'],
             'senSchool'                 =>  $request['senSchool'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+
+    private function setAutonomous($request){
+
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'autonomuos'                =>  $request['autonomuos'],
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
             'action_type'               =>  $request['action_type'],

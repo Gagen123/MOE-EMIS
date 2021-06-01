@@ -255,14 +255,14 @@
                     <li class="nav-item has-treeview" >
                         <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
                         <i class="fa fa-angle-double-right nav-icon"></i>
-                            Organization Profile
+                            View Org Profile
                         </router-link>
                     </li>
                     <li class="nav-item" id="organization_list" @click="setclass('organizationlink','','organization_list')">
                         <router-link to="/organization_list" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Organization List
+                                View Org List
                             </p>
                         </router-link> 
                     </li>
@@ -270,7 +270,7 @@
                         <router-link to="/establishment_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Create New Organization
+                                Establishment Organization
                             </p>
                         </router-link> 
                     </li>
@@ -278,7 +278,55 @@
                         <router-link to="/restructuring_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Change in Details
+                                Change Organization Details
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/mission_vission" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Mission & Vission
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/basic_details_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Organization Basic Details
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/organization_visitor_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Organizaiton Visitor & SBM
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/program_clubs_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Programs & Clubs
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/equipment_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Equipments and Furnitures
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/equipment_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Infrastructure
                             </p>
                         </router-link>
                     </li>

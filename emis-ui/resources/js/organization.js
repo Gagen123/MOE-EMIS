@@ -1,6 +1,16 @@
 const routes = [  
     { path: '/OrganizationMasterIndex',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterIndex.vue').default,
           children:[
+               { path: '/org_service_index', 
+                  component: require('./components/masters/organization_masters/service/service_index.vue').default ,
+                  children: 
+                  [
+                    { path: '',name:'org_service_index', component: require('./components/masters/organization_masters/service/list_service.vue').default },
+                    { path: '/list_org_service', name:'list_org_service', component: require('./components/masters/organization_masters/service/list_service.vue').default },
+                    { path: '/create_org_service', name:'create_org_service', component: require('./components/masters/organization_masters/service/create_service.vue').default },
+                    { path: '/edit_org_service', name:'edit_org_service', component: require('./components/masters/organization_masters/service/edit_service.vue').default },
+                  ]    
+              },
               { path: '/department_index', 
                   component: require('./components/masters/organization_masters/department/department_index.vue').default ,
                   children: 
@@ -11,6 +21,46 @@ const routes = [
                     { path: '/edit_department', name:'edit_department', component: require('./components/masters/organization_masters/department/edit_department.vue').default },
                   ]    
               },
+              { path: '/proposed_by_index',  
+                component: require('./components/masters/organization_masters/proposed_by/proposed_by_index.vue').default ,
+                  children: [
+                    { path: '/',name:'proposed_by_index', component: require('./components/masters/organization_masters/proposed_by/list_proposed_by.vue').default },
+                    { path: '/list_proposed_by',name:'list_proposed_by', component: require('./components/masters/organization_masters/proposed_by/list_proposed_by.vue').default },
+                    { path: '/create_proposed_by',name:'create_proposed_by', component: require('./components/masters/organization_masters/proposed_by/create_proposed_by.vue').default },
+                    { path: '/edit_proposed_by',name:'edit_proposed_by', component: require('./components/masters/organization_masters/proposed_by/edit_proposed_by.vue').default },
+                  ]    
+              }, 
+              { path: '/document_type_index',  
+                component: require('./components/masters/organization_masters/document_type/document_type_index.vue').default ,
+                  children: [
+                    { path: '/',name:'document_type_index', component: require('./components/masters/organization_masters/document_type/list_document_type.vue').default },
+                    { path: '/list_document_type',name:'list_document_type', component: require('./components/masters/organization_masters/document_type/list_document_type.vue').default },
+                    { path: '/create_document_type',name:'create_document_type', component: require('./components/masters/organization_masters/document_type/create_document_type.vue').default },
+                    { path: '/edit_document_type',name:'edit_document_type', component: require('./components/masters/organization_masters/document_type/edit_document_type.vue').default },
+                  ]     
+              },
+              { path: '/income_facility_index',  
+                component: require('./components/masters/organization_masters/income_facility/income_facility_index.vue').default ,
+                  children: [
+                    { path: '/',name:'income_facility_index', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
+                    { path: '/list_income_facility',name:'list_income_facility', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
+                    { path: '/create_income_facility',name:'create_income_facility', component: require('./components/masters/organization_masters/income_facility/create_income_facility.vue').default },
+                    { path: '/edit_income_facility',name:'edit_income_facility', component: require('./components/masters/organization_masters/income_facility/edit_income_facility.vue').default },
+                  ]     
+              },
+              { path: '/financial_information_index',  
+                component: require('./components/masters/organization_masters/financial_information/financial_information_index.vue').default ,
+                  children: [
+                    { path: '/',name:'financial_information_index', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
+                    { path: '/list_financial_information',name:'list_financial_information', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
+                    { path: '/create_financial_information',name:'create_financial_information', component: require('./components/masters/organization_masters/financial_information/create_financial_information.vue').default },
+                    { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/masters/organization_masters/financial_information/edit_financial_information.vue').default },
+                  ]     
+              }, 
+              
+
+
+
               { path: '/location_index', 
                   component: require('./components/masters/organization_masters/location/location_index.vue').default ,
                   children: 
@@ -475,7 +525,24 @@ const routes = [
             { path: '/proprietor_change_acknowledgement', name:'proprietor_change_acknowledgement', component: require('./components/organization/restructuring/proprietor_change/acknowledgement.vue').default },
           ]    
       },
-      
+      { path: '/location_change_index',  
+        component: require('./components/organization/restructuring/location_change/location_change_index.vue').default ,
+          children: [
+            { path: '/',name:'location_change_index', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
+            { path: '/list_location_change',name:'list_location_change', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
+            { path: '/create_location_change',name:'create_location_change', component: require('./components/organization/restructuring/location_change/create_location_change.vue').default },
+            { path: '/location_change_acknowledgement', name:'location_change_acknowledgement', component: require('./components/organization/restructuring/location_change/acknowledgement.vue').default },
+          ]    
+      },
+      { path: '/expension_index',  
+        component: require('./components/organization/restructuring/expension/expension_index.vue').default ,
+          children: [
+            { path: '/',name:'expension_index', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
+            { path: '/list_expension',name:'list_expension', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
+            { path: '/create_expension',name:'create_expension', component: require('./components/organization/restructuring/expension/create_expension.vue').default },
+            { path: '/expension_acknowledgement', name:'expension_acknowledgement', component: require('./components/organization/restructuring/expension/acknowledgement.vue').default },
+          ]    
+      },
 
       { path: '/bifurcation_index',  
         component: require('./components/organization/restructuring/bifurcation/bifurcation_index.vue').default ,

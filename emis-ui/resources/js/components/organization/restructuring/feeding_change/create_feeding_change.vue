@@ -47,7 +47,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
                                 </div>
                             </div>
                         </div>
