@@ -47,7 +47,7 @@ class AdminstratorController extends Controller
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$param.'/'.$dzoId);
     }
 
-    public function loadClassStreamSection($orgId = "", $type = ''){
+    public function loadClassStreamSection($type = "", $orgId = ''){
         $itemList = $this->apiService->listData('emis/common_services/loadClassStreamSection/'.$type.'/'.$orgId);
         return $itemList;
     }

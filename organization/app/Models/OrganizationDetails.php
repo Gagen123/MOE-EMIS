@@ -30,6 +30,7 @@ class OrganizationDetails extends Model
         'yearOfEstablishment',
         'created_by',
         'updated_by',
+        'isFeedingSchool',
         'remarks'
     ];
 }

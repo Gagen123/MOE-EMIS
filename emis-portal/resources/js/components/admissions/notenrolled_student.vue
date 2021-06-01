@@ -142,7 +142,7 @@
                                             <label>Class:  <span class="text-danger">*</span></label>
                                                     <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
                                                         <option value=""> --Select--</option>
-                                                        <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
                                                     </select>
                                                     <has-error :form="school_form" field="s_class"></has-error>
                                                 </div>
@@ -840,16 +840,15 @@ export default {
 
           },
          getschoolList(id){
-             alert(id)
              let dzoId=$('#s_dzongkhag').val();
                  if(id!=""){
                  dzoId=id;
               
             } 
-              axios.get('/masters/getOrgList/' +dzoId)
+            axios.get('/masters/getOrgList/' +dzoId)
               .then(Response =>{
                 let data = Response.data.data;
-                this.schoolList = data;
+                this.s_schoolList = data;
               })
 
           },
@@ -859,10 +858,11 @@ export default {
                 if(id!=""){
                  orgId=id;
             } 
-              axios.get('/masters/getClassByOrganizationId/' +orgId)
+            this.classList = [];
+              axios.get('/masters/loadClassStreamSection/school/' +orgId)
               .then(Response =>{
-                let data = Response.data.data;
-                this.classList = data;
+                let data = Response.data;
+                this.s_classList = data;
               })
 
           },
@@ -884,29 +884,6 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-
-        async changefunction(id){
-            alert(id);
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            } 
-             
-            if(id=="s_dzongkhag"){
-                this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
-                this.getschoolList($('#s_dzongkhag').val());
-                
-            }
-            if(id=="s_school"){ 
-                this.school_form.s_school=$('#s_school').val();
-                this.getclassList($('#s_school').val());
-            }
-            if(id=="s_class"){
-                this.school_form.s_class=$('#s_class').val();
-                
-            }
-           },
 
         getgewoglist(id,type){
             let dzoId=$('#dzongkhag').val();
@@ -1207,11 +1184,24 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-        async changefunction(id){
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="s_dzongkhag"){
+                this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
+                this.getschoolList($('#s_dzongkhag').val());
+                
+            }
+            if(id=="s_school"){ 
+                this.school_form.s_school=$('#s_school').val();
+                this.getclassList($('#s_school').val());
+            }
+            if(id=="s_class"){
+                this.school_form.s_class=$('#s_class').val();
+                
             }
 
             if(id=="sex_id"){
@@ -1355,12 +1345,9 @@ export default {
     },
 
     mounted() {
-        this.loadAllActiveMasters('all_active_gender');
-        this.loadAllActiveMasters('all_active_dzongkhag');
-        this.getdzongkhagList();
         // this.getschoolList();
         // this.getclassList();
-        // $('.select2').select2();
+        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
@@ -1371,6 +1358,9 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadAllActiveMasters('all_active_gender');
+        this.loadAllActiveMasters('all_active_dzongkhag');
+        this.getdzongkhagList();
     },
 
      created() { 

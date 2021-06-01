@@ -655,9 +655,9 @@ class EstablishmentController extends Controller
             $org_data = $org_data+[
                 'levelId'                   =>$org_details['levelId'],
                 'locationId'                =>$org_details['locationId'],
-                'isGeopoliticallyLocated'   =>$org_details['isFeedingSchool'],
+                'isGeopoliticallyLocated'   =>$org_details['isGeopoliticallyLocated'],
                 'isSenSchool'               =>$org_details['isSenSchool'],
-                'isFeedingSchool'           =>$org_details['isSenSchool'],
+                'isFeedingSchool'           =>$org_details['isFeedingSchool'],
             ];
         }
         if($caegory=="private_school"){
