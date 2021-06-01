@@ -68,6 +68,40 @@ export default {
                 }); 
             }, 3000);  
         },
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadClassArrayList(uri="loadCommons/getClassArray"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.classArray =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadSectionArrayList(uri="loadCommons/getSectionArray"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.sectionArray =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadStreamArrayList(uri="loadCommons/getStreamArray"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.streamArray =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         showview(data){
             this.$router.push({name:'std_health_screening_view',params: {data:data}});
         },
@@ -77,6 +111,9 @@ export default {
     },
     mounted(){
         this.loadDataList();
+        this.loadClassArrayList();
+        this.loadStreamArrayList();
+        this.loadSectionArrayList();
     },
 }
 </script>

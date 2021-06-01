@@ -362,6 +362,14 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    <li class="nav-item" id="studentlist" @click="setclass('studentlist','','studentlist')">
+                        <router-link to="/student_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Student List
+                            </p>
+                        </router-link>
+                    </li>
                    <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
