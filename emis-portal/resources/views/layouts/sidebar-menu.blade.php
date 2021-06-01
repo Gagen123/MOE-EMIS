@@ -27,6 +27,15 @@
           </li>
 
       @endcan
+      <li class="nav-item">
+            <router-link to="/admissionRequest" class="nav-link">
+            <i class="fa fa-users nav-icon blue"></i>
+              <p>
+              Request for admission
+              </p>
+            </router-link>
+       </li>
+      
 
       <!-- @can('isAdmin')
         <li class="nav-item">
