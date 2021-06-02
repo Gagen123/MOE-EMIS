@@ -10,10 +10,9 @@
                         <th>Dzongkhag/Thromde</th>
                         <th>School Name</th>
                         <th>Application Date</th>
-
                         <th>Status</th>
                         <th>Student Decission</th>
-                         <th>School decission</th>
+                        <th>School decission</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,6 +61,8 @@
                     .then(response => {
                     let data = response;
                     this.applicationList = data.data.data;
+                    let dzongkhag_name = applicationList.dzonkhag;
+                    alert(JSON.stringify(dzongkhag_name));
                     // let orgId = response.data.data.OrgOrganizationId
                     // this.getDetailsByOrgId(orgId)
                 });

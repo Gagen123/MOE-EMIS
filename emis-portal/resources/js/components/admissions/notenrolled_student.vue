@@ -634,11 +634,7 @@ export default {
                 s_school:'',
                 s_class:'',
             }),
-            personal_detail: new form({
-                s_dzongkhag:'',
-                s_school:'',
-                s_class:'',
-            }),
+            
 
             guardian_form: new form({
                 student_id:'',
@@ -1023,6 +1019,8 @@ export default {
                         'content-type': 'multipart/form-data'
                     }
                 } 
+
+        
                 let formData = new FormData();
                 formData.append('snationality', this.student_form.snationality);
                 formData.append('student_id', this.student_form.student_id);
@@ -1035,6 +1033,9 @@ export default {
                 formData.append('dzongkhag', this.student_form.dzongkhag);
                 formData.append('gewog', this.student_form.gewog);
                 formData.append('village_id', this.student_form.village_id);
+                formData.append('s_dzongkhag', this.school_form.s_dzongkhag);
+                formData.append('s_school', this.school_form.s_school);
+                formData.append('s_class', this.school_form.s_class);
                 formData.append('type','new');
                 formData.append('Status', 'pending'); 
                 axios.post('/saveStudentDetails',formData, config)

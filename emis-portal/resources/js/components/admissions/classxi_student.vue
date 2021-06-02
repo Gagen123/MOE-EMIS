@@ -198,8 +198,9 @@
                   let formData = new FormData();
                   formData.append('student_type', this.student_form.student_type);
                   formData.append('cid_passport', this.student_form.cid_passport);
+                  formData.append('DateOfBirth', this.student_form.DateOfBirth);
                   formData.append('Name', this.student_form.Name);
-                  formData.append('OrgOrganizationId',this.$route.query.data[0].OrgOrganizationId);
+                  formData.append('OrgOrganizationId',this.$route.query.data.OrgOrganizationId);
                   formData.append('gender', this.student_form.gender );
                   formData.append('student_id', this.student_form.student_id);
                   formData.append('dzongkhag', this.student_form.dzongkhag);
@@ -386,7 +387,7 @@
             this.getgewogName();
            
             this.student_form.cid_passport=this.$route.query.data.CidNo;
-            this.student_form.Name=this.$route.query.data.Name;
+            this.student_form.Name=this.$route.query.data.first_name + ' ' + this.$route.query.data.last_name;
             this.student_form.gender=this.$route.query.data.CmnSexId;
             this.student_form.DateOfBirth=this.$route.query.data.DateOfBirth; 
             this.student_form.address=this.$route.query.data.Address;

@@ -5,7 +5,7 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h5><b>Request For Admission</b></h5>
+              <h5><b>Admission Request</b></h5>
             </div>
           </div>
         </div>
@@ -15,42 +15,43 @@
       <div class="card-body">
          <form id="" class="form-horizontal" enctype="multipart/form-data" action="#" method="POST">
               <div class="row md-12">
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                       <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
                         <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag"  >
                           <option value="">--- Please Select ---</option>
                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                         </select>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                        <label>School <span class="text-danger">*</span></label>
                           <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                           </select>
                   </div>
-                  <div class="form-group col-md-4">
+                  <div class="form-group col-md-3">
                         <label>Class<span class="text-danger">*</span></label>
                           <select v-model="student_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
                               <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.class}}</option>
                           </select>
                   </div>
-                 
-              </div>
-              <div class="row md-12">
-                    <div class="form-group col-md-4" >
-                        <label>Reason <span class="text-danger">*</span><span class="text-danger"></span></label>
-                          <input v-model="student_form.reasons" id="reasons" type="text" name="reasons" 
-                            class="form-control" :class="{ 'is-invalid': student_form.errors.has('reasons') }"   />
-                          <has-error :student_form="form" field="reasons"></has-error>
-                   </div>
-                   
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                           <label>Request Date:<span class="text-danger">*</span></label>
                             <input type="date" class="form-control" @change="removeerror('dateOfapply')" :class="{ 'is-invalid': student_form.errors.has('dateOfapply') }" id="dateOfapply" v-model="student_form.dateOfapply" placeholder="Date of apply">
                               <has-error :student_form="form" field="date"></has-error>
                     </div>
+                 
+              </div>
+              <div class="row md-12">
+                    <div class="form-group col-md-12" >
+                        <label>Reason <span class="text-danger">*</span><span class="text-danger"></span></label>
+                          <textarea v-model="student_form.reasons" id="reasons" type="text" name="reasons" 
+                            class="form-control" :class="{ 'is-invalid': student_form.errors.has('reasons') }"   />
+                          <has-error :student_form="form" field="reasons"></has-error>
+                   </div>
+                   
+                  
               </div>
                 <hr>                        
                 <div class="footer float-right" >
