@@ -32,7 +32,8 @@
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
                                     <span class="text-danger" id="snationality_err"></span>
                                 </div>
-                                <div class="row form-group col-lg-10 col-md-10 col-sm-10">
+                                
+                                <div class="row form-group col-lg-9 col-md-9 col-sm-9">
                                     <div class="card card-primary">
                                         <div class="card-body">
                                             <div class="row form-group">
@@ -562,7 +563,31 @@
                         <div id="schoolsections">
                             <dt>Class Details</dt>
                             <hr>
-                            <div class="row form-group">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Class:</label>
+                                    <select v-model="class_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('class') }" @change="aboveClass10()"  class="form-control select2" name="class" id="class">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in clasList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                                    </select>
+                                    <has-error :form="class_form" field="class"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
+                                    <label>Streams:</label>
+                                    <select v-model="class_form.stream" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('stream') }" class="form-control select2" name="stream" id="stream">
+                                        <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
+                                    </select>
+                                    <has-error :form="class_form" field="stream"></has-error>
+                                </div> 
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
+                                    <label>Section:</label>
+                                    <select v-model="class_form.section" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('section') }" class="form-control select2" name="section" id="section">
+                                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
+                                    </select>
+                                    <has-error :form="class_form" field="section"></has-error>
+                                </div>
+                            </div>
+                            <!-- <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Student Class: <span class="text-danger">*</span></label>
                                     <select v-model="class_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('class') }" class="form-control select2" name="class" id="class">
@@ -587,7 +612,7 @@
                                     </select>
                                     <has-error :form="class_form" field="section"></has-error>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Student Type: <span class="text-danger">*</span></label>
@@ -694,6 +719,7 @@ export default {
             studentscholarshipList:[],
             studentbenefitList:[],
             sectionList:[],
+            orgid:'',
             personal_form: new form({
                 student_id:'',
                 snationality:'',
@@ -771,6 +797,14 @@ export default {
                 gardain_email:'',
                 gardain_cntct_no:'',
                 
+            }),
+            class_form: new form({
+                student_id:'',
+                disability:'',
+                special_benifit:[],
+                scholarship:[],
+                feeding_type:'',
+                meal_type:'', no_meals:'', student_type:'', section:'', stream:'', class:'',class_stream_id:'',
             }),
         }
     },
@@ -1004,7 +1038,6 @@ export default {
             });
         },
         getgewoglist(id,type){
-            alert(id);
             let dzoId=$('#dzongkhag').val();
             if(id!=""){
                 dzoId=id;
@@ -1147,8 +1180,8 @@ export default {
                 formData.append('type','add');
                 axios.post('students/admission/saveStudentDetails',formData, config)
                 .then((response) => {
-                    this.guardian_form.student_id=response.data.data.id;
-                    this.class_form.student_id=response.data.data.id;
+                    this.guardian_form.student_id=response.data.id;
+                    this.class_form.student_id=response.data.id;
                     Toast.fire({
                         icon: 'success',
                         title: 'Student Personal Details has been saved successfully'
@@ -1197,6 +1230,7 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) =>{
                 if (result.isConfirmed){
+                    this.class_form.class_stream_id=this.class_form.class;
                     this.class_form.post('students/admission/saveStudentClassDetails')
                     .then((response) => {
                         Swal.fire(
@@ -1430,22 +1464,50 @@ export default {
 
             if(id=="class"){
                 this.class_form.class=$('#class').val();
-                $('#stream_section').hide();
-                if($('#class option:selected').text()=="XI" || $('#class option:selected').text()=="XII"){
-                    $('#stream_section').show();
-                    this.showstream($('#class').val());
-                }
-                else{
-                    this.getExistingSection($('#class').val());
+                let class_selected = $("#class").val();
+                this.getStreamList(class_selected);
+                this.getSectionList();
+                if(class_selected == 11 || class_selected == 12){
+                    $(".stream_selection").show();
+                    $(".section_selection").show();
+                }else{
+                    $(".section_selection").show();
+                    $(".stream_selection").hide();
                 }
             }
+
             if(id=="stream"){
                 this.class_form.stream=$('#stream').val();
-                this.getExistingSection($('#stream').val());
             }
-            if(id=="section"){
-                this.class_form.section=$('#section').val();
-            }
+            // if(id=="section"){
+            //     axios.get('/students/loadStudentBySection/'+$('#class').val()+'__'+$('#stream').val()+'__'+$('#section').val())
+            //         .then((response) => {
+            //             this.studentList = response.data;  
+            //     })
+            //     .catch(() => {
+            //         consoele.log("Error:"+e)
+            //     });
+            //     this.class_form.section=$('#section').val();
+            // }
+
+            // if(id=="class"){
+            //     this.class_form.class=$('#class').val();
+            //     $('#stream_section').hide();
+            //     if($('#class option:selected').text()=="XI" || $('#class option:selected').text()=="XII"){
+            //         $('#stream_section').show();
+            //         this.showstream($('#class').val());
+            //     }
+            //     else{
+            //         this.getExistingSection($('#class').val());
+            //     }
+            // }
+            // if(id=="stream"){
+            //     this.class_form.stream=$('#stream').val();
+            //     this.getExistingSection($('#stream').val());
+            // }
+            // if(id=="section"){
+            //     this.class_form.section=$('#section').val();
+            // }
             if(id=="student_type"){
                 this.class_form.student_type=$('#student_type').val();
             }
@@ -1506,7 +1568,63 @@ export default {
             if(type=="primary-contact-guardian"){
                 $('#gardain_section').show();
             } 
-        }
+        },
+        // loadDetails(org_id){
+        //     axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
+        //     .then(response => {
+        //         this.existing_details=response.data.data;
+        //         this.clasList= response.data.data.classes; 
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.clasList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        /**
+         * method to get stream list
+         */
+        getStreamList(id){
+            let classId=$('#class').val();
+            if(id!="" && classId==null){
+                classId=id; 
+            }
+            let uri = 'loadCommons/loadStreamList/'+classId;
+            this.streamList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.streamList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getSectionList(id){
+            let classId=$('#class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadSectionList/'+classId;
+            this.sectionList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.sectionList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+       
     },
 
     mounted() {
@@ -1516,14 +1634,20 @@ export default {
         this.loadAllStudentMasters('StudentType_Active');
         this.loadAllStudentMasters('ScholarType_Active');
         this.loadAllStudentMasters('SpBenefit_Active');
-        this.loadclasses('clasList');
+        // this.loadclasses('clasList');
+        axios.get('common/getSessionDetail')
+        .then(response =>{
+            let data = response.data.data;
+            this.orgid=data['Agency_Code'];
+        }) ;
+        this.loadClassList();
          
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
         
-        Fire.$on('changefunction',(id)=> {
+        Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
         });
     },

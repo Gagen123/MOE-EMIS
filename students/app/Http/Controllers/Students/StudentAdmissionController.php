@@ -407,45 +407,40 @@ class StudentAdmissionController extends Controller
 
     //this funtion used for student portal for saving details of enrolled students
     public function  savedetailsEnrolledStd(Request $request){
-        // dd($request);
         $rules = [
                 'dateOfapply'               => 'required',
             ];
         $customMessages = [
                 'dateOfapply.required'        => 'This field is required',
             ];
-        
         $this->validate($request, $rules, $customMessages);
-            $data =[    
-                    'snationality'                   => $request->snationality,
-                    'OrgOrganizationId'              =>  $request->OrgOrganizationId,
-                    'CidNo'                          =>  $request->cid_passport,
-                    'CmnSexId'                       =>  $request->gender,
-                    'first_name'                     =>  $request->Name,
-                    'student_type'                   =>  $request->student_type,
-                    'dzongkhag'                      =>  $request->dzongkhag,
-                    'school'                         =>  $request->school,
-                    'class_id'                       =>  $request->class,
-                    'stream_id'                      =>  $request->stream,
-                    'dateOfapply'                    =>  $request->dateOfapply,
-                    'Remarks'                        =>  $request->remarks,
-                    'Status'                         =>  $request->status,
-            ];
-            dd($data);
-        $std_admin_data = std_admission::create($data);
-            $std_data=[
-                    'std_admission_id'               => $std_admin_data->id,
-                    'OrgOrganizationId'              =>  $request->OrgOrganizationId,
-                    'dateOfapply'                    =>  $request->date_of_application,
-                    'Status'                         =>  $request->status,
-                    'Remarks'                        =>  $request->remarks,
-                    'std_decission'                  =>  $request->std_decission,
-            ];
+                $data =[    
+                        'snationality'                   => $request->snationality,
+                        'OrgOrganizationId'              =>  $request->OrgOrganizationId,
+                        'CidNo'                          =>  $request->cid_passport,
+                        'CmnSexId'                       =>  $request->gender,
+                        'first_name'                     =>  $request->Name,
+                        'student_type'                   =>  $request->student_type,
+                        'dzongkhag'                      =>  $request->dzongkhag,
+                        // 'school'                         =>  $request->school,
+                        'class_id'                       =>  $request->class,
+                        'stream_id'                      =>  $request->stream,
+                        'dateOfapply'                    =>  $request->dateOfapply,
+                        'Remarks'                        =>  $request->remarks,
+                        'Status'                         =>  $request->status,
+                ];
+            $std_admin_data = std_admission::create($data);
+                $std_data=[
+                        'std_admission_id'               => $std_admin_data->id,
+                        'OrgOrganizationId'              =>  $request->OrgOrganizationId,
+                        'dateOfapply'                    =>  $request->date_of_application,
+                        'Status'                         =>  $request->status,
+                        'Remarks'                        =>  $request->remarks,
+                        'std_decission'                  =>  $request->std_decission,
+                ];
         $response_data2 = std_admission_org::create($std_data);
         return $this->successResponse($response_data2, Response::HTTP_CREATED);
-    }
-    
-    //this function is used for displaying the application details of admissions
+        }
 
     public function acceptApplication(Request $request){
             $id=$request->id;
@@ -625,22 +620,21 @@ class StudentAdmissionController extends Controller
                 $response_data=Std_Students::where('IsNewAdmission',1)->get();
             }
             if($access_level=="Dzongkhag"){
-                $response_data = DB::table('std_student_school_detail as c')
-                ->join('std_student as p', 'p.id', '=', 'c.StdStudentId')
+                $response_data = DB::table('std_student as p')
                 ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
                 'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
                 'p.PhotoPath','p.CmnParentsMaritalStatusId','p.PrimaryContact',
                  'p.Status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
-                )->where('c.Dzo_Id', explode('SSS',$param)[1])->where('IsNewAdmission',1)->get();
+                )->where('p.OrgOrganizationId', explode('SSS',$param)[1])->get();
             }
             if($access_level=="Org"){
-                $response_data = DB::table('std_student_school_detail as c')
-                ->join('std_student as p', 'p.id', '=', 'c.StdStudentId')
+                dd(explode('SSS',$param)[2]);
+                $response_data = DB::table('std_student as p')
                 ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
                 'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
                 'p.PhotoPath','p.CmnParentsMaritalStatusId','p.PrimaryContact',
                  'p.Status','p.created_by','p.created_at','p.updated_by', 'p.updated_at'
-                )->where('c.Org_Id', explode('SSS',$param)[2])->where('IsNewAdmission',1)->get();
+                )->where('p.OrgOrganizationId', explode('SSS',$param)[2])->get();
             }
         }
         else if($param=="transfered"){
