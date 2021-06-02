@@ -306,14 +306,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                    <!-- <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/program_clubs_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Programs & Clubs
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/equipment_index" class="nav-link">
                             <p>

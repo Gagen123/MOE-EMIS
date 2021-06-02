@@ -49,72 +49,68 @@
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-                                <strong><i class="fas fa-building mr-1"></i> School Level</strong>
+                                <strong><i class="fas fa-building mr-1"></i> School </strong>
                                 <div class="card-body p-0">
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Task</th>
-                                        <th>Progress</th>
-                                        <th style="width: 40px">Label</th>
+                                            <th>Organization Name</th>
+                                            <th><span class="text-blue text-bold">{{existing_details.name}}</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                        <td>1.</td>
-                                        <td>Update software</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-danger">55%</span></td>
+                                            <td>Level</td>
+                                            <td>{{levelArray[existing_details.levelId]}}</td>
                                         </tr>
                                         <tr>
-                                        <td>2.</td>
-                                        <td>Clean database</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar bg-warning" style="width: 70%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-warning">70%</span></td>
-                                        </tr>
-                                    </tbody>
-                                    </table>
-                                </div>
-                                <strong><i class="fas fa-map-marker mr-1"></i> Location</strong>
-                                <div class="card-body p-0">
-                                    <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Task</th>
-                                        <th>Progress</th>
-                                        <th style="width: 40px">Label</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1.</td>
-                                        <td>Update software</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-danger">55%</span></td>
+                                            <td>Year of Establishment</td>
+                                            <td>{{existing_details.yearOfEstablishment}}</td>
                                         </tr>
                                         <tr>
-                                        <td>2.</td>
-                                        <td>Clean database</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar bg-warning" style="width: 70%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-warning">70%</span></td>
+                                            <td>RCSC/ZEST Code</td>
+                                            <td>{{existing_details.zestAgencyCode}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>MOF Code</td>
+                                            <td>{{existing_details.mofCode}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Organization Code</td>
+                                            <td>{{existing_details.code}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Has Shift System</td>
+                                            <td>{{existing_details.hasShiftSystem =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Has Counselling room</td>
+                                            <td>{{existing_details.hasCounselingRoom =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Has CE</td>
+                                            <td>{{existing_details.hasCE =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Has Feeding School</td>
+                                            <td>{{existing_details.isFeedingSchool =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>GeoPolitically Located</td>
+                                            <td>{{existing_details.isGeoPoliticallyLocated =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Is Resource Center</td>
+                                            <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Is SEN School</td>
+                                            <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
+                                        </tr>
+                                        
+                                         <tr>
+                                            <td>Category</td>
+                                            <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'privte_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
                                         </tr>
                                     </tbody>
                                     </table>
@@ -126,32 +122,22 @@
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Task</th>
-                                        <th>Progress</th>
-                                        <th style="width: 40px">Label</th>
+                                            <th>Total Male Teacher</th>
+                                            <th>12</th>
+                                        </tr>
+                                         <tr>
+                                            <th>Total FeMale Teacher</th>
+                                            <th>10</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                        <td>1.</td>
-                                        <td>Update software</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-danger">55%</span></td>
+                                            <td>Total Teaching Staff</td>
+                                            <td>8</td>
                                         </tr>
                                         <tr>
-                                        <td>2.</td>
-                                        <td>Clean database</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar bg-warning" style="width: 70%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-warning">70%</span></td>
+                                            <td>Total Non Teaching Staff</td>
+                                            <td>12</td>
                                         </tr>
                                     </tbody>
                                     </table>
@@ -162,34 +148,15 @@
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Task</th>
-                                        <th>Progress</th>
-                                        <th style="width: 40px">Label</th>
+                                            <th>Total Male Student</th>
+                                            <th>360</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Female Student</th>
+                                            <th>155</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                        <td>1.</td>
-                                        <td>Update software</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-danger">55%</span></td>
-                                        </tr>
-                                        <tr>
-                                        <td>2.</td>
-                                        <td>Clean database</td>
-                                        <td>
-                                            <div class="progress progress-xs">
-                                            <div class="progress-bar bg-warning" style="width: 70%"></div>
-                                            </div>
-                                        </td>
-                                        <td><span class="badge bg-warning">70%</span></td>
-                                        </tr>
-                                    </tbody>
+                                    
                                     </table>
                                 </div>
                             </div>
@@ -198,13 +165,12 @@
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                        <th style="width: 10px">#</th>
-                                        <th>Task</th>
-                                        <th>Progress</th>
-                                        <th style="width: 40px">Label</th>
+                                            <th style="width: 10px">#</th>
+                                            <th>Type</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <!-- <tbody>
                                         <tr>
                                         <td>1.</td>
                                         <td>Update software</td>
@@ -245,14 +211,14 @@
                                         </td>
                                         <td><span class="badge bg-success">90%</span></td>
                                         </tr>
-                                    </tbody>
+                                    </tbody> -->
                                     </table>
                                 </div>
                             </div>
                             </div>
                         </div>
                         <!-- /.card -->
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -265,6 +231,8 @@
             return{
                 orgDetails:'',
                 isprofile:false,
+                existing_details:'',
+                levelArray:{},
                 form: new form({
                     org_id: '',
                     attachments:'',
@@ -275,16 +243,12 @@
             }
         },
         methods:{
-            onChangeFileUpload(e){
-                this.form.attachments = e.target.files[0];
-            },
             getorgProfile(rogId){
                 axios.get('organization/getOrgProfile/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;
                     this.form.mission=data.mission;
-                    this.form.org_id=data.org_id;
                     this.form.profile_path=data.logo_path;
                     this.orgDetails=data.orgName+' '+data.level;
                     if(data.logo_path!=""){
@@ -295,18 +259,40 @@
                     console.log(errors)
                 });
             },
+            getLevel(uri = '/organization/getLevelInDropdown'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data;
+                    for(let i=0;i<data.length;i++){
+                        this.levelArray[data[i].id] = data[i].name; 
+                    }
+                });
+            },
+            loadPriviousOrgDetails(org_id){
+                axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
+                .then(response => {
+                    this.existing_details=response.data.data;
+                    // this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
+                    // this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
+                })
+                .catch((error) => {  
+                    console.log("Error: "+error);
+                });
+            },
            
         },
         mounted(){
+            this.getLevel();
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
                 this.getorgProfile(this.$route.query.org_id);
+                this.loadPriviousOrgDetails(this.$route.query.org_id);
             }
             else{
-                 axios.get('common/getSessionDetail')
+                axios.get('common/getSessionDetail')
                 .then(response =>{
                     let data = response.data.data;
-                    this.form.org_id=data['Agency_Code'];
                     this.getorgProfile(data['Agency_Code']);
+                    this.loadPriviousOrgDetails(data['Agency_Code']);
                 }) ;
             }
         }

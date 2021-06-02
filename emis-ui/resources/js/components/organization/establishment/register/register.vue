@@ -37,7 +37,7 @@
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                                 <br/>
-                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('0')"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('public')"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div> 
                         </div>
                     </div>
@@ -45,14 +45,14 @@
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
                                 <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
-                                <select name="organizationid" id="organizationid" v-model="applicaitondetailsform.organizationid" :class="{ 'is-invalid': applicaitondetailsform.errors.has('organizationid') }" class="form-control select2">
+                                <select name="organizationid" id="pri_organizationid" v-model="applicaitondetailsform.organizationid" :class="{ 'is-invalid': applicaitondetailsform.errors.has('organizationid') }" class="form-control select2">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
                                 </select>
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                                 <br/>
-                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('0')"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('private')"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div> 
                         </div>
                     </span>           
@@ -276,8 +276,11 @@ export default {
             if(type==1){
                 key=this.applicaitondetailsform.zestcode;
             }
-            if(type==0){
-                key=this.applicaitondetailsform.organizationid;
+            if(type=="private"){
+                key=$('#pri_organizationid').val();
+            }
+            if(type=="public"){
+                key=$('#organizationid').val();
             }
             axios.get('organization/getApprovedOrgDetails/'+type+'/'+key)
             .then((response) => {  
