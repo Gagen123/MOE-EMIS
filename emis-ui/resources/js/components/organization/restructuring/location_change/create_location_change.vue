@@ -64,7 +64,7 @@ export default {
             locationList:[],
             streamList:[],
             form: new form({
-                organizationId:'',autonomuos:'',initiatedBy:' ', application_type:'location_type_change', 
+                organizationId:'',locationType:'',initiatedBy:' ', application_type:'location_type_change', 
                 application_for:'Change in Location Type', action_type:'add', status:'pending',organization_type:'',
             }),
         } 
@@ -113,7 +113,7 @@ export default {
                                 }
                                 if(response!="" && response!="No Screen"){
                                     let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
+                                    this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
@@ -152,6 +152,10 @@ export default {
                 this.form.organizationId=$('#organizationId').val();  
                 this.getorgdetials($('#organizationId').val()); 
             }
+            if(id=="locationType"){
+                this.form.locationType=$('#locationType').val();  
+            }
+            
             
         },
         getorgdetials(org_id){

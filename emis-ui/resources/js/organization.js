@@ -525,7 +525,7 @@ const routes = [
             { path: '/proprietor_change_acknowledgement', name:'proprietor_change_acknowledgement', component: require('./components/organization/restructuring/proprietor_change/acknowledgement.vue').default },
           ]    
       },
-      { path: '/location_change_index',  
+      { path: '/location_change_index',   
         component: require('./components/organization/restructuring/location_change/location_change_index.vue').default ,
           children: [
             { path: '/',name:'location_change_index', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
@@ -623,7 +623,7 @@ const routes = [
         { path: '/school_feeding',name:'school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
       ] 
     },
-    { path: '/organization_profile',name:'organization_profile', component: require('./components/organization/organization_profile.vue').default },
+    { path: '/mission_vission',name:'mission_vission', component: require('./components/organization/organization_profile_update.vue').default },
     { path: '/organization_list',name:'organization_list', component: require('./components/organization/organization_list.vue').default },
     { path: '/view_organization_profile',name:'view_organization_profile', component: require('./components/organization/view_organization_profile.vue').default },
 

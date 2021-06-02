@@ -63,9 +63,14 @@ class RestructuringController extends Controller
                 $establishment_data = $this->setAutonomous($request);
                 break;
             }
+            case "location_type_change" : {
+                $validation = $this->validateGeneralChange($request);
+                $establishment_data = $this->setLocationChange($request);
+                break;
+            }
             case "expension_change" : {
                 $validation = $this->validateGeneralChange($request);
-                $establishment_data = $this->setAutonomous($request);
+                $establishment_data = $this->setExtension($request);
                 break;
             }
             case "all_details" : {
@@ -102,6 +107,7 @@ class RestructuringController extends Controller
         }
 
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
+        // dd( $response_data);
         $service_name=json_decode($response_data)->data->establishment_type;
 
         $workflow_data=[
@@ -182,7 +188,7 @@ class RestructuringController extends Controller
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
-            if(strpos(strtolower($work->screenName),'change')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            if($work->Sequence!=1 && strpos(strtolower($work->screenName),'change')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -237,7 +243,7 @@ class RestructuringController extends Controller
             'action_by'         =>$this->userId(),
         ];
         // dd($workflow_data);
-        // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -954,12 +960,44 @@ class RestructuringController extends Controller
     }
 
     private function setAutonomous($request){
-
         $change =[
             'organizationId'            =>  $request['organizationId'],
             'autonomuos'                =>  $request['autonomuos'],
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+    
+    private function setLocationChange($request){
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'autonomuos'                =>  $request['autonomuos'],
+            'locationType'              =>  $request['locationType'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+    
+    private function setExtension($request){
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'autonomuos'                =>  $request['autonomuos'],
+            'currentCapacity'           =>  $request['currentCapacity'],
+            'proposedCapacity'          =>  $request['proposedCapacity'],
+            'application_for'           =>  $request['application_for'],
+            'application_type'          =>  $request['application_type'],
             'action_type'               =>  $request['action_type'],
             'status'                    =>  $request['status'],  
             'id'                        =>  $request['id'],

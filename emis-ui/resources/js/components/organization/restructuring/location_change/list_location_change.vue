@@ -52,7 +52,7 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_autonomous',params: {data:data}});
+            this.$router.push({name:'edit_location_change',params: {data:data}});
         },
     },
     mounted(){

@@ -253,7 +253,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item has-treeview" >
-                        <router-link to="/organization_profile" class="nav-link pt-1 pb-1">
+                        <router-link to="/view_organization_profile" class="nav-link pt-1 pb-1">
                         <i class="fa fa-angle-double-right nav-icon"></i>
                             View Org Profile
                         </router-link>

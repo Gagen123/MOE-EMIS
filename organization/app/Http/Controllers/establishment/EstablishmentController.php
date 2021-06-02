@@ -29,6 +29,7 @@ use App\Models\OrganizationDetails;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
+use App\Models\OrgProfile;
 use App\Models\establishment\HeadQuaterDetails;
 use App\Models\establishment\ApplicationEstPublic;
 use App\Models\establishment\ApplicationEstPrivate;
@@ -861,7 +862,8 @@ class EstablishmentController extends Controller
     }
 
     public function udpateOrgProfile(Request $request){
-        $org_det=OrgProfile::where('org_id',$request->ori_id)->first();
+        $org_det=OrgProfile::where('org_id',$request->org_id)->first();
+        // dd($request->ori_id);
         $org_data = [
             'org_id'        =>  $request->org_id,
             'mission'       =>  $request->mission,

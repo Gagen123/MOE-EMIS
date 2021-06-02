@@ -15,12 +15,6 @@
                             </div>
                             <h3 class="profile-username text-center">{{orgDetails}}</h3>
                         </div>
-                        <div class="form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <span>Upload/Change logo</span>
-                                <input type="file" class="form-control" v-on:change="onChangeFileUpload">
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="col-xl-9 col-sm-9 col-md-9 col-lg-9">
@@ -46,12 +40,12 @@
                             <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                 <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
                                 <p class="text-muted">
-                                    To Serve the Nation
+                                    {{form.mission}}
                                 </p>
 
                                 <strong><i class="fas fa-file-alt mr-1"></i> Vision</strong>
                                 <p class="text-muted">
-                                    Education for All
+                                    {{form.vission}}
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
@@ -301,43 +295,20 @@
                     console.log(errors)
                 });
             },
-            updateorg(){
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                } 
-                let formData = new FormData();
-                formData.append('org_id', this.form.org_id);
-                formData.append('vission', this.form.vission);
-                formData.append('profile_path', this.form.profile_path);
-                formData.append('mission', this.form.mission);
-                formData.append('attachments', this.form.attachments);
-                axios.post('organization/udpateOrgProfile',formData, config)
-                .then((response) => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Profile Details has been saved successfully'
-                    })
-                })
-                .catch((error) => {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Unexpected error occured:'+error
-                    });
-                })
-            }
+           
         },
         mounted(){
-            axios.get('common/getSessionDetail')
-            .then(response =>{
-                let data = response.data.data;
-                this.form.org_id=data['Agency_Code'];
-                this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
-                console.log(errors)
-            });
+            if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
+                this.getorgProfile(this.$route.query.org_id);
+            }
+            else{
+                 axios.get('common/getSessionDetail')
+                .then(response =>{
+                    let data = response.data.data;
+                    this.form.org_id=data['Agency_Code'];
+                    this.getorgProfile(data['Agency_Code']);
+                }) ;
+            }
         }
     }
 </script>
