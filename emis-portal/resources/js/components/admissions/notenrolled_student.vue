@@ -138,19 +138,16 @@
                                                     <has-error :form="school_form" field="s_school"></has-error>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                     
-                                            <label>Class:  <span class="text-danger">*</span></label>
+                                                    <label>Class:  <span class="text-danger">*</span></label>
                                                     <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
                                                         <option value=""> --Select--</option>
-                                                        <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
                                                     </select>
                                                     <has-error :form="school_form" field="s_class"></has-error>
                                                 </div>
                                             </div>
                                 </div>
                             </div>
-                           
-                           
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -165,18 +162,18 @@
                         <div class="row form-group">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Parent's Marital Status:</label>
-                                <select v-model="guardian_form.merital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('merital_status') }" class="form-control select2" name="merital_status" id="merital_status">
-                                    <option value=""> --Select--</option>
-                                    <option value="Divorse">Divorse</option>
-                                    <option value="Single">Single</option>
-                                </select>
+                                    <select v-model="guardian_form.merital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('merital_status') }" class="form-control select2" name="merital_status" id="merital_status">
+                                        <option value=""> --Select--</option>
+                                        <option value="Divorse">Divorse</option>
+                                        <option value="Single">Single</option>
+                                    </select>
                                 <has-error :form="guardian_form" field="merital_status"></has-error>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label> Student Primary Contact:</label><br>
-                                <input type="radio" value="Father" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact" @click="showidentity('primary-contact-father')" checked> Father
-                                <input type="radio" value="Mother" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact1" @click="showidentity('primary-contact-mother')" > Mother
-                                <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian 
+                                    <input type="radio" value="Father" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact" @click="showidentity('primary-contact-father')" checked> Father
+                                    <input type="radio" value="Mother" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact1" @click="showidentity('primary-contact-mother')" > Mother
+                                    <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian 
                                 <has-error :form="guardian_form" field="primary_contact"></has-error>
                             </div> 
                         </div>
@@ -244,26 +241,26 @@
                                         <div class="row form-group">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.father_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_dzongkhag') }" class="form-control select2" name="father_present_dzongkhag" id="father_present_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.father_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_dzongkhag') }" class="form-control select2" name="father_present_dzongkhag" id="father_present_dzongkhag">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="father_present_dzongkhag"></has-error>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label> Gewog:</label>
-                                                <select v-model="guardian_form.father_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_gewog') }" class="form-control select2" name="father_present_gewog" id="father_present_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in father_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.father_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_gewog') }" class="form-control select2" name="father_present_gewog" id="father_present_gewog">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in father_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="father_present_gewog"></has-error>
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <label>Village: </label>
-                                                <select v-model="guardian_form.father_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_village_id') }" class="form-control select2" name="father_present_village_id" id="father_present_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in father_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.father_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_village_id') }" class="form-control select2" name="father_present_village_id" id="father_present_village_id">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in father_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="father_present_village_id"></has-error>
                                             </div>
                                         </div>
@@ -284,13 +281,13 @@
                                         <div class="row form-group">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <label>Occupation: </label>
-                                                <select v-model="guardian_form.father_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_occupation') }" class="form-control select2" name="father_occupation" id="father_occupation">
-                                                    <option value=""> --Select--</option>
-                                                    <option value="Civil Servant"> Civil Servant</option>
-                                                    <option value="Private Employee"> Private Employee</option>
-                                                    <option value="Business"> Business</option>
-                                                    <option value="Farmer"> Farmer</option>
-                                                </select>
+                                                    <select v-model="guardian_form.father_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_occupation') }" class="form-control select2" name="father_occupation" id="father_occupation">
+                                                        <option value=""> --Select--</option>
+                                                        <option value="Civil Servant"> Civil Servant</option>
+                                                        <option value="Private Employee"> Private Employee</option>
+                                                        <option value="Business"> Business</option>
+                                                        <option value="Farmer"> Farmer</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="father_occupation"></has-error>
                                             </div>
                                             
@@ -337,27 +334,27 @@
                                       
                                         <div class="row form-group" id="mothers_dzo_gewog_village">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.mother_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_dzongkhag') }" class="form-control select2" name="mother_dzongkhag" id="mother_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <label>Dzongkhag/Thromde: </label>
+                                                    <select v-model="guardian_form.mother_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_dzongkhag') }" class="form-control select2" name="mother_dzongkhag" id="mother_dzongkhag">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_dzongkhag"></has-error>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label> Gewog:</label>
-                                                <select v-model="guardian_form.mother_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_gewog') }" class="form-control select2" name="mother_gewog" id="mother_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.mother_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_gewog') }" class="form-control select2" name="mother_gewog" id="mother_gewog">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in p_mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_gewog"></has-error>
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <label>Village: </label>
-                                                <select v-model="guardian_form.mother_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_village_id') }" class="form-control select2" name="mother_village_id" id="mother_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.mother_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_village_id') }" class="form-control select2" name="mother_village_id" id="mother_village_id">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in p_mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_village_id"></has-error>
                                             </div>
                                         </div>
@@ -373,26 +370,26 @@
                                         <div class="row form-group">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.mother_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_dzongkhag') }" class="form-control select2" name="mother_present_dzongkhag" id="mother_present_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.mother_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_dzongkhag') }" class="form-control select2" name="mother_present_dzongkhag" id="mother_present_dzongkhag">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_present_dzongkhag"></has-error>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label> Gewog:</label>
-                                                <select v-model="guardian_form.mother_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_gewog') }" class="form-control select2" name="mother_present_gewog" id="mother_present_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.mother_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_gewog') }" class="form-control select2" name="mother_present_gewog" id="mother_present_gewog">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_present_gewog"></has-error>
                                             </div>
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <label>Village: </label>
-                                                <select v-model="guardian_form.mother_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_village_id') }" class="form-control select2" name="mother_present_village_id" id="mother_present_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.mother_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_village_id') }" class="form-control select2" name="mother_present_village_id" id="mother_present_village_id">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_present_village_id"></has-error>
                                             </div>
                                         </div>
@@ -413,13 +410,13 @@
                                         <div class="row form-group">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <label>Occupation: </label>
-                                                <select v-model="guardian_form.mother_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_occupation') }" class="form-control select2" name="mother_occupation" id="mother_occupation">
-                                                    <option value=""> --Select--</option>
-                                                    <option value="Civil Servant"> Civil Servant</option>
-                                                    <option value="Private Employee"> Private Employee</option>
-                                                    <option value="Business"> Business</option>
-                                                    <option value="Farmer"> Farmer</option>
-                                                </select>
+                                                    <select v-model="guardian_form.mother_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_occupation') }" class="form-control select2" name="mother_occupation" id="mother_occupation">
+                                                        <option value=""> --Select--</option>
+                                                        <option value="Civil Servant"> Civil Servant</option>
+                                                        <option value="Private Employee"> Private Employee</option>
+                                                        <option value="Business"> Business</option>
+                                                        <option value="Farmer"> Farmer</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="mother_occupation"></has-error>
                                             </div>
                                         </div>
@@ -475,18 +472,18 @@
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <label> Gewog:</label>
-                                                <select v-model="guardian_form.gardain_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_gewog') }" class="form-control select2" name="gardain_gewog" id="gardain_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.gardain_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_gewog') }" class="form-control select2" name="gardain_gewog" id="gardain_gewog">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in p_gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="gardain_gewog"></has-error>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <label>Village: </label>
-                                                <select v-model="guardian_form.gardain_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_village_id') }" class="form-control select2" name="gardain_village_id" id="gardain_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.gardain_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_village_id') }" class="form-control select2" name="gardain_village_id" id="gardain_village_id">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in p_gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="gardain_village_id"></has-error>
                                             </div>
                                         </div>
@@ -503,26 +500,26 @@
                                         <div class="row form-group">
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.gardain_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_dzongkhag') }" class="form-control select2" name="gardain_present_dzongkhag" id="gardain_present_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.gardain_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_dzongkhag') }" class="form-control select2" name="gardain_present_dzongkhag" id="gardain_present_dzongkhag">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="gardain_present_dzongkhag"></has-error>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <label> Gewog:</label>
-                                                <select v-model="guardian_form.gardain_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_gewog') }" class="form-control select2" name="gardain_present_gewog" id="gardain_present_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.gardain_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_gewog') }" class="form-control select2" name="gardain_present_gewog" id="gardain_present_gewog">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="gardain_present_gewog"></has-error>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <label>Village: </label>
-                                                <select v-model="guardian_form.gardain_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_village_id') }" class="form-control select2" name="gardain_present_village_id" id="gardain_present_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                    <select v-model="guardian_form.gardain_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_village_id') }" class="form-control select2" name="gardain_present_village_id" id="gardain_present_village_id">
+                                                        <option value=""> --Select--</option>
+                                                        <option v-for="(item, index) in gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="gardain_present_village_id"></has-error>
                                             </div>
                                         </div>
@@ -543,13 +540,13 @@
                                         <div class="row form-group">
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                 <label>Occupation: </label>
-                                                <select v-model="guardian_form.gardain_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_occupation') }" class="form-control select2" name="occupation" id="gardain_occupation">
-                                                    <option value=""> --Select--</option>
-                                                    <option value="Civil Servant"> Civil Servant</option>
-                                                    <option value="Private Employee"> Private Employee</option>
-                                                    <option value="Business"> Business</option>
-                                                    <option value="Farmer"> Farmer</option>
-                                                </select>
+                                                    <select v-model="guardian_form.gardain_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_occupation') }" class="form-control select2" name="occupation" id="gardain_occupation">
+                                                        <option value=""> --Select--</option>
+                                                        <option value="Civil Servant"> Civil Servant</option>
+                                                        <option value="Private Employee"> Private Employee</option>
+                                                        <option value="Business"> Business</option>
+                                                        <option value="Farmer"> Farmer</option>
+                                                    </select>
                                                 <has-error :form="guardian_form" field="gardain_occupation"></has-error>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -571,7 +568,6 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-flat btn-success"  @click="shownexttab('basic-tabs')"><i class="fa fa-arrow-left"></i> Previous </button>
-                                <!-- <button class="btn btn-flat btn-primary" @click="submitfinalform('')"> Submit <i class="fa fa-arrow-save"></i></button> -->
                                 <button class="btn btn-flat btn-primary" @click="shownexttab('details-tab')"> submit <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
@@ -616,6 +612,7 @@ export default {
             studentscholarshipList:[],
             studentbenefitList:[],
             sectionList:[],
+
             student_form: new form({
                 student_id:'',
                 snationality:'',
@@ -633,6 +630,11 @@ export default {
             }),
 
             school_form: new form({
+                s_dzongkhag:'',
+                s_school:'',
+                s_class:'',
+            }),
+            personal_detail: new form({
                 s_dzongkhag:'',
                 s_school:'',
                 s_class:'',
@@ -840,16 +842,15 @@ export default {
 
           },
          getschoolList(id){
-             alert(id)
              let dzoId=$('#s_dzongkhag').val();
                  if(id!=""){
                  dzoId=id;
               
             } 
-              axios.get('/masters/getOrgList/' +dzoId)
+            axios.get('/masters/getOrgList/' +dzoId)
               .then(Response =>{
                 let data = Response.data.data;
-                this.schoolList = data;
+                this.s_schoolList = data;
               })
 
           },
@@ -859,10 +860,11 @@ export default {
                 if(id!=""){
                  orgId=id;
             } 
-              axios.get('/masters/getClassByOrganizationId/' +orgId)
+            this.classList = [];
+              axios.get('/masters/loadClassStreamSection/school/' +orgId)
               .then(Response =>{
-                let data = Response.data.data;
-                this.classList = data;
+                let data = Response.data;
+                this.s_classList = data;
               })
 
           },
@@ -884,29 +886,6 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-
-        async changefunction(id){
-            alert(id);
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            } 
-             
-            if(id=="s_dzongkhag"){
-                this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
-                this.getschoolList($('#s_dzongkhag').val());
-                
-            }
-            if(id=="s_school"){ 
-                this.school_form.s_school=$('#s_school').val();
-                this.getclassList($('#s_school').val());
-            }
-            if(id=="s_class"){
-                this.school_form.s_class=$('#s_class').val();
-                
-            }
-           },
 
         getgewoglist(id,type){
             let dzoId=$('#dzongkhag').val();
@@ -1207,11 +1186,24 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-        async changefunction(id){
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="s_dzongkhag"){
+                this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
+                this.getschoolList($('#s_dzongkhag').val());
+                
+            }
+            if(id=="s_school"){ 
+                this.school_form.s_school=$('#s_school').val();
+                this.getclassList($('#s_school').val());
+            }
+            if(id=="s_class"){
+                this.school_form.s_class=$('#s_class').val();
+                
             }
 
             if(id=="sex_id"){
@@ -1355,12 +1347,7 @@ export default {
     },
 
     mounted() {
-        this.loadAllActiveMasters('all_active_gender');
-        this.loadAllActiveMasters('all_active_dzongkhag');
-        this.getdzongkhagList();
-        // this.getschoolList();
-        // this.getclassList();
-        // $('.select2').select2();
+        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
@@ -1371,6 +1358,9 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadAllActiveMasters('all_active_gender');
+        this.loadAllActiveMasters('all_active_dzongkhag');
+        this.getdzongkhagList();
     },
 
      created() { 

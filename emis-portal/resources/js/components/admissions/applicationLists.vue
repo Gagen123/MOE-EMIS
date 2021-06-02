@@ -24,13 +24,12 @@
                         <td>{{ item.dateOfapply }}</td>
                         <td><span class="badge badge-success">{{ item.Status}}</span></td>
                         <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Accept')"> <b-button variant="success">Accept</b-button></a>
-                        </div>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Cancel')"> <b-button variant="danger">Cancel</b-button></a>
-                        </div>
-                            
+                            <div class="btn-group btn-group-sm">
+                                <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Accept')"> <b-button variant="success">Accept</b-button></a>
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Cancel')"> <b-button variant="danger">Cancel</b-button></a>
+                            </div>
                         </td>
                         <td>
                              <div class="btn-group btn-group-lg">

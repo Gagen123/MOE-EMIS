@@ -1,7 +1,8 @@
 export default [
 
     
-
+       
+    { path: '/admissionRequest', component: require('./components/admissions/requestadmission.vue').default },
     { path: '/track_application', component: require('./components/admissions/track_application.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },

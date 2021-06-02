@@ -26,7 +26,7 @@ use App\Http\Controllers\NotenrolledController;
     Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdminstratorController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
     Route::get('/getOrgList/{dzoId}', [App\Http\Controllers\AdminstratorController::class, 'getOrgList'])->name('getOrgList');
 
-    Route::get('/loadClassStreamSection/{type}{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
+    Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
     Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
     Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
 });
@@ -40,6 +40,11 @@ Route::prefix('adminstratorController')->group(function () {
 Route::prefix('TrackApplicationController')->group(function () {
     Route::get('/applicationListsbyCid/{cid}', [App\Http\Controllers\TrackApplicationController::class, 'applicationListsbyCid'])->name('applicationListsbyCid');
     Route::post('/acceptApplication', [App\Http\Controllers\TrackApplicationController::class, 'acceptApplication'])->name('acceptApplication');
+});
+
+//Admission request controller
+Route::prefix('RequestadmissionController')->group(function () {
+    Route::post('/savedrequestadmission', [App\Http\Controllers\RequestadmissionController::class, 'savedrequestadmission'])->name('savedrequestadmission');
 });
 
     

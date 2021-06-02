@@ -10,6 +10,7 @@ use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
+use App\Models\requestForAdmission; 
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
@@ -127,9 +128,8 @@ class StudentAdmissionController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    //function for student portal
+    //function for student portal to saved student details
     public function saveStudentDetailsFromPortal(Request $request){
-        // dd($request);
         $rules = [
             'snationality'              => 'required',
             'cid_passport'              => 'required',
@@ -402,66 +402,62 @@ class StudentAdmissionController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    //this funtion used for student portal
+    //this funtion used for student portal for saving details of enrolled students
     public function  savedetailsEnrolledStd(Request $request){
-        // dd($request);
         $rules = [
-            'dateOfapply'               => 'required',
-        ];
+                'dateOfapply'               => 'required',
+            ];
         $customMessages = [
-            'dateOfapply.required'        => 'This field is required',
-        ];
+                'dateOfapply.required'        => 'This field is required',
+            ];
         
         $this->validate($request, $rules, $customMessages);
-        $data =[    
-                'snationality'                   => $request->snationality,
-                'OrgOrganizationId'              =>  $request->OrgOrganizationId,
-                'CidNo'                          =>  $request->cid_passport,
-                'CmnSexId'                       =>  $request->gender,
-                'first_name'                     =>  $request->Name,
-                'student_type'                   =>  $request->student_type,
-                'dzongkhag'                      =>  $request->dzongkhag,
-                'class_id'                       =>  $request->class,
-                'stream_id'                      =>  $request->stream,
-                'dateOfapply'                    =>  $request->dateOfapply,
-                'Remarks'                        =>  $request->remarks,
-                'Status'                         =>  $request->status,
-        ];  
+            $data =[    
+                    'snationality'                   => $request->snationality,
+                    'OrgOrganizationId'              =>  $request->OrgOrganizationId,
+                    'CidNo'                          =>  $request->cid_passport,
+                    'CmnSexId'                       =>  $request->gender,
+                    'first_name'                     =>  $request->Name,
+                    'student_type'                   =>  $request->student_type,
+                    'dzongkhag'                      =>  $request->dzongkhag,
+                    'school'                         =>  $request->school,
+                    'class_id'                       =>  $request->class,
+                    'stream_id'                      =>  $request->stream,
+                    'dateOfapply'                    =>  $request->dateOfapply,
+                    'Remarks'                        =>  $request->remarks,
+                    'Status'                         =>  $request->status,
+            ];  
         $std_admin_data = std_admission::create($data);
-        $std_data=[
-            'std_admission_id'               => $std_admin_data->id,
-            'OrgOrganizationId'              =>  $request->OrgOrganizationId,
-            'dateOfapply'                    =>  $request->date_of_application,
-            'Status'                         =>  $request->status,
-            'Remarks'                        =>  $request->remarks,
-            'std_decission'                  =>  $request->std_decission,
-        ];
+            $std_data=[
+                    'std_admission_id'               => $std_admin_data->id,
+                    'OrgOrganizationId'              =>  $request->OrgOrganizationId,
+                    'dateOfapply'                    =>  $request->date_of_application,
+                    'Status'                         =>  $request->status,
+                    'Remarks'                        =>  $request->remarks,
+                    'std_decission'                  =>  $request->std_decission,
+            ];
         $response_data2 = std_admission_org::create($std_data);
         return $this->successResponse($response_data2, Response::HTTP_CREATED);
     }
     
+    //this function is used for displaying the application details of admissions
+
     public function acceptApplication(Request $request){
-        $id=$request->id;
-        $update_data=[
-            'Status' =>$request->Status,
-        ];
-        $response_data=std_admission::where('id',$id)->update($update_data);
-        return $response_data;
-    }
+            $id=$request->id;
+            $update_data=[
+                'Status' =>$request->Status,
+            ];
+            $response_data=std_admission::where('id',$id)->update($update_data);
+            return $response_data;
+        }
 
     public function  savedetailsNotEnrolledStd(Request $request){
-        $rules = [
-            // 'dzongkhag'                 => 'required',
-            // 'school'                    => 'required',
-            // 'class'                     => 'required',
-            'dateOfapply'               => 'required',
-        ];
-        $customMessages = [
-            // 'dzongkhag.required'          => 'This field is required',
-            // 'school.required'             => 'This field is required',
-            // 'class.required'              => 'This field is required',
-            'dateOfapply.required'        => 'This field is required',
-        ];
+            $rules = [
+                'dateOfapply'               => 'required',
+            ];
+            $customMessages = [
+                'dateOfapply.required'        => 'This field is required',
+            ];
         
         $this->validate($request, $rules, $customMessages);
             $data =[
@@ -478,7 +474,7 @@ class StudentAdmissionController extends Controller
                 'remarks'                    =>  $request->remarks,
             ];
             $response_data = std_admission::create($data);
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
+         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
     
@@ -666,11 +662,9 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data);
     }
-
     /**
      * load the list of students who have applied for admission
      */
-    
     public function loadStudentAdmissionList($org_id=""){
         $records = DB::table('std_admissions')
                     ->where('OrgOrganizationId', $org_id)
@@ -678,7 +672,6 @@ class StudentAdmissionController extends Controller
     }
     
     public function getStudentDetails(){
-    
         $response_data=Std_Students::all();
         return $this->successResponse($response_data);
     }
@@ -689,15 +682,13 @@ class StudentAdmissionController extends Controller
  
     //getting student details std_student table using cid number
     public function getstudentdetailsbyCid($cid){
-        
-        if($cid!="" || $cid!="null" || $cid!="undefined"){ 
-            $response_data=Std_Students::where('CidNo',$cid)->get();
-            return $this->successResponse($response_data);
+        $response_data = std_admission:: where ('CidNo', $cid)->first();
+        // dd($response_data);
+        if($response_data==""){
+            $response_data1=Std_Students::where('CidNo',$cid)->first();
+            return $this->successResponse($response_data1);
         }
-        // else if($cid!="" || $cid!="null" || $cid!="undefined"){
-        //     $response_data1=Std_Students::where('CidNo',$cid)->get();
-        //     return $this->successResponse($response_data1);
-        // }
+        return $this->successResponse($response_data);
 
     }
 
@@ -718,9 +709,39 @@ class StudentAdmissionController extends Controller
     }
 
     public function applicationListsbyCid($cid){
-        $response_data=std_admission::where('CidNo',$cid)->get();
+        $response_data = DB::table('std_admissions')
+            ->where('CidNo', $cid)
+            ->where(function($query) {
+            $query->where('Status', 'pending');
+            })->get();
         return $this->successResponse($response_data);
 
+
+    }
+
+    public function savedrequestadmission(Request $request){
+        // dd($request);
+        $rules = [
+            'dateOfapply'               => 'required',
+            
+        ];
+        $customMessages = [
+            'dateOfapply.required'      => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'dzongkhag'                  =>  $request->dzongkhag,
+            'school'                     =>  $request->school,
+            'class'                      =>  $request->class,
+            'stream'                     =>  $request->stream,
+            'dateOfapply'                =>  $request->dateOfapply,
+            'reasons'                    =>  $request->reasons,
+            'snationality'               =>  $request->snationality,
+        ];
+        // dd($data);
+         $response_data = requestForAdmission::create($data);
+         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
     

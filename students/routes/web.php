@@ -66,6 +66,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
             //getting student details by cid number 
             $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
+
+            $router->post('/savedrequestadmission',['uses' => 'Students\StudentAdmissionController@savedrequestadmission']);
             
             $router->get('/applicationListsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@applicationListsbyCid']);
             $router->post('/acceptApplication',['uses' => 'Students\StudentAdmissionController@acceptApplication']);

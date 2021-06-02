@@ -17,6 +17,7 @@
                                     <th>Category</th>
                                     <th>Code</th>
                                     <th>Dzongkhag</th>
+                                    <th>Status</th>
                                     <th class="pl-5 ml-5 pr-5 ml-5 text-center">Action</th>
                                 </tr>
                             </thead>
@@ -28,6 +29,7 @@
                                     <td>{{ item.category }}</td>
                                     <td>{{ item.code }}</td>
                                     <td>{{ dzoArray[item.dzongkhagId] }}</td>
+                                    <td>{{ item.status }}</td>
                                     <td>
                                         <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View</a>
                                     </td>

@@ -180,7 +180,6 @@ class AcademicController extends Controller
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     public function loadStudentAssessmentList($staffId, $orgId){
-        dd($staffId, $orgId);
         $currentTerms = "SELECT SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_class_id)),6) AS org_class_id,
                 SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_stream_id)),6) AS org_stream_id,
                 SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.id)),6) AS aca_assmt_term_id,

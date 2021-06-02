@@ -29,6 +29,7 @@ class OrganizationMasterController extends Controller{
         $request_data =[
             'id'                        =>  $request->id,
             'name'                      =>  $request->name,
+            'addfield_1'                =>  $request->addfield_1,
             'description'               =>  $request->description,
             'status'                    =>  $request->status,
             'action_type'               =>  $request->action_type,
