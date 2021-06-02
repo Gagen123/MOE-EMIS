@@ -641,6 +641,11 @@ class StudentAdmissionController extends Controller
         else if($param=="transfered"){
             $response_data=Std_Students::where('IsTransferred',1)->get();
         }
+        //to get new admission students
+        else if($param == "admission"){
+            $response_data = DB::table('std_admissions')->get();
+            return $response_data;
+        }
         else{
             parse_str($param,$output); //revert query string to array and stored to $output
             $response_data = DB::table('std_student_school_detail as c')

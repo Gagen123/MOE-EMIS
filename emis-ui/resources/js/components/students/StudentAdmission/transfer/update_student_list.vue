@@ -7,16 +7,31 @@
                      <th >No.</th>
                      <th >Student Code</th>
                      <th >Student Name</th>
+                     <th >CID</th>
                      <th >Gender</th>
+                     <th >Type of Admission</th>
                      <th >Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(std, index) in stdList" :key="index">
                     <td>{{ index + 1 }} </td>
-                    <td>{{ std.CidNo }}</td>
+                    <td>{{ std.student_code }}</td>
                     <td>{{ std.Name }}</td>
+                    <td>{{ std.CidNo }}</td>
                     <td>{{ sex_idList[std.CmnSexId] }}</td>
+                    <td>Transfer Student</td>
+                    <td>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
+                    </td>
+                </tr>
+                <tr v-for="(std, index) in newAdmissionList" :key="index">
+                    <td>{{ index + 1 }} </td>
+                    <td>{{ }}</td>
+                    <td>{{ std.first_name }} {{ std.last_name }} </td>
+                    <td>{{ std.CidNo }}</td>
+                    <td>{{ sex_idList[std.CmnSexId] }}</td>
+                    <td>New Admission</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
                     </td>
@@ -31,7 +46,9 @@ export default {
     },
     data() {
         return {
+            dt:'',
             stdList:[],
+            newAdmissionList:[],
             sex_idList:{},
         }
     },
@@ -76,17 +93,39 @@ export default {
                 this.stdList = data.data;
             });
         },
+        loadStudentAdmissionList(param){
+            this.newAdmissionList =[];
+            let uri="";
+            uri='students/admission/loadStudentList/admission';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.newAdmissionList = data;
+            });
+        },
     
     },
     mounted() {
+        this.dt = $("#list-student-left").DataTable();
         this.loadStudentList('session');
+        this.loadStudentAdmissionList('session');
         this.loadAllActiveMasters('all_active_gender');
-        $("#list-student-left").DataTable({
-            "responsive": true,
-            "autoWidth": false,
-        }); 
-        $('.dataTables_filter').addClass('fa-pull-right');
-        $('#student-table_paginate').addClass('fa-pull-right');
+
+        // $("#list-student-left").DataTable({
+        //     "responsive": true,
+        //     "autoWidth": false,
+        // }); 
+        // $('.dataTables_filter').addClass('fa-pull-right');
+        // $('#student-table_paginate').addClass('fa-pull-right');
+    },
+    watch: {
+        stdList(val){
+            this.dt.destroy();
+            this.$nextTick(()=>{
+                this.dt = $("#list-student-left").DataTable();
+            });
+        }
+
     },
 }
 </script>

@@ -31,12 +31,12 @@
                     </router-link>
                 </li> -->
 
-                <!-- <li class="nav-item active pr-1">
+                <li class="nav-item active pr-1">
                     <router-link to="/student_admission_request" id="admission_request" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Admission Request
                     </router-link>
-                </li> -->
+                </li>
                 <li class="nav-item pr-1">
                     <router-link id="reporting" to="/student_reporting" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fa fa-user-clock"></span>
@@ -58,7 +58,7 @@
                 <li class="nav-item pr-1" @click="activatelink('student_transfers')"> 
                     <router-link to="/student_transfers" id="student_transfers" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Admit Transferer
+                        Admissions
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('abroad_student')">
