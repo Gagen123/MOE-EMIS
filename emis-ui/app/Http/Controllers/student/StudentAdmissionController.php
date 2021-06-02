@@ -331,7 +331,7 @@ class StudentAdmissionController extends Controller{
      */
 
     public function loadStudentAdmissionList(){
-        $org_id = $this->getWrkingAgencyId(),
+        $org_id = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$org_id);
         return $student_list;
     }

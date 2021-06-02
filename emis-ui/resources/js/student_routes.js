@@ -329,12 +329,11 @@ const routes = [
                     { path: '/edit_student_admission', name:'edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
                 ]    
             },
-            { path: '/student_admission_request', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,
+            { path: '/student_admission_request', component: require('./components/students/StudentAdmission/Request/student_admission_request.vue').default,
                 children: [
-                    { path: '/', name:'student_admission_request', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
-                    { path: '/student_admission_list', name:'student_admission_list', component: require('./components/students/StudentAdmission/Admission/student_admission_list.vue').default },
-                    { path: '/new_student_admission', name:'new_student_admission', component: require('./components/students/StudentAdmission/Admission/new_student_admission.vue').default },
-                    { path: '/edit_student_admission', name:'edit_student_admission', component: require('./components/students/StudentAdmission/Admission/edit_student_admission.vue').default },
+                    { path: '/', name:'student_admission_request', component: require('./components/students/StudentAdmission/Request/request_admission_list.vue').default },
+                    { path: '/request_admission_list', name:'request_admission_list', component: require('./components/students/StudentAdmission/Request/request_admission_list.vue').default },
+                    { path: '/request_admission_view', name:'request_admission_view', component: require('./components/students/StudentAdmission/Request/request_admission_view.vue').default },
                 ]    
             }, 
             { path: '/student_admission_apply', component: require('./components/students/StudentAdmission/Admission/student_admission.vue').default,

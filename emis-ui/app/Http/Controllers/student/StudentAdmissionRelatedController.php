@@ -153,6 +153,17 @@ class StudentAdmissionRelatedController extends Controller
         $students = $this->apiService->listData('emis/students/loadStudentWhereabouts/'.$param);
         return $students;
     }
+    /**
+     * load the list of admission requests
+     */
+
+    public function loadAdmissionRequest($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadlist = $this->apiService->listData('emis/students/loadAdmissionRequest/'.$orgId);
+        return $loadlist;
+    }
 
     ///Student Residing Aboard
     //load function 
