@@ -95,9 +95,9 @@ class MessManagementController extends Controller
 
     // //local Procurement
 
-    public function loadLocalProcure(){
+    public function loadLocalProcure($org_Id=""){
      //return json_encode('from UI');  
-        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure');
+        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure'.$org_Id);
         return $list;
     }
 
@@ -163,12 +163,9 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadFoodReleaseListing($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
-        }
+    public function loadFoodReleaseListing($org_Id=""){
        // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$org_Id);
         return $list;
        // dd($list);
     }
@@ -198,6 +195,13 @@ class MessManagementController extends Controller
         return $receivedDetails;
     }
 
+    public function viewitemreceived($stockreceivedId=""){
+       // return($stockreceivedId);
+        //dd('m here');
+        $itemrcv = $this->apiService->listData('emis/messManagement/viewitemreceived/'.$stockreceivedId);
+        return $itemrcv;
+    }
+
  
     // // public function getfoodreleasedetailbyquarter($quarter_id="",$foodreleaseId=""){
     // //   //  dd('m here');
@@ -206,9 +210,12 @@ class MessManagementController extends Controller
     // // }
 
     // Stock Issued
-    public function loadStockIssuedList(){
+    public function loadStockIssuedList($org_Id=""){
      //   dd('m here');
-      $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList');
+     if($org_Id=="null" || $org_Id==""){
+         $org_Id=$this->getWrkingAgencyId();
+        }
+      $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList'.$org_Id);
       return $list;
     }
 
@@ -250,12 +257,12 @@ class MessManagementController extends Controller
 
     
 
-    public function getStockIssueItem($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
+    public function getStockIssueItem($org_Id=""){
+        if($org_Id=="null" || $org_Id==""){
+            $org_Id=$this->getWrkingAgencyId();
         }
        // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/getStockIssueItem/'.$orgId);
+        $list = $this->apiService->listData('emis/messManagement/getStockIssueItem/'.$org_Id);
         return $list;
        // dd($list);
     }

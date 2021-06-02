@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 namespace App\Models\mess_manage;
@@ -17,37 +16,10 @@ class StockIssued extends Model
         'dateOfissue',
         'item_id',
         'quantity',
-        'unit',
+        'unit_id',
         'damagequantity',
         'remarks',
         'created_by',
         'updated_by'
     ];
 }
-=======
-<?php
-
-namespace App\Models\mess_manage;
-use App\Traits\Uuid;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-class StockIssued extends Model
-{
-    use HasFactory, Uuid;
-    protected $table="stock_issueds";
-
-    protected $fillable = [
-        'id',   
-        'organizationId',                         
-        'dateOfissue',
-        'item',
-        'quantity',
-        'unit',
-        'damagequantity',
-        'remarks',
-        'created_by',
-        'updated_by'
-    ];
-}
->>>>>>> 19c11771b5c9e7268c1cd32088b5e69342ffa6ab

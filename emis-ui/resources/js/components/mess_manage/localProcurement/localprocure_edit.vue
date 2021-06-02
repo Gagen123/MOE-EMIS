@@ -202,8 +202,16 @@ export default {
         });
       this.loadActiveItemList(); 
       this.loadActiveUnitList();
-      this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
+     // this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
        
+    },
+    created() {
+        this.form.id=this.$route.params.data.id;
+        this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
+        this.form.local_item.item = this.$route.params.data.item;
+        this.form.local_item.quantity = this.$route.params.data.quantity;
+        this.form.local_item.unit = this.$route.params.data.unit;
+        this.form.local_item.remarks = this.$route.params.data.remarks;
     }
 }
 </script>

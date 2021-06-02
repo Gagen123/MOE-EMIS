@@ -27,12 +27,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
 
         $router->group(['prefix' => 'localprocure'], function () use ($router) {
-            $router->get('/loadLocalProcure', 'messManage\LocalProcureController@loadLocalProcure');
+            $router->get('/loadLocalProcure/{org_Id}', 'messManage\LocalProcureController@loadLocalProcure');
             $router->post('/saveLocalProcure', 'messManage\LocalProcureController@saveLocalProcure');
         });
  
         $router->group(['prefix' => 'stockissue'], function () use ($router) {
-            $router->get('/loadStockIssuedList', 'messManage\StockIssuedController@loadStockIssuedList');
+            $router->get('/loadStockIssuedList/{org_Id}', 'messManage\StockIssuedController@loadStockIssuedList');
             $router->post('/saveStockIssued', 'messManage\StockIssuedController@saveStockIssued');
             $router->get('/getStockIssueItem/{org_Id}', 'messManage\StockIssuedController@getStockIssueItem');
         });
@@ -43,12 +43,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveStockReceived', 'messManage\StockReceivedController@saveStockReceived');
             //just added 
             $router->get('/getStockReceivedDetails/{stockreceivedId}', 'messManage\StockReceivedController@getStockReceivedDetails');
+            $router->get('/viewitemreceived/{stockreceivedId}', 'messManagement\FoodReceivedController@viewitemreceived');
          //     $router->get('/loadStockReceivedList', 'messManage\StockReceivedController@loadStockReceivedList');
            // $router->get('/saveStockReceived', 'messManage\StockReceiveController@saveStockReceived')
         });
-        // $router->group(['prefix' => 'foodreleased'], function () use ($router) {
-        //    $router->post('/saveFoodRelease', 'messManagement\FoodReleasedController@saveFoodRelease');
-        // });
+       
         $router->get('/getInventoryList/{org_Id}', 'messManage\StockInventoryController@getInventoryList');
        // dd('from microseervices');
 

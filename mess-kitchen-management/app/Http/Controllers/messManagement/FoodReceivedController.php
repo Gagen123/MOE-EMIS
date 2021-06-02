@@ -47,17 +47,24 @@ class FoodReceivedController extends Controller
          //  dd('m here');
         return $this->successResponse($stckrcv, Response::HTTP_CREATED);
         return($stckrcv);
+        dd($stckrcv);
     }
 
     public function loadFoodReleaseListing($org_Id=""){
       //  return 'from service of mine';
          $stckrecive = DB::table('stock_receiveds')
-        ->select('dateOfreceived as dateOfreceived', 'quarter_id as quarter', 'remarks as remarks')->where('organizationId', $org_Id)->get();
+        ->select('id','organizationId','dateOfreceived as dateOfreceived', 'quarter_id as quarter', 'remarks as remarks')->where('organizationId', $org_Id)->get();
         return $stckrecive;
         // $response_data=StockReceived::where('organizationId',$org_id)->get();
         // return $this->successResponse($response_data);
     }
-   
+    public function viewitemreceived($stockreceivedId=''){
+        $list = DB::table('stock_received_items')
+        ->select( 'item_id as item','receivedquantity as quantity','unit_id as unit', 'remarks as remarks')->where('stockreceivedId',$stockreceivedId)->get();
+        return $list;
+        //dd($list);
+      //  dd('from services');
+    }
    
     public function getfoodreleaseditemList($foodreleaseId){
         $foodreleaseitem = DB::table('item_released_notes')
