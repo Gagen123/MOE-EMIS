@@ -407,45 +407,40 @@ class StudentAdmissionController extends Controller
 
     //this funtion used for student portal for saving details of enrolled students
     public function  savedetailsEnrolledStd(Request $request){
-        // dd($request);
         $rules = [
                 'dateOfapply'               => 'required',
             ];
         $customMessages = [
                 'dateOfapply.required'        => 'This field is required',
             ];
-        
         $this->validate($request, $rules, $customMessages);
-            $data =[    
-                    'snationality'                   => $request->snationality,
-                    'OrgOrganizationId'              =>  $request->OrgOrganizationId,
-                    'CidNo'                          =>  $request->cid_passport,
-                    'CmnSexId'                       =>  $request->gender,
-                    'first_name'                     =>  $request->Name,
-                    'student_type'                   =>  $request->student_type,
-                    'dzongkhag'                      =>  $request->dzongkhag,
-                    'school'                         =>  $request->school,
-                    'class_id'                       =>  $request->class,
-                    'stream_id'                      =>  $request->stream,
-                    'dateOfapply'                    =>  $request->dateOfapply,
-                    'Remarks'                        =>  $request->remarks,
-                    'Status'                         =>  $request->status,
-            ];
-            dd($data);
-        $std_admin_data = std_admission::create($data);
-            $std_data=[
-                    'std_admission_id'               => $std_admin_data->id,
-                    'OrgOrganizationId'              =>  $request->OrgOrganizationId,
-                    'dateOfapply'                    =>  $request->date_of_application,
-                    'Status'                         =>  $request->status,
-                    'Remarks'                        =>  $request->remarks,
-                    'std_decission'                  =>  $request->std_decission,
-            ];
+                $data =[    
+                        'snationality'                   => $request->snationality,
+                        'OrgOrganizationId'              =>  $request->OrgOrganizationId,
+                        'CidNo'                          =>  $request->cid_passport,
+                        'CmnSexId'                       =>  $request->gender,
+                        'first_name'                     =>  $request->Name,
+                        'student_type'                   =>  $request->student_type,
+                        'dzongkhag'                      =>  $request->dzongkhag,
+                        // 'school'                         =>  $request->school,
+                        'class_id'                       =>  $request->class,
+                        'stream_id'                      =>  $request->stream,
+                        'dateOfapply'                    =>  $request->dateOfapply,
+                        'Remarks'                        =>  $request->remarks,
+                        'Status'                         =>  $request->status,
+                ];
+            $std_admin_data = std_admission::create($data);
+                $std_data=[
+                        'std_admission_id'               => $std_admin_data->id,
+                        'OrgOrganizationId'              =>  $request->OrgOrganizationId,
+                        'dateOfapply'                    =>  $request->date_of_application,
+                        'Status'                         =>  $request->status,
+                        'Remarks'                        =>  $request->remarks,
+                        'std_decission'                  =>  $request->std_decission,
+                ];
         $response_data2 = std_admission_org::create($std_data);
         return $this->successResponse($response_data2, Response::HTTP_CREATED);
-    }
-    
-    //this function is used for displaying the application details of admissions
+        }
 
     public function acceptApplication(Request $request){
             $id=$request->id;
