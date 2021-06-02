@@ -46,10 +46,10 @@ export default {
                 if(data!=null && data!="" && data!=undefined){
                 //Already for enrolled students  
                     this.$Progress.start();
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'please fill the details before you apply'
-                        });
+                        // Toast.fire({
+                        //     icon: 'success',
+                        //     title: 'please fill the details before you apply'
+                        // });
                         this.$router.push({name:'applicationLists',query: {cid:$('#'+cid_passport).val()}});
                         this.$Progress.finish() 
                     }
