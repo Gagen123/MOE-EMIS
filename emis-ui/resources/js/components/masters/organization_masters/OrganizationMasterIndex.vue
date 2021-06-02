@@ -11,10 +11,42 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/org_service_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Services
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/department_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Department
                     </router-link>
+                </li> 
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/proposed_by_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Proposed By
+                    </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/document_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Document Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/financial_information_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Financial Information
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/income_facility_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Income Facility Type
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/income_facility_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Income Facility Type
+                    </router-link>
+                </li> -->
+                
+                
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/location_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Location Type
