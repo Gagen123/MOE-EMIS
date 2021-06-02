@@ -160,6 +160,9 @@ class StudentAdmissionController extends Controller
                 'dzongkhag'                 =>  $request->dzongkhag, 
                 'CmnGewogId'                =>  $request->gewog, 
                 'village_id'                =>  $request->village_id, 
+                // 'village_id'                =>  $request->s_dzongkhag, 
+                'OrgOrganizationId'         =>  $request->s_school, 
+                'class_id'                =>  $request->s_class, 
                 'address'                   =>  $request->fulladdress,
                 'attachments'               =>  $request->attachments, 
                 'student_type'              =>  $request->type, 
@@ -404,6 +407,7 @@ class StudentAdmissionController extends Controller
 
     //this funtion used for student portal for saving details of enrolled students
     public function  savedetailsEnrolledStd(Request $request){
+        // dd($request);
         $rules = [
                 'dateOfapply'               => 'required',
             ];
@@ -426,7 +430,8 @@ class StudentAdmissionController extends Controller
                     'dateOfapply'                    =>  $request->dateOfapply,
                     'Remarks'                        =>  $request->remarks,
                     'Status'                         =>  $request->status,
-            ];  
+            ];
+            dd($data);
         $std_admin_data = std_admission::create($data);
             $std_data=[
                     'std_admission_id'               => $std_admin_data->id,

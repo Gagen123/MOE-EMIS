@@ -58,7 +58,6 @@ export default {
                     }
                     else{
                         //new adminssion form
-
                         this.$Progress.start();
                             Toast.fire({
                                 icon: 'success',
@@ -72,9 +71,7 @@ export default {
                     console.log("Retrieving error: "+error)
                 });
             }
-            
         },
-        
         /**
          * method to remove error
          */
@@ -84,8 +81,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
-
-
         loadRespectivePage(val){
             this.$router.push("/"+val);
         },
