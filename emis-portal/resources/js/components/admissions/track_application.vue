@@ -54,11 +54,10 @@ export default {
                         this.$Progress.finish() 
                     }
                     else{
-                        //new adminssion form
-                        this.$Progress.start();
                           Swal.fire(
-                            'you are not admiited in the school.',
-                            'sorry',
+                            'Sorry!',
+                            'You are not admitted into the system.',
+                            'Fail',
                             this.$router.push('#')
                         );
                        
