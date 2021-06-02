@@ -207,18 +207,6 @@ class StudentAdmissionRelatedController extends Controller
     /// student Aboard 
 
     public function loadAboardList($orgId=""){
-        // try{
-        //     $list = DB::table('student_aboards')
-        //     ->select('id', 'first_name', 'middle_name', 'last_name', 'dob', 'country')
-        //     ->where('organizationId',$orgId)->get();
-           
-        // return $list;
-            
-
-        //     } catch(\Illuminate\Database\QueryException $ex){
-        //         dd($ex->getMessage());
-        //         // Note any method of class PDOException can be called on $ex.
-        //     }
 
          $list = DB::table('student_aboards')
              ->select('id', 'first_name', 'middle_name', 'last_name', 'dob', 'country')
@@ -244,7 +232,7 @@ class StudentAdmissionRelatedController extends Controller
             // $this->validate($request, $rules);
         
             $data =[
-                'id'                      =>  $request->id,
+            'id'                        =>  $request->id,
             'organizationId'            =>  $request->organizationId,
             'cid_passport'              =>  $request->cid_passport,
             'first_name'                =>  $request->first_name,

@@ -42,7 +42,7 @@
                                     <th>Class</th>
                                     <th>Section</th>
                                     <th>
-                                        Un-Reported
+                                        Reported
                                         <input type="checkbox" name="reported" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
                                     </th>
                                 </tr>

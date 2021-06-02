@@ -346,6 +346,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
+                        <router-link to="/financial_information" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Latest Missing Menus Added
+                            </p>
+                        </router-link>
+                    </li>
                 </ul>
             </li>
             <li class="nav-header"></li>
