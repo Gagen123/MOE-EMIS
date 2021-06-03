@@ -73,10 +73,12 @@ export default {
                                 classSubjectTerms[index].class_stream_section = item.class+' '+item.stream+' '+item.section
                             }else if(item.stream){
                                 classSubjectTerms[index].class_stream_section = item.class+' '+item.stream
+                            }else if(item.section){
+                                classSubjectTerms[index].class_stream_section = item.class+' '+item.section
                             }else{
                                 classSubjectTerms[index].class_stream_section = item.class
                             }
-                            
+                            classSubjectTerms[index].OrgClassStreamId = item.OrgClassStreamId
                         }
                     })
                 })

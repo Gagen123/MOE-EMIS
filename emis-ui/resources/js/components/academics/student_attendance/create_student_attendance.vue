@@ -135,17 +135,17 @@ export default {
                 });
         },
         save(){
-                axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4],attendance_date:this.attendance_date,data:this.studentList})
-                    .then(() => {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved successfully.'
-                        })
-                        this.$router.push('/list-student-attendance');
+            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4],attendance_date:this.attendance_date,data:this.studentList})
+                .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved successfully.'
                     })
-                    .catch(function(error){
-                    console.log( error);
-                });
+                    this.$router.push('/list-student-attendance');
+                })
+                .catch(function(error){
+                console.log( error);
+            });
        
         },
     },

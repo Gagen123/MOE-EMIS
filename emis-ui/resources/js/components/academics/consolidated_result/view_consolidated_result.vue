@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
+        <form @submit.prevent="save" class="bootbox-form" id="consolidated-result">
             <div class="ml-1 row form-group">
               <div class="mr-3">
                 <strong>Class: </strong> {{class_stream_section }}
@@ -8,10 +8,10 @@
             </div>          
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="view-consolidated-result-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                    <table id="view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th rowspan="3">Roll No.</th>
+                                <th rowspan="3">Student Code</th>
                                 <th rowspan="3">Name</th>
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
@@ -34,7 +34,9 @@
                                 <td>{{item3.CidNo}}</td>
                                 <td>{{ item3.Name }}</td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
-                                     {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
+                                    <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)">
+                                       {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
+                                    </span>
                                     <!-- <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)"> -->
                                 </td> 
                             </tr>
@@ -70,7 +72,7 @@
         },
        async loadConsolidatedResult(){
          let uri = 'academics/loadConsolidatedResult'
-           uri += ('?classId='+this.classId)
+           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
           if(this.streamId !== null){
                 uri += ('&streamId='+this.streamId)
             }
@@ -90,7 +92,22 @@
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-             }                    
+            }
+            setTimeout(function(){
+                $("#view-table").DataTable({
+                    "responsive": false,
+                    "autoWidth": true,
+                    scrollY:        "300px",
+                    scrollX:        true,
+                    scrollCollapse: true,
+                    paging:         false,
+                    searching: false,
+                    fixedColumns:   {
+                        leftColumns: 2
+                    }
+                    
+                }); 
+            }, 300);                      
         },
         areasPerTerm(term_id){
            return this.areas.filter(item=>item.aca_assmt_term_id == term_id).length
@@ -99,7 +116,7 @@
             return this.areas.filter(item=>item.aca_sub_id == sub_id).length
         },
         save(action=""){
-        let params = {org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,aca_assmt_term_id:this.aca_assmt_term_id};
+        let params = {org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,aca_assmt_term_id:this.aca_assmt_term_id};
         if(action == "finalize"){
             params.finalize = 1
             Swal.fire({
@@ -166,16 +183,28 @@
     },
     mounted(){ 
         this.loadConsolidatedResult()
-        this.dt = $("#view-consolidated-result-table").DataTable({
-            scrollX: true,
-            scrollCollapse: true,
-            "fixedColumns":   {
-                leftColumns: 2
-            },
-            columnDefs: [
-                { width: 2, targets: 0},
-            ],
-        })
+        // this.dt = $("#view-table").DataTable({
+        //           scrollY:        "300px",
+        // scrollX:        true,
+        // scrollCollapse: true,
+        // paging:         false,
+        // fixedColumns:   {
+        //     leftColumns: 2
+        // }
+        // })
+            // $("#view-table").DataTable({
+            //         "responsive": true,
+            //         "autoWidth": true,
+            //         "paging": false,
+            //         scrollX: true,
+            //         scrollCollapse: true,
+            //         fixedColumns:   {
+            //             leftColumns: 2
+            //         },
+            //         columnDefs: [
+            //             { width: 2, targets: 0},
+            //         ],
+            //     }); 
 
     },
     created() {
@@ -185,22 +214,34 @@
         this.streamId=this.$route.params.data.org_stream_id;
         this.sectionId=this.$route.params.data.org_section_id;
         this.class_stream_section=this.$route.params.data.class_stream_section;
+        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+
     },
-    watch: {
-        consolidatedResultList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt = $("#view-consolidated-result-table").DataTable()
-            });
-        }
-    }
+    // watch: {
+    //     consolidatedResultList() {
+    //         this.dt.destroy();
+    //         this.$nextTick(() => {
+    //             this.dt = $("#view-consolidated-result-table").DataTable({
+    //                scrollY:        "300px",
+    //     scrollX:        true,
+    //     scrollCollapse: true,
+    //     paging:         false,
+    //     fixedColumns:   {
+    //         leftColumns: 2
+    //     }
+    //             })
+    //         });
+    //     }
+    // }
 }
 </script>
 <style scoped>
-   th, td { white-space: nowrap; }
+  th, td { white-space: nowrap; }
     div.dataTables_wrapper {
-        width: 100%;
+        width: 900px;
         margin: 0 auto;
     }
-    table.DTFC_Cloned thead,table.DTFC_Cloned tfoot{background-color:white}div.DTFC_Blocker{background-color:white}div.DTFC_LeftWrapper table.dataTable,div.DTFC_RightWrapper table.dataTable{margin-bottom:0;z-index:2}div.DTFC_LeftWrapper table.dataTable.no-footer,div.DTFC_RightWrapper table.dataTable.no-footer{border-bottom:none}table.dataTable.display tbody tr.DTFC_NoData{background-color:transparent}
+
+    
+table.DTFC_Cloned thead,table.DTFC_Cloned tfoot{background-color:white}div.DTFC_Blocker{background-color:white}div.DTFC_LeftWrapper table.dataTable,div.DTFC_RightWrapper table.dataTable{margin-bottom:0;z-index:2}div.DTFC_LeftWrapper table.dataTable.no-footer,div.DTFC_RightWrapper table.dataTable.no-footer{border-bottom:none}table.dataTable.display tbody tr.DTFC_NoData{background-color:transparent}div.DTFC_LeftBodyLiner{overflow-x: hidden}
 </style>

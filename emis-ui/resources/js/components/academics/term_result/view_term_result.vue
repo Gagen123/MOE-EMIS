@@ -13,8 +13,8 @@
               </div>
             </div>          
             <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
-                    <table id="term-result-view-table" cellspacing="0" width="100%" class="table table-striped table-bordered">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
                                 <th>Student Code</th>
@@ -30,8 +30,10 @@
                                 <td>{{item1.CidNo}}<input type="hidden" :value="totalScore = 0"></td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
-                                   {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}}
-                                    <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)">
+                                    <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
+                                        {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}}
+                                        <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)">
+                                    </span>
                                 </td>
                                 <td v-if="totalWeightage>0" class="text-right"><span v-if="totalScore!=0">{{totalScore}}</span></td>
                             </tr>
@@ -60,7 +62,8 @@
         },
        async loadStudentAssessments(){
          let uri = 'academics/loadStudentAssessments'
-          uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&classId='+this.classId)
+            uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
+
           if(this.streamId !== null){
                 uri += ('&streamId='+this.streamId)
             }
@@ -76,8 +79,23 @@
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-             }                    
-        },
+             }  
+            setTimeout(function(){
+                $("#term-result-view-table").DataTable({
+                        "responsive": false,
+                        "autoWidth": true,
+                        scrollY:        "300px",
+                        scrollX:        true,
+                        scrollCollapse: true,
+                        paging:         false,
+                        searching: false,
+                        fixedColumns:   {
+                            leftColumns: 2
+                        }
+                        
+                    }); 
+            }, 300);  
+       }                  
     },
     computed:{
         totalWeightage(){
@@ -105,26 +123,28 @@
         this.class_stream_section=this.$route.params.data.class_stream_section;
         this.subject=this.$route.params.data.sub_name;
         this.term=this.$route.params.data.term_name;
+        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+
     },
     mounted(){ 
         this.loadStudentAssessments()
-        this.dt = $("#term-result-view-table").DataTable({
-            scrollX: true,
-            scrollCollapse: true,
-            fixedColumns:   {
-                leftColumns: 2
-            }
-        })
+        // this.dt = $("#term-result-view-table").DataTable({
+        //     scrollX: true,
+        //     scrollCollapse: true,
+        //     fixedColumns:   {
+        //         leftColumns: 2
+        //     }
+        // })
 
     },
-    watch: {
-        studentAssessmentList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt = $("#term-result-view-table").DataTable()
-            });
-        }
-    }
+    // watch: {
+    //     studentAssessmentList() {
+    //         this.dt.destroy();
+    //         this.$nextTick(() => {
+    //             this.dt = $("#term-result-view-table").DataTable()
+    //         });
+    //     }
+    // }
 }
 </script>
 <style scoped>

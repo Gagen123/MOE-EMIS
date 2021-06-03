@@ -7,6 +7,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\academics\ClassTeacher;
 use App\Models\academics\SubjectTeacher;
@@ -113,12 +114,15 @@ class AcademicController extends Controller
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     private function saveAttendance($request){
+        try{
         DB::transaction(function() use($request) {
+           $org_stream_id = isset($request['org_stream_id']) ? $request['org_stream_id'] : null;
+           $org_section_id = isset($request['org_section_id']) ? $request['org_section_id'] : null;
             $attendance = [
                 'org_id' => $request['org_id'],
                 'org_class_id' => $request['org_class_id'],
-                'org_stream_id' => $request['org_stream_id'],
-                'org_section_id' => $request['org_section_id'],
+                'org_stream_id' =>  $org_stream_id,
+                'org_section_id' =>  $org_section_id,
                 'class_stream_section' => $request['class_stream_section'],
                 'attendance_date' => $request['attendance_date'],
                 'created_by' => $request['user_id'],
@@ -136,28 +140,25 @@ class AcademicController extends Controller
                 }
             }
         });
+    }catch(Exception $e){
+        dd($e);
+    }
     }
     public function saveStudentAttendance(Request $request){
-            $rules = [
-                'org_class_id' => 'required',
-                'org_stream_id' => 'required',
-                'org_section_id' => 'required',
-                'class_stream_section' => 'required',
-                'attendance_date' => 'required|unique:aca_student_attendance',
-                'data.*.CidNo' => 'required',
-                'data.*.Name' => 'required',
-                'data.*.std_student_id' => 'required',
-            ];
-            $customMessages = [
-                'org_class_id.required' => 'This field is required',
-                'org_stream_id.required' => 'This field is required',
-                'org_section_id.required' => 'This field is required',
-                'class_stream_section.required' => 'This field is required',
-                'attendance_date.required' => 'This field is required',
-                'data.*.CidNo.required' => 'This field is required',
-                'data.*.Name.required' => 'This field is required',
-                'data.*.std_student_id.required' => 'This field is required',
-            ];
+        $rules = [
+            'org_class_id' => 'required',
+            'class_stream_section' => 'required',
+            'attendance_date' => 'required|unique:aca_student_attendance,attendance_date,'. null .',id,class_stream_section,'. $request['class_stream_section'],
+            'data.*.Name' => 'required',
+            'data.*.std_student_id' => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'class_stream_section.required' => 'This field is required',
+            'attendance_date.required' => 'This field is required',
+            'data.*.Name.required' => 'This field is required',
+            'data.*.std_student_id.required' => 'This field is required',
+        ];
             $this->validate($request, $rules, $customMessages);
 
             if($request['action']=="add"){
@@ -180,7 +181,6 @@ class AcademicController extends Controller
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     public function loadStudentAssessmentList($staffId, $orgId){
-        dd($staffId, $orgId);
         $currentTerms = "SELECT SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_class_id)),6) AS org_class_id,
                 SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_stream_id)),6) AS org_stream_id,
                 SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.id)),6) AS aca_assmt_term_id,
