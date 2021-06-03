@@ -223,26 +223,26 @@
                 .catch(()=>{console.log("Error.....")})
             },
 
-             getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
-              axios.get(uri)
-                .then(Response =>{
-                  let data = Response.data.data;
-                  this.dzongkhagList = data;
-              }).catch(error => console.log(error));
+            getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
+            axios.get(uri)
+              .then(Response =>{
+                let data = Response.data.data;
+                this.dzongkhagList = data;
+            }).catch(error => console.log(error));
 
-          },
-            getschoolList(id){
-              let dzoId=$('#dzongkhag').val();
-                 if(id!=""){
-                 dzoId=id;
-                } 
+        },
+          getschoolList(id){
+            let dzoId=$('#dzongkhag').val();
+                if(id!=""){
+                dzoId=id;
+              } 
 
-              axios.get('/masters/getOrgList/' +dzoId)
-                .then(response =>{
-                  let data = response.data.data;
-                  this.schoolList = data;
-              })
-          },
+            axios.get('/masters/getOrgList/' +dzoId)
+              .then(response =>{
+                let data = response.data.data;
+                this.schoolList = data;
+            })
+        },
          getclassList(id){
              let orgId=$('#school').val();
                 if(id!=""){
@@ -256,18 +256,18 @@
               })
 
           },
-          getstreamListByid(id){
-             let classId=$('#class').val();
-                if(id!=""){
-                 classId=id;
-            } 
-              axios.get('/masters/getStreamByclassId/' +classId)
-              .then(Response =>{
-                let data = Response.data;
-                // console.log(data);
-                this.classList = data;
-              })
-          },
+        getstreamListByid(id){
+            let classId=$('#class').val();
+              if(id!=""){
+                classId=id;
+          } 
+            axios.get('/masters/getStreamByclassId/' +classId)
+            .then(Response =>{
+              let data = Response.data;
+              // console.log(data);
+              this.classList = data;
+            })
+        },
          getseatdetailsbyOrgId(id){
                let orgId=$('#school').val();
                 if(id!=""){
@@ -297,38 +297,38 @@
               })
 
           },
-          getdzongkhagName(dzo_id){
-            axios.get('load_dzongkhag_details_by_id/' +dzo_id)
-              .then(response =>{
-                let data = response.data.data;
-                this.getDzoName=data;
-               
-              })
+        getdzongkhagName(dzo_id){
+          axios.get('load_dzongkhag_details_by_id/' +dzo_id)
+            .then(response =>{
+              let data = response.data.data;
+              this.getDzoName=data;
+              
+            })
 
-          },
-          getgewogName(gewog_id){
-             axios.get('load_gewog_details_by_id/' +gewog_id)
-              .then(response =>{
-                let data = response.data.data;
-                this.getGewogName=data;
-              })
+        },
+        getgewogName(gewog_id){
+            axios.get('load_gewog_details_by_id/' +gewog_id)
+            .then(response =>{
+              let data = response.data.data;
+              this.getGewogName=data;
+            })
 
+        },
+        applyselect()
+          {
+              if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+                $('#dzongkhag').addClass('select2-hidden-accessible');
+              }
+              if(!$('#school').attr('class').includes('select2-hidden-accessible')){
+                $('#school').addClass('select2-hidden-accessible');
+              }
+              if(!$('#class').attr('class').includes('select2-hidden-accessible')){
+                $('#class').addClass('select2-hidden-accessible');
+              }
+              if(!$('#stream').attr('class').includes('select2-hidden-accessible')){
+                $('#stream').addClass('select2-hidden-accessible');
+              }
           },
-          applyselect()
-            {
-                if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                 $('#dzongkhag').addClass('select2-hidden-accessible');
-                }
-                if(!$('#school').attr('class').includes('select2-hidden-accessible')){
-                 $('#school').addClass('select2-hidden-accessible');
-                }
-                if(!$('#class').attr('class').includes('select2-hidden-accessible')){
-                 $('#class').addClass('select2-hidden-accessible');
-                }
-                if(!$('#stream').attr('class').includes('select2-hidden-accessible')){
-                 $('#stream').addClass('select2-hidden-accessible');
-                }
-            },
           removeerror(fieldid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
