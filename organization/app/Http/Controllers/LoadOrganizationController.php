@@ -106,21 +106,43 @@ class LoadOrganizationController extends Controller{
                     ->select('organization_class_streams.*', 'classes.class AS class')
                     ->where('organizationId', $org_id)
                     ->orderBy('classes.displayOrder', 'asc')
+                    ->groupBy('organization_class_streams.classId') //added by Tshewang as required only class
                     ->get();
 
         return $this->successResponse($response_data);
     }
 
-    public function loadStreamList($org_id){
+    public function loadStreamList($id){
 
         $response_data = DB::table('organization_class_streams')
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
                     ->select('organization_class_streams.*', 'classes.class AS class')
-                    ->where('organizationId', $org_id)
+                    ->where('organizationId', $id)
                     ->where('streamId', '<>', 'NULL')
                     ->get();
 
         return $this->successResponse($response_data);
+         // $cls_id="";
+        // $org_id="";
+        // if(strpos('__',$id)!==false){
+        //     $cls_id=explode('__', $id)[0];
+        //     $org_id=explode('__', $id)[1];
+        //     $response_data = DB::table('organization_class_streams')
+        //         ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+        //         ->select('organization_class_streams.*', 'classes.class AS class')
+        //         ->where('organizationId', $org_id)
+        //         ->where('classes.id', $cls_id)
+        //         ->where('streamId', '<>', 'NULL')
+        //         ->get();
+        // }
+        // else{
+        //     $response_data = DB::table('organization_class_streams')
+        //             ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+        //             ->select('organization_class_streams.*', 'classes.class AS class')
+        //             ->where('organizationId', $id)
+        //             ->where('streamId', '<>', 'NULL')
+        //             ->get();
+        // }
     } 
 
     public function loadSectionList($id){

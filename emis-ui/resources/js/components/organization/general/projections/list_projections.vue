@@ -4,19 +4,18 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Student Name</th>
-                    <th >Student Id</th>
                     <th >Class</th>
-                    <th >Section</th>
+                    <th >Projections</th>
+                    <th >Remarks</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.class}}</td>
+                    <td>{{ item.projections}}</td>
+                    <td>{{ item.remarks}}</td>
                     <td>{{ }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -37,11 +36,11 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentWhereabouts/'+this.org_id){
+        loadDataList(uri='organization/loadProjections'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.dataList =  data.data.data;
+                this.dataList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
