@@ -20,8 +20,8 @@
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.screening_type}}</td>
-                            <td>{{ item.class}}</td>
-                            <td>{{ item.section}}</td>
+                            <td>{{ classList[item.class]}}</td>
+                            <td>{{ sectionList[item.section]}}</td>
                             <td v-if="item.stream">{{ item.stream}}</td>
                             <td v-else>{{ NA }}</td>
                             <td>{{ item.date}}</td>
@@ -46,7 +46,11 @@ export default {
     data() {
         return {
             id:'2',
-            dataList:[], 
+            dataList:[],
+            sectionList:{},
+            classList:{},
+            streamList:{},
+            
         }
     },
     methods:{
@@ -68,6 +72,46 @@ export default {
                 }); 
             }, 3000);  
         },
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadClassArrayList(uri="loadCommons/getClassArray"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.classList[data[i].id] = data[i].class;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadSectionArrayList(uri="loadCommons/getSectionArray"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.sectionList[data[i].id] = data[i].section;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadStreamArrayList(uri="loadCommons/getStreamArray"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.streamList[data[i].id] = data[i].stream;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         showview(data){
             this.$router.push({name:'std_health_screening_view',params: {data:data}});
         },
@@ -77,6 +121,9 @@ export default {
     },
     mounted(){
         this.loadDataList();
+        this.loadClassArrayList();
+        this.loadStreamArrayList();
+        this.loadSectionArrayList();
     },
 }
 </script>

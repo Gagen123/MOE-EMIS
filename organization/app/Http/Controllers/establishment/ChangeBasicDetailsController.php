@@ -56,7 +56,7 @@ class ChangeBasicDetailsController extends Controller
 
         $inserted_application_data = ApplicationDetails::create($application_details_data);
         $applicationDetailsId = $inserted_application_data->id;
-
+        // return ($applicationDetailsId,$request['application_type']);
         switch($request['application_type']){
             case "name_change" : {
                     $change_details_data = $this->extractNameChangeData($request, $applicationDetailsId);
@@ -78,6 +78,18 @@ class ChangeBasicDetailsController extends Controller
                     $change_details_data = $this->extractSenChangeData($request, $applicationDetailsId);
                     break;
                 }
+            case "autonomus_change" : {
+                $change_details_data = $this->extractAutomonusData($request, $applicationDetailsId);
+                break;
+            }
+            case "location_type_change" : {
+                $change_details_data = $this->extractLocationData($request, $applicationDetailsId);
+                break;
+            }
+            case "expension_change" : {
+                $change_details_data = $this->extractExtensionData($request, $applicationDetailsId);
+                break;
+            }
             case "all_details" : {
                     $change_details_data = $this->extractAllChangeData($request, $applicationDetailsId);
                     break;
@@ -402,6 +414,49 @@ class ChangeBasicDetailsController extends Controller
 
         return $changeDetails;
     }
+    
+    private function extractAutomonusData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'          => $applicationDetailsId,
+            'organizationId'                =>  $request['organizationId'],
+            'change_type'                   =>  $request['application_for'],
+            'proposedChange'               =>  $request['autonomuos'],
+            'created_by'                   =>  $request['user_id'] 
+        ];
+
+        $changeDetails = ApplicationEstDetailsChange::create($data);
+
+        return $changeDetails;
+    }
+    
+    private function extractLocationData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'          => $applicationDetailsId,
+            'organizationId'                =>  $request['organizationId'],
+            'change_type'                   =>  $request['application_for'],
+            'proposedChange'               =>  $request['locationType'],
+            'created_by'                   =>  $request['user_id'] 
+        ];
+
+        $changeDetails = ApplicationEstDetailsChange::create($data);
+
+        return $changeDetails;
+    }
+    
+    private function extractExtensionData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'          => $applicationDetailsId,
+            'organizationId'                =>  $request['organizationId'],
+            'change_type'                   =>  $request['application_for'],
+            'proposedChange'                =>  $request['currentCapacity'],
+            'changeInDetails'               =>  $request['proposedCapacity'],
+            'created_by'                    =>  $request['user_id'] 
+        ];
+
+        $changeDetails = ApplicationEstDetailsChange::create($data);
+
+        return $changeDetails;
+    }
 
     private function extractAllChangeData($request, $applicationDetailsId){
         $data = [
@@ -581,6 +636,7 @@ class ChangeBasicDetailsController extends Controller
     }
 
     public function updateChangeBasicDetails(Request $request){
+        // dd($app_details->application_type);
         $estd =[
             'status'                        =>   $request->status,
             'remarks'                       =>   $request->remarks,
@@ -610,11 +666,11 @@ class ChangeBasicDetailsController extends Controller
         }
 
         $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
-
+        // return $app_details;
         if($request->status=="Approved"){
             $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
             $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
-
+            $change_details_data="";
             switch($app_details->application_type){
                 case "name_change" : {
                     $change_details_data = $this->updateNameChange($change_details,  $org_details, $request);
@@ -636,6 +692,30 @@ class ChangeBasicDetailsController extends Controller
                     $change_details_data = $this->updateLevel($change_details,  $org_details, $request);
                     break;
                 }
+                case "location_type_change" : {
+                    $change_details_data = $this->updateLocationType($change_details,  $org_details, $request);
+                    break;
+                }
+                case "expension_change" : {
+                    $change_details_data = $this->updateExtension($change_details,  $org_details, $request);
+                    break;
+                }
+                case "autonomus_change" : {
+                    $change_details_data = $this->updateAutonomous($change_details,  $org_details, $request);
+                    break;
+                }
+                // case "" : {
+                //     $change_details_data = $this->extractAutomonusData($request, $applicationDetailsId);
+                //     break;
+                // }
+                // case "" : {
+                //     $change_details_data = $this->extractLocationData($request, $applicationDetailsId);
+                //     break;
+                // }
+                // case "" : {
+                //     $change_details_data = $this->extractExtensionData($request, $applicationDetailsId);
+                //     break;
+                // }
                 // case "all_details" : {
                 //     $change_details_data = $this->extractAllChangeData($request, $applicationDetailsId);
                 //     break;
@@ -645,10 +725,11 @@ class ChangeBasicDetailsController extends Controller
                 }
             }
         }
-        return $this->successResponse($app_details, Response::HTTP_CREATED);
+        return $this->successResponse($change_details_data, Response::HTTP_CREATED);
     }
 
-    private function updateNameChange($change_details, $org_details){
+    private function updateNameChange($change_details, $org_details,$request){
+        // return $change_details->proposedChange;
         $org_data =[
             'id'                        =>  $org_details->id,
             'name'                      =>  $org_details->name,
@@ -818,5 +899,46 @@ class ChangeBasicDetailsController extends Controller
             }
         }
         return $class_strm;
+    }
+    
+    private function updateLocationType($change_details, $org_details,$request){
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'locationId'                =>  $org_details->locationId,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Change in Location', 
+            'recorded_by'               =>  $request->user_id, 
+        ];
+        HistoryForOrganizaitonDetail::create($org_data);
+        $org_update_data =[
+            'locationId'               =>  $change_details->proposedChange,
+            'updated_by'                =>  date('Y-m-d h:i:s'),
+            'updated_at'                =>  $request->user_id, 
+        ];
+        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        return $change_details;
+
+    }
+    private function updateExtension($change_details, $org_details,$request){
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'capacity'                  =>  $org_details->capacity,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Change in Location', 
+            'recorded_by'               =>  $request->user_id, 
+        ];
+        HistoryForOrganizaitonDetail::create($org_data);
+        $org_update_data =[
+            'capacity'               =>  $change_details->changeInDetails,
+            'updated_by'                =>  date('Y-m-d h:i:s'),
+            'updated_at'                =>  $request->user_id, 
+        ];
+        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        return $change_details;
+
     }
 }

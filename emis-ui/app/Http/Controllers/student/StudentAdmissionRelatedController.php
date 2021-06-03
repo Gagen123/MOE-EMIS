@@ -51,6 +51,16 @@ class StudentAdmissionRelatedController extends Controller
         
     }
 
+    /**
+     * load un reported students list by org id
+     */
+
+    public function loadUnreportedStudents($param){
+        $org_id = $this->getWrkingAgencyId();
+        $student_list = $this->apiService->listData('emis/students/loadUnreportedStudents/'.$org_id);
+        return $student_list;
+    }
+
     public function saveStudentTransfer(Request $request){
         
         $rules = [
@@ -140,8 +150,19 @@ class StudentAdmissionRelatedController extends Controller
     }
 
     public function loadStudentWhereabouts($param=""){
-        $student_awards = $this->apiService->listData('emis/students/loadStudentWhereabouts/'.$param);
-        return $student_awards;
+        $students = $this->apiService->listData('emis/students/loadStudentWhereabouts/'.$param);
+        return $students;
+    }
+    /**
+     * load the list of admission requests
+     */
+
+    public function loadAdmissionRequest($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadlist = $this->apiService->listData('emis/students/loadAdmissionRequest/'.$orgId);
+        return $loadlist;
     }
 
     ///Student Residing Aboard

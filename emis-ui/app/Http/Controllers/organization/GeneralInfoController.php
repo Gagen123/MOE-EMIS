@@ -351,7 +351,7 @@ class GeneralInfoController extends Controller
     }
     
     public function getOrgProfile($id = ""){
-        $org_details = $this->apiService->listData('emis/organization/getOrgProfile/'.$id);
+        $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;
     }
 

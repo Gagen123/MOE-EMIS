@@ -31,14 +31,35 @@ class GeneralStudentController extends Controller
     }
 
     /**
+     * Get the basic student list (id, name, student code, class, section, stream, sex)
+     */
+
+    public function loadBasicStudentList($param=""){
+        $id = $param;
+        $records = DB::table('std_student')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                    ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
+                            'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
+                    ->where('std_student.OrgOrganizationId', $id)
+                    ->get();
+        return $records;
+    }
+
+    /**
      * Get the student list by stream and section (id, name, student code, class, section, stream)
      */
 
     public function loadStudentBySection($param1){
         $id = $param1;
+        $class_details = explode('__', $id);
         
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->where('IsTransferred','0')
-                            ->get(['id', 'Name', 'DateOfBirth']));
+        $records = DB::table('std_student')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                    ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId')
+                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0])
+                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2])
+                    ->get();
+        return $records;
     }
 
     public function getStudents($org_id,Request $request){
@@ -53,9 +74,6 @@ class GeneralStudentController extends Controller
         }
   
         return $this->successResponse (DB::select($query,$params)); 
-       
-        
-        
     }
     
 }

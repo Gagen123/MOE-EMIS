@@ -41,21 +41,21 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Class:</label>
                         <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
-                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.class">{{ item.class }}</option>
+                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
                         </select>
                         <has-error :form="student_form" field="std_class"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
                         <label>Streams:</label>
                         <select v-model="student_form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
-                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream">{{ item.stream }}</option>
+                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
                         </select>
                         <has-error :form="student_form" field="std_stream"></has-error>
                     </div> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
                         <label>Section:</label>
                         <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
-                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section">{{ item.section }}</option>
+                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
                         </select>
                         <has-error :form="student_form" field="std_section"></has-error>
                     </div>
@@ -75,7 +75,7 @@
                                     </th>
                                     <th>
                                         Referred
-                                        <input type="checkbox" name="height" class="form-control-input" id="refferedid" @change="checkall('refferedcheck','refferedid')"/>
+                                        <input type="checkbox" name="weight" class="form-control-input" id="refferedid" @change="checkall('refferedcheck','refferedid')"/>
                                     </th>
                                 </tr>
                             </thead>
@@ -114,14 +114,9 @@ export default {
             screeningTitle:[],
             screeningEndorser:[],
             classStreamSections:[],
-            // classList:[],
-            // sectionList:[],
-            // streamList:[],
-
-            //temporary definition
-            classList:[{class:"7"}, {class:"8"}, {class:"9"}, {class:"10"}, {class:"11"}, {class:"12"}],
-            sectionList:[{section:"A"}, {section:"B"}, {section:"C"}],
-            streamList:[{stream:"Arts"}, {stream:"Science"}, {stream:"Commerce"}],
+            classList:[],
+            sectionList:[],
+            streamList:[],
             byClass:[],
             studentList:[],
 
@@ -173,7 +168,11 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadClassList(uri="loadCommons/loadClassList"){
+
+        /**
+         * to load the class list
+         */
+        loadClassList(uri="loadCommons/getOrgClassStream"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -183,26 +182,44 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadSectionList(uri="loadCommons/loadSectionList"){
+
+        /**
+         * method to get stream list
+         */
+        getStreamList(id){
+            let classId=$('#std_class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadStreamList/'+classId;
+            this.streamList =[];
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response;
-                this.sectionList =  data.data.data;
+                this.streamList = data.data.data;
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
-        loadStreamList(uri="loadCommons/loadStreamList"){
+        getSectionList(id){
+            let classId=$('#std_class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadSectionList/'+classId;
+            this.sectionList =[];
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response;
-                this.streamList =  data.data.data;
+                this.sectionList = data.data.data;
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
+
+        
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
@@ -269,6 +286,8 @@ export default {
             if(id=="std_class"){
                 this.student_form.std_class=$('#std_class').val();
                 let class_selected = $("#std_class").val();
+                this.getStreamList();
+                this.getSectionList();
                 if(class_selected == 11 || class_selected == 12){
                     $(".stream_selection").show();
                     $(".section_selection").show();
@@ -277,16 +296,14 @@ export default {
                     $(".stream_selection").hide();
                 }
             }
+
             if(id=="std_stream"){
                 this.student_form.std_stream=$('#std_stream').val();
             }
             if(id=="std_section"){
-                //axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'/'+$('#std_stream').val()+'/'+$('#std_section').val())
-                // axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'/'+$('#std_section').val())
-                //axios.get('/students/loadStudentList/'+$('#std_section').val())
-                axios.get('/students/loadStudentList/'+$('#std_class').val())
+                axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
                     .then((response) => {
-                        this.studentList = response.data.data;  
+                        this.studentList = response.data;  
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
@@ -326,10 +343,10 @@ export default {
         this.loadActiveScreeningList();
         this.loadActiveScreeningTitleList();
         this.loadActiveScreeningEndorserList();
-        //Fix this when the classes are loaded in database
-        // this.loadClassList();
-        // this.loadSectionList();
-        // this.loadStreamList();
+        
+        this.loadClassList();
+        this.loadSectionList();
+        this.loadStreamList();
     },
     
 }

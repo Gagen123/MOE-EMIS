@@ -244,57 +244,24 @@ class StudentHealthController extends Controller
         unset($data['std_id']);
         unset($data['std_screened']);
         unset($data['std_referred']);
-
-        try{
-            StudentHealthScreening::create($data);
-
-            } catch(\Illuminate\Database\QueryException $ex){ 
-                dd($ex->getMessage()); 
-                // Note any method of class PDOException can be called on $ex.
-            }
 			
 
         $response_data = StudentHealthScreening::create($data);
         $lastInsertId = $response_data->id;
 
-        if(!empty($std_screened)){
-            foreach($std_screened as $index => $screened){
-                if($screened == NULL || $screened == false){
-                    $screened_data = [
-                        'StdHealthScreeningId' => $lastInsertId,
-                        'StdStudentId'=> $std_ids[$index],
-                    ];
-                    
-                    StudentScreened::create($screened_data);
-                }
-            }
-        } else{
-            foreach($std_ids as $index => $student_id){
+        foreach($std_ids as $index => $stdStudentId){
+            if(!array_key_exists($index, $std_screened)){
                 $screened_data = [
                     'StdHealthScreeningId' => $lastInsertId,
-                    'StdStudentId'=> $student_id
+                    'StdStudentId'=> $stdStudentId,
                 ];
                 
                 StudentScreened::create($screened_data);
             }
-        }
-
-        if(!empty($std_referred)){
-            foreach($std_referred as $index => $referred){
-                if($referred == NULL){
-                    $referred_data = [
-                        'StdHealthScreeningId' => $lastInsertId,
-                        'StdStudentId'=> $std_ids[$index],
-                    ];
-                    
-                    StudentReferred::create($screened_data);
-                }
-            }
-        } else{
-            foreach($std_ids as $index => $student_id){
+            if(array_key_exists($index, $std_referred)){
                 $screened_data = [
                     'StdHealthScreeningId' => $lastInsertId,
-                    'StdStudentId'=> $student_id
+                    'StdStudentId'=> $stdStudentId,
                 ];
                 
                 StudentReferred::create($screened_data);

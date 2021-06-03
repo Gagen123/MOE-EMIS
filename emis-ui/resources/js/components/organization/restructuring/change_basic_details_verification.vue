@@ -132,7 +132,23 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Proposal Initiated Bye:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.change_details.initiatedBy}}</span>
+                                    <span class="text-blue text-bold">{{proposed_by_list[appicationDetails.change_details.initiatedBy]}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="appicationDetails.application_type=='location_type_change'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Proposed Location:</label>
+                                    <span class="text-blue text-bold">{{locationArray[appicationDetails.change_details.proposedChange]}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="appicationDetails.application_type=='expension_change'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Current Capacity:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.change_details.proposedChange}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Proposed Capacity:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.change_details.changeInDetails}}</span>
                                 </div>
                             </div>
                             <div class="form-group row" v-if="appicationDetails.application_type=='feeding_change'">
@@ -207,6 +223,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div class="callout callout-info">
                             <h4><u>Any Supporting Documents and Attachments (if applicable)</u></h4>
@@ -355,6 +372,8 @@ export default {
             gewogArray:{},
             calssArray:{},
             streamArray:{},
+            proposed_by_list:{},
+            locationArray:{},
             selected_gewog:'',
             selected_village:'',
             appicationDetails:[],
@@ -598,9 +617,32 @@ export default {
                 }
             });
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.proposed_by_list[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.locationArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
     },
 
     mounted(){
+        this.getLocation();
+        this.loadproposedBy();
         this.getLevel();
         this.getClass();
         this.getStream();

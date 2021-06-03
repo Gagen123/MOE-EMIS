@@ -61,10 +61,13 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
+            $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
             //getting student details by cid number 
             $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
+
+            $router->post('/savedrequestadmission',['uses' => 'Students\StudentAdmissionController@savedrequestadmission']);
             
             $router->get('/applicationListsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@applicationListsbyCid']);
             $router->post('/acceptApplication',['uses' => 'Students\StudentAdmissionController@acceptApplication']);
@@ -76,13 +79,14 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });  
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
-        $router->get('/loadStudentBySection/{param1}/{param2}/{param3}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
-		//route by chimi to get temporary
-        $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
 
+		//route by chimi to get temporary
+        $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
+        
+
         $router->post('/reportStudents',['uses' => 'Students\StudentAdmissionRelatedController@reportStudents']);
-        $router->get('/loadUnreportedStudents/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadUnreportedStudents']);
+        $router->get('/loadUnreportedStudents/{org_id}', ['uses' => 'Students\StudentAdmissionRelatedController@loadUnreportedStudents']);
         $router->post('/saveStudentTransfer',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentTransfer']);
         $router->get('/loadStudentTransfers/{param}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
         $router->post('/saveStudentWhereabouts',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentWhereabouts']);
@@ -142,6 +146,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadProgramActionPlan/{param}', ['uses' => 'Students\StudentProgramController@loadProgramActionPlan']);
         $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);
         $router->get('/loadProgramInventory/{param}', ['uses' => 'Students\StudentProgramController@loadProgramInventory']);
+        $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
         
         $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);
         $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);

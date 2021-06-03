@@ -717,7 +717,6 @@ class AdministrationController extends Controller{
             'id'             =>  $request['id'],
             'user_id'        =>$this->userId()
         ];
-        dd($class);
         $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
 

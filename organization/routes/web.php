@@ -179,6 +179,33 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');
             $router->get('/getLocationUse', 'generalInformation\EquipmentController@getLocationUse');
         });
+
+        //newly added routes
+
+        $router->group(['prefix' => 'visitor'], function () use ($router) {
+            $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
+            $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
+        });
+
+        $router->group(['prefix' => 'disaster'], function () use ($router) {
+            $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
+            $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');
+        });
+
+        $router->group(['prefix' => 'finance'], function () use ($router) {
+            $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
+            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
+            $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
+            $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
+        });
+
+        $router->group(['prefix' => 'projections'], function () use ($router) {
+            $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
+            $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
+        });
+
+        //newly added routs ends here
+
         $router->group(['prefix' => 'section'], function () use ($router) {
             // section route
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
@@ -334,9 +361,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
 
-        $router->get('/loadClassList/{org_id}', ['uses' => 'LoadOrganizationController@loadClassList']);
-        $router->get('/loadStreamList/{org_id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
-        $router->get('/loadSectionList/{org_id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
+        $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);
+        $router->get('/loadStreamList/{id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
+        $router->get('/loadSectionList/{id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
+        $router->get('/getClassArray/{org_id}', ['uses' => 'LoadOrganizationController@getClassArray']);
+        $router->get('/getStreamArray/{org_id}', ['uses' => 'LoadOrganizationController@getStreamArray']);
+        $router->get('/getSectionArray/{org_id}', ['uses' => 'LoadOrganizationController@getSectionArray']);
 
 
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
