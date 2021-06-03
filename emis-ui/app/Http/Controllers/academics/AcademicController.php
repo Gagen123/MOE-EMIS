@@ -291,7 +291,7 @@ class AcademicController extends Controller
         }
         $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
 
-       return $consolidatedResult = json_decode($this->apiService->listData($uri),true);
+        $consolidatedResult = json_decode($this->apiService->listData($uri),true);
         $terms = [];
         $subjects = [];
         $areas = [];

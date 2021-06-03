@@ -19,12 +19,12 @@
                             </tr>
                             <tr>
                                 <th v-for="(item1,index1) in subjects" :key="index1" :colspan="areasPerSubject(item1.aca_sub_id)" class="text-center">
-                                    {{item1.subject}}
+                                    {{item1.subject}} <span v-if="item1.sub_dzo_name">( {{item1.sub_dzo_name }} )</span>
                                 </th> 
                             </tr>
                              <tr>
                                 <th v-for="(item2,index2) in areas" :key="index2" class="text-center">
-                                    {{item2.assessment_area}} 
+                                    {{item2.assessment_area}} <span v-if="item2.assmt_area_dzo_name">( {{item2.assmt_area_dzo_name }} )</span>
                                     <span v-if="item2.input_type==1">({{item2.weightage}}%)</span>
                                 </th> 
                             </tr>

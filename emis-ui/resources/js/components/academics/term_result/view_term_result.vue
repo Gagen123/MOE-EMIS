@@ -1,17 +1,17 @@
 <template>
     <div>
         <form @submit.prevent="save" class="bootbox-form" id="subjectGroup">
-            <div class="ml-1 row form-group">
+                <div class="ml-1 row form-group">
               <div class="mr-3">
                 <strong>Class: </strong> {{ class_stream_section }}
               </div>
               <div class="mr-3">
-                <strong>Term: </strong> {{term}}
+                <strong>Term: </strong> {{term}} <span v-if="term_dzo_name && sub_dzo_name">( {{term_dzo_name}} )</span>
               </div>
               <div class="mr-3">
-                <strong>Subject: </strong> {{subject}}
+                <strong>Subject: </strong> {{subject}} <span v-if="sub_dzo_name">( {{sub_dzo_name}} )</span>
               </div>
-            </div>          
+            </div>           
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
@@ -21,8 +21,13 @@
                                 <th>Name</th>
                                 <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
 
-                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} <span v-if="item.input_type==1">({{item.weightage}}%)</span></th>
-                                <th v-if="totalWeightage>-1">Total ({{totalWeightage}}%)</th>
+                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} 
+                                     <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
+                                     <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                </th>
+                                <th v-if="totalWeightage>-1">
+                                    Total 
+                                    <span v-if="term_dzo_name && sub_dzo_name"> ( བསྡོམས། ) </span> ({{totalWeightage}}%)</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -122,7 +127,9 @@
         this.sectionId=this.$route.params.data.org_section_id;
         this.class_stream_section=this.$route.params.data.class_stream_section;
         this.subject=this.$route.params.data.sub_name;
+        this.sub_dzo_name=this.$route.params.data.sub_dzo_name;
         this.term=this.$route.params.data.term_name;
+        this.term_dzo_name=this.$route.params.data.term_dzo_name;
         this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
 
     },
