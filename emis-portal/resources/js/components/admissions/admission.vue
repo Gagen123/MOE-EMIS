@@ -9,7 +9,7 @@
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label id="level_name"></label>
-                                <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport')" @blur="getDetailsbyCID('cid_passport',)" :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="Ref/cid No">
+                                <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport')" :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="Ref/cid No">
                                 <has-error :form="form" field="cid_passport"></has-error>
                             </div>
                         </div>
@@ -43,23 +43,27 @@ export default {
             axios.get('/getstudentdetailsbyCid/' +$('#'+cid_passport).val())
             .then(response => {
                 let data = response.data.data;
-                if(data!=null && data!="" && data!=undefined){
-                //Already for enrolled students  
-                    this.$Progress.start();
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'please fill the details before you apply'
-                        });
-                        this.$router.push({name:'classxi_student',query: {data:data}});
-                        this.$Progress.finish() 
+                // alert(JSON.stringify(data.CidNo));
+                
+                data = data==null ? "" : data;
+                    if(data!=""){
+                    //Already for enrolled students 
+                        this.$Progress.start();
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'please fill the details before you apply'
+                            });
+                            this.$router.push({name:'classxi_student',query: {data:data}});
+                            this.$Progress.finish() 
                     }
                     else{
                         //new adminssion form
+
                         this.$Progress.start();
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'please fill the details before you apply'
-                        })
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'please fill the details before you apply'
+                            })
                         this.$router.push({name:'notenrolled_student',query: {cid:$('#'+cid_passport).val()}});
                         this.$Progress.finish() 
                     }

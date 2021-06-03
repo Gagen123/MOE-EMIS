@@ -1,0 +1,89 @@
+<template>
+    <div>
+        <form class="bootbox-form" id="contactTypeId">
+            <div class="card-body">
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Financial Information:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Applied to:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.addfield_1" :class="{ 'is-invalid': form.errors.has('addfield_1') }" id="addfield_1" @change="remove_err('addfield_1')" type="text" tabindex="2" autofocus="true">
+                        <has-error :form="form" field="addfield_1"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" tabindex="2" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
+                        <has-error :form="form" field="description"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Status:</label>
+                        <br>
+                        <label><input v-model="form.status"  type="radio" value="1" tabindex="3"/> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" tabindex="4"/> Inactive</label>
+                    </div>
+                </div>          
+            </div>
+            <div class="card-footer text-right">
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
+            </div>
+        </form>
+    </div>
+</template>
+
+<script>
+export default {
+    data(){
+        return{
+            count:10,
+            form: new form({
+                id: '',
+                name: '',
+                addfield_1:'',
+                description:'',
+                status: 1,
+                action_type:'edit',
+                model:'FinancialInformation'
+            })
+        }
+    },
+
+    methods:{
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+        formaction: function(type){
+            if(type=="reset"){
+                this.form.name= '';
+                this.form.description= '';
+                this.form.status= 1;
+            }
+            if(type=="save"){
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
+                .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Financial Information is udpated successfully'
+                    })
+                    this.$router.push('/list_financial_information');
+                })
+                .catch((err) => {
+                    console.log("Error:"+err)
+                })
+            }
+		},
+    },
+    created() {
+        this.form.name          =this.$route.query.data.name;
+        this.form.description   =this.$route.query.data.description;
+        this.form.addfield_1    =this.$route.query.data.applicableTo;
+        this.form.status        =this.$route.query.data.status;
+        this.form.id            =this.$route.query.data.id;
+    },
+}
+</script>

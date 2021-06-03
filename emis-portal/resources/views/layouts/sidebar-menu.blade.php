@@ -9,14 +9,14 @@
         </router-link>
       </li>
       @can('isAdmin')
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <router-link to="/Userprofile" class="nav-link">
           <i class="nav-icon fas fa-list orange"></i>
           <p>
             Profile
           </p>
         </router-link>
-      </li>
+      </li> -->
       <li class="nav-item">
             <router-link to="/admission" class="nav-link">
             <i class="fa fa-users nav-icon blue"></i>
@@ -27,14 +27,23 @@
           </li>
 
       @endcan
+      <li class="nav-item">
+            <router-link to="/admissionRequest" class="nav-link">
+            <i class="fa fa-users nav-icon blue"></i>
+              <p>
+              Request for admission
+              </p>
+            </router-link>
+       </li>
+      
 
-      @can('isAdmin')
+      <!-- @can('isAdmin')
         <li class="nav-item">
           <router-link to="/result" class="nav-link">
             <i class="fa fa-users nav-icon orange"></i>
             <p>Result</p>
           </router-link>
-        </li>
+        </li> -->
 
       <li class="nav-item">
             <router-link to="/track_application" class="nav-link">

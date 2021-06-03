@@ -47,6 +47,8 @@ export default {
                        renameId['class_stream_section'] = element.class+' '+element.stream+' '+element.section
                     }else if(element.stream){
                         renameId['class_stream_section'] = element.class+' '+element.stream
+                    } else if(element.section){
+                        renameId['class_stream_section'] = element.class+' '+element.section
                     }
                     else{
                         renameId['class_stream_section'] = element.class
@@ -54,6 +56,8 @@ export default {
                     renameId['org_class_id'] = element.org_class_id
                     renameId['org_stream_id'] = element.org_stream_id
                     renameId['org_section_id'] = element.org_section_id
+                    renameId['OrgClassStreamId'] = element.OrgClassStreamId
+                    
                     const obj = {...renameId};
                     classStreamSection.push(obj);
                 });

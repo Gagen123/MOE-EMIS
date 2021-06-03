@@ -37,7 +37,8 @@ class LoadOrganizationController extends Controller{
             if($id=="allData"){
                 $response_data=OrganizationDetails::all();
             }
-            else{
+            else{        // dd($request);
+
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
             }
         }
@@ -73,7 +74,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadClassStreamSection($type="", $id=""){
-        $section = DB::select('SELECT t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
+        $section = DB::select('SELECT t1.id AS OrgClassStreamId, t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
         t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1 
         JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id 
         LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
@@ -92,5 +93,104 @@ class LoadOrganizationController extends Controller{
     
     public function getClassByType($type=""){
         return Classes::where('status',1)->where('category',$type)->orderBy('displayOrder', 'asc')->get();
+    }
+
+    /**
+     * Get the Class Streams by Organization
+     */
+
+    public function getOrgClassStream($org_id){
+
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class')
+                    ->where('organizationId', $org_id)
+                    ->orderBy('classes.displayOrder', 'asc')
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
+    public function loadStreamList($org_id){
+
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class')
+                    ->where('organizationId', $org_id)
+                    ->where('streamId', '<>', 'NULL')
+                    ->get();
+
+        return $this->successResponse($response_data);
+    } 
+
+    public function loadSectionList($id){
+
+        $response_data = DB::table('section_details')
+                    ->join('organization_class_streams', 'section_details.classSectionId', '=', 'organization_class_streams.id')
+                    ->select('organization_class_streams.*', 'section_details.section AS section', 'section_details.id AS section_id')
+                    ->where('organization_class_streams.id', $id)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
+    /**
+     * the get Arrays fetches the list of classes, streams and sections in an array
+     * this is for display the name of the class, stream and section
+     */
+
+    public function getClassArray($org_id){
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.id AS id', 'classes.class AS class')
+                    ->where('organization_class_streams.organizationId', $org_id)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
+    public function getStreamArray($org_id){
+        $response_data = DB::table('organization_class_streams')
+                    ->join('streams', 'organization_class_streams.streamId', '=', 'streams.id')
+                    ->select('organization_class_streams.id AS id', 'streams.stream AS stream')
+                    ->where('organization_class_streams.organizationId', $org_id)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
+    // /**
+    //  * the get Arrays fetches the list of classes, streams and sections in an array
+    //  * this is for display the name of the class, stream and section
+    //  */
+
+    // public function getClassArray($org_id){
+    //     $response_data = DB::table('organization_class_streams')
+    //                 ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+    //                 ->select('organization_class_streams.id AS id', 'classes.class AS class')
+    //                 ->where('organization_class_streams.organizationId', $org_id)
+    //                 ->get();
+
+    //     return $this->successResponse($response_data);
+    // }
+
+    // public function getStreamArray($org_id){
+    //     $response_data = DB::table('organization_class_streams')
+    //                 ->join('streams', 'organization_class_streams.streamId', '=', 'streams.id')
+    //                 ->select('organization_class_streams.id AS id', 'streams.stream AS stream')
+    //                 ->where('organization_class_streams.organizationId', $org_id)
+    //                 ->get();
+
+    //     return $this->successResponse($response_data);
+    // }
+
+    public function getSectionArray($org_id){
+        $response_data = DB::table('section_details')
+                    ->join('organization_class_streams', 'section_details.classSectionId', '=', 'organization_class_streams.id')
+                    ->select('section_details.id AS id', 'section_details.section AS section')
+                    ->where('organization_class_streams.organizationId', $org_id)
+                    ->get();
+
+        return $this->successResponse($response_data);
     }
 }

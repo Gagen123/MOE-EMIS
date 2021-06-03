@@ -52,8 +52,6 @@ class AcademicController extends Controller
     public function saveStudentAttendance(Request $request){
         $rules = [
             'org_class_id' => 'required',
-            'org_stream_id' => 'required',
-            'org_section_id' => 'required',
             'class_stream_section' => 'required',
             'attendance_date' => 'required',
             'data.*.CidNo' => 'required',
@@ -62,8 +60,6 @@ class AcademicController extends Controller
         ];
         $customMessages = [
             'org_class_id.required' => 'This field is required',
-            'org_stream_id.required' => 'This field is required',
-            'org_section_id.required' => 'This field is required',
             'class_stream_section.required' => 'This field is required',
             'attendance_date.required' => 'This field is required',
             'data.*.CidNo.required' => 'This field is required',
@@ -80,7 +76,6 @@ class AcademicController extends Controller
        
     }
     public function getStudentsForAttendance(Request $request){
-
         $org_id = $this->getWrkingAgencyId();
 
         $uri = 'emis/academics/loadStudentAttendanceDetail/'.$org_id;
@@ -94,7 +89,7 @@ class AcademicController extends Controller
             $uri .= (('&org_section_id='.$request->sectionId));
         }
         $studentAttendanceDetail = json_decode($this->apiService->listData($uri),true);        
-        $students = $this->getStudents($org_id,$request->classId,$request->streamId,$request->sectionId);
+        $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
         return json_encode([
             "student"=>$students,
             "studentAttendanceDetail"=>$studentAttendanceDetail["data"]
@@ -143,14 +138,11 @@ class AcademicController extends Controller
         $response_data = $this->apiService->listData($uri); 
         return $response_data;
     } 
-    private function getStudents($org_id,$org_class_id,$org_stream_id="",$org_section_id=""){
+    public function getStudents($org_id,$OrgClassStreamId,$org_section_id=""){
         $uri = 'emis/students/getStudents/'.$org_id;
          
-        $uri .= ('?classId='.$org_class_id);
+        $uri .= ('?OrgClassStreamId='.$OrgClassStreamId);
 
-        if($org_stream_id !== null){
-            $uri .= (('&streamId='.$org_stream_id));
-        }
         if($org_section_id !== null){
             $uri .= (('&sectionId='.$org_section_id));
         }
@@ -158,8 +150,8 @@ class AcademicController extends Controller
         return $students['data'];
     }
     public function getStudentElectiveSubjects(Request $request){
-        $org_id = $this->getWrkingAgencyId();
-        $students = $this->getStudents($org_id,$request->classId,$request->streamId,$request->sectionId);
+    $org_id = $this->getWrkingAgencyId();
+       $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
         $studentElectiveSubjects = json_decode($this->apiService->listData('emis/academics/getStudentElectiveSubjects'),true);        
         for($i=0;$i<count($students);$i++) {
             foreach ($studentElectiveSubjects["data"] as $studentElectiveSubject) {

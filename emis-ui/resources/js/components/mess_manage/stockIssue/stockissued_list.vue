@@ -105,7 +105,7 @@ export default {
     },
     methods: {
         loadStockIssuedList(org_Id){
-        let uri = 'mess_manage/loadStockIssuedList/'+org_Id;
+        let uri = 'mess_manage/getStockIssuedList/'+org_Id;
             axios.get(uri)
             .then(response => { 
                 let data = response;

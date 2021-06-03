@@ -74,7 +74,7 @@ export default {
     methods: {
         //need to get the organisation id and pass it as a parameter
         
-        loadStudentList(uri='students/loadStudentTransfers/'+this.org_id){
+        loadStudentList(uri='students/loadStudentWhereabouts/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -104,7 +104,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_updates_list');
+                    this.$router.push('/student_update_list');
                 })
                 .catch(() => {
                     console.log("Error......")

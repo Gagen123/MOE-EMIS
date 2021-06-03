@@ -23,7 +23,7 @@ class FoodReceivedController extends Controller
      //   dd('m here at my service');
       $stockreceive = [
         'dateOfreceived'           =>  $request['dateOfreceived'],
-        'quarter_id'               =>  $request['quarter'],
+        'term_id'                  =>  $request['term'],
         'organizationId'           =>  $request['organizationId'],
         'updated_by'               =>  $request->user_id,
         'created_at'               =>  date('Y-m-d h:i:s')
@@ -46,8 +46,8 @@ class FoodReceivedController extends Controller
         }
          //  dd('m here');
         return $this->successResponse($stckrcv, Response::HTTP_CREATED);
-        return($stckrcv);
-        dd($stckrcv);
+       
+       // dd($stckrcv);
     }
 
     public function loadFoodReleaseListing($org_Id=""){

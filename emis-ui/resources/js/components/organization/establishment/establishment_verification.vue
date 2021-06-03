@@ -43,7 +43,7 @@
                             <div class="form-group row"> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
                                     <label class="mb-0">Proposal Initiated By:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.initiated_by}}</span>
+                                    <span class="text-blue text-bold">{{proposed_by_list[applicationOrgdetails.initiated_by]}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
@@ -357,6 +357,7 @@ export default {
             sectionList:[],
             applicationdetails:[],
             levelList:{},
+            proposed_by_list:{},
             locationList:[],
             feeding:[],
             applicationOrgdetails:{locationTypeId:'', level:'', proposedName:'', initiated_by:''},
@@ -649,13 +650,26 @@ export default {
                 }
             });
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.proposed_by_list[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
     },
     mounted(){
         this.getLevel();
         this.getLocation();
-        this.getClassStream();
+        // this.getClassStream();
         this.getClass();
         this.getstream();
+        this.loadproposedBy();
         // this.applicationdetails.applicationNo=this.$route.params.data.application_number;
         this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
         

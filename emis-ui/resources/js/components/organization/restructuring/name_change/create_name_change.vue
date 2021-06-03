@@ -25,11 +25,19 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <label>Org Type: {{form.organization_type}}</label>
+                                </div>
+                                
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/>
+                                    <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control" @change="remove_error('initiatedBy')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <!-- <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/> -->
                                     <has-error :form="form" field="initiatedBy"></has-error>
                                 </div>
                             </div>
@@ -44,7 +52,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
                                 </div>
                             </div>
                         </div>
@@ -60,6 +68,7 @@
 export default {
     data(){
         return{
+            proposed_by_list:[],
             orgList:'',
             classList:[],
             streamList:[],
@@ -178,10 +187,21 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.proposed_by_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
         
     },
     
     mounted() { 
+        this.loadproposedBy();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -200,6 +220,7 @@ export default {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
                 this.form.organizationId=data['Agency_Code'];
+                this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
             }
         })    

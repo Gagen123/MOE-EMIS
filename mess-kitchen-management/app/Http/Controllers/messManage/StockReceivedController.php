@@ -20,7 +20,7 @@ class StockReceivedController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveStockReceived(Request $request){
-      //  dd('m here');
+      //  dd('m here at my service');
        $stockreceived = [
            'dateOfreceived'             =>  $request['dateOfreceived'],
            'quarter_id'                 =>  $request['quarter'],
@@ -30,7 +30,7 @@ class StockReceivedController extends Controller
            'created_at'                 =>  date('Y-m-d h:i:s')
        ];
      // dd($stockreceived);
-       $stockrcv = StockReceived::create($stockreceived);
+       $stockrcv = StockReceived::create($stockreceived); 
 
        foreach ($request->items_received as $i => $item){
            $stockreciveitems = array(
@@ -42,7 +42,7 @@ class StockReceivedController extends Controller
                'updated_by'                   =>  $request->user_id,
                'created_at'                   =>  date('Y-m-d h:i:s')
            );
-
+         //  dd($stockrcv);
            StockReceivedItem::create($stockreciveitems);
        }
        return $this->successResponse($stockrcv, Response::HTTP_CREATED);
@@ -64,5 +64,10 @@ class StockReceivedController extends Controller
     }
     
     
+    // public function getfoodreleaseditemList($stockreceivedId){
+    //     $foodreleaseitem = DB::table('item_released_notes')
+    //     ->select('item_id', 'quantity', 'unit_id')->where('stockreceivedId', $stockreceivedId)->get();
+    //     return $foodreleaseitem;
+    // }
 
 }

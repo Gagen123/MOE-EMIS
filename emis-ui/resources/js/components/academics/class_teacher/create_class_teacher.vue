@@ -94,6 +94,9 @@ export default {
                        renameId['class_stream_section'] = item.class+' '+item.stream+' '+item.section
                     }else if(item.stream){
                         renameId['class_stream_section'] = item.class+' '+item.stream
+                    }
+                    else if(item.section){
+                        renameId['class_stream_section'] = item.class+' '+item.section
                     }else{
                         renameId['class_stream_section'] = item.class
                     }

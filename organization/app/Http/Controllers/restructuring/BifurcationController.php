@@ -176,7 +176,7 @@ class BifurcationController extends Controller
         
         // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
         $class1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->groupBy('classId')->get();
-        $stream1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->where('streamId','!=',null)->get();
+        $stream1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->where('streamId','<>',null)->get();
         foreach($class1 as $cls){
             $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
         }

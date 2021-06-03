@@ -37,23 +37,16 @@ export default {
         }
     },
     methods:{
-        loadClosureList(uri = 'organization/getOrgList'){
+        loadClosureList(dzo_id){
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.closureList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#closure-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
 
          viewClosureList(data){
@@ -62,7 +55,14 @@ export default {
     },
 
     mounted(){
-        this.loadClosureList();
+         axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.loadClosureList(data['Dzo_Id']);
+        })    
+        .catch(errors => { 
+            console.log(errors)
+        });
     },
 }
 </script>

@@ -69,6 +69,11 @@ class LoadOrganizaitonController extends Controller{
         return $this->apiService->getListData('emis/common_services/loadHeaquarterList/'.$type.'/'.$param);
     }
 
+    /**
+     * type values "NOT AVAILABLE" and "ANY"
+     * 
+     */
+
     public function loadClassStreamSection($type="",$id=""){
         //type=userworkingagency: to list with working agency from user login
         if($type=="userworkingagency"){
@@ -84,6 +89,56 @@ class LoadOrganizaitonController extends Controller{
     public function getClassByType($type=""){
         return $this->apiService->getListData('emis/common_services/getClassByType/'.$type);
     }
-    
+
+    /**
+     * Get the class list from the organization class mapping
+     */
+
+    public function getOrgClassStream(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getOrgClassStream/'.$org_id);
+    }
+
+    /**
+     * function to get the class stream section by organization
+     * params is Class, Stream and Section separated by __ (double underscore)
+     */
+
+    public function getClassStreamSection($params){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getClassStreamSection/'.$params.'/'.$org_id);
+    }
+
+    /**
+     * the id is the id from the table organizaiton_class_streams
+     */
+
+    public function loadStreamList($id){
+        return $this->apiService->getListData('emis/common_services/loadStreamList/'.$id);
+    } 
+
+    public function loadSectionList($id){
+        return $this->apiService->getListData('emis/common_services/loadSectionList/'.$id);
+    }
+
+    /**
+     * the get Arrays fetches the list of classes, streams and sections in an array
+     * this is for display the name of the class, stream and section
+     */
+
+    public function getClassArray(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getClassArray/'.$org_id);
+    }
+
+    public function getStreamArray(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getStreamArray/'.$org_id);
+    }
+
+    public function getSectionArray(){
+        $org_id = $this->getWrkingAgencyId();
+        return $this->apiService->getListData('emis/common_services/getSectionArray/'.$org_id);
+    }
 
 }

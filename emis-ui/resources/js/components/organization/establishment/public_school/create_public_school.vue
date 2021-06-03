@@ -33,7 +33,10 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/>
+                                <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control select2" @change="remove_error('initiatedBy')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
                                 <has-error :form="form" field="initiatedBy"></has-error>
                             </div>
                         </div>
@@ -47,7 +50,7 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getCategory(),remove_error('level')">
+                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="this.getClassStream(),remove_error('level')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
@@ -173,34 +176,55 @@
                                 <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                        <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
                                     <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">
                                     <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                 </span>  
                             </span> 
-                        </div>
+                        </div> -->
+                         <!-- <span v-for="(item, key, index) in  classStreamList" :key="index">
+                            <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> 
+                                <label class="pr-3"> 
+                                    {{ item.class }} 
+                                    <span v-if="item.stream"> - 
+                                        {{  item.stream  }}
+                                    </span>
+                                </label>
+                            </span>  
+                        </span>  -->
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <!-- <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <br>
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                    Here we are taking the class stream mapping id. Do not need to use padding
-                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                </span>
-                            </span>  -->
-                            <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> 
-                                    <label class="pr-3"> 
-                                        {{ item.class }} 
-                                        <span v-if="item.stream"> - 
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Classes</th>
+                                        <th>Stream</th>  
+                                        <th></th>                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
                                             {{  item.stream  }}
-                                        </span>
-                                    </label>
-                                </span>  
-                            </span> 
+                                        </td>
+                                        <td v-else>                                
+                                           {{ item.class }}
+                                        </td>
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                        </td>
+                                        <td v-else>  
+                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                            
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -231,7 +255,7 @@ export default {
             classStreamList:[],
             fileUpload: [],
             draft_data:[],
-
+            proposed_by_list:[],
             file_form: new form({
                 id:'',
                 file_name: '',
@@ -379,7 +403,7 @@ export default {
         /**
          * method to populate dropdown
          */
-        async changefunction(id){
+        async changefunction(id,text){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
@@ -391,7 +415,7 @@ export default {
             }
             if(id=="level"){
                 this.form.level=$('#level').val();
-                this.getCategory();
+                this.getClassStream(text);
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag=$('#dzongkhag').val();
@@ -412,12 +436,12 @@ export default {
         /**
          * method to get class stream in checkbox
          */
-        getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping/school')
-              .then(response => {
-                this.classStreamList = response.data.data;
-            });
-        },
+        // getClassStream:function(){
+        //     axios.get('/masters/loadClassStreamMapping/school')
+        //       .then(response => {
+        //         this.classStreamList = response.data.data;
+        //     });
+        // },
 
         /**
          * method to get class in checkbox
@@ -463,7 +487,7 @@ export default {
                             }
                             if(response!="" && response!="No Screen"){
                                 let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'estb_acknowledgement',params: {data:message}});
+                                this.$router.push({name:'acknowledgement_public_school',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
                                     title: 'Application for new establishment has been submitted for further action'
@@ -568,14 +592,24 @@ export default {
         /**
          * method to get other category if the category is 'ECCD'
          */
-        getCategory(){
-            let level = $('#level option:selected').text();
-            if(level == "ECCD"){
-                $(".eccd").show();
+        getClassStream(text){
+            let level = text;
+            if(level.toLowerCase().includes('middle')){
+                level="10";
+            }
+            else if(level.toLowerCase().includes('lower')){
+                level="8";
+            }
+            else if(level.toLowerCase().includes('primary')){
+                level="6";
             }
             else{
-                $(".eccd").hide();
+                level="12";
             }
+            axios.get('/masters/loadClassStreamMapping/school_'+level)
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
         },
 
         /**
@@ -634,11 +668,22 @@ export default {
                 console.log(errors)
             });
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.proposed_by_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
     },
     
     created(){
         this.getScreenAccess();
         this.getLevel();
+        this.loadproposedBy();
         this.getLocation();
     },
     mounted() {
@@ -659,16 +704,16 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text()); 
         });
         
-        Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
+        Fire.$on('changefunction',(id,text)=> {
+            this.changefunction(id,text);
         });
        
         this.getClass();
         this.getStream();
-        this.getClassStream();
+        // this.getClassStream();
         this.getLevel();
         this.getLocation();
         this.getOrgList();

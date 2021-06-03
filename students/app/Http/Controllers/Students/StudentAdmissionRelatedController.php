@@ -48,33 +48,31 @@ class StudentAdmissionRelatedController extends Controller
             'std_reported'          => $request->std_reported,
         ];
         
-        $std_reported = $data['std_reported'];
+        $std_unreported = $data['std_reported'];
+        $student_id = $data['std_id'];
 
         unset($data['std_reported']);
 
-        foreach($std_ids as $index => $student_id){
-            $screened_data = [
-                // 'StdHealthTermId' => $data['term_id'],
-                // 'StdStudentId'=> $student_id,
-                // 'date' => $data['date'],
-                // 'height' => $std_height[$index],
-                // 'weight' => $std_weight[$index],
-                // 'bmi' => 0,
-                // 'remarks' => $std_remarks[$index]
-            ];
-
-            //$response_data = StudentBmi::create($screened_data);
+        foreach($std_unreported as $index => $unreported){
+            if($unreported == 'on'){
+                $StdStudentId = $student_id[$index];
+                $response_data = $this->updateStudentStatus('reporting', $StdStudentId);
+            }
+            
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
         
     }
 
-    public function loadUnreportedStudents($param1){
-        $id =$param1;
+    public function loadUnreportedStudents($org_id){
+
+        $students = DB::table('std_student')
+                ->where('OrgOrganizationId', $org_id)
+                ->where('IsRejoined', '1')
+                ->get();
         
-        return $this->successResponse(Student::where('OrgOrganizationId',$id)->take(10)
-                            ->get(['id', 'Name', 'DateOfBirth']));
+        return $this->successResponse($students);
     }
 
     public function saveStudentTransfer(Request $request){
@@ -104,6 +102,7 @@ class StudentAdmissionRelatedController extends Controller
         
         if($request->action_type=="add"){
             $response_data = StdSchoolLeaving::create($data);
+            $updated_status = $this->updateStudentStatus('school_leaving', $request->student);
 
         } else if($request->action_type=="edit"){
 
@@ -128,14 +127,13 @@ class StudentAdmissionRelatedController extends Controller
 
     public function loadStudentTransfers($param){
         $id =$param;
-
-        $awards = DB::table('std_student_school_leaving')
-                ->join('std_student', 'std_student_school_leaving.StdStudentId', '=', 'std_student.id')
-                ->select('std_student_school_leaving.*', 'std_student.Name')
+        
+        $students = DB::table('std_student')
                 ->where('std_student.OrgOrganizationId', $id)
+                ->where('IsTransferred', '1')
                 ->get();
         
-        return $this->successResponse($awards);
+        return $this->successResponse($students);
     }
 
     public function saveStudentWhereabouts(Request $request){
@@ -266,5 +264,21 @@ class StudentAdmissionRelatedController extends Controller
 
         return $this->successResponse($persondata, Response::HTTP_CREATED);
        // dd($persondata);
+    }
+
+    private function updateStudentStatus($type, $student_id){
+        if($type == 'school_leaving'){
+            $app_data = [
+                'IsTransferred' => '1',
+            ];
+        }
+        if($type == 'reporting'){
+            $app_data = [
+                'IsRejoined' => '1',
+            ];
+        }
+
+        Student::where('id', $student_id)->update($app_data);
+        return;
     }
 }

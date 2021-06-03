@@ -332,6 +332,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
+        $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
+
+        $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);
+        $router->get('/loadStreamList/{id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
+        $router->get('/loadSectionList/{id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
+        $router->get('/getClassArray/{org_id}', ['uses' => 'LoadOrganizationController@getClassArray']);
+        $router->get('/getStreamArray/{org_id}', ['uses' => 'LoadOrganizationController@getStreamArray']);
+        $router->get('/getSectionArray/{org_id}', ['uses' => 'LoadOrganizationController@getSectionArray']);
+
+
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
         $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
