@@ -14,6 +14,8 @@ class VaccineType extends Model
     protected $fillable = [
         'id',
         'Name', 
+        'vaccineFor',
+        'Description',
         'Status'
     ];
 }

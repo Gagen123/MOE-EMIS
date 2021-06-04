@@ -75,6 +75,11 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/str_sub_category_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Structure Sub Category
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/structure_facility_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Structure Facility
                     </router-link>
@@ -102,11 +107,6 @@
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/sport_supporter_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Sport Supporter
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/str_sub_category_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Structure Sub Category
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">

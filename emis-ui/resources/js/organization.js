@@ -436,6 +436,15 @@ const routes = [
                     { path: '/equipment_edit', name:'EquipmentEdit', component: require('./components/organization/general/equipment/equipment_edit.vue').default },
                     { path: '/equipment_list', name:'EquipmentList', component: require('./components/organization/general/equipment/equipment_list.vue').default },
                 ]    
+            },
+            { path: '/furniture_index',
+                component: require('./components/organization/general/furniture/furniture_index.vue').default,
+                children: [
+                    { path: '',name:'furniture_index', component: require('./components/organization/general/furniture/furniture_list.vue').default },
+                    { path: '/furniture_add', name:'furniture_add', component: require('./components/organization/general/furniture/furniture_add.vue').default },
+                    { path: '/furniture_edit', name:'furniture_edit', component: require('./components/organization/general/furniture/furniture_edit.vue').default },
+                    { path: '/furniture_list', name:'furniture_list', component: require('./components/organization/general/furniture/furniture_list.vue').default },
+                ]    
             },  
             { path: '/locations', name:'locations', 
                 component: require('./components/organization/general/locations.vue').default,

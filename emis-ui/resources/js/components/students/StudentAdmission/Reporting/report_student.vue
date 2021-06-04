@@ -37,10 +37,9 @@
                         <table id="student-list-table" class="table w-100 table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>Sl No</th>
                                     <th>Student ID</th>
                                     <th>Name</th> 
-                                    <th>Class</th>
-                                    <th>Section</th>
                                     <th>
                                         Reported
                                         <input type="checkbox" name="reported" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
@@ -50,10 +49,9 @@
                             <tbody id="tbody">
                                 <tr v-for="(student, index) in studentList" :key="index">
                                     <td>{{ index + 1 }}</td>
+                                    <td>{{ student.student_code}}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> {{ }} </td>
                                         <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
-                                    <td>{{ }}</td>
                                     <td>
                                         <input type="checkbox" name="screened" class="form-control-input screencheck" v-model="student_form.std_reported[index]"/>
                                     </td>

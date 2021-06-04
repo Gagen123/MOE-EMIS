@@ -175,7 +175,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
-            $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
+            // $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
+            // $router->get('/loadEquipment/{orgId}', 'generalInformation\EquipmentController@loadEquipment');
+            $router->post('/saveEquipment', 'generalInformation\EquipmentController@saveEquipment');
             $router->get('/loadEquipment/{orgId}', 'generalInformation\EquipmentController@loadEquipment');
             $router->get('/getType', 'generalInformation\EquipmentController@getType');
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');

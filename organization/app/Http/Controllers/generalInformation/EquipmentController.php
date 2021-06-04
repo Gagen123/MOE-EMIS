@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\generalInformation\EquipmentAndFurniture;
+use App\Models\generalInformation\Equipment;
 use App\Models\Masters\EquipmentType;
 use App\Models\Masters\EquipmentItem;
 use App\Models\Masters\EquipmentUsage;
@@ -30,13 +30,14 @@ class EquipmentController extends Controller
     */
     
     public function loadEquipment($orgId=""){
-        $equi = DB::table('equipment_and_furniture as a')
+
+        $equip = DB::table('organization_equipment as a')
             ->join('equipment_type as b', 'a.type', '=', 'b.id')
             ->join('equipment_items as c', 'a.item', '=', 'c.id')
-            ->join('equipment_usage as d', 'a.location', '=', 'd.id')
-            ->select('a.id as id','b.name as type', 'c.equipmentItem as item','d.name as location','a.number as number',
-            'b.id AS typeId', 'c.id AS itemId', 'd.id AS locationUsageId')->where('organizationId',$orgId)->get();
-        return $equi;
+            ->select('a.id as id','b.name as type', 'c.equipmentItem as item','a.cost as cost', 'a.condition as condition',
+            'b.id AS typeId', 'c.id AS itemId')->where('organizationId',$orgId)->get();
+
+        return $equip;
     }
 
     /**
@@ -61,8 +62,47 @@ class EquipmentController extends Controller
         return EquipmentUsage::where('status',1)->get();
     }
 
+    /**
+     * TO save Equipments
+     */
+
+    public function saveEquipment(Request $request){
+
+        $id = $request->id;
+
+        if( $id != null){
+            $data = [
+                'organizationId'            =>  $request['organizationId'],
+                'type'                      =>  $request['type'],
+                'item'                      =>  $request['item'],
+                'cost'                      =>  $request['cost'],
+                'condition'                 =>  $request['condition'],
+                'updated_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
+            ];
+
+            $response_data = Equipment::where('id', $id)->update($data);
+        } else {
+            $data = [
+                'organizationId'            =>  $request['organizationId'],
+                'type'                      =>  $request['type'],
+                'item'                      =>  $request['item'],
+                'cost'                      =>  $request['cost'],
+                'condition'                 =>  $request['condition'],
+                'created_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
+            ];
+
+            $response_data = Equipment::create($data);
+
+        }
+
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
     /** 
-     * method to save section
+     * method to save equipments
+     * old function created by Ugyen
     */
     public function saveEquipmentAndFurniture(Request $request){
         $id = $request->id;
@@ -92,6 +132,6 @@ class EquipmentController extends Controller
         }
         
         return $this->successResponse($section, Response::HTTP_CREATED);
-}
+    }
 
 }

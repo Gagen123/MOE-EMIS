@@ -298,6 +298,12 @@ class StudentMasterController extends Controller
                 }
             case "vaccine_type" : {
                     $databaseModel = "VaccineType";
+                    if($type =='data'){
+                        $additional_data = [
+                            'vaccineFor' => $request->vaccineFor
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "term_type" : {
