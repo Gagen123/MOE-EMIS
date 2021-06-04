@@ -361,6 +361,16 @@ class GeneralInfoController extends Controller
             'hasCE'                     =>  $request['hasCE'],
             'mofCode'                   =>  $request['mofCode'],
             'zestAgencyCode'            =>  $request['zestAgencyCode'],
+            'longitude'                 =>  $request['longitude'],
+            'latitude'                  =>  $request['latitude'],
+            'altitude'                  =>  $request['altitude'],
+            'map_path'                  =>  $request['map_path'],
+            'climate_type'              =>  $request['climate_type'],
+            'distance_from_dzo'         =>  $request['distance_from_dzo'],
+            'thramNo'                   =>  $request['thramNo'],
+            'fencingtype'               =>  $request['fencingtype'],
+            'disasterArea'              =>  $request['disasterArea'],
+            'entranceGate'              =>  $request['entranceGate'],
             'user_id'                   =>  $this->userId()
         ];
         // dd($org_details);

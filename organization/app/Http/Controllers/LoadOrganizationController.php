@@ -15,6 +15,7 @@ use App\Models\generalInformation\SectionDetails;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrgProfile;
 use App\Models\Masters\Classes;
+use App\Models\generalInformation\Locations;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -54,6 +55,10 @@ class LoadOrganizationController extends Controller{
             $response_data->classes=OrganizationClassStream::where('organizationId',$response_data->id)->get();
             if($response_data->category=="private_school"){
                 $response_data->proprioter=OrganizationProprietorDetails::where('organizationId',$response_data->id)->first();
+            }
+            $loc=Locations::where('organizationId',$response_data->id)->first();
+            if($loc!=null && $loc!=""){
+                $response_data->locationDetials=$loc;
             }
         }
         if($type=="Headquarterbyid"){

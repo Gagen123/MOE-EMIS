@@ -226,6 +226,13 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks</label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="classStreamForm.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -278,7 +285,7 @@ export default {
             }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Public School', status:'Submitted',application_number:'',
-                action_type:'add',
+                action_type:'add',submit_type:'',remarks:'',proposedName:'',
             }) 
         } 
     },
@@ -468,38 +475,60 @@ export default {
          * method to show next tab
          */
         shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
-                Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveClassStream')
-                        .then((response) => {
-                            if(response.data=="No Screen"){
-                                Toast.fire({  
-                                    icon: 'error',
-                                    title: 'Technical Errors: please contact system administrator for further details'
-                                });
-                            }
-                            if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'acknowledgement_public_school',params: {data:message}});
-                                Toast.fire({  
-                                    icon: 'success',
-                                    title: 'Application for new establishment has been submitted for further action'
-                                });
-                            } 
-                        })
-                        .catch((err) => {
-                            console.log("Error:"+err)
-                        })
+            if(nextclass=="final-tab" || nextclass=="reject"){ 
+                let subform=true;
+                let status="";
+                let message="";
+                if(nextclass=="reject"){
+                    if($('#remarks').val()==""){
+                        subform=false;
+                        $('#remarks_err').html('Please mention remarks');
                     }
-                });
+                    else{
+                        status="Are you sure you wish to reject this application? ";
+                        message="Applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                    }
+                }
+                if(nextclass=="final-tab"){
+                    status="Are you sure you wish to submit this application for further approval ? ";
+                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                }
+                if(subform){
+                    Swal.fire({
+                        text: status,
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.classStreamForm.submit_type=nextclass;
+                            this.classStreamForm.proposedName=this.form.proposedName;
+                            this.classStreamForm.post('organization/saveClassStream')
+                            .then((response) => {
+                                if(response=="No Screen"){
+                                    Toast.fire({  
+                                        icon: 'error',
+                                        title: 'Technical Errors: please contact system administrator for further details'
+                                    });
+                                }
+                                alert('ddd'+response);
+                                if(response!="" && response!="No Screen"){
+                                    let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    this.$router.push({name:'acknowledgement_public_school',params: {data:message+res }});
+                                    Toast.fire({  
+                                        icon: 'success',
+                                        title: 'Application for new establishment has been submitted for further action'
+                                    });
+                                } 
+                            })
+                            .catch((err) => {
+                                console.log("Error:"+err)
+                            })
+                        }
+                    });
+                }
             }
             else{
                 if(nextclass=="file-tab"){
@@ -556,7 +585,6 @@ export default {
             }
         },
         loadpendingdetails(type){
-            alert(type);
             axios.get('organization/loaddraftApplication/'+type)
               .then(response => {
                 let draft = response.data.data;
@@ -710,9 +738,6 @@ export default {
         this.getScreenAccess();
         this.getLevel();
         this.loadproposedBy();
-        this.getLocation();
-    },
-    mounted() {
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -723,7 +748,9 @@ export default {
         .catch(errors => { 
             console.log(errors)
         });
-    
+        this.getLocation();
+    },
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

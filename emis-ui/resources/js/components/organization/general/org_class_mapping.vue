@@ -4,17 +4,21 @@
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="message"></div>
         </div>
+        <div class="callout callout-danger" style="display:none" id="newMessage">
+            Seems there is no section mapping in your Organizaiton. Please update your classes and section <br>
+            Thank you
+        </div>
         <div id="mainformid">
             <form class="bootbox-form" id="classMappingId">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
                         <div class="row form-group pl-5">
                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                               <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                               <table id="class_strm-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th style="width:10%">Classes</th>
-                                            <th style="width:20%">StreamSection</th>  
+                                            <th class="streamsec" style="width:20%">Stream</th>  
                                             <th style="width:10%">
                                                 <!-- <input type="checkbox" id="chkbtn" @click="checkall('chkbtn')"> Check All -->
                                             </th> 
@@ -27,10 +31,10 @@
                                             <td>
                                                 <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                             </td>
-                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                            <td class="streamsec" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
                                                 {{  item.stream  }}<input type="hidden" name="selectedSection" :id="'seelctedsec'+item.id">
                                             </td>
-                                            <td v-else> <input type="hidden" name="selectedSection" :id="'seelctedsec'+item.classId"></td>
+                                            <td class="streamsec" v-else> <input type="hidden" name="selectedSection" :id="'seelctedsec'+item.classId"></td>
 
                                             <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
                                                 <input type="checkbox" :id="'applibable'+item.id" @click="showNoSection(item.id)" class="classname" 
@@ -221,8 +225,12 @@ export default {
             axios.get('/organization/getCurrentClassStream/'+schoolId)
               .then(response => {
                 let response_data = response.data;
+                let isNew=false;
                 for(let i=0;i<response_data.length;i++){
                     let sec_count=response_data[i].sectionCount;
+                    if(sec_count==0){
+                        isNew=true;
+                    }
                     if(response_data[i].streamId!=""){
                         $('#applibable'+response_data[i].classStreamId).prop('checked',true);
                         this.showNoSection(response_data[i].classStreamId);
@@ -236,6 +244,9 @@ export default {
                         this.setsections(response_data[i].classId);
                     }
                 }
+                if(isNew){
+                    $('#newMessage').show();
+                }
             });
         },
         getorgdetials(org_id){
@@ -243,10 +254,12 @@ export default {
             .then(response => {
                 let org_data=response.data.data;
                 this.getClassStream(this.levelArray[org_data.levelId]);
+                this.getCurrentClassStream(org_id);
             });
         },
         getClassStream(text){
             let level = text;
+            $('streamsec').hide();
             if(level.toLowerCase().includes('middle')){
                 level="10";
             }
@@ -258,6 +271,7 @@ export default {
             }
             else{
                 level="12";
+                $('.streamsec').show();
             }
             axios.get('/masters/loadClassStreamMapping/school_'+level)
               .then(response => {
@@ -284,9 +298,9 @@ export default {
         .then(response => {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
-                this.form.school=data['Agency_Code'];
-                this.getCurrentClassStream(data['Agency_Code']);
                 this.getorgdetials(data['Agency_Code']);
+                this.form.school=data['Agency_Code'];
+                
             }
             else{
                 $('#screenPermission').show();

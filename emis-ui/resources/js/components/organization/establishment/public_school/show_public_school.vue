@@ -289,6 +289,7 @@
                                         <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                                     </span> 
                                 </div>  -->
+                                <!-- <Workflow :appNo="application_number" /> -->
                             </div>
                         </div>
                         <hr>
@@ -304,11 +305,14 @@
     </div>
 </template>
 <script>
+import Workflow from "../../../common/view_workflow_details";
 export default {
     components: {
+        Workflow,
     },
     data(){
         return{ 
+            application_number:'',
             calssArray:{},
             streamArray:{},
             levelList:{},
@@ -329,6 +333,7 @@ export default {
             .then((response) => {  
                 let data=response.data.data;
                 this.applicationdetails=data;
+                this.application_number=this.applicationdetails.application_no;
                 this.applicationOrgdetails=data.org_details;
                 if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
                     $('.strm_clas').show();
@@ -337,14 +342,14 @@ export default {
                 if(data.app_verification!=null){
                     this.verification=data.app_verification;
                 }
-                if(data.org_details.isFeedingSchool==1){
-                    for(let i=0;i<data.feeding_modality.length;i++){
-                        if(data.feeding_modality[i].noOfMeals!=undefined){
-                            $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
-                        }
-                    }
-                    $('#feedingDetails').show();
-                }
+                // if(data.org_details.isFeedingSchool==1){
+                //     for(let i=0;i<data.feeding_modality.length;i++){
+                //         if(data.feeding_modality[i].noOfMeals!=undefined){
+                //             $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
+                //         }
+                //     }
+                //     $('#feedingDetails').show();
+                // }
                 if(data.app_verification!=""){
                     $('#tentativeAttachment').show();
                 }
@@ -443,6 +448,7 @@ export default {
         },
     },
     mounted(){
+        this.application_number=this.$route.query.id;
         this.loadproposedBy();
         this.getLevel();
         this.getLocation();
