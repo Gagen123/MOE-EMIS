@@ -22,6 +22,11 @@ class GeneralInfoController extends Controller
         $this->apiService = $apiService;
     }
 
+    /**
+     * To save the equipments
+     * this function was created by Ugyen. No longer used for the new equipments
+     */
+
     public function saveEquipment(Request $request){
         $rules = [
             'type'          =>  'required',

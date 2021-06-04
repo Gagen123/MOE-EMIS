@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Type:<span class="text-danger">*</span></label> 
+                        <label>Equipment Type:<span class="text-danger">*</span></label> 
                             <select name="type" class="form-control" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" id="type" @change="remove_err('type'),getItem()">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -12,7 +12,7 @@
                             <has-error :form="form" field="type"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Item:<span class="text-danger">*</span></label> 
+                        <label>Equipment Name:<span class="text-danger">*</span></label> 
                         <select name="item" class="form-control" v-model="form.item" :class="{ 'is-invalid': form.errors.has('item') }" id="item" @change="remove_err('item')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.equipmentItem }}</option>
@@ -22,19 +22,19 @@
                 </div>  
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Location/Use:<span class="text-danger">*</span></label> 
-                        <select name="location" class="form-control" v-model="form.location" :class="{ 'is-invalid': form.errors.has('location') }" id="location" @change="remove_err('location')">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in locationUse" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="location"></has-error>
+                        <label>Cost:<span class="text-danger">*</span></label> 
+                        <input name="cost" class="form-control" v-model="form.cost" :class="{ 'is-invalid': form.errors.has('cost') }" id="cost" @change="remove_err('cost')" type="cost">
+                        <has-error :form="form" field="cost"></has-error>
                     </div>
+                </div> 
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Number:<span class="text-danger">*</span></label> 
-                        <input name="number" class="form-control" v-model="form.number" :class="{ 'is-invalid': form.errors.has('number') }" id="number" @change="remove_err('number')" type="number">
-                        <has-error :form="form" field="number"></has-error>
+                        <label class="required">Condition of Equipment:</label>
+                        <br>
+                        <label><input v-model="form.condition"  type="radio" value="1" tabindex="2"/> Usable</label>
+                        <label><input v-model="form.condition"  type="radio" value="0" tabindex="3"/> Not Usable</label>
                     </div>
-                </div>          
+                </div>         
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -56,8 +56,8 @@ export default {
                 organizationId:'',
                 type: '',
                 item: '',
-                location: '',
-                number: '',
+                cost: '',
+                condition: 1,
                 action_type:'add',
             })
         }
@@ -80,8 +80,7 @@ export default {
             if(type=="reset"){
                 this.form.type= '';
                 this.form.item= '';
-                this.form.location= '';
-                this.form.number= '';
+                this.form.cost= '';
             }
             if(type=="save"){
                 this.form.post('/organization/saveEquipment',this.form)
@@ -134,7 +133,6 @@ export default {
 
     mounted() { 
         this.getType();
-        this.getLocationUse();
     }
 }
 </script>
