@@ -150,8 +150,8 @@ Route::prefix('organization')->group(function () {
     Route::get('/loadProjections', [App\Http\Controllers\organization\ProjectionsController::class, 'loadProjections'])->name('loadProjections');
 
     //routes for disasters information
-    Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
-    Route::get('/loadDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'loadDisasterInformation'])->name('loadDisasterInformation');
+ //   Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
+    
 
     //route for income 
     Route::post('/saveIncomeInformation', [App\Http\Controllers\organization\FinanceController::class, 'saveIncomeInformation'])->name('saveIncomeInformation');
@@ -296,11 +296,11 @@ Route::prefix('organization')->group(function () {
     Route::post('/updateBifurcationApplication', [App\Http\Controllers\organization\RestructuringController::class, 'updateBifurcationApplication'])->name('updateBifurcationApplication');
    //Compound Details
     Route::post('/saveSchoolCompundDetails', [App\Http\Controllers\organization\CompoundDetailsController::class, 'saveSchoolCompundDetails'])->name('saveSchoolCompundDetails');
-    Route::get('/loadcompoundareadetials/{org_id}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
-    //disaster Information
+    Route::get('/loadcompoundareadetials', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
     
-    Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\CompoundDetailsController::class, 'saveSchoolCompundDetails'])->name('saveDisasterInformation');
-  //  Route::get('/loadcompoundareadetials/{org_id}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
+    //disaster Information
+    Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
+    Route::get('/loadDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'loadDisasterInformation'])->name('loadDisasterInformation');
 });
 Route::prefix('questionAnswers')->group(function () {
     Route::post('/saveQuestionaries', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'saveQuestionaries'])->name('saveQuestionaries');

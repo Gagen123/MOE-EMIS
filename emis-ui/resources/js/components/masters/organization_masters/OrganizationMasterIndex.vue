@@ -53,10 +53,17 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/location_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Location Type
+                    <router-link to="/fencing_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Fencing Type
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/climate_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Climate Type
+                    </router-link>
+                </li>
+
+
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/level_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Level Type 

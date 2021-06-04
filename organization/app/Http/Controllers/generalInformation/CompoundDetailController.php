@@ -47,11 +47,10 @@ class CompoundDetailController extends Controller
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-
-    
-    // public function loadVisitorInformation($orgId=""){
-    //     $info = Visitor::where('organizationId',$orgId)->get();
-    //     return $info;
-    // }
+   
+    public function loadcompoundareadetials($orgId=""){
+        $info = OrganizationCompoundDetail::where('organizationId',$orgId)->get();
+        return $info;
+    }
 
 }

@@ -937,6 +937,39 @@ class EstablishmentController extends Controller
         ];
         OrganizationDetails::where('id',$request->org_id)->update($org_update_data);
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
+        $location = [
+            'organizationId'        =>  $request->org_id,
+            'landOwnership'         =>  $request['landOwnership'],
+            'compoundFencing'       =>  $request['compoundFencing'],
+            'entranceGate'          =>  $request['entranceGate'],
+            'longitude'             =>  $request['longitude'],
+            'latitude'              =>  $request['latitude'],
+            'altitude'              =>  $request['altitude'],
+            'thramNo'               =>  $request['thramNo'],
+            'cid'                   =>  $request['cid'],
+            'name'                  =>  $request['name'],
+            'compoundArea'          =>  $request['compoundArea'],
+            'googleMapPath'         =>  $request['map_path'],
+            'climate_type'          =>  $request['climate_type'],
+            'disasterArea'          =>  implode($request['disasterArea'],', '),
+            'distance_from_dzo'     =>  $request['distance_from_dzo'],
+            'fencingtypeId'           =>  $request['fencingtype'],
+        ];
+        $loc = Locations::where('organizationId', $request->org_id)->first();
+        if($loc!=null && $loc!=""){
+            $location = $location+[
+                'updated_by'            =>  $request->user_id,
+                'updated_at'            =>  date('Y-m-d h:i:s')
+            ];
+            Locations::where('organizationId', $request->org_id)->update($location);
+        }
+        else{
+            $location = $location+[
+                'created_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
+            ];
+            Locations::create($location);
+        }
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }
 

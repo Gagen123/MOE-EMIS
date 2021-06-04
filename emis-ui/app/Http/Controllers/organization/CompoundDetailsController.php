@@ -72,10 +72,16 @@ class CompoundDetailsController extends Controller
             return $e;
         }
     }
-    public function loadcompoundareadetials($org_id=""){
-        //  dd('m here');
-        $list = $this->apiService->listData('emis/organization/compoundDetails/loadcompoundareadetials'.$org_id);
-        return $list;
+    // public function loadcompoundareadetials($org_id=""){
+    //     //  dd('m here');
+    //     $list = $this->apiService->listData('emis/organization/compoundDetails/loadcompoundareadetials'.$org_id);
+    //     return $list;
+    // }
+    public function loadcompoundareadetials(){
+      //  dd('from UI');
+        $orgId=$this->getWrkingAgencyId();
+        $data = $this->apiService->listData('emis/organization/compoundDetails/loadcompoundareadetials/'.$orgId);
+        return $data;
     }
 
 }

@@ -4,20 +4,20 @@
             <thead>
                 <tr>
                     <th >SL#</th>
+                    <th >Thram No</th>
+                    <th >Plot No</th>
                     <th >Peg Information</th>
                     <th >Compound Area</th>
-                    <th >Play Ground Area</th>
-                    <th >Agriculture Area</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.peginfo}}</td>
-                    <td>{{ item.comparea}}</td>
-                    <td>{{ item.playground}}</td>
-                    <td>{{ item.agriculturalarea}}</td>
+                    <td>{{ item.thramNo}}</td>
+                    <td>{{ item.plotNo}}</td>
+                    <td>{{ item.pegInformation}}</td>
+                    <td>{{ item.compoundArea}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -37,11 +37,11 @@ export default {
         }
     },
     methods:{
-        loadcompoundareadetials(uri='organization/loadcompoundareadetials/'+this.org_id){
+        loadcompoundareadetials(uri='organization/loadcompoundareadetials'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.dataList =  data.data.data;
+                this.dataList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

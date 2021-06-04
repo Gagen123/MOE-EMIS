@@ -32,6 +32,10 @@ export default {
                 this.$router.push({name:type,params: {data:null}});
             }
         },
-    }
+    },
+    mounted() {
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+    },
 }
 </script>

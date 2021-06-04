@@ -57,6 +57,25 @@ const routes = [
                     { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/masters/organization_masters/financial_information/edit_financial_information.vue').default },
                   ]     
               }, 
+              { path: '/fencing_index',  
+                component: require('./components/masters/organization_masters/fencing/fencing_index.vue').default ,
+                  children: [
+                    { path: '/',name:'fencing_index', component: require('./components/masters/organization_masters/fencing/list_fencing.vue').default },
+                    { path: '/list_fencing',name:'list_fencing', component: require('./components/masters/organization_masters/fencing/list_fencing.vue').default },
+                    { path: '/create_fencing',name:'create_fencing', component: require('./components/masters/organization_masters/fencing/create_fencing.vue').default },
+                    { path: '/edit_fencing',name:'edit_fencing', component: require('./components/masters/organization_masters/fencing/edit_fencing.vue').default },
+                  ]     
+              },
+              
+              { path: '/climate_type_index',  
+                component: require('./components/masters/organization_masters/climate_type/climate_type_index.vue').default ,
+                  children: [
+                    { path: '/',name:'climate_type_index', component: require('./components/masters/organization_masters/climate_type/list_climate_type.vue').default },
+                    { path: '/list_climate_type',name:'list_climate_type', component: require('./components/masters/organization_masters/climate_type/list_climate_type.vue').default },
+                    { path: '/create_climate_type',name:'create_climate_type', component: require('./components/masters/organization_masters/climate_type/create_climate_type.vue').default },
+                    { path: '/edit_climate_type',name:'edit_climate_type', component: require('./components/masters/organization_masters/climate_type/edit_climate_type.vue').default },
+                  ]     
+              },
               
 
 

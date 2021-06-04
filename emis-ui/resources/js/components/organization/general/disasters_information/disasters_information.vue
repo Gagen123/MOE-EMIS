@@ -24,8 +24,8 @@ export default {
             if(type=="add_disasters_information" || type=="edit_disasters_information"){
                 this.$router.push("/"+type);
             }
-            if(type=="list_disaster_information"){
-                this.$router.push("/list_disaster_information");
+            if(type=="list_disasters_information"){
+                this.$router.push("/list_disasters_information");
             }
 		},
     },

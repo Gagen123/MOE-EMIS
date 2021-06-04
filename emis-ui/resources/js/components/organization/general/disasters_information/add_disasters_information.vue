@@ -6,16 +6,18 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label class="mb-0.5">Disaster Type:<i class="text-danger">*</i></label>
-                     <select v-model="form.diastertype" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastertype') }" class="form-control select2" name="diastertype" id="diastertype">
-                         <option v-for="(item, index) in dataList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                     </select>
+                      <select v-model="form.diastertype" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastertype') }" class="form-control select2" name="diastertype" id="diastertype">
+                         <option v-for="(item, index) in Disaster_Committee_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                     </select> 
+                  <!--<input type="text" class="form-control" @change="removeerror('diastertype')" :class="{ 'is-invalid': form.errors.has('diastertype') }" id="diastertype" v-model="form.diastertype">-->
                      <has-error :form="form" field="diastertype"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label class="mb-0.5">Disaster Committe:<i class="text-danger">*</i></label>
-                      <select v-model="form.diastercomm" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastercomm') }" class="form-control select2" name="diastercomm" id="diastercomm">
-                         <option v-for="(item, index) in dataList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                       </select>
+                       <select v-model="form.diastercomm" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastercomm') }" class="form-control select2" name="diastercomm" id="diastercomm">
+                         <option v-for="(item, index) in Disaster_Committee_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                       </select> 
+                    <!--    <input type="text" class="form-control" @change="removeerror('diastercomm')" :class="{ 'is-invalid': form.errors.has('diastercomm') }" id="fullname" v-model="form.diastercomm"> -->
                       <has-error :form="form" field="diastercomm"></has-error>
                     </div>
                 </div>
@@ -81,6 +83,8 @@ export default {
         return{
             
             sex_idList:[],
+            Disaster_Committee_list:[],
+            disasterList:[],
            
             form: new form({
                 id: '', 
@@ -173,6 +177,23 @@ export default {
             }
             
         },
+        loadlDisasterCommitteeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/DisasterCommittee'){
+            axios.get(uri)
+            .then(response => {
+             let data = response.data.data;
+             this.Disaster_Committee_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Disaster'){
+            axios.get(uri)
+             .then(response => {
+                let data = response.data.data;
+                 this.disasterList =  data;
+            })
+        },
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
@@ -263,8 +284,17 @@ export default {
             }
             
         },
+        loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Disaster'){
+             axios.get(uri)
+            .then(response => {
+                 let data = response.data.data;
+                 this.disasterList =  data;
+            })
+        },
     },
      mounted() { 
+        this.loadlDisasterCommitteeList();
+        this.loadDisasterList();
         this.loadAllActiveMasters('all_active_gender');
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){

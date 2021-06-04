@@ -11,7 +11,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label > Plot No: </label>
                          <input type="text" class="form-control" @change="removeerror('plotno')" :class="{ 'is-invalid': form.errors.has('plotno') }" id="plotno" v-model="form.plotno" placeholder="plotno">
-                        <has-error :form="form" field="middle_name"></has-error>
+                        <has-error :form="form" field="plotno"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label >Peg Information: </label>
@@ -29,7 +29,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Size of Play Ground Area:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('sizeplayground')" :class="{ 'is-invalid': form.errors.has('sizeplayground') }" id="dob" v-model="form.sizeplayground">
-                        <has-error :form="form" field="dob"></has-error>
+                        <has-error :form="form" field="sizeplayground"></has-error>
                       
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -132,13 +132,13 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.post('/organization/saveCompoundarea',this.form)
+                    this.form.post('/organization/saveSchoolCompundDetails',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: ' Detail is added successfully'
                     })
-                    this.$router.push('/studentaboard_list');
+                    this.$router.push('/list_compound_details');
                 })
                 .catch(() => {
                     console.log("Error......");
@@ -183,7 +183,7 @@ export default {
         // },
         
     },
-     mounted() { 
+    mounted() { 
       
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){
@@ -193,6 +193,18 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-    }
+    },
+     created() {
+        this.form.thramno=this.$route.params.data.thramNo;
+        this.form.plotno=this.$route.params.data.plotNo;
+        this.form.peginfo=this.$route.params.data.pegInformation;
+        this.form.sizecompound=this.$route.params.data.compoundArea;
+        this.form.sizeplayground=this.$route.params.data.playgroundArea;
+        this.form.playgroundused=this.$route.params.data.playgroundAreaUsable;
+        this.form.status=this.$route.params.data.status;
+        this.form.agriculturalarea=this.$route.params.data.agricultureArea;
+        this.form.areaused=this.$route.params.data.agricultureAreaUsed;
+        this.form.id=this.$route.params.data.id;
+    },
 }
 </script>

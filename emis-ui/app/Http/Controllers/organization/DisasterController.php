@@ -23,7 +23,7 @@ class DisasterController extends Controller
     }
 
     public function saveDisasterInformation(Request $request){
-        dd('from UI');
+      //  dd('from UI');
         $rules = [
             'diastertype'           =>  'required',
             'diastercomm'           =>  'required',
@@ -62,7 +62,7 @@ class DisasterController extends Controller
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-
+       // dd($loc);
         try{
             $response_data= $this->apiService->createData('emis/organization/disaster/saveDisasterInformation', $loc);
             return $response_data;
@@ -73,6 +73,7 @@ class DisasterController extends Controller
     }
 
     public function loadDisasterInformation(){
+      //  dd('loading');
         $orgId=$this->getWrkingAgencyId();
         $dis = $this->apiService->listData('emis/organization/disaster/loadDisasterInformation/'.$orgId);
         return $dis;
