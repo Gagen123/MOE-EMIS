@@ -4,8 +4,8 @@
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-1">Visitor Information:<i class="text-danger">*</i></label>
-                    <input type="text" @change="remove_error('last_class_attended')" v-model="form.last_class_attended" :class="{ 'is-invalid': form.errors.has('last_class_attended') }" class="form-control" name="last_class_attended" id="last_class_attended" >
-                    <has-error :form="form" field="last_class_attended"></has-error>
+                    <input type="text" @change="remove_error('visitor_information')" v-model="form.visitor_information" :class="{ 'is-invalid': form.errors.has('visitor_information') }" class="form-control" name="visitor_information" id="visitor_information" >
+                    <has-error :form="form" field="visitor_information"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -18,8 +18,8 @@
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('reasons')" class="form-control" v-model="form.reasons" :class="{ 'is-invalid': form.errors.has('reasons') }" name="reasons" id="reasons"></textarea>
-                    <has-error :form="form" field="reasons"></has-error>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="form" field="remarks"></has-error>
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -33,17 +33,14 @@
 export default {
     data(){
         return {
-            studentList:[],
+            dataList:[],
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             form: new form({
                 id:'',
-                student: '',
-                last_class_attended: '',
+                remarks: '',
+                visitor_information: '',
                 date: '',
-                current_address: '',
-                reasons: '',
-                current_engagement:'',
                 action_type:'add'
             }),
         }
@@ -51,12 +48,12 @@ export default {
     methods: {
         //need to get the organisation id and pass it as a parameter
         
-        loadStudentList(uri='students/loadStudentWhereabouts/'+this.org_id){
+        loadMastersList(uri='organization/loadVisitorInformation'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 console.log(data);
-                this.studentList =  data.data.data;
+                this.dataList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -75,13 +72,13 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/students/saveStudentWhereabouts',this.form)
+                this.form.post('/organization/saveVisitorInformation',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_update_list');
+                    this.$router.push('/list_visitors_information');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -93,12 +90,6 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
-            if(id=="student"){
-                this.form.student=$('#student').val();
-            }
-            if(id=="award_type_id"){
-                this.form.award_type_id=$('#award_type_id').val();
             }
         },
     },
@@ -116,7 +107,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
+        this.loadMasterList();
     },
     
 }

@@ -21,11 +21,11 @@ export default {
     },
     methods: {
         showadprocess(type){
-            if(type=="add_financial_information" || type=="edit_financial_information"){
+            if(type=="add_financial_information"){
                 this.$router.push("/"+type);
             }
             if(type=="list_financial_information"){
-                this.$router.push("/list_financial_information");
+                this.$router.push("/financial_information");
             }
 		},
     },

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use App\Models\Masters\IncomeType;
+use App\Models\Masters\FinancialInformation;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Masters\Service;
@@ -40,7 +42,7 @@ class OrganizationMasterController extends Controller{
         ];
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
-                'applicableTo'              =>  implode($request->addfield_1,', '),
+                'applicableTo'              =>  implode($request->addfield_1),
             ];
         }
         if($request->model=="FinancialInformation"){
@@ -93,5 +95,13 @@ class OrganizationMasterController extends Controller{
         else{
             return $this->successResponse($model::where('status',1)->get());
         }
+    }
+    public function loadFinacialtype(){
+        $response_data = FinancialInformation::all();
+        return $this->successResponse($response_data);
+    }
+    public function loadincomeList(){
+        $response_data = IncomeType::all();
+        return $this->successResponse($response_data);
     }
 }

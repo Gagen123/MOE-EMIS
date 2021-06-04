@@ -20,8 +20,8 @@
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.screening_type}}</td>
-                            <td>{{ item.class}}</td>
-                            <td>{{ item.section}}</td>
+                            <td>{{ classList[item.class]}}</td>
+                            <td>{{ sectionList[item.section]}}</td>
                             <td v-if="item.stream">{{ item.stream}}</td>
                             <td v-else>{{ NA }}</td>
                             <td>{{ item.date}}</td>
@@ -93,9 +93,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                   
                     this.sectionList[data[i].id] = data[i].section;
-                     alert(sectionList.length);
                 }
             })
             .catch(function (error) {

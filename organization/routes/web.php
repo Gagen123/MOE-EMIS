@@ -21,6 +21,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organizationMasterController'], function () use ($router) {
         $router->post('/saveOrganizationMaster', 'OrganizationMasterController@saveOrganizationMaster');
         $router->get('/loadOrganizaitonmasters/{type}/{model}', 'OrganizationMasterController@loadOrganizaitonmasters');
+        $router->get('/loadFinacialtype', 'OrganizationMasterController@loadFinacialtype');
+        $router->get('/loadincomeList', 'OrganizationMasterController@loadincomeList');
     }); 
 
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {
@@ -179,6 +181,38 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');
             $router->get('/getLocationUse', 'generalInformation\EquipmentController@getLocationUse');
         });
+
+        //newly added routes
+
+        $router->group(['prefix' => 'visitor'], function () use ($router) {
+            $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
+            $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
+        });
+
+        $router->group(['prefix' => 'disaster'], function () use ($router) {
+            $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
+            $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');
+        });
+
+        $router->group(['prefix' => 'finance'], function () use ($router) {
+            $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
+            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
+            $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
+            $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
+        });
+
+        $router->group(['prefix' => 'income'], function () use ($router) {
+            $router->post('/saveIncomeInformation', 'generalInformation\IncomeController@saveIncomeInformation');
+            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\IncomeController@loadIncomeInformation');
+        });
+
+        $router->group(['prefix' => 'projections'], function () use ($router) {
+            $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
+            $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
+        });
+
+        //newly added routs ends here
+
         $router->group(['prefix' => 'section'], function () use ($router) {
             // section route
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');

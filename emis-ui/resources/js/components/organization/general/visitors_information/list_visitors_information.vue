@@ -13,10 +13,9 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.visitor}}</td>
+                    <td>{{ item.dateOfVisit}}</td>
+                    <td>{{ item.remarks}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -36,11 +35,11 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='organization/route/'+this.org_id){
+        loadDataList(uri='organization/loadVisitorInformation'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.dataList =  data.data.data;
+                this.dataList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

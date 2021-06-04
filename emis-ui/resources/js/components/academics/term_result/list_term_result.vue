@@ -16,8 +16,8 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in classSubjectTermList" :key="index">
                             <td>{{ item.class_stream_section }}</td>
-                            <td>{{ item.sub_name }}</td>
-                            <td>{{item.term_name}}</td>
+                            <td>{{ item.sub_name }} <span v-if="item.sub_dzo_name">( {{ item.sub_dzo_name }} )</span></td>
+                            <td>{{item.term_name}} <span v-if="item.term_dzo_name && item.sub_dzo_name">( {{ item.term_dzo_name }} )</span></td>
                             <td>
                                 <span v-if="item.finalized"><strong>Finalized</strong> by
                                     <span v-if="item.assessed_by_class_teacher">class</span>
@@ -73,10 +73,12 @@ export default {
                                 classSubjectTerms[index].class_stream_section = item.class+' '+item.stream+' '+item.section
                             }else if(item.stream){
                                 classSubjectTerms[index].class_stream_section = item.class+' '+item.stream
+                            }else if(item.section){
+                                classSubjectTerms[index].class_stream_section = item.class+' '+item.section
                             }else{
                                 classSubjectTerms[index].class_stream_section = item.class
                             }
-                            
+                            classSubjectTerms[index].OrgClassStreamId = item.OrgClassStreamId
                         }
                     })
                 })

@@ -68,11 +68,13 @@ export default {
                                  studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
                             }else if(item1.stream){
                                 studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
+                            }else if(item1.section){
+                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.section
                             }
                             else{
                                 studentsConsolidatedResult[index]['class_stream_section'] = item1.class
                             }
-                         
+                            studentsConsolidatedResult[index].OrgClassStreamId = item1.OrgClassStreamId
                         }
                     })
             })
