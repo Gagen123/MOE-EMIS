@@ -23,4 +23,7 @@ class ApplicationClassStream extends Model
         'classId',
         'streamId'
     ];
+    public function withClass(){
+        return $this->belongsTo(Classes::class, 'classId')->select('id','class');
+    }
 }

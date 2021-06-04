@@ -13,7 +13,6 @@
                             <label>Student Guardian Details</label>
                         </a>
                     </li>
-                      
                 </ul>
             </div>  
             <div class="card-body">
@@ -120,32 +119,32 @@
                              <div class="form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>School Information</label><br><br>
-                                           <div class="row form-group" id="dzo_gewog_village">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Dzongkhag/Thromde:  <span class="text-danger">*</span> </label>
-                                                    <select v-model="school_form.s_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_dzongkhag') }" class="form-control select2" name="s_dzongkhag" id="s_dzongkhag">
-                                                        <option value=""> --Select--</option>
-                                                        <option v-for="(item, index) in s_dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                    </select>
-                                                    <has-error :form="school_form" field="s_dzongkhag"></has-error>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label> School:  <span class="text-danger">*</span></label>
-                                                    <select v-model="school_form.s_school" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_school') }" class="form-control select2" name="s_school" id="s_school">
-                                                        <option value=""> --Select--</option>
-                                                        <option v-for="(item, index) in s_schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                    </select>
-                                                    <has-error :form="school_form" field="s_school"></has-error>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Class:  <span class="text-danger">*</span></label>
-                                                    <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
-                                                        <option value=""> --Select--</option>
-                                                        <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
-                                                    </select>
-                                                    <has-error :form="school_form" field="s_class"></has-error>
-                                                </div>
+                                        <div class="row form-group" id="dzo_gewog_village">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label>Dzongkhag/Thromde:  <span class="text-danger">*</span> </label>
+                                                <select v-model="school_form.s_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_dzongkhag') }" class="form-control select2" name="s_dzongkhag" id="s_dzongkhag">
+                                                    <option value=""> --Select--</option>
+                                                    <option v-for="(item, index) in s_dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="school_form" field="s_dzongkhag"></has-error>
                                             </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label> School:  <span class="text-danger">*</span></label>
+                                                <select v-model="school_form.s_school" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_school') }" class="form-control select2" name="s_school" id="s_school">
+                                                    <option value=""> --Select--</option>
+                                                    <option v-for="(item, index) in s_schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="school_form" field="s_school"></has-error>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label>Class:  <span class="text-danger">*</span></label>
+                                                <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
+                                                    <option value=""> --Select--</option>
+                                                    <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
+                                                </select>
+                                                <has-error :form="school_form" field="s_class"></has-error>
+                                            </div>
+                                        </div>
                                 </div>
                             </div>
                             <hr>
@@ -290,7 +289,6 @@
                                                     </select>
                                                 <has-error :form="guardian_form" field="father_occupation"></has-error>
                                             </div>
-                                            
                                         </div>
                                         <div class="row form-group">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -331,7 +329,6 @@
                                                 <has-error :form="guardian_form" field="mother_first_name"></has-error>
                                             </div>
                                         </div>
-                                      
                                         <div class="row form-group" id="mothers_dzo_gewog_village">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Dzongkhag/Thromde: </label>
@@ -808,7 +805,6 @@ export default {
                         
                     }
                 }
-                    
             });
         },
         
@@ -848,9 +844,7 @@ export default {
                 let data = Response.data.data;
                 this.s_schoolList = data;
               })
-
           },
-
          getclassList(id){
              let orgId=$('#school').val();
                 if(id!=""){
@@ -882,7 +876,6 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-
         getgewoglist(id,type){
             let dzoId=$('#dzongkhag').val();
             if(id!=""){
@@ -1019,8 +1012,6 @@ export default {
                         'content-type': 'multipart/form-data'
                     }
                 } 
-
-        
                 let formData = new FormData();
                 formData.append('snationality', this.student_form.snationality);
                 formData.append('student_id', this.student_form.student_id);
@@ -1039,7 +1030,6 @@ export default {
                 formData.append('type','new');
                 formData.append('Status', 'pending'); 
                 axios.post('/saveStudentDetails',formData, config)
-
                 .then((response) => {
                     this.guardian_form.student_id=response.data.id;
                     Toast.fire({

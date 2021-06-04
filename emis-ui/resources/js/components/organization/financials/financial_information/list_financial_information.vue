@@ -4,11 +4,11 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Student Name</th>
-                    <th >Student Id</th>
-                    <th >Class</th>
-                    <th >Section</th>
-                    <th >Action</th> 
+                    <th >Type</th>
+                    <th >Amount</th>
+                    <th >Year</th>
+                    <th >Status</th>
+                  
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -16,7 +16,6 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
                     <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
                     <td>{{ }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -37,7 +36,8 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentWhereabouts/'+this.org_id){
+        
+        loadDataList(uri='organization/loadFinancialInformation/'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -48,12 +48,6 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#award-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'edit_student_whereabouts',params: {data:data}});

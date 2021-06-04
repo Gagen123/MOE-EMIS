@@ -21,7 +21,7 @@ class AcaStudentAttendance extends Migration
             $table->char('org_stream_id',36)->index()->nullable();
             $table->char('org_section_id',36)->index()->nullable();
             $table->string('class_stream_section',100);
-            $table->date('attendance_date')->unique();
+            $table->date('attendance_date')->index();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
