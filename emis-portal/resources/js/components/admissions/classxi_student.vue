@@ -210,7 +210,7 @@
                   formData.append('dateOfapply', this.student_form.dateOfapply); 
                   formData.append('remarks', this.student_form.remarks); 
                   formData.append('status', 'pending'); 
-                  formData.append('snationality', 'bhutaness');
+                  
                   formData.append('std_decission', 'pending'); 
 
                 axios.post('/savedetailsEnrolledStd',formData,config)

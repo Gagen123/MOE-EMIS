@@ -21,6 +21,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organizationMasterController'], function () use ($router) {
         $router->post('/saveOrganizationMaster', 'OrganizationMasterController@saveOrganizationMaster');
         $router->get('/loadOrganizaitonmasters/{type}/{model}', 'OrganizationMasterController@loadOrganizaitonmasters');
+        $router->get('/loadFinacialtype', 'OrganizationMasterController@loadFinacialtype');
+        $router->get('/loadincomeList', 'OrganizationMasterController@loadincomeList');
     }); 
 
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {
@@ -197,6 +199,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
             $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
+        });
+
+        $router->group(['prefix' => 'income'], function () use ($router) {
+            $router->post('/saveIncomeInformation', 'generalInformation\IncomeController@saveIncomeInformation');
+            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\IncomeController@loadIncomeInformation');
         });
 
         $router->group(['prefix' => 'projections'], function () use ($router) {
