@@ -325,6 +325,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
         
         $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
+        $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
        
         
     });

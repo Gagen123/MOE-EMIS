@@ -76,6 +76,10 @@ class EstablishmentController extends Controller
         $customMessages = $validation['messages'];
 
         $this->validate($request, $rules, $customMessages);
+        $establishment_data=$establishment_data+[
+            'app_id'                =>  $request['app_id'],
+            'ap_estb_id'            =>  $request['ap_estb_id'],
+        ];
         // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
         // dd($response_data);
