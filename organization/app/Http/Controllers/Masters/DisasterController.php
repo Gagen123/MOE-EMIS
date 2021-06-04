@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Masters\Disaster;
+use App\Models\Masters\DisasterCommittee;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\DB;
 
@@ -67,6 +68,9 @@ class DisasterController extends Controller
             return $this->successResponse($disaster, Response::HTTP_CREATED);
         }
     }
+    
+
+
 
     //endregion
 

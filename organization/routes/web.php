@@ -167,6 +167,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadStructureDesigner', 'Masters\StructureDesignerController@loadStructureDesigner');
     });
 
+    $router->group(['prefix' => 'masters/disastercomm'], function () use ($router) {
+        $router->post('/saveDisasterCommittee', 'Masters\DisasterCommitteeController@saveDisasterCommittee');
+        $router->get('/loadDisasterComm', 'Masters\DisasterCommitteeController@loadDisasterComm');
+    });
     //Organization Transactions Routes
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
@@ -179,6 +183,38 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');
             $router->get('/getLocationUse', 'generalInformation\EquipmentController@getLocationUse');
         });
+
+        //newly added routes
+
+        $router->group(['prefix' => 'visitor'], function () use ($router) {
+            $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
+            $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
+        });
+
+        $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
+            $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails'); 
+        
+        });
+
+        $router->group(['prefix' => 'disaster'], function () use ($router) {
+            $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
+            $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');
+        });
+
+        $router->group(['prefix' => 'finance'], function () use ($router) {
+            $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
+            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
+            $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
+            $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
+        });
+
+        $router->group(['prefix' => 'projections'], function () use ($router) {
+            $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
+            $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
+        });
+
+        //newly added routs ends here
+
         $router->group(['prefix' => 'section'], function () use ($router) {
             // section route
             $router->post('/saveSection', 'generalInformation\SectionController@saveSection');
@@ -323,10 +359,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
 
         });
-        
         $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
-       
-        
+
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);

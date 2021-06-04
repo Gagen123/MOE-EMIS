@@ -66,7 +66,8 @@ class StudentAdmissionController extends Controller{
             'attachments'               =>  $path, 
             'user_id'                   =>  $this->userId() 
         ];
-        $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetails', $data);
+        //changed the route link to saveAdmissionStudentDetails from saveStudentDetails
+        $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionStudentDetails', $data);
         return $response_data;
     }
       public function saveStudentGardianDetails(Request $request){
@@ -314,6 +315,7 @@ class StudentAdmissionController extends Controller{
             'disability'                =>  $request->disability,
             'user_id'                   =>  $this->userId() 
         ];
+        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentClassDetails', $data);
         return $response_data;
     }
@@ -329,9 +331,8 @@ class StudentAdmissionController extends Controller{
     /**
      * to load the list of students for admission from the portal
      */
-
     public function loadStudentAdmissionList(){
-        $org_id = $this->getWrkingAgencyId(),
+        $org_id = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$org_id);
         return $student_list;
     }
