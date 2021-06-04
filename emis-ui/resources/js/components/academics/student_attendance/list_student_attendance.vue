@@ -53,9 +53,14 @@ export default {
                                 studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
                             }else if(item.stream){
                                 studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream
-                            }else{
+                            }else if(item.section){
+                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.section
+                            }
+                            else{
                                 studentsAttendance[index]['class_stream_section'] = item.class
                             }
+                            studentsAttendance[index]['OrgClassStreamId'] = item.OrgClassStreamId
+
                         }
                     })
                 });
