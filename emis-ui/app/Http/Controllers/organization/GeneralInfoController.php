@@ -22,6 +22,11 @@ class GeneralInfoController extends Controller
         $this->apiService = $apiService;
     }
 
+    /**
+     * To save the equipments
+     * this function was created by Ugyen. No longer used for the new equipments
+     */
+
     public function saveEquipment(Request $request){
         $rules = [
             'type'          =>  'required',
@@ -266,29 +271,25 @@ class GeneralInfoController extends Controller
     }
 
     public function saveClassMapping(Request $request){
-        // $rules = [
-        //     'school'         =>  'required',
-        //     'class'          =>  'required',
-        // ];
-        // $customMessages = [
-        //     'school.required'        => 'School is required',
-        //     'class.required'         => 'Class is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
-        $loc =[
+        $rules = [
+            'school'         =>  'required',
+            'class.*'          =>  'required',
+        ];
+        $customMessages = [
+            'school.required'        => 'School is required',
+            'class.required'         => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $class_section =[
             'school'        =>  $request['school'],
             'class'         =>  $request['class'],
             'stream'        =>  $request['stream'],
+            'sections'      =>  $request['sections'],
             'user_id'       =>  $this->userId(),
             'id'            =>  $request['id'],
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $loc);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $class_section);
+        return $response_data;
     }
     public function getCurrentClassStream($school_id = ""){
         $itemList = $this->apiService->listData('emis/organization/classMapping/getCurrentClassStream/'.$school_id);
@@ -353,6 +354,23 @@ class GeneralInfoController extends Controller
     public function getOrgProfile($id = ""){
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;
+    }
+    public function updateOrgBasicDetials(Request $request){
+        $org_details =[
+            'org_id'                    =>  $request['org_id'],
+            'isAspNetSchool'            =>  $request['isAspNetSchool'],
+            'isColocated'               =>  $request['isColocated'],
+            'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
+            'hasCounselingRoom'         =>  $request['hasCounselingRoom'],
+            'hasShiftSystem'            =>  $request['hasShiftSystem'],
+            'hasCE'                     =>  $request['hasCE'],
+            'mofCode'                   =>  $request['mofCode'],
+            'zestAgencyCode'            =>  $request['zestAgencyCode'],
+            'user_id'                   =>  $this->userId()
+        ];
+        // dd($org_details);
+        $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
+        return $response_data;
     }
 
 }

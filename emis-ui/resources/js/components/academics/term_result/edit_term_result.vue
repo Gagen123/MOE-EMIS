@@ -6,10 +6,10 @@
                 <strong>Class: </strong> {{ class_stream_section }}
               </div>
               <div class="mr-3">
-                <strong>Term: </strong> {{term}}
+                <strong>Term: </strong> {{term}} <span v-if="term_dzo_name && sub_dzo_name">( {{term_dzo_name}} )</span>
               </div>
               <div class="mr-3">
-                <strong>Subject: </strong> {{subject}}
+                <strong>Subject: </strong> {{subject}} <span v-if="sub_dzo_name">( {{sub_dzo_name}} )</span>
               </div>
             </div>          
             <div class="form-group row">
@@ -19,7 +19,10 @@
                             <tr>
                                 <th>Student Code</th>
                                 <th>Name</th>
-                                <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} <span v-if="item.input_type==1">({{item.weightage}}%)</span></th>
+                                <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} 
+                                    <span v-if="item.assmt_area_dzo_name">( {{item.assmt_area_dzo_name}} )</span>
+                                    <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -27,14 +30,16 @@
                                 <td>{{item1.CidNo}}</td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2">
-                                    <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
-                                    <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
-                                    <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.1" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
-                                    <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control" id="assmt_area" type="text">
-                                    <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control  editable_fields" :id="item1.assessment_area"> 
-                                        <option selected value="">--SELECT--</option>
-                                        <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
-                                    </select>
+                                    <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
+                                        <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
+                                        <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
+                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.1" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
+                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control" id="assmt_area" type="text">
+                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control ditable_fields" :id="item1.assessment_area"> 
+                                            <option selected value="">--SELECT--</option>
+                                            <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
+                                        </select>
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>
@@ -66,7 +71,7 @@
         },
         async loadStudentAssessments(){
             let uri = 'academics/loadStudentAssessments'
-            uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&classId='+this.classId)
+            uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
             if(this.streamId !== null){
                     uri += ('&streamId='+this.streamId)
                 }
@@ -76,13 +81,30 @@
             try{
                 let studentAssesssments = await axios.get(uri).then(response => response.data)
                 this.assessmentAreaList = studentAssesssments.assessmentAreas
+                console.log(this.assessmentAreaList)
                 this.ratingList = studentAssesssments.ratings
                 this.studentAssessmentList = studentAssesssments.studentAssessments
+                console.log(this.studentAssessmentList)
             }catch(e){
                 if(e.toString().includes("500")){
                 $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-            }                    
+            } 
+            setTimeout(function(){
+                $("#assessment-term-table").DataTable({
+                    "responsive": false,
+                    "autoWidth": true,
+                    scrollY:        "300px",
+                    scrollX:        true,
+                    scrollCollapse: true,
+                    paging:         false,
+                    searching: false,
+                    fixedColumns:   {
+                        leftColumns: 2
+                    }
+                    
+                }); 
+            }, 300);                     
         },
         save(action=""){
             let params = {class_stream_section:this.class_stream_section,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,aca_sub_id:this.aca_sub_id, aca_assmt_term_id:this.aca_assmt_term_id,data:this.studentAssessmentList};
@@ -127,14 +149,14 @@
         },
         mounted(){ 
             this.loadStudentAssessments()
-            this.dt = $("#assessment-term-table").DataTable({
-                "paging": false,
-                scrollX: true,
-                scrollCollapse: true,
-                fixedColumns:   {
-                    leftColumns: 2
-                }
-            })
+            // this.dt = $("#assessment-term-table").DataTable({
+            //     "paging": false,
+            //     scrollX: true,
+            //     scrollCollapse: true,
+            //     fixedColumns:   {
+            //         leftColumns: 2
+            //     }
+            // })
         },
         created() {
             this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
@@ -144,16 +166,20 @@
             this.sectionId=this.$route.params.data.org_section_id;
             this.class_stream_section=this.$route.params.data.class_stream_section;
             this.subject=this.$route.params.data.sub_name;
+            this.sub_dzo_name=this.$route.params.data.sub_dzo_name;
             this.term=this.$route.params.data.term_name;
+            this.term_dzo_name=this.$route.params.data.term_dzo_name;
+            this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+
         },
-        watch: {
-            studentAssessmentList(val) {
-                this.dt.destroy();
-                this.$nextTick(() => {
-                    this.dt = $("#assessment-term-table").DataTable()
-                });
-            }
-        }
+        // watch: {
+        //     studentAssessmentList(val) {
+        //         this.dt.destroy();
+        //         this.$nextTick(() => {
+        //             this.dt = $("#assessment-term-table").DataTable()
+        //         });
+        //     }
+        // }
 }
 </script>
 <style scoped>

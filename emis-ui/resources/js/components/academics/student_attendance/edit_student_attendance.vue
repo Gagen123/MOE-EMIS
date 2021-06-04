@@ -59,7 +59,7 @@ export default {
     methods:{
         getStudents(){
            let uri = 'academics/getStudentsForAttendance'
-           uri += ('?classId='+this.classId)
+           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
            if(this.streamId !== null){
                     uri += ('&streamId='+this.streamId)
                 }
@@ -115,7 +115,7 @@ export default {
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.sectionId=this.$route.params.data.org_section_id;
-        this.id=this.$route.params.data.id;
+        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
     },
     watch: {
         studentList(val) {

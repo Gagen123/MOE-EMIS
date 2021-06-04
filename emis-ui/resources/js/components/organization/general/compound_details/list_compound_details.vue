@@ -33,7 +33,7 @@ export default {
     data(){
         return{
           //  org_id:'2',
-            dataList:[], 
+            dataList:[],  
         }
     },
     methods:{

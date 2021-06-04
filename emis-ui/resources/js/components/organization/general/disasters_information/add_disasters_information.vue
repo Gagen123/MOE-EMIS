@@ -5,11 +5,18 @@
                 <div class="form-group row">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                     <label class="mb-0.5">Disaster Committe:<i class="text-danger">*</i></label>
-                     <select v-model="form.diastercomm" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastercomm') }" class="form-control select2" name="diastercomm" id="diastercomm">
+                      <label class="mb-0.5">Disaster Type:<i class="text-danger">*</i></label>
+                     <select v-model="form.diastertype" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastertype') }" class="form-control select2" name="diastertype" id="diastertype">
                          <option v-for="(item, index) in dataList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="diastercomm"></has-error>
+                     </select>
+                     <has-error :form="form" field="diastertype"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                      <label class="mb-0.5">Disaster Committe:<i class="text-danger">*</i></label>
+                      <select v-model="form.diastercomm" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastercomm') }" class="form-control select2" name="diastercomm" id="diastercomm">
+                         <option v-for="(item, index) in dataList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                       </select>
+                      <has-error :form="form" field="diastercomm"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -31,19 +38,27 @@
                         </select>
                         <has-error :form="form" field="sex_id"></has-error>
                     </div>
-                </div>
+                </div> 
                 <div class="form-group row">
-                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-1">Email:<i class="text-danger">*</i></label>
-                        <input type="text" @change="remove_error('email')" v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" name="email" id="email" >
+                        <input pattern="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$" type="email" required  @change="remove_error('email')" v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" name="email" id="email">
                         <has-error :form="form" field="email"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="mb-1">Contact No:<i class="text-danger">*</i></label>
+                        <input name="contactno"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "8"
+                         @change="remove_error('contactno')" v-model="form.contactno" :class="{ 'is-invalid': form.errors.has('contactno') }" class="form-control"  id="contactno" >
+                        <has-error :form="form" field="contactno"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-1">Serving As:<i class="text-danger">*</i></label>
                         <input type="text" @change="remove_error('servining_as')" v-model="form.servining_as" :class="{ 'is-invalid': form.errors.has('servining_as') }" class="form-control" name="servining_as" id="servining_as" >
                         <has-error :form="form" field="servining_as"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                         <label >Place of Work and Address: </label>
                         <textarea class="form-control" rows="3" @change="removeerror('fulladdress')" :class="{ 'is-invalid': form.errors.has('fulladdress') }" id="fulladdress" v-model="form.fulladdress" placeholder="Permanent Address"></textarea>
                         <has-error :form="form" field="fulladdress"></has-error>
@@ -69,11 +84,13 @@ export default {
            
             form: new form({
                 id: '', 
+                diastertype:'',
                 diastercomm:'', 
                 cid_passport: '',
                 fullname:'',
                 sex_id: '',
                 email: '',
+                contactno:'',
                 servining_as:'',
                 fulladdress: '',
                
@@ -97,15 +114,15 @@ export default {
          */
         restForm(){
             this.form.id= '';
+            this.form.diastertype ='';
             this.form.diastercomm = '';
             this.form.cid_passport = '';
             this.form.fullname= '';
-            this.form.dob= '';
             this.form.sex_id= '';
             this.form.email= '';
+            this.form.contactno = '';
             this.form.servining_as= '';
             this.form.fulladdress='';
-            this.form.fulladdress = '';
         },
 
         /**
@@ -116,13 +133,13 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.post('/organization/saveDisasterMember',this.form)
+                    this.form.post('/organization/saveDisasterInformation',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: ' Detail is added successfully'
                     })
-                    this.$router.push('/disastermember_list');
+                    this.$router.push('/list_disasters_information');
                 })
                 .catch(() => {
                     console.log("Error......");
@@ -141,9 +158,7 @@ export default {
                 if(type=="all_active_gender"){
                     this.sex_idList = data.data.data;
                 }
-                if(type=="all_country"){
-                    this.countryList = data.data.data;
-                }
+               
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -154,9 +169,7 @@ export default {
                 if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
                     $('#sex_id').addClass('select2-hidden-accessible');
                 }
-                if(!$('#mother_tongue').attr('class').includes('select2-hidden-accessible')){
-                    $('#mother_tongue').addClass('select2-hidden-accessible');
-                }
+               
             }
             
         },
@@ -175,12 +188,7 @@ export default {
             if(id=="sex_id"){
                 this.form.sex_id=$('#sex_id').val();
             }
-            if(id=="mother_tongue"){
-                this.form.mother_tongue=$('#mother_tongue').val();
-            }
-            if(id=="country"){
-                this.form.country=$('#country').val();
-            }
+            
              
         },
         getDetailsbyCID(fieldId){
@@ -190,8 +198,6 @@ export default {
                     icon: 'error'
                 });
             }
-
-
 
             else{
                 axios.get('getpersonbycid/'+ $('#'+fieldId).val())
@@ -259,10 +265,7 @@ export default {
         },
     },
      mounted() { 
-        this.loadAllActiveMasters('all_country');
         this.loadAllActiveMasters('all_active_gender');
-        this.loadAllActiveMasters('active_mother_tongue');
-      
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 

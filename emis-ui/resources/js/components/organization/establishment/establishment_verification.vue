@@ -71,16 +71,16 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationTypeId]}}</span>
+                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.levelId]}}</span>
                                 </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
                                         {{ applicationdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
-                                </div> 
+                                </div>  -->
                             </div>
-                            <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
+                            <!-- <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Feeding School:</label>
                                     <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
@@ -91,7 +91,7 @@
                                     <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                                 </div>
-                            </div>
+                            </div> -->
                             <div v-if="applicationdetails.establishment_type=='Private School'">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -170,12 +170,41 @@
                         <div class="callout callout-success">
                             <h4><u>Select classes and streams</u></h4>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Classes</th>
+                                            <th class="strm_clas">Stream</th>  
+                                            <th></th>                     
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, key, index) in  class_section" :key="index">
+                                            <td>
+                                                <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                            </td>
+                                            <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                {{  streamArray[item.streamId]  }}
+                                            </td>
+                                            <td class="strm_clas" v-else>                                
+                                            
+                                            </td>
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                            </td>
+                                            <td v-else>  
+                                                <input type="checkbox" checked="true">                           
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                                <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <span v-for="(item, index) in  class_section" :key="index">
                                         <br>
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
+                                        <input type="checkbox" checked="true"><label class="pr-4">
+                                         &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                                     </span> 
-                                </div> 
+                                </div>  -->
                             </div>
                         </div>
                         <div class="callout callout-success">
@@ -377,7 +406,7 @@ export default {
     },
     methods:{
         loadestablishmentapplicationdetails(appId,type){
-            
+            $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
@@ -437,6 +466,9 @@ export default {
                 }
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
+                if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
+                    $('.strm_clas').show();
+                }
                 this.class_section=data.org_class_stream;
             })
             .catch((error) => {  

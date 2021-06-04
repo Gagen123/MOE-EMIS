@@ -54,7 +54,6 @@ class AcademicController extends Controller
             'org_class_id' => 'required',
             'class_stream_section' => 'required',
             'attendance_date' => 'required',
-            'data.*.CidNo' => 'required',
             'data.*.Name' => 'required',
             'data.*.std_student_id' => 'required',
         ];
@@ -62,7 +61,6 @@ class AcademicController extends Controller
             'org_class_id.required' => 'This field is required',
             'class_stream_section.required' => 'This field is required',
             'attendance_date.required' => 'This field is required',
-            'data.*.CidNo.required' => 'This field is required',
             'data.*.Name.required' => 'This field is required',
             'data.*.std_student_id.required' => 'This field is required',
         ];
@@ -199,39 +197,39 @@ class AcademicController extends Controller
         if($request->sectionId !== null){
             $uri .= (('&org_section_id='.$request->sectionId));
         }
-        // $students = $this->getStudents("d77x1e56-1b24-4b1d-bc18-2b9anmn20wqq",$request->classId,$request->streamId,$request->sectionId);
 
-         $students = $this->getStudents($org_id,$request->classId,$request->streamId,$request->sectionId);
-
-         $studentAssessments = json_decode($this->apiService->listData($uri),true);
-         $assessmentAreasRatings = json_decode($this->loadAssessmentAreas($request->aca_assmt_term_id,$request->aca_sub_id,$request->classId, $request->streamId),true);
+        $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
+        $selectedStudents = [];
+        $studentAssessments = json_decode($this->apiService->listData($uri),true);
+        $assessmentAreasRatings = json_decode($this->loadAssessmentAreas($request->aca_assmt_term_id,$request->aca_sub_id,$request->classId, $request->streamId),true);
         if(gettype($studentAssessments["data"]["studentsTakingElective"])=="array"){
             for($i=0;$i<count($students);$i++) {
-                if(!(in_array($students[$i]["std_student_id"], $studentAssessments["data"]["studentsTakingElective"]))){
-                    unset($students[$i]);
+                if(in_array($students[$i]["std_student_id"], $studentAssessments["data"]["studentsTakingElective"])){
+                    array_push($selectedStudents,$students[$i]);
                 }
             }
         }
-         for($i=0;$i<count($students);$i++) {
-             if(array_key_exists($i, $students)){
-                foreach ($assessmentAreasRatings["data"]["assessmentAreas"] as $area) {
-                    $students[$i][$area["aca_assmt_area_id"]]["aca_assmt_area_id"] = $area["aca_assmt_area_id"];
-                    $students[$i][$area["aca_assmt_area_id"]]["aca_rating_type_id"] = $area["aca_rating_type_id"];
-                    $students[$i][$area["aca_assmt_area_id"]]["weightage"] = $area["weightage"];
-                    $students[$i][$area["aca_assmt_area_id"]]["score"] = null;
-                    $students[$i][$area["aca_assmt_area_id"]]["score_text"] = null;
+        for($i=0;$i<count($selectedStudents);$i++) {
+            foreach ($assessmentAreasRatings["data"]["assessmentAreas"] as $area) {
+                $selectedStudents[$i][$area["aca_assmt_area_id"]]["aca_assmt_area_id"] = $area["aca_assmt_area_id"];
+                $selectedStudents[$i][$area["aca_assmt_area_id"]]["aca_rating_type_id"] = $area["aca_rating_type_id"];
+                $selectedStudents[$i][$area["aca_assmt_area_id"]]["weightage"] = $area["weightage"];
+                $selectedStudents[$i][$area["aca_assmt_area_id"]]["score"] = null;
+                $selectedStudents[$i][$area["aca_assmt_area_id"]]["score_text"] = null;
 
+            }
+            foreach ($studentAssessments["data"]['studentAssessments'] as $studentAssessment) {
+                if($studentAssessment["std_student_id"] == $selectedStudents[$i]["std_student_id"]){
+                    $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score"] = $studentAssessment["score"];
+                    $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
                 }
-                foreach ($studentAssessments["data"]['studentAssessments'] as $studentAssessment) {
-                    if($studentAssessment["std_student_id"] == $students[$i]["std_student_id"]){
-                        $students[$i][$studentAssessment["aca_assmt_area_id"]]["score"] = $studentAssessment["score"];
-                        $students[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
-
-                    }
-                }
+                // if(!array_key_exists($studentAssessment["aca_assmt_area_id"],$students[$i])){
+                //     $students[$i][$studentAssessment["aca_assmt_area_id"]]["score"] = null;
+                //     $students[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = null;
+                // }
             }
         }
-        return json_encode(["studentAssessments"=>$students, "assessmentAreas"=>$assessmentAreasRatings["data"]["assessmentAreas"],"ratings"=>$assessmentAreasRatings["data"]["ratings"]]);
+        return json_encode(["studentAssessments"=>$selectedStudents, "assessmentAreas"=>$assessmentAreasRatings["data"]["assessmentAreas"],"ratings"=>$assessmentAreasRatings["data"]["ratings"]]);
     }
     public function saveStudentAssessment(Request $request){
         $rules = [
@@ -291,9 +289,8 @@ class AcademicController extends Controller
         if($request->aca_assmt_term_id){
             $uri .= (('&aca_assmt_term_id='.$request->aca_assmt_term_id));
         }
-        $students = $this->getStudents($org_id,$request->classId,$request->streamId,$request->sectionId);
+        $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
 
-        // return $this->apiService->listData($uri);
         $consolidatedResult = json_decode($this->apiService->listData($uri),true);
         $terms = [];
         $subjects = [];
@@ -303,15 +300,15 @@ class AcademicController extends Controller
                foreach ($consolidatedResult["data"] as $consolidated) {
                    if($consolidated["std_student_id"] == $students[$i]["std_student_id"]){
                         if(!$this->hasTerm($consolidated,$terms)){
-                            array_push($terms, ["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"], "term"=>$consolidated["term"]]);
+                            array_push($terms, ["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"], "term"=>$consolidated["term"],"term_dzo_name"=>$consolidated["term_dzo_name"]]);
                         }
 
                         if(!$this->hasSubject($consolidated, $subjects)){
-                            array_push($subjects,["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"],"aca_sub_id"=>$consolidated["aca_sub_id"], "subject"=>$consolidated["subject"]]);
+                            array_push($subjects,["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"],"aca_sub_id"=>$consolidated["aca_sub_id"], "subject"=>$consolidated["subject"],"sub_dzo_name"=>$consolidated["sub_dzo_name"]]);
                         }
 
                         if(!$this->hasArea($consolidated, $areas)){
-                            array_push($areas,["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"],"aca_sub_id"=>$consolidated["aca_sub_id"],"aca_assmt_area_id"=>$consolidated["aca_assmt_area_id"], "assessment_area"=>$consolidated["assessment_area"], "weightage"=>$consolidated["weightage"], "aca_rating_type_id"=>$consolidated["aca_rating_type_id"], "input_type"=>$consolidated["input_type"]]);
+                            array_push($areas,["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"],"aca_sub_id"=>$consolidated["aca_sub_id"],"aca_assmt_area_id"=>$consolidated["aca_assmt_area_id"], "assessment_area"=>$consolidated["assessment_area"],"assmt_area_dzo_name"=>$consolidated["assmt_area_dzo_name"], "weightage"=>$consolidated["weightage"], "aca_rating_type_id"=>$consolidated["aca_rating_type_id"], "input_type"=>$consolidated["input_type"]]);
                         }
 
                         $students[$i][$consolidated["aca_assmt_term_id"]][$consolidated["aca_sub_id"]][$consolidated["aca_assmt_area_id"]]['score'] = $consolidated["score"];

@@ -21,16 +21,7 @@
                                             <input type="text" class="form-control" :value="levelArray[orgDetails.levelId]" disabled>
                                          </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Category:</label>
-                                            <input type="text" class="form-control" :value="category" disabled>
-                                        </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Year Of Establishment:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.yearOfEstablishment" disabled>
-                                         </div>
-                                    </div>
+                                  
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <label>Category:</label>
@@ -44,28 +35,60 @@
                                     <hr>
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>MOF Code:</label>
+                                            <input type="text" class="form-control" v-model="form.mofCode">
+                                        </div>
+                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>RCSC/Zest Code:</label>
+                                            <input type="text" class="form-control" v-model="form.mofCzestAgencyCodeode">
+                                         </div>  
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                             <label>Is AspNet School:</label><br>
                                             <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
                                             <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="isSenSchool==1">
                                             <label>Co-Located to Parent School:</label><br>
                                             <label><input  type="radio" v-model="form.isColocated" value="1" tabindex=""/> Yes</label>
                                             <label><input  type="radio" v-model="form.isColocated" value="0" tabindex=""/> No</label>
                                         </div>
                                     </div>
-                                    isFeedingSchool:'',
-                                    isGeoPoliticallyLocated:'',
-                                    isResourceCenter:'',
-                                    isSenSchool:'',
-                                    hasCounselingRoom:'',
-                                    hasShiftSystem:'',
-                                    hasCE:'',
-                                    mofCode:'',
-                                    zestAgencyCode:''
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Is GeoPoliticallyLocated:</label><br>
+                                            <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="isSenSchool==1">
+                                            <label>Is Resource Center:</label><br>
+                                            <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Has Counselling room:</label><br>
+                                            <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="isSenSchool==1">
+                                            <label>Has shift System:</label><br>
+                                            <label><input  type="radio" v-model="form.hasShiftSystem" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="form.hasShiftSystem" value="0" tabindex=""/> No</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <label>Has CE:</label><br>
+                                            <label><input  type="radio" v-model="form.hasCE" value="1" tabindex=""/> Yes</label>
+                                            <label><input  type="radio" v-model="form.hasCE" value="0" tabindex=""/> No</label>
+                                        </div>
+                                    </div>
                                     <div class="row form-group fa-pull-right">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <button class="btn btn-flat btn-primary" @click="updateorg('details-tab')"><i class="fa fa-check"></i> Update</button>
+                                            <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
                                         </div>
                                     </div>
                                 </form>
@@ -99,7 +122,6 @@
                     hasCE:'',
                     mofCode:'',
                     zestAgencyCode:''
-                    
                 }) 
             }
         },
@@ -142,22 +164,11 @@
                 });
             },
             updateorg(){
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                } 
-                let formData = new FormData();
-                formData.append('org_id', this.form.org_id);
-                formData.append('vission', this.form.vission);
-                formData.append('profile_path', this.form.profile_path);
-                formData.append('mission', this.form.mission);
-                formData.append('attachments', this.form.attachments);
-                axios.post('organization/udpateOrgProfile',formData, config)
+                this.form.post('organization/updateOrgBasicDetials')
                 .then((response) => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Profile Details has been saved successfully'
+                        title: 'Basic Details has been saved successfully'
                     })
                 })
                 .catch((error) => {

@@ -7,6 +7,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\academics\ClassTeacher;
 use App\Models\academics\SubjectTeacher;
@@ -113,12 +114,15 @@ class AcademicController extends Controller
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     private function saveAttendance($request){
+        try{
         DB::transaction(function() use($request) {
+           $org_stream_id = isset($request['org_stream_id']) ? $request['org_stream_id'] : null;
+           $org_section_id = isset($request['org_section_id']) ? $request['org_section_id'] : null;
             $attendance = [
                 'org_id' => $request['org_id'],
                 'org_class_id' => $request['org_class_id'],
-                'org_stream_id' => $request['org_stream_id'],
-                'org_section_id' => $request['org_section_id'],
+                'org_stream_id' =>  $org_stream_id,
+                'org_section_id' =>  $org_section_id,
                 'class_stream_section' => $request['class_stream_section'],
                 'attendance_date' => $request['attendance_date'],
                 'created_by' => $request['user_id'],
@@ -136,28 +140,25 @@ class AcademicController extends Controller
                 }
             }
         });
+    }catch(Exception $e){
+        dd($e);
+    }
     }
     public function saveStudentAttendance(Request $request){
-            $rules = [
-                'org_class_id' => 'required',
-                'org_stream_id' => 'required',
-                'org_section_id' => 'required',
-                'class_stream_section' => 'required',
-                'attendance_date' => 'required|unique:aca_student_attendance',
-                'data.*.CidNo' => 'required',
-                'data.*.Name' => 'required',
-                'data.*.std_student_id' => 'required',
-            ];
-            $customMessages = [
-                'org_class_id.required' => 'This field is required',
-                'org_stream_id.required' => 'This field is required',
-                'org_section_id.required' => 'This field is required',
-                'class_stream_section.required' => 'This field is required',
-                'attendance_date.required' => 'This field is required',
-                'data.*.CidNo.required' => 'This field is required',
-                'data.*.Name.required' => 'This field is required',
-                'data.*.std_student_id.required' => 'This field is required',
-            ];
+        $rules = [
+            'org_class_id' => 'required',
+            'class_stream_section' => 'required',
+            'attendance_date' => 'required|unique:aca_student_attendance,attendance_date,'. null .',id,class_stream_section,'. $request['class_stream_section'],
+            'data.*.Name' => 'required',
+            'data.*.std_student_id' => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'class_stream_section.required' => 'This field is required',
+            'attendance_date.required' => 'This field is required',
+            'data.*.Name.required' => 'This field is required',
+            'data.*.std_student_id.required' => 'This field is required',
+        ];
             $this->validate($request, $rules, $customMessages);
 
             if($request['action']=="add"){
@@ -183,7 +184,8 @@ class AcademicController extends Controller
         $currentTerms = "SELECT SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_class_id)),6) AS org_class_id,
                 SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_stream_id)),6) AS org_stream_id,
                 SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.id)),6) AS aca_assmt_term_id,
-                SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.name)),6) AS term_name
+                SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.name)),6) AS term_name,
+                SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.dzo_name)),6) AS term_dzo_name
             FROM aca_class_assessment_frequency x1 JOIN aca_assessment_term x2 ON x1.aca_assmt_frequency_id=x2.aca_assmt_frequency_id
             where x2.id NOT IN (SELECT aa.aca_assmt_term_id FROM aca_result_consolidated aa WHERE aa.finalized=1 AND aa.org_id = ?)
             GROUP BY x1.org_class_id,x1.org_stream_id";
@@ -195,7 +197,9 @@ class AcademicController extends Controller
                 t1.aca_sub_id,
                 t3.aca_assmt_term_id,
                 t2.name AS sub_name,
+                t2.dzo_name AS sub_dzo_name,
                 t3.term_name,
+                t3.term_dzo_name,
                 (t4.id IS NOT NULL) AS is_class_teacher,
                 (t1.stf_staff_id = ? OR (t4.id IS NOT NULL AND t2.assessed_by_class_teacher=1)) AS is_subject_teacher,
                 t6.finalized,
@@ -210,7 +214,7 @@ class AcademicController extends Controller
     }
  
     public function loadAssessmentAreas($term_id,$sub_id,$class_id, $stream_id=""){
-        $query = "SELECT t1.aca_assmt_area_id, t2.name AS assessment_area, trim(t1.weightage)+0 AS weightage,IFNULL(t2.aca_rating_type_id,t3.aca_rating_type_id) AS aca_rating_type_id,t4.input_type, t1.display_order
+        $query = "SELECT t1.aca_assmt_area_id, t2.name AS assessment_area,t2.dzo_name AS assmt_area_dzo_name, trim(t1.weightage)+0 AS weightage,IFNULL(t2.aca_rating_type_id,t3.aca_rating_type_id) AS aca_rating_type_id,t4.input_type, t1.display_order
         FROM aca_class_subject_assessment t1 
             JOIN aca_assessment_area t2 ON t1.aca_sub_id = t2.aca_sub_id AND t1.aca_assmt_area_id=t2.id
             JOIN aca_class_subject t3 on t1.aca_sub_id=t3.aca_sub_id AND t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id is null AND t3.org_stream_id IS NULL))
@@ -382,7 +386,7 @@ class AcademicController extends Controller
     }
 
     public function loadConsolidatedResult($orgId,Request $request){
-        $query = "SELECT t11.display_order AS term_display_order,t12.display_order AS subject_display_order,IFNULL(t13.display_order,t21.display_order) AS area_display_order,t1.id, t1.aca_assmt_term_id, t2.std_student_id, t1.aca_sub_id, t2.aca_assmt_area_id, t2.aca_rating_type_id, t11.name AS term, t12.name AS subject, t21.name AS assessment_area,trim(t13.weightage)+0 AS weightage,t4.input_type, IF(t4.input_type=2,t2.score,IFNULL(t3.name,NULLIF(trim(t2.score)+0,0))) AS score, t2.remarks
+        $query = "SELECT t11.display_order AS term_display_order,t12.display_order AS subject_display_order,IFNULL(t13.display_order,t21.display_order) AS area_display_order,t1.id, t1.aca_assmt_term_id, t2.std_student_id, t1.aca_sub_id, t2.aca_assmt_area_id, t2.aca_rating_type_id, t11.name AS term,t11.dzo_name AS term_dzo_name, t12.name AS subject,t12.dzo_name AS sub_dzo_name, t21.name AS assessment_area,t21.dzo_name AS assmt_area_dzo_name,trim(t13.weightage)+0 AS weightage,t4.input_type, IF(t4.input_type=2,t2.score,IFNULL(t3.name,NULLIF(trim(t2.score)+0,0))) AS score, t2.remarks
         FROM (aca_student_assessment t1 JOIN aca_assessment_term t11 ON t1.aca_assmt_term_id = t11.id JOIN aca_subject t12 ON t1.aca_sub_id=t12.id)
             JOIN (aca_student_assessment_detail t2 JOIN aca_assessment_area t21 ON t2.aca_assmt_area_id = t21.id) ON t1.id=t2.aca_student_assmt_id
             JOIN aca_class_subject_assessment t13 ON t1.aca_assmt_term_id=t13.aca_assmt_term_id AND t1.aca_sub_id=t13.aca_sub_id AND t2.aca_assmt_area_id=t13.aca_assmt_area_id AND t1.org_class_id = t13.org_class_id AND (t1.org_stream_id = t13.org_stream_id OR (t1.org_stream_id is null AND t13.org_stream_id IS NULL))
