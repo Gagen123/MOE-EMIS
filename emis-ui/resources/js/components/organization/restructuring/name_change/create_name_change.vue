@@ -26,9 +26,33 @@
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{form.organization_type}}</label>
+                                    <label>Org Type: {{form.category}}</label>
                                 </div>
-                                
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Current Name:</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                                </div>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <label>Dzongkhag:</label>
+                                    <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <label>Gewog:</label>
+                                    <input type="text" readonly  class="form-control" id="gewogid"/>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <label>Village:</label>
+                                    <input type="text" readonly class="form-control" id="proposedName"/>
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
@@ -37,7 +61,6 @@
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
-                                    <!-- <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/> -->
                                     <has-error :form="form" field="initiatedBy"></has-error>
                                 </div>
                             </div>
@@ -68,7 +91,12 @@
 export default {
     data(){
         return{
+            organization_details:'',
             proposed_by_list:[],
+            levelArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
             orgList:'',
             classList:[],
             streamList:[],
@@ -88,6 +116,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
+        
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -166,7 +195,65 @@ export default {
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                // this.form.organization_type=response.data.data.organizationType;
+                this.organization_details=response.data.data;
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+            });
+        },
+        
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+                 for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        getGewogList(dzongkhag,gewogId){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogId').val(this.gewogArray[gewogId]);
+            });
+        },
+
+        getvillagelist(gewogId,vil_id){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogId').val(this.gewogArray[gewogId])
+                if(vil_id!=""){
+                    this.form.chiwog=draft.chiwogId;
+                    $('#chiwog').val(draft.chiwogId).trigger('change');;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
 
@@ -215,6 +302,7 @@ export default {
             this.changefunction(id);
         });
         this.getOrgList();
+        this.getLevel();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
