@@ -36,12 +36,9 @@
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4" v-if="existing_details.isFeedingSchool==1">
-                                    <label><input  type="checkbox" id="exisfed1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" id="exisfed2"  value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" id="exisfed3"  value="3" tabindex=""/> Three Meals</label>
+                                    <label class="pl-4" v-for="(item, index) in existing_details.meals" :key="index" id="exisfed1"><input  type="checkbox" checked />  {{item.noOfMeals}} Meal</label>
                                 </div>
                             </div>
-                            
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
@@ -138,8 +135,13 @@ export default {
             .then(response => {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.existing_details=response.data.data;
+               
+                if(this.existing_details.isFeedingSchool==1){
+                    for(let i=0;i<this.existing_details.meals.length;i++){
+                        // $('#exisfed'+this.existing_details.meals[i].noOfMeals).prop('checked',true);
+                    }
+                }
                 this.category=this.existing_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.existing_details.category.replace('_', " ").slice(1);
-                
             });
         },
 

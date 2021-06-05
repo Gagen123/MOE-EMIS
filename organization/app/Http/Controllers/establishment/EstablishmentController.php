@@ -276,9 +276,9 @@ class EstablishmentController extends Controller
             'proprietorPhone'              =>  $request['proprietorPhone'],
             'proprietorMobile'             =>  $request['proprietorMobile'],
             'proprietorEmail'              =>  $request['proprietorEmail'],
-            'totalLand'                    =>  $request['totalLand'],
-            'enrollmentBoys'               =>  $request['enrollmentBoys'],
-            'enrollmentGirls'              =>  $request['enrollmentGirls'],
+            // 'totalLand'                    =>  $request['totalLand'],
+            // 'enrollmentBoys'               =>  $request['enrollmentBoys'],
+            // 'enrollmentGirls'              =>  $request['enrollmentGirls'],
             'proposedLocation'             =>  $request['proposedLocation'],
             'typeOfSchool'                 =>  $request['typeOfSchool'],
             'levelId'                      =>  $request['level'],
@@ -976,13 +976,18 @@ class EstablishmentController extends Controller
     public function loaddraftApplication($type="",$user_id=""){
         $app_details=  ApplicationDetails::where('status','pending')->where('created_by',$user_id)->where('establishment_type',str_replace('_',' ',$type))->first();
         if($app_details!=""){
-            $appData=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
-            $app_details->estb_details=$appData;
+            if($app_details->establishment_type=="Private School" || $app_details->establishment_type=="Private ECCD"){
+                $appData=ApplicationEstPrivate::where('ApplicationDetailsId',$app_details->id)->first();
+                $app_details->estb_details=$appData; 
+            }
+            else{
+                $appData=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
+                $app_details->estb_details=$appData;
+            }
             // if($appData->isFeedingSchool==1){
             //     $app_details->meal_details=ApplicationNoMeals::where('foreignKeyId',$appData->id)->get();
             // } 
             //commented as not required those fields on establisment
-            
         }
         return $this->successResponse($app_details);
     }

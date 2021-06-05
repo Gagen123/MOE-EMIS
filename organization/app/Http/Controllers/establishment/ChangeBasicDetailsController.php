@@ -784,6 +784,7 @@ class ChangeBasicDetailsController extends Controller
             $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
             $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
             $change_details_data="";
+            // return $change_details;
             switch($app_details->application_type){
                 case "name_change" : {
                     $change_details_data = $this->updateNameChange($change_details,  $org_details, $request);
@@ -882,7 +883,6 @@ class ChangeBasicDetailsController extends Controller
         ];
         $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
         return $change_details;
-
     }
     
     private function updateFeedingDetails($change_details, $org_details,$request){
@@ -913,7 +913,7 @@ class ChangeBasicDetailsController extends Controller
             'updated_by'                =>  date('Y-m-d h:i:s'),
             'updated_at'                =>  $request->user_id, 
         ];
-        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        $org_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
         if( $change_details->proposedChange==1){
             OrganizationFeedingDetails::where('organizationId',$change_details->organizationId)->delete();
             $app_meals=ApplicationNoMeals::where('foreignKeyId',$change_details->id)->get();
