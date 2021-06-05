@@ -528,6 +528,31 @@ export default {
         },
 
         /**
+         * method to get other category if the category is 'ECCD'
+         */
+        getClassStream(text){
+            $('.strm_clas').hide();
+            let level = text;
+            if(level.toLowerCase().includes('middle')){
+                level="10";
+            }
+            else if(level.toLowerCase().includes('lower')){
+                level="8";
+            }
+            else if(level.toLowerCase().includes('primary')){
+                level="6";
+            }
+            else{
+                level="12";
+                $('.strm_clas').show();
+            }
+            axios.get('/masters/loadClassStreamMapping/school_'+level)
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
+
+        /**
          * method to populate dropdown
          */
         async changefunction(id){

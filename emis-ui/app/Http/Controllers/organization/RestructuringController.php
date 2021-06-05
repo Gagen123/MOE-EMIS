@@ -746,9 +746,54 @@ class RestructuringController extends Controller
         $response_data= $this->apiService->createData('emis/organization/bifurcation/updateBifurcation', $bifurcation);
         return $work_response_data;
     }
+
     public function loadOrganizationDetails(){
         $loadBifurcationDetails = $this->apiService->listData('emis/organization/bifurcation/loadBifurcation');
         return $loadBifurcationDetails;
+    }
+
+    /**
+     * Verification and Approval Process
+     * This was copied from Public School Creation
+     */
+
+    private function verificationProcess(){
+        //get submitter role
+        if($request['action_type']!="edit"){
+            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            $screen_id="";
+            $status="";
+            $app_role="";
+            $service_name=json_decode($response_data)->data->establishment_type;
+            foreach($workflowdet as $work){
+                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                    $screen_id=$work->SysSubModuleId;
+                    $status=$work->Sequence;
+                    $app_role=$work->SysRoleId;
+                }
+            }
+            if($request->submit_type=="reject"){
+                $status='0__submitterRejects';
+            }
+
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$service_name,//service name 
+                'name'              =>$request['proposedName'],//service name 
+                'application_number'=>json_decode($response_data)->data->application_no,
+                'screen_id'         =>$screen_id,
+                'status_id'         =>$status,
+                'remarks'           =>$request['remarks'],
+                'app_role_id'       => $app_role,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            // dd($workflow_data);
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
     }
     
     // public function getOrgList(){
