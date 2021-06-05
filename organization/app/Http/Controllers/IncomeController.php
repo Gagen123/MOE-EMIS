@@ -11,7 +11,7 @@ class IncomeController extends Controller
     use ApiResponser;
     //
     public function saveIncomeInformation(Request $request){
-          // dd($request);
+        //   dd($request);
           $rules = [
             // 'type'                           =>  'required',
             'income'                            =>  'required',

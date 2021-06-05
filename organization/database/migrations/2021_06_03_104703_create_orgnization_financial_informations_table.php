@@ -15,12 +15,11 @@ class CreateOrganizationFinancialInformationsTable extends Migration
     {
         Schema::create('organization_financial_informations', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            // $table->uuid('organizationId',36);
-            // $table->uuid('financialInformationId',36);
-            // $table->char('type',36);
+            $table->uuid('organizationId',36);
+            $table->uuid('financialInformationId',36);
             $table->char('amount');
             $table->char('date');
-            $table->char('status');
+            $table->char('remarks');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
         });

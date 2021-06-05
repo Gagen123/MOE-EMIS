@@ -153,13 +153,14 @@ Route::prefix('organization')->group(function () {
 
     //route for income 
     Route::post('/saveIncomeInformation', [App\Http\Controllers\organization\FinanceController::class, 'saveIncomeInformation'])->name('saveIncomeInformation');
-   
     Route::get('/loadIncomeInformation', [App\Http\Controllers\organization\FinanceController::class, 'loadIncomeInformation'])->name('loadIncomeInformation');
 
     //routes for financial information saveFinancialInfo
     Route::post('/saveFinancialInformation', [App\Http\Controllers\organization\FinanceController::class, 'saveFinancialInformation'])->name('saveFinancialInformation');
     Route::post('/saveFinancialInfo', [App\Http\Controllers\organization\FinanceController::class, 'saveFinancialInfo'])->name('saveFinancialInfo');
+    Route::post('/updateFinancialInfo', [App\Http\Controllers\organization\FinanceController::class, 'updateFinancialInfo'])->name('updateFinancialInfo');
     Route::post('/saveIncomeinfo', [App\Http\Controllers\organization\FinanceController::class, 'saveIncomeinfo'])->name('saveIncomeinfo');
+    Route::post('/updateIncomeinfo', [App\Http\Controllers\organization\FinanceController::class, 'updateIncomeinfo'])->name('updateIncomeinfo');
     Route::get('/loadFinancialInformation', [App\Http\Controllers\organization\FinanceController::class, 'loadFinancialInformation'])->name('loadFinancialInformation');
 
 

@@ -23,7 +23,8 @@ class FinanceController extends Controller
     }
 
     public function saveIncomeInformation(Request $request){
-        $rules = [
+        $rules = [ 
+            // 'organizationId.required'           => 'organizationId is required',
             'type'          =>  'required',
             'item'          =>  'required',
             'location'      =>  'required',
@@ -99,13 +100,10 @@ class FinanceController extends Controller
     }
 
     public function saveFinancialInfo(Request $request){
-        // dd($request);
         $rules = [
-            // 'type'                           =>  'required',
             'amount'                            =>  'required',
             'date'                              =>  'required',
-            'status'                            =>  'required',
-            // 'organizationId'                    =>  'organizationId',
+            'remarks'                           =>  'required',
             // 'financialInformationId'            =>  'financialInformationId',
             
         ];
@@ -113,17 +111,17 @@ class FinanceController extends Controller
             'type.required'                     => 'Type is required',
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
-            'status.required'                   => 'status is required',
-            // 'organizationId.required'           => 'organizationId is required',
+            'remarks.required'                  => 'remarks is required',
+           
             // 'financialInformationId.required'   => 'financialInformationId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
+            'organizationId'                    =>  $this->getWrkingAgencyId(),
             'type'                              =>  $request['type'],
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
-            'status'                            =>  $request['status'],
-            // 'organizationId'                 =>  $request['organizationId'],
+            'remarks'                           =>  $request['remarks'],
             // 'financialInformationId'         =>  $request['financialInformationId'],
         ];
         $response_data= $this->apiService->createData('emis/organization/finance/saveFinancialInformation', $data );
@@ -133,47 +131,102 @@ class FinanceController extends Controller
     public function saveIncomeinfo(Request $request){
         // dd($request);
         $rules = [
-            // 'type'                           =>  'required',
-            'income'                            =>  'required',
             'amount'                            =>  'required',
             'date'                              =>  'required',
             'remarks'                           =>  'required',
-            // 'organizationId'                 =>  'organizationId',
             // 'incomeFacilitiesId'             =>  'incomeFacilitiesId',
             
         ];
         $customMessages = [
-            'type.required'                     => 'Type is required',
-            'income.required'                   => 'Type is required',
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
-            // 'organizationId.required'        => 'organizationId is required',
             // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
-            'type'                              =>  $request['type'],
+            'organizationId'                    =>  $this->getWrkingAgencyId(),
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
             'remarks'                           =>  $request['remarks'],
-            // 'organizationId'                 =>  $request['organizationId'],
             // 'incomeFacilitiesId'             =>  $request['incomeFacilitiesId'],
         ];
-        $response_data= $this->apiService->createData('emis/organization/income/saveIncomeInformation', $data );
-        return $response_data;
-    } 
-
-
-    public function loadFinancialInformation($orgId){
-        try{
-        $financialInformation = $this->apiService->listData('emis/organization/finance/loadFinancialInformation/', +$orgId);
-        return $financialInformation;
+         $response_data= $this->apiService->createData('emis/organization/finance/saveIncomeInformation', $data );
+         return $response_data;
         }
-        catch(\Illuminate\Database\QueryException $e){
-            dd($e);
 
-        }
+        public function updateIncomeinfo(Request $request){
+            // dd($request);
+            $rules = [
+                'id'                                =>  'required',
+                'amount'                            =>  'required',
+                'date'                              =>  'required',
+                'remarks'                           =>  'required',
+                // 'incomeFacilitiesId'             =>  'incomeFacilitiesId',
+                
+            ];
+            $customMessages = [
+                'id.required'                       => 'amount is required',
+                'amount.required'                   => 'amount is required',
+                'date.required'                     => 'date is required',
+                'remarks.required'                  => 'remarks is required',
+                // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+            $data =[
+                'organizationId'                    =>  $this->getWrkingAgencyId(),
+                'amount'                            =>  $request['amount'],
+                'date'                              =>  $request['date'],
+                'remarks'                           =>  $request['remarks'],
+                'id'                                =>  $request['id'],
+                // 'incomeFacilitiesId'             =>  $request['incomeFacilitiesId'],
+            ];
+             $response_data= $this->apiService->createData('emis/organization/finance/updateIncomeInformation', $data );
+             return $response_data;
+            }
+
+        public function updateFinancialInfo(Request $request){
+            $rules = [
+                'id'                                =>  'required',
+                'amount'                            =>  'required',
+                'date'                              =>  'required',
+                'remarks'                           =>  'required',
+                // 'incomeFacilitiesId'             =>  'incomeFacilitiesId',
+                
+            ];
+            $customMessages = [
+                'id.required'                       => 'id is required',
+                'amount.required'                   => 'amount is required',
+                'date.required'                     => 'date is required',
+                'remarks.required'                  => 'remarks is required',
+                // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+            $data =[
+                'organizationId'                    =>  $this->getWrkingAgencyId(),
+                'amount'                            =>  $request['amount'],
+                'date'                              =>  $request['date'],
+                'remarks'                           =>  $request['remarks'],
+                'id'                                =>  $request['id'],
+                // 'incomeFacilitiesId'             =>  $request['incomeFacilitiesId'],
+            ];
+             $response_data= $this->apiService->createData('emis/organization/finance/updateFinancialInfo', $data );
+             return $response_data;
+            }
+
+        
+            
+    public function loadFinancialInformation(){
+        $orgId = $this->getWrkingAgencyId();
+        $data = $this->apiService->listData('emis/organization/finance/loadFinancialInformation/'. $orgId);
+        return $data;
+    }
+
+    public function loadIncomeInformation(){
+        $orgId = $this->getWrkingAgencyId();
+        $data = $this->apiService->listData('emis/organization/finance/loadIncomeInformation/'. $orgId);
+        return $data;
+      
     }
 
    

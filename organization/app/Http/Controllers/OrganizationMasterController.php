@@ -89,6 +89,6 @@ class OrganizationMasterController extends Controller{
     }
     public function loadincomeList(){
         $response_data = IncomeType::all();
-        return $this->successResponse($response_data);
+        return $response_data;
     }
 }

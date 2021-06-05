@@ -196,15 +196,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'finance'], function () use ($router) {
             $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
+            $router->post('/updateIncomeInformation', 'generalInformation\FinanceController@updateIncomeInformation');
             $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
+            
             $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
+            $router->post('/updateFinancialInfo', 'generalInformation\FinanceController@updateFinancialInfo');
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
         });
 
-        $router->group(['prefix' => 'income'], function () use ($router) {
-            $router->post('/saveIncomeInformation', 'generalInformation\IncomeController@saveIncomeInformation');
-            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\IncomeController@loadIncomeInformation');
-        });
 
         $router->group(['prefix' => 'projections'], function () use ($router) {
             $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
