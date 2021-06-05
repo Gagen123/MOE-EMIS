@@ -623,7 +623,8 @@ class ChangeBasicDetailsController extends Controller
      */
     public function loadCurrentOrgDetails($orgId=""){
         $response_data=OrganizationDetails::where('id',$orgId)->first();
-        // $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
+        $response_data->class = OrganizationClassStream::where('organizationId',$orgId)->get();
         // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
         return $this->successResponse($response_data);
     }

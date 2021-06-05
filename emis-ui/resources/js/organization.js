@@ -57,10 +57,6 @@ const routes = [
                     { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/masters/organization_masters/financial_information/edit_financial_information.vue').default },
                   ]     
               }, 
-              
-
-
-
               { path: '/location_index', 
                   component: require('./components/masters/organization_masters/location/location_index.vue').default ,
                   children: 
@@ -132,7 +128,36 @@ const routes = [
                     { path: '/equipment_usage_list', name:'EquipmentUsageList', component: require('./components/masters/organization_masters/equipment_usage/equipment_usage_list.vue').default },
                 ]    
             },
-  
+            { path: '/furniture_type_index', 
+                component: require('./components/masters/organization_masters/furniture_type/furniture_type_index.vue').default ,
+                children: 
+                [
+                    { path: '',name:'furniture_type_index', component: require('./components/masters/organization_masters/furniture_type/furniture_type_list.vue').default },
+                    { path: '/furniture_type_add', name:'furniture_type_add', component: require('./components/masters/organization_masters/furniture_type/furniture_type_add.vue').default },
+                    { path: '/furniture_type_edit', name:'furniture_type_edit', component: require('./components/masters/organization_masters/furniture_type/furniture_type_edit.vue').default },
+                    { path: '/furniture_type_list', name:'furniture_type_list', component: require('./components/masters/organization_masters/furniture_type/furniture_type_list.vue').default },
+                ]    
+            },
+            { path: '/furniture_item_index', 
+                component: require('./components/masters/organization_masters/furniture_item/furniture_item_index.vue').default ,
+                children: 
+                [
+                    { path: '',name:'furniture_item_index', component: require('./components/masters/organization_masters/furniture_item/furniture_item_list.vue').default },
+                    { path: '/furniture_item_add', name:'furniture_item_add', component: require('./components/masters/organization_masters/furniture_item/furniture_item_add.vue').default },
+                    { path: '/furniture_item_edit', name:'furniture_item_edit', component: require('./components/masters/organization_masters/furniture_item/furniture_item_edit.vue').default },
+                    { path: '/furniture_item_list', name:'furniture_item_list', component: require('./components/masters/organization_masters/furniture_item/furniture_item_list.vue').default },
+                ]    
+            },
+            { path: '/furniture_usage_index', 
+                component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_index.vue').default ,
+                children: 
+                [
+                    { path: '',name:'furniture_usage_index', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_list.vue').default },
+                    { path: '/furniture_usage_add', name:'furniture_usage_add', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_add.vue').default },
+                    { path: '/furniture_usage_edit', name:'furniture_usage_edit', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_edit.vue').default },
+                    { path: '/furniture_usage_list', name:'furniture_usage_list', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_list.vue').default },
+                ]    
+            },
             { path: '/sport_facility_index', 
                 component: require('./components/masters/organization_masters/sport_facility/sport_facility_index.vue').default ,
                 children: 

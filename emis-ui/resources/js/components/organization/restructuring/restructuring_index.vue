@@ -49,13 +49,13 @@
                 </li>
                  <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link id="expension_index" to="/expension_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Expension
+                        Expansion
                     </router-link>
                 </li>
                 
                 <li class="nav-item pr-1"  @click="activatelink('volunteer')">
                     <router-link id="volunteer" to="/bifurcation_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    Bifurcation
+                        Bifurcation
                     </router-link>
                 </li> 
                 <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
@@ -66,6 +66,11 @@
                 <li class="nav-item pr-1" @click="activatelink('nomination')">
                     <router-link to="/closure_list" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Closure
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('nomination')">
+                    <router-link to="/closure_list" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Re-Opening
                     </router-link>
                 </li>
             </ul>
