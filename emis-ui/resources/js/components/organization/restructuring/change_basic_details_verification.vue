@@ -253,7 +253,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="callout callout-info">
                             <h4><u>Any Supporting Documents and Attachments (if applicable)</u></h4>
@@ -316,9 +315,9 @@
                                 </div>
                             </div>
                          </div>
-                        <div class="row form-group">
+                        <div class="row form-group" v-if="appicationDetails.establishment_type=='Change in Name' || appicationDetails.establishment_type=='Upgrade Downgrade'">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <input type="date" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
+                                <input type="date" class="form-control" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
                                 <span class="text-danger" id="effective_date_err"></span>
                             </div>
                         </div>
@@ -340,7 +339,7 @@
                         </div>
                     </div>
                     
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -381,7 +380,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

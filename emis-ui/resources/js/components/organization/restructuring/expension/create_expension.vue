@@ -71,7 +71,7 @@ export default {
             streamList:[],
             form: new form({
                 organizationId:'',currentCapacity:'',proposedCapacity:' ', application_type:'expension_change', 
-                application_for:'Expension', action_type:'add', status:'Submitted',organization_type:'',
+                application_for:'Expansion', action_type:'add', status:'Submitted',organization_type:'',
             }),
         } 
     },

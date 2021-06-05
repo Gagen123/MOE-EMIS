@@ -63,7 +63,6 @@ export default {
         showview(data){
             this.$router.push({name:'show_private_school',query: {id:data.application_no}});
         },
-        
     },
     mounted(){
         this.loadDataList();

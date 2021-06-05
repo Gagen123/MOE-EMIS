@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\OrgProfile;
 use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
+use App\Models\OrganizationFeedingDetails;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -56,6 +57,7 @@ class LoadOrganizationController extends Controller{
             ->orderBy('c.displayOrder', 'asc')
             ->get();
             $response_data->classes=$data;
+            $response_data->meals=OrganizationFeedingDetails::where('organizationId',$id)->get();
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();

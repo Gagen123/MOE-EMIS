@@ -29,6 +29,14 @@
                                     <label>Org Type: {{category}}</label>
                                 </div>
                             </div>
+                            
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is SEN School(Current):<span class="text-danger">*</span></label>
+                                <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                    <label><input  type="radio" v-model="organization_details.isSenSchool" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" v-model="organization_details.isSenSchool" value="0" tabindex=""/> No</label>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is SEN School:<span class="text-danger">*</span></label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
@@ -55,6 +63,7 @@
 export default {
     data(){
         return{
+            organization_details:'',
             category:'',
             orgList:'',
             levelList:[],
