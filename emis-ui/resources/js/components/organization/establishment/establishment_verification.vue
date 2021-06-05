@@ -71,7 +71,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.levelId]}}</span>
+                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
                                 </div>   
                                 <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
@@ -357,7 +357,7 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i>Update </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i><span id="update_btn_level"></span> </button>
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
@@ -405,6 +405,19 @@ export default {
         } 
     },
     methods:{
+        getAttachmentType(type){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        },
         loadestablishmentapplicationdetails(appId,type){
             $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
@@ -429,6 +442,8 @@ export default {
                 }
 
                 if(data.app_verification==null){
+                    this.getAttachmentType('ForTransaction__Update_Tentative_Date_for_Public');
+                    $('#update_btn_level').html('Notify For Tentative Date');
                     this.form.update_type='tentative';
                     $('#updateBtn').show();
                     $('#verifyId').hide();
@@ -444,6 +459,8 @@ export default {
                     $('#verifier_team').show();
                     if(data.app_verification_team.length==0){
                         this.form.update_type='team_verification';
+                        this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
+                        $('#update_btn_level').html('Notify For team Verification');
                         this.showsearch=true;
                         $('#updateBtn').show();
                         $('#verifier_team').show();
@@ -453,6 +470,7 @@ export default {
                     else{
                         this.showsearch=false;
                         this.form.update_type='final_verification';
+                        this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
                         $('#removeBtn').hide();
                         $('#team_verificationAttachment').show();
                         for(let i=0;i<data.app_verification_team.length;i++){

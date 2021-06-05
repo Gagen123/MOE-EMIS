@@ -40,10 +40,10 @@ class LocalProcureController extends Controller
      //    dd('localprocure'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
-    public function loadLocalProcure(){
+    public function loadLocalProcure($org_Id=""){
         //   return 'from service of mine';
         $list = DB::table('local_procures')
-        ->select( 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->get();
+        ->select('organizationId', 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->where('organizationId', $org_Id)->get();
         return $list;
     }
 }

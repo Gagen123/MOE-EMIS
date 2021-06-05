@@ -14,7 +14,6 @@
                                     <label><u>Current Details</u></label>
                                 </div>
                             </div>
-                            
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:</label>
@@ -24,10 +23,6 @@
                                     <label>Level:</label>
                                     <span class="text-blue text-bold">{{levelArray[existing_details.levelId]}}</span>
                                 </div>
-                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Category:</label>
-                                    <span class="text-blue text-bold">{{existing_details.organizationType == 'public_school' ? "Public" : existing_details.organizationType == 'public_eccd' ? "sss" : "Private"}}</span>
-                                </div> -->
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -57,6 +52,39 @@
                                     <span class="text-blue text-bold">{{selected_village}}</span>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Classes</th>
+                                                <th class="strm_clas">Stream</th>  
+                                                <th></th>                     
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, key, index) in  existing_details.classes" :key="index">
+                                                <td>
+                                                    <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                                </td>
+                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                    {{  streamArray[item.streamId]  }}
+                                                </td>
+                                                <td class="strm_clas" v-else> </td>
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    <input type="checkbox" checked="true">
+                                                </td>
+                                                <td v-else>  
+                                                    <input type="checkbox" checked="true">                           
+                                                </td>
+                                            </tr> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
+
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>is SEN School:</label>
@@ -94,7 +122,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="appicationDetails.application_type=='level_change'">
+                            <!-- <div v-if="appicationDetails.application_type=='level_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label><u>Classes Details</u></label>
@@ -107,7 +135,7 @@
                                         </span> 
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="callout callout-info">
                             <div class="form-group row">
@@ -202,6 +230,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div v-if="appicationDetails.application_type=='level_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -212,7 +242,7 @@
                                
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Classes Details</u></label>
+                                        <label><u>Change In Classes Details</u></label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -287,6 +317,12 @@
                             </div>
                          </div>
                         <div class="row form-group">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <input type="date" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
+                                <span class="text-danger" id="effective_date_err"></span>
+                            </div>
+                        </div>
+                        <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
                                 <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
@@ -296,7 +332,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <!-- <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button> -->
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
@@ -345,8 +381,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                       
                     </div>
                 </div>
             </div>
@@ -381,7 +415,7 @@ export default {
             senSchool:'',
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',
-                ref_docs:[],fileUpload: [],sequence:'',screen_id:'',
+                ref_docs:[],fileUpload: [],sequence:'',screen_id:'',effective_date:'',
             }), 
         }
     },
@@ -579,6 +613,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name; 
                 }
+                alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
             })
             .catch(function (error) {

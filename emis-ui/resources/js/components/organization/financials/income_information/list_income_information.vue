@@ -4,20 +4,20 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Student Name</th>
-                    <th >Student Id</th>
-                    <th >Class</th>
-                    <th >Section</th>
+                    <th >Income Facilities</th>
+                    <th >Amount generated</th>
+                    <th >Date</th>
+                    <th >Remarks</th> 
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                     <td>{{ item.name}}</td>
+                    <td>{{ item.amountGenerated}}</td>
+                    <td>{{ item.date}}</td>
+                    <td>{{ item.remarks}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -32,21 +32,19 @@
 export default {
     data(){
         return{
-            org_id:'2',
+            org_id:'',
             dataList:[], 
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentWhereabouts/'+this.org_id){
+        loadIncomeList(uri='organization/loadIncomeInformation/'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.dataList =  data.data.data;
+                this.dataList =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
             setTimeout(function(){
                 $("#award-list-table").DataTable({
@@ -56,11 +54,12 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_income_information',params: {data:data}});
         },
     },
     mounted(){
-        this.loadDataList();
+        this.loadIncomeList();
+        this.axios();
     },
 }
 </script>

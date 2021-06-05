@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class organization_financial_information extends Model
+class OrganizationFinancialInformation extends Model
 {
     //
     use HasFactory, Uuid;
@@ -14,12 +14,11 @@ class organization_financial_information extends Model
 
     protected $fillable = [
         'id',
-        // 'organizationId',
-        // 'financialInformationId',
-        // 'type',
+        'organizationId',
+        'financialInformationId',
         'amount',
         'date',
-        'status'
+        'remarks'
     ];
 
 }

@@ -6,17 +6,19 @@
                     <th >SL#</th>
                     <th >Type</th>
                     <th >Amount</th>
-                    <th >Year</th>
-                    <th >Status</th>
+                    <th >Date</th>
+                    <th >Remarks</th>
+                    <th >Action</th>
                   
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.incomeFacilitiesId}}</td>
+                    <td>{{ item.amount}}</td>
+                    <td>{{ item.date}}</td>
+                    <td>{{ item.remarks}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -31,7 +33,7 @@
 export default {
     data(){
         return{
-            org_id:'2',
+            org_id:'',
             dataList:[], 
         }
     },
@@ -40,17 +42,17 @@ export default {
         loadDataList(uri='organization/loadFinancialInformation/'){
             axios.get(uri)
             .then(response => {
+                
                 let data = response;
-                this.dataList =  data.data.data;
+                this.dataList =  data.data;
+
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+               console.log(error);
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_financial_info',params: {data:data}});
         },
     },
     mounted(){

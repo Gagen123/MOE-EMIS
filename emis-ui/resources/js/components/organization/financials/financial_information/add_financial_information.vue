@@ -19,7 +19,7 @@
                     </div> 
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>year:<span class="text-danger">*</span></label> 
+                    <label>Date:<span class="text-danger">*</span></label> 
                     <input class="form-control" v-model="finacial_form.date" :class="{ 'is-invalid': finacial_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
                     <has-error :form="finacial_form" field="date"></has-error>
                 </div>
@@ -27,8 +27,8 @@
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('status')" class="form-control" v-model="finacial_form.status" :class="{ 'is-invalid': finacial_form.errors.has('status') }" name="status" id="status"></textarea>
-                    <has-error :form="finacial_form" field="status"></has-error>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="finacial_form.remarks" :class="{ 'is-invalid': finacial_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="finacial_form" field="remarks"></has-error>
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -48,7 +48,7 @@ export default {
                 type: '',
                 amount: '',
                 date:'',
-                status: '',
+                remarks: '',
                 organizationId:'',
                 financialInformationId:'',
             }),
@@ -60,7 +60,7 @@ export default {
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
                 let data = response;
-                this.typeList =  data.data.data[0];
+                this.typeList =  data.data;
                 // alert(JSON.stringify(data.data.data[0].name))
             })
             .catch(function (error) {
@@ -77,19 +77,18 @@ export default {
                 // this.$Progress.start();
 
                 let formData = new FormData(); 
-                formData.append('organizationId', '0e663891-85f2-4a71-b11e-a74f6705b8f4');
-                formData.append('financialInformationId','0e663891-85f2-4a71-b11e-a74f6705b8ff' );
-                formData.append('type', this.finacial_form.type);
+                // formData.append('type', this.finacial_form.type);
                 formData.append('amount', this.finacial_form.amount);
                 formData.append('date', this.finacial_form.date);
-                formData.append('status', this.finacial_form.status);
+                formData.append('remarks', this.finacial_form.status);
                 
                 axios.post('/organization/saveFinancialInfo',formData,config)
                 .then(()=>{
                     Toast.fire({
                         icon: 'success',
                         title: 'Data  saved successfully'
-                    })
+                    });
+                    this.$router.push('/list_financial_info');
                 })
                 .catch(()=>{console.log("Error.....")})
             
@@ -128,6 +127,7 @@ export default {
         
     },
     created() {
+    this.submitForm();
     this.loadtypeList();
        
   },

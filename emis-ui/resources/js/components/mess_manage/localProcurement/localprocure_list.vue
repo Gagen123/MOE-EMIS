@@ -45,7 +45,8 @@ export default {
         } 
     },
     methods: {
-        loadLocalProcure(uri = 'mess_manage/loadLocalProcure'){
+        loadLocalProcure(org_Id){
+        let uri = 'mess_manage/loadLocalProcure/'+org_Id;
             axios.get(uri)
             .then(response => { 
                 let data = response;

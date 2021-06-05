@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Level of Organization</label>                              
+                            <label class="mb-0.5">Upgradation/Downgradation</label>                              
                         </a>
                     </li>
                 </ul>
@@ -15,58 +15,151 @@
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <form class="form-horizontal">
-                            <input type="hidden" class="form-control" v-model="form.id" id="id"/>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
-                                        <option value="">--- Please Select ---</option>
-                                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="organizationId"></has-error>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="organizationId"></has-error>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{form.organization_type}}</label>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Org Type:</label>
+                                        <span class="text-blue text-bold">
+                                            {{category}}
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Level:</label>
+                                         <span class="text-blue text-bold">{{levelArray[organization_details.levelId]}}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">New Level of Organization:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" id="level" class="form-control select2" @change="remove_error('level')">
-                                        <option value="">--- Please Select ---</option>
-                                        <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="level"></has-error>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Dzongkhag: </label>
+                                        <span class="text-blue text-bold">
+                                            {{dzongkhagArray[organization_details.dzongkhagId]}}
+                                        </span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                        <label>Gewog:</label>
+                                       <span class="text-blue text-bold" id="gewogid"></span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Village:</label>
+                                        <span class="text-blue text-bold" id="vilageId"></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Location:</label>
+                                        <span class="text-blue text-bold">
+                                            {{locationArray[organization_details.locationId]}}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <br>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                    <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
-                                        <input type="checkbox" v-model="form.class" :value="item.classId">
-                                        <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                    </span>  
-                                </span> 
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                    <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                        <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id"> 
-                                        <label class="pr-3"> 
-                                            {{ item.class }} 
-                                            <span v-if="item.stream"> - 
-                                                {{  item.stream  }}
-                                            </span>
-                                        </label>
-                                    </span>  
-                                </span> 
-                            </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="mb-0">Selected classes and streams:<span class="text-danger">*</span></label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Classes</th>
+                                                    <th class="existstrm_clas">Stream</th>  
+                                                    <th></th>                     
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item, key, index) in  organization_details.classes" :key="index">
+                                                    <td>
+                                                        <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                                    </td>
+                                                    <td class="existstrm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                        {{  streamArray[item.streamId]  }}
+                                                    </td>
+                                                    <td class="existstrm_clas" v-else> </td>
+                                                    <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                        <input type="checkbox"  :id="item.id" :value="item.id">
+                                                    </td>
+                                                    <td v-else>  
+                                                        <input type="checkbox" checked="true">                           
+                                                    </td>
+                                                </tr> 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">New Level of Organization:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <select name="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" id="level" class="form-control select2" @change="remove_error('level')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="level"></has-error>
+                                    </div>
+                                </div>
+                                
+                                    <!--                                 
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                    <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
+                                            <input type="checkbox" v-model="form.class" :value="item.classId">
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </span>  
+                                    </span> 
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                    <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id"> 
+                                            <label class="pr-3"> 
+                                                {{ item.class }} 
+                                                <span v-if="item.stream"> - 
+                                                    {{  item.stream  }}
+                                                </span>
+                                            </label>
+                                        </span>  
+                                    </span> 
+                                </div> -->
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Classes</th>
+                                                <th class="strm_clas">Stream</th>  
+                                                <th></th>                     
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                                <td>
+                                                    <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                                </td>
+                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    {{  item.stream  }}
+                                                </td>
+                                                <td class="strm_clas" v-else>                                
+                                                
+                                                </td>
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                                </td>
+                                                <td v-else>  
+                                                    <input type="checkbox" v-model="form.class" :value="item.classId">                              
+                                                </td>
+                                            </tr> 
+                                        </tbody>
+                                    </table>
+                                </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -88,13 +181,22 @@ export default {
     data(){
         return{
             orgList:'',
+            category:'',
             classList:[],
             streamList:[],
             classStreamList:[],
             levelList:[],
+            levelArray:{},
+            dzongkhagArray:{},
+            locationArray:{},
+            gewogArray:{},
+            villageArray:{},
+            calssArray:{},
+            streamArray:{},
+            organization_details:'',
             form: new form({
                 organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
-                application_for:'Change in Level', action_type:'add', status:'pending',organization_type:''
+                application_for:'Upgrade Downgrade', action_type:'add', status:'Submitted',organization_type:''
             })
         } 
     },
@@ -108,7 +210,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
-
+        
         /**
          * method to get level in dropdown
          */
@@ -117,6 +219,9 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.levelList = data;
+                for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
             });
         },
 
@@ -128,26 +233,52 @@ export default {
             });
         },
 
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.organization_details=response.data.data;
+                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+            });
+        },
+
         /**
          * method to populate dropdown
          */
-        async changefunction(id){
+        async changefunction(id,text){
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();
                 this.getorgdetials($('#organizationId').val()); 
             }
-
-            if(id=="level"){
+             if(id=="level"){
                 this.form.level=$('#level').val();
+                this.getClassStream(text);
             }
         },
-
-        getorgdetials(org_id){
-            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+        getClassStream(text){
+            $('.strm_clas').hide();
+            let level = text;
+            if(level.toLowerCase().includes('middle')){
+                level="10";
+            }
+            else if(level.toLowerCase().includes('lower')){
+                level="8";
+            }
+            else if(level.toLowerCase().includes('primary')){
+                level="6";
+            }
+            else{
+                level="12";
+                $('.strm_clas').show();
+            }
+            axios.get('/masters/loadClassStreamMapping/school_'+level)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                this.classStreamList = response.data.data;
             });
         },
+        
 
         /**
          * method to show next and previous tab
@@ -173,7 +304,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'level_change_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
@@ -183,23 +314,80 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            console.log("Error on submit:"+err)
                         })
                     }
                 });
             }
         },
         
-        change_tab(nextclass){ 
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
 
+        getGewogList(dzongkhag,gewogId){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogid').html(this.gewogArray[gewogId]);
+            });
+        },
+
+        getvillagelist(gewogId,vil_id){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name; 
+                }
+                $('#vilageId').html(this.villageArray[vil_id])
+            })
+            .catch(function (error){
+                console.log("Error getting Village:"+error)
+            });
+        },
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.locationArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
+            });
+        },
+
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.streamArray[data[i].id] = data[i].stream; 
+                }
+            });
+        },
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -219,52 +407,37 @@ export default {
         },
 
 
-        /**
-         * method to get class in checkbox
-         */
-        getClass:function(){
-            axios.get('/organization/getClass')
-              .then(response => {
-                this.classList = response.data;
-            });
-        },
-
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
-
-        /**
-         * method to get class stream in checkbox
-         */
-        getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping/school')
-              .then(response => {
-                this.classStreamList = response.data.data;
-            });
-        },
+        // /**
+        //  * method to get class stream in checkbox
+        //  */
+        // getClassStream:function(){
+        //     axios.get('/masters/loadClassStreamMapping/school')
+        //       .then(response => {
+        //         this.classStreamList = response.data.data;
+        //     });
+        // },
          
     },
     
     mounted() { 
-        $('[data-toggle="tooltip"]').tooltip();
+        this.getOrgList();
+        this.loadactivedzongkhagList();
+        this.getClass();
+        this.getStream();  
+        // this.getClassStream();
+        this.getLevel();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text()); 
         });
         
-        Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
+        Fire.$on('changefunction',(id,text)=> {
+            this.changefunction(id,text);
         });
-        this.getOrgList();
+       
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -277,11 +450,7 @@ export default {
         .catch(errors => { 
             console.log(errors)
         });
-        this.getClass();
-        this.getStream();  
-        this.getClassStream();
-        this.getLevel();
-        this.getOrgList();
+        
     }
 }
 </script>

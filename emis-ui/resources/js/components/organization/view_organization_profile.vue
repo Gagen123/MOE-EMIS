@@ -49,13 +49,12 @@
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-                                <strong><i class="fas fa-building mr-1"></i> School </strong>
                                 <div class="card-body p-0">
                                     <table class="table table-sm">
-                                    <thead>
+                                    <thead class="bg-info">
                                         <tr>
                                             <th>Organization Name</th>
-                                            <th><span class="text-blue text-bold">{{existing_details.name}}</span></th>
+                                            <th><span class="text-bold">{{existing_details.name}}</span></th>
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -15,36 +15,103 @@
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <form class="form-horizontal">
-                            <input type="hidden" class="form-control" v-model="form.id" id="id"/>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
-                                        <option value="">--- Please Select ---</option>
-                                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="organizationId"></has-error>
+                                <input type="hidden" class="form-control" v-model="form.id" id="id"/>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="organizationId"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Org Type: {{category}}</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/>
-                                    <has-error :form="form" field="initiatedBy"></has-error>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Current Name:</label>
+                                        <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Level:</label>
+                                        <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
-                                    <has-error :form="form" field="proposedName"></has-error>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Dzongkhag:</label>
+                                        <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                        <label>Gewog:</label>
+                                        <input type="text" readonly  class="form-control" id="gewogid"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Village:</label>
+                                        <input type="text" readonly class="form-control" id="vilageId"/>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Location:</label>
+                                        <input type="text" readonly :value="locationArray[organization_details.locationId]"  class="form-control" id="proposedName"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Classes</th>
+                                                    <th class="strm_clas">Stream</th>  
+                                                    <th></th>                     
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item, key, index) in  organization_details.classes" :key="index">
+                                                    <td>
+                                                        <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                                    </td>
+                                                    <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                        {{  streamArray[item.streamId]  }}
+                                                    </td>
+                                                    <td class="strm_clas" v-else> </td>
+                                                    <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                       <input type="checkbox" checked="true">
+                                                    </td>
+                                                    <td v-else>  
+                                                        <input type="checkbox" checked="true">                           
+                                                    </td>
+                                                </tr> 
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control" @change="remove_error('initiatedBy')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="initiatedBy"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
+                                        <has-error :form="form" field="proposedName"></has-error>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
                                 </div>
                             </div>
                         </div>
@@ -60,19 +127,27 @@
 export default {
     data(){
         return{
+            record_id:'',
+            organization_details:'',
+            category:'',
+            proposed_by_list:[],
+            levelArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
+            locationArray:{},
+            calssArray:{},
+            streamArray:{},
             orgList:'',
             classList:[],
             streamList:[],
             form: new form({
-                organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change', 
-                application_for:'Change in Name', action_type:'edit', status:'pending',organization_type:'',
+                id:'',organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change', 
+                application_for:'Change in Name', action_type:'eidt', status:'Submitted',organization_type:'',
             }),
         } 
     },
     methods: {
-        /**
-         * method to remove error
-         */
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -112,7 +187,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been udpated for approval. <br><b>Thank You !</b>";
+                                    let message="Your changes in the Applicaiton for Change basic details has been updated.  <br><b>Thank You !</b>";
                                     this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
@@ -127,7 +202,6 @@ export default {
                     }
                 });
             }
-            
         },
         
         change_tab(nextclass){
@@ -151,17 +225,109 @@ export default {
             }
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();  
-                this.getorgdetials($('#organizationId').val()); 
             }
             
         },
+        loadApplicaitonDetials(){ 
+            axios.get('organization/getChangeBasicDetails/'+this.record_id)
+            .then(response => {
+                let response_data=response.data.data;
+                this.getorgdetials(response_data.change_details.organizationId);
+                this.form.id=response_data.change_details.id;
+                this.form.initiatedBy=response_data.change_details.initiatedBy;
+                this.form.proposedName=response_data.change_details.proposedChange;
+            });
+        },
         getorgdetials(org_id){
+            this.form.organizationId=org_id;
+            $('#organizationId').val(org_id).trigger('change');
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.organization_details=response.data.data;
+                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+            });
+        },
+        
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+                 for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
             });
         },
 
+        getGewogList(dzongkhag,gewogId){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogid').val(this.gewogArray[gewogId]);
+            });
+        },
+
+        getvillagelist(gewogId,vil_id){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name; 
+                }
+                $('#vilageId').val(this.villageArray[vil_id])
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.locationArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
+            });
+        },
+        getstream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.streamArray[data[i].id] = data[i].stream; 
+                }
+            });
+        },
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -179,10 +345,27 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.proposed_by_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
         
     },
     
     mounted() { 
+        this.loadactivedzongkhagList();
+        this.loadproposedBy();
+        this.getOrgList();
+        this.getLevel();
+        this.getLocation();
+        this.getClass();
+        this.getstream();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -195,8 +378,9 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        
-        this.getOrgList();
+
+        this.record_id=this.$route.params.data.application_no;
+        this.loadApplicaitonDetials();
     }
 }
 </script>

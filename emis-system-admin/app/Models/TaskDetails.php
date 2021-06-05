@@ -13,6 +13,7 @@ class TaskDetails extends Model
         'id',
         'table_name',
         'service_name',
+        'name',
         'screen_id',
         'application_number',
         'status_id',

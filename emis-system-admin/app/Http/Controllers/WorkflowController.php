@@ -36,13 +36,18 @@ class WorkflowController extends Controller{
             'action_date'           =>date('Y-m-d h:i:s'),
         ];
         $workflowdetails = Workflow::create($data);
-        if($request->status_id==1){
+        if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
+            $status=$request->status_id;
+            if(strpos($request->status_id,'__submitterRejects')!==false){
+                $status=explode('__',$status)[0];
+            }
             $task_data=[
                 'table_name'            =>$request->table_name,
                 'service_name'          =>$request->service_name,
+                'name'                  =>$request->name,
                 'screen_id'             =>$request->screen_id,
                 'application_number'    =>$request->application_number,
-                'status_id'             =>$request->status_id,
+                'status_id'             =>$status,
                 'remarks'               =>$request->remarks,
                 'access_level'          =>$request->access_level,
                 'user_dzo_id'           =>$request->user_dzo_id,
@@ -54,7 +59,7 @@ class WorkflowController extends Controller{
                 'app_role_id'           => $request->app_role_id,
                 'record_type_id'        => $request->record_type_id,
             ];
-            $workflowdetails = TaskDetails::create($task_data);
+            return $workflowdetails = TaskDetails::create($task_data);
         } 
         else{
             $task_data=[
@@ -65,6 +70,7 @@ class WorkflowController extends Controller{
                 'claimed_by'            =>null,
                 'claimed_date'          =>null,
             ];
+
             if($request->service_name=="Hr Development"){
                 TaskDetails::where('screen_id', $request->screen_id)->update($task_data);
             }

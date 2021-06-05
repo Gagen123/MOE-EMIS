@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_of_Location'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Change_in_Location_Type'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -53,6 +53,9 @@ export default {
         },
         showedit(data){
             this.$router.push({name:'edit_location_change',params: {data:data}});
+        },
+        showview(data){
+            this.$router.push({name:'view_location_change',params: {data:data}});
         },
     },
     mounted(){

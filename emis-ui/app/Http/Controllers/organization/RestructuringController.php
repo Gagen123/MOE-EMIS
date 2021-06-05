@@ -94,7 +94,6 @@ class RestructuringController extends Controller
         $screen_id="";
         $status="";
         $app_role="";
-        
         foreach($workflowdet as $work){
             if($work->Establishment_type==$request->organization_type){
                 $screen_id=$work->SysSubModuleId;
@@ -108,26 +107,34 @@ class RestructuringController extends Controller
 
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         // dd( $response_data);
-        $service_name=json_decode($response_data)->data->establishment_type;
-
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,//service name 
-            'application_number'=>json_decode($response_data)->data->application_no,
-            'screen_id'         =>$screen_id,
-            'status_id'         =>$status,
-            'remarks'           =>null,
-            'app_role_id'       => $app_role,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
-        // dd($workflow_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        return $work_response_data;
+    //    dd($request->action_type);
+        if($request->action_type!="edit"){
+            $service_name=json_decode($response_data)->data->establishment_type;
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$request['organization_type'],//application type
+                'application_number'=>json_decode($response_data)->data->application_no,
+                'name'              =>$request['application_for'],//service name 
+                'screen_id'         =>$screen_id,
+                'status_id'         =>$status,
+                'remarks'           =>null,
+                'app_role_id'       => $app_role,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            // dd($workflow_data);
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
+        return $response_data;
         // return $response_data;
+    }
+    
+    public function getChangeBasicDetails($appId=""){
+        $loadPriviousOrgDetails = $this->apiService->listData('emis/organization/changeDetails/getChangeBasicDetails/'.$appId);
+        return $loadPriviousOrgDetails;
     }
 
     public function saveChangeClass(Request $request){
@@ -912,6 +919,7 @@ class RestructuringController extends Controller
             'action_type'               =>  $request['action_type'],
             'status'                    =>  $request['status'],  
             'id'                        =>  $request['id'],
+            'app_level_change_id'       =>  $request['app_level_change_id'],
             'user_id'                   =>  $this->userId() 
         ];
 
@@ -933,6 +941,7 @@ class RestructuringController extends Controller
             'action_type'               =>  $request['action_type'],
             'status'                    =>  $request['status'],  
             'id'                        =>  $request['id'],
+            'change_id'                        =>  $request['change_id'],
             'user_id'                   =>  $this->userId() 
         ];
 

@@ -24,6 +24,9 @@ use App\Models\establishment\ApplicationNoMeals;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\OrganizationProprietorDetailsHistory;
 use App\Models\OrganizationClassStreamHistory;
+use App\Models\OrganizationSectionHistory;
+use App\Models\generalInformation\SectionDetails;
+ 
 
 use Illuminate\Support\Facades\DB;
 
@@ -44,62 +47,146 @@ class ChangeBasicDetailsController extends Controller
      * method to save change basic details
     */
     public function saveChangeBasicDetails(Request $request){
-
-        $application_details_data =[
-            'application_no'       =>  $this->generateApplicationNo(),
-            'establishment_type'   =>  $request['application_for'],
-            'application_type'     =>  $request['application_type'],
-            'year'                 =>  date('Y'),
-            'status'               =>  $request['status'],
-            'created_by'           =>  $request['user_id']
-        ];
-
-        $inserted_application_data = ApplicationDetails::create($application_details_data);
-        $applicationDetailsId = $inserted_application_data->id;
-        // return ($applicationDetailsId,$request['application_type']);
-        switch($request['application_type']){
-            case "name_change" : {
-                    $change_details_data = $this->extractNameChangeData($request, $applicationDetailsId);
+        if($request->action_type!="edit"){
+            $application_details_data =[
+                'application_no'       =>  $this->generateApplicationNo(),
+                'establishment_type'   =>  $request['application_for'],
+                'application_type'     =>  $request['application_type'],
+                'year'                 =>  date('Y'),
+                'status'               =>  $request['status'],
+                'created_by'           =>  $request['user_id']
+            ];
+            $inserted_application_data = ApplicationDetails::create($application_details_data);
+            $applicationDetailsId = $inserted_application_data->id;
+            switch($request['application_type']){
+                case "name_change" : {
+                        $change_details_data = $this->extractNameChangeData($request, $applicationDetailsId);
+                        break;
+                    }
+                case "feeding_change" : {
+                        $change_details_data = $this->extractFeedingChangeData($request, $applicationDetailsId);
+                        break;
+                    }
+                case "level_change" : {
+                        $change_details_data = $this->extractChangeInLevelData($request, $applicationDetailsId);
+                        break;
+                    }
+                case "proprietor_change" : {
+                        $change_details_data = $this->extractChangeInPropreitorData($request, $applicationDetailsId);
+                        break;
+                    }
+                case "sen_change" : {
+                        $change_details_data = $this->extractSenChangeData($request, $applicationDetailsId);
+                        break;
+                    }
+                case "autonomus_change" : {
+                    $change_details_data = $this->extractAutomonusData($request, $applicationDetailsId);
                     break;
                 }
-            case "feeding_change" : {
-                    $change_details_data = $this->extractFeedingChangeData($request, $applicationDetailsId);
+                case "location_type_change" : {
+                    $change_details_data = $this->extractLocationData($request, $applicationDetailsId);
                     break;
                 }
-            case "level_change" : {
-                    $change_details_data = $this->extractChangeInLevelData($request, $applicationDetailsId);
+                case "expension_change" : {
+                    $change_details_data = $this->extractExtensionData($request, $applicationDetailsId);
                     break;
                 }
-            case "proprietor_change" : {
-                    $change_details_data = $this->extractChangeInPropreitorData($request, $applicationDetailsId);
+                case "all_details" : {
+                        $change_details_data = $this->extractAllChangeData($request, $applicationDetailsId);
+                        break;
+                    }
+                default : {
+                    
                     break;
                 }
-            case "sen_change" : {
-                    $change_details_data = $this->extractSenChangeData($request, $applicationDetailsId);
-                    break;
-                }
-            case "autonomus_change" : {
-                $change_details_data = $this->extractAutomonusData($request, $applicationDetailsId);
-                break;
-            }
-            case "location_type_change" : {
-                $change_details_data = $this->extractLocationData($request, $applicationDetailsId);
-                break;
-            }
-            case "expension_change" : {
-                $change_details_data = $this->extractExtensionData($request, $applicationDetailsId);
-                break;
-            }
-            case "all_details" : {
-                    $change_details_data = $this->extractAllChangeData($request, $applicationDetailsId);
-                    break;
-                }
-            default : {
-                
-                break;
             }
         }
+        else{
+            if($request['application_type']=="name_change"){
+                $data =[
+                    'proposedChange'           =>  $request['proposedName'],
+                    'initiatedBy'              =>  $request['initiatedBy'],
+                ];
+                $changeDetails = ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+            }
 
+            if($request['application_type']=="level_change"){
+                $data =[
+                    'proposedChange'           =>  $request['level'],
+                ];
+                $changeDetails = ApplicationEstDetailsChange::where('id',$request->app_level_change_id)->update($data);
+
+                if($request->class){
+                    ApplicationClassStream::where('ApplicationDetailsId',$request->app_level_change_id)->delete();
+                    foreach($request->class as $key => $classId){
+                        $stream_exists = $this->checkStreamExists($classId);
+                        if(empty($stream_exists)){
+                            $classStream = [
+                                'ApplicationDetailsId'  => $request->app_level_change_id,
+                                'classId'               => $classId,
+                                'streamId'              => '',
+                                'created_by'            => $request->user_id,
+                                'created_at'            => date('Y-m-d h:i:s'),
+                            ];
+                            $class = ApplicationClassStream::create($classStream);
+                        } 
+                    }
+                }
+                
+                if($request->stream!=null && $request->stream!=""){
+                    foreach($request->stream as $key2 => $classStreamId){
+                        $class_stream_data = $this->getClassStreamId($classStreamId);
+                        foreach($class_stream_data as $v){
+                            $classStream = [
+                                'ApplicationDetailsId'  => $request->app_level_change_id,
+                                'classId'               => $v->classId,
+                                'streamId'              => $v->streamId,
+                                'created_by'            => $request->user_id,
+                                'created_at'            => date('Y-m-d h:i:s'),
+                            ];
+                            $class = ApplicationClassStream::create($classStream);
+                        }
+                    }
+                }
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->app_level_change_id)->first();
+            }
+            if($request['application_type']=="sen_change"){
+                $data =[
+                    'proposedChange'           =>  $request['senSchool'],
+                ];
+                $changeDetails = ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+            }
+            if($request['application_type']=="location_type_change"){
+                $data =[
+                    'proposedChange'           =>  $request['locationType'],
+                ];
+                $changeDetails = ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+            }
+            if($request['application_type']=="feeding_change"){
+                $data =[
+                    'proposedChange'               =>  $request['isfeedingschool'],
+                ];
+                $changeDetails = ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                if($request->isfeedingschool==1 && sizeof($request->feeding)>0 ){
+                    ApplicationNoMeals::where( 'foreignKeyId', $request->id)->delete();
+                    foreach($request->feeding as $feed){
+                        $data =[
+                            'noOfMeals'                 =>  $feed,
+                            'foreignKeyFor'             => 'application_est_public',
+                            'foreignKeyId'              =>  $request->id,
+                            'created_by'                =>  $request->user_id,
+                            'created_at'                =>  date('Y-m-d h:i:s')
+                        ];
+                        ApplicationNoMeals::create($data);
+                    }
+                }
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+            }
+            
+        }
         return $this->successResponse($inserted_application_data, Response::HTTP_CREATED);
 
         //UGYEN'S OLD FUNCTION
@@ -529,6 +616,25 @@ class ChangeBasicDetailsController extends Controller
         return $this->successResponse($class, Response::HTTP_CREATED);
     }
 
+    public function getChangeBasicDetails($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $change_det=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
+            $response_data->change_details= $change_det;
+            $change_class=ApplicationClassStream::where('ApplicationDetailsId',$change_det->id)->get();
+            $calss_data = DB::table('classes as c')
+            ->join('application_class_stream as cl', 'c.id', '=', 'cl.classId')
+            ->select('cl.*', 'c.class', 'c.id AS classId')
+            ->where('cl.ApplicationDetailsId',$change_det->id)
+            ->orderBy('c.displayOrder', 'asc')
+            ->get();
+            $response_data->change_class_details=  $calss_data;
+            $feed_det=ApplicationNoMeals::where('foreignKeyId',$change_det->id)->get();;
+            $response_data->feed_det= $feed_det;
+        }
+        return $this->successResponse($response_data); 
+    }
+
     public function loadChangeDetailForVerification($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         if($response_data!="" && $response_data!=null){
@@ -543,7 +649,13 @@ class ChangeBasicDetailsController extends Controller
                 $response_data->change_prop=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_det->id)->first();
             }
             if($response_data->application_type=="level_change"){
-                $response_data->change_classes=ApplicationClassStream::where('ApplicationDetailsId',$change_det->id)->get();
+                $response_data->change_classes = DB::table('classes as c')
+                ->join('application_class_stream as cl', 'c.id', '=', 'cl.classId')
+                ->select('cl.*', 'c.class', 'c.id AS classId')
+                ->where('cl.ApplicationDetailsId',$change_det->id)
+                ->orderBy('c.displayOrder', 'asc')
+                ->get();
+                // $response_data->change_classes=ApplicationClassStream::where('ApplicationDetailsId',$change_det->id)->get();
             }
             // if($response_data=="Change in Level"){
                 
@@ -884,6 +996,30 @@ class ChangeBasicDetailsController extends Controller
                     'recorded_by'       =>  $request->user_id 
                 ];
                 OrganizationClassStreamHistory::create($cls_data);
+            }
+            $org_section=OrganizationClassStream::where('organizationId',$change_details->organizationId)->get();
+            if($org_section!="" && sizeof($org_section)>0){
+                foreach($org_section as $orgCls){
+                    $sections=SectionDetails::where('classSectionId',$orgCls['id'])->get();
+                    if($sections!="" && sizeof($sections)>0){
+                        foreach($sections as $sec){
+                            $sec_data=[
+                                'id'                =>  $sec['id'],
+                                'classSectionId'    =>  $sec['classSectionId'],
+                                'section'           =>  $sec['section'],
+                                'created_by'        =>  $sec['created_by'],
+                                'created_at'        =>  $sec['created_at'],
+                                'updated_at'        =>  $sec['updated_at'],
+                                'updated_by'        =>  $sec['updated_by'],
+                                'recorded_for'      =>  'Change in Level',
+                                'recorded_on'       =>  date('Y-m-d h:i:s'),
+                                'recorded_by'       =>  $request->user_id 
+                            ];
+                            OrganizationSectionHistory::create($sec_data);
+                        }
+                    }
+                    SectionDetails::where('classSectionId',$orgCls['id'])->delete();
+                }
             }
             OrganizationClassStream::where('organizationId',$change_details->organizationId)->delete();
         }

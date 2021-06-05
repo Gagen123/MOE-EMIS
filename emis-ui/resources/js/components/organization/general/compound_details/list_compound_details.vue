@@ -4,20 +4,20 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Student Name</th>
-                    <th >Student Id</th>
-                    <th >Class</th>
-                    <th >Section</th>
+                    <th >Thram No</th>
+                    <th >Plot No</th>
+                    <th >Peg Information</th>
+                    <th >Compound Area</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.thramNo}}</td>
+                    <td>{{ item.plotNo}}</td>
+                    <td>{{ item.pegInformation}}</td>
+                    <td>{{ item.compoundArea}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -32,16 +32,16 @@
 export default {
     data(){
         return{
-            org_id:'2',
-            dataList:[], 
+          //  org_id:'2',
+            dataList:[],  
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentWhereabouts/'+this.org_id){
+        loadcompoundareadetials(uri='organization/loadcompoundareadetials'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.dataList =  data.data.data;
+                this.dataList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -56,11 +56,11 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_compound_details',params: {data:data}});
         },
     },
     mounted(){
-        this.loadDataList();
+        this.loadcompoundareadetials();
     },
 }
 </script>
