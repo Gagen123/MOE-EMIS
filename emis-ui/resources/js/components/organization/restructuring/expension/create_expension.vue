@@ -71,7 +71,7 @@ export default {
             streamList:[],
             form: new form({
                 organizationId:'',currentCapacity:'',proposedCapacity:' ', application_type:'expension_change', 
-                application_for:'Expension', action_type:'add', status:'pending',organization_type:'',
+                application_for:'Expension', action_type:'add', status:'Submitted',organization_type:'',
             }),
         } 
     },
@@ -118,7 +118,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'expension_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
@@ -163,7 +163,10 @@ export default {
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.existing_details=response.data.data;
+                this.category=this.existing_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.existing_details.category.replace('_', " ").slice(1);
+                
             });
         },
 

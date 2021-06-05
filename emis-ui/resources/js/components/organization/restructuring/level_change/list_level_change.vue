@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_in_Level'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Upgrade_Downgrade'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -52,8 +52,12 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
+            this.$router.push({name:'edit_level_change',params: {data:data}});
         },
+        showview(data){
+            this.$router.push({name:'view_level_change',params: {data:data}});
+        },
+        
     },
     mounted(){
         this.loadDataList();

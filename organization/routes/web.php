@@ -329,6 +329,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'changeDetails'], function () use ($router) {
             $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
+            $router->get('/getChangeBasicDetails/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@getChangeBasicDetails']);
             $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
             $router->get('/loadCurrentOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentOrgDetails']);
             $router->get('/loadCurrentProprietorDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentProprietorDetails']);

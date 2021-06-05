@@ -26,9 +26,22 @@
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{form.organization_type}}</label>
+                                    <label>Org Type: {{category}}</label>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School(Curent):<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4" v-if="existing_details.isFeedingSchool==1">
+                                    <label><input  type="checkbox" id="exisfed1" value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" id="exisfed2"  value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" id="exisfed3"  value="3" tabindex=""/> Three Meals</label>
+                                </div>
+                            </div>
+                            
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
@@ -66,9 +79,11 @@ export default {
             orgList:'',
             classList:[],
             streamList:[],
+            existing_details:'',
+            category:'',
             form: new form({
                 organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
-                application_for:'Change in Feeding Details', action_type:'add', status:'pending',organization_type:'',
+                application_for:'Change in Feeding Details', action_type:'add', status:'Submitted',organization_type:'',
             }),
         } 
     },
@@ -121,7 +136,10 @@ export default {
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.existing_details=response.data.data;
+                this.category=this.existing_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.existing_details.category.replace('_', " ").slice(1);
+                
             });
         },
 
@@ -149,7 +167,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Applicaiton for Feeding details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'feeding_change_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',

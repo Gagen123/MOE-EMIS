@@ -513,6 +513,7 @@ const routes = [
             { path: '/list_name_change',name:'list_name_change', component: require('./components/organization/restructuring/name_change/list_name_change.vue').default },
             { path: '/create_name_change',name:'create_name_change', component: require('./components/organization/restructuring/name_change/create_name_change.vue').default },
             { path: '/edit_name_change',name:'edit_name_change', component: require('./components/organization/restructuring/name_change/edit_name_change.vue').default },
+            { path: '/view_name_change',name:'view_name_change', component: require('./components/organization/restructuring/name_change/view_name_change.vue').default },
             { path: '/name_change_acknowledgement', name:'name_change_acknowledgement', component: require('./components/organization/restructuring/name_change/acknowledgement.vue').default },
           ]    
       },
@@ -523,6 +524,7 @@ const routes = [
             { path: '/list_level_change',name:'list_level_change', component: require('./components/organization/restructuring/level_change/list_level_change.vue').default },
             { path: '/create_level_change',name:'create_level_change', component: require('./components/organization/restructuring/level_change/create_level_change.vue').default },
             { path: '/edit_level_change',name:'edit_level_change', component: require('./components/organization/restructuring/level_change/edit_level_change.vue').default },
+            { path: '/view_level_change',name:'view_level_change', component: require('./components/organization/restructuring/level_change/view_level_change.vue').default },
             { path: '/level_change_acknowledgement', name:'level_change_acknowledgement', component: require('./components/organization/restructuring/level_change/acknowledgement.vue').default },
           ]    
       },
@@ -532,6 +534,8 @@ const routes = [
             { path: '/',name:'sen_details_index', component: require('./components/organization/restructuring/sen_change/list_sen_change.vue').default },
             { path: '/list_sen_change',name:'list_sen_change', component: require('./components/organization/restructuring/sen_change/list_sen_change.vue').default },
             { path: '/create_sen_change',name:'create_sen_change', component: require('./components/organization/restructuring/sen_change/create_sen_change.vue').default },
+            { path: '/edit_sen_change',name:'edit_sen_change', component: require('./components/organization/restructuring/sen_change/edit_sen_change.vue').default },
+            { path: '/view_sen_change',name:'view_sen_change', component: require('./components/organization/restructuring/sen_change/view_sen_change.vue').default },
             { path: '/sen_change_acknowledgement', name:'sen_change_acknowledgement', component: require('./components/organization/restructuring/sen_change/acknowledgement.vue').default },
           ]    
       },
@@ -541,6 +545,8 @@ const routes = [
             { path: '/',name:'feeding_details_index', component: require('./components/organization/restructuring/feeding_change/list_feeding_change.vue').default },
             { path: '/list_feeding_change',name:'list_feeding_change', component: require('./components/organization/restructuring/feeding_change/list_feeding_change.vue').default },
             { path: '/create_feeding_change',name:'create_feeding_change', component: require('./components/organization/restructuring/feeding_change/create_feeding_change.vue').default },
+            { path: '/edit_feeding_change',name:'edit_feeding_change', component: require('./components/organization/restructuring/feeding_change/edit_feeding_change.vue').default },
+            { path: '/view_feeding_change',name:'view_feeding_change', component: require('./components/organization/restructuring/feeding_change/view_feeding_change.vue').default },
             { path: '/feeding_change_acknowledgement', name:'feeding_change_acknowledgement', component: require('./components/organization/restructuring/feeding_change/acknowledgement.vue').default },
           ]    
       },
@@ -559,6 +565,8 @@ const routes = [
             { path: '/',name:'location_change_index', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
             { path: '/list_location_change',name:'list_location_change', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
             { path: '/create_location_change',name:'create_location_change', component: require('./components/organization/restructuring/location_change/create_location_change.vue').default },
+            { path: '/edit_location_change',name:'edit_location_change', component: require('./components/organization/restructuring/location_change/edit_location_change.vue').default },
+            { path: '/view_location_change',name:'view_location_change', component: require('./components/organization/restructuring/location_change/view_location_change.vue').default },
             { path: '/location_change_acknowledgement', name:'location_change_acknowledgement', component: require('./components/organization/restructuring/location_change/acknowledgement.vue').default },
           ]    
       },
@@ -569,6 +577,16 @@ const routes = [
             { path: '/list_expension',name:'list_expension', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
             { path: '/create_expension',name:'create_expension', component: require('./components/organization/restructuring/expension/create_expension.vue').default },
             { path: '/expension_acknowledgement', name:'expension_acknowledgement', component: require('./components/organization/restructuring/expension/acknowledgement.vue').default },
+          ]    
+      },
+      
+      { path: '/autonomus_index',  
+        component: require('./components/organization/restructuring/autonomous/autonomous_index.vue').default ,
+          children: [
+            { path: '/',name:'autonomus_index', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
+            { path: '/list_autonomous',name:'list_autonomous', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
+            { path: '/create_autonomous',name:'create_autonomous', component: require('./components/organization/restructuring/autonomous/create_autonomous.vue').default },
+            { path: '/autonomous_acknowledgement', name:'autonomous_acknowledgement', component: require('./components/organization/restructuring/autonomous/acknowledgement.vue').default },
           ]    
       },
 
