@@ -6,232 +6,20 @@
         </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
-                <div class="form-group row">
-                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                    <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="parent_id"></has-error>
-                    </div>
-                </div>
+                <ul class="nav nav-tabs" id="tabhead">
+                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
+                        <a class="nav-link active" data-toggle="pill" role="tab"> 
+                            <label class="mb-0.5">Current Organization Details </label>                              
+                        </a>
+                    </li>
+                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Bifurcation Details </label>
+                        </a>
+                    </li>
+                </ul>
             </div>
-            <div class="form-group row">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Present School Details</h3>
-                        </div>
-                        <div class="card-body">
-                            <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <input type="text" class="form-control currentDetails" id="name" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" @change="remove_error('name')"/>
-                                        <has-error :form="form" field="name"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name">{{data.name}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Code:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.code}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{levelArray[data.levelId]}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{ data.category == 'public_school' ? "Public School" :  "Private & Other"}}</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                         <span class="text-blue text-bold"> {{ data.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
-                                    </div>
-                                </div>
-                                <label class="mb-0"><i><u>Other Details</u></i></label>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{dzongkhagArray[data.dzongkhagId]}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.gewog}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name"> </span>
-                                    </div>
-                                </div>
-                                <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                        <span v-for="(item, index) in  data.classes" :key="index">
-                                            <br>
-                                            <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.classId] }}</label>
-                                        </span> 
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">School/ECR/ECCD 2</h3>
-                        </div>
-                        <div class="card-body">
-                            <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <input type="text" class="form-control currentDetails" id="name1" v-model="form.name1" :class="{ 'is-invalid': form.errors.has('name1') }" @change="remove_error('name1')"/>
-                                        <has-error :form="form" field="name1"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="level1"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
-                                        <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="location1"></has-error>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.geoLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.geoLocated1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <label class="mb-0"><i><u>Other Details</u></i></label>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select v-model="form.dzongkhag1" :class="{ 'is-invalid': form.errors.has('dzongkhag1') }" class="form-control select2" name="dzongkhag1" id="dzongkhag1">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in dzongkhagList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="dzongkhag1"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select v-model="form.gewog1" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog1') }" class="form-control select2" name="gewog1" id="gewog1">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in gewog_list1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="gewog1"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select v-model="form.chiwog1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog1') }" class="form-control select2" name="chiwog1" id="chiwog1">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in villageList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="chiwog1"></has-error>
-                                    </div>
-                                </div>
-                                <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                        <span v-for="(item, key, index) in  classList" :key="index">
-                                            <br>
-                                            <input type="checkbox" v-model="form.class1" :value="item.id"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                            <span v-for="(stm, key, index) in streamList" :key="index" >
-                                                <span v-if="item.class=='XI' || item.class=='XII'">
-                                                    <br>
-                                                    <input type="checkbox" v-model="form.stream1"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
-                                                </span>
-                                            </span>
-                                        </span> 
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <!-- <div class="card-body pt-0 mt-1">
+            <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
@@ -351,7 +139,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
-                                        <h3 class="card-title">Present School Details</h3>
+                                        <h3 class="card-title">School/ECR/ECCD 1</h3>
                                     </div>
                                     <div class="card-body">
                                         <form class="form-horizontal">
@@ -611,7 +399,7 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
         
     </div>

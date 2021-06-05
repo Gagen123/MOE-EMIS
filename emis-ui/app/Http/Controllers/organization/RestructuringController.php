@@ -317,83 +317,90 @@ class RestructuringController extends Controller
     public function saveMerger(Request $request){
         $rules = [
             'proposedName'      =>  'required',
-            'level'             =>  'required',
-            'category'          =>  'required',
-            'dzongkhag'         =>  'required',
-            'gewog'             =>  'required',
-            'chiwog'            =>  'required',
-            'locationType'      =>  'required',
-            'senSchool'         =>  'required',
         ];
         $customMessages = [
             'proposedName.required' =>  'Name is required',
-            'level.required'        => 'Level is required',
-            'category.required'     => 'Category is required',
-            'dzongkhag.required'    => 'Dzongkhag is required',
-            'gewog.required'        => 'Gewog is required',
-            'chiwog.required'       => 'Chiwog is required',
-            'locationType.required' => 'Location Type is required',
-            'senSchool.required'    => 'SEN School is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $merger =[
             'orgId1'                   =>       $request['orgId1'],
             'orgId2'                   =>       $request['orgId2'],
             'proposedName'             =>       $request['proposedName'],
-            'cid'                      =>       $request['cid'],
-            'name'                     =>       $request['name'],
-            'phoneNo'                  =>       $request['phoneNo'],
-            'email'                    =>       $request['email'],
-            'category'                 =>       $request['category'],
-            'level'                    =>       $request['level'],
-            'dzongkhag'                =>       $request['dzongkhag'],
-            'gewog'                    =>       $request['gewog'],
-            'chiwog'                   =>       $request['chiwog'],
-            'location'                 =>       $request['locationType'],
-            'geoLocated'               =>       $request['geoLocated'],
-            'senSchool'                =>       $request['senSchool'],
-            'parentSchool'             =>       $request['parentSchool'],
-            'coLocated'                =>       $request['coLocated'],
-            'year'                     =>       $request['year'],
-            'class'                    =>       $request['class'],
-            'stream'                   =>       $request['stream'],
-            'isfeedingschool'          =>       $request['isfeedingschool'],
-            'feeding'                  =>       $request['feeding'],
             'id'                       =>       $request['id'],
             'user_id'                  =>  $this->userId() 
         ];
+
         $response_data= $this->apiService->createData('emis/organization/merger/saveMerger', $merger);
         // dd($response_data);
-        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-        // dd($workflowdet);
-        $screen_id="";
-        $status="";
-        $app_role="";
-        foreach($workflowdet as $work){
-            if(strpos(strtolower($work->screenName),'merge')!==false){
-                $screen_id=$work->SysSubModuleId;
-                $status=$work->Sequence;
-                $app_role=$work->SysRoleId;
+        
+        //Work Flow Process (based on Public School Establishment)
+        //get submitter role
+        if($request['action_type']!="edit"){
+            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            $screen_id="";
+            $status="";
+            $app_role="";
+            $service_name=json_decode($response_data)->data->establishment_type;
+            foreach($workflowdet as $work){
+                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                    $screen_id=$work->SysSubModuleId;
+                    $status=$work->Sequence;
+                    $app_role=$work->SysRoleId;
+                }
             }
+            if($request->submit_type=="reject"){
+                $status='0__submitterRejects';
+            }
+
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$service_name,//service name 
+                'name'              =>$request['proposedName'],//service name 
+                'application_number'=>json_decode($response_data)->data->application_no,
+                'screen_id'         =>$screen_id,
+                'status_id'         =>$status,
+                'remarks'           =>$request['remarks'],
+                'app_role_id'       => $app_role,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            // dd($workflow_data);
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
-        // $workflowdet=$this->getsubmitterStatus('merge');
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->bif_table_name,
-            'service_name'      =>'Merger',
-            'application_number'=>json_decode($response_data)->data->application_no,
-            'screen_id'         => $screen_id,
-            'status_id'         =>$status,
-            'app_role_id'       => $app_role,
-            'remarks'           =>null,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
-        // dd($workflow_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        return $work_response_data;
+        
+        // $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
+        // $screen_id="";
+        // $status="";
+        // $app_role="";
+        // foreach($workflowdet as $work){
+        //     if(strpos(strtolower($work->screenName),'merge')!==false){
+        //         $screen_id=$work->SysSubModuleId;
+        //         $status=$work->Sequence;
+        //         $app_role=$work->SysRoleId;
+        //     }
+        // }
+        // // $workflowdet=$this->getsubmitterStatus('merge');
+        // $workflow_data=[
+        //     'db_name'           =>$this->database_name,
+        //     'table_name'        =>$this->bif_table_name,
+        //     'service_name'      =>'Merger',
+        //     'application_number'=>json_decode($response_data)->data->application_no,
+        //     'screen_id'         => $screen_id,
+        //     'status_id'         =>$status,
+        //     'app_role_id'       => $app_role,
+        //     'remarks'           =>null,
+        //     'user_dzo_id'       =>$this->getUserDzoId(),
+        //     'access_level'      =>$this->getAccessLevel(),
+        //     'working_agency_id' =>$this->getWrkingAgencyId(),
+        //     'action_by'         =>$this->userId(),
+        // ];
+        // // dd($workflow_data);
+        // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $response_data;
     }
 
     public function loadMergerForVerification($appNo="",$type=""){
@@ -750,50 +757,6 @@ class RestructuringController extends Controller
     public function loadOrganizationDetails(){
         $loadBifurcationDetails = $this->apiService->listData('emis/organization/bifurcation/loadBifurcation');
         return $loadBifurcationDetails;
-    }
-
-    /**
-     * Verification and Approval Process
-     * This was copied from Public School Creation
-     */
-
-    private function verificationProcess(){
-        //get submitter role
-        if($request['action_type']!="edit"){
-            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            $screen_id="";
-            $status="";
-            $app_role="";
-            $service_name=json_decode($response_data)->data->establishment_type;
-            foreach($workflowdet as $work){
-                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
-                    $screen_id=$work->SysSubModuleId;
-                    $status=$work->Sequence;
-                    $app_role=$work->SysRoleId;
-                }
-            }
-            if($request->submit_type=="reject"){
-                $status='0__submitterRejects';
-            }
-
-            $workflow_data=[
-                'db_name'           =>$this->database_name,
-                'table_name'        =>$this->table_name,
-                'service_name'      =>$service_name,//service name 
-                'name'              =>$request['proposedName'],//service name 
-                'application_number'=>json_decode($response_data)->data->application_no,
-                'screen_id'         =>$screen_id,
-                'status_id'         =>$status,
-                'remarks'           =>$request['remarks'],
-                'app_role_id'       => $app_role,
-                'user_dzo_id'       =>$this->getUserDzoId(),
-                'access_level'      =>$this->getAccessLevel(),
-                'working_agency_id' =>$this->getWrkingAgencyId(),
-                'action_by'         =>$this->userId(),
-            ];
-            // dd($workflow_data);
-            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        }
     }
     
     // public function getOrgList(){
