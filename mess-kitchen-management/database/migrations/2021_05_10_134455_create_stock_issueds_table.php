@@ -17,6 +17,9 @@ class CreateStockIssuedsTable extends Migration
             $table->uuid('id')->primary();
             $table->char('organizationId',36);
             $table->date('dateOfissue');
+            $table->char('item_id',36);
+            $table->char('quantity',36);
+            $table->char('unit_id',36);
             $table->char('item',36);
             $table->char('quantity',36);
             $table->char('unit',36);

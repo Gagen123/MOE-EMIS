@@ -54,7 +54,7 @@ const routes = [
                     { path: '/',name:'financial_information_index', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
                     { path: '/list_financial_information',name:'list_financial_information', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
                     { path: '/create_financial_information',name:'create_financial_information', component: require('./components/masters/organization_masters/financial_information/create_financial_information.vue').default },
-                    { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/masters/organization_masters/financial_information/edit_financial_information.vue').default },
+                    { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
                   ]     
               }, 
               { path: '/fencing_index',  
@@ -305,6 +305,16 @@ const routes = [
                     { path: '/attachment_list', name:'AttachmentList', component: require('./components/masters/organization_masters/attachment/attachment_list.vue').default },
                 ]    
             },
+            { path: '/disastercommittee_index', 
+            component: require('./components/masters/organization_masters/disastercommittee/disastercomm_index.vue').default ,
+            children: 
+            [
+                { path: '',name:'disastercomm_index', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_list.vue').default },
+                { path: '/disastercomm_add', name:'DisasterCommitteeAdd', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_add.vue').default },
+                { path: '/disastercomm_edit', name:'DisasterCommitteeEdit', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_edit.vue').default },
+                { path: '/disastercomm_list', name:'DisasterCommitteeList', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_list.vue').default },
+            ]    
+          },
         ]  
     },
     //Organziation Routes (Establishment)
@@ -706,8 +716,8 @@ const routes = [
           children: [
             { path: '',name:'financial_information', component: require('./components/organization/financials/financial_information/list_financial_information.vue').default },
             { path: '/add_financial_information', name:'add_financial_information', component: require('./components/organization/financials/financial_information/add_financial_information.vue').default },
-            { path: '/edit_financial_information', name:'edit_financial_information', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
-            { path: '/list_financial_information', name:'list_financial_information', component: require('./components/organization/financials/financial_information/list_financial_information.vue').default },
+            { path: '/edit_financial_info', name:'edit_financial_info', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
+            { path: '/list_financial_info', name:'list_financial_information', component: require('./components/organization/financials/financial_information/list_financial_information.vue').default },
           ]    
         },
         { path: '/income_information', 

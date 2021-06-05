@@ -20,20 +20,18 @@ class StockReceivedController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveStockReceived(Request $request){
-        //dd('m here');
+      //  dd('m here at my service');
        $stockreceived = [
            'dateOfreceived'             =>  $request['dateOfreceived'],
-           'term_id'                    =>  $request['term'],
+           'quarter_id'                 =>  $request['quarter'],
            'remarks'                    =>  $request['remarks'],
            'organizationId'             =>  $request['organizationId'],
            'updated_by'                 =>  $request->user_id,
            'created_at'                 =>  date('Y-m-d h:i:s')
        ];
-      // dd($stockreceived);
-       $stockrcv = StockReceived::create($stockreceived);
+     // dd($stockreceived);
+       $stockrcv = StockReceived::create($stockreceived); 
 
-      // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
-       // dd($request->items_release);
        foreach ($request->items_received as $i => $item){
            $stockreciveitems = array(
                'stockreceivedId'              =>  $stockrcv->id,
@@ -44,21 +42,28 @@ class StockReceivedController extends Controller
                'updated_by'                   =>  $request->user_id,
                'created_at'                   =>  date('Y-m-d h:i:s')
            );
+         //  dd($stockrcv);
            StockReceivedItem::create($stockreciveitems);
        }
        return $this->successResponse($stockrcv, Response::HTTP_CREATED);
-      // dd($stockrcv);
     }
 
     public function loadFoodReleaseListing($org_Id=""){
-    //  return 'from service of mine';
+      //  dd('m here');
+     // return 'from service of mine';
        $stckrecive = DB::table('stock_receiveds')
-      ->select('dateOfreceived as dateOfreceived', 'term_id as term', 'remarks as remarks')->where('organizationId', $org_Id)->get();
+      ->select('id','organizationId', 'dateOfreceived as dateOfreceived', 'quarter_id as quarter', 'remarks as remarks')->where('organizationId', $org_Id)->get();
       return $stckrecive;
-      // $response_data=StockReceived::where('organizationId',$org_id)->get();
-      // return $this->successResponse($response_data);
     }
 
+ //just added 
+    public function getStockReceivedDetails($stockreceivedId=""){
+        $response_data=StockReceived::where('id',$stockreceivedId)->first();
+        $response_data->stockreceived=StockReceivedItem::where('stockreceivedId',$response_data->id)->get();
+        return $this->successResponse($response_data); 
+    }
+    
+    
     // public function getfoodreleaseditemList($stockreceivedId){
     //     $foodreleaseitem = DB::table('item_released_notes')
     //     ->select('item_id', 'quantity', 'unit_id')->where('stockreceivedId', $stockreceivedId)->get();

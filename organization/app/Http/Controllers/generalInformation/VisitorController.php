@@ -27,8 +27,8 @@ class VisitorController extends Controller
 
         $data =[
             'organizationId'           =>  $request['organizationId'],
-            'visitor'      =>  $request['visitor_information'],
-            'dateOfVisit'                     =>  $request['date'],
+            'visitor'                  =>  $request['visitor_information'],
+            'dateOfVisit'              =>  $request['date'],
             'remarks'                  =>  $request['remarks'],
         ];
 

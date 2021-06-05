@@ -9,7 +9,8 @@ use App\Traits\ApiResponser;
 use App\Models\generalInformation\ClassMapping;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrganizationClassStream;
-use App\Models\organization_financial_information;
+use App\Models\OrganizationIncomeFacilities;
+use App\Models\OrganizationFinancialInformation;
 
 class FinanceController extends Controller
 {
@@ -23,87 +24,145 @@ class FinanceController extends Controller
     {
         //
     }
-
-    // public function saveIncomeInformation(Request $request){
-    //     OrganizationClassStream::where('organizationId',$request->school)->delete();
-    //     $response_data="";
-    //     if($request->class){
-    //         foreach($request->class as $key => $classId){
-    //             $stream_exists = $this->checkStreamExists($classId);
-    //             if(empty($stream_exists)){
-    //                 $classStream = [
-    //                     'organizationId'        => $request->school,
-    //                     'classId'               => $classId,
-    //                     'streamId'              => '',
-    //                     'created_by'            => $request->user_id,
-    //                     'created_at'            => date('Y-m-d h:i:s'),
-    //                 ];
-    //                 $class = OrganizationClassStream::create($classStream);
-    //             } 
-    //         }
-    //         return $this->successResponse($response_data, Response::HTTP_CREATED);
-    //     }
-    // }
-        
-    // public function loadIncomeInformation($orgId=""){
-    //     $response_data = OrganizationClassStream::where('organizationId',$school_id)->get();
-    //     if($response_data!=null && $response_data!=""){
-    //         foreach($response_data as $class_stream){
-    //             if($class_stream['streamId']!=null && $class_stream['streamId']!=""){
-    //                 // dd($this->getmappingId($class_stream['classId'],$class_stream['streamId'])->id);
-    //                 $class_stream->classStreamId= $this->getmappingId($class_stream['classId'],$class_stream['streamId'])->id;
-    //             }
-    //             else{
-    //                 $class_stream->classStreamId= "";
-    //             }
-    //         }
-    //     }
-    //     return $response_data;
-    // }
-
-    public function saveFinancialInformation(Request $request){
-        //  dd($request);
-         $rules = [
-            // 'type'               =>  'required',
+    public function saveIncomeInformation(Request $request){
+        //   dd($request);
+          $rules = [
+            // 'income'                         =>  'required',
             'amount'                            =>  'required',
             'date'                              =>  'required',
-            'status'                            =>  'required',
-            // 'organizationId'                    =>  'organizationId',
-            // 'financialInformationId'            =>  'financialInformationId',
+            'remarks'                           =>  'required',
+            'organizationId'                    =>  'required',
             
         ];
         $customMessages = [
-            'type.required'                     => 'Type is required',
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
-            'status.required'                   => 'status is required',
-            // 'organizationId.required'           => 'organizationId is required',
+            'remarks.required'                  => 'remarks is required',
+            'organizationId.required'           => 'organizationId is required',
+            // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'amountGenerated'                    =>  $request['amount'],
+            'date'                               =>  $request['date'],
+            'remarks'                            =>  $request['remarks'],
+            'organization_details_id'            =>  $request['organizationId'],
+            // 'incomeFacilitiesId'              =>  $request['income'],
+        ];
+        // dd($data);
+        $response_data = OrganizationIncomeFacilities::create($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    } 
+    public function updateIncomeInformation(Request $request){
+        $id = $request->id;
+        //   dd($request);
+          $rules = [
+            // 'income'                         =>  'required',
+            'id'                                =>  'required',
+            'amount'                            =>  'required',
+            'date'                              =>  'required',
+            'remarks'                           =>  'required',
+            'organizationId'                    =>  'required',
+            
+        ];
+        $customMessages = [
+            'id.required'                       => 'amount is required',
+            'amount.required'                   => 'amount is required',
+            'date.required'                     => 'date is required',
+            'remarks.required'                  => 'remarks is required',
+            'organizationId.required'           => 'organizationId is required',
+            // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'id'                                 =>  $request['id'],
+            'amountGenerated'                    =>  $request['amount'],
+            'date'                               =>  $request['date'],
+            'remarks'                            =>  $request['remarks'],
+            'organization_details_id'            =>  $request['organizationId'],
+            // 'incomeFacilitiesId'              =>  $request['income'],
+        ];
+        $response_data = OrganizationIncomeFacilities::where('id', $id)->update($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+        
+    public function saveFinancialInformation(Request $request){
+        // dd($request);
+         $rules = [
+            'amount'                            =>  'required',
+            'date'                              =>  'required',
+            'remarks'                           =>  'required',
+            'organizationId'                    =>  'required',
+            // 'financialInformationId'            =>  'required',
+            
+        ];
+        $customMessages = [
+            // 'type.required'                     => 'Type is required',
+            'amount.required'                   => 'amount is required',
+            'date.required'                     => 'date is required',
+            'remarks.required'                  => 'remarks is required',
+            'organizationId.required'           => 'organizationId is required',
             // 'financialInformationId.required'   => 'financialInformationId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
-            'type'                              =>  $request['type'],
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
-            'status'                            =>  $request['status'],
-            // 'organizationId'                    =>  $request['organizationId'],
-            // 'financialInformationId'            =>  $request['financialInformationId'],
+            'remarks'                           =>  $request['remarks'],
+            'organizationId'                    =>  $request['organizationId'],
+            // 'financialInformationId'         =>  $request['financialInformationId'],
            
         ];
-        try{
-            $response_data = organization_financial_information::create($data);
-            }
-            catch(\Illuminate\Database\QueryException $e){
-                dd($e);
-
-            }
+        $response_data = OrganizationFinancialInformation::create($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    public function updateFinancialInfo(Request $request){
+        $id = $request->organizationId;
+        // dd($request);
+         $rules = [
+            // 'id'                                =>  'required',
+            'amount'                            =>  'required',
+            'date'                              =>  'required',
+            'remarks'                           =>  'required',
+            'organizationId'                    =>  'required',
+            // 'financialInformationId'            =>  'required',
+            
+        ];
+        $customMessages = [
+            // 'type.required'                     => 'Type is required',
+            // 'id.required'                       => 'id is required',
+            'amount.required'                   => 'amount is required',
+            'date.required'                     => 'date is required',
+            'remarks.required'                  => 'remarks is required',
+            'organizationId.required'           => 'organizationId is required',
+            // 'financialInformationId.required'   => 'financialInformationId is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'amount'                            =>  $request['amount'],
+            'date'                              =>  $request['date'],
+            'remarks'                           =>  $request['remarks'],
+            'organizationId'                    =>  $request['organizationId'],
+            // 'financialInformationId'         =>  $request['financialInformationId'],
+           
+        ];
+        // dd($data);
+        $response_data = OrganizationFinancialInformation::where('id', $id)->update($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
 
-    public function loadFinancialInformation($orgId){
-        $finacialinfo=organization_financial_information::where('organizationId',$orgId)->get();
-        return $this->successResponse($finacialinfo); 
+    }
+
+    public function loadFinancialInformation($orgId=""){
+        $data=OrganizationFinancialInformation::where('organizationId',$orgId)->get();
+        return $data; 
+    }
+    
+    public function loadIncomeInformation($orgId= ""){
+        $data=OrganizationIncomeFacilities::where('organization_details_id',$orgId)->get();
+        return $data; 
     }
 }
+
 
 
