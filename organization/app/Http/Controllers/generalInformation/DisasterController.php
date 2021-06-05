@@ -24,16 +24,21 @@ class DisasterController extends Controller
     }
 
     public function saveDisasterInformation(Request $request){
+       // dd('microservices');
         $data =[
             'organizationId'            =>  $request['organizationId'],
-            'name'                      =>  $request['name'],
-            'cid'                      =>  $request['cid'],
-            'email'                  =>  $request['email'],
-            'contactNo'             =>  $request['contact_no'],
-            'servingAs'             => $request['serving_as'],
-            'placeOfWork'                    =>  $request['address']
-        ];
+            'disasterTypeId'            =>  $request['diastertype'],
+            'diastercomm'               =>  $request['diastercomm'],
+            'cid'                       =>  $request['cid_passport'],
+            'name'                      =>  $request['fullname'],
+            'sex_id'                    =>  $request['sex_id'],
+            'email'                     =>  $request['email'],
+            'contactNo'                 =>  $request['contactno'],
+            'servingAs'                 =>  $request['servining_as'],
+            'placeOfWork'               =>  $request['fulladdress'],
 
+        ];
+      //  dd( $data );
         $response_data = Disaster::create($data);
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);

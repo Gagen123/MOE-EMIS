@@ -76,6 +76,10 @@ class EstablishmentController extends Controller
         $customMessages = $validation['messages'];
 
         $this->validate($request, $rules, $customMessages);
+        $establishment_data=$establishment_data+[
+            'app_id'                =>  $request['app_id'],
+            'ap_estb_id'            =>  $request['ap_estb_id'],
+        ];
         // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
         // dd($response_data);
@@ -130,12 +134,16 @@ class EstablishmentController extends Controller
         //     'class.required'         => 'Class is required',
         // ];
         // $this->validate($request, $rules, $customMessages);
+        $form_status=$request['status'];
+        if($request->submit_type=="reject"){
+            $form_status='Rejected';
+        }
         $classStream =[
             'class'                 =>  $request['class'],
             'stream'                =>  $request['stream'],
             'proposed_establishment'    =>  $request['proposed_establishment'],
             'application_number'    =>  $request['application_number'],
-            'status'                =>  $request['status'],
+            'status'                =>  $form_status,
             'action_type'           =>  $request['action_type'],
             'user_id'               =>  $this->userId() ,
         ];
@@ -156,15 +164,19 @@ class EstablishmentController extends Controller
                     $app_role=$work->SysRoleId;
                 }
             }
+            if($request->submit_type=="reject"){
+                $status='0__submitterRejects';
+            }
 
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>$service_name,//service name 
+                'name'              =>$request['proposedName'],//service name 
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
-                'remarks'           =>null,
+                'remarks'           =>$request['remarks'],
                 'app_role_id'       => $app_role,
                 'user_dzo_id'       =>$this->getUserDzoId(),
                 'access_level'      =>$this->getAccessLevel(),
@@ -506,7 +518,7 @@ class EstablishmentController extends Controller
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
             'locationType'          =>  'required',
-            'senSchool'             =>  'required',
+            // 'senSchool'             =>  'required',
         ];
         $customMessages = [
             'initiatedBy.required'          => 'Proposal Initiated By is required',
@@ -517,7 +529,7 @@ class EstablishmentController extends Controller
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
             'locationType.required'         => 'Location Type  is required',
-            'senSchool.required'            => 'Sen School is required',
+            // 'senSchool.required'            => 'Sen School is required',
             
         ];
         $validation = array();

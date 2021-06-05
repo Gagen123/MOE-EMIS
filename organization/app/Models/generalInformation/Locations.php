@@ -9,15 +9,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Locations extends Model
 {
     use HasFactory, Uuid;
-    protected $table="locations";
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $table="organization_locations";
     protected $fillable = [
-        'id','organizationId','landOwnership','compoundFencing','entranceGate','longitude','latitude','altitude',
-        'thramNo','cid','name','compoundArea','created_by','updated_by'
+        'id','organizationId','entranceGate','longitude','latitude','altitude',
+        'thramNo','googleMapPath','climate_type','distance_from_dzo','fencingtypeId','disasterArea','created_by','updated_by'
     ];
 }

@@ -321,14 +321,17 @@ export default {
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
         this.loadActiveQuarterList();
+
+    },
+    created() {
        // this.getStockReceivedDetails(this.$route.params.data.id);
-        this.form.dateOfreceived = this.$route.params.data.dateOfreceived;
-        this.form.quarter = this.$route.params.data.quarter_id;
-        this.items_received.item = this.$route.params.data.item_id;
-        this.items_received.quantity = this.$route.params.data.quantity;
-        this.items_received.unit = this.$route.params.data.unit_id;
+        this.form.dateOfreceived=this.$route.params.data.dateOfreceived;
+        this.form.quarter=this.$route.params.data.quarter;
+        this.items_received.item=this.$route.params.data.item;
+        this.items_received.quantity=this.$route.params.data.receivedquantity;
+        this.items_received.unit=this.$route.params.data.unit;
         this.items_received.remarks = this.$route.params.data.remarks;
-       //  this.student_form.gender=this.$route.query.data[0].CmnSexId;
+        this.form.id=this.$route.params.data.id;
        
     }
 }

@@ -169,13 +169,19 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadStructureDesigner', 'Masters\StructureDesignerController@loadStructureDesigner');
     });
 
+    $router->group(['prefix' => 'masters/disastercomm'], function () use ($router) {
+        $router->post('/saveDisasterCommittee', 'Masters\DisasterCommitteeController@saveDisasterCommittee');
+        $router->get('/loadDisasterComm', 'Masters\DisasterCommitteeController@loadDisasterComm');
+    });
     //Organization Transactions Routes
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
-            $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
+            // $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
+            // $router->get('/loadEquipment/{orgId}', 'generalInformation\EquipmentController@loadEquipment');
+            $router->post('/saveEquipment', 'generalInformation\EquipmentController@saveEquipment');
             $router->get('/loadEquipment/{orgId}', 'generalInformation\EquipmentController@loadEquipment');
             $router->get('/getType', 'generalInformation\EquipmentController@getType');
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');
@@ -189,9 +195,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
         });
 
+        $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
+            $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails'); 
+             $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
+        });
+
         $router->group(['prefix' => 'disaster'], function () use ($router) {
             $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
             $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');
+           // dd('m hee');
         });
 
         $router->group(['prefix' => 'finance'], function () use ($router) {
@@ -356,8 +368,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
 
         });
-        
         $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
+
+        $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
        
         
     });

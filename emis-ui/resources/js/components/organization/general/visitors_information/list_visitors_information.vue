@@ -31,7 +31,7 @@ export default {
     data(){
         return{
             org_id:'2',
-            dataList:[], 
+            dataList:[],  
         }
     },
     methods:{
@@ -54,7 +54,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_visitors_information',params: {data:data}});
         },
     },
     mounted(){

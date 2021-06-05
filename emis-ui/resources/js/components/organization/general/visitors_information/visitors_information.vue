@@ -24,7 +24,7 @@ export default {
             if(type=="add_visitors_information" || type=="edit_visitors_information"){
                 this.$router.push("/"+type);
             }
-            if(type=="list_visitor_information"){
+            if(type=="list_visitors_information"){
                 this.$router.push("/list_visitors_information");
             }
 		},

@@ -4,20 +4,20 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Student Name</th>
-                    <th >Student Id</th>
-                    <th >Class</th>
-                    <th >Section</th>
+                    <th >Disaster Committee</th>
+                    <th >CID</th>
+                    <th >Name</th>
+                    <th >Contact No</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.diastercomm }}</td>
+                    <td>{{ item.cid}}</td>
+                    <td>{{ item.name}}</td>
+                    <td>{{ item.contactNo}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -32,7 +32,7 @@
 export default {
     data(){
         return{
-            org_id:'2',
+           // org_id:'2',
             dataList:[], 
         }
     },
@@ -56,11 +56,12 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_disasters_information',params: {data:data}});
         },
     },
     mounted(){
         this.loadDataList();
+
     },
 }
 </script>

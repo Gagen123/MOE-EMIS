@@ -12,6 +12,17 @@
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
                     </div>
+                </div>          
+            </div>
+            <div class="card-body">
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Vaccination For:</label>
+                        <br>
+                        <label><input v-model="form.vaccineFor"  type="radio" value="0" /> Both</label>
+                        <label><input v-model="form.vaccineFor"  type="radio" value="1" /> Boys</label>
+                        <label><input v-model="form.vaccineFor"  type="radio" value="2" /> Girls</label>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -35,6 +46,7 @@ export default {
                 id: '',
                 name: '',
                 description:'',
+                vaccineFor:0,
                 status: 1,
                 record_type:'vaccine_type',
                 action_type:'add',
@@ -52,6 +64,7 @@ export default {
                 this.form.name= '';
                 this.form.description='';
                 this.form.status= 1;
+                this.form.vaccineFor= 1;
             }
             if(type=="save"){
                 this.form.post('/masters/saveStudentMasters',this.form)

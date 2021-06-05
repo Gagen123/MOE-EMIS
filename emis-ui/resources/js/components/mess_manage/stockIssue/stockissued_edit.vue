@@ -192,14 +192,14 @@ export default {
     mounted() { 
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
+    },
+    created() {
         this.form.dateOfissue = this.$route.params.data.dateOfissue;
-        this.item_issue.item = this.$$route.query.data[0].item_id;
-        this.item_issue.quantity = this.$$route.query.data[0].quantity;
-        this.item_issue.unit = this.$$route.query.data[0].unit_id;
-        this.item_issue.damagequantity = this.$$route.query.data[0].damagequantity;
-        this.item_issue.remarks = this.$$route.query.data[0].remarks;
-       
-       
+        this.form.item_issue.item = this.$route.params.data.item;
+        this.form.item_issue.quantity = this.$route.params.data.quantity;
+        this.form.item_issue.unit = this.$route.params.data.unit;
+        this.form.item_issue.damagequantity = this.$route.params.data.damagequantity;
+        this.form.item_issue.remarks = this.$route.params.data.remarks;
     }
 }
 </script>

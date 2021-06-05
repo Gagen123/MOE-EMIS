@@ -613,7 +613,7 @@
                                     <has-error :form="class_form" field="section"></has-error>
                                 </div>
                             </div> -->
-                            <div class="row form-group">
+                            <!-- <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Student Type: <span class="text-danger">*</span></label>
                                     <select v-model="class_form.student_type" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('student_type') }" class="form-control select2" name="student_type" id="student_type">
@@ -630,8 +630,26 @@
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" name="no_meals" v-model="class_form.no_meals" value="0" id="no_meals3"> None
                                     <has-error :form="class_form" field="no_meals"></has-error>
                                 </div>
-                                
+                            </div> -->
+
+                            <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Student Type:<span class="text-danger">*</span></label>
+                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Student Type: <span class="text-danger">*</span></label>
+                                    <select v-model="class_form.student_type" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('student_type') }" class="form-control select2" name="student_type" id="student_type">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in studentTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="class_form" field="student_type"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"  id="feedingDetails" style="display:none">
+                                    <label class="mb-0">Feeding Modality:</label><br>
+                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                </div>
                             </div>
+
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category: <span class="text-danger">*</span></label><br>
@@ -1510,6 +1528,7 @@ export default {
             // }
             if(id=="student_type"){
                 this.class_form.student_type=$('#student_type').val();
+                this.show_feeding_details($('#student_type').val());
             }
         },
         showstream(valu){
@@ -1623,6 +1642,15 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
+        },
+        //to hide and show no of meals
+        show_feeding_details(param){
+            if(param == 'Boarding'){
+                $('#feedingDetails').show();
+            }
+            else{
+                $('#feedingDetails').hide();
+            }
         },
        
     },

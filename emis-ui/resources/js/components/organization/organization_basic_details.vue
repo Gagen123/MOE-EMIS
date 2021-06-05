@@ -11,61 +11,141 @@
                         <div class="card-body">
                             <div class="tab-pane">
                                 <form class="form-horizontal">
+                                    <hr>
                                     <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Name:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.name" disabled>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>MOF Code:</label>
+                                            <input type="text" class="form-control" v-model="form.mofCode">
                                         </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Level:</label>
-                                            <input type="text" class="form-control" :value="levelArray[orgDetails.levelId]" disabled>
-                                         </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>RCSC/Zest Code:</label>
+                                            <input type="text" class="form-control" v-model="form.zestAgencyCode">
+                                        </div>  
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Organization code:</label>
+                                            <input type="text" readonly class="form-control" v-model="form.code">
+                                        </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Category:</label>
-                                            <input type="text" class="form-control" :value="category" disabled>
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                            <label class="mb-0"><i><u>Basic Details</u></i></label>
                                         </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Year Of Establishment:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.yearOfEstablishment" disabled>
-                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Category:</label>
-                                            <input type="text" class="form-control" :value="category" disabled>
-                                        </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Year Of Establishment:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.yearOfEstablishment" disabled>
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Is AspNet School:</label><br>
+                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Is GeoPoliticallyLocated:</label><br>
+                                                    <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Is Resource Center:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Has Counselling room:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Has shift System:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasShiftSystem" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasShiftSystem" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Has CE:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasCE" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasCE" value="0" tabindex=""/> No</label>
+                                                </div>
+                                            </div>
                                          </div>
                                     </div>
                                     <hr>
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Is AspNet School:</label><br>
-                                            <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                            <label class="mb-0"><i><u>Geo-Position Details</u></i></label>
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Co-Located to Parent School:</label><br>
-                                            <label><input  type="radio" v-model="form.isColocated" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.isColocated" value="0" tabindex=""/> No</label>
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
+                                            <div class="form-group row">
+                                                <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Long:</label>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <input type="text" v-model="form.longitude" class="form-control editable_fields" id="longitude" />
+                                                </div>
+                                                <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Lat:</label>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <input type="text" v-model="form.latitude" class="form-control editable_fields" id="latitude" />
+                                                </div>
+                                                <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Alt:</label>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <input type="text" v-model="form.altitude" class="form-control editable_fields" id="altitude" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <i>Above values are displayed from your current location. Make sure that you are updating this information from your school, Otherwise you can Overwrite then if you know those values </i>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Google Map Path:</label>
+                                                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                                                    <input type="text" v-model="form.map_path" class="form-control editable_fields" id="nameOwner"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                    isFeedingSchool:'',
-                                    isGeoPoliticallyLocated:'',
-                                    isResourceCenter:'',
-                                    isSenSchool:'',
-                                    hasCounselingRoom:'',
-                                    hasShiftSystem:'',
-                                    hasCE:'',
-                                    mofCode:'',
-                                    zestAgencyCode:''
+                                    <hr>
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                            <label class="mb-0"><i><u>Others</u></i></label>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Climate Type:</label>
+                                                    <select v-model="form.climate_type" class="form-control" name="climate_type" id="climate_type">
+                                                        <option v-for="(item, index) in climate_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Distance From Dzongkhag HQ (KM):</label>
+                                                    <input type="number" min="0" v-model="form.distance_from_dzo" class="form-control editable_fields" id="cidOfOwner"/>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Thram No:</label>
+                                                    <input type="text" name="thramNo" v-model="form.thramNo" class="form-control editable_fields" id="thramNo"/>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Entrance Gate:</label><br>
+                                                    <label><input  type="radio" v-model="form.entranceGate" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.entranceGate" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Compound Fencing:</label><br>
+                                                    <label  v-for="(item, key, index) in  fence_list" :key="index" class="pr-4">
+                                                        <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/> 
+                                                        {{item.name}}
+                                                    </label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Disaster Area:</label><br>
+                                                    <label  v-for="(item, key, index) in  disasterList" :key="index" class="pr-4">
+                                                        <input  type="checkbox" v-model="form.disasterArea" :value="item.id" tabindex=""/> 
+                                                        {{item.name}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row form-group fa-pull-right">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <button class="btn btn-flat btn-primary" @click="updateorg('details-tab')"><i class="fa fa-check"></i> Update</button>
+                                            <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
                                         </div>
                                     </div>
                                 </form>
@@ -86,6 +166,9 @@
                 isprofile:false,
                 levelArray:{},
                 category:'',
+                fence_list:[],
+                disasterList:[],
+                climate_type_list:[],
                 form: new form({
                     org_id: '',
                     isAspNetSchool:'',
@@ -98,8 +181,10 @@
                     hasShiftSystem:'',
                     hasCE:'',
                     mofCode:'',
-                    zestAgencyCode:''
-                    
+                    zestAgencyCode:'',
+                    longitude:'', latitude:'', altitude:'',map_path:'',
+                    climate_type:'',distance_from_dzo:'',thramNo:'',
+                    fencingtype:'',entranceGate:'',disasterArea:[],
                 }) 
             }
         },
@@ -135,6 +220,18 @@
                     this.form.hasCE=response_data.hasCE;
                     this.form.mofCode=response_data.mofCode;
                     this.form.zestAgencyCode=response_data.zestAgencyCode;
+                    if(response_data.locationDetials!=null && response_data.locationDetials!=""){
+                        this.form.altitude=response_data.locationDetials.altitude;
+                        this.form.climate_type=response_data.locationDetials.climate_type;
+                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
+                        this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
+                        this.form.entranceGate=response_data.locationDetials.entranceGate;
+                        this.form.fencingtypeId=response_data.locationDetials.fencingtypeId;
+                        this.form.map_path=response_data.locationDetials.googleMapPath;
+                        this.form.latitude=response_data.locationDetials.latitude;
+                        this.form.longitude=response_data.locationDetials.longitude;
+                        this.form.thramNo=response_data.locationDetials.thramNo;
+                    }
                     
                 })
                 .catch((error) => {  
@@ -142,22 +239,11 @@
                 });
             },
             updateorg(){
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                } 
-                let formData = new FormData();
-                formData.append('org_id', this.form.org_id);
-                formData.append('vission', this.form.vission);
-                formData.append('profile_path', this.form.profile_path);
-                formData.append('mission', this.form.mission);
-                formData.append('attachments', this.form.attachments);
-                axios.post('organization/udpateOrgProfile',formData, config)
+                this.form.post('organization/updateOrgBasicDetials')
                 .then((response) => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Profile Details has been saved successfully'
+                        title: 'Basic Details has been saved successfully'
                     })
                 })
                 .catch((error) => {
@@ -176,10 +262,50 @@
                     }
                 });
             },
+            getLat: function(){
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(this.showPosition);
+                } 
+            },
+            showPosition(position){
+                $('#latitude').val(position.coords.latitude);
+                $('#longitude').val(position.coords.longitude);
+                $('#altitude').val(position.coords.altitude);
+            },
+            loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Disaster'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.disasterList =  data;
+                })
+            },
+            loadfencingList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/FencingType'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.fence_list =  data;
+                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
+            },
+            loadlcimateTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ClimateType'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.climate_type_list =  data;
+                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
+            },
         },
         mounted(){
+            this.getLat();
             this.getLevel();
-
+            this.loadfencingList();
+            this.loadDisasterList();
+            this.loadlcimateTypeList();
             axios.get('common/getSessionDetail')
             .then(response =>{
                 let data = response.data.data;

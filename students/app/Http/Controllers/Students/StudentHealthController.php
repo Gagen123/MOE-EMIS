@@ -66,7 +66,7 @@ class StudentHealthController extends Controller
         unset($data['std_section']);
 
         foreach($std_ids as $index => $student_id){
-            if(!array_key_exists($index, $std_screened)){
+            if($student_id != 'on'){
                 $screened_data = [
                     'StdStudentId'=> $student_id,
                     'status' => 'not given'
@@ -108,10 +108,21 @@ class StudentHealthController extends Controller
         $id =$param;
 
         $records = DB::table('std_health_deworming')
-                    ->join('std_health_term', 'std_health_deworming.StdHealthTermId', '=', 'std_health_term.id')
-                    ->select('std_health_deworming.*', 'std_health_term.name AS term')
-                    ->groupBy('std_health_deworming.StdHealthTermId', 'std_health_deworming.date')
+                    ->select('std_health_deworming.id', 'std_health_deworming.date', 'std_health_deworming.class', 
+                                'std_health_deworming.section', 'std_health_deworming.stream',
+                                DB::raw('COUNT(std_health_not_screened.StdStudentId) as not_screened'), 
+                                DB::raw('COUNT(std_health_referred.StdStudentId) as referred'))
+                    ->join('std_health_screening', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
+                    ->leftjoin('std_health_not_screened', 'std_health_screening.id', '=', 'std_health_not_screened.StdHealthScreeningId')
+                    ->leftjoin('std_health_referred', 'std_health_screening.id', '=', 'std_health_referred.StdHealthScreeningId')
+                    ->groupBy('std_health_screening.class', 'std_health_screening.StdHealthScreeningTypeId', 'std_health_screening.date')
                     ->get();
+
+        // $records = DB::table('std_health_deworming')
+        //             ->join('std_health_term', 'std_health_deworming.StdHealthTermId', '=', 'std_health_term.id')
+        //             ->select('std_health_deworming.*', 'std_health_term.name AS term')
+        //             ->groupBy('std_health_deworming.StdHealthTermId', 'std_health_deworming.date')
+        //             ->get();
         
         return $this->successResponse($records);
 
@@ -135,6 +146,7 @@ class StudentHealthController extends Controller
             'term_id.required'  => 'This field is required',
             'date.required'     => 'This field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
         
         $data =[
@@ -160,7 +172,7 @@ class StudentHealthController extends Controller
         unset($data['std_section']);
 
         foreach($std_ids as $index => $student_id){
-            if(!array_key_exists($index, $std_screened)){
+            if($student_id != 'on'){
                 $screened_data = [
                     'StdStudentId'=> $student_id,
                     'status' => 'not given'

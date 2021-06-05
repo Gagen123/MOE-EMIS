@@ -1,7 +1,14 @@
 <template>
     <div>
         <div class="card ">
-            <div class="card-body">   
+            <div class="card-body">  
+                <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
+                     <span class="card-title">
+                    <b>Stock Inventory</b>
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">  
                 <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="training-table" class="table w-100 table-sm table-bordered table-striped">
