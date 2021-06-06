@@ -87,7 +87,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Equipment & Furniture is added successfully'
+                        title: 'Equipment is added successfully'
                     })
                     this.$router.push('/equipment_list');
                 })

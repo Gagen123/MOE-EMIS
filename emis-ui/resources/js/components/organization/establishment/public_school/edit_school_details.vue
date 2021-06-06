@@ -581,12 +581,7 @@ export default {
                 }
             }
         },
-        loadpendingdetails(type){
-            axios.get('organization/loaddraftApplication/'+type)
-              .then(response => {
-                this.draft_data = response.data.data;
-            });
-        },
+        
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -658,7 +653,7 @@ export default {
                 this.form.email         =   data.email;
             })
             .catch((error) => {  
-                console.log("Error......"+error);
+                console.log("Error: "+error);
             });
         },
         loadApplicaitonDetials(){

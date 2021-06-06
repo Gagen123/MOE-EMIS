@@ -39,7 +39,7 @@ class CommonController extends Controller{
         $user_id=$data['user_id'];
         $response_data=[];
         // dd($screen_status);
-        $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
+        $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
         
         if($type=="common" || $type=="commonLeaveOthers"){
             if(strtolower($access_level)=="dzongkhag"){
@@ -81,14 +81,18 @@ class CommonController extends Controller{
                     $response_data=DB::select($result_data);;
                 }else{
                     foreach($screen_status as $i => $srcn){
-                        $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).')'; 
-                        if(sizeof($screen_status)-1==$i){
-                            $result_data.=')'; 
-                        } 
-                        else{ 
-                            $result_data.=' OR '; 
-                        } 
+                        if(isset($srcn['Establishment_type'])){
+                            $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR '; 
+                            $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')'; 
+                            if(sizeof($screen_status)-1==$i){
+                                $result_data.=')'; 
+                            } 
+                            else{ 
+                                $result_data.=' OR '; 
+                            } 
+                        }
                     }
+                    // return $result_data;
                     $response_data=DB::select($result_data);
                 }
             }

@@ -51,9 +51,13 @@ export default {
                 console.log('error: '+error);
             });
         },
-        showedit(data){
-            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
+        showview(data){
+            this.$router.push({name:'view_feeding_change',params: {data:data}});
         },
+        showedit(data){
+            this.$router.push({name:'edit_feeding_change',params: {data:data}});
+        },
+        
     },
     mounted(){
         this.loadDataList();

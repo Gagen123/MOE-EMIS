@@ -52,8 +52,12 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
+            this.$router.push({name:'edit_sen_change',params: {data:data}});
         },
+        showview(data){
+            this.$router.push({name:'view_sen_change',params: {data:data}});
+        },
+        
     },
     mounted(){
         this.loadDataList();

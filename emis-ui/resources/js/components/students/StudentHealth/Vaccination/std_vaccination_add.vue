@@ -257,11 +257,11 @@ export default {
                 let vaccination_selected = $("#vaccination").val();
                 
                 if(vaccination_selected == '32abba18-889d-4018-ba66-c9b8d7ef7385'){
-                    $(".HPVvaccine").show();
-                    $(".TDvaccine").hide();
+                    $("#HPVvaccine").show();
+                    $("#TDvaccine").hide();
                 }else{
-                    $(".HPVvaccine").hide();
-                    $(".TDvaccine").show();
+                    $("#HPVvaccine").hide();
+                    $("#TDvaccine").show();
                 }
             }
             if(id=="std_class"){
@@ -324,8 +324,8 @@ export default {
         this.loadActiveVaccineList();
         
         this.loadClassList();
-        this.loadSectionList();
-        this.loadStreamList();
+        // this.loadSectionList();
+        // this.loadStreamList();
     },
     
 }
