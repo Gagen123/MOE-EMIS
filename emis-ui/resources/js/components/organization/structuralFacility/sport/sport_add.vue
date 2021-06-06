@@ -23,19 +23,26 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Facility:<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="type" id="type" class="form-control editable_fields" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type')">
+                                <select name="type" id="type" class="form-control editable_fields" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
                                     <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
+                                    <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }} </option>
                                 </select>
                                 <has-error :form="form" field="type"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
+                        <div class="form-group row" id="sizeAndarea">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Size/Area:</label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                                <input class="form-control editable_fields " id="size" type="text" v-model="form.size">
                             </div>
                         </div>
+                         <div class="form-group row"  id="Nocourts">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No of Courts:</label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <input class="form-control editable_fields " id="courts" type="text" v-model="form.courts">
+                            </div>
+                        </div>
+                        
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Year of Establishment:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -94,6 +101,8 @@ export default {
                 organizationId:'', 
                 facility: '',
                 type: '',
+                size:'',
+                courts:'',
                 yearOfEstablish: '',
                 supportedBy: '',
                 status: '1',
@@ -162,6 +171,20 @@ export default {
                 this.supportList = data;
             });
         },
+        showfield:function(type){
+            let selecttype = $("#"+type+" option:selected").text();
+            if(selecttype = 'standard'){
+                 $('#sizeAndarea').hide();
+                 $('#Nocourts').hide(); 
+            }
+
+            if(selecttype!= 'standard'){ 
+                $('#sizeAndarea').show();
+                $('#Nocourts').show(); 
+
+            }
+
+        }
     },
      mounted() { 
         this.getFacilityDropdown();

@@ -93,35 +93,28 @@ class FinanceController extends Controller
             'amount'                            =>  'required',
             'date'                              =>  'required',
             'remarks'                           =>  'required',
-            'organizationId'                    =>  'required',
-            // 'financialInformationId'            =>  'required',
             
         ];
         $customMessages = [
-            // 'type.required'                     => 'Type is required',
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
-            'organizationId.required'           => 'organizationId is required',
-            // 'financialInformationId.required'   => 'financialInformationId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
+            'organizationId'                    =>  $request['organizationId'],
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
-            'remarks'                           =>  $request['remarks'],
-            'organizationId'                    =>  $request['organizationId'],
+            'status'                           =>  $request['remarks'],
             // 'financialInformationId'         =>  $request['financialInformationId'],
-           
         ];
+        // dd($data);
         $response_data = OrganizationFinancialInformation::create($data);
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
+        return $response_data;
     }
     public function updateFinancialInfo(Request $request){
         $id = $request->organizationId;
-        // dd($request);
          $rules = [
-            // 'id'                                =>  'required',
             'amount'                            =>  'required',
             'date'                              =>  'required',
             'remarks'                           =>  'required',
@@ -130,8 +123,6 @@ class FinanceController extends Controller
             
         ];
         $customMessages = [
-            // 'type.required'                     => 'Type is required',
-            // 'id.required'                       => 'id is required',
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
@@ -140,14 +131,14 @@ class FinanceController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
+            'id'                                =>  $request['id'],
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
-            'remarks'                           =>  $request['remarks'],
+            'status'                            =>  $request['remarks'],
             'organizationId'                    =>  $request['organizationId'],
             // 'financialInformationId'         =>  $request['financialInformationId'],
            
         ];
-        // dd($data);
         $response_data = OrganizationFinancialInformation::where('id', $id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 

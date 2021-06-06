@@ -358,7 +358,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i><span id="update_btn_level"></span> </button>
-                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
+                                <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
@@ -468,6 +468,12 @@ export default {
                         $('#approveId').hide();
                     }
                     else{
+                        if(data.establishment_type=="Private School" && data.status!="Document Updated"){
+                            $('#verifyId').hide();
+                            $('#approveId').hide();
+                            $('#rejectbtn').hide();
+                        }
+
                         this.showsearch=false;
                         this.form.update_type='final_verification';
                         this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');

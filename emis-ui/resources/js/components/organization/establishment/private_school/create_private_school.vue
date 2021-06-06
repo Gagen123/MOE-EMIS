@@ -553,7 +553,6 @@ export default {
                                         title: 'Technical Errors: please contact system administrator for further details'
                                     });
                                 }
-                                alert('ddd'+response);
                                 if(response!="" && response!="No Screen"){
                                     let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});

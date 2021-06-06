@@ -659,7 +659,7 @@ export default {
         loadApplicaitonDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
-                let data = response.data.data;
+                let data = response.data;
                 this.attachment_details=data.estb_attachments;
                 this.form.id=data.id;
                 this.form.application_number=data.application_no;

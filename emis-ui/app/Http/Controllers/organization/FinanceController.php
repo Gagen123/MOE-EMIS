@@ -100,25 +100,23 @@ class FinanceController extends Controller
     }
 
     public function saveFinancialInfo(Request $request){
+        // dd($request);
         $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
             'remarks'                           =>  'required',
-            // 'financialInformationId'            =>  'financialInformationId',
+            // 'financialInformationId'         =>  'financialInformationId',
             
         ];
         $customMessages = [
-            'type.required'                     => 'Type is required',
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
-           
             // 'financialInformationId.required'   => 'financialInformationId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
             'organizationId'                    =>  $this->getWrkingAgencyId(),
-            'type'                              =>  $request['type'],
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
             'remarks'                           =>  $request['remarks'],
@@ -156,9 +154,7 @@ class FinanceController extends Controller
         }
 
         public function updateIncomeinfo(Request $request){
-            // dd($request);
             $rules = [
-                'id'                                =>  'required',
                 'amount'                            =>  'required',
                 'date'                              =>  'required',
                 'remarks'                           =>  'required',
@@ -166,7 +162,6 @@ class FinanceController extends Controller
                 
             ];
             $customMessages = [
-                'id.required'                       => 'amount is required',
                 'amount.required'                   => 'amount is required',
                 'date.required'                     => 'date is required',
                 'remarks.required'                  => 'remarks is required',
@@ -186,8 +181,8 @@ class FinanceController extends Controller
             }
 
         public function updateFinancialInfo(Request $request){
+            // dd($request);
             $rules = [
-                'id'                                =>  'required',
                 'amount'                            =>  'required',
                 'date'                              =>  'required',
                 'remarks'                           =>  'required',
@@ -195,7 +190,6 @@ class FinanceController extends Controller
                 
             ];
             $customMessages = [
-                'id.required'                       => 'id is required',
                 'amount.required'                   => 'amount is required',
                 'date.required'                     => 'date is required',
                 'remarks.required'                  => 'remarks is required',

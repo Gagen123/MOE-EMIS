@@ -33,7 +33,10 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/>
+                                <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control select2" @change="remove_error('initiatedBy')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
                                 <has-error :form="form" field="initiatedBy"></has-error>
                             </div>
                         </div>
@@ -162,13 +165,30 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classStreamList" :key="index">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age Group</th>
+                                        <th></th>                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td >  
+                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                            <!-- <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
                                 <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                    <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
-                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
+                                    <input type="checkbox" v-model="classStreamForm.class"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
                                 </span>
-                            </span> 
+                            </span>  -->
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -199,6 +219,7 @@ export default {
             classStreamList:[],
             fileUpload: [],
             draft_data:[],
+            proposed_by_list:[],
             form: new form({
                 id: '',initiatedBy:'', proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
                 coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'
@@ -217,7 +238,7 @@ export default {
             }),
            
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Public ECCD', status:'submitted',application_number:'',
+                id: '',class:[], proposed_establishment:'Public ECCD', status:'submitted',application_number:'',
             }) 
         } 
     },
@@ -232,16 +253,7 @@ export default {
             }
         }, 
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
+       
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -317,10 +329,7 @@ export default {
             this.count++;
             this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
-        addMoreStudents: function(){
-            this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+        
         /**
          * method to remove fields
          */
@@ -328,12 +337,6 @@ export default {
              if(this.file_form.roles.length>1){
                 this.count--;
                 this.file_form.roles.splice(index,1); 
-            }
-        },
-        removeStudents(index){    
-             if(this.file_form.assigned_student.length>1){
-                this.count--;
-                this.file_form.assigned_student.splice(index,1); 
             }
         },
 
@@ -349,15 +352,6 @@ export default {
             } 
         },
 
-
-        /**
-         * to load the respective pages depending on the type of establishment
-         */
-
-        loadRespectivePage(val){
-            this.$router.push({name:''+val,query: {data:id}});
-        },
-
         /**
          * method to populate dropdown
          */
@@ -366,6 +360,9 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="initiatedBy"){
+                this.form.initiatedBy=$('#initiatedBy').val();
             }
             if(id=="establishment_type"){
                 this.form.establishment_type=$('#establishment_type').val();     
@@ -411,15 +408,6 @@ export default {
             });
         },
 
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
 
         /**
          * method to show next tab
@@ -547,29 +535,9 @@ export default {
         },
 
         /**
-         * method to get other category if the category is 'ECCD'
-         */
-        getCategory(){
-            let level = $('#level option:selected').text();
-            if(level == "ECCD"){
-                $(".eccd").show();
-            }
-            else{
-                $(".eccd").hide();
-            }
-        },
-
-        /**
          * method to show private fields
          */
-        showprivatedetails(type){
-            if(type=='private'){
-                $('#privatedetails').show();
-            }
-            else{
-                $('#privatedetails').hide();
-            }
-        },
+       
         show_parent_school_details(param){
             if(param){
                 $('#parentDetails').show();
@@ -578,28 +546,7 @@ export default {
                 $('#parentDetails').hide();
             }
         } ,
-        show_feeding_details(param){
-            if(param){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
-        },
-        loadProprietorDetails(){
-            axios.get('organization/loadProprietorDetails')
-            .then((response) => {  
-
-                let data=response.data.data[0];
-                this.form.cid           =   data.cid;
-                this.form.name          =   data.fullName;
-                this.form.phoneNo       =   data.phoneNo;
-                this.form.email         =   data.email;
-            })
-            .catch((error) => {  
-                console.log("Error......"+error);
-            });
-        },
+        
         
         /**
          * method to load organization details
@@ -653,6 +600,29 @@ export default {
                 console.log(errors)
             });
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.proposed_by_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        getAttachmentType(){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Public_ECCD/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        }
         /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
 
         // checkPendingApplication(){
@@ -673,8 +643,9 @@ export default {
     
     created(){
         this.getScreenAccess();
-        this.getLevel();
         this.getLocation();
+        this.loadproposedBy();
+        this.getAttachmentType();
         // this.checkPendingApplication();
     },
     mounted() {
@@ -703,12 +674,9 @@ export default {
         });
        
         this.getClass();
-        this.getStream();
         this.getClassStream();
-        this.getLevel();
         this.getLocation();
         // this.loadactivedzongkhagList();
-        // this.loaddOrganizationDetails();
         this.getOrgList();
         // this.loadpendingdetails('Public_ECCD');
     }, 

@@ -144,6 +144,7 @@ class EstablishmentController extends Controller
             'proposed_establishment'    =>  $request['proposed_establishment'],
             'application_number'    =>  $request['application_number'],
             'status'                =>  $form_status,
+            'update_type'           =>  $request['update_type'],
             'action_type'           =>  $request['action_type'],
             'user_id'               =>  $this->userId() ,
         ];
