@@ -33,7 +33,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label>Electricity Connection: {{display.electricity}}</label>
+                                            <label>Electricity Connection: {{display.electricity =='1'? 'yes':'No'}}</label>
                                         </div>
                                     </div>
                                    
@@ -68,7 +68,7 @@
             .then(response => {
                 // let data = response;
                 // this.display =  data.data;
-                 this.display=response.data.data;
+                 this.display=response.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

@@ -435,6 +435,7 @@ export default {
                     }
                     $('#feedingDetails').show();
                 }
+                alert(response.data.app_stage.toLowerCase());
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
