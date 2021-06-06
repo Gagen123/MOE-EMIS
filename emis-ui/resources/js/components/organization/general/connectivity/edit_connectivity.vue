@@ -318,23 +318,9 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-        // async changefunction(id){
-        //     if($('#'+id).val()!=""){
-        //         $('#'+id).removeClass('is-invalid select2');
-        //         $('#'+id+'_err').html('');
-        //         $('#'+id).addClass('select2');
-        //     }
-        //     if(id=="sex_id"){
-        //         this.form.sex_id=$('#sex_id').val();
-        //     }
-        //     if(id=="mother_tongue"){
-        //         this.form.mother_tongue=$('#mother_tongue').val();
-        //     }
-        //     if(id=="country"){
-        //         this.form.country=$('#country').val();
-        //     }
-             
-        // },
+       updateform(){
+           
+       }
         
     },
      mounted() { 

@@ -970,6 +970,8 @@ class EstablishmentController extends Controller
             ];
             Locations::create($location);
         }
+
+        
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }
 

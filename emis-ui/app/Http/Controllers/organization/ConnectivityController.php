@@ -76,14 +76,9 @@ class ConnectivityController extends Controller
             'electricitysubstation'         =>  $request['electricitysubstation'],
             'user_id'                       =>  $this->userId()
         ];
-       // dd($data);
-        try{
-            $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivityDetails', $data);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+    //    dd($data);
+       $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivityDetails', $data);
+       return $response_data;
     }
     public function loadConnectivityInformation(){
       //  dd('from UI ');

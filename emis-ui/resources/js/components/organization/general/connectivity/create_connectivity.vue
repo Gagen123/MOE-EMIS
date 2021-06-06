@@ -86,9 +86,9 @@
                         <label >Is your School/ECCD/ECR connected to:<span class="text-danger">*</span> </label>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label><input  type="checkbox" v-model="form.DrukREN" value="DrukREN" tabindex=""/> DrukREN</label>
-                        <label><input  type="checkbox" v-model="form.GovNET" value="GovNET" tabindex="" /> GovNET</label>
-                        <label><input  type="checkbox" v-model="form.independent" value="independent" tabindex="" /> Independent</label>
+                        <label><input  type="checkbox" v-model="form.DrukREN" value="1" tabindex=""/> DrukREN</label>
+                        <label><input  type="checkbox" v-model="form.GovNET" value="1" tabindex="" /> GovNET</label>
+                        <label><input  type="checkbox" v-model="form.independent" value="1" tabindex="" /> Independent</label>
                     </div>
                </div>
                <div class="form-group row">
@@ -186,7 +186,7 @@ export default {
                 sharedconnection:'',
                 connectionsharedtype:'',
                 sharedspeed:'',
-                internetAccessible:'',
+                internetAccessible:[],
                 electricity:'',
                 electricitysubstation:'',
                
@@ -238,7 +238,7 @@ export default {
             this.form.sharedconnection = '';
             this.form.connectionsharedtype = '';
             this.form.sharedspeed = '';
-            this.form.internetAccessible = '';
+            this.form.internetAccessible =[];
             this.form.electricity = '';
             this.form.electricitysubstation = '';
         },

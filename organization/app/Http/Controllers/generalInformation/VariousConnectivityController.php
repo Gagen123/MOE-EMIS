@@ -23,7 +23,7 @@ class VariousConnectivityController extends Controller
         //
   }
   public function saveConnectivityDetails(Request $request){
-      //  dd('m at microservices');
+    // dd('m at microservices');
     $data =[
       'organizationId'           =>  $request['organizationId'],
       'connectedtoroad'                  =>  $request['connectedtoroad'],
@@ -44,9 +44,8 @@ class VariousConnectivityController extends Controller
       'electricity'                  =>  $request['electricity'],
       'electricitysubstation'                  =>  $request['electricitysubstation'],
       'created_by'                  =>  $request['user_id'],
-      'updated_by'                  =>  $request['user_id'],
       'created_at'                  =>  date('Y-m-d h:i:s'),
-      'updated_at'                  =>  date('Y-m-d h:i:s'),
+     
     ];
       //  dd($data);
     $response_data = VariousConnectivity::create($data);

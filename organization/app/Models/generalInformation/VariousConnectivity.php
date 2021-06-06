@@ -38,10 +38,7 @@ class VariousConnectivity extends Model
         'electricity',
         'electricitysubstation',
         'created_by',
-        'updated_by',
         'created_at',
-        'updated_at'
-
     ];
 
 }
