@@ -172,12 +172,24 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                    </span>
-                            </span> 
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age Group</th>
+                                        <th></th>                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td >  
+                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -242,16 +254,7 @@ export default {
             }
         }, 
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
+       
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -326,10 +329,7 @@ export default {
             this.count++;
             this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
-        addMoreStudents: function(){
-            this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+        
         /**
          * method to remove fields
          */
@@ -337,12 +337,6 @@ export default {
              if(this.file_form.roles.length>1){
                 this.count--;
                 this.file_form.roles.splice(index,1); 
-            }
-        },
-        removeStudents(index){    
-             if(this.file_form.assigned_student.length>1){
-                this.count--;
-                this.file_form.assigned_student.splice(index,1); 
             }
         },
 
@@ -358,14 +352,6 @@ export default {
             } 
         },
 
-
-        /**
-         * to load the respective pages depending on the type of establishment
-         */
-
-        loadRespectivePage(val){
-            this.$router.push({name:''+val,query: {data:id}});
-        },
 
         /**
          * method to populate dropdown
@@ -420,15 +406,6 @@ export default {
             });
         },
 
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
 
         /**
          * method to show next tab
@@ -554,18 +531,6 @@ export default {
             this.applyselect2();
         },
 
-        /**
-         * method to get other category if the category is 'ECCD'
-         */
-        getCategory(){
-            let level = $('#level option:selected').text();
-            if(level == "ECCD"){
-                $(".eccd").show();
-            }
-            else{
-                $(".eccd").hide();
-            }
-        },
 
         /**
          * method to show private fields
@@ -586,14 +551,7 @@ export default {
                 $('#parentDetails').hide();
             }
         } ,
-        show_feeding_details(param){
-            if(param){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
-        },
+     
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {  
@@ -623,13 +581,26 @@ export default {
                 console.log(errors)
             });
         },
+        getAttachmentType(){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Private_ECCD/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        }
 
     },
     
     created(){
-        this.getScreenAccess();
-        this.getLevel();
+        // this.getScreenAccess();
         this.getLocation();
+        this.getAttachmentType();
     },
     mounted() {
         axios.get('common/getSessionDetail')
@@ -657,9 +628,7 @@ export default {
         });
        
         this.getClass();
-        this.getStream();
         this.getClassStream();
-        this.getLevel();
         this.getLocation();
         this.getOrgList();
         this.loadpendingdetails('Private_ECCD');

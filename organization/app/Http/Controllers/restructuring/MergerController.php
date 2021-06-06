@@ -56,7 +56,7 @@ class MergerController extends Controller{
         $data =[
             'application_no'       =>  $application_no,
             'establishment_type'   =>  'public_school',
-            'application_type'     =>  'Merger',
+            'application_type'     =>  'Change Details',
             'status'               =>  'Submitted',
             'created_by'           =>  $request['user_id'],
             'created_at'           =>  date('Y-m-d h:i:s')

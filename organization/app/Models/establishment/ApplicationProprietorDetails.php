@@ -19,7 +19,7 @@ class ApplicationProprietorDetails extends Model
     protected $fillable = [
         'id',
         'ApplicationEstDetailsChangeId',
-        'proposedName',
+        'proprietorName',
         'proprietorCid',
         'proprietorMobile',
         'proprietorPhone',

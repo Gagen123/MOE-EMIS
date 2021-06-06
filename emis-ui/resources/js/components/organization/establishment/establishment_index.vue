@@ -82,27 +82,27 @@ export default {
     },
 
     methods:{
-        activatelink(btnid){
-            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-            $('#'+btnid).addClass('btn-primary text-white');
-        },
-        getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;  
-            })
-            .catch(function (error) { 
-                console.log("Error:"+error)
-            });
-        },
+        // activatelink(btnid){
+        //     $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
+        //     $('#'+btnid).addClass('btn-primary text-white');
+        // },
+        // getmenus(sub_mod_id){
+        //     let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.menubar =  data.data;  
+        //     })
+        //     .catch(function (error) { 
+        //         console.log("Error:"+error)
+        //     });
+        // },
         
     },
     mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        // this.getmenus(routeparam);
     },
 }
 </script>
