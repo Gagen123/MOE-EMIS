@@ -43,10 +43,7 @@ export default {
     data(){
         return {
             incomeList:[],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
-
             income_form: new form({
-                id:'',
                 income: '',
                 amount: '',
                 date: '',
@@ -78,20 +75,20 @@ export default {
             // alert("dsadsads");
             // this.$Progress.start();
             let formData = new FormData(); 
-            formData.append('org_id', '0e663891-85f2-4a71-b11e-a74f6705b8f4');
-            formData.append('incomeFacilitiesId','0e663891-85f2-4a71-b11e-a74f6705b8ff' );
-            formData.append('income', this.finacial_form.income);
-            formData.append('amount', this.finacial_form.amount);
-            formData.append('date', this.finacial_form.date);
-            formData.append('remarks', this.finacial_form.remarks);
-            axios.post('/organization/saveFinancialInformation',formData,config)
+            formData.append('amount', this.income_form.amount);
+            formData.append('date', this.income_form.date);
+            formData.append('remarks', this.income_form.remarks);
+            axios.post('/organization/saveIncomeinfo',formData,config)
             .then(()=>{
                 Toast.fire({
                     icon: 'success',
                     title: 'Data  saved successfully'
-                })
+                });
+                 this.$router.push('/list_income_information');
             })
             .catch(()=>{console.log("Error.....")})
+            
+
         
 
         },  
@@ -126,8 +123,8 @@ export default {
 
     },
     created() {
-        this.getloadincomeList();
         this.submitForm();
+        this.getloadincomeList();
        
   },
     

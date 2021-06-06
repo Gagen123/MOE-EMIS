@@ -83,6 +83,24 @@ class GeneralInfoController extends Controller
         return $locationUse;
     }
 
+    /**
+     * For Furniture
+     */
+
+    public function getFurnitureType(){
+        $type = $this->apiService->listData('emis/organization/furniture/getFurnitureType');
+        return $type;
+    }
+    public function getFurnitureItem($itemId = ""){
+        $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
+        return $itemList;
+    }
+
+    public function getFurnitureUse(){
+        $furnitureUse = $this->apiService->listData('emis/organization/furniture/getFurnitureUse');
+        return $furnitureUse;
+    }
+
     public function saveSection(Request $request){
         $rules = [
             'school'     =>  'required',

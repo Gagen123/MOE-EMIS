@@ -187,6 +187,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getLocationUse', 'generalInformation\EquipmentController@getLocationUse');
         });
 
+        $router->group(['prefix' => 'furniture'], function () use ($router) {
+            $router->post('/saveFurniture', 'generalInformation\FurnitureController@saveFurniture');
+            $router->get('/loadFurniture/{orgId}', 'generalInformation\FurnitureController@loadFurniture');
+            $router->get('/getFurnitureType', 'generalInformation\FurnitureController@getFurnitureType');
+            $router->get('/getFurnitureItem/{typeId}', 'generalInformation\FurnitureController@getFurnitureItem');
+            $router->get('/getFurnitureUse', 'generalInformation\FurnitureController@getFurnitureUse');
+        });
+
         //newly added routes
 
         $router->group(['prefix' => 'visitor'], function () use ($router) {
@@ -212,15 +220,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'finance'], function () use ($router) {
             $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
+            $router->post('/updateIncomeInformation', 'generalInformation\FinanceController@updateIncomeInformation');
             $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
+            
             $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
+            $router->post('/updateFinancialInfo', 'generalInformation\FinanceController@updateFinancialInfo');
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
         });
 
-        $router->group(['prefix' => 'income'], function () use ($router) {
-            $router->post('/saveIncomeInformation', 'generalInformation\IncomeController@saveIncomeInformation');
-            $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\IncomeController@loadIncomeInformation');
-        });
 
         $router->group(['prefix' => 'projections'], function () use ($router) {
             $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
@@ -343,6 +350,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'changeDetails'], function () use ($router) {
             $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
+            $router->get('/getChangeBasicDetails/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@getChangeBasicDetails']);
             $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
             $router->get('/loadCurrentOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentOrgDetails']);
             $router->get('/loadCurrentProprietorDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentProprietorDetails']);

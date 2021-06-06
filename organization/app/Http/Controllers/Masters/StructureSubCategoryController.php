@@ -43,7 +43,6 @@ class StructureSubCategoryController extends Controller
      * method to save or update level type
     */
     public function saveStrSubCategory(Request $request){
-
         $id = $request->id;
         if( $id != null){
             $equ = [
