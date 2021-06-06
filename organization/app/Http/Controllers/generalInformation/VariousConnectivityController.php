@@ -45,9 +45,9 @@ class VariousConnectivityController extends Controller
       'electricitysubstation'                  =>  $request['electricitysubstation'],
       'created_by'                  =>  $request['user_id'],
       'created_at'                  =>  date('Y-m-d h:i:s'),
-     
+
     ];
-      //  dd($data);
+      // dd($data);
     $response_data = VariousConnectivity::create($data);
         
     return $this->successResponse($response_data, Response::HTTP_CREATED);

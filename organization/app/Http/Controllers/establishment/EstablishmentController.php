@@ -758,6 +758,7 @@ class EstablishmentController extends Controller
                 $stream_data = OrganizationClassStream::create($strm_details);
             }
         }
+
         $app_details=['status' => 'Registered','registered_org_code'=>$org_code];
         ApplicationDetails::where('application_no',$request->applicaitondetails['application_no'])->update($app_details);
         return $this->successResponse($establishment, Response::HTTP_CREATED);
@@ -982,9 +983,21 @@ class EstablishmentController extends Controller
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];
-            Locations::create($location);
+            Locations::create($location); 
         }
-
+        foreach ($request->input('users') as $i=> $user){
+            $contact_details = array(
+                'organizationId'    =>  $request->org_id,
+                'contactTypeId'     =>  $user['contactName'],
+                'phone'             =>  $user['phone'],
+                'mobile'            =>  $user['mobile'],
+                'email'             =>  $user['email'],
+                'type'              =>  2,
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s')
+        );
+            $org_det = ContactDetails::create($contact_details);
+        }
         
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }

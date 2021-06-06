@@ -172,11 +172,17 @@
                                                                 <has-error :form="form" field="user.contactName"></has-error>
                                                             </td>
                                                             <td>                                
-                                                                <input type="number" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
+                                                                <!-- <input type="number" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
+                                                                <has-error :form="form" field="phone"></has-error> -->
+                                                               
+                                                                <input name="phone"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "6"
+                                                                @change="remove_error('phone')" v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" class="form-control"  id="phone" >
                                                                 <has-error :form="form" field="phone"></has-error>
                                                             </td>
                                                             <td>                                
-                                                                <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/>
+                                                                <!-- <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/> -->
+                                                                <input name="mobile"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "8"
+                                                                @change="remove_error('mobile')" v-model="form.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" class="form-control"  id="mobile" >
                                                                 <has-error :form="form" field="mobile"></has-error>
                                                             </td>
                                                             <td>                                
