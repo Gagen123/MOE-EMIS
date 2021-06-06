@@ -41,12 +41,12 @@
                         Sections
                     </router-link>
                 </li>  -->
-                <li class="nav-item active pr-1" @click="activatelink('org_class_mapping')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('org_class_mapping')">
                     <router-link id="org_class_mapping" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Class Mapping
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         <router-view></router-view>
         </div>
