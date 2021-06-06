@@ -595,6 +595,8 @@ const routes = [
             { path: '/',name:'proprietor_details_index', component: require('./components/organization/restructuring/proprietor_change/list_proprietor_change.vue').default },
             { path: '/list_proprietor_change',name:'list_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/list_proprietor_change.vue').default },
             { path: '/create_proprietor_change',name:'create_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/create_proprietor_change.vue').default },
+            { path: '/edit_proprietor_change',name:'edit_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/edit_proprietor_change.vue').default },
+            { path: '/view_proprietor_change',name:'view_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/view_proprietor_change.vue').default },
             { path: '/proprietor_change_acknowledgement', name:'proprietor_change_acknowledgement', component: require('./components/organization/restructuring/proprietor_change/acknowledgement.vue').default },
           ]    
       },

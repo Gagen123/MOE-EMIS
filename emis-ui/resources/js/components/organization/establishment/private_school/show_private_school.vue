@@ -160,7 +160,7 @@
                                 </div>   
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Tentative Date:</label>
-                                    <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
+                                    <span class="text-blue text-bold">{{ verification.tentativeDate }}</span>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
@@ -273,13 +273,35 @@
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <h4><u>Select classes and streams</u></h4>
+                            
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl#</th> 
+                                            <th>Class</th> 
+                                            <th class="strm_clas">Stream</th> 
+                                            <th></th> 
+                                        </tr>
+                                    </thead> 
+                                    <tbody>
+                                        <tr v-for='(item,count) in class_section' :key="count+1">
+                                            <td>{{count+1 }} </td>
+                                            <td>{{calssArray[item.classId] }} </td>
+                                            <td class="strm_clas" v-if="item.streamId">  {{streamArray[item.streamId]}}</td>
+                                            <td class="strm_clas" v-else> </td>
+                                                <td>
+                                                <input type="checkbox" checked="true">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <span v-for="(item, index) in  class_section" :key="index">
                                         <br>
                                         <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                                     </span> 
-                                </div> 
+                                </div>  -->
                             </div>
                         </div>
                         <hr>
@@ -308,7 +330,7 @@ export default {
             applicationOrgdetails:'',
             class_section:[],
             nomi_staffList:[],
-            verification:'',
+            verification:'NA',
         } 
     },
     methods:{
@@ -319,21 +341,23 @@ export default {
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
                 this.class_section=data.org_class_stream;
-                this.verification=data.app_verification;
-                if(data.app_verification!=""){
+                if(data.app_verification!=null && data.app_verification!=""){
+                    this.verification=data.app_verification;
                     $('#tentativeAttachment').show();
-                }
-                if(data.app_verification_team.length>0){
-                    $('#team_verificationAttachment').show();
-                    $('#verifier_team').show();
-                    for(let i=0;i<data.app_verification_team.length;i++){
-                        this.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
-                            name:data.app_verification_team[i].name,
-                            cid:data.app_verification_team[i].cid,
-                            po_title:data.app_verification_team[i].po_title,
-                        })
+
+                    if(data.app_verification_team.length>0){
+                        $('#team_verificationAttachment').show();
+                        $('#verifier_team').show(); 
+                        for(let i=0;i<data.app_verification_team.length;i++){
+                            this.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
+                                name:data.app_verification_team[i].name,
+                                cid:data.app_verification_team[i].cid,
+                                po_title:data.app_verification_team[i].po_title,
+                            })
+                        }
                     }
                 }
+                
             })
             .catch((error) => {  
                 console.log("Error......"+error);
@@ -372,14 +396,15 @@ export default {
                 }
             });
         },
-        getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping')
-              .then(response => {
-                this.classStreamList = response.data.data;
-                let data = response.data.data;
-                //this.calssArray[data[i].id] = data[i].name;
-            });
-        },
+        // getClassStream:function(){
+        //     axios.get('/masters/loadClassStreamMapping')
+        //       .then(response => {
+        //         this.classStreamList = response.data.data;
+        //         let data = response.data.data;
+        //         //this.calssArray[data[i].id] = data[i].name;
+        //     });
+        // },
+        
 
         /**
          * method to get class in checkbox
@@ -407,7 +432,7 @@ export default {
     mounted(){
         this.getLevel();
         this.getLocation();
-        this.getClassStream();
+        // this.getClassStream();
         this.getClass();
         this.getstream();
         this.loadestablishmentapplicationdetails(this.$route.query.id);

@@ -29,13 +29,13 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
                                     <label>Zest Code:</label>
                                     <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
-                                    <span class="text-blue text-bold">{{existing_details.category == 1 ? "Public" : "Private"}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.category}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -212,7 +212,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proposedName}}</span>
+                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorName}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -255,8 +255,7 @@
                             </div>
                         </div>
                         <div class="callout callout-info">
-                            <h4><u>Any Supporting Documents and Attachments (if applicable)</u></h4>
-                            <div class="row pb-2" style="display:none" id="team_verificationAttachment">
+                            <div class="row pb-2" id="team_verificationAttachment">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -269,7 +268,7 @@
                                         </thead> 
                                         <tbody>
                                             <tr v-for='(attach,count) in appicationDetails.attachments' :key="count+1">
-                                                <template v-if="attach.upload_type=='team_verification'">
+                                                <template>
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
                                                     <td>    
@@ -281,9 +280,9 @@
                                     </table>
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <h5><u>Any Supporting Documents and Attachments (if applicable)</u></h5>
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -291,7 +290,7 @@
                                                 <th>Upload File</th>                     
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody>  
                                             <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
                                                 <td>
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">

@@ -200,7 +200,7 @@
                                 <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" >
                             <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -209,7 +209,26 @@
                                         <th></th>                     
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="afer_verification" style="display:none">
+                                    <tr v-for="(item, key, index) in  class_section" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                        </td>
+                                        <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                            {{  streamArray[item.streamId]  }}
+                                        </td>
+                                        <td class="strm_clas" v-else>                                
+                                        
+                                        </td>
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                        </td>
+                                        <td v-else>  
+                                            <input type="checkbox" checked="true">                           
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                                <tbody id="class_edit" style="display:none">
                                     <tr v-for="(item, key, index) in  classStreamList" :key="index">
                                         <td>
                                             <label class="pr-4"> &nbsp;{{ item.class }} </label>
@@ -242,7 +261,7 @@
                         <div class="row form-group fa-pull-right">
                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('file-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
+                                <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                             </div>
                         </div>
@@ -270,11 +289,14 @@ export default {
             classStreamList:[],
             fileUpload: [],
             draft_data:[],
+            class_section:[],
+            calssArray:{},
+            streamArray:{},
             file_form: new form({
                 id:'',
                 file_name: '',
                 fileUpload: [],
-                record_type:'add',
+                record_type:'edit',
                 application_number:'',
                 attachments:
                 [{
@@ -286,12 +308,12 @@ export default {
                 id: '', proposedName:'', level:'',category:'2', dzongkhag:'', gewog:'', chiwog:'0', proposedLocation:'',
                 proprietorCid:'', proprietorName:'', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'', totalLand:'',
                 enrollmentBoys:'', enrollmentGirls:'', typeOfSchool:'', establishment_type:'private_school', status:'pending',
-                action_type:'add',application_number:'',
+                action_type:'edit',application_number:'',
                 
             }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',application_number:'',
-                action_type:'add',submit_type:'',remarks:'',proposedName:'',application_number:'',
+                action_type:'edit',submit_type:'',remarks:'',proposedName:'',update_type:'',
             }) 
         } 
     },
@@ -464,7 +486,11 @@ export default {
         getClass:function(){
             axios.get('/organization/getClass')
               .then(response => {
-                this.classList = response.data;
+                let data = response.data;
+                this.classList = data;
+                for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
             });
         },
 
@@ -474,7 +500,11 @@ export default {
         getStream:function(){
             axios.get('/organization/getStream')
               .then(response => {
-                this.streamList = response.data;
+                  let data=response.data;
+                this.streamList = data;
+                for(let i=0;i<data.length;i++){
+                    this.streamArray[data[i].id] = data[i].class; 
+                }
             });
         },
 
@@ -531,7 +561,7 @@ export default {
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    message="Applicaiton details for new Establishment has been updated and send for further approval. ";
                 }
                 if(subform){
                     Swal.fire({
@@ -553,13 +583,12 @@ export default {
                                         title: 'Technical Errors: please contact system administrator for further details'
                                     });
                                 }
-                                alert('ddd'+response);
                                 if(response!="" && response!="No Screen"){
-                                    let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let res=' <br><b>Thank You !</b>';
                                     this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
                                     Toast.fire({  
                                         icon: 'success',
-                                        title: 'Application for new establishment has been submitted for further action'
+                                        title: 'Application for new establishment has been udpated for further action'
                                     });
                                 } 
                             })
@@ -575,9 +604,7 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.application_number=response.data.data.applicaiton_details.application_no;
-                            this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
-                            this.loadpendingdetails('Public_School');
+                            this.loadpendingdetails('Private_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -642,12 +669,26 @@ export default {
                 this.form.gewog  =data.gewogId;
                 $('#gewog').val(data.gewogId).trigger('change');
 
+                if(data.status=="Notified For Team Verification"){
+                    this.getAttachmentType('');//Attachment name here
+                    $('#class_edit').hide();
+                    $('#rejectbtn').hide();
+                    this.class_section=data.estb_classStream;
+                    $('#afer_verification').show();
+                    this.classStreamForm.update_type="Document Update";
+                }
+                else{
+                    this.getAttachmentType('ForTransaction__Private_School');
+                    $('#class_edit').show();
+                    $('#afer_verification').hide();
+                }
+
                 this.getvillagelist(data.gewogId,data.chiwogId);
                 this.form.chiwog=data.chiwogId;
                 this.attachment_details=data.estb_attachments;
                 this.form.dzongkhag=data.dzongkhagId;
                 this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
-               
+                
             })    
             .catch(errors => { 
                 console.log('error in retrieving: '+errors)
@@ -737,8 +778,8 @@ export default {
                 console.log(errors)
             });
         },
-        getAttachmentType(){
-            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Private_School/DocumentType')
+        getAttachmentType(type){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
             .then(response => {
                 let data = response.data;
                 data.forEach((item => {
@@ -758,7 +799,7 @@ export default {
         this.getLevel();
         this.getLocation();
         this.getOrgList();
-        this.getAttachmentType();
+        
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;

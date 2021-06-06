@@ -25,8 +25,80 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{form.organization_type}}</label>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Current Details</u></label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Current Name:</label>
+                                    <span class="text-blue text-bold">{{organization_details.name}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{levelArray[organization_details.levelId]}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Org Type:</label>
+                                    <span class="text-blue text-bold">{{category}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzongkhagArray[organization_details.dzongkhagId]}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Gewog:</label>
+                                    <span class="text-blue text-bold" id="gewogid"></span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Village:</label>
+                                    <span class="text-blue text-bold" id="vilageId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Location:</label>
+                                    <span class="text-blue text-bold">{{organization_details.locationId}}</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Current Proprietor</u></label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>CID:</label>
+                                    <span class="text-blue text-bold">{{proprietor_details.cid}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Name:</label>
+                                    <span class="text-blue text-bold">{{proprietor_details.fullName}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Mobile No:</label>
+                                    <span class="text-blue text-bold">{{proprietor_details.mobileNo}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Phone No:</label>
+                                    <span class="text-blue text-bold">{{proprietor_details.phoneNo}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Email:</label>
+                                    <span class="text-blue text-bold">{{proprietor_details.email}}</span>
+                                </div>
+                            </div>
+                            <hr>
+                           <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Proposed Proprietor</u></label>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -43,7 +115,6 @@
                                     <has-error :form="form" field="proprietorName"></has-error>
                                 </div>
                             </div>
-                            
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
                                 <div class="col-lg-3 col-md-3 col-sm-3">
@@ -84,7 +155,7 @@ export default {
         return{
             orgList:'',
             levelList:[],
-            locationList:[],
+            locationList:[], 
             dzongkhagList:[],
             gewog_list:[],
             villageList:[], 
@@ -92,9 +163,21 @@ export default {
             streamList1:[],
             classList:[],
             streamList:[],
+
+            organization_details:'',
+            proprietor_details:'',
+            category:'',
+            proposed_by_list:[],
+            levelArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
+            locationArray:{},
+            calssArray:{},
+            streamArray:{},
             form: new form({
-                organizationId:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
-                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'pending',organization_type:'',
+                organizationId:'',org_name:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
+                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'Submitted',organization_type:'',
             }),
         } 
     },
@@ -158,7 +241,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Applicaiton for Change in proprietor details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'proprietor_change_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
@@ -201,10 +284,65 @@ export default {
             }
             
         },
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+                 for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.organization_details=response.data.data;
+                this.form.org_name=response.data.data.name;
+                this.proprietor_details=response.data.data.proprietor;
+                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+            });
+        },
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        getGewogList(dzongkhag,gewogId){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogid').val(this.gewogArray[gewogId]);
+            });
+        },
+
+        getvillagelist(gewogId,vil_id){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name; 
+                }
+                $('#vilageId').val(this.villageArray[vil_id])
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
 
@@ -230,6 +368,9 @@ export default {
     },
     
     mounted() { 
+        this.loadactivedzongkhagList();
+        this.getLevel();
+        this.getOrgList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -242,7 +383,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
+        
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -255,7 +396,7 @@ export default {
         .catch(errors => { 
             console.log(errors)
         });
-        this.getOrgList();
+       
     }
 }
 </script>

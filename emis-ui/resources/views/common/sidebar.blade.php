@@ -242,6 +242,34 @@
                 <li class="nav-item has-treeview" id="organizationlink">
             </li>
 
+            <li class="nav-item has-treeview" id="organization">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-save"></i>
+                    <p>
+                        Approval
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
+                        <router-link to="/establishment_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Establishment Organization
+                            </p>
+                        </router-link> 
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/restructuring_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Change In Organization
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -266,22 +294,7 @@
                             </p>
                         </router-link> 
                     </li>
-                    <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
-                        <router-link to="/establishment_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Establishment Organization
-                            </p>
-                        </router-link> 
-                    </li>
-                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/restructuring_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Change Organization Details
-                            </p>
-                        </router-link>
-                    </li>
+                   
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
                         <router-link to="/mission_vission" class="nav-link">
                             <p>
