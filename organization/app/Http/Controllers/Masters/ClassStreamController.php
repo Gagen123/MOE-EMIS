@@ -82,6 +82,13 @@ class ClassStreamController extends Controller
                     ->get();
                 }
             }
+            else if($type=="School"){
+                $data = DB::table('classes')
+                ->select('classes.*')
+                ->where('category',$type)
+                ->orderBy('displayOrder', 'asc')
+                ->get();
+            }
             else{
                 $data = DB::table('classes')
                 ->select('classes.*')

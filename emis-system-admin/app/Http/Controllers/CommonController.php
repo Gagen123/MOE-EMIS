@@ -71,7 +71,7 @@ class CommonController extends Controller{
                 if($type=="commonLeaveOthers"){
                     foreach($screen_status as $i => $srcn){
                         $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';  
-                        if(sizeof($screen_status)-1==$i){
+                        if(sizeof($screen_status)-2==$i){
                             $result_data.=')'; 
                         } 
                         else{ 
@@ -80,21 +80,20 @@ class CommonController extends Controller{
                     }
                     $response_data=DB::select($result_data);;
                 }else{
+                    // dd(sizeof($screen_status));
                     foreach($screen_status as $i => $srcn){
-                        return $srcn['Establishment_type'];
-                        if(isset($srcn['Establishment_type'])){
-                            $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') '; 
-                            // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR '; 
-                            // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')'; 
-                            if(sizeof($screen_status)-1==$i){
-                                $result_data.=')'; 
-                            } 
-                            else{ 
-                                $result_data.=' OR '; 
-                            } 
-                        }
+                        // dd(sizeof($screen_status),$i);
+                        $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') '; 
+                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR '; 
+                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')'; 
+                        if(sizeof($screen_status)-1==$i){
+                            $result_data.=')'; 
+                        } 
+                        else{ 
+                            $result_data.=' OR '; 
+                        } 
                     }
-                    return $result_data;
+                    // return $result_data;
                     $response_data=DB::select($result_data);
                 }
             }

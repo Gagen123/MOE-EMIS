@@ -64,6 +64,7 @@ export default {
             form: new form({
                 organizationId:'',autonomuos:'',initiatedBy:' ', application_type:'autonomus_change', 
                 application_for:'Change in Autonomous', action_type:'add', status:'pending',organization_type:'',
+                screen_name:'Autonomous',
             }),
         } 
     },

@@ -312,7 +312,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/organization_visitor_index" class="nav-link">
+                        <router-link to="/visitors_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Organizaiton Visitor & SBM
@@ -328,7 +328,7 @@
                         </router-link>
                     </li> -->
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/equipment_index" class="nav-link">
+                        <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Equipments and Furnitures
@@ -351,14 +351,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
+                    <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Other Information
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
                         <router-link to="/financial_information" class="nav-link">
                             <p>

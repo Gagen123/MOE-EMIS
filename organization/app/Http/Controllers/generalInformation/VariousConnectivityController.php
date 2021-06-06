@@ -47,8 +47,7 @@ class VariousConnectivityController extends Controller
       'created_at'                  =>  date('Y-m-d h:i:s'),
 
     ];
-      // dd($data);
-    $response_data = VariousConnectivity::create($data);
+    VariousConnectivity::where('organizationId',$request['organizationId'])->update($data);
         
     return $this->successResponse($response_data, Response::HTTP_CREATED);
   }
@@ -56,7 +55,7 @@ class VariousConnectivityController extends Controller
     
   public function loadConnectivityInformation($orgId=""){
   //  dd('from microservices');
-    $info = VariousConnectivity::where('organizationId',$orgId)->get();
+    $info = VariousConnectivity::where('organizationId',$orgId)->first();
     return $info;
   }
 }

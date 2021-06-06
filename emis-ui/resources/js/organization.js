@@ -777,6 +777,16 @@ const routes = [
         { path: '/school_feeding',name:'school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
       ] 
     },
+
+    { path: '/visitors_information', 
+      component: require('./components/organization/general/visitors_information/visitors_information.vue').default ,
+      children: [
+        { path: '',name:'visitors_information', component: require('./components/organization/general/visitors_information/list_visitors_information.vue').default },
+        { path: '/add_visitors_information', name:'add_visitors_information', component: require('./components/organization/general/visitors_information/add_visitors_information.vue').default },
+        { path: '/edit_visitors_information', name:'edit_visitors_information', component: require('./components/organization/general/visitors_information/edit_visitors_information.vue').default },
+        { path: '/list_visitors_information', name:'list_visitors_information', component: require('./components/organization/general/visitors_information/list_visitors_information.vue').default },
+      ] 
+    },
     //Latest Routes (31st May - All missing information as per the requirement gathering and discussion)
     { path: '/financials', component: require('./components/organization/financials/index.vue').default,
       children:[
@@ -807,15 +817,7 @@ const routes = [
             { path: '/list_child_facilities', name:'list_child_facilities', component: require('./components/organization/facilities/child/list_child_facilities.vue').default },
           ] 
         },
-        { path: '/visitors_information', 
-          component: require('./components/organization/general/visitors_information/visitors_information.vue').default ,
-          children: [
-            { path: '',name:'visitors_information', component: require('./components/organization/general/visitors_information/list_visitors_information.vue').default },
-            { path: '/add_visitors_information', name:'add_visitors_information', component: require('./components/organization/general/visitors_information/add_visitors_information.vue').default },
-            { path: '/edit_visitors_information', name:'edit_visitors_information', component: require('./components/organization/general/visitors_information/edit_visitors_information.vue').default },
-            { path: '/list_visitors_information', name:'list_visitors_information', component: require('./components/organization/general/visitors_information/list_visitors_information.vue').default },
-          ] 
-        },
+        
         { path: '/projections', 
           component: require('./components/organization/general/projections/projections.vue').default ,
           children: [

@@ -4,7 +4,6 @@
             <li class="pl-2 form-inline "><h6 class="pt-1">Basic Change Application Verification/Approval</h6></li>
         </ol>
         <div class="card card-primary card-outline card-outline-tabs">
-            
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
@@ -82,8 +81,6 @@
                                     </table>
                                 </div>
                             </div>
-                            
-
 
                             <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
