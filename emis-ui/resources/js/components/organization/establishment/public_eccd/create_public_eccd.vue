@@ -47,13 +47,13 @@
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Location:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="text" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" @change="remove_error('proposedLocation')" class="form-control" id="proposedLocation" placeholder="Proposed Location"/>
                                 <has-error :form="form" field="proposedLocation"></has-error>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -178,17 +178,11 @@
                                             <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                         </td>
                                         <td >  
-                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                            <input type="checkbox" name="class" v-model="classForm.class" :value="item.id">                               
                                         </td>
                                     </tr> 
                                 </tbody>
                             </table>
-                            <!-- <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                    <input type="checkbox" v-model="classStreamForm.class"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                </span>
-                            </span>  -->
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -220,6 +214,9 @@ export default {
             fileUpload: [],
             draft_data:[],
             proposed_by_list:[],
+            classForm: new form({
+                id: '',class:[], proposedName:'',  proposed_establishment:'Public ECCD', status:'submitted',application_number:'',
+            }),
             form: new form({
                 id: '',initiatedBy:'', proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
                 coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'
@@ -236,10 +233,7 @@ export default {
                 }],
                 ref_docs:[],
             }),
-           
-            classStreamForm: new form({
-                id: '',class:[], proposed_establishment:'Public ECCD', status:'submitted',application_number:'',
-            }) 
+            
         } 
     },
     methods: {
@@ -423,7 +417,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveClassStream')
+                        this.classForm.post('organization/saveClassStream')
                         .then((response) => {
                             if(response.data=="No Screen"){
                                 Toast.fire({  
@@ -432,7 +426,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement_public_eccd',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -452,8 +446,8 @@ export default {
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
-                            this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
-                            // this.loadpendingdetails('Public_School');
+                            this.classForm.application_number=response.data.data.applicaiton_details.application_no;
+                            this.loadpendingdetails('Public_ECCD');
                             this.change_tab(nextclass);
                         }
                     })
@@ -499,7 +493,10 @@ export default {
         loadpendingdetails(type){
             axios.get('organization/loaddraftApplication/'+type)
               .then(response => {
-                this.draft_data = response.data.data;
+                let data = response.data.data;
+                // this.form.proposedName=data.
+                // id: '',initiatedBy:'', :'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
+                // coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'
             });
         },
         applyselect2(){
@@ -678,7 +675,7 @@ export default {
         this.getLocation();
         // this.loadactivedzongkhagList();
         this.getOrgList();
-        // this.loadpendingdetails('Public_ECCD');
+        this.loadpendingdetails('Public_ECCD');
     }, 
 }
 </script>

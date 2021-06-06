@@ -82,13 +82,13 @@
                                 <has-error :form="form" field="proposedLocation"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed ECCD Infrastructure:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="text" v-model="form.proposedInfrastructure" :class="{ 'is-invalid': form.errors.has('proposedInfrastructure') }" @change="remove_error('proposedInfrastructure')" class="form-control" id="proposedInfrastructure" placeholder="Proposed ECCD Housed In (e.g. Residential House etc)"/>
                                 <has-error :form="form" field="proposedInfrastructure"></has-error>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -133,15 +133,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for='(attach,count) in attachment_details' :key="count+1">
-                                                <template v-if="attach.upload_type==null || attach.upload_type=='null'">
-                                                    <td>{{attach.user_defined_file_name}} </td>
-                                                    <td>  {{attach.name}}</td>
-                                                    <td>    
-                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                    </td>
-                                                </template>
-                                            </tr>
                                             <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
                                                 <td>
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -181,12 +172,24 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                    </span>
-                            </span> 
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age Group</th>
+                                        <th></th>                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td >  
+                                            <input type="checkbox" :id="'eccd'+item.id" name="eccdclass" v-model="classStreamForm.class" :value="item.id">                               
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -205,6 +208,7 @@
 export default {
     data(){
         return{
+            record_id:'',
             dzongkhag:'',
             levelList:[],
             locationList:[],
@@ -217,13 +221,12 @@ export default {
             classStreamList:[],
             fileUpload: [],
             draft_data:[],
-            record_id:'',
-            attachment_details:'',
+            gewog_listArray:{},
             file_form: new form({
                 id:'',
                 file_name: '',
                 fileUpload: [],
-                record_type:'add',
+                record_type:'edit',
                 application_number:'',
                 attachments:
                 [{
@@ -237,52 +240,11 @@ export default {
                 status:'pending', establishment_type:'private_eccd',action_type:'edit',
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted',application_number:'',action_type:'edit',
+                id: '',proposedName:'', class:[],update_type:'', proposed_establishment:'Private ECCD', status:'submitted',application_number:'',action_type:'edit',
             }) 
         } 
     },
     methods: {
-        loadApplicaitonDetials(){
-            axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
-            .then(response => {
-                let data = response.data.data;
-                this.form.id=data.estb_details.id;
-                this.form.application_number=data.application_no;
-                this.classStreamForm.application_number=data.application_no;
-                this.file_form.application_number=data.application_no;
-                this.form.proprietorCid=data.estb_details.proprietorCid;
-                this.form.proprietorName=data.estb_details.proprietorName;
-                this.form.proprietorPhone=data.estb_details.proprietorPhone;
-                this.form.proprietorMobile=data.estb_details.proprietorMobile;
-                this.form.proprietorEmail=data.estb_details.proprietorEmail;
-                this.form.totalLand=data.estb_details.totalLand;
-                this.form.enrollmentBoys=data.estb_details.enrollmentBoys;
-                this.form.enrollmentGirls=data.estb_details.enrollmentGirls;
-                this.form.typeOfSchool=data.estb_details.typeOfSchool;
-                this.form.proposedName=data.estb_details.proposedName;
-                this.form.proposedLocation=data.estb_details.proposedLocation;
-                this.form.level=data.estb_details.levelId;
-                $('#level').val(data.estb_details.levelId).trigger('change');
-                this.form.dzongkhag=data.dzongkhagId;
-                $('#dzongkhag').val(data.estb_details.dzongkhagId).trigger('change');
-                this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
-                this.getvillagelist(data.gewogId,data.chiwogId);
-
-                this.attachment_details=data.estb_attachments;
-
-                this.classStreamForm.application_number=data.application_no;
-                this.file_form.application_number=data.application_no;
-                
-                if(data.estb_classStream.length>0){
-                    for(let i=0;i<data.estb_classStream.length;i++){
-                        $('input:radio[name="class_stream"][value="' + data.estb_classStream[i].classId + '"]').attr('checked', 'checked');
-                    }
-                }
-            })    
-            .catch(errors => { 
-                console.log('error in retrieving: '+errors)
-            });
-        },
         /**
          * method to remove error
          */
@@ -293,16 +255,7 @@ export default {
             }
         }, 
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
+       
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -377,10 +330,7 @@ export default {
             this.count++;
             this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
-        addMoreStudents: function(){
-            this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+        
         /**
          * method to remove fields
          */
@@ -388,12 +338,6 @@ export default {
              if(this.file_form.roles.length>1){
                 this.count--;
                 this.file_form.roles.splice(index,1); 
-            }
-        },
-        removeStudents(index){    
-             if(this.file_form.assigned_student.length>1){
-                this.count--;
-                this.file_form.assigned_student.splice(index,1); 
             }
         },
 
@@ -409,14 +353,6 @@ export default {
             } 
         },
 
-
-        /**
-         * to load the respective pages depending on the type of establishment
-         */
-
-        loadRespectivePage(val){
-            this.$router.push({name:''+val,query: {data:id}});
-        },
 
         /**
          * method to populate dropdown
@@ -470,14 +406,49 @@ export default {
                 this.classList = response.data;
             });
         },
-
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
+        getgewoglistunderdzo(dzongkhag,gewog_id){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.gewog_list = data;
+                for(let i=0;i<data.length;i++){
+                    this.gewog_listArray[data[i].id] = data[i].name; 
+                }
+                if(gewog_id!="NA"){
+                    this.form.gewog=gewog_id;
+                    $('#gewog').val(gewog_id).trigger('change');
+                }
+            });
+        },
+        getGewogList(dzongkhag){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.gewog_list = data.data;
+            });
+        },
+        async getvillagelist(id,chewqogid){
+            let gewogId=$('#gewog').val();
+            if(id!="" && (gewogId==null || gewogId=="")){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList = data.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villagelistArray[data[i].id] = data[i].name; 
+                }
+                if(chewqogid!="NA"){
+                    this.form.chiwog=chewqogid;
+                    $('#chiwog').val(chewqogid).trigger('change');
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
 
@@ -504,7 +475,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been updated and send for further action. <br><b>Thank You !</b>";
+                                let message="Applicaiton for new Establishment has been updated and submitted for approval. <br><b>Thank You !</b>";
                                 this.$router.push({name:'acknowledgement_private_eccd',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -564,21 +535,14 @@ export default {
                 }
             }
         },
+      
         applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
+          
             if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
                 $('#gewog').addClass('select2-hidden-accessible');
             }
             if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
                 $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
             }
         },
 
@@ -596,18 +560,6 @@ export default {
             this.applyselect2();
         },
 
-        /**
-         * method to get other category if the category is 'ECCD'
-         */
-        getCategory(){
-            let level = $('#level option:selected').text();
-            if(level == "ECCD"){
-                $(".eccd").show();
-            }
-            else{
-                $(".eccd").hide();
-            }
-        },
 
         /**
          * method to show private fields
@@ -628,14 +580,7 @@ export default {
                 $('#parentDetails').hide();
             }
         } ,
-        show_feeding_details(param){
-            if(param){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
-        },
+     
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {  
@@ -665,27 +610,72 @@ export default {
                 console.log(errors)
             });
         },
+        getAttachmentType(){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Private_ECCD/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        },
+        loadApplicaitonDetials(){
+            axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
+            .then(response => {
+                let data = response.data.data;
+                this.attachment_details=data.estb_attachments;
+                this.form.id=data.id;
+                this.form.application_number=data.application_no;
+                this.classStreamForm.application_number=data.application_no;
+                this.file_form.application_number=data.application_no;
+                this.form.initiatedBy=data.estb_details.initiated_by;
+                $('#initiatedBy').val(data.estb_details.initiated_by).trigger('change');
+                this.form.proposedName=data.estb_details.proposedName;
+                this.form.dzongkhag=data.dzongkhagId;
+                this.form.proprietorCid=data.estb_details.proprietorCid;
+                this.form.proprietorName=data.estb_details.proprietorName;
+                this.form.proprietorPhone=data.estb_details.proprietorPhone;
+                this.form.proprietorMobile=data.estb_details.proprietorMobile;
+                this.form.proprietorEmail=data.estb_details.proprietorEmail;
+
+                $('#dzongkhag').val(data.estb_details.dzongkhagId).trigger('change');
+                this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
+                this.getvillagelist(data.gewogId,data.chiwogId);
+
+                this.form.locationType=data.estb_details.locationId;
+                $('#locationType').val(data.estb_details.locationId).trigger('change');
+
+                if(data.status=="Notified For Team Verification"){
+                    this.getAttachmentType('');//Attachment name here
+                    this.classStreamForm.update_type="Document Update";
+                }
+                else{
+                    this.getAttachmentType('ForTransaction__Private_ECCD');
+                }
+                
+                if(data.estb_classStream.length>0){
+                    for(let i=0;i<data.estb_classStream.length;i++){
+                        $('#eccd'+data.estb_classStream[i].classId).prop('checked',true);
+                    }
+                }
+            })    
+            .catch(errors => { 
+                console.log('error in retrieving: '+errors)
+            });
+        },
 
     },
     
     created(){
-        this.getScreenAccess();
-        this.getLevel();
+        // this.getScreenAccess();
         this.getLocation();
+        this.getAttachmentType();
     },
     mounted() {
-        axios.get('common/getSessionDetail')
-            .then(response => {
-                let data = response.data.data;
-                this.dzongkhag=data['Dzo_Id'];
-                this.form.dzongkhag=data['Dzo_Id'];
-                this.getGewogList(data['Dzo_Id']);
-            })    
-            .catch(errors => { 
-                console.log(errors)
-            });
-        
-        $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -699,9 +689,7 @@ export default {
         });
        
         this.getClass();
-        this.getStream();
         this.getClassStream();
-        this.getLevel();
         this.getLocation();
         this.getOrgList();
         this.record_id=this.$route.params.id;

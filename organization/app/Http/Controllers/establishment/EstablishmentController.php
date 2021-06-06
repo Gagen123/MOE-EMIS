@@ -363,28 +363,28 @@ class EstablishmentController extends Controller
      */
     public function saveClassStream(Request $request){
         $classes=$request->class;
+        
         $classStream='';
         $inserted_class="";
         $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
         if($request['update_type']!="Document Update"){
             if($request['action_type']=="edit"){
                 ApplicationClassStream::where('ApplicationDetailsId', $application_details->id)->delete();
-            }                                          
+            }     
+            // return $request->class;                                     
             if($request->class){
                 foreach($request->class as $key => $classId){
-                    $stream_exists = $this->checkStreamExists($classId);
-                    if(empty($stream_exists)){
-                        $classStream = [
-                            'ApplicationDetailsId'  => $application_details->id,
-                            'classId'               => $classId,
-                            'streamId'              => '',
-                            'created_by'            => $request->user_id,
-                            'created_at'            => date('Y-m-d h:i:s'),
-                        ];
-                        
-                        $class = ApplicationClassStream::create($classStream);
-        
-                    } 
+                    // $stream_exists = $this->checkStreamExists($classId);
+                    // if(empty($stream_exists)){
+                    $classStream = [
+                        'ApplicationDetailsId'  => $application_details->id,
+                        'classId'               => $classId,
+                        'streamId'              => '',
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    $class = ApplicationClassStream::create($classStream);
+                    // } 
                 }
             }
     
@@ -595,10 +595,10 @@ class EstablishmentController extends Controller
     }
 
     public function loadApprovedOrgs($type=""){
-        $response_data= ApplicationDetails::where('status','Approved')->where('establishment_type','like',$type.'%')->get();
+        $response_data= ApplicationDetails::where('status','Approved')->where('establishment_type','like','%'.$type.'%')->get();
         if($response_data!=null && $response_data!=""){
             foreach($response_data as $data){
-                if($data->establishment_type=="Private School"){
+                if($data->establishment_type=="Private School" || $data->establishment_type=="Private ECCD"){
                     $data->proposedName=ApplicationEstPrivate::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
                 else{
@@ -612,7 +612,7 @@ class EstablishmentController extends Controller
 
     public function getApprovedOrgDetails($type="",$key=""){
         $response_data= ApplicationDetails::where('status','Approved')->where('id',$key)->first();
-        if($response_data->establishment_type=="Private School"){
+        if($response_data->establishment_type=="Private School" ||$response_data->establishment_type=="Private ECCD"){
             $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
         else{
