@@ -262,6 +262,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
 
         $router->group(['prefix' => 'sport'], function () use ($router) {
+            $router->post('/saveEccd', 'structuralFacility\SportController@saveEccd');
             $router->post('/saveSport', 'structuralFacility\SportController@saveSport');
             $router->get('/loadSport/{orgId}', 'structuralFacility\SportController@loadSport');
             $router->get('/getFacilityInDropdown', 'structuralFacility\SportController@getFacilityInDropdown');

@@ -136,7 +136,7 @@ export default {
     this.finacial_form.type=this.$route.params.data.type;
     this.finacial_form.amount=this.$route.params.data.amount;
     this.finacial_form.date = this.$route.params.data.date;
-    this.finacial_form.dzo_name =this.$route.params.data.remarks;
+    this.finacial_form.remarks =this.$route.params.data.status;
   
 
        

@@ -677,6 +677,16 @@ const routes = [
             { path: '/infrastructure_list', name:'InfrastructureList', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_list.vue').default },
           ]    
         },
+        { path: '/eccd_index', 
+        component: require('./components/organization/structuralFacility/eccd_facilities/eccd_index.vue').default ,
+        children: [
+          { path: '',name:'eccd_index', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
+          { path: '/eccd_add', name:'EccdAdd', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_add.vue').default },
+          { path: '/eccd_edit', name:'EccdEdit', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_edit.vue').default },
+          { path: '/eccd_list', name:'EccdList', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
+        ] 
+      },
+       
         { path: '/sport_index', 
           component: require('./components/organization/structuralFacility/sport/sport_index.vue').default ,
           children: [
@@ -693,7 +703,7 @@ const routes = [
     //Latest Routes (31st May - All missing information as per the requirement gathering and discussion)
     { path: '/financials', component: require('./components/organization/financials/index.vue').default,
       children:[
-        { path: '/financial_information', name:'financial_information',
+        { path: '/financial_information', 
           component: require('./components/organization/financials/financial_information/financial_information.vue').default ,
           children: [
             { path: '',name:'financial_information', component: require('./components/organization/financials/financial_information/list_financial_information.vue').default },

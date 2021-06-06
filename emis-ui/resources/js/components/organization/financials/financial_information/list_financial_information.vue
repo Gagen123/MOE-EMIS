@@ -18,7 +18,7 @@
                     <td>{{ item.incomeFacilitiesId}}</td>
                     <td>{{ item.amount}}</td>
                     <td>{{ item.date}}</td>
-                    <td>{{ item.remarks}}</td>
+                    <td>{{ item.status}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
