@@ -82,13 +82,13 @@
                                 <has-error :form="form" field="proposedLocation"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed ECCD Infrastructure:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="text" v-model="form.proposedInfrastructure" :class="{ 'is-invalid': form.errors.has('proposedInfrastructure') }" @change="remove_error('proposedInfrastructure')" class="form-control" id="proposedInfrastructure" placeholder="Proposed ECCD Housed In (e.g. Residential House etc)"/>
                                 <has-error :form="form" field="proposedInfrastructure"></has-error>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -185,7 +185,7 @@
                                             <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                         </td>
                                         <td >  
-                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                            <input type="checkbox" name="class" v-model="classStreamForm.class" :value="item.id">                              
                                         </td>
                                     </tr> 
                                 </tbody>
@@ -239,7 +239,7 @@ export default {
                 status:'pending', establishment_type:'private_eccd',action_type:'add',
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted',application_number:'',action_type:'add',
+                id: '',proposedName:'', class:[],  proposed_establishment:'Private ECCD', status:'submitted',application_number:'',action_type:'add',
             }) 
         } 
     },
@@ -430,7 +430,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement_private_eccd',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',

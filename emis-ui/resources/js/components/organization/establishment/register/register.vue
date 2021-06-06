@@ -38,7 +38,7 @@
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                                 <br/>
-                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('public')"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails()"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div> 
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                                 <br/>
-                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('private')"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails()"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div> 
                         </div>
                     </span>           
@@ -67,7 +67,7 @@
                                 <label class="mb-0">Proposed Name:</label>
                                 <span class="text-blue text-bold">{{applicant_rog_details.proposedName}}</span>
                             </div>  
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicaitondetails.establishment_type=='Private School' || applicaitondetails.establishment_type=='Public School'">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicaitondetails.establishment_type!='Private ECCD' && applicaitondetails.establishment_type=='Public ECCD'">
                                 <label class="mb-0">Level:</label>
                                 <span class="text-blue text-bold">{{levelArray[orgLevel]}}</span>
                             </div>  
@@ -206,17 +206,19 @@ export default {
         }
     },
     methods:{
-        display_respective_section: function(){
+        display_respective_section: function(school_type){
             $("#zest_code_section").hide();
             $("#approved_schol_list").hide();
-            if(this.applicaitondetailsform.category == 1){
-               $("#zest_code_section").show();
-                this.loadApproveSchoolname('Public');
-                //integration with Zest
-            }else{
-                this.loadApproveSchoolname(this.applicaitondetailsform.category);
-                $("#approved_schol_list").show();
-            }
+             this.loadApproveSchoolname(this.applicaitondetailsform.category);
+             $("#approved_schol_list").show();
+            // if(this.applicaitondetailsform.category == 1){
+            //    $("#zest_code_section").show();
+            //     this.loadApproveSchoolname('Public');
+            //     //integration with Zest
+            // }else{
+               
+            //     $("#approved_schol_list").show();
+            // }
         },
         // getClassStream:function(){
         //     axios.get('/masters/loadClassStreamMapping')
@@ -269,7 +271,7 @@ export default {
         async changefunction(id){
             if(id=="category"){
                 this.applicaitondetailsform.category=$('#category').val();
-                this.display_respective_section();
+                this.display_respective_section($('#category').val());
             }
             if(id=="organizationid"){
                 this.applicaitondetailsform.organizationid=$('#organizationid').val();
@@ -293,7 +295,9 @@ export default {
             .then((response) => {  
                 let data=response.data.data;
                 this.applicaitondetails=data;
-                this.orgLevel=data.org_details.levelId;
+                if(data.establishment_type!="Private ECCD" && data.establishment_type!="Public ECCD"){
+                    this.orgLevel=data.org_details.levelId;
+                }
                 this.proposedName=data.org_details.proposedName;
                 this.applicant_rog_details=data.org_details;
                 this.org_class_details=data.org_class_stream;
