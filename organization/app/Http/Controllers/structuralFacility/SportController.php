@@ -102,6 +102,7 @@ class SportController extends Controller
                 'updated_by'                            =>  $request->user_id,
                 'created_at'                            =>  date('Y-m-d h:i:s')
             ];
+            
             $spo = Eccd::where('id', $id)->update($sport);
             return $this->successResponse($spo, Response::HTTP_CREATED);
 
@@ -116,7 +117,14 @@ class SportController extends Controller
                     'created_by'                            =>  $request->user_id,
                     'created_at'                            =>  date('Y-m-d h:i:s')
                 ];
+                // dd($sport);
+                try{
                 $spo = Eccd::create($sport);
+                }
+                catch(\Illuminate\Database\QueryException $e){
+                    dd($e);
+
+                }
                 return $this->successResponse($spo, Response::HTTP_CREATED);
             }
         

@@ -5,7 +5,6 @@
                 <tr>
                     <th>SL#</th>
                     <th>Facility</th>
-                    <th>Type</th>
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -13,7 +12,6 @@
                 <tr v-for="(item, index) in sportList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.facilityName}}</td>
-                    <td>{{ item.type}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewSportList(item)"><i class="fas fa-edit"></i ></a>

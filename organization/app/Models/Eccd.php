@@ -12,8 +12,15 @@ class Eccd extends Model
     protected $table="eccds";
 
     protected $fillable = [
-        'id','organizationId','facility','yearOfEstablishment','status','supportedBy','noOfFacility',
-       'created_by','updated_by'
+        'id',
+        'organizationId',
+        'facility',
+        'yearOfEstablishment',
+        'status',
+        'supportedBy',
+        'noOfFacility',
+        'created_by',
+        'created_at',
     ];
 
 }
