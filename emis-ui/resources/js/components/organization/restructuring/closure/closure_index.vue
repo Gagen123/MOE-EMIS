@@ -8,6 +8,7 @@
             <div class="card-header">
                 <span class="fa-pull-right">
                     <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('closure_list')"><i class="fa fa-list"></i> List</button>
+                    <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('closure')"><i class="fa fa-list"></i> Close Organization</button>
                 </span>
             </div>
             <div class="card-body">  

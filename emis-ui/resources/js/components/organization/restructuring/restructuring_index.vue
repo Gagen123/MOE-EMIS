@@ -63,13 +63,13 @@
                         Merger
                     </router-link>
                 </li>
-                <li class="nav-item pr-1" @click="activatelink('nomination')">
-                    <router-link to="/closure_list" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('closure_index')">
+                    <router-link to="/closure_index" id="closure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Closure
                     </router-link>
                 </li>
-                <li class="nav-item pr-1" @click="activatelink('nomination')">
-                    <router-link to="/closure_list" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('reopening_index')">
+                    <router-link to="/reopening_index" id="reopening" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Re-Opening
                     </router-link>
                 </li>

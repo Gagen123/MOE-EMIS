@@ -112,16 +112,6 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Distance From Dzongkhag HQ (KM):</label>
-                                                    <input type="number" min="0" v-model="form.distance_from_dzo" class="form-control editable_fields" id="cidOfOwner"/>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Thram No:</label>
-                                                    <input type="text" name="thramNo" v-model="form.thramNo" class="form-control editable_fields" id="thramNo"/>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Entrance Gate:</label><br>
                                                     <label><input  type="radio" v-model="form.entranceGate" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.entranceGate" value="0" tabindex=""/> No</label>
@@ -133,6 +123,18 @@
                                                         {{item.name}}
                                                     </label>
                                                 </div>
+                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Distance From Dzongkhag HQ (KM):</label>
+                                                    <input type="number" min="0" v-model="form.distance_from_dzo" class="form-control editable_fields" id="cidOfOwner"/>
+                                                </div> -->
+                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Thram No:</label>
+                                                    <input type="text" name="thramNo" v-model="form.thramNo" class="form-control editable_fields" id="thramNo"/>
+                                                </div> -->
+                                            </div>
+                                            <div class="form-group row">
+                                                
+                                                
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Disaster Area:</label><br>
                                                     <label  v-for="(item, key, index) in  disasterList" :key="index" class="pr-4">
@@ -141,6 +143,59 @@
                                                     </label>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                            <label class="mb-0"><i><u>Contact Detail</u></i></label>
+                                        </div>
+                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
+                                           <div class="form-group row">
+                                              <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Contact of</th>
+                                                            <th>Phone</th>
+                                                            <th>Mobile</th>
+                                                            <th>Email</th>                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr id="record1" v-for='(user, index) in form.users' :key="index">
+                                                            <td>
+                                                                <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_err('contactName')">
+                                                                    <option value="">--- Please Select ---</option>
+                                                                    <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                                </select>
+                                                                <has-error :form="form" field="user.contactName"></has-error>
+                                                            </td>
+                                                            <td>                                
+                                                                <input type="number" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
+                                                                <has-error :form="form" field="phone"></has-error>
+                                                            </td>
+                                                            <td>                                
+                                                                <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/>
+                                                                <has-error :form="form" field="mobile"></has-error>
+                                                            </td>
+                                                            <td>                                
+                                                                <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
+                                                                 <has-error :form="form" field="email"></has-error>
+                                                            </td>
+                                                        </tr> 
+                                                        <tr>
+                                                            <td colspan="5"> 
+                                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                            </td>
+                                                        </tr>                                          
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="row form-group fa-pull-right">
@@ -162,6 +217,8 @@
     export default {
         data(){
             return{
+                users: [],
+                contactTypeList:[],
                 orgDetails:'',
                 isprofile:false,
                 levelArray:{},
@@ -185,6 +242,10 @@
                     longitude:'', latitude:'', altitude:'',map_path:'',
                     climate_type:'',distance_from_dzo:'',thramNo:'',
                     fencingtype:'',entranceGate:'',disasterArea:[],
+                    users:
+                    [{
+                        contactName:'',phone:'', mobile:'',email:''
+                    }],
                 }) 
             }
         },
@@ -232,6 +293,13 @@
                         this.form.longitude=response_data.locationDetials.longitude;
                         this.form.thramNo=response_data.locationDetials.thramNo;
                     }
+                    let prop=data.contact;
+                    let contactDetails=[];
+                    for(let i=0;i<prop.length;i++){
+                     contactDetails.push({contactName:prop[i].contactTypeId,phone:prop[i].phone,mobile:prop[i].mobile,email:prop[i].email,});
+                    }
+                    this.count=data.length;
+                    this.form.users=contactDetails;
                     
                 })
                 .catch((error) => {  
@@ -252,6 +320,13 @@
                         title: 'Unexpected error occured:'+error
                     });
                 })
+            },
+            getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.contactTypeList = data;
+                });
             },
             getLevel(uri = '/organization/getLevelInDropdown'){
                 axios.get(uri)
@@ -299,8 +374,20 @@
                     console.log('error: '+error);
                 });
             },
+            addMore: function(){
+                this.count++;
+                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})    
+            }, 
+            remove(index){    
+                if(this.form.users.length>1){
+                  this.count--;
+                  this.form.users.splice(index,1); 
+                }
+            },
+            
         },
         mounted(){
+            this.getContactTypeDropdown();
             this.getLat();
             this.getLevel();
             this.loadfencingList();

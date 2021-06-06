@@ -15,10 +15,10 @@
                     <router-link id="locations" to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Location
-                    </router-link>
+                    </router-link> 
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('connectivity')">
-                    <router-link id="connectivity" to="/connectivity" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
+                    <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Connectivity
                     </router-link>
