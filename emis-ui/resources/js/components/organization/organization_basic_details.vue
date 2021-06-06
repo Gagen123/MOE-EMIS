@@ -146,14 +146,14 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="row invoice-info">
+                                    <!-- <div class="row invoice-info">
                                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
                                             <label class="mb-0"><i><u>Contact Detail</u></i></label>
                                         </div>
                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                            <div class="form-group row">
                                               <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                <!-- <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                                     <thead>
                                                         <tr>
                                                             <th>Contact of</th>
@@ -162,8 +162,8 @@
                                                             <th>Email</th>                            
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <tr id="record1" v-for='(user, index) in form.users' :key="index">
+                                                    <tbody> -->
+                                                        <!-- <tr id="record1" v-for='(user, index) in form.users' :key="index">
                                                             <td>
                                                                 <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_err('contactName')">
                                                                     <option value="">--- Please Select ---</option>
@@ -171,25 +171,25 @@
                                                                 </select>
                                                                 <has-error :form="form" field="user.contactName"></has-error>
                                                             </td>
-                                                            <td>                                
+                                                            <td>                                 -->
                                                                 <!-- <input type="number" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
                                                                 <has-error :form="form" field="phone"></has-error> -->
                                                                
-                                                                <input name="phone"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "6"
+                                                                <!-- <input name="phone"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "6"
                                                                 @change="remove_error('phone')" v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" class="form-control"  id="phone" >
                                                                 <has-error :form="form" field="phone"></has-error>
                                                             </td>
-                                                            <td>                                
-                                                                <!-- <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/> -->
+                                                            <td>                                 -->
+                                                                <!-- <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/>
                                                                 <input name="mobile"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "8"
                                                                 @change="remove_error('mobile')" v-model="form.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" class="form-control"  id="mobile" >
                                                                 <has-error :form="form" field="mobile"></has-error>
-                                                            </td>
-                                                            <td>                                
+                                                            </td> -->
+                                                            <!-- <td>                                
                                                                 <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
                                                                  <has-error :form="form" field="email"></has-error>
-                                                            </td>
-                                                        </tr> 
+                                                            </td> -->
+                                                        <!-- </tr> 
                                                         <tr>
                                                             <td colspan="5"> 
                                                                 <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
@@ -199,11 +199,11 @@
                                                             </td>
                                                         </tr>                                          
                                                     </tbody>
-                                                </table>
+                                                </table> -->
                                             </div>
                                         </div>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="row form-group fa-pull-right">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
