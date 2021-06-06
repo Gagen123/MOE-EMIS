@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
 use App\Models\structuralFacility\Sport;
+use App\Models\Eccd;
 use App\Models\Masters\SportFacilityType;
 use App\Models\Masters\SportSupporter;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +50,8 @@ class SportController extends Controller
                 'organizationId'                        =>  $request['organizationId'],
                 'facility'                              =>  $request['facility'],
                 'type'                                  =>  $request['type'],
+                'size'                                  =>  $request['size'],
+                'courts'                                =>  $request['courts'],
                 'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
                 'status'                                =>  $request['status'],
                 'supportedBy'                           =>  $request['supportedBy'],
@@ -59,22 +62,63 @@ class SportController extends Controller
             ];
             $spo = Sport::where('id', $id)->update($sport);
             return $this->successResponse($spo, Response::HTTP_CREATED);
-        }else{
+
+            }else{
+                $sport = [
+                    'organizationId'                        =>  $request['organizationId'],
+                    'facility'                              =>  $request['facility'],
+                    'type'                                  =>  $request['type'],
+                    'size'                                  =>  $request['size'],
+                    'courts'                                =>  $request['courts'],
+                    'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
+                    'status'                                =>  $request['status'],
+                    'supportedBy'                           =>  $request['supportedBy'],
+                    'noOfFacility'                          =>  $request['numberOfFacility'], 
+                    'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
+                    'created_by'                            =>  $request->user_id,
+                    'created_at'                            =>  date('Y-m-d h:i:s')
+                ];
+                try{
+                $spo = Sport::create($sport);
+                }catch(\Illuminate\Database\QueryException $e){
+                    dd($e);
+               
+                }
+                return $this->successResponse($spo, Response::HTTP_CREATED);
+            }
+        
+    }
+
+    public function saveEccd(Request $request){
+        $id = $request->id;
+        if( $id != null){
             $sport = [
                 'organizationId'                        =>  $request['organizationId'],
                 'facility'                              =>  $request['facility'],
-                'type'                                  =>  $request['type'],
                 'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
                 'status'                                =>  $request['status'],
                 'supportedBy'                           =>  $request['supportedBy'],
                 'noOfFacility'                          =>  $request['numberOfFacility'], 
-                'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
-                'created_by'                            =>  $request->user_id,
+                'updated_by'                            =>  $request->user_id,
                 'created_at'                            =>  date('Y-m-d h:i:s')
             ];
-            $spo = Sport::create($sport);
+            $spo = Eccd::where('id', $id)->update($sport);
             return $this->successResponse($spo, Response::HTTP_CREATED);
-        }
+
+            }else{
+                $sport = [
+                    'organizationId'                        =>  $request['organizationId'],
+                    'facility'                              =>  $request['facility'],
+                    'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
+                    'status'                                =>  $request['status'],
+                    'supportedBy'                           =>  $request['supportedBy'],
+                    'noOfFacility'                          =>  $request['numberOfFacility'], 
+                    'created_by'                            =>  $request->user_id,
+                    'created_at'                            =>  date('Y-m-d h:i:s')
+                ];
+                $spo = Eccd::create($sport);
+                return $this->successResponse($spo, Response::HTTP_CREATED);
+            }
         
     }
     

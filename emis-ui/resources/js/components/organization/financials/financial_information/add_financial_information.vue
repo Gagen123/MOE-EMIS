@@ -61,7 +61,6 @@ export default {
             .then(response => {
                 let data = response;
                 this.typeList =  data.data;
-                // alert(JSON.stringify(data.data.data[0].name))
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -80,7 +79,7 @@ export default {
                 // formData.append('type', this.finacial_form.type);
                 formData.append('amount', this.finacial_form.amount);
                 formData.append('date', this.finacial_form.date);
-                formData.append('remarks', this.finacial_form.status);
+                formData.append('remarks', this.finacial_form.remarks);
                 
                 axios.post('/organization/saveFinancialInfo',formData,config)
                 .then(()=>{
@@ -127,8 +126,11 @@ export default {
         
     },
     created() {
-    this.submitForm();
+    this.typeList();
     this.loadtypeList();
+    this.submitForm();
+   
+    
        
   },
     

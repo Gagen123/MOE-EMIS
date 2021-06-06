@@ -38,6 +38,8 @@ class StructuralController extends Controller
             'organizationId'                        =>  $this->getWrkingAgencyId(),
             'facility'                              =>  $request['facility'],
             'type'                                  =>  $request['type'],
+            'size'                                  =>  $request['size'],
+            'courts'                                =>  $request['courts'],
             'yearOfEstablish'                       =>  $request['yearOfEstablish'],
             'status'                                =>  $request['status'],
             'supportedBy'                           =>  $request['supportedBy'],
@@ -46,13 +48,42 @@ class StructuralController extends Controller
             'id'                                    =>  $request['id'],
             'user_id'                               =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
+    }
+
+    public function saveEccd(Request $request){
+        $rules = [
+            'facility'          =>  'required',
+            'status'            =>  'required',
+        ];
+        $customMessages = [
+            'facility.required'         => 'Facility is required',
+            'status.required'           => 'TyCurrent Status is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $sport =[
+            'organizationId'                        =>  $this->getWrkingAgencyId(),
+            'facility'                              =>  $request['facility'],
+            'yearOfEstablish'                       =>  $request['yearOfEstablish'],
+            'status'                                =>  $request['status'],
+            'supportedBy'                           =>  $request['supportedBy'],
+            'numberOfFacility'                      =>  $request['numberOfFacility'], 
+            'id'                                    =>  $request['id'],
+            'user_id'                               =>  $this->userId()
+        ];
+        // try{
+            $response_data= $this->apiService->createData('emis/organization/sport/saveEccd', $sport);
+            return $response_data;
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
     
     public function loadSport($orgId=""){
@@ -103,13 +134,13 @@ class StructuralController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadInfrastructureList($orgId=""){
@@ -175,13 +206,13 @@ class StructuralController extends Controller
             'id'                         =>  $request['id'],
             'user_id'                    =>  $this->userId() 
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveKitchenStatus', $kitchenStatus);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadKitchenStatus(){
@@ -198,13 +229,13 @@ class StructuralController extends Controller
             'id'                         =>  $request['id'],
             'user_id'                    =>  $this->userId() 
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveFoodStoreStatus', $foodStatus);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function saveUtensilKitchen(Request $request){
@@ -216,13 +247,13 @@ class StructuralController extends Controller
             'id'                         =>  $request['id'],
             'user_id'                    =>  $this->userId() 
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveUtensilKitchen', $equipmentKitchen);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function saveDinningHall(Request $request){
@@ -234,13 +265,13 @@ class StructuralController extends Controller
             'id'                         =>  $request['id'],
             'user_id'                    =>  $this->userId() 
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/schoolFeeding/saveDinningHall', $dinningHall);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadFoodStoreStatus(){
