@@ -186,6 +186,18 @@ class ChangeBasicDetailsController extends Controller
                 $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
             }
             
+            if($request['application_type']=="proprietor_change"){
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+                $prop_data =[
+                    'proprietorName'                => $request['proprietorName'],
+                    'proprietorCid'                 => $request['proprietorCid'],
+                    'proprietorMobile'              => $request['proprietorMobile'],
+                    'proprietorPhone'               => $request['proprietorPhone'],
+                    'proprietorEmail'               => $request['proprietorEmail']
+                ];
+                ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$request->id)->update($prop_data);
+            }
+            
         }
         return $this->successResponse($inserted_application_data, Response::HTTP_CREATED);
 
@@ -475,7 +487,7 @@ class ChangeBasicDetailsController extends Controller
 
         $prop_data =[
             'ApplicationEstDetailsChangeId' => $EstDetailsChangeId,
-            'proposedName'                  => $request['proposedName'],
+            'proprietorName'                => $request['proprietorName'],
             'proprietorCid'                 => $request['proprietorCid'],
             'proprietorMobile'              => $request['proprietorMobile'],
             'proprietorPhone'               => $request['proprietorPhone'],
@@ -631,6 +643,7 @@ class ChangeBasicDetailsController extends Controller
             $response_data->change_class_details=  $calss_data;
             $feed_det=ApplicationNoMeals::where('foreignKeyId',$change_det->id)->get();;
             $response_data->feed_det= $feed_det;
+            $response_data->proprietor=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_det->id)->first();
         }
         return $this->successResponse($response_data); 
     }
@@ -638,7 +651,7 @@ class ChangeBasicDetailsController extends Controller
     public function loadChangeDetailForVerification($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         if($response_data!="" && $response_data!=null){
-            // $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->whereIn('upload_type', ['Verification','Approval'])->get();
+            $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
             $change_det=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
             $response_data->change_details= $change_det;
             $response_data->category=OrganizationDetails::where('id',$response_data->change_details->organizationId)->first()->category;
@@ -657,9 +670,6 @@ class ChangeBasicDetailsController extends Controller
                 ->get();
                 // $response_data->change_classes=ApplicationClassStream::where('ApplicationDetailsId',$change_det->id)->get();
             }
-            // if($response_data=="Change in Level"){
-                
-            // }
         }
         // $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
         // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
@@ -784,7 +794,7 @@ class ChangeBasicDetailsController extends Controller
             $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
             $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
             $change_details_data="";
-            // return $change_details;
+            // dd($change_details,$app_details->application_type);
             switch($app_details->application_type){
                 case "name_change" : {
                     $change_details_data = $this->updateNameChange($change_details,  $org_details, $request);
@@ -933,27 +943,28 @@ class ChangeBasicDetailsController extends Controller
 
     private function updateProprietor($change_details, $org_details,$request){
         $current_proprioter=OrganizationProprietorDetails::where('organizationId',$change_details->organizationId)->first();              
-        if($current_propriote!="" && $current_propriote!=""){
+        if($current_proprioter!="" && $current_proprioter!=""){
             $pro_det= [
-                'id'                =>  $prop['id'],
-                'organizationId'    =>  $prop['organizationId'],
-                'cid'               =>  $prop['cid'],
-                'fullName'          =>  $prop['fullName'],
-                'phoneNo'           =>  $prop['phoneNo'],
-                'mobileNo'          =>  $prop['mobileNo'],
-                'email'             =>  $prop['email'],
-                'created_by'        =>  $prop['created_by'],
-                'updated_by'        =>  $prop['updated_by'],
+                'id'                =>  $current_proprioter->id,
+                'organizationId'    =>  $current_proprioter->organizationId,
+                'cid'               =>  $current_proprioter->cid,
+                'fullName'          =>  $current_proprioter->fullName,
+                'phoneNo'           =>  $current_proprioter->phoneNo,
+                'mobileNo'          =>  $current_proprioter->mobileNo,
+                'email'             =>  $current_proprioter->email,
+                'created_by'        =>  $current_proprioter->created_by,
+                'updated_by'        =>  $current_proprioter->updated_by,
                 'recorded_on'       =>  date('Y-m-d h:i:s'),
                 'recorded_by'       =>  $request->user_id,
             ];
             OrganizationProprietorDetailsHistory::create($pro_det);
             OrganizationProprietorDetails::where('organizationId',$change_details->organizationId)->delete();              
         }
-        $app_prop=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_details->id)->fist();
+        $app_prop=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_details->id)->first();
+        // return $app_prop;
         $prop_data =[
             'organizationId'        => $change_details->organizationId,
-            'fullName'              => $app_prop->proposedName,
+            'fullName'              => $app_prop->proprietorName,
             'cid'                   => $app_prop->proprietorCid,
             'mobileNo'              => $app_prop->proprietorMobile,
             'phoneNo'               => $app_prop->proprietorPhone,

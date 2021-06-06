@@ -614,6 +614,8 @@ const routes = [
             { path: '/',name:'proprietor_details_index', component: require('./components/organization/restructuring/proprietor_change/list_proprietor_change.vue').default },
             { path: '/list_proprietor_change',name:'list_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/list_proprietor_change.vue').default },
             { path: '/create_proprietor_change',name:'create_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/create_proprietor_change.vue').default },
+            { path: '/edit_proprietor_change',name:'edit_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/edit_proprietor_change.vue').default },
+            { path: '/view_proprietor_change',name:'view_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/view_proprietor_change.vue').default },
             { path: '/proprietor_change_acknowledgement', name:'proprietor_change_acknowledgement', component: require('./components/organization/restructuring/proprietor_change/acknowledgement.vue').default },
           ]    
       },
@@ -695,7 +697,15 @@ const routes = [
           children: [
             { path: '/',name:'closure_index', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
             { path: '/closure_list',name:'closure_list', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
-            { path: '/closure', name:'ClosureAdd', component: require('./components/organization/restructuring/closure/closure.vue').default },
+            { path: '/closure', name:'closure', component: require('./components/organization/restructuring/closure/closure.vue').default },
+          ]    
+        },
+        { path: '/reopening_index', 
+          component: require('./components/organization/restructuring/reopening_public/reopening_index.vue').default ,
+          children: [
+            { path: '/',name:'reopening_index', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
+            { path: '/reopening_add',name:'reopening_add', component: require('./components/organization/restructuring/reopening_public/reopening_add.vue').default },
+            { path: '/reopening_list', name:'reopening_list', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
           ]    
         },
       ] 
@@ -743,6 +753,16 @@ const routes = [
             { path: '/infrastructure_list', name:'InfrastructureList', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_list.vue').default },
           ]    
         },
+        { path: '/eccd_index', 
+        component: require('./components/organization/structuralFacility/eccd_facilities/eccd_index.vue').default ,
+        children: [
+          { path: '',name:'eccd_index', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
+          { path: '/eccd_add', name:'EccdAdd', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_add.vue').default },
+          { path: '/eccd_edit', name:'EccdEdit', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_edit.vue').default },
+          { path: '/eccd_list', name:'EccdList', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
+        ] 
+      },
+       
         { path: '/sport_index', 
           component: require('./components/organization/structuralFacility/sport/sport_index.vue').default ,
           children: [
@@ -759,7 +779,7 @@ const routes = [
     //Latest Routes (31st May - All missing information as per the requirement gathering and discussion)
     { path: '/financials', component: require('./components/organization/financials/index.vue').default,
       children:[
-        { path: '/financial_information', name:'financial_information',
+        { path: '/financial_information', 
           component: require('./components/organization/financials/financial_information/financial_information.vue').default ,
           children: [
             { path: '',name:'financial_information', component: require('./components/organization/financials/financial_information/list_financial_information.vue').default },

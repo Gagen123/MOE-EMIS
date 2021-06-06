@@ -13,13 +13,13 @@ class CreateOrganizationFinancialInformationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_financial_informations', function (Blueprint $table) {
+        Schema::create('organization_financial_information', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('organizationId',36);
             $table->uuid('financialInformationId',36);
             $table->char('amount');
             $table->char('date');
-            $table->char('remarks');
+            $table->char('status');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
         });

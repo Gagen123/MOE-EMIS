@@ -10,7 +10,7 @@ class OrganizationFinancialInformation extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="orgnization_financial_informations";
+    protected $table="orgnization_financial_information";
 
     protected $fillable = [
         'id',
@@ -18,7 +18,7 @@ class OrganizationFinancialInformation extends Model
         'financialInformationId',
         'amount',
         'date',
-        'remarks'
+        'status'
     ];
 
 }

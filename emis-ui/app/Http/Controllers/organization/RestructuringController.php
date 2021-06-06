@@ -20,7 +20,7 @@ class RestructuringController extends Controller
     public $table_name="application_details";
     public $bif_table_name="bifurcations";
 
-    public $service_name=" ";
+    public $service_name="Change Details";
     public $service_name_closure="Closure";
     public $merge_service_name="Merger";
     public $bif_service_name="Bifurcation";
@@ -94,11 +94,13 @@ class RestructuringController extends Controller
         $screen_id="";
         $status="";
         $app_role="";
+        $screen_name="";
         foreach($workflowdet as $work){
             if($work->Establishment_type==$request->organization_type){
                 $screen_id=$work->SysSubModuleId;
                 $status=$work->Sequence;
                 $app_role=$work->SysRoleId;
+                $screen_name=$work->screenName;
             }
         }
         if($screen_id==null || $screen_id==""){
@@ -113,9 +115,9 @@ class RestructuringController extends Controller
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>$request['organization_type'],//application type
+                'service_name'      =>$screen_name,//screen name
                 'application_number'=>json_decode($response_data)->data->application_no,
-                'name'              =>$request['application_for'],//service name 
+                'name'              =>$request['application_for'], //Organizaiton Name
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
                 'remarks'           =>null,
@@ -190,7 +192,7 @@ class RestructuringController extends Controller
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
-
+        // dd($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
         $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
@@ -337,6 +339,7 @@ class RestructuringController extends Controller
         //get submitter role
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet);
             $screen_id="";
             $status="";
             $app_role="";
@@ -355,8 +358,8 @@ class RestructuringController extends Controller
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>$service_name,//service name 
-                'name'              =>$request['proposedName'],//service name 
+                'service_name'      =>'Merger',//service name 
+                'name'              =>'Merger',//service name 
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,

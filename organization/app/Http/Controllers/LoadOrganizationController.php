@@ -57,7 +57,13 @@ class LoadOrganizationController extends Controller{
             ->orderBy('c.displayOrder', 'asc')
             ->get();
             $response_data->classes=$data;
-            $response_data->meals=OrganizationFeedingDetails::where('organizationId',$id)->get();
+            
+            if($response_data->category=="private_school"){
+                $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
+            }
+            else{
+                $response_data->meals=OrganizationFeedingDetails::where('organizationId',$id)->get();
+            }
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
