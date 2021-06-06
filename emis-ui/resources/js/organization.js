@@ -76,6 +76,24 @@ const routes = [
                     { path: '/edit_climate_type',name:'edit_climate_type', component: require('./components/masters/organization_masters/climate_type/edit_climate_type.vue').default },
                   ]     
               },
+              { path: '/internetconn_type_index',  
+                component: require('./components/masters/organization_masters/internet_connection_type/internetconn_type_index.vue').default ,
+                  children: [
+                    { path: '/',name:'internetconn_type_index', component: require('./components/masters/organization_masters/internet_connection_type/list_internetconn_type.vue').default },
+                    { path: '/list_internetconn_type',name:'list_internetconn_type', component: require('./components/masters/organization_masters/internet_connection_type/list_internetconn_type.vue').default },
+                    { path: '/create_internetconn_type',name:'create_internetconn_type', component: require('./components/masters/organization_masters/internet_connection_type/create_internetconn_type.vue').default },
+                    { path: '/edit_internetconn_type',name:'edit_internetconn_type', component: require('./components/masters/organization_masters/internet_connection_type/edit_internetconn_type.vue').default },
+                  ]     
+              },
+              { path: '/internet_accessible_index',  
+                component: require('./components/masters/organization_masters/Internet_accessible/internet_accessible_index.vue').default ,
+                  children: [
+                    { path: '/',name:'internet_accessible_index', component: require('./components/masters/organization_masters/Internet_accessible/list_internet_accessible.vue').default },
+                    { path: '/list_internet_accessible',name:'list_internet_accessible', component: require('./components/masters/organization_masters/Internet_accessible/list_internet_accessible.vue').default },
+                    { path: '/create_internet_accessible',name:'create_internet_accessible', component: require('./components/masters/organization_masters/Internet_accessible/create_internet_accessible.vue').default },
+                    { path: '/edit_internet_accessible',name:'edit_internet_accessible', component: require('./components/masters/organization_masters/Internet_accessible/edit_internet_accessible.vue').default },
+                  ]     
+              },
               
 
 
@@ -488,16 +506,17 @@ const routes = [
                     { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
                 ]    
             },
-            { path: '/connectivity', name:'connectivity', 
-                component: require('./components/organization/general/connectivity.vue').default,
+            { path: '/connectivity_details', name:'connectivity_details', 
+                component: require('./components/organization/general/connectivity/index_connectivity.vue').default, 
                 children: 
                 [
-                    { path: '',name:'location_index', component: require('./components/masters/organization_masters/location/location_list.vue').default },
-                    { path: '/location_add', name:'LocationAdd', component: require('./components/masters/organization_masters/location/location_add.vue').default },
-                    { path: '/location_edit', name:'LocationEdit', component: require('./components/masters/organization_masters/location/location_edit.vue').default },
-                    { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
+                    { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
+                    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
+                    { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+                    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
                 ]    
             },
+
             { path: '/org_class_mapping', name:'org_class_mapping', 
                 component: require('./components/organization/general/org_class_mapping.vue').default,
                 children: 
@@ -756,20 +775,13 @@ const routes = [
             { path: '/list_location_details', name:'list_location_details', component: require('./components/organization/general/location_details/list_location_details.vue').default },
           ] 
         },
-        { path: '/compound_details', 
-          component: require('./components/organization/general/compound_details/compound_details.vue').default ,
-          children: [
-            { path: '',name:'compound_details', component: require('./components/organization/general/compound_details/list_compound_details.vue').default },
-            { path: '/add_compound_details', name:'add_compound_details', component: require('./components/organization/general/compound_details/add_compound_details.vue').default },
-            { path: '/edit_compound_details', name:'edit_compound_details', component: require('./components/organization/general/compound_details/edit_compound_details.vue').default },
-            { path: '/list_compound_details', name:'list_compound_details', component: require('./components/organization/general/compound_details/list_compound_details.vue').default },
-          ] 
-        },
+        
+        
       ] 
     },
 
 
-    //New Routes for change in Details (restructuring)    
+    //New Routes for Connectivity    
     // { path: '/restructuringnew_index', 
     //   component: require('./components/organization/restructuring/change_details/restructuringnew_index.vue').default,
     //     children:[

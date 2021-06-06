@@ -173,6 +173,10 @@ Route::prefix('organization')->group(function () {
     Route::get('/getServiceProviderDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getServiceProviderDropdown'])->name('getServiceProviderDropdown');
     Route::get('/getServiceProviderDropdown1', [App\Http\Controllers\organization\GeneralInfoController::class, 'getServiceProviderDropdown1'])->name('getServiceProviderDropdown1');
     Route::get('/getContactTypeDropdown', [App\Http\Controllers\organization\GeneralInfoController::class, 'getContactTypeDropdown'])->name('getContactTypeDropdown');
+    
+    //new connectivity Route
+    Route::post('/saveConnectivityDetails', [App\Http\Controllers\organization\ConnectivityController::class, 'saveConnectivityDetails'])->name('saveConnectivityDetails');
+    Route::get('/loadConnectivityInformation', [App\Http\Controllers\organization\ConnectivityController::class, 'loadConnectivityInformation'])->name('loadConnectivityInformation');
 
     //location
     Route::post('/saveLocation', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveLocation'])->name('saveLocation');

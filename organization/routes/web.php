@@ -30,7 +30,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadDisaster', 'Masters\DisasterController@loadDisaster');
         $router->post('/saveDisaster', 'Masters\DisasterController@saveDisaster');
 
-
     });
     $router->group(['prefix' => 'masters/location'], function () use ($router) {
         // location route
@@ -193,6 +192,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'visitor'], function () use ($router) {
             $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
             $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
+        });
+        $router->group(['prefix' => 'connectivity'], function () use ($router) {
+            $router->post('/saveConnectivityDetails', 'generalInformation\VariousConnectivityController@saveConnectivityDetails');
+            $router->get('/loadConnectivityInformation/{orgId}', 'generalInformation\VariousConnectivityController@loadConnectivityInformation');
+           
         });
 
         $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
