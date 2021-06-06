@@ -81,6 +81,7 @@ class CommonController extends Controller{
                     $response_data=DB::select($result_data);;
                 }else{
                     foreach($screen_status as $i => $srcn){
+                        return $srcn['Establishment_type'];
                         if(isset($srcn['Establishment_type'])){
                             $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR '; 
                             $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')'; 
@@ -92,7 +93,7 @@ class CommonController extends Controller{
                             } 
                         }
                     }
-                    // return $result_data;
+                    return $result_data;
                     $response_data=DB::select($result_data);
                 }
             }

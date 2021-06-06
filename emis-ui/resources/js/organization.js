@@ -676,7 +676,15 @@ const routes = [
           children: [
             { path: '/',name:'closure_index', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
             { path: '/closure_list',name:'closure_list', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
-            { path: '/closure', name:'ClosureAdd', component: require('./components/organization/restructuring/closure/closure.vue').default },
+            { path: '/closure', name:'closure', component: require('./components/organization/restructuring/closure/closure.vue').default },
+          ]    
+        },
+        { path: '/reopening_index', 
+          component: require('./components/organization/restructuring/reopening_public/reopening_index.vue').default ,
+          children: [
+            { path: '/',name:'reopening_index', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
+            { path: '/reopening_add',name:'reopening_add', component: require('./components/organization/restructuring/reopening_public/reopening_add.vue').default },
+            { path: '/reopening_list', name:'reopening_list', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
           ]    
         },
       ] 
