@@ -847,7 +847,7 @@ const routes = [
         { path: '/eccd_index', 
         component: require('./components/organization/structuralFacility/eccd_facilities/eccd_index.vue').default ,
         children: [
-          { path: '',name:'eccd_index', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
+          { path: '',name:'eccd_index', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_add.vue').default },
           { path: '/eccd_add', name:'EccdAdd', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_add.vue').default },
           { path: '/eccd_edit', name:'EccdEdit', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_edit.vue').default },
           { path: '/eccd_list', name:'EccdList', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
