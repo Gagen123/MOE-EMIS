@@ -270,7 +270,7 @@
                             </div>
 
 
-                            <div v-if="appicationDetails.application_type=='level_change'">
+                            <div v-if="appicationDetails.application_type=='level_change' || appicationDetails.application_type=='stream_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Proposed Level:</label>

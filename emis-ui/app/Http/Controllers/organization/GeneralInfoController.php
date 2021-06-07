@@ -397,7 +397,7 @@ class GeneralInfoController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
-        // dd($org_details);
+        dd($org_details);
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
         return $response_data;
     }

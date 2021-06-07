@@ -83,6 +83,11 @@ class RestructuringController extends Controller
                 $establishment_data = $this->setBoadring($request);
                 break;
             }
+            case "stream_change" : {
+                $validation = $this->validateGeneralChange($request);
+                $establishment_data = $this->setchangeofstream($request);
+                break;
+            }
             case "all_details" : {
                     $validation = $this->validateAllChangesFields($request);
                     $establishment_data = $this->setAllChangesFields($request);
@@ -695,7 +700,7 @@ class RestructuringController extends Controller
         //get submitter role
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            // dd($workflowdet);
+            // dd($workflowdet,$response_data);
             $screen_id="";
             $status="";
             $screen_name="";
@@ -1101,6 +1106,25 @@ class RestructuringController extends Controller
          * application_for:'Change in Level', action_type:'add', status:'pending'
          */
 
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'level_change'              =>  $request['level_change'],
+            'level'                     =>  $request['level'],
+            'class'                     =>  $request['class'],
+            'stream'                    =>  $request['stream'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'app_level_change_id'       =>  $request['app_level_change_id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+    
+    private function setchangeofstream($request){
         $change =[
             'organizationId'            =>  $request['organizationId'],
             'level_change'              =>  $request['level_change'],

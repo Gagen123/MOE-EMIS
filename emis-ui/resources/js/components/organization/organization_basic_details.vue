@@ -44,8 +44,8 @@
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Is Resource Center:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="0" tabindex=""/> No</label>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -156,7 +156,7 @@
                                                 <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                                     <thead>
                                                         <tr>
-                                                            <th>Contact of</th>
+                                                            <!-- <th>Contact of</th> -->
                                                             <th>Phone</th>
                                                             <th>Mobile</th>
                                                             <th>Email</th>                            
@@ -164,29 +164,29 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr id="record1" v-for='(user, index) in form.users' :key="index">
-                                                            <td>
-                                                                <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_err('contactName')">
+                                                            <!-- <td>
+                                                                <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_error('contactName')">
                                                                     <option value="">--- Please Select ---</option>
                                                                     <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                                 </select>
                                                                 <has-error :form="form" field="user.contactName"></has-error>
-                                                            </td>
+                                                            </td> -->
                                                             <td>                                
                                                                 <!-- <input type="number" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
                                                                 <has-error :form="form" field="phone"></has-error> -->
                                                                
                                                                 <input name="phone"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "6"
-                                                                @change="remove_error('phone')" v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" class="form-control"  id="phone" >
+                                                                @change="remove_error('phone')" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" class="form-control"  id="phone" >
                                                                 <has-error :form="form" field="phone"></has-error>
                                                             </td>
                                                             <td>                                
                                                                 <!-- <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/> -->
                                                                 <input name="mobile"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "8"
-                                                                @change="remove_error('mobile')" v-model="form.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" class="form-control"  id="mobile" >
+                                                                @change="remove_error('mobile')" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" class="form-control"  id="mobile" >
                                                                 <has-error :form="form" field="mobile"></has-error>
                                                             </td>
                                                             <td>                                
-                                                                <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_err('email')"/>
+                                                                <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_error('email')"/>
                                                                  <has-error :form="form" field="email"></has-error>
                                                             </td>
                                                         </tr> 
@@ -312,20 +312,20 @@
                     console.log("Error: "+error);
                 });
             },
+            remove_error(err){
+                if($('#'+err).val()!=""){
+                    $('#'+err).html('');
+                }
+            },
             updateorg(){
                 this.form.post('organization/updateOrgBasicDetials')
                 .then((response) => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Basic Details has been saved successfully'
-                    })
+                    this.loadexsitingDetails();
+                    alert(response);
                 })
-                .catch((error) => {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Unexpected error occured:'+error
-                    });
-                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
             },
             getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
             axios.get(uri)
@@ -390,6 +390,17 @@
                   this.form.users.splice(index,1); 
                 }
             },
+            loadexsitingDetails(){
+                axios.get('common/getSessionDetail')
+                .then(response =>{
+                    let data = response.data.data;
+                    this.form.org_id=data['Agency_Code'];
+                    this.getorgProfile(data['Agency_Code']);
+                })    
+                .catch(errors =>{ 
+                    console.log(errors)
+                });
+            }
             
         },
         mounted(){
@@ -399,16 +410,7 @@
             this.loadfencingList();
             this.loadDisasterList();
             this.loadlcimateTypeList();
-            axios.get('common/getSessionDetail')
-            .then(response =>{
-                let data = response.data.data;
-                this.form.org_id=data['Agency_Code'];
-                this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
-                console.log(errors)
-            });
-            
+            this.loadexsitingDetails();
         }
     }
 </script>

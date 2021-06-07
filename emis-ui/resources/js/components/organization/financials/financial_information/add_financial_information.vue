@@ -54,7 +54,6 @@ export default {
         }
     },
     methods: {
-
         loadtypeList(){
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
