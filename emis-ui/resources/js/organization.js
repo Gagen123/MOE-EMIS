@@ -11,6 +11,15 @@ const routes = [
                     { path: '/edit_org_service', name:'edit_org_service', component: require('./components/masters/organization_masters/service/edit_service.vue').default },
                   ]    
               },
+              { path: '/income_facility_index',  
+                component: require('./components/masters/organization_masters/income_facility/income_facility_index.vue').default ,
+                  children: [
+                    { path: '/',name:'income_facility_index', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
+                    { path: '/list_income_facility',name:'list_income_facility', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
+                    { path: '/create_income_facility',name:'create_income_facility', component: require('./components/masters/organization_masters/income_facility/create_income_facility.vue').default },
+                    { path: '/edit_income_facility',name:'edit_income_facility', component: require('./components/masters/organization_masters/income_facility/edit_income_facility.vue').default },
+                  ]     
+              },
               { path: '/department_index', 
                   component: require('./components/masters/organization_masters/department/department_index.vue').default ,
                   children: 
@@ -182,6 +191,15 @@ const routes = [
                     { path: '/furniture_usage_list', name:'furniture_usage_list', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_list.vue').default },
                 ]    
             },
+            { path: '/financial_information_index',  
+              component: require('./components/masters/organization_masters/financial_information/financial_information_index.vue').default ,
+              children: [
+                { path: '/',name:'financial_information_index', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
+                { path: '/list_financial_information',name:'list_financial_information', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
+                { path: '/create_financial_information',name:'create_financial_information', component: require('./components/masters/organization_masters/financial_information/create_financial_information.vue').default },
+                { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
+              ]     
+            }, 
             { path: '/sport_facility_index', 
                 component: require('./components/masters/organization_masters/sport_facility/sport_facility_index.vue').default ,
                 children: 
@@ -736,24 +754,8 @@ const routes = [
     // Organisational Routes (structural facility route)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
-        { path: '/income_facility_index',  
-            component: require('./components/masters/organization_masters/income_facility/income_facility_index.vue').default ,
-              children: [
-                { path: '/',name:'income_facility_index', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
-                { path: '/list_income_facility',name:'list_income_facility', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
-                { path: '/create_income_facility',name:'create_income_facility', component: require('./components/masters/organization_masters/income_facility/create_income_facility.vue').default },
-                { path: '/edit_income_facility',name:'edit_income_facility', component: require('./components/masters/organization_masters/income_facility/edit_income_facility.vue').default },
-              ]     
-          },
-          { path: '/financial_information_index',  
-            component: require('./components/masters/organization_masters/financial_information/financial_information_index.vue').default ,
-              children: [
-                { path: '/',name:'financial_information_index', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
-                { path: '/list_financial_information',name:'list_financial_information', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
-                { path: '/create_financial_information',name:'create_financial_information', component: require('./components/masters/organization_masters/financial_information/create_financial_information.vue').default },
-                { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
-              ]     
-          }, 
+        
+          
         { path: '/infrastructure_index', 
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [

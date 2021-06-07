@@ -303,9 +303,11 @@ class GeneralInfoController extends Controller
             'class'         =>  $request['class'],
             'stream'        =>  $request['stream'],
             'sections'      =>  $request['sections'],
+            'multiAgeId'      =>  $request['multiAgeId'],
             'user_id'       =>  $this->userId(),
             'id'            =>  $request['id'],
         ];
+        // dd($class_section);
         $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $class_section);
         return $response_data;
     }

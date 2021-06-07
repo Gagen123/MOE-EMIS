@@ -132,7 +132,7 @@
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>                                
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
@@ -408,6 +408,20 @@ export default {
          */
         shownexttab(nextclass){ 
             if(nextclass=="final-tab"){ 
+                let validated=true;
+                let clasArray=[];
+                $("input[name='class']:checked").each( function () {
+                    clasArray.push($(this).val());
+                });
+                if(clasArray.length<1){
+                    Swal.fire({
+                        text: "Please select Age group?",
+                        icon: 'info',
+                        confirmButtonText: 'OK',
+                        showCancelButton: true,
+                    });
+                    validated=false;
+                }
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -416,7 +430,7 @@ export default {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
-                    if (result.isConfirmed) {
+                    if (result.isConfirmed && validated) {
                         this.classForm.post('organization/saveClassStream')
                         .then((response) => {
                             if(response.data=="No Screen"){
@@ -447,7 +461,7 @@ export default {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
                             this.classForm.application_number=response.data.data.applicaiton_details.application_no;
-                            this.loadpendingdetails('Public_ECCD');
+                            // this.loadpendingdetails('Public_ECCD');
                             this.change_tab(nextclass);
                         }
                     })
@@ -458,33 +472,48 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
+                    let clasArray=[];
+                    $("input[name='attachment']:checked").each( function () {
+                        clasArray.push($(this).val());
+                    });
+                    if(clasArray.length<1){
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
                         }
+                        let formData = new FormData();
+                        formData.append('id', this.file_form.id);
+                        formData.append('ref_docs[]', this.file_form.ref_docs);
+                        for(let i=0;i<this.file_form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                            // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
+                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                        }
+                        formData.append('application_number', this.file_form.application_number);
+                        
+                        axios.post('organization/saveUploadedFiles', formData, config)
+                        // this.file_form.post('organization/saveUploadedFiles',this.form)
+                        .then((response) => {
+                            if(response.data!=""){
+                                this.change_tab(nextclass);
+                            }
+                        })
+                        .catch((error) => {
+                        this.applyselect2();
+                            this.change_tab('organization-tab');
+                            console.log("Error:"+error)
+                        })
                     }
-                    let formData = new FormData();
-                    formData.append('id', this.file_form.id);
-                    formData.append('ref_docs[]', this.file_form.ref_docs);
-                    for(let i=0;i<this.file_form.ref_docs.length;i++){
-                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                        // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
-                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                    else{
+                        Swal.fire({
+                            text: "Please attach files ",
+                            icon: 'info',
+                            confirmButtonText: 'OK',
+                            showCancelButton: true,
+                        });
                     }
-                    formData.append('application_number', this.file_form.application_number);
                     
-                    axios.post('organization/saveUploadedFiles', formData, config)
-                    // this.file_form.post('organization/saveUploadedFiles',this.form)
-                    .then((response) => {
-                        if(response.data!=""){
-                            this.change_tab(nextclass);
-                        }
-                    })
-                    .catch((error) => {
-                       this.applyselect2();
-                        this.change_tab('organization-tab');
-                        console.log("Error:"+error)
-                    })
                 }else{
                     this.change_tab(nextclass);
                 }

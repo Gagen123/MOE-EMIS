@@ -35,7 +35,7 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                <input type="number" max="11" min="11" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
                                 <has-error :form="form" field="proprietorCid"></has-error>
                             </div> 
                         </div>
@@ -168,7 +168,7 @@
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>                                
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachment" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
@@ -530,10 +530,26 @@ export default {
                     }
                 }
                 if(nextclass=="final-tab"){
-                    status="Are you sure you wish to submit this application for further approval ? ";
-                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    let clasArray=[];
+                    $("input[name='class']:checked").each( function () {
+                        clasArray.push($(this).val());
+                    });
+                    if(clasArray.length<1){
+                        Swal.fire({
+                            text: "Please select Age group ",
+                            icon: 'info',
+                            confirmButtonText: 'OK',
+                            showCancelButton: true,
+                        });
+                        subform=false;
+                    }
+                    else{
+                        status="Are you sure you wish to submit this application for further approval ? ";
+                        message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    }
                 }
                 if(subform){
+                    
                     Swal.fire({
                         text: status,
                         icon: 'info',
@@ -581,36 +597,52 @@ export default {
                         }
                     })
                     .catch((error) => {
-                       this.applyselect2();
+                    this.applyselect2();
                         this.change_tab('organization-tab');
                         console.log("Error:"+error)
                     })
+                    
                 }
                 else if(nextclass=="class-tab"){
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
+                    let clasArray=[];
+                    $("input[name='attachment']:checked").each( function () {
+                        clasArray.push($(this).val());
+                    });
+                    if(clasArray.length<1){
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
                         }
-                    }
-                    let formData = new FormData();
-                    formData.append('id', this.file_form.id);
-                    formData.append('ref_docs[]', this.file_form.ref_docs);
-                    for(let i=0;i<this.file_form.ref_docs.length;i++){
-                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
-                    }
-                    formData.append('application_number', this.file_form.application_number);
-                    axios.post('organization/saveUploadedFiles', formData, config)
-                    .then((response) => {
-                        if(response.data!=""){
-                            this.change_tab(nextclass);
+                        let formData = new FormData();
+                        formData.append('id', this.file_form.id);
+                        formData.append('ref_docs[]', this.file_form.ref_docs);
+                        for(let i=0;i<this.file_form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
                         }
-                    })
-                    .catch((error) => {
-                       this.applyselect2();
-                        this.change_tab('organization-tab');
-                        console.log("Error:"+error)
-                    })
+                        formData.append('application_number', this.file_form.application_number);
+                        axios.post('organization/saveUploadedFiles', formData, config)
+                        .then((response) => {
+                            if(response.data!=""){
+                                this.change_tab(nextclass);
+                            }
+                        })
+                        .catch((error) => {
+                        this.applyselect2();
+                            this.change_tab('organization-tab');
+                            console.log("Error:"+error)
+                        })
+                    }
+                    else{
+                        Swal.fire({
+                            text: "Please attach files ",
+                            icon: 'info',
+                            confirmButtonText: 'OK',
+                            showCancelButton: true,
+                        });
+                    }
+                    
                 }else{
                     this.change_tab(nextclass);
                 }
