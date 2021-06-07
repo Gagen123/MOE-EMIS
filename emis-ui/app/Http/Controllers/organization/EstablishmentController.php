@@ -61,13 +61,12 @@ class EstablishmentController extends Controller
                     break;
                 }
             case "public_ecr" : {
-                    $this->service_name = "Public ECR";
-                    $validation = $this->validatePublicEccdFields($request);
-                    $establishment_data = $this->setPublicEccdFields($request);
-                    break;
-                }
+                $this->service_name = "Public ECR";
+                $validation = $this->validatePublicEccdFields($request);
+                $establishment_data = $this->setPublicEccdFields($request);
+                break;
+            }
             default : {
-                
                 break;
             }
         }

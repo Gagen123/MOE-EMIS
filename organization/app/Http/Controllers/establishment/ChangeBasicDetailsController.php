@@ -71,6 +71,11 @@ class ChangeBasicDetailsController extends Controller
                         $change_details_data = $this->extractChangeInLevelData($request, $applicationDetailsId);
                         break;
                     }
+                case "stream_change" : {
+                    $change_details_data = $this->extractChangeInStreamData($request, $applicationDetailsId);
+                    break;
+                }
+                    
                 case "proprietor_change" : {
                         $change_details_data = $this->extractChangeInPropreitorData($request, $applicationDetailsId);
                         break;
@@ -460,6 +465,57 @@ class ChangeBasicDetailsController extends Controller
 
         return $changeDetails;
     }
+    
+    private function extractChangeInStreamData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'      => $applicationDetailsId,
+            'organizationId'            =>  $request['organizationId'],
+            'change_type'              =>  $request['application_for'],
+            'proposedChange'               =>  $request['level'],
+            'created_by'                   =>  $request['user_id']  
+        ];
+
+        $changeDetails = ApplicationEstDetailsChange::create($data);
+        $EstDetailsChangeId = $changeDetails->id;
+
+        if($request->class){
+            foreach($request->class as $key => $classId){
+                $stream_exists = $this->checkStreamExists($classId);
+                
+                if(empty($stream_exists)){
+    
+                    $classStream = [
+                        'ApplicationDetailsId'  => $EstDetailsChangeId,
+                        'classId'               => $classId,
+                        'streamId'              => '',
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    
+                    $class = ApplicationClassStream::create($classStream);
+    
+                } 
+            }
+        }
+        
+        if($request->stream!=null && $request->stream!=""){
+            foreach($request->stream as $key2 => $classStreamId){
+                $class_stream_data = $this->getClassStreamId($classStreamId);
+    
+                foreach($class_stream_data as $v){
+                    $classStream = [
+                        'ApplicationDetailsId'  => $EstDetailsChangeId,
+                        'classId'               => $v->classId,
+                        'streamId'              => $v->streamId,
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    $class = ApplicationClassStream::create($classStream);
+                }
+            }
+        }
+        return $changeDetails;
+    }
 
     /**
      * Check whether a class has streams or not
@@ -704,7 +760,7 @@ class ChangeBasicDetailsController extends Controller
             if($response_data->application_type=="proprietor_change"){
                 $response_data->change_prop=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_det->id)->first();
             }
-            if($response_data->application_type=="level_change"){
+            if($response_data->application_type=="level_change" || $response_data->application_type=="stream_change"){
                 $response_data->change_classes = DB::table('classes as c')
                 ->join('application_class_stream as cl', 'c.id', '=', 'cl.classId')
                 ->select('cl.*', 'c.class', 'c.id AS classId')
@@ -856,7 +912,11 @@ class ChangeBasicDetailsController extends Controller
                     break;
                 }
                 case "level_change" : {
-                    $change_details_data = $this->updateLevel($change_details,  $org_details, $request);
+                    $change_details_data = $this->updateLevel($change_details,  $org_details, $request,'level_change');
+                    break;
+                }
+                case "stream_change" : {
+                    $change_details_data = $this->updateLevel($change_details,  $org_details, $request,'stream_change');
                     break;
                 }
                 case "location_type_change" : {
@@ -1026,14 +1086,14 @@ class ChangeBasicDetailsController extends Controller
         return $propDetails;
     }
     
-    private function updateLevel($change_details, $org_details,$request){
+    private function updateLevel($change_details, $org_details,$request,$type){
         $org_data=[
             'id'                        =>  $org_details->id,
             'levelId'                   =>  $org_details->levelId,
             'updated_by'                =>  $org_details->updated_by,
             'updated_at'                =>  $org_details->updated_at,
             'recorded_on'               =>  date('Y-m-d h:i:s'),
-            'recorded_for'              =>  'Change in Level', 
+            'recorded_for'              =>  $type, 
             'recorded_by'               =>  $request->user_id, 
         ];
         HistoryForOrganizaitonDetail::create($org_data);

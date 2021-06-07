@@ -63,7 +63,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="mb-0">Selected classes and streams:<span class="text-danger">*</span></label>
+                                        <label class="mb-0">Classes and streams:<span class="text-danger">*</span></label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -73,7 +73,6 @@
                                                 <tr>
                                                     <th>Classes</th>
                                                     <th class="existstrm_clas">Stream</th>  
-                                                    <th></th>                     
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -85,12 +84,6 @@
                                                         {{  streamArray[item.streamId]  }}
                                                     </td>
                                                     <td class="existstrm_clas" v-else> </td>
-                                                    <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                        <input type="checkbox"  :id="item.id" :value="item.id">
-                                                    </td>
-                                                    <td v-else>  
-                                                        <input type="checkbox" checked="true">                           
-                                                    </td>
                                                 </tr> 
                                             </tbody>
                                         </table>
