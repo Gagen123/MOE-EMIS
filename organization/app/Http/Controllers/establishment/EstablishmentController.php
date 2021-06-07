@@ -950,7 +950,9 @@ class EstablishmentController extends Controller
     }
     
     public function updateOrgBasicDetials(Request $request){
+
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
+
         $org_data =[
             'id'                        =>  $org_det->id,
             'isAspNetSchool'            =>  $org_det->isAspNetSchool,
@@ -965,7 +967,9 @@ class EstablishmentController extends Controller
             'recorded_for'              =>  'Basic Detials Update', 
             'recorded_by'               =>  $request->user_id, 
         ];
+
         HistoryForOrganizaitonDetail::create($org_data); //pushing in history
+
         $org_update_data = [
             'isAspNetSchool'            =>  $request['isAspNetSchool'],
             'isColocated'               =>  $request['isColocated'],
@@ -978,27 +982,37 @@ class EstablishmentController extends Controller
             'updated_by'                =>  $request['user_id'],
             'updated_at'                =>  date('Y-m-d h:i:s')
         ];
+
         OrganizationDetails::where('id',$request->org_id)->update($org_update_data);
+
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
+
+        /**
+         * all the commented fields are the ones missing from the database
+         * Note to those looking at this function
+        */
+
         $location = [
             'organizationId'        =>  $request->org_id,
             'landOwnership'         =>  $request['landOwnership'],
-            'compoundFencing'       =>  $request['compoundFencing'],
+            //'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
             'longitude'             =>  $request['longitude'],
             'latitude'              =>  $request['latitude'],
             'altitude'              =>  $request['altitude'],
-            'thramNo'               =>  $request['thramNo'],
-            'cid'                   =>  $request['cid'],
-            'name'                  =>  $request['name'],
-            'compoundArea'          =>  $request['compoundArea'],
+            //'thramNo'               =>  $request['thramNo'],
+            // 'cid'                   =>  $request['cid'],
+            // 'name'                  =>  $request['name'],
+            // 'compoundArea'          =>  $request['compoundArea'],
             'googleMapPath'         =>  $request['map_path'],
-            'climate_type'          =>  $request['climate_type'],
-            'disasterArea'          =>  implode($request['disasterArea'],', '),
-            'distance_from_dzo'     =>  $request['distance_from_dzo'],
-            'fencingtypeId'           =>  $request['fencingtype'],
+            // 'climate_type'          =>  $request['climate_type'],
+            //'disasterArea'          =>  implode($request['disasterArea'],', '),
+            'distanceFromDzongkhag'     =>  $request['distance_from_dzo'],
+            //'fencingtypeId'           =>  $request['fencingtype'],
         ];
+
         $loc = Locations::where('organizationId', $request->org_id)->first();
+
         if($loc!=null && $loc!=""){
             $location = $location+[
                 'updated_by'            =>  $request->user_id,
@@ -1011,23 +1025,85 @@ class EstablishmentController extends Controller
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];
+            try{
+                Locations::create($location); 
+    
+                } catch(\Illuminate\Database\QueryException $ex){ 
+                    dd($ex->getMessage()); 
+                    // Note any method of class PDOException can be called on $ex.
+                }
             Locations::create($location); 
         }
-        foreach ($request->input('users') as $i=> $user){
-            $contact_details = array(
-                'organizationId'    =>  $request->org_id,
-                'contactTypeId'     =>  $user['contactName'],
-                'phone'             =>  $user['phone'],
-                'mobile'            =>  $user['mobile'],
-                'email'             =>  $user['email'],
-                'type'              =>  2,
-                'created_by'        =>  $request->user_id,
-                'created_at'        =>  date('Y-m-d h:i:s')
-        );
-            $org_det = ContactDetails::create($contact_details);
-        }
+
+        //Contact details is no longer an add more array
+        //also the contact details and table have been changed
+
+        // foreach ($request->input('users') as $i=> $user){
+        //     $contact_details = array(
+        //         'organizationId'    =>  $request->org_id,
+        //         'contactTypeId'     =>  $user['contactName'],
+        //         'phone'             =>  $user['phone'],
+        //         'mobile'            =>  $user['mobile'],
+        //         'email'             =>  $user['email'],
+        //         'type'              =>  2,
+        //         'created_by'        =>  $request->user_id,
+        //         'created_at'        =>  date('Y-m-d h:i:s')
+        // );
+        //     $org_det = ContactDetails::create($contact_details);
+        // }
         
         return $this->successResponse($org_det, Response::HTTP_CREATED);
+    }
+
+    //New function to add basic details
+
+    public function updateBasicDetails(Request $request){
+
+        $org_details =[
+            'mofCode'           =>  $request['mofCode'],
+            'contactNo'         =>  $request['contactNo'],
+            'officialWebsite'   =>  $request['officialWebsite'],
+            'officialEmail'     =>  $request['officialEmail'],
+            'facebookLink'      =>  $request['facebookLink'],
+            'user_id'           =>  $request['user_id'],
+            'org_id'            =>  $request['org_id']
+        ];
+
+        $org_update_data =[
+            'mofCode'           =>  $request['mofCode'],
+            'zestAgencyCode'    =>  $request['zestAgencyCode'],
+        ];
+
+        OrganizationDetails::where('id',$request->org_id)->update($org_update_data);
+
+        $org_det=OrganizationDetails::where('id',$request->org_id)->first();
+
+        $contact_details = [
+            'phone'         =>  $request['contactNo'],
+            'website'   =>  $request['officialWebsite'],
+            'email'     =>  $request['officialEmail'],
+            'facebookLink'      =>  $request['facebookLink'],
+            'organizationId'            =>  $request['org_id']
+        ];
+
+        $contact = ContactDetails::where('organizationId', $request->org_id)->first();
+
+        if($contact!=null && $contact!=""){
+            $contact_details = $contact_details+[
+                'updated_by'            =>  $request->user_id,
+                'updated_at'            =>  date('Y-m-d h:i:s')
+            ];
+            $response_data = ContactDetails::where('organizationId', $request->org_id)->update($location);
+        }
+        else{
+            $contact_details = $contact_details+[
+                'created_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
+            ];
+            $response_data = ContactDetails::create($contact_details);
+        }
+
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
     public function loaddraftApplication($type="",$user_id=""){

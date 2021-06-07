@@ -775,7 +775,11 @@ const routes = [
     { path: '/mission_vission',name:'mission_vission', component: require('./components/organization/organization_profile_update.vue').default },
     { path: '/organization_list',name:'organization_list', component: require('./components/organization/organization_list.vue').default },
     { path: '/view_organization_profile',name:'view_organization_profile', component: require('./components/organization/view_organization_profile.vue').default },
+    { path: '/view_dzongkhag_profile',name:'view_dzongkhag_profile', component: require('./components/organization/view_dzongkhag_profile.vue').default },
+    { path: '/view_department_profile',name:'view_department_profile', component: require('./components/organization/view_department_profile.vue').default },
     { path: '/basic_details_index',name:'basic_details_index', component: require('./components/organization/organization_basic_details.vue').default },
+    { path: '/detailed_information_eccd',name:'detailed_information_eccd', component: require('./components/organization/detailed_information_eccd.vue').default },
+    { path: '/detailed_information_school',name:'detailed_information_school', component: require('./components/organization/detailed_information_school.vue').default },
     { path: '/org_class_section',name:'org_class_section', component: require('./components/organization/general/org_class_mapping.vue').default },
          //new routes for change in details (restructuring)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,

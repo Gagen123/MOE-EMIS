@@ -373,36 +373,7 @@ class RestructuringController extends Controller
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
-        
-        // $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-        // dd($workflowdet);
-        // $screen_id="";
-        // $status="";
-        // $app_role="";
-        // foreach($workflowdet as $work){
-        //     if(strpos(strtolower($work->screenName),'merge')!==false){
-        //         $screen_id=$work->SysSubModuleId;
-        //         $status=$work->Sequence;
-        //         $app_role=$work->SysRoleId;
-        //     }
-        // }
-        // // $workflowdet=$this->getsubmitterStatus('merge');
-        // $workflow_data=[
-        //     'db_name'           =>$this->database_name,
-        //     'table_name'        =>$this->bif_table_name,
-        //     'service_name'      =>'Merger',
-        //     'application_number'=>json_decode($response_data)->data->application_no,
-        //     'screen_id'         => $screen_id,
-        //     'status_id'         =>$status,
-        //     'app_role_id'       => $app_role,
-        //     'remarks'           =>null,
-        //     'user_dzo_id'       =>$this->getUserDzoId(),
-        //     'access_level'      =>$this->getAccessLevel(),
-        //     'working_agency_id' =>$this->getWrkingAgencyId(),
-        //     'action_by'         =>$this->userId(),
-        // ];
-        // // dd($workflow_data);
-        // $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
         return $response_data;
     }
 
@@ -442,9 +413,17 @@ class RestructuringController extends Controller
         // $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
     }
+
+    /**
+     * Ugyen's old function name.
+     * Method has been changed to new function written by Tshewang
+     */
     
     public function updateMergerApplication(Request $request){
-        $work_status=$request->work_status;
+        //updating the work flow and status
+        
+        $org_status='Verified';
+        $work_status=$request->sequence;
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -454,11 +433,11 @@ class RestructuringController extends Controller
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
-            'table_name'        =>$this->bif_table_name,
-            'service_name'      =>$this->bif_service_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$request->service_name,
             'application_number'=>$request->applicationNo,
-            'screen_id'         =>$request->screen_id,
-            'status_id'         =>$work_status,
+            'screen_id'         =>$request->screen_id,//pulled while loading details for verification
+            'status_id'         =>$work_status,//pulled while loading details for verification
             'remarks'           =>$request->remarks,
             'user_dzo_id'       =>$this->getUserDzoId(),
             'access_level'      =>$this->getAccessLevel(),
@@ -467,14 +446,44 @@ class RestructuringController extends Controller
         ];
         // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'MergerVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
+        
+        //change the following for each type of application
+        
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
             'remarks'                      =>   $request->remarks,
+            'attachment_details'           =>   $attachment_details,
             'user_id'                      =>   $this->userId() 
         ];
-        $response_data= $this->apiService->createData('emis/organization/merger/updateMergerApplication', $estd);
-        // dd($response_data);
+        $response_data= $this->apiService->createData('emis/organization/merger/updateMergerDetails', $estd);
         return $work_response_data;
     }
 
@@ -602,9 +611,10 @@ class RestructuringController extends Controller
     }
 
     public function updateClosureApplication(Request $request){
-        $workflowdet=$this->getcurrentworkflowStatusForUpdate('closure');
-        $work_status=$workflowdet['status'];
-        $org_status='Under Process';
+        //updating the work flow and status
+        
+        $org_status='Verified';
+        $work_status=$request->sequence;
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -615,10 +625,10 @@ class RestructuringController extends Controller
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name_closure,
+            'service_name'      =>$request->service_name,
             'application_number'=>$request->applicationNo,
-            'screen_id'         =>$workflowdet['screen_id'],
-            'status_id'         =>$work_status,
+            'screen_id'         =>$request->screen_id,//pulled while loading details for verification
+            'status_id'         =>$work_status,//pulled while loading details for verification
             'remarks'           =>$request->remarks,
             'user_dzo_id'       =>$this->getUserDzoId(),
             'access_level'      =>$this->getAccessLevel(),
@@ -627,15 +637,52 @@ class RestructuringController extends Controller
         ];
         // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        $closure =[
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'MergerVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
+        
+        //change the following for each type of application
+        
+        $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
-            'remarks'                      =>   $request->yourRemark,
+            'remarks'                      =>   $request->remarks,
+            'attachment_details'           =>   $attachment_details,
             'user_id'                      =>   $this->userId() 
         ];
-        // dd($closure);
-        $response_data= $this->apiService->createData('emis/organization/closure/updateClosure', $closure);
+        $response_data= $this->apiService->createData('emis/organization/closure/updateClosureDetails', $estd);
+        // dd($response_data);
         return $work_response_data;
+
+        //Ugyen's old route
+        
+        // // dd($closure);
+        // $response_data= $this->apiService->createData('emis/organization/closure/updateClosure', $closure);
+        // return $work_response_data;
     }
 
     public function saveBifurcation(Request $request){
@@ -766,8 +813,10 @@ class RestructuringController extends Controller
     }
 
     public function updateBifurcationApplication(Request $request){
-        $org_status='Under Process';
-        $work_status=$request->work_status;
+        //updating the work flow and status
+        
+        $org_status='Verified';
+        $work_status=$request->sequence;
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -777,11 +826,11 @@ class RestructuringController extends Controller
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
-            'table_name'        =>$this->bif_table_name,
-            'service_name'      =>$this->bif_service_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$request->service_name,
             'application_number'=>$request->applicationNo,
-            'screen_id'         =>$request->screen_id,
-            'status_id'         =>$work_status,
+            'screen_id'         =>$request->screen_id,//pulled while loading details for verification
+            'status_id'         =>$work_status,//pulled while loading details for verification
             'remarks'           =>$request->remarks,
             'user_dzo_id'       =>$this->getUserDzoId(),
             'access_level'      =>$this->getAccessLevel(),
@@ -790,15 +839,50 @@ class RestructuringController extends Controller
         ];
         // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        $bifurcation =[
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'BifurcationVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
+        
+        //change the following for each type of application
+        
+        $estd =[
             'status'                       =>   $org_status,
-            'service'                      =>  $request->service,
             'application_number'           =>   $request->applicationNo,
             'remarks'                      =>   $request->remarks,
+            'attachment_details'           =>   $attachment_details,
             'user_id'                      =>   $this->userId() 
         ];
-        $response_data= $this->apiService->createData('emis/organization/bifurcation/updateBifurcation', $bifurcation);
+        $response_data= $this->apiService->createData('emis/organization/bifurcation/updateBifurcationDetails', $estd);
+        // dd($response_data);
         return $work_response_data;
+
+        // //Ugyen's old route
+        // $response_data= $this->apiService->createData('emis/organization/bifurcation/updateBifurcation', $bifurcation);
+        // return $work_response_data;
     }
 
     /**
@@ -926,6 +1010,79 @@ class RestructuringController extends Controller
         // dd($loadOrganizationDetails);
         // $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
+    }
+
+    /**
+     * function to update the re-opening verification process
+     */
+
+    public function updateReopeningApplication(Request $request){
+        //updating the work flow and status
+        
+        $org_status='Verified';
+        $work_status=$request->sequence;
+        if($request->actiontype=="reject"){
+            $work_status=0;
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
+        }
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$request->service_name,
+            'application_number'=>$request->applicationNo,
+            'screen_id'         =>$request->screen_id,//pulled while loading details for verification
+            'status_id'         =>$work_status,//pulled while loading details for verification
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'ReopeningVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
+
+        
+        //change the following for each type of application
+        
+        $estd =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'remarks'                      =>   $request->remarks,
+            'attachment_details'           =>   $attachment_details,
+            'user_id'                      =>   $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/organization/reopening/updateReopeningDetails', $estd);
+        // dd($response_data);
+        return $work_response_data;
     }
 
     public function loadOrganizationDetails(){
