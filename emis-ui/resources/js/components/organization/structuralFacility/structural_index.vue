@@ -1,7 +1,7 @@
 <template>
     <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="form-inline "><h5 class="pt-1">Structural Facilities</h5></li>
+            <li class="form-inline "><h5 class="pt-1"> Facilities</h5></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
@@ -48,12 +48,31 @@
                         Financial Information
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('income_information')">
+                <li class="nav-item active pr-1" >
                     <router-link id="income_information" to="/income_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Income Facilities
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1">
+                    <router-link id="disasters_information" to="/disasters_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Disaster Information
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link id="compound_information" to="/compound_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Compound Details
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
+                    <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Connectivity
+                    </router-link>
+                </li>
+
             </ul>
             <router-view></router-view>
         </div>

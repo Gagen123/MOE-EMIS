@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\DB;
 use App\Models\generalInformation\VariousConnectivity;
+use App\Models\generalInformation\ConnectivityModel;
 
 class VariousConnectivityController extends Controller
 {
@@ -24,7 +25,7 @@ class VariousConnectivityController extends Controller
   }
   public function saveConnectivityDetails(Request $request){
     // dd('m at microservices');
-    $data =[
+    $requestdata =[
       'organizationId'           =>  $request['organizationId'],
       'connectedtoroad'                  =>  $request['connectedtoroad'],
       'road_typeyes'              =>  $request['road_typeyes'],
@@ -39,23 +40,38 @@ class VariousConnectivityController extends Controller
       'independent'                  =>  $request['independent'],
       'sharedconnection'                  =>  $request['sharedconnection'],
       'connectionsharedtype'                  =>  $request['connectionsharedtype'],
-      'sharedspeed'                  =>  $request['sharedspeed'],
+      // 'sharedspeed'                  =>  $request['sharedspeed'],
       'internetAccessible'                  =>  $request['internetAccessible'],
       'electricity'                  =>  $request['electricity'],
       'electricitysubstation'                  =>  $request['electricitysubstation'],
+      'electricitysource'              =>  $request['electricitysource'],    
       'created_by'                  =>  $request['user_id'],
       'created_at'                  =>  date('Y-m-d h:i:s'),
 
     ];
-    VariousConnectivity::where('organizationId',$request['organizationId'])->update($data);
-        
-    return $this->successResponse($response_data, Response::HTTP_CREATED);
+    // dd($requestdata);
+    // dd($data,$request['organizationId']);
+    try{ 
+        $data=ConnectivityModel::where('organizationId',$request->organizationId)->first();
+       
+        if($data!=""){
+          $response_data=ConnectivityModel::where('organizationId',$request->organizationId)->update($requestdata);
+        }
+        else{
+          $response_data=ConnectivityModel::create($requestdata);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    catch(GuzzleHttp\Exception\ClientException $e){
+        return $e;
+    }
+   
   }
 
     
-  public function loadConnectivityInformation($orgId=""){
-  //  dd('from microservices');
-    $info = VariousConnectivity::where('organizationId',$orgId)->first();
+  public function loadConnectivityInformation($org_id=""){
+   // dd('from microservices');
+    $info = VariousConnectivity::where('organizationId',$org_id)->first();
     return $info;
   }
 }

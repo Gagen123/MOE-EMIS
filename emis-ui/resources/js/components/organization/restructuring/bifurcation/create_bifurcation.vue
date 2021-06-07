@@ -26,7 +26,7 @@
                         <div class="card-body">
                             <form class="form-horizontal">
                                 <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Proposed Name:<small><i>(Blank to keep same name)</i></small></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <input type="text" class="form-control currentDetails" id="name" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" @change="remove_error('name')"/>
                                         <has-error :form="form" field="name"></has-error>
@@ -64,12 +64,12 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
                                         <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
                                     </div>
-                                </div>
+                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:</label>
@@ -154,7 +154,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
                                         <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
@@ -178,7 +178,7 @@
                                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </div>
-                                </div>
+                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
@@ -284,11 +284,9 @@ export default {
             classStreamList:[],
 
             form: new form({
-                id: '',parent_id:'',name:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'',location:'',
-                geoLocated:'0',senSchool:'0',coLocated:'0',parentSchool:'',
+                id: '',parent_id:'',name:'',
                 name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
-                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',
-                class:[],stream:[],class1:[],stream1:[],class2:[],stream2:[]
+                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[]
                 
             }), 
         } 
@@ -597,7 +595,7 @@ export default {
                         this.form.post('organization/saveBifurcation')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',

@@ -9,11 +9,11 @@
                 <div class="form-group row">
                     <label class="col-lg-3 col-md-3 col-sm-3 col-form-label pl-5">Select School:<span class="text-danger">*</span></label>
                     <div class="col-lg-6 col-md-6 col-sm-6">
-                    <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
+                    <select name="organizationId" id="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" class="form-control select2" @change="getCategory(),remove_error('organizationId')">
                         <option value="">--- Please Select ---</option>
                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="form" field="parent_id"></has-error>
+                    <has-error :form="form" field="organizationId"></has-error>
                     </div>
                 </div>
             </div>
@@ -424,31 +424,9 @@ export default {
          * method to populate dropdown
          */
         async changefunction(id){
-            if(id=="parent_id"){
-                this.form.parent_id=$('#parent_id').val();
-                this.getOrgDetails($('#parent_id').val());
-            }
-            if(id=="dzongkhag"){
-                this.form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
-            }
-            if(id=="dzongkhag1"){
-                this.form.dzongkhag1=$('#dzongkhag1').val();
-                this.getgewoglist1();
-            }
-            if(id=="gewog"){
-                this.form.gewog=$('#gewog').val();
-                this.getvillagelist();
-            }
-            if(id=="gewog1"){
-                this.form.gewog1=$('#gewog1').val();
-                this.getvillagelist1();
-            }
-            if(id=="chiwog"){
-                this.form.chiwog=$('#chiwog').val();
-            }
-            if(id=="chiwog1"){
-                this.form.chiwog1=$('#chiwog1').val();
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();
+                this.getOrgDetails($('#organizationId').val());
             }
         },
 
@@ -466,14 +444,14 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveBifurcation')
+                        this.form.post('organization/saveClosure')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
+                                let message="Applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'closure_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
-                                    title: 'Bifurcation details has been submitted for further action.'
+                                    title: 'Closure details has been submitted for further action.'
                                 }); 
                             } 
                             
@@ -505,7 +483,7 @@ export default {
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
             .then((response) => {  
                 let data=response.data.data;
-                this.form.parent_id=data.id;
+                this.form.organizationid=data.id;
                 this.data=data;
             })
             .catch((error) =>{  

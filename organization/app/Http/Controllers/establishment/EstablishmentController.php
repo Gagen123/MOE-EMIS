@@ -492,6 +492,34 @@ class EstablishmentController extends Controller
     }
 
     /**
+     * loading bifurcation, merger, closure and reopening
+     */
+
+    public function loadBifurcationApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('dzongkhagId',$dzo_id)->where('application_no', 'like', 'Bif%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    public function loadMergerApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Mer%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    public function loadClosureApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Cls%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    public function loadReopeningApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('dzongkhagId',$dzo_id)->where('application_no', 'like', 'Reop%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    /**
      * method to load organization details
      */
     public function loadProprietorDetails(){
@@ -923,21 +951,24 @@ class EstablishmentController extends Controller
     
     public function updateOrgBasicDetials(Request $request){
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
-        $org_data =[
-            'id'                        =>  $org_det->id,
-            'isAspNetSchool'            =>  $org_det->isAspNetSchool,
-            'isColocated'               =>  $org_det->isColocated,
-            'isGeoPoliticallyLocated'   =>  $org_det->isGeoPoliticallyLocated,
-            'hasCounselingRoom'         =>  $org_det->hasCounselingRoom,
-            'hasShiftSystem'            =>  $org_det->hasShiftSystem,
-            'hasCE'                     =>  $org_det->hasCE,
-            'mofCode'                   =>  $org_det->mofCode,
-            'zestAgencyCode'            =>  $org_det->zestAgencyCode,
-            'recorded_on'               =>  date('Y-m-d h:i:s'),
-            'recorded_for'              =>  'Basic Detials Update', 
-            'recorded_by'               =>  $request->user_id, 
-        ];
-        HistoryForOrganizaitonDetail::create($org_data); //pushing in history
+        if($org_det!=null && $org_det!=""){
+            $org_data =[
+                'id'                        =>  $org_det->id,
+                'isAspNetSchool'            =>  $org_det->isAspNetSchool,
+                'isColocated'               =>  $org_det->isColocated,
+                'isGeoPoliticallyLocated'   =>  $org_det->isGeoPoliticallyLocated,
+                'hasCounselingRoom'         =>  $org_det->hasCounselingRoom,
+                'hasShiftSystem'            =>  $org_det->hasShiftSystem,
+                'hasCE'                     =>  $org_det->hasCE,
+                'mofCode'                   =>  $org_det->mofCode,
+                'zestAgencyCode'            =>  $org_det->zestAgencyCode,
+                'recorded_on'               =>  date('Y-m-d h:i:s'),
+                'recorded_for'              =>  'Basic Detials Update', 
+                'recorded_by'               =>  $request->user_id, 
+            ];
+            HistoryForOrganizaitonDetail::create($org_data); //pushing in history
+        }
+        
         $org_update_data = [
             'isAspNetSchool'            =>  $request['isAspNetSchool'],
             'isColocated'               =>  $request['isColocated'],
@@ -954,15 +985,15 @@ class EstablishmentController extends Controller
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
         $location = [
             'organizationId'        =>  $request->org_id,
-            'landOwnership'         =>  $request['landOwnership'],
+            // 'landOwnership'         =>  $request['landOwnership'],
             'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
             'longitude'             =>  $request['longitude'],
             'latitude'              =>  $request['latitude'],
             'altitude'              =>  $request['altitude'],
             'thramNo'               =>  $request['thramNo'],
-            'cid'                   =>  $request['cid'],
-            'name'                  =>  $request['name'],
+            // 'cid'                   =>  $request['cid'],
+            // 'name'                  =>  $request['name'],
             'compoundArea'          =>  $request['compoundArea'],
             'googleMapPath'         =>  $request['map_path'],
             'climate_type'          =>  $request['climate_type'],
@@ -985,17 +1016,18 @@ class EstablishmentController extends Controller
             ];
             Locations::create($location); 
         }
-        foreach ($request->input('users') as $i=> $user){
+        ContactDetails::where('organizationId',$request->org_id)->delete();
+        // dd($request->users);
+        foreach ($request->users as $i=> $user){
             $contact_details = array(
                 'organizationId'    =>  $request->org_id,
-                'contactTypeId'     =>  $user['contactName'],
                 'phone'             =>  $user['phone'],
                 'mobile'            =>  $user['mobile'],
                 'email'             =>  $user['email'],
                 'type'              =>  2,
                 'created_by'        =>  $request->user_id,
                 'created_at'        =>  date('Y-m-d h:i:s')
-        );
+            );
             $org_det = ContactDetails::create($contact_details);
         }
         

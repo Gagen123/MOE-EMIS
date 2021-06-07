@@ -51,10 +51,18 @@ class VisitorController extends Controller
             return $response_data;
     }
 
-    public function loadVisitorInformation(){
+    public function loadVisitorInformation(){ 
         $orgId=$this->getWrkingAgencyId();
         $data = $this->apiService->listData('emis/organization/visitor/loadVisitorInformation/'.$orgId);
         return $data;
     }
+
+    public function getVisitorTypeDropdown(){
+     
+        $data = $this->apiService->listData('emis/organization/visitor/getVisitorTypeDropdown');
+        return $data;
+    }
+
+    
 
 }

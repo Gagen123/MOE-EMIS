@@ -12,14 +12,16 @@
                             <label class="mb-0.5">Organization Details </label>                              
                         </a>
                     </li>
-                    <li class="nav-item file-tab" @click="shownexttab('file-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">File Uploads </label>
-                        </a>
-                    </li>
+                    
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Classes and Stream </label>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item file-tab" @click="shownexttab('file-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">File Uploads </label>
                         </a>
                     </li>
                 </ul>
@@ -118,19 +120,66 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
                         <div class="card">
-                            <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Classes</th>
+                                            <th class="strm_clas">Stream</th>  
+                                            <th></th>                     
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                            <td>
+                                                <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                            </td>
+                                            <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                {{  item.stream  }}
+                                            </td>
+                                            <td class="strm_clas" v-else>                                
+                                            
+                                            </td>
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                            </td>
+                                            <td v-else>  
+                                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                                
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('class-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('file-tab')"> Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                                 <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
@@ -162,22 +211,6 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')"> Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
-                            </div>
-                        </div><br>
                         <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
@@ -197,37 +230,7 @@
                                 </label>
                             </span>  
                         </span>  -->
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Classes</th>
-                                        <th class="strm_clas">Stream</th>  
-                                        <th></th>                     
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
-                                        <td>
-                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                        </td>
-                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                            {{  item.stream  }}
-                                        </td>
-                                        <td class="strm_clas" v-else>                                
-                                          
-                                        </td>
-                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
-                                        </td>
-                                        <td v-else>  
-                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
-                                            
-                                        </td>
-                                    </tr> 
-                                </tbody>
-                            </table>
-                        </div>
+                        
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>

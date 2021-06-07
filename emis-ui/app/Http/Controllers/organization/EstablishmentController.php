@@ -61,13 +61,12 @@ class EstablishmentController extends Controller
                     break;
                 }
             case "public_ecr" : {
-                    $this->service_name = "Public ECR";
-                    $validation = $this->validatePublicEccdFields($request);
-                    $establishment_data = $this->setPublicEccdFields($request);
-                    break;
-                }
+                $this->service_name = "Public ECR";
+                $validation = $this->validatePublicEccdFields($request);
+                $establishment_data = $this->setPublicEccdFields($request);
+                break;
+            }
             default : {
-                
                 break;
             }
         }
@@ -211,6 +210,30 @@ class EstablishmentController extends Controller
     public function loadOrgChangeApplications($type=""){
         $loadOrgChangeApplications = $this->apiService->listData('emis/organization/establishment/loadOrgChangeApplications/'.$this->userId().'/'.$type );
         return $loadOrgChangeApplications;
+    }
+
+    public function loadMergerApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadMergerApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
+    }
+
+    public function loadClosureApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadClosureApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
+    }
+
+    public function loadBifurcationApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadBifurcationApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
+    }
+
+    public function loadReopeningApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadReopeningApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
     }
 
     public function loadOrganizationDetails(){        

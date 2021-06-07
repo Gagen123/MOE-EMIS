@@ -9,6 +9,7 @@ use App\Traits\ApiResponser;
 use App\Models\generalInformation\ClassMapping;
 use Illuminate\Support\Facades\DB;
 use App\Models\generalInformation\Visitor;
+use App\Models\Masters\VisitorType;
 
 class VisitorController extends Controller
 {
@@ -73,7 +74,10 @@ class VisitorController extends Controller
 
        
     // }
+    public function getVisitorTypeDropdown(){
+       // dd('from microserve ');
+        return VisitorType::where('status',1)->get();
+    }
+   
 
-    
-    
 }
