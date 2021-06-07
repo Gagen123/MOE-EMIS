@@ -351,6 +351,7 @@ const routes = [
     { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
     { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
     { path: '/closure_verification',name:'closure_verification', component: require('./components/organization/restructuring/closure_verification.vue').default },
+    { path: '/reopening_verification',  name:'reopening_verification',component: require('./components/organization/restructuring/reopening_verification.vue').default },
     { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
     { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
     
@@ -663,15 +664,15 @@ const routes = [
             ]  
         },
 
-        { path: '/merger',name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
-        // { path: '/bifurcation_index',  
-        //   component: require('./components/organization/restructuring/bifurcation/bifurcation_index.vue').default ,
-        //     children: [
-        //       { path: '/',name:'bifurcation_index', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
-        //       { path: '/bifurcation_list',name:'bifurcation_list', component: require('./components/organization/restructuring/bifurcation/bifurcation_list.vue').default },
-        //       { path: '/bifurcation', name:'BifurcationAdd', component: require('./components/organization/restructuring/bifurcation/bifurcation.vue').default },
-        //     ]    
-        // }, 
+        //{ path: '/merger',name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
+        { path: '/merger_index',  
+          component: require('./components/organization/restructuring/merger/merger_index.vue').default ,
+            children: [
+              { path: '/',name:'merger_index', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
+              { path: '/bifurcation_list',name:'bifurcation_list', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
+              { path: '/merger', name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
+            ]    
+        }, 
         { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },
         { path: '/closure_index', 
           component: require('./components/organization/restructuring/closure/closure_index.vue').default ,
@@ -679,6 +680,7 @@ const routes = [
             { path: '/',name:'closure_index', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
             { path: '/closure_list',name:'closure_list', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
             { path: '/closure', name:'closure', component: require('./components/organization/restructuring/closure/closure.vue').default },
+            { path: '/closure_acknowledgement', name:'closure_acknowledgement', component: require('./components/organization/restructuring/closure/acknowledgement.vue').default },
           ]    
         },
         { path: '/reopening_index', 
@@ -687,6 +689,7 @@ const routes = [
             { path: '/',name:'reopening_index', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
             { path: '/reopening_add',name:'reopening_add', component: require('./components/organization/restructuring/reopening_public/reopening_add.vue').default },
             { path: '/reopening_list', name:'reopening_list', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
+            { path: '/reopening_acknowledgement', name:'reopening_acknowledgement', component: require('./components/organization/restructuring/reopening_public/acknowledgement.vue').default },
           ]    
         },
       ] 

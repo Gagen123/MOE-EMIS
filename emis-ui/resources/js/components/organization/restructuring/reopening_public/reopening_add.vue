@@ -7,7 +7,7 @@
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <div class="form-group row">
-                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label pl-5">Select School:<span class="text-danger">*</span></label>
+                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                     <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
                         <option value="">--- Please Select ---</option>
@@ -21,7 +21,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Present School Details</h3>
+                            <h3 class="card-title">Closed School Details</h3>
                         </div>
                         <div class="card-body">
                             <form class="form-horizontal">
@@ -57,12 +57,12 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
                                         <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
                                     </div>
-                                </div>
+                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:</label>
@@ -98,22 +98,142 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Reasons/Remarks for Re-Opening</h3>
+                            <h3 class="card-title">Proposed Details</h3>
                         </div>
                         <div class="card-body">
                             <form class="form-horizontal">
                                 <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="mb-0">Reason:<span class="text-danger">*</span></label>
-                                        <textarea class="form-control" v-model="form.reason" :class="{ 'is-invalid': form.errors.has('reason') }" @change="remove_error('reason')"></textarea>
-                                        <has-error :form="form" field="reason"></has-error>
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <input type="text" class="form-control currentDetails" id="name1" v-model="form.name1" :class="{ 'is-invalid': form.errors.has('name1') }" @change="remove_error('name1')"/>
+                                        <has-error :form="form" field="name1"></has-error>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label>Remarks:</label>
-                                        <textarea class="form-control" v-model="form.remark"></textarea>
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="level1"></has-error>
                                     </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
+                                        <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
+                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
+                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="location1"></has-error>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <label><input  type="radio" v-model="form.geoLocated1" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" v-model="form.geoLocated1" value="0"  tabindex=""/> No</label>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                    </div>
+                                </div> -->
+                                <label class="mb-0"><i><u>Other Details</u></i></label>
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <select v-model="form.dzongkhag1" :class="{ 'is-invalid': form.errors.has('dzongkhag1') }" class="form-control select2" name="dzongkhag1" id="dzongkhag1">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in dzongkhagList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="dzongkhag1"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <select v-model="form.gewog1" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog1') }" class="form-control select2" name="gewog1" id="gewog1">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in gewog_list1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="gewog1"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <select v-model="form.chiwog1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog1') }" class="form-control select2" name="chiwog1" id="chiwog1">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in villageList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="chiwog1"></has-error>
+                                    </div>
+                                </div>
+                                <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Classes</th>
+                                                <th class="strm_clas">Stream</th>  
+                                                <th></th>                     
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                                <td>
+                                                    <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                                </td>
+                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    {{  item.stream  }}
+                                                </td>
+                                                <td class="strm_clas" v-else>                                
+                                                
+                                                </td>
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                                </td>
+                                                <td v-else>  
+                                                    <input type="checkbox" v-model="form.class" :value="item.classId">                              
+                                                    
+                                                </td>
+                                            </tr> 
+                                        </tbody>
+                                    </table>
                                 </div>
                             </form>
                         </div>
@@ -157,10 +277,9 @@ export default {
             classStreamList:[],
 
             form: new form({
-                organizationId:'',
-                reason:'',
-                remark:'',
-                status:'submitted'
+                id: '',parent_id:'',name:'',
+                name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
+                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[]
                 
             }), 
         } 
@@ -466,11 +585,11 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveBifurcation')
+                        this.form.post('organization/saveReopening')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
+                                let message="Application for Re-Opening has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'reopening_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
                                     title: 'Bifurcation details has been submitted for further action.'
@@ -513,10 +632,10 @@ export default {
             }); 
         },
         //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
+        getOrgList(uri = 'loadCommons/loadInactiveOrgList'){
             axios.get(uri)
             .then(response => {
-                this.orgList = response.data.data;
+                this.orgList = response.data;
             });
         },
 

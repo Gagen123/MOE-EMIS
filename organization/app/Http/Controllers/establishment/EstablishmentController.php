@@ -492,6 +492,34 @@ class EstablishmentController extends Controller
     }
 
     /**
+     * loading bifurcation, merger, closure and reopening
+     */
+
+    public function loadBifurcationApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('dzongkhagId',$dzo_id)->where('application_no', 'like', 'Bif%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    public function loadMergerApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Mer%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    public function loadClosureApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Cls%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    public function loadReopeningApplications($user_id="",$dzo_id=""){
+        return $this->successResponse(ApplicationDetails::where('dzongkhagId',$dzo_id)->where('application_no', 'like', 'Reop%')->get());
+        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
+    }
+
+    /**
      * method to load organization details
      */
     public function loadProprietorDetails(){
