@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Facility</th>
+                    <th>Supported By</th>
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -12,9 +13,10 @@
                 <tr v-for="(item, index) in sportList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.facilityName}}</td>
+                    <td>{{ item.SupportedBy}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewSportList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewEccdList(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -35,7 +37,7 @@ export default {
         /**
          * method to load sport facility
          */
-        loadSportList(uri = 'organization/loadSport/null'){
+        viewEccdList(uri = 'organization/loadeccd/null'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -46,12 +48,6 @@ export default {
                    
                 }
             });
-            setTimeout(function(){
-                $("#sport-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
 
         /**
@@ -63,7 +59,7 @@ export default {
         },
     },
     mounted(){
-        this.loadSportList();
+        this.loadEccdList();
     },
 }
 </script>

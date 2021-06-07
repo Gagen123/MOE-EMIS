@@ -93,6 +93,13 @@ class StructuralController extends Controller
         $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
         return $loadSport;
     }
+    public function loadeccd($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadSport = $this->apiService->listData('emis/organization/sport/loadeccd/'.$orgId);
+        return $loadSport;
+    }
 
     public function getFacilityInDropdown(Request $request){
         $facilityDropdown = $this->apiService->listData('emis/organization/sport/getFacilityInDropdown');
