@@ -61,13 +61,11 @@ class SportController extends Controller
                 'organizationId'                        =>  $request['organizationId'],
                 'facility'                              =>  $request['facility'],
                 'type'                                  =>  $request['type'],
-                'size'                                  =>  $request['size'],
-                'courts'                                =>  $request['courts'],
-                'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
+                'yearOfEstablishment'                   =>  $request['yoe'],
                 'status'                                =>  $request['status'],
+                'size'                                  =>  $request['area'],
                 'supportedBy'                           =>  $request['supportedBy'],
-                'noOfFacility'                          =>  $request['numberOfFacility'], 
-                'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
+                'accessibleToDisabled'                  =>  $request['access'],
                 'updated_by'                            =>  $request->user_id,
                 'created_at'                            =>  date('Y-m-d h:i:s')
             ];
@@ -75,27 +73,25 @@ class SportController extends Controller
             return $this->successResponse($spo, Response::HTTP_CREATED);
 
             }else{
-                $sport = [
-                    'organizationId'                        =>  $request['organizationId'],
-                    'facility'                              =>  $request['facility'],
-                    'type'                                  =>  $request['type'],
-                    'size'                                  =>  $request['size'],
-                    'courts'                                =>  $request['courts'],
-                    'yearOfEstablishment'                   =>  $request['yearOfEstablish'],
-                    'status'                                =>  $request['status'],
-                    'supportedBy'                           =>  $request['supportedBy'],
-                    'noOfFacility'                          =>  $request['numberOfFacility'], 
-                    'accessibleToDisabled'                  =>  $request['facilityAccessibleToDisabled'],
-                    'created_by'                            =>  $request->user_id,
-                    'created_at'                            =>  date('Y-m-d h:i:s')
-                ];
-                try{
-                $spo = Sport::create($sport);
-                }catch(\Illuminate\Database\QueryException $e){
-                    dd($e);
-               
+                $organizationId  = $request['organizationId'];
+                $supportedBy     = $request['supportedBy'];
+
+                foreach ($request->items_received as $i=> $item){
+                    $localprocure = array(
+                     'organizationId'             =>  $organizationId,
+                     'type'                       =>  $item['type'],
+                     'yearOfEstablishment'        =>  $item['yoe'],
+                     'accessibleToDisabled'       =>  $item['access'],
+                     'size'                       =>  $request['area'],
+                     'status'                     =>  $item['status'],
+                     'updated_by'                 =>  $request->user_id,
+                     'created_at'                 =>  date('Y-m-d h:i:s')
+                    );
+        
+                 $localpro = Sport::create($localprocure);
                 }
-                return $this->successResponse($spo, Response::HTTP_CREATED);
+                
+                return $this->successResponse($localpro, Response::HTTP_CREATED);
             }
         
     }

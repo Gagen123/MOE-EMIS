@@ -59,6 +59,15 @@ const routes = [
                     { path: '/edit_climate_type',name:'edit_climate_type', component: require('./components/masters/organization_masters/climate_type/edit_climate_type.vue').default },
                   ]     
               },
+              { path: '/accessible_sen_index',  
+                component: require('./components/masters/organization_masters/accessible_sen/accessible_sen_index.vue').default ,
+                  children: [
+                    { path: '/',name:'accessible_sen_index', component: require('./components/masters/organization_masters/accessible_sen/list_accessible_sen.vue').default },
+                    { path: '/list_accessible_sen',name:'list_accessible_sen', component: require('./components/masters/organization_masters/accessible_sen/list_accessible_sen.vue').default },
+                    { path: '/add_accessible_sen',name:'create_accessible_sen', component: require('./components/masters/organization_masters/accessible_sen/add_accessible_sen.vue').default },
+                    { path: '/edit_accessible_sen',name:'edit_accessible_sen', component: require('./components/masters/organization_masters/accessible_sen/edit_accessible_sen.vue').default },
+                  ]     
+              },
               { path: '/internetconn_type_index',  
                 component: require('./components/masters/organization_masters/internet_connection_type/internetconn_type_index.vue').default ,
                   children: [
