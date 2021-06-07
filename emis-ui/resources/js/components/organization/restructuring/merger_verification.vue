@@ -648,7 +648,7 @@ export default {
                                 formData.append('attachments[]', this.form.ref_docs[i].attach);
                                 formData.append('attachmentname[]', this.form.ref_docs[i].name);
                             }
-                            axios.post('organization/updateChangeBasicDetailApplication', formData, config)
+                            axios.post('organization/updateMergerApplication', formData, config)
                             .then((response) => {
                                 if(response!=""){
                                     Toast.fire({

@@ -204,6 +204,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/udpateOrgProfile', [App\Http\Controllers\organization\GeneralInfoController::class, 'udpateOrgProfile'])->name('udpateOrgProfile');
     Route::get('/getOrgProfile/{id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getOrgProfile'])->name('getOrgProfile');
     Route::post('/updateOrgBasicDetials', [App\Http\Controllers\organization\GeneralInfoController::class, 'updateOrgBasicDetials'])->name('updateOrgBasicDetials');
+    Route::post('/updateBasicDetails', [App\Http\Controllers\organization\GeneralInfoController::class, 'updateBasicDetails'])->name('updateBasicDetails');
 
 
     /** structural facility route */
