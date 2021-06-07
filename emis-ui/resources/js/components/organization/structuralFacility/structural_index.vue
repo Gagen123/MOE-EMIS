@@ -1,7 +1,7 @@
 <template>
     <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="form-inline "><h5 class="pt-1">Structural Facilities</h5></li>
+            <li class="form-inline "><h5 class="pt-1"> Facilities</h5></li>
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
@@ -66,6 +66,13 @@
                         Compound Details
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
+                    <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Connectivity
+                    </router-link>
+                </li>
+
             </ul>
             <router-view></router-view>
         </div>

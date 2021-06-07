@@ -68,6 +68,15 @@ const routes = [
                     { path: '/edit_climate_type',name:'edit_climate_type', component: require('./components/masters/organization_masters/climate_type/edit_climate_type.vue').default },
                   ]     
               },
+              { path: '/visitor_index',  
+                component: require('./components/masters/organization_masters/visitor/visitor_index.vue').default ,
+                  children: [
+                    { path: '/',name:'visitor_index', component: require('./components/masters/organization_masters/visitor/list_visitor.vue').default },
+                    { path: '/list_visitor',name:'list_visitor', component: require('./components/masters/organization_masters/visitor/list_visitor.vue').default },
+                    { path: '/create_visitor',name:'create_visitor', component: require('./components/masters/organization_masters/visitor/create_visitor.vue').default },
+                    { path: '/edit_visitor',name:'edit_visitor', component: require('./components/masters/organization_masters/visitor/edit_visitor.vue').default },
+                  ]     
+                },
               { path: '/accessible_sen_index',  
                 component: require('./components/masters/organization_masters/accessible_sen/accessible_sen_index.vue').default ,
                   children: [
@@ -547,16 +556,7 @@ const routes = [
                     { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
                 ]    
             },
-            { path: '/connectivity_details', name:'connectivity_details', 
-                component: require('./components/organization/general/connectivity/index_connectivity.vue').default, 
-                children: 
-                [
-                    { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
-                    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
-                    { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
-                    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
-                ]    
-            },
+           
 
             // { path: '/org_class_mapping', name:'org_class_mapping', 
             //     component: require('./components/organization/general/org_class_mapping.vue').default,
@@ -819,6 +819,16 @@ const routes = [
             { path: '/list_compound_details', name:'list_compound_details', component: require('./components/organization/general/compound_details/list_compound_details.vue').default },
           ] 
         },
+        { path: '/connectivity_details', name:'connectivity_details', 
+        component: require('./components/organization/general/connectivity/index_connectivity.vue').default, 
+        children: 
+        [
+            { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+        //    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
+            { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+        //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
+        ]    
+    },
         { path: '/wash',name:'wash', component: require('./components/organization/structuralFacility/wash.vue').default },
         { path: '/school_feeding',name:'school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
       ] 

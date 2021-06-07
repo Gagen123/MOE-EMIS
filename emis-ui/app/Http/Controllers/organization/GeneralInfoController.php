@@ -88,6 +88,7 @@ class GeneralInfoController extends Controller
      */
 
     public function getFurnitureType(){
+       // dd('m here');
         $type = $this->apiService->listData('emis/organization/furniture/getFurnitureType');
         return $type;
     }
@@ -180,6 +181,11 @@ class GeneralInfoController extends Controller
     public function getRoadTypeDropdown(){
         $roadType = $this->apiService->listData('emis/organization/connectivity/getRoadTypeDropdown');
         return $roadType;
+    }
+    public function getVisitorTypeDropdown(){
+       // dd('m here at UI');
+        $visitortype = $this->apiService->listData('emis/organization/connectivity/getVisitorTypeDropdown');
+        return $visitortype;
     }
 
     public function getElectricitySourceDropdown(){

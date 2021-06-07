@@ -205,10 +205,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'visitor'], function () use ($router) {
             $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
             $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
+            $router->get('/getVisitorTypeDropdown', 'generalInformation\VisitorController@getVisitorTypeDropdown');
         });
         $router->group(['prefix' => 'connectivity'], function () use ($router) {
             $router->post('/saveConnectivityDetails', 'generalInformation\VariousConnectivityController@saveConnectivityDetails');
-            $router->get('/loadConnectivityInformation/{orgId}', 'generalInformation\VariousConnectivityController@loadConnectivityInformation');
+            $router->get('/loadConnectivityInformation/{org_id}', 'generalInformation\VariousConnectivityController@loadConnectivityInformation');
            
         });
 
@@ -268,6 +269,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getServiceProviderDropdown', 'generalInformation\ConnectivityController@getServiceProviderDropdown');
             $router->get('/getServiceProviderDropdown1', 'generalInformation\ConnectivityController@getServiceProviderDropdown1');
             $router->get('/getContactTypeDropdown', 'generalInformation\ConnectivityController@getContactTypeDropdown');
+           
 
         });
         $router->group(['prefix' => 'location'], function () use ($router) {
@@ -362,6 +364,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'changeDetails'], function () use ($router) {
             $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
+            // $router->post('/saveAllChangeBasicDetailsOK', 'establishment\ChangeBasicDetailsController@saveAllChangeBasicDetailsOK');
             $router->get('/getChangeBasicDetails/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@getChangeBasicDetails']);
             $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
             $router->get('/loadCurrentOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentOrgDetails']);

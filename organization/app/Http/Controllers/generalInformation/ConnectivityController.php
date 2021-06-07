@@ -112,6 +112,9 @@ class ConnectivityController extends Controller
     public function getRoadTypeDropdown(){
         return RoadType::where('status',1)->get();
     }
+    public function getVisitorTypeDropdown(){
+        return VisitorType::where('status',1)->get();
+    }
 
     /**
      * method to get electricity source use in dropdown

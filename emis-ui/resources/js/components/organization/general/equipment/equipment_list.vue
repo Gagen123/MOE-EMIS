@@ -6,8 +6,8 @@
                     <th>SL#</th>
                     <th>Type</th>
                     <th>Item</th>
-                    <th>Cost</th>
-                    <th>Condition</th>
+                    <th>Usable</th>
+                    <th>Not Usable</th>
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -16,8 +16,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.type}}</td>
                     <td>{{ item.item}}</td>
-                    <td>{{ item.cost}}</td>
-                    <td>{{ item.condition==  1 ? "Usable" : "Not Usable"}}</td>
+                    <td>{{ item.usable}}</td>
+                    <td>{{ item.notusable}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewEquipmentList(item)"><i class="fas fa-edit"></i ></a>
