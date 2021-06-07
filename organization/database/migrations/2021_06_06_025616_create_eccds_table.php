@@ -26,6 +26,8 @@ class CreateEccdsTable extends Migration
             $table->integer('noOfFacility');
             $table->char('created_by',36)->nullable(true);
             $table->char('created_at',36)->nullable(true);
+            $table->char('updated_by',36)->nullable(true);
+            $table->char('updated_at',36)->nullable(true);
             $table->timestamps();
         });
     }

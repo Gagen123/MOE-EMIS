@@ -21,41 +21,6 @@ class FinanceController extends Controller
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-
-    public function saveIncomeInformation(Request $request){
-        $rules = [ 
-            // 'organizationId.required'           => 'organizationId is required',
-            'type'          =>  'required',
-            'item'          =>  'required',
-            'location'      =>  'required',
-            'number'        =>  'required',
-        ];
-        $customMessages = [
-            'type.required'         => 'Type is required',
-            'item.required'         => 'Item is required',
-            'location.required'     => 'Location/Use is required',
-            'number.required'       => 'Number is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
-        $loc =[
-            'organizationId'            =>  $this->getWrkingAgencyId(),
-            'type'                      =>  $request['type'],
-            'item'                      =>  $request['item'],
-            'location'                  =>  $request['location'],
-            'number'                    =>  $request['number'],
-            'actiontype'                =>  $request['action_type'],
-            'id'                        =>  $request['id'],
-            'user_id'                   =>  $this->userId()
-        ];
-        // try{
-            $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipmentAndFurniture', $loc);
-            return $response_data;
-        // }
-        // catch(GuzzleHttp\Exception\ClientException $e){
-        //     return $e;
-        // }
-    }
-
     public function loadEquipment($orgId=""){
         if($orgId=="null" || $orgId==""){
             $orgId=$this->getWrkingAgencyId();
@@ -100,17 +65,14 @@ class FinanceController extends Controller
     }
 
     public function saveFinancialInfo(Request $request){
-        // dd($request);
         $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
-            // 'financialInformationId'         =>  'financialInformationId',
             
         ];
         $customMessages = [
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
-            // 'financialInformationId.required'   => 'financialInformationId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -118,14 +80,13 @@ class FinanceController extends Controller
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
             'remarks'                           =>  $request['remarks'],
-            'type'                              =>  $request['type'],
+            'financialInformationId'            =>  $request['financialInformationId'],
         ];
         $response_data= $this->apiService->createData('emis/organization/finance/saveFinancialInformation', $data );
         return $response_data;
     } 
     
     public function saveIncomeinfo(Request $request){
-        // dd($request);
         $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',

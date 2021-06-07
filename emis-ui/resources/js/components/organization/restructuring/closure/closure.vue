@@ -88,7 +88,7 @@
                                         <span v-for="(item, index) in  data.classes" :key="index">
                                             <br>
                                             <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.classId] }}</label>
-                                        </span> 
+                                        </span>
                                     </div>
                                 </div>
                             </form>
@@ -115,6 +115,12 @@
                                         <textarea class="form-control" v-model="form.remark"></textarea>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Proposal Letter</label>
+                                        <input type="file" class="form-control" v-on:change="onChangeFileUpload">
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -127,13 +133,13 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             data:'',
             orgList:'',
             levelList:[],
@@ -160,12 +166,20 @@ export default {
                 organizationId:'',
                 reason:'',
                 remark:'',
+                attachments:'',
+                application_type:'closure',
+                application_for:'closure',
+                screen_id:'',
                 status:'submitted'
-                
-            }), 
-        } 
+
+            }),
+        }
     },
     methods: {
+        //File Upload
+        onChangeFileUpload(e){
+            this.form.attachments = e.target.files[0];
+        },
 
         /**
          * method to remove error
@@ -175,7 +189,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -186,9 +200,9 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
-                
+
             });
         },
         /**
@@ -200,7 +214,7 @@ export default {
                 let data = response.data;
                 this.locationList = data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -274,7 +288,7 @@ export default {
                 let data = response.data.data;
                 this.dzongkhagList =  data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -433,8 +447,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -444,21 +458,51 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveClosure')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('reason', this.form.reason);
+                        formData.append('remark', this.form.remark);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('screen_id', this.form.screen_id);
+                        formData.append('attachments', this.form.attachments);
+                        axios.post('organization/saveClosure',formData, config)
                         .then((response) => {
-                            if(response!=""){
+                            if(response.data!=""){
                                 let message="Applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'closure_acknowledgement',params: {data:message}});
-                                Toast.fire({  
+                                Toast.fire({
                                     icon: 'success',
                                     title: 'Closure details has been submitted for further action.'
-                                }); 
-                            } 
-                            
+                                });
+                            }
                         })
-                        .catch((er) => {
-                            console.log("Error:"+er)
-                     })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured:'+error
+                            });
+                        })
+
+                        // this.form.post('organization/saveClosure')
+                    //     .then((response) => {
+                    //         if(response!=""){
+                    //             let message="Applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                    //             this.$router.push({name:'closure_acknowledgement',params: {data:message}});
+                    //             Toast.fire({
+                    //                 icon: 'success',
+                    //                 title: 'Closure details has been submitted for further action.'
+                    //             });
+                    //         }
+
+                    //     })
+                    //     .catch((er) => {
+                    //         console.log("Error:"+er)
+                    //  })
                     }
                 });
             }
@@ -481,14 +525,14 @@ export default {
         getOrgDetails(id){
             // axios.get('organization/getFullSchoolDetials/'+id)
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
-                this.form.organizationid=data.id;
+                this.form.organizationId=data.id;
                 this.data=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         },
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -501,11 +545,11 @@ export default {
         /**
          * method to check pending status
          */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
 
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {  
+        //     .then((response) => {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
@@ -513,7 +557,7 @@ export default {
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
-        //     .catch((error) => {  
+        //     .catch((error) => {
         //         console.log("Error: "+error);
         //     });
         // },
@@ -524,7 +568,7 @@ export default {
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
-        
+
         this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
@@ -532,8 +576,8 @@ export default {
             if(data['acess_level']=="Org"){
                 this.getOrgDetails(data['Agency_Code']);
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
         this.getOrgList();
@@ -546,9 +590,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

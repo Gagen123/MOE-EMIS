@@ -27,26 +27,25 @@ class ClosureController extends Controller
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    
+
     /**
-     * method to submit school for closure 
+     * method to submit school for closure
      */
     public function saveClosure(Request $request){
-
         $last_seq=ApplicationSequence::where('service_name','Closure')->first();
             if($last_seq==null || $last_seq==""){
                 $last_seq=1;
                 $app_details = [
                     'service_name'                  =>  'Closure',
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::create($app_details);
             }
             else{
                 $last_seq=$last_seq->last_sequence+1;
                 $app_details = [
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::where('service_name', 'Closure')->update($app_details);
             }
             $application_no='Cls-';
@@ -62,7 +61,7 @@ class ClosureController extends Controller
             else if(strlen($last_seq)==4){
                 $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
             }
-        
+
         $data =[
             'application_no'       =>  $application_no,
             'establishment_type'   =>  'public_school',
@@ -75,9 +74,9 @@ class ClosureController extends Controller
             'created_by'           =>  $request['user_id'],
             'created_at'           =>  date('Y-m-d h:i:s')
         ];
-        
+
         $establishment = ApplicationDetails::create($data);
-    
+
         $closure =[
         'ApplicationDetailsId'     =>  $establishment->id,
         'organizationId'           =>  $request['organizationId'],
@@ -98,12 +97,12 @@ class ClosureController extends Controller
      */
     public function loadClosureApplicationDetails($appNo=""){
         $response_data=ApplicationDetails::where('applicationNo',$appNo)->first();
-        $response_data->level=Level::where('id',$response_data->levelId)->first()->name; 
+        $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
         $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
         if($response_data->id!=null && $response_data->id!=""){
             $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
         }
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
     /**
@@ -113,7 +112,7 @@ class ClosureController extends Controller
         $estd =[
             'status'                       =>   $request->status,
             'updated_remarks'              =>   $request->yourRemark,
-            'updated_by'                   =>   $request->user_id, 
+            'updated_by'                   =>   $request->user_id,
         ];
         $close = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
         return $this->successResponse($close, Response::HTTP_CREATED);
@@ -127,13 +126,13 @@ class ClosureController extends Controller
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         // $response_data->application_date=date_format(Carbon::parse($response_data->created_at), 'Y-m-d h:i:s');
         $closure = ApplicationEstClosure::where('ApplicationDetailsId',$response_data->id)->first();
-        
+
         $response_data->closure=$closure;
-        
+
         // if($merger->isfeedingschool==1){
         //     $response_data->feeding=ApplicationNoMeals::where('ApplicationDetailsId',$merger->id)->get();
         // }
-        
+
         // $response_data->level=Level::where('id',$merger->levelId)->first()->name;
         // $response_data->locationType=Location::where('id',$merger->locationId)->first()->name;
         // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
@@ -149,6 +148,6 @@ class ClosureController extends Controller
         //     }
         //     $response_data->stream=$sections;
         // }
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 }
