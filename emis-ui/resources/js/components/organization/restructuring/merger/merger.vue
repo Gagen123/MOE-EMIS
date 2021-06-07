@@ -232,7 +232,6 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                 <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                             </div>
                         </div>
@@ -536,7 +535,7 @@ export default {
                         this.form.post('organization/saveMerger')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'restr_acknowledgement',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',

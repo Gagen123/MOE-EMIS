@@ -74,8 +74,8 @@
                         Bifurcation
                     </router-link>
                 </li> 
-                <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
-                    <router-link to ="/merger" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('merger_index')">
+                    <router-link to ="/merger_index" id="merger_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Merger
                     </router-link>
                 </li>

@@ -1,68 +1,59 @@
 <template>
     <div>
-        <table id="closure-table" class="table table-bordered text-sm table-striped">
+        <table id="disciplinary-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th>SL#</th>
-                    <th>School Name</th>
-                    <th>Category</th>
-                    <th>Level</th>
-                    <th>Status</th>
-                    <th>Action</th> 
+                    <th >SL#</th>
+                    <th >Application No.</th>
+                    <th >Application For</th>
+                    <th >Status</th>
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in closureList" :key="index">
+                <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.category  == 1 ? "Public" :  "Private & Others"}}</td>
-                    <td>{{ item.level}}</td>
-                    <td>{{ item.status == 1 ? "Active" : "Inactive"}}</td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewClosureList(item.id)"><i class="fas fa-edit"></i ></a>
-                        </div>
-                    </td>
+                    <td>{{ item.application_no}}</td>
+                    <!-- <td>{{ item.establishment_type}}</td> -->
+                    <td>Closure of Public School</td>
+                    <td>{{ item.status}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 </template>
-
 <script>
 export default {
     data(){
         return{
-            closureList:[],
+            id:'2',
+            dataList:[], 
         }
     },
     methods:{
-        loadClosureList(dzo_id){
-            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
+        loadDataList(uri='organization/loadClosureApplications'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.closureList =  data.data.data;
+                this.dataList =  data.data.data;
             })
             .catch(function (error) {
-                console.log('error: '+error);
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
             });
+            setTimeout(function(){
+                $("#disciplinary-list-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 3000);  
         },
-
-         viewClosureList(data){
-            this.$router.push({name:'ClosureAdd',query: {data:data}});
+        showedit(data){
+            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
         },
     },
-
     mounted(){
-         axios.get('common/getSessionDetail')
-        .then(response => {
-            let data = response.data.data;
-            this.loadClosureList(data['Dzo_Id']);
-        })    
-        .catch(errors => { 
-            console.log(errors)
-        });
+        this.loadDataList();
     },
 }
 </script>
