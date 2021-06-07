@@ -527,7 +527,7 @@ class RestructuringController extends Controller
     }
 
     public function saveClosure(Request $request){
-        dd($request);
+        // dd($request);
         $file = $request->attachments;
         $path="";
         $file_store_path='Closure';
@@ -562,11 +562,11 @@ class RestructuringController extends Controller
         //get submitter role
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet,$request->application_for);
             $screen_id="";
             $status="";
             $screen_name="";
             $app_role="";
-            // $service_name=json_decode($response_data)->data->establishment_type;
             foreach($workflowdet as $work){
                 if($work->screenName==$request->application_for){
                     $screen_id=$work->SysSubModuleId;
@@ -593,6 +593,7 @@ class RestructuringController extends Controller
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
+            // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             // dd(json_decode($response_data));
         }

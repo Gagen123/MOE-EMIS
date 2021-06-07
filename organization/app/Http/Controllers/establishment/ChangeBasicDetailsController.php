@@ -47,7 +47,11 @@ class ChangeBasicDetailsController extends Controller
      * method to save change basic details
     */
     public function saveChangeBasicDetails(Request $request){
+
+
         if($request->action_type!="edit"){
+
+           
             $application_details_data =[
                 'application_no'       =>  $this->generateApplicationNo(),
                 'establishment_type'   =>  $request['application_for'],
@@ -113,6 +117,21 @@ class ChangeBasicDetailsController extends Controller
                     break;
                 }
             }
+
+            if($request->attachment_details!=null && $request->attachment_details!=""){
+                // $application_details=  ApplicationDetails::where('application_no',$change_details_data['application_number'],)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $applicationDetailsId,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'updoad_type'               =>  'Applicant',
+                    ];
+                    $doc = ApplicationAttachments::create($attach);
+                }
+            }
+            
         }
         else{
             if($request['application_type']=="name_change"){
