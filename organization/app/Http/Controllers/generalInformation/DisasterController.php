@@ -25,10 +25,12 @@ class DisasterController extends Controller
 
     public function saveDisasterInformation(Request $request){
        // dd('microservices');
+       $id = $request->id;
+       if( $id != null){
         $data =[
             'organizationId'            =>  $request['organizationId'],
-            'disasterTypeId'            =>  $request['diastertype'],
-            'diastercomm'               =>  $request['diastercomm'],
+            'disasterTypeId'            =>  $request['disastertype'],
+            'disastercomm'              =>  $request['disastercomm'],
             'cid'                       =>  $request['cid_passport'],
             'name'                      =>  $request['fullname'],
             'sex_id'                    =>  $request['sex_id'],
@@ -39,9 +41,29 @@ class DisasterController extends Controller
 
         ];
       //  dd( $data );
+        $response_data = Disaster::where('id', $id)->update($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }else{
+            $data =[
+                'organizationId'            =>  $request['organizationId'],
+                'disasterTypeId'            =>  $request['disastertype'],
+                'disastercomm'              =>  $request['disastercomm'],
+                'cid'                       =>  $request['cid_passport'],
+                'name'                      =>  $request['fullname'],
+                'sex_id'                    =>  $request['sex_id'],
+                'email'                     =>  $request['email'],
+                'contactNo'                 =>  $request['contactno'],
+                'servingAs'                 =>  $request['servining_as'],
+                'placeOfWork'               =>  $request['fulladdress'],
+                'created_at'                =>date('Y-m-d h:i:s'),
+                'created_by'                =>  $request['user_id'],
+    
+            ];
+        // dd($data);
         $response_data = Disaster::create($data);
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }
     }
 
     

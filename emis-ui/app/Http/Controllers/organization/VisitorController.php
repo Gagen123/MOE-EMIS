@@ -42,17 +42,27 @@ class VisitorController extends Controller
             'visitor_information'       =>  $request['visitor_information'],
             'date'                      =>  $request['date'],
             'remarks'                  =>  $request['remarks'],
-            'user_id'                   =>  $this->userId()
+            'user_id'                   =>  $this->userId(),
+            'id'                        =>  $request['id'],
         ];
+       // dd($data);
     
             $response_data= $this->apiService->createData('emis/organization/visitor/saveVisitorInformation', $data);
             return $response_data;
     }
 
-    public function loadVisitorInformation(){
+    public function loadVisitorInformation(){ 
         $orgId=$this->getWrkingAgencyId();
         $data = $this->apiService->listData('emis/organization/visitor/loadVisitorInformation/'.$orgId);
         return $data;
     }
+
+    public function getVisitorTypeDropdown(){
+     
+        $data = $this->apiService->listData('emis/organization/visitor/getVisitorTypeDropdown');
+        return $data;
+    }
+
+    
 
 }

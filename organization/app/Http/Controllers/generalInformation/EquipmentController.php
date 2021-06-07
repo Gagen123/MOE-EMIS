@@ -34,7 +34,7 @@ class EquipmentController extends Controller
         $equip = DB::table('organization_equipment as a')
             ->join('equipment_type as b', 'a.type', '=', 'b.id')
             ->join('equipment_items as c', 'a.item', '=', 'c.id')
-            ->select('a.id as id','b.name as type', 'c.equipmentItem as item','a.cost as cost', 'a.condition as condition',
+            ->select('a.id as id','b.name as type', 'c.equipmentItem as item','a.usable as usable', 'a.notusable as notusable',
             'b.id AS typeId', 'c.id AS itemId')->where('organizationId',$orgId)->get();
 
         return $equip;
@@ -75,8 +75,8 @@ class EquipmentController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'cost'                      =>  $request['cost'],
-                'condition'                 =>  $request['condition'],
+                'usable'                      =>  $request['usable'],
+                'notusable'                 =>  $request['notusable'],
                 'updated_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];
@@ -87,8 +87,8 @@ class EquipmentController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'cost'                      =>  $request['cost'],
-                'condition'                 =>  $request['condition'],
+                'usable'                      =>  $request['usable'],
+                'notusable'                 =>  $request['notusable'],
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];

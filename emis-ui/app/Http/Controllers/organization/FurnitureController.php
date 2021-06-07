@@ -27,23 +27,17 @@ class FurnitureController extends Controller
         $rules = [
             'type'              =>  'required',
             'item'              =>  'required',
-            'cost'              =>  'required',
-            'date_received'     =>  'required',
-            'life_expectancy'   =>  'required',
-            'number'            =>  'required',
-            'condition'         =>  'required',
-            'location'          =>  'required'
+            'usable'            =>  'required',
+            'notusable'         =>  'required',
+            
 
         ];
         $customMessages = [
             'type.required'                 => 'Type is required',
             'item.required'                 => 'Item is required',
-            'cost.required'                 => 'Cost is required',
-            'condition.required'            => 'Condition is required',
-            'date_received.required'        =>  'Date is required',
-            'life_expectancy.required'      =>  'Life Expectancy is required',
-            'number.required'               =>  'number is required',
-            'location.required'             =>  'Use/Location is required'
+            'usable.required'                 => 'usable is required',
+            'notusable.required'            => 'notusable is required',
+           
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -52,12 +46,9 @@ class FurnitureController extends Controller
             'organizationId'            =>  $this->getWrkingAgencyId(),
             'type'                      =>  $request['type'],
             'item'                      =>  $request['item'],
-            'location'                  =>  $request['location'],
-            'cost'                      =>  $request['cost'],
-            'number'                    =>  $request['number'],
-            'condition'                 =>  $request['condition'],
-            'life_expectancy'           =>  $request['life_expectancy'],
-            'date_received'             =>  $request['date_received'],
+            'usable'                    =>  $request['usable'],
+            'notusable'                 =>  $request['notusable'],
+            
             'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()

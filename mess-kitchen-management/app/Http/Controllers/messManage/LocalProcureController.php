@@ -19,8 +19,7 @@ class LocalProcureController extends Controller
 
     public function saveLocalProcure(Request $request){
        //  dd('m here');
-        $orgId = $request['organizationId'];
-        $date = $request['dateOfprocure'];
+        $facility = $request['facility'];
      foreach ($request->local_item as $i=> $item){
             $localprocure = array(
              'organizationId'             =>  $orgId,
