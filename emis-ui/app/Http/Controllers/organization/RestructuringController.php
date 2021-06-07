@@ -73,6 +73,16 @@ class RestructuringController extends Controller
                 $establishment_data = $this->setExtension($request);
                 break;
             }
+            case "fee_structure_change" : {
+                $validation = $this->validateGeneralChange($request);
+                $establishment_data = $this->setFeeStructure($request);
+                break;
+            }
+            case "boadring_change" : {
+                $validation = $this->validateGeneralChange($request);
+                $establishment_data = $this->setBoadring($request);
+                break;
+            }
             case "all_details" : {
                     $validation = $this->validateAllChangesFields($request);
                     $establishment_data = $this->setAllChangesFields($request);
@@ -90,13 +100,13 @@ class RestructuringController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-        // dd( $workflowdet,$request->organization_type);
+        // dd( $workflowdet,$request->application_for);
         $screen_id="";
         $status="";
         $app_role="";
         $screen_name="";
         foreach($workflowdet as $work){
-            if($work->Establishment_type==$request->organization_type){
+            if($work->screenName==$request->application_for){
                 $screen_id=$work->SysSubModuleId;
                 $status=$work->Sequence;
                 $app_role=$work->SysRoleId;
@@ -193,11 +203,12 @@ class RestructuringController extends Controller
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
         // dd($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
-        $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
+        $service_name=$loadOrganizationDetails->data->establishment_type;//pulled category from existing organization details to match the data for verification
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
-            if($work->Sequence!=1 && strpos(strtolower($work->screenName),'change')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            // dd(strtolower($work->screenName),$work->Establishment_type,$service_name);
+            if($work->Sequence!=1 && $work->screenName==$service_name){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -982,7 +993,7 @@ class RestructuringController extends Controller
     private function setAutonomous($request){
         $change =[
             'organizationId'            =>  $request['organizationId'],
-            'autonomuos'                =>  $request['autonomuos'],
+            'isAutonomy'                =>  $request['isAutonomy'],
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
             'action_type'               =>  $request['action_type'],
@@ -1016,6 +1027,36 @@ class RestructuringController extends Controller
             'autonomuos'                =>  $request['autonomuos'],
             'currentCapacity'           =>  $request['currentCapacity'],
             'proposedCapacity'          =>  $request['proposedCapacity'],
+            'application_for'           =>  $request['application_for'],
+            'application_type'          =>  $request['application_type'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+    
+    private function setFeeStructure($request){
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'fees'                      =>  $request['fees'],
+            'application_for'           =>  $request['application_for'],
+            'application_type'          =>  $request['application_type'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],  
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId() 
+        ];
+
+        return $change;
+    }
+    
+    private function setBoadring($request){
+        $change =[
+            'organizationId'            =>  $request['organizationId'],
+            'isFeedingSchool'           =>  $request['isFeedingSchool'],
             'application_for'           =>  $request['application_for'],
             'application_type'          =>  $request['application_type'],
             'action_type'               =>  $request['action_type'],

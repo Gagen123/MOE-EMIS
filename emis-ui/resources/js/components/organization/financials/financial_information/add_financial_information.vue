@@ -45,11 +45,10 @@ export default {
             typeList:[],
 
             finacial_form: new form({
-                type: '',
                 amount: '',
                 date:'',
                 remarks: '',
-                organizationId:'',
+                type:'',
                 financialInformationId:'',
             }),
         }
@@ -60,7 +59,7 @@ export default {
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
                 let data = response;
-                this.typeList =  data.data;
+                this.typeList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -126,7 +125,7 @@ export default {
         
     },
     created() {
-    this.typeList();
+    // this.typeList();
     this.loadtypeList();
     this.submitForm();
    

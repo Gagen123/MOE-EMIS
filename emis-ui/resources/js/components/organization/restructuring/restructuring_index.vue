@@ -48,26 +48,22 @@
                     </router-link>
                 </li> -->
                 <li class="nav-item active pr-1">
-                    <router-link id="fee_change_index" to="/fee_structure_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link id="fee_structure_change_index" to="/fee_structure_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change in Fee Structure
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link id="bording_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Change to Bording School
+                    <router-link id="bording_change_index" to="/bording_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change to Boadring School
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link id="stream_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <!-- <li class="nav-item active pr-1">
+                    <router-link id="stream_change_index" to="/stream_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change in Stream
                     </router-link>
-                </li>
+                </li> -->
+              
                 <li class="nav-item active pr-1">
-                    <router-link id="fee_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Change in Fee Structure
-                    </router-link>
-                </li>
-                 <li class="nav-item active pr-1">
                     <router-link id="expension_index" to="/expension_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Expansion
                     </router-link>

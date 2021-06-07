@@ -91,12 +91,20 @@ class ChangeBasicDetailsController extends Controller
                     $change_details_data = $this->extractExtensionData($request, $applicationDetailsId);
                     break;
                 }
+                case "fee_structure_change" : {
+                    $change_details_data = $this->extractFeeStructureData($request, $applicationDetailsId);
+                    break;
+                }
+                case "boadring_change" : {
+                    $change_details_data = $this->extractBoadringData($request, $applicationDetailsId);
+                    break;
+                }
+                
                 case "all_details" : {
                         $change_details_data = $this->extractAllChangeData($request, $applicationDetailsId);
                         break;
                     }
                 default : {
-                    
                     break;
                 }
             }
@@ -196,6 +204,14 @@ class ChangeBasicDetailsController extends Controller
                     'proprietorEmail'               => $request['proprietorEmail']
                 ];
                 ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$request->id)->update($prop_data);
+            }
+            
+            if($request['application_type']=="fee_structure_change"){
+                $data =[
+                    'proposedChange'           =>  $request['fees'],
+                ];
+                $changeDetails = ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
             }
             
         }
@@ -519,7 +535,7 @@ class ChangeBasicDetailsController extends Controller
             'ApplicationDetailsId'          => $applicationDetailsId,
             'organizationId'                =>  $request['organizationId'],
             'change_type'                   =>  $request['application_for'],
-            'proposedChange'               =>  $request['autonomuos'],
+            'proposedChange'               =>  $request['isAutonomy'],
             'created_by'                   =>  $request['user_id'] 
         ];
 
@@ -556,6 +572,33 @@ class ChangeBasicDetailsController extends Controller
 
         return $changeDetails;
     }
+    private function extractFeeStructureData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'          => $applicationDetailsId,
+            'organizationId'                =>  $request['organizationId'],
+            'change_type'                   =>  $request['application_for'],
+            'proposedChange'                =>  $request['fees'],
+            'created_by'                    =>  $request['user_id'] 
+        ];
+
+        $changeDetails = ApplicationEstDetailsChange::create($data);
+
+        return $changeDetails;
+    }
+    private function extractBoadringData($request, $applicationDetailsId){
+        $data =[
+            'ApplicationDetailsId'          => $applicationDetailsId,
+            'organizationId'                =>  $request['organizationId'],
+            'change_type'                   =>  $request['application_for'],
+            'proposedChange'                =>  $request['isFeedingSchool'],
+            'created_by'                    =>  $request['user_id'] 
+        ];
+        $changeDetails = ApplicationEstDetailsChange::create($data);
+
+        return $changeDetails;
+    }
+    
+    
 
     private function extractAllChangeData($request, $applicationDetailsId){
         $data = [
@@ -824,6 +867,15 @@ class ChangeBasicDetailsController extends Controller
                     $change_details_data = $this->updateExtension($change_details,  $org_details, $request);
                     break;
                 }
+                case "fee_structure_change" : {
+                    $change_details_data = $this->updateFeestructure($change_details,  $org_details, $request);
+                    break;
+                }
+                
+                case "boadring_change" : {
+                    $change_details_data = $this->updateBoadring($change_details,  $org_details, $request);
+                    break;
+                }
                 case "autonomus_change" : {
                     $change_details_data = $this->updateAutonomous($change_details,  $org_details, $request);
                     break;
@@ -1088,5 +1140,63 @@ class ChangeBasicDetailsController extends Controller
         $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
         return $change_details;
 
+    }
+    private function updateFeestructure($change_details, $org_details,$request){
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'current_fees'              =>  $org_details->current_fees,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Change in Fee Structure', 
+            'recorded_by'               =>  $request->user_id, 
+        ];
+        HistoryForOrganizaitonDetail::create($org_data);
+        $org_update_data =[
+            'current_fees'               =>  $change_details->proposedChange,
+            'updated_by'                =>  date('Y-m-d h:i:s'),
+            'updated_at'                =>  $request->user_id, 
+        ];
+        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        return $change_details;
+    }
+    
+    private function updateAutonomous($change_details, $org_details,$request){
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'isAutonomy'                =>  $org_details->isAutonomy,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Change in Fee Structure', 
+            'recorded_by'               =>  $request->user_id, 
+        ];
+        HistoryForOrganizaitonDetail::create($org_data);
+        $org_update_data =[
+            'isAutonomy'               =>  $change_details->proposedChange,
+            'updated_by'                =>  date('Y-m-d h:i:s'),
+            'updated_at'                =>  $request->user_id, 
+        ];
+        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        return $change_details;
+    }
+    private function updateBoadring($change_details, $org_details,$request){
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'isFeedingSchool'           =>  $org_details->isFeedingSchool,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Change to Boadring', 
+            'recorded_by'               =>  $request->user_id, 
+        ];
+        HistoryForOrganizaitonDetail::create($org_data);
+        $org_update_data =[
+            'isFeedingSchool'           =>  $change_details->proposedChange,
+            'updated_by'                =>  date('Y-m-d h:i:s'),
+            'updated_at'                =>  $request->user_id, 
+        ];
+        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        return $change_details;
     }
 }

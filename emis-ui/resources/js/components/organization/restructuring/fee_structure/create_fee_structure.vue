@@ -55,12 +55,13 @@
                                 </div>
                                
                                 <div class="form-group row">
-                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Location Type:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                        <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2" @change="remove_error('locationType')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
+                                        <label>Current Fees (Nu):</label>
+                                        <input type="number" min="1" readonly v-model="organization_details.current_fees"  class="form-control" id="fees"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
+                                        <label>Propose New Fees (Nu):<span class="text-danger">*</span></label>
+                                        <input type="number" min="1" v-model="form.fees"  class="form-control" id="fees"/>
                                     </div>
                                 </div>
                             </form>
@@ -98,8 +99,8 @@ export default {
             calssArray:{},
             streamArray:{},
             form: new form({
-                organizationId:'',locationType:'',initiatedBy:' ', application_type:'location_type_change', 
-                application_for:'Change in Location Type', action_type:'add', status:'Submitted',organization_type:'',
+                organizationId:'',fees:'', application_type:'fee_structure_change', 
+                application_for:'Change in Fee Structure', action_type:'add', status:'Submitted',organization_type:'',
             }),
         } 
     },
@@ -146,8 +147,8 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
+                                    let message="Applicaiton for Change in Fee details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    this.$router.push({name:'fee_structure_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
                                         title: 'Change details is saved successfully'

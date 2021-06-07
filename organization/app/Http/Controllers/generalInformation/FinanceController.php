@@ -47,7 +47,7 @@ class FinanceController extends Controller
             'date'                               =>  $request['date'],
             'remarks'                            =>  $request['remarks'],
             'organization_details_id'            =>  $request['organizationId'],
-            // 'incomeFacilitiesId'              =>  $request['income'],
+            'incomeFacilitiesId'                 =>  $request['type'],
         ];
         // dd($data);
         $response_data = OrganizationIncomeFacilities::create($data);
@@ -106,7 +106,7 @@ class FinanceController extends Controller
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
             'status'                           =>  $request['remarks'],
-            // 'financialInformationId'         =>  $request['financialInformationId'],
+            'financialInformationId'            =>  $request['type'],
         ];
         // dd($data);
         $response_data = OrganizationFinancialInformation::create($data);

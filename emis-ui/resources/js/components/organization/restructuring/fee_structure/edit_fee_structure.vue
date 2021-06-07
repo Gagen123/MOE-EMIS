@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Feeding Details of Organization</label>                              
+                            <label class="mb-0.5">Change in Fee Structure</label>                              
                         </a>
                     </li>
                 </ul>
@@ -30,32 +30,36 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School(Curent):<span class="text-danger">*</span></label>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Current Name:</label>
+                                        <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Level:</label>
+                                        <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4" v-if="existing_details.isFeedingSchool==1">
-                                    <label><input  type="checkbox" id="exisfed1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" id="exisfed2"  value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" id="exisfed3"  value="3" tabindex=""/> Three Meals</label>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Dzongkhag:</label>
+                                        <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                        <label>Gewog:</label>
+                                        <input type="text" readonly  class="form-control" id="gewogid"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Village:</label>
+                                        <input type="text" readonly class="form-control" id="vilageId"/>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
-                                <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                    <label><input  type="radio" @change="show_feeding_details(true)" v-model="form.isfeedingschool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" @change="show_feeding_details(false)" v-model="form.isfeedingschool" value="0" tabindex=""/> No</label>
+                               
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
+                                        <label>Propose New Fees:<span class="text-danger">*</span></label>
+                                        <input type="number" min="1" v-model="form.fees"  class="form-control" id="fees"/>
+                                    </div>
                                 </div>
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"  id="feedingDetails" style="display:none">
-                                    <label class="mb-0">Feeding Modality:</label><br>
-                                    <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
-                                </div>
-                            </div>
-                            <br>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -76,15 +80,24 @@
 export default {
     data(){
         return{
+            organization_details:'',
+            proposed_by_list:[],
             orgList:'',
-            classList:[],
-            streamList:[],
-            existing_details:'',
-            category:'',
             record_id:'',
+            classList:[],
+            locationList:[],
+            streamList:[],
+            category:'',
+            levelArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
+            locationArray:{},
+            calssArray:{},
+            streamArray:{},
             form: new form({
-                organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
-                application_for:'Change in Feeding Details', action_type:'edit', status:'Submitted',organization_type:'',
+                id:'', organizationId:'',fees:'', application_type:'fee_structure_change', 
+                application_for:'Change in Fee Structure', action_type:'edit', status:'Submitted',organization_type:'',
             }),
         } 
     },
@@ -99,50 +112,11 @@ export default {
             }
         }, 
 
-        /**
-         * method to get location in dropdown
-         */
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-            });
-        },
-
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
-            });
-        },
-
-        /**
-         * method to populate dropdown
-         */
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
-                this.getorgdetials($('#organizationId').val()); 
-            }
-            
-        },
-
-        getorgdetials(org_id){
-            $('#organizationId').val(org_id).trigger('change');
-            this.form.organizationId=org_id;   
-            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
-            .then(response => {
-                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
-                this.existing_details=response.data.data;
-                this.category=this.existing_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.existing_details.category.replace('_', " ").slice(1);
-                
             });
         },
 
@@ -160,23 +134,18 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        let clasArray=[];
-                        $("input[name='feeding']:checked").each( function () {
-                            clasArray.push($(this).val());
-                        });
-                        this.form.feeding=clasArray;
                         this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
                                     Toast.fire({  
                                         icon: 'error',
-                                        title: 'Technical Errors: please contact system admimnistrator for further details'
+                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Feeding details has been updated and send for approval. <br><b>Thank You !</b>";
-                                    this.$router.push({name:'feeding_change_acknowledgement',params: {data:message}});
+                                    let message="Applicaiton for Change in Fee details has been edited and submitted for approval. <br><b>Thank You !</b>";
+                                    this.$router.push({name:'fee_structure_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
@@ -202,6 +171,39 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
 
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();  
+                this.getorgdetials($('#organizationId').val()); 
+            }
+            if(id=="locationType"){
+                this.form.locationType=$('#locationType').val();  
+            }
+            
+            
+        },
+       
+        getorgdetials(org_id){
+             this.form.organizationId=org_id;
+            $('#organizationId').val(org_id).trigger('change');
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.organization_details=response.data.data;
+                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+            });
+        },
+
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -219,59 +221,95 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-
-
-        /**
-         * method to get class in checkbox
-         */
-        getClass:function(){
-            axios.get('/organization/getClass')
-              .then(response => {
-                this.classList = response.data;
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.proposed_by_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+       
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+                 for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
             });
         },
 
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
+        getGewogList(dzongkhag,gewogId){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogid').val(this.gewogArray[gewogId]);
             });
         },
 
-        /**
-         * Show feeding details options
-         */
-        show_feeding_details(param){
-            if(param){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
+        getvillagelist(gewogId,vil_id){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name; 
+                }
+                $('#vilageId').val(this.villageArray[vil_id])
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
         },
-
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.locationList = data;
+                for(let i=0;i<data.length;i++){
+                    this.locationArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
         loadApplicaitonDetials(){ 
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
                 this.getorgdetials(response_data.change_details.organizationId);
                 this.form.id=response_data.change_details.id;
-                this.form.isfeedingschool=response_data.change_details.proposedChange;
-                if(response_data.change_details.proposedChange==1){
-                    $('#feedingDetails').show();
-                    for(let i=0;i<response_data.feed_det.length;i++){
-                        $('#feeding'+response_data.feed_det[i].noOfMeals).prop('checked',true);
-                    }
-                }
+                this.form.fees=response_data.change_details.proposedChange;
             });
         },
         
     },
     
     mounted() { 
+        this.getLocation();
+        this.loadproposedBy();
+        this.loadactivedzongkhagList();
+        this.getOrgList();
+        this.getLevel();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -284,9 +322,9 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
         this.loadApplicaitonDetials();
+        
     }
 }
 </script>
