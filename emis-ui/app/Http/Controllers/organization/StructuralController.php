@@ -25,12 +25,10 @@ class StructuralController extends Controller
     public function saveSport(Request $request){
         $rules = [
             'facility'                   =>  'required',
-            'support'                    =>  'required',
             
         ];
         $customMessages = [
             'facility.required'          => 'Facility is required',
-            'support.required'           => 'Facility is required',
             
         ];
         $this->validate($request, $rules, $customMessages);

@@ -17,7 +17,7 @@ class Sport extends Model
      * @var array
      */
     protected $fillable = [
-        'id','organizationId','facility','type','yearOfEstablishment','status','size','supportedBy','accessible','size',
+        'id','organizationId','facility','type','yearOfEstablishment','status','size','sportstype','supportedBy','accessible','size',
         'rampAccess','created_by','updated_by'
     ];
 }

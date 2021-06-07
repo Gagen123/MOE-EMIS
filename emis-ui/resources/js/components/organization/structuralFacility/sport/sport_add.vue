@@ -12,16 +12,7 @@
                         <has-error :form="form" field="facility"></has-error>
                     </div>
                     </div>
-                    <div class="form-group row"> 
-                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">supportBy:<span class="text-danger">*</span></label>
-                     <div class="col-lg-8 col-md-8 col-sm-8">
-                        <select name="support" id="support" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="form.support">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="facility"></has-error>
-                    </div>
-                 </div>
+                  
             <div class="card">
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -30,8 +21,10 @@
                               <tr>
                                   <th>Type of facilities<span class="text-danger">*</span></th>
                                   <th>Year of establishment<span class="text-danger">*</span></th>
+                                  <th>support By<span class="text-danger">*</span></th>
                                   <th id='sizeAndarea1'>Area/Size</th>
                                   <th>Accessible to SEN<span class="text-danger">*</span></th>
+                                  <th>Sports type</th>
                                   <th>Status<span class="text-danger">*</span></th>
                               </tr>
                            </thead>
@@ -45,9 +38,16 @@
                                   <td>                          
                                     <input type="number" name="yoe" class="form-control" v-model="item.yoe"/>
                                   </td>
+                                  <td>
+                                         <select name="support"  class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="item.support">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                  </td>
                                   <td id='sizeAndarea'> 
                                     <input type="number" name="area" class="form-control" v-model="item.area"/>
                                 </td>
+                                
                                   <td>                                
                                      <select name="access" id="access" class="form-control editable_fields" v-model="item.access">
                                            <option  value="">--- Please Select ---</option>
@@ -55,6 +55,10 @@
                                                 <option value="1">no</option>
                                                 <option value="2">partial</option>
                                      </select> 
+                                  </td>
+                                  <td>                                
+                                    <label><input v-model="item.sportstype"  type="radio" value="1" /> Indoor</label>
+                                    <label><input v-model="item.sportstype"  type="radio" value="0" /> Outdoor</label>
                                   </td>
                                   <td>                                
                                     <label><input v-model="item.status"  type="radio" value="1" /> Usable</label>
@@ -96,10 +100,10 @@ export default {
             facilitySubList:[],
             items_received: [],
             form: new form({
-                 id: '',facility:'',support:'',
+                 id: '',facility:'',
                   items_received:
                 [{
-                    type:'',yoe:'',access:'',area:'', status:'',
+                    type:'',yoe:'',access:'',area:'', status:'',sportstype:'',item:'',support:'',
                 }], 
             })
         }
@@ -114,7 +118,7 @@ export default {
             this.form.facility= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({type:'',yoe:'',access:'',area:'', status:'',})
+            this.form.items_received.push({type:'',yoe:'',access:'',area:'', status:'',sportstype:'',item:'',support:'',})
         },
 
         /**
@@ -243,7 +247,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.items_received.push({
-               type:'',yoe:'',access:'',area:'', status:''})    
+               type:'',yoe:'',access:'',area:'', status:'',sportstype:'',item:'',support:'',})    
         }, 
         /**
          * method to remove fields

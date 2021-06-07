@@ -64,7 +64,8 @@ class SportController extends Controller
                 'yearOfEstablishment'                   =>  $request['yoe'],
                 'status'                                =>  $request['status'],
                 'size'                                  =>  $request['area'],
-                'supportedBy'                           =>  $request['supportedBy'],
+                'sportstype'                            =>  $request['sportstype'],
+                'supportedBy'                           =>  $request['support'],
                 'accessibleToDisabled'                  =>  $request['access'],
                 'updated_by'                            =>  $request->user_id,
                 'created_at'                            =>  date('Y-m-d h:i:s')
@@ -74,7 +75,6 @@ class SportController extends Controller
 
             }else{
                 $organizationId  = $request['organizationId'];
-                $supportedBy     = $request['supportedBy'];
 
                 foreach ($request->items_received as $i=> $item){
                     $localprocure = array(
@@ -84,6 +84,8 @@ class SportController extends Controller
                      'accessibleToDisabled'       =>  $item['access'],
                      'size'                       =>  $request['area'],
                      'status'                     =>  $item['status'],
+                     'sportstype'                 =>  $item['sportstype'],
+                     'supportedBy'                 =>  $item['support'],
                      'updated_by'                 =>  $request->user_id,
                      'created_at'                 =>  date('Y-m-d h:i:s')
                     );
