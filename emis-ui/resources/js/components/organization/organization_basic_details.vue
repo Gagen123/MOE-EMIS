@@ -11,197 +11,54 @@
                         <div class="card-body">
                             <div class="tab-pane">
                                 <form class="form-horizontal">
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                        <label class="mb-0"><i><u>Basic Details</u></i></label>
+                                    </div>
                                     <hr>
                                     <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>MOF Code:</label>
-                                            <input type="text" class="form-control" v-model="form.mofCode">
+                                            <input type="text" class="form-control" v-model="form.mofCode" :class="{ 'is-invalid': form.errors.has('mofCode') }" >
+                                            <has-error :form="form" field="mofCode"></has-error>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>RCSC/Zest Code:</label>
-                                            <input type="text" class="form-control" v-model="form.zestAgencyCode">
+                                            <input type="text" class="form-control" v-model="form.zestAgencyCode" :class="{ 'is-invalid': form.errors.has('zestAgencyCode') }" >
                                         </div>  
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Organization code:</label>
-                                            <input type="text" readonly class="form-control" v-model="form.code">
-                                        </div>
-                                    </div>
-                                    <div class="row invoice-info">
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
-                                            <label class="mb-0"><i><u>Basic Details</u></i></label>
-                                        </div>
-                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
-                                            <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is AspNet School:</label><br>
-                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is GeoPoliticallyLocated:</label><br>
-                                                    <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is Resource Center:</label><br>
-                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="0" tabindex=""/> No</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Has Counselling room:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Has shift System:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasShiftSystem" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasShiftSystem" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Has CE:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCE" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCE" value="0" tabindex=""/> No</label>
-                                                </div>
-                                            </div>
-                                         </div>
-                                    </div>
-                                    <hr>
-                                    <div class="row invoice-info">
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
-                                            <label class="mb-0"><i><u>Geo-Position Details</u></i></label>
-                                        </div>
-                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
-                                            <div class="form-group row">
-                                                <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Long:</label>
-                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                    <input type="text" v-model="form.longitude" class="form-control editable_fields" id="longitude" />
-                                                </div>
-                                                <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Lat:</label>
-                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                    <input type="text" v-model="form.latitude" class="form-control editable_fields" id="latitude" />
-                                                </div>
-                                                <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Alt:</label>
-                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                    <input type="text" v-model="form.altitude" class="form-control editable_fields" id="altitude" />
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <i>Above values are displayed from your current location. Make sure that you are updating this information from your school, Otherwise you can Overwrite then if you know those values </i>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Google Map Path:</label>
-                                                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-                                                    <input type="text" v-model="form.map_path" class="form-control editable_fields" id="nameOwner"/>
-                                                </div>
-                                            </div>
+                                            <input type="text" readonly class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" >
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="row invoice-info">
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
-                                            <label class="mb-0"><i><u>Others</u></i></label>
-                                        </div>
-                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
-                                            <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Climate Type:</label>
-                                                    <select v-model="form.climate_type" class="form-control" name="climate_type" id="climate_type">
-                                                        <option v-for="(item, index) in climate_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Entrance Gate:</label><br>
-                                                    <label><input  type="radio" v-model="form.entranceGate" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.entranceGate" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Compound Fencing:</label><br>
-                                                    <label  v-for="(item, key, index) in  fence_list" :key="index" class="pr-4">
-                                                        <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/> 
-                                                        {{item.name}}
-                                                    </label>
-                                                </div>
-                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Distance From Dzongkhag HQ (KM):</label>
-                                                    <input type="number" min="0" v-model="form.distance_from_dzo" class="form-control editable_fields" id="cidOfOwner"/>
-                                                </div> -->
-                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Thram No:</label>
-                                                    <input type="text" name="thramNo" v-model="form.thramNo" class="form-control editable_fields" id="thramNo"/>
-                                                </div> -->
-                                            </div>
-                                            <div class="form-group row">
-                                                
-                                                
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Disaster Area:</label><br>
-                                                    <label  v-for="(item, key, index) in  disasterList" :key="index" class="pr-4">
-                                                        <input  type="checkbox" v-model="form.disasterArea" :value="item.id" tabindex=""/> 
-                                                        {{item.name}}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                        <label class="mb-0"><i><u>Contact Details</u></i></label>
                                     </div>
                                     <hr>
                                     <div class="row invoice-info">
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
-                                            <label class="mb-0"><i><u>Contact Detail</u></i></label>
-                                        </div>
-                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 invoice-col">
                                            <div class="form-group row">
-                                              <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <!-- <th>Contact of</th> -->
-                                                            <th>Phone</th>
-                                                            <th>Mobile</th>
-                                                            <th>Email</th>                            
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr id="record1" v-for='(user, index) in form.users' :key="index">
-                                                            <!-- <td>
-                                                                <select name="contactName" id="contactName" class="form-control" v-model="user.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" @change="remove_error('contactName')">
-                                                                    <option value="">--- Please Select ---</option>
-                                                                    <option v-for="(item, index) in contactTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                                </select>
-                                                                <has-error :form="form" field="user.contactName"></has-error>
-                                                            </td> -->
-                                                            <td>                                
-                                                                <!-- <input type="number" name="phone" id="phone" class="form-control" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')"/>
-                                                                <has-error :form="form" field="phone"></has-error> -->
-                                                               
-                                                                <input name="phone"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "6"
-                                                                @change="remove_error('phone')" v-model="user.phone" :class="{ 'is-invalid': form.errors.has('phone') }" class="form-control"  id="phone" >
-                                                                <has-error :form="form" field="phone"></has-error>
-                                                            </td>
-                                                            <td>                                
-                                                                <!-- <input type="number" name="mobile" id="mobile" class="form-control" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" @change="remove_err('mobile')"/> -->
-                                                                <input name="mobile"  oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type = "number" maxlength = "8"
-                                                                @change="remove_error('mobile')" v-model="user.mobile" :class="{ 'is-invalid': form.errors.has('mobile') }" class="form-control"  id="mobile" >
-                                                                <has-error :form="form" field="mobile"></has-error>
-                                                            </td>
-                                                            <td>                                
-                                                                <input type="email" name="email" id="email" class="form-control" v-model="user.email" :class="{ 'is-invalid': form.errors.has('email') }" @change="remove_error('email')"/>
-                                                                 <has-error :form="form" field="email"></has-error>
-                                                            </td>
-                                                        </tr> 
-                                                        <tr>
-                                                            <td colspan="5"> 
-                                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                                            </td>
-                                                        </tr>                                          
-                                                    </tbody>
-                                                </table>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Official Contact No:</label>
+                                                    <input type="number" class="form-control" v-model="form.contactNo" :class="{ 'is-invalid': form.errors.has('contactNo') }" >
+                                                    <has-error :form="form" field="contactNo"></has-error>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Official Email:</label>
+                                                    <input type="text" class="form-control" v-model="form.officialEmail" :class="{ 'is-invalid': form.errors.has('officialEmail') }" >
+                                                    <has-error :form="form" field="officialEmail"></has-error>
+                                                </div>  
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Official Website:</label>
+                                                    <input type="text" class="form-control" v-model="form.officialWebsite" :class="{ 'is-invalid': form.errors.has('officialWebsite') }" >
+                                                    <has-error :form="form" field="officialWebsite"></has-error>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Facebook Link:</label>
+                                                    <input type="text" class="form-control" v-model="form.facebookLink" :class="{ 'is-invalid': form.errors.has('facebookLink') }" >
+                                                    <has-error :form="form" field="facebookLink"></has-error>
+                                                </div>
                                             </div>
-                                        </div>
                                         </div>
                                     </div>
                                     <div class="row form-group fa-pull-right">
@@ -234,24 +91,14 @@
                 climate_type_list:[],
                 form: new form({
                     org_id: '',
-                    isAspNetSchool:'',
-                    isColocated: '',
-                    isFeedingSchool:'',
-                    isGeoPoliticallyLocated:'',
-                    isResourceCenter:'',
-                    isSenSchool:'',
-                    hasCounselingRoom:'',
-                    hasShiftSystem:'',
-                    hasCE:'',
+                    code:'',
                     mofCode:'',
                     zestAgencyCode:'',
-                    longitude:'', latitude:'', altitude:'',map_path:'',
-                    climate_type:'',distance_from_dzo:'',thramNo:'',
-                    fencingtype:'',entranceGate:'',disasterArea:[],
-                    users:
-                    [{
-                        contactName:'',phone:'', mobile:'',email:''
-                    }],
+                    contactNo:'', 
+                    officialWebsite:'',
+                    officialEmail:'',
+                    facebookLink:'',
+                    fields_for:'organization'
                 }) 
             }
         },
@@ -299,6 +146,13 @@
                         this.form.longitude=response_data.locationDetials.longitude;
                         this.form.thramNo=response_data.locationDetials.thramNo;
                     }
+                    if(response_data.contactDetails!=null && response_data.contactDetails!=""){
+                        this.form.contactNo=response_data.contactDetails.phone;
+                        this.form.facebookLink=response_data.contactDetails.facebookLink;
+                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
+                        this.form.officialEmail=response_data.contactDetails.email;
+                        this.form.officialWebsite=response_data.contactDetails.website;
+                    }
                     let prop=data.contact;
                     let contactDetails=[];
                     for(let i=0;i<prop.length;i++){
@@ -318,7 +172,7 @@
                 }
             },
             updateorg(){
-                this.form.post('organization/updateOrgBasicDetials')
+                this.form.post('organization/updateBasicDetails')
                 .then((response) => {
                     this.loadexsitingDetails();
                     alert(response);

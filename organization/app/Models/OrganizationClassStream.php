@@ -21,6 +21,8 @@ class OrganizationClassStream extends Model
         'organizationId',
         'classId',
         'streamId',
+        'isMultiGrade',
+        'multiGradeId',
         'created_by',
         'updated_by'
     ];

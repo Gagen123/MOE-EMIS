@@ -12,16 +12,14 @@
                             <label class="mb-0.5">Organization Details </label>                              
                         </a>
                     </li>
-                    
-                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Classes and Stream </label>
-                        </a>
-                    </li>
-                    
                     <li class="nav-item file-tab" @click="shownexttab('file-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">File Uploads </label>
+                        </a>
+                    </li>
+                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Classes and Stream </label>
                         </a>
                     </li>
                 </ul>
@@ -120,66 +118,19 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
                         <div class="card">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Classes</th>
-                                            <th class="strm_clas">Stream</th>  
-                                            <th></th>                     
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item, key, index) in  classStreamList" :key="index">
-                                            <td>
-                                                <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                            </td>
-                                            <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                {{  item.stream  }}
-                                            </td>
-                                            <td class="strm_clas" v-else>                                
-                                            
-                                            </td>
-                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
-                                            </td>
-                                            <td v-else>  
-                                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
-                                                
-                                            </td>
-                                        </tr> 
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('class-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('file-tab')"> Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
-                            </div>
-                        </div>
-                        <div class="form-group row">
+                            <div class="form-group row">
                                 <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
@@ -195,7 +146,7 @@
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>                                
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
@@ -211,6 +162,22 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')"> Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
+                            </div>
+                        </div><br>
                         <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                             <span v-for="(item, key, index) in  classStreamList" :key="index">
                                 <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
@@ -230,7 +197,38 @@
                                 </label>
                             </span>  
                         </span>  -->
-                        
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Classes</th>
+                                        <th class="strm_clas">Stream</th>  
+                                        <th></th>   
+                                        <th>Applicable Class Stream</th> 
+                                                               
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                            {{  item.stream  }}
+                                        </td>
+                                        <td class="strm_clas" v-else>                                
+                                          
+                                        </td>
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                        </td>
+                                        <td v-else>  
+                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                        </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
@@ -270,6 +268,7 @@ export default {
             fileUpload: [],
             draft_data:[],
             proposed_by_list:[],
+            multiAgeIdList:[],
             file_form: new form({
                 id:'',
                 file_name: '',
@@ -290,7 +289,7 @@ export default {
             }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Public School', status:'Submitted',application_number:'',
-                action_type:'add',submit_type:'',remarks:'',proposedName:'',
+                action_type:'add',submit_type:'',remarks:'',proposedName:'',multiAgeId:[],
             }) 
         } 
     },
@@ -547,7 +546,7 @@ export default {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
                             this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
-                            this.loadpendingdetails('Public_School');
+                            // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -558,31 +557,46 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
+                    let clasArray=[];
+                    $("input[name='attachment']:checked").each( function () {
+                        clasArray.push($(this).val());
+                    });
+                    if(clasArray.length<1){
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
                         }
+                        let formData = new FormData();
+                        formData.append('id', this.file_form.id);
+                        formData.append('ref_docs[]', this.file_form.ref_docs);
+                        for(let i=0;i<this.file_form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                        }
+                        formData.append('application_number', this.file_form.application_number);
+                        
+                        axios.post('organization/saveUploadedFiles', formData, config)
+                        .then((response) => {
+                            if(response.data!=""){
+                                this.change_tab(nextclass);
+                            }
+                        })
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.change_tab('organization-tab');
+                            console.log("Error:"+error)
+                        })
                     }
-                    let formData = new FormData();
-                    formData.append('id', this.file_form.id);
-                    formData.append('ref_docs[]', this.file_form.ref_docs);
-                    for(let i=0;i<this.file_form.ref_docs.length;i++){
-                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                    else{
+                        Swal.fire({
+                            text: "Please attach files ",
+                            icon: 'info',
+                            confirmButtonText: 'OK',
+                            showCancelButton: true,
+                        });
                     }
-                    formData.append('application_number', this.file_form.application_number);
                     
-                    axios.post('organization/saveUploadedFiles', formData, config)
-                    .then((response) => {
-                        if(response.data!=""){
-                            this.change_tab(nextclass);
-                        }
-                    })
-                    .catch((error) => {
-                        this.applyselect2();
-                        this.change_tab('organization-tab');
-                        console.log("Error:"+error)
-                    })
                 }else{
                     this.change_tab(nextclass);
                 }
@@ -669,6 +683,8 @@ export default {
          */
         getClassStream(text){
             $('.strm_clas').hide();
+            $('.multiageclass').prop('disabled',true);
+            $('.multiageclassval').val('');
             let level = text;
             if(level.toLowerCase().includes('middle')){
                 level="10";
@@ -678,6 +694,7 @@ export default {
             }
             else if(level.toLowerCase().includes('primary')){
                 level="6";
+                $('.multiageclass').prop('disabled',false);
             }
             else{
                 level="12";
@@ -735,7 +752,11 @@ export default {
             .catch(errors => { 
                 console.log(errors)
             });   
-        }
+        },
+        
+        
+        
+        
     },
     
     created(){
@@ -769,6 +790,7 @@ export default {
         });
         this.getClass();
         this.getStream();
+        this.getmultiGrade();
         this.getAttachmentType();
         this.getLocation();
         this.getOrgList();

@@ -16,6 +16,7 @@ class CreateOrganizationIncomeFacilitiesTable extends Migration
         Schema::create('organization_income_facilities', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('organization_details_id',36);
+            $table->char('incomeFacilitiesId')->nullable(true);;
             $table->char('amountgenerated');
             $table->char('date');
             $table->char('remarks');

@@ -24,28 +24,19 @@ class StructuralController extends Controller
 
     public function saveSport(Request $request){
         $rules = [
-            'facility'          =>  'required',
-            'type'              =>  'required',
-            'status'            =>  'required',
+            'facility'                   =>  'required',
+            
         ];
         $customMessages = [
-            'facility.required'         => 'Facility is required',
-            'type.required'             => 'Type is required',
-            'status.required'           => 'TyCurrent Status is required',
+            'facility.required'          => 'Facility is required',
+            
         ];
         $this->validate($request, $rules, $customMessages);
         $sport =[
             'organizationId'                        =>  $this->getWrkingAgencyId(),
             'facility'                              =>  $request['facility'],
-            'type'                                  =>  $request['type'],
-            'size'                                  =>  $request['size'],
-            'courts'                                =>  $request['courts'],
-            'yearOfEstablish'                       =>  $request['yearOfEstablish'],
-            'status'                                =>  $request['status'],
-            'supportedBy'                           =>  $request['supportedBy'],
-            'numberOfFacility'                      =>  $request['numberOfFacility'], 
-            'facilityAccessibleToDisabled'          =>  $request['facilityAccessibleToDisabled'],
-            'id'                                    =>  $request['id'],
+            'support'                               =>  $request['support'],
+            'items_received'                        =>  $request->items_received,
             'user_id'                               =>  $this->userId()
         ];
         // try{
@@ -72,6 +63,7 @@ class StructuralController extends Controller
             'facility'                              =>  $request['facility'],
             'yearOfEstablish'                       =>  $request['yearOfEstablish'],
             'status'                                =>  $request['status'],
+            'area'                                  =>  $request['area'],
             'supportedBy'                           =>  $request['supportedBy'],
             'numberOfFacility'                      =>  $request['numberOfFacility'], 
             'id'                                    =>  $request['id'],
@@ -91,6 +83,13 @@ class StructuralController extends Controller
             $orgId=$this->getWrkingAgencyId();
         }
         $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
+        return $loadSport;
+    }
+    public function loadeccd($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $loadSport = $this->apiService->listData('emis/organization/sport/loadeccd/'.$orgId);
         return $loadSport;
     }
 

@@ -176,6 +176,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
+        $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
+
+        $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
+        $router->post('/updateBasicDetails', 'establishment\EstablishmentController@updateBasicDetails');
+
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
             // $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
@@ -279,6 +284,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveEccd', 'structuralFacility\SportController@saveEccd');
             $router->post('/saveSport', 'structuralFacility\SportController@saveSport');
             $router->get('/loadSport/{orgId}', 'structuralFacility\SportController@loadSport');
+            $router->get('/loadeccd/{orgId}', 'structuralFacility\SportController@loadeccd');
             $router->get('/getFacilityInDropdown', 'structuralFacility\SportController@getFacilityInDropdown');
             $router->get('/getSupportInDropdown', 'structuralFacility\SportController@getSupportInDropdown');
             $router->get('/getSubFacilityDropdown/{id}', 'structuralFacility\SportController@getSubFacilityDropdown');
@@ -375,12 +381,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadBifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadBifurcationForVerification']);
             // $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
             $router->post('/updateBifurcation', 'restructuring\BifurcationController@updateBifurcation');
+            $router->post('/updateBifurcationDetails', 'restructuring\BifurcationController@updateBifurcationDetails');
         });
 
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
             $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
             $router->post('/updateMergerApplication', 'restructuring\MergerController@updateMergerApplication');
+            $router->post('/updateMergerDetails', 'restructuring\MergerController@updateMergerDetails');
 
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
@@ -388,18 +396,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadClosureApplicationDetails/{appNo}', ['uses' => 'restructuring\ClosureController@loadClosureApplicationDetails']);
             $router->get('/loadClosureForVerification/{appNo}', ['uses' => 'restructuring\ClosureController@loadClosureForVerification']);
             $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
+            $router->post('/updateClosureDetails', 'restructuring\ClosureController@updateClosureDetails');
+
 
         });
 
         $router->group(['prefix' => 'reopening'], function () use ($router) {
             $router->post('/saveReopening', 'restructuring\ReopeningController@saveReopening');
             $router->get('/loadReopeningForVerification/{appNo}', ['uses' => 'restructuring\ReopeningController@loadReopeningForVerification']);
+            $router->post('/updateReopeningDetails', 'restructuring\ReopeningController@updateReopeningDetails');
 
         });
-
-        $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
-
-        $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
        
         
     });

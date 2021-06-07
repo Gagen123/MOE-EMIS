@@ -49,10 +49,22 @@ class ClassMappingController extends Controller
             foreach($request->class as $key => $classId){
                 $stream_exists = $this->checkStreamExists($classId);
                 if(empty($stream_exists)){
+                    $multigrade="";
+                    $ismultigrade='';
+                    if($request->multiAgeId!=""){
+                        foreach($request->multiAgeId as $sec => $multiage){
+                            if(explode('__',$multiage)[0]==$classId){
+                                $multigrade=explode('__',$multiage)[1];
+                                $ismultigrade=1;
+                            }
+                        }
+                    }
                     $classStream = [
                         'organizationId'        => $request->school,
                         'classId'               => $classId,
                         'streamId'              => '',
+                        'isMultiGrade'          => $ismultigrade,
+                        'multiGradeId'          => $multigrade,
                         'created_by'            => $request->user_id,
                         'created_at'            => date('Y-m-d h:i:s'),
                     ];

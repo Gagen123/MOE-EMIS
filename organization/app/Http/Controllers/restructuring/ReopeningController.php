@@ -16,7 +16,8 @@ use App\Models\Masters\Stream;
 use Illuminate\Support\Carbon;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
-
+use App\Models\HistoryForOrganizaitonDetail;
+use App\Models\OrganizationDetails;
 
 class ReopeningController extends Controller
 {
@@ -160,6 +161,69 @@ class ReopeningController extends Controller
         //     $response_data->stream=$sections;
         // }
         return $this->successResponse($response_data); 
+    }
+
+    /**
+     * to update after approving/rejecting
+     */
+
+    public function updateReopeningDetails(Request $request){
+
+        //Code is copied from updateChangeBasicDetails
+        // to update the applications table
+
+        $estd =[
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id, 
+        ];
+        ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+       
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id, 
+                    ];
+                    $doc = ApplicationAttachments::create($attach);
+                }
+            }
+        }
+
+        $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
+
+        // $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
+        // $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
+        // $change_details_data="";
+
+        // $org_data =[
+        //     'id'                        =>  $org_details->id,
+        //     'name'                      =>  $org_details->name,
+        //     'updated_by'                =>  $org_details->updated_by,
+        //     'updated_at'                =>  $org_details->updated_at,
+        //     'recorded_on'               =>  date('Y-m-d h:i:s'),
+        //     'recorded_for'              =>  'Name Change', 
+        //     'recorded_by'               =>  $request->user_id, 
+        // ];
+        // HistoryForOrganizaitonDetail::create($org_data);
+        // $org_update_data =[
+        //     'name'                      =>  $change_details->proposedChange,
+        //     'updated_by'                =>  date('Y-m-d h:i:s'),
+        //     'updated_at'                =>  $request->user_id, 
+        // ];
+        // $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+
+        // return $this->successResponse($change_details_data, Response::HTTP_CREATED);
     }
 
 }

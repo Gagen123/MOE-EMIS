@@ -29,7 +29,7 @@
                                     <td>{{ item.category }}</td>
                                     <td>{{ item.code }}</td>
                                     <td>{{ dzoArray[item.dzongkhagId] }}</td>
-                                    <td>{{ item.status }}</td>
+                                    <td>{{ item.status==  1 ? "Active" : "Inactive"}}</td>
                                     <td>
                                         <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View</a>
                                     </td>
@@ -83,7 +83,7 @@ export default {
         this.getLevel();
         this.loaddzongkhagList();
         this.dt =  $("#register-table").DataTable();
-        axios.get('loadCommons/loadOrgList/allorganizationList/allData')
+        axios.get('loadCommons/loadOrgList/userdzongkhagwise/allData')
         .then((response) => {  
             this.data_list=response.data.data;
         })
