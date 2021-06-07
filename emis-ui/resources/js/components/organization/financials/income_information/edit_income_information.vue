@@ -123,7 +123,7 @@ export default {
     },
     created() {
         this.getloadincomeList();
-         this.updateForm();
+        this.updateForm();
         this.income_form.id=this.$route.params.data.id;
         this.income_form.income=this.$route.params.data.income;
         this.income_form.amount=this.$route.params.data.amountGenerated;

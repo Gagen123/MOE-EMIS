@@ -11,12 +11,7 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" >
-                    <router-link id="regularstaff" to="/infrastructure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Infrastructure
-                    </router-link>
-                </li>
+                
                 <li class="nav-item active pr-1">
                     <router-link id="volunteer" to="/sport_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
@@ -39,6 +34,24 @@
                     <router-link id="nomination" to="/school_feeding" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         School Feeding
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" >
+                    <router-link id="regularstaff" to="/infrastructure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Infrastructure
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('financial_information')">
+                    <router-link id="financial_information" to="/financial_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Financial Information
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('income_information')">
+                    <router-link id="income_information" to="/income_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Income Facilities
                     </router-link>
                 </li>
             </ul>

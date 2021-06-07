@@ -172,6 +172,9 @@
                 if(data.service_name.includes('Leave')){ 
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
                 }
+                if(data.service_name.includes('Reopen')){ 
+                    this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
+                }
             }   
         }
     },

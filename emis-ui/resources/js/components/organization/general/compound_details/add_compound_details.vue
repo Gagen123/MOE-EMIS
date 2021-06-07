@@ -42,7 +42,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Does the School have agricultural area?<span class="text-danger">*</span></label> 
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1" @click="showtextbox('No')" checked/>No</label>
+                        <label><input v-model="form.status"  type="radio" value="1" @click="showtextbox('No')" />No</label>
                         <label><input v-model="form.status"  type="radio" value="0" @click="showtextbox('Yes')"/>Yes</label>
                     </div>
                 </div>
@@ -82,7 +82,7 @@ export default {
                 sizecompound:'',
                 sizeplayground:'',
                 playgroundused: '',
-                status: '1',
+                status: '',
                 agriculturalarea: '',
                 areaused:'',
                

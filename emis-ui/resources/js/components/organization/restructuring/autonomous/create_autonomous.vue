@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Name of Organization</label>                              
+                            <label class="mb-0.5">Change to Autonomous</label>                              
                         </a>
                     </li>
                 </ul>
@@ -26,17 +26,46 @@
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{form.organization_type}}</label>
+                                    <label>Org Type: {{category}}</label>
                                 </div>
-                                
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is SEN School:<span class="text-danger">*</span></label>
-                                <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                    <label><input  type="radio" v-model="form.autonomuos" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="form.autonomuos" value="0" tabindex=""/> No</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Current Name:</label>
+                                        <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Level:</label>
+                                        <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Dzongkhag:</label>
+                                        <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                        <label>Gewog:</label>
+                                        <input type="text" readonly  class="form-control" id="gewogid"/>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <label>Village:</label>
+                                        <input type="text" readonly class="form-control" id="vilageId"/>
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
+                                        <label>Is Autonomy:</label>
+                                        <label><input  type="radio" disabled v-model="organization_details.isAutonomy" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" disabled v-model="organization_details.isAutonomy" value="0" tabindex=""/> No</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
+                                        <label>Propose for Autonomy:<span class="text-danger">*</span></label>
+                                        <label><input  type="radio" v-model="form.isAutonomy" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" v-model="form.isAutonomy" value="0" tabindex=""/> No</label>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -57,13 +86,23 @@
 export default {
     data(){
         return{
+            organization_details:'',
             proposed_by_list:[],
             orgList:'',
             classList:[],
+            locationList:[],
             streamList:[],
+            category:'',
+            levelArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
+            locationArray:{},
+            calssArray:{},
+            streamArray:{},
             form: new form({
-                organizationId:'',autonomuos:'',initiatedBy:' ', application_type:'autonomus_change', 
-                application_for:'Change in Autonomous', action_type:'add', status:'pending',organization_type:'',
+                organizationId:'',isAutonomy:'', application_type:'autonomus_change', 
+                application_for:'Autonomy Change', action_type:'add', status:'Submitted',organization_type:'',
             }),
         } 
     },
@@ -110,8 +149,8 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
+                                    let message="Applicaiton for Aotonomy details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    this.$router.push({name:'autonomous_acknowledgement',params: {data:message}});
                                     Toast.fire({  
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
@@ -150,12 +189,20 @@ export default {
                 this.form.organizationId=$('#organizationId').val();  
                 this.getorgdetials($('#organizationId').val()); 
             }
+            if(id=="locationType"){
+                this.form.locationType=$('#locationType').val();  
+            }
+            
             
         },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
+                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.organization_details=response.data.data;
+                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
             });
         },
 
@@ -186,11 +233,76 @@ export default {
                 console.log('error: '+error);
             });
         },
+       
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+                 for(let i=0;i<data.length;i++){
+                    this.levelArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
+        
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        getGewogList(dzongkhag,gewogId){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name; 
+                }
+                $('#gewogid').val(this.gewogArray[gewogId]);
+            });
+        },
+
+        getvillagelist(gewogId,vil_id){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name; 
+                }
+                $('#vilageId').val(this.villageArray[vil_id])
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getLocation(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.locationList = data;
+                for(let i=0;i<data.length;i++){
+                    this.locationArray[data[i].id] = data[i].name; 
+                }
+            });
+        },
         
     },
     
     mounted() { 
+        this.getLocation();
         this.loadproposedBy();
+        this.loadactivedzongkhagList();
+        this.getOrgList();
+        this.getLevel();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -203,7 +315,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
+        
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;

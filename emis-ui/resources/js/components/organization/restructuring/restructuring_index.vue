@@ -12,42 +12,58 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/name_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change In Name
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/level_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Upgrade/Downgrade
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/sen_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change SEN Details
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/feeding_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change Feeding School Details
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/proprietor_details_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Proprietor Change
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
                     <router-link to="/autonomus_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Autonomy
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <!-- <li class="nav-item active pr-1">
                     <router-link id="location_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Location Type Change
                     </router-link>
+                </li> -->
+                <li class="nav-item active pr-1">
+                    <router-link id="fee_structure_change_index" to="/fee_structure_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change in Fee Structure
+                    </router-link>
                 </li>
-                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                <li class="nav-item active pr-1">
+                    <router-link id="bording_change_index" to="/bording_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change to Boadring School
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item active pr-1">
+                    <router-link id="stream_change_index" to="/stream_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Change in Stream
+                    </router-link>
+                </li> -->
+              
+                <li class="nav-item active pr-1">
                     <router-link id="expension_index" to="/expension_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Expansion
                     </router-link>
@@ -58,8 +74,8 @@
                         Bifurcation
                     </router-link>
                 </li> 
-                <li class="nav-item pr-1" @click="activatelink('trainingprogram')">
-                    <router-link to ="/merger" id="trainingprogram" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <li class="nav-item pr-1" @click="activatelink('merger_index')">
+                    <router-link to ="/merger_index" id="merger_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Merger
                     </router-link>
                 </li>

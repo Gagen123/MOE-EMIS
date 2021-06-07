@@ -27,7 +27,9 @@ class LoadOrganizationController extends Controller{
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
-            $response_data=OrganizationDetails::where('id',$id)->select( 'id','name','levelId','dzongkhagId')->get();
+            $response_data=OrganizationDetails::where('id',$id)
+                                ->where('status',1)    
+                                ->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="gewoggwise"){
             $response_data=OrganizationDetails::where('gewogId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
@@ -46,6 +48,14 @@ class LoadOrganizationController extends Controller{
         }
         return $this->successResponse($response_data);
     }
+
+    public function loadInactiveOrgList($dzo_id){
+        $response_data=OrganizationDetails::where('status',0)
+                            ->where('dzongkhagId',$dzo_id)
+                            ->select( 'id','name','levelId','dzongkhagId')->get();
+        return $response_data;
+    }
+
     public function loadOrgDetails($type="", $id=""){
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){

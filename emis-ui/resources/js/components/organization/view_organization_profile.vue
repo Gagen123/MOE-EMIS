@@ -33,6 +33,7 @@
                                 <li class="nav-item border-left border-right">
                                     <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Organizational Facilities</a>
                                 </li>
+                                
                             </ul>
                         </div>
                         <div class="card-body">
@@ -50,69 +51,112 @@
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                 <div class="card-body p-0">
-                                    <table class="table table-sm">
-                                    <thead class="bg-info">
-                                        <tr>
-                                            <th>Organization Name</th>
-                                            <th><span class="text-bold">{{existing_details.name}}</span></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Level</td>
-                                            <td>{{levelArray[existing_details.levelId]}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Year of Establishment</td>
-                                            <td>{{existing_details.yearOfEstablishment}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>RCSC/ZEST Code</td>
-                                            <td>{{existing_details.zestAgencyCode}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>MOF Code</td>
-                                            <td>{{existing_details.mofCode}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Organization Code</td>
-                                            <td>{{existing_details.code}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Has Shift System</td>
-                                            <td>{{existing_details.hasShiftSystem =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Has Counselling room</td>
-                                            <td>{{existing_details.hasCounselingRoom =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Has CE</td>
-                                            <td>{{existing_details.hasCE =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Has Feeding School</td>
-                                            <td>{{existing_details.isFeedingSchool =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>GeoPolitically Located</td>
-                                            <td>{{existing_details.isGeoPoliticallyLocated =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Is Resource Center</td>
-                                            <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Is SEN School</td>
-                                            <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
-                                        </tr>
-                                        
-                                         <tr>
-                                            <td>Category</td>
-                                            <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'privte_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
-                                        </tr>
-                                    </tbody>
-                                    </table>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                                            <table class="table table-sm">
+                                                <thead class="bg-info">
+                                                     <tr>
+                                                         <th>Organization Name</th>
+                                                         <th><span class="text-bold">{{existing_details.name}}</span></th>
+                                                      </tr>
+                                                  </thead>
+                                                 <tbody>
+                                                  <tr>
+                                                     <td>Level</td>
+                                                     <td>{{levelArray[existing_details.levelId]}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                        <td>Year of Establishment</td>
+                                                        <td>{{existing_details.yearOfEstablishment}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>RCSC/ZEST Code</td>
+                                                     <td>{{existing_details.zestAgencyCode}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                     <td>MOF Code</td>
+                                                     <td>{{existing_details.mofCode}}</td>
+                                                 </tr>
+                                                 <tr>
+                                                     <td>Organization Code</td>
+                                                     <td>{{existing_details.code}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>Has Shift System</td>
+                                                     <td>{{existing_details.hasShiftSystem =='1'? 'yes':'No'}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                     <td>Has Counselling room</td>
+                                                     <td>{{existing_details.hasCounselingRoom =='1'? 'yes':'No'}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>Has CE</td>
+                                                      <td>{{existing_details.hasCE =='1'? 'yes':'No'}}</td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td>Has Feeding School</td>
+                                                       <td>{{existing_details.isFeedingSchool =='1'? 'yes':'No'}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                       <td>GeoPolitically Located</td>
+                                                       <td>{{existing_details.isGeoPoliticallyLocated =='1'? 'yes':'No'}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                     <td>Is Resource Center</td>
+                                                     <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>Is SEN School</td>
+                                                       <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
+                                                  </tr>
+                                                   <tr>
+                                                       <td>Category</td>
+                                                       <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'privte_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
+                                                   </tr>
+                                              </tbody>
+                                          </table>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                                            <table class="table table-sm">
+                                                <thead class="bg-info">
+                                                    <tr>
+                                                        <th>Location and Contact Detial</th>
+                                                        <th><span class="text-bold"></span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Longitude</td>
+                                                        <td>{{existing_details.longitude}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Lattitude</td>
+                                                        <td>{{existing_details.latitude}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Altitude</td>
+                                                        <td>{{existing_details.altitude}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>School Contact No</td>
+                                                        <td>{{existing_details.mofCode}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Principal Contact No</td>
+                                                        <td>{{existing_details.code}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Vice/Assistant Principal Contact No</td>
+                                                        <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>Is SEN School</td>
+                                                        <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
