@@ -61,12 +61,13 @@ class EstablishmentController extends Controller
                     break;
                 }
             case "public_ecr" : {
-                $this->service_name = "Public ECR";
-                $validation = $this->validatePublicEccdFields($request);
-                $establishment_data = $this->setPublicEccdFields($request);
-                break;
-            }
+                    $this->service_name = "Public ECR";
+                    $validation = $this->validatePublicEccdFields($request);
+                    $establishment_data = $this->setPublicEccdFields($request);
+                    break;
+                }
             default : {
+                
                 break;
             }
         }
@@ -641,7 +642,7 @@ class EstablishmentController extends Controller
         $rules = [
             'proprietorName'        =>  'required',
             'proprietorCid'         =>  'required|min:11|max:11',
-            'proprietorPhone'       =>  'required|min:6|max:6',
+            // 'proprietorPhone'       =>  'required|min:6|max:6',
             'proprietorMobile'      =>  'required|min:8|max:8',
             'proprietorEmail'       =>  'required|email',
             // 'proposedInfrastructure'    =>  'required',
@@ -655,7 +656,7 @@ class EstablishmentController extends Controller
         $customMessages = [
             'proprietorName.required'           => 'Proprietor Name is required',
             'proprietorCid.required'            => 'Proprietor CID is required',
-            'proprietorPhone.required'          => 'Phone No. is required',
+            // 'proprietorPhone.required'          => 'Phone No. is required',
             'proprietorMobile.required'         => 'Mobile No.  is required',
             // 'proposedInfrastructure.required'   => 'Infrastructure to be housed in is required',
             'proposedName.required'             => 'Proposed Name is required',

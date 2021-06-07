@@ -89,55 +89,88 @@
                                         </table>
                                     </div>
                                 </div>
-                                <br>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">New Level of Organization:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" id="level" class="form-control select2" @change="remove_error('level')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="level"></has-error>
+                                <hr>
+                                <div v-if="levelArray[organization_details.levelId]=='Higher Secondary School'">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label>Change Type:<span class="text-danger">*</span></label>
+                                            <select name="changetype" v-model="form.changetype" :class="{ 'is-invalid': form.errors.has('changetype') }" id="changetype" class="form-control select2" @change="remove_error('changetype')">
+                                                <option value="">--- Please Select ---</option>
+                                                <option value="1">Addition of Stream</option>
+                                                <option value="2">Deletion of Stream</option>
+                                            </select>
+                                            <has-error :form="form" field="changetype"></has-error>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="strm_clas">Stream</th>  
+                                                            <th></th>                     
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item, key, index) in  streamList" :key="index">
+                                                            <td> {{item.stream}}</td>
+                                                            <td>  
+                                                                <input type="checkbox" v-model="item.stream" :value="item.id">                              
+                                                            </td>
+                                                        </tr> 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>File Name</th>
+                                                        <th>Upload File</th>                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
+                                                        <td>
+                                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                        </td>
+                                                        <td>                                
+                                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                        </td>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td colspan="5"> 
+                                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                        </td>
+                                                    </tr>                                          
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row form-group fa-pull-right">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
+                                        </div>
                                     </div>
                                 </div>
-                                  
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>  
-                                                <th></th>                     
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, key, index) in  classStreamList" :key="index">
-                                                <td>
-                                                    <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                                </td>
-                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                    {{  item.stream  }}
-                                                </td>
-                                                <td class="strm_clas" v-else>                                
-                                                
-                                                </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                    <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
-                                                </td>
-                                                <td v-else>  
-                                                    <input type="checkbox" v-model="form.class" :value="item.classId">                              
-                                                </td>
-                                            </tr> 
-                                        </tbody>
-                                    </table>
+                                <div class="callout callout-danger" v-else>
+                                    <div class="form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <h5 class="bg-gradient-danger">Sorry!</h5>
+                                            <div>Sorry! You are not accessible to this page! Only Higher Secondary school can proceed for this service</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
-                            <hr>
-                            <div class="row form-group fa-pull-right">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -151,6 +184,7 @@
 export default {
     data(){
         return{
+            count:1,
             orgList:'',
             category:'',
             classList:[],
@@ -165,8 +199,16 @@ export default {
             calssArray:{},
             streamArray:{},
             organization_details:'',
+            fileUpload: [],
             form: new form({
-                organizationId:'', level:'', application_type:'stream_change', class:[], stream:[],
+                fileUpload: [
+                ],
+                attachments:
+                [{
+                    file_name:'Proposal Letter',attachment:''
+                }],
+                ref_docs:[],
+                organizationId:'', stream:[], application_type:'stream_change', class:[],changetype:'',
                 application_for:'Change of Stream', action_type:'add', status:'Submitted',organization_type:''
             })
         } 
@@ -181,6 +223,28 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
+        remove(index){    
+             if(this.form.fileUpload.length>1){
+                this.count--;
+                this.form.fileUpload.pop(); 
+            }
+        },
+        addMore: function(){
+            this.count++;
+            this.form.fileUpload.push({file_name:'', file_upload:''})
+        },
+       
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.file_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            } 
+        },
         
         /**
          * method to get level in dropdown
@@ -228,27 +292,24 @@ export default {
                 this.getClassStream(text);
             }
         },
-        getClassStream(text){
-            $('.strm_clas').hide();
-            let level = text;
-            if(level.toLowerCase().includes('middle')){
-                level="10";
-            }
-            else if(level.toLowerCase().includes('lower')){
-                level="8";
-            }
-            else if(level.toLowerCase().includes('primary')){
-                level="6";
-            }
-            else{
-                level="12";
-                $('.strm_clas').show();
-            }
-            axios.get('/masters/loadClassStreamMapping/school_'+level)
-            .then(response => {
-                this.classStreamList = response.data.data;
-            });
-        },
+        // getClassStream(text){
+        //     $('.strm_clas').hide();
+        //     let level = text;
+        //     if(level.toLowerCase().includes('middle')){
+        //         level="10";
+        //     }
+        //     else if(level.toLowerCase().includes('lower')){
+        //         level="8";
+        //     }
+        //     else if(level.toLowerCase().includes('primary')){
+        //         level="6";
+        //     }
+        //     else{
+        //         level="12";
+        //         $('.strm_clas').show();
+        //     }
+            
+        // },
         
 
         /**
@@ -265,9 +326,22 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.file_form.id);
+                        formData.append('ref_docs[]', this.file_form.ref_docs);
+                        for(let i=0;i<this.file_form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                        }
+                        formData.append('application_number', this.file_form.application_number);
+                        axios.post('organization/saveChangeBasicDetails', formData, config)
                         .then((response) => {
-                            if(response!=""){
+                            if(response.data!=""){
                                 if(response.data=="No Screen"){
                                     Toast.fire({  
                                         icon: 'error',
@@ -284,8 +358,10 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error on submit:"+err)
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.change_tab('organization-tab');
+                            console.log("Error:"+error)
                         })
                     }
                 });
@@ -301,7 +377,7 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Erro: "+error)
             });
         },
 
@@ -354,6 +430,7 @@ export default {
             axios.get('/organization/getStream')
               .then(response => {
                 let data = response.data;
+                this.streamList = response.data;
                 for(let i=0;i<data.length;i++){
                     this.streamArray[data[i].id] = data[i].stream; 
                 }
@@ -391,6 +468,13 @@ export default {
     },
     
     mounted() { 
+        axios.get('/masters/loadClassStreamMapping/school_12')
+        .then(response => {
+            this.classStreamList = response.data.data;
+        });
+        this.count++;
+        this.form.fileUpload.push({file_name:'Proposal Letter', file_upload:''});
+
         this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();

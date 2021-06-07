@@ -17,6 +17,9 @@ use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\establishment\ApplicationNoMeals;
 use App\Models\ApplicationSequence;
+use App\Models\HistoryForOrganizaitonDetail;
+use App\Models\OrganizationDetails;
+
 class MergerController extends Controller{
     use ApiResponser;
     public function __construct() {
@@ -133,10 +136,78 @@ class MergerController extends Controller{
             'remarks'                      =>   $request->remarks,
             'updated_by'                   =>   $request->user_id,
             'updated_at'                   =>   date('Y-m-d h:i:s'),
-        ]; 
+        ];
+
         $establishment = ApplicationDetails::where('application_no', $request->application_number)->update($merger);
         //update the main organizaiton 
         return $this->successResponse($establishment, Response::HTTP_CREATED);
+    }
+
+    /**
+     * to update after approving/rejecting
+     */
+
+    public function updateMergerDetails(Request $request){
+
+        //Code is copied from updateChangeBasicDetails
+        // to update the applications table
+
+        $estd =[
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id, 
+        ];
+        ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+       
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id, 
+                    ];
+                    $doc = ApplicationAttachments::create($attach);
+                }
+            }
+        }
+
+        $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
+
+        $merger_details=ApplicationEstMerger::where('ApplicationDetailsId',$app_details->id)->first();
+        $org_details=OrganizationDetails::where('id',$merger_details->OldOrganizationId2)->first();
+        $merger_details_data="";
+
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'name'                      =>  $org_details->name,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Name Change', 
+            'recorded_by'               =>  $request->user_id, 
+        ];
+        $merger_details_data = HistoryForOrganizaitonDetail::create($org_data);
+        if($merger_details->proposedName != "" && $merger_details->proposedName != NULL){
+            $org_update_data =[
+                'name'                      =>  $merger_details->proposedName,
+                'updated_by'                =>  date('Y-m-d h:i:s'),
+                'updated_at'                =>  $request->user_id, 
+            ];
+            $merger_details_data=OrganizationDetails::where('id',$merger_details->OldOrganizationId)->update($org_update_data);
+            
+        }
+        
+
+        return $this->successResponse($merger_details_data, Response::HTTP_CREATED);
     }
 
 }

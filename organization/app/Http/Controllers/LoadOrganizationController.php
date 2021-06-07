@@ -17,6 +17,7 @@ use App\Models\OrgProfile;
 use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
+use App\Models\ContactDetails;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -28,7 +29,7 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)
-                                ->where('status',1)    
+                                ->where('status','1')    
                                 ->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="gewoggwise"){
@@ -50,7 +51,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadInactiveOrgList($dzo_id){
-        $response_data=OrganizationDetails::where('status',0)
+        $response_data=OrganizationDetails::where('status','0')
                             ->where('dzongkhagId',$dzo_id)
                             ->select( 'id','name','levelId','dzongkhagId')->get();
         return $response_data;
@@ -90,6 +91,10 @@ class LoadOrganizationController extends Controller{
             $loc=Locations::where('organizationId',$response_data->id)->first();
             if($loc!=null && $loc!=""){
                 $response_data->locationDetials=$loc;
+            }
+            $contact = ContactDetails::where('organizationId',$response_data->id)->first();
+            if($contact!=null && $contact!=""){
+                $response_data->contactDetails=$contact;
             }
         }
         if($type=="Headquarterbyid"){

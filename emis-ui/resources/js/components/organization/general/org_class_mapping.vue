@@ -17,13 +17,17 @@
                                <table id="class_strm-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th style="width:10%">Classes</th>
-                                            <th class="streamsec" style="width:20%">Stream</th>  
+                                            <th style="width:5%">Classes</th>
+                                            <th class="streamsec" style="width:15%">Stream</th>  
                                             <th style="width:10%">
-                                                <!-- <input type="checkbox" id="chkbtn" @click="checkall('chkbtn')"> Check All -->
+                                            <!-- <input type="checkbox" id="chkbtn" @click="checkall('chkbtn')"> Check All -->
                                             </th> 
-                                            <th style="width:30%">No. Section</th>
-                                            <th style="width:30%">Section</th>      
+                                            <th style="width:20%">No. Section</th>
+                                            <th style="width:15%">Section</th> 
+                                            <template v-if="org_type == 'public_ecr'" >
+                                                <th style="width:15%">Multi Grade</th> 
+                                                <th style="width:20%">Group</th>  
+                                            </template>    
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -60,10 +64,21 @@
                                             <td v-else>
                                                 <span :id="'sectionval'+item.classId"></span>
                                             </td> 
+                                            
+                                            <template v-if="org_type == 'public_ecr'" >
+                                                <td >
+                                                    <input type="checkbox" class="multiageclass" :id="'check'+item.classId" @click="showMF('multigrade',item.classId)">
+                                                </td>
+                                                <td>  
+                                                    <select name="multiAgeId" disabled :id="'multigrade'+item.classId" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('multiAgeId') }" class="form-control multiageclassval" >
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(multi, index) in multiAgeIdList" :key="index" v-bind:value="item.classId+'__'+multi.id">{{ multi.name }}</option>
+                                                    </select>
+                                                </td>
+                                            </template>
                                         </tr> 
                                     </tbody>
                                 </table>
-                                 
                             </div>
                             <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                 <span v-for="(item, key, index) in  classStreamList" :key="index">
@@ -101,14 +116,16 @@
 export default {
     data(){
         return{
+            org_type:"",
             levelArray:{},
             classList:[],
             schoolList:[],
             classStreamList:[],
             selected_sections:[],
+            multiAgeIdList:[],
             secval:['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
             form: new form({
-                id: '',school:'',class:[], stream:[],sections:[],
+                id: '',school:'',class:[], stream:[],sections:[],multigrade:[],
             })
         }
     },
@@ -158,6 +175,15 @@ export default {
             $('#seelctedsec'+id).val(sectionArray);
             $('#sectionval'+id).html(sections);
         },
+        showMF(id,count){
+            if($('#check'+count).prop('checked')){
+                $('#'+id+count).prop('disabled',false);
+            }
+            else{
+                $('#'+id+count).prop('disabled',true);
+                $('#'+id+count).val('');
+            }
+        },
         insertvalue(section){
             if(this.form.sections.join('; ').includes(section)==false){
                 this.form.sections.push(section);
@@ -206,6 +232,18 @@ export default {
                         icon: 'error'
                     });
                 }else{
+                   
+                    let multiage=[];
+                    $.each(this.classStreamList, function(key, value){
+                        if($('#multigrade'+value.classId).val()!=""){
+                            multiage.push($('#multigrade'+value.classId).val());
+                            // alert($('#multigrade'+i).val());
+                        }
+                    })
+                    for(let i=0;i<this.classStreamList.length;i++){
+                        
+                    }
+                    this.form.multiAgeId=multiage;
                     this.form.post('/organization/saveClassMapping',this.form)
                     .then(() => {
                         Toast.fire({
@@ -219,7 +257,15 @@ export default {
                 }
             }
 		},
-       
+        getmultiGrade(){
+            axios.get('/masters/loadClassStreamMapping/multiGrade')
+              .then(response => {
+                this.multiAgeIdList = response.data.data;
+            })              
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        },
         
         getCurrentClassStream(schoolId){
             axios.get('/organization/getCurrentClassStream/'+schoolId)
@@ -242,6 +288,10 @@ export default {
                         this.showNoSection(response_data[i].classId);//show the input field
                         $('#no_section'+response_data[i].classId).val(sec_count);//set the value of onput section count
                         this.setsections(response_data[i].classId);
+                        if(response_data[i].isMultiGrade==1){
+                            $('#check'+response_data[i].classId).prop('checked',true);
+                            $('#multigrade'+response_data[i].classId).val(response_data[i].classId+'__'+response_data[i].multiGradeId);
+                        }
                     }
                 }
                 if(isNew){
@@ -253,6 +303,7 @@ export default {
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
                 let org_data=response.data.data;
+                this.org_type = org_data.category;
                 this.getClassStream(this.levelArray[org_data.levelId]);
                 this.getCurrentClassStream(org_id);
             });
@@ -293,6 +344,7 @@ export default {
 
     mounted(){
         this.getLevel();
+        this.getmultiGrade();
         // this.getClassStream();
         axios.get('common/getSessionDetail')
         .then(response => {
