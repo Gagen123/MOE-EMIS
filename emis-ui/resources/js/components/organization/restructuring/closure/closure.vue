@@ -167,10 +167,10 @@ export default {
                 reason:'',
                 remark:'',
                 attachments:'',
-                application_type:'closure',
-                application_for:'closure',
+                application_type:'Closure',
+                application_for:'Closure',
                 screen_id:'',
-                status:'submitted'
+                status:'Submitted'
 
             }),
         }
@@ -473,7 +473,7 @@ export default {
                         axios.post('organization/saveClosure',formData, config)
                         .then((response) => {
                             if(response.data!=""){
-                                let message="Applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'closure_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',

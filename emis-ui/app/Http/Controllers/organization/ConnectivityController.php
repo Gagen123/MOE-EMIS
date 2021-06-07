@@ -35,7 +35,7 @@ class ConnectivityController extends Controller
          //   'DrukREN'                    =>  'required',
          //   'GovNET'                     =>  'required',
          //   'independent'                 =>  'required',
-            'sharedconnection'       =>  'required',
+            // 'sharedconnection'       =>  'required',
          //   'connectionsharedtype'       =>  'required',
           //  'sharedspeed'        =>  'required',
          //   'internetAccessible'             =>  'required',
@@ -48,7 +48,7 @@ class ConnectivityController extends Controller
             'connectedtoroad.required'         => 'This is required',
             'hqdistance.required'              => 'field is required',
             'connectedtointernet.required'     => 'this is required',
-            'sharedconnection'                 => 'This is required',
+            // 'sharedconnection'                 => 'This is required',
             'electricity'                      => 'This is required',
             'electricitysubstation'            => 'This is required',
         ];
@@ -70,20 +70,21 @@ class ConnectivityController extends Controller
             'independent'                   =>  $request['independent'],
             'sharedconnection'              =>  $request['sharedconnection'],
             'connectionsharedtype'          =>  $request['connectionsharedtype'],
-            'sharedspeed'                   =>  $request['sharedspeed'],
+            // 'sharedspeed'                   =>  $request['sharedspeed'],
             'internetAccessible'            =>  $request['internetAccessible'],
             'electricity'                   =>  $request['electricity'],
             'electricitysubstation'         =>  $request['electricitysubstation'],
+            'electricitysource'              =>  $request['electricitysource'],           
+            'id'                             =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-    //    dd($data);
+      // dd($data);
        $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivityDetails', $data);
        return $response_data;
     }
-    public function loadConnectivityInformation(){
-      //  dd('from UI ');
-        $orgId=$this->getWrkingAgencyId();
-        $data = $this->apiService->listData('emis/organization/connectivity/loadConnectivityInformation/'.$orgId);
+    public function loadConnectivityInformation($org_id){
+        //dd('m here');
+        $data = $this->apiService->listData('emis/organization/connectivity/loadConnectivityInformation/'.$org_id);
         return $data;
     }
 }

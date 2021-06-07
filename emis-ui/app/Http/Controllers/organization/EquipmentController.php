@@ -26,22 +26,22 @@ class EquipmentController extends Controller
         $rules = [
             'type'          =>  'required',
             'item'          =>  'required',
-            'cost'          =>  'required',
-            'condition'     =>  'required',
+            'usable'        =>  'required',
+            'notusable'     =>  'required',
         ];
         $customMessages = [
             'type.required'         => 'Type is required',
             'item.required'         => 'Item is required',
-            'cost.required'         => 'Cost is required',
-            'condition.required'    => 'Condition is required',
+            'usable.required'         => 'notusable is required',
+            'notusable.required'    => 'notusable is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
             'organizationId'            =>  $this->getWrkingAgencyId(),
             'type'                      =>  $request['type'],
             'item'                      =>  $request['item'],
-            'cost'                      =>  $request['cost'],
-            'condition'                 =>  $request['condition'],
+            'usable'                    =>  $request['usable'],
+            'notusable'                 =>  $request['notusable'],
             'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()

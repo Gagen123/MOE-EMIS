@@ -89,79 +89,88 @@
                                         </table>
                                     </div>
                                 </div>
-                                <br>
                                 <hr>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Change Type:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="changetype" v-model="form.changetype" :class="{ 'is-invalid': form.errors.has('changetype') }" id="changetype" class="form-control select2" @change="remove_error('changetype')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option value="1">Addition of Stream</option>
-                                            <option value="2">Deletion of Stream</option>
-                                        </select>
-                                        <has-error :form="form" field="changetype"></has-error>
+                                <div v-if="levelArray[organization_details.levelId]=='Higher Secondary School'">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <label>Change Type:<span class="text-danger">*</span></label>
+                                            <select name="changetype" v-model="form.changetype" :class="{ 'is-invalid': form.errors.has('changetype') }" id="changetype" class="form-control select2" @change="remove_error('changetype')">
+                                                <option value="">--- Please Select ---</option>
+                                                <option value="1">Addition of Stream</option>
+                                                <option value="2">Deletion of Stream</option>
+                                            </select>
+                                            <has-error :form="form" field="changetype"></has-error>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="strm_clas">Stream</th>  
+                                                            <th></th>                     
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(item, key, index) in  streamList" :key="index">
+                                                            <td> {{item.stream}}</td>
+                                                            <td>  
+                                                                <input type="checkbox" v-model="item.streams" :value="item.id">                              
+                                                            </td>
+                                                        </tr> 
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group row">
+                                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>File Name</th>
+                                                        <th>Upload File</th>                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
+                                                        <td>
+                                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                        </td>
+                                                        <td>                                
+                                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                        </td>
+                                                    </tr> 
+                                                    <tr>
+                                                        <td colspan="5"> 
+                                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                        </td>
+                                                    </tr>                                          
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row form-group fa-pull-right">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
+                                        </div>
                                     </div>
                                 </div>
-                                  
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th class="strm_clas">Stream</th>  
-                                                <th></th>                     
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, key, index) in  streamList" :key="index">
-                                                <td>                                
-                                                    {{item.stream}}
-                                                </td>
-                                                <td>  
-                                                    <input type="checkbox" v-model="item.stream" :value="item.id">                              
-                                                </td>
-                                            </tr> 
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>File Name</th>
-                                                    <th>Upload File</th>                     
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
-                                                    <td>
-                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                        <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                                    </td>
-                                                    <td>                                
-                                                        <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                                    </td>
-                                                </tr> 
-                                                <tr>
-                                                    <td colspan="5"> 
-                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                                    </td>
-                                                </tr>                                          
-                                            </tbody>
-                                        </table>
+                                <div class="callout callout-danger" v-else>
+                                    <div class="form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <h5 class="bg-gradient-danger">Sorry!</h5>
+                                            <div>Sorry! You are not accessible to this page! Only Higher Secondary school can proceed for this service</div>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
-                            <hr>
-                            <div class="row form-group fa-pull-right">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -199,7 +208,7 @@ export default {
                     file_name:'Proposal Letter',attachment:''
                 }],
                 ref_docs:[],
-                organizationId:'', stream:'', application_type:'stream_change', class:[], stream:[],changetype:'',
+                organizationId:'', streams:[], application_type:'stream_change', class:[],changetype:'',
                 application_for:'Change of Stream', action_type:'add', status:'Submitted',organization_type:''
             })
         } 
@@ -228,7 +237,7 @@ export default {
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
-                this.file_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
                 $('#fileName'+currentcount).prop('readonly',true);
             }
             else{
@@ -317,19 +326,30 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        const config = {
+                        alert();
+                        const config = { 
                             headers: {
                                 'content-type': 'multipart/form-data'
                             }
                         }
                         let formData = new FormData();
-                        formData.append('id', this.file_form.id);
-                        formData.append('ref_docs[]', this.file_form.ref_docs);
-                        for(let i=0;i<this.file_form.ref_docs.length;i++){
-                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                        formData.append('id', this.form.id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
                         }
-                        formData.append('application_number', this.file_form.application_number);
+                        formData.append('application_number', this.form.application_number);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('streams', this.form.streams);
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('class', this.form.class);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('organization_type', this.form.organization_type);
+                        formData.append('status', this.form.status);
+                        formData.append('changetype', this.form.changetype);
+                        formData.append('action_type', 'add');
                         axios.post('organization/saveChangeBasicDetails', formData, config)
                         .then((response) => {
                             if(response.data!=""){
@@ -421,6 +441,7 @@ export default {
             axios.get('/organization/getStream')
               .then(response => {
                 let data = response.data;
+                this.streamList = response.data;
                 for(let i=0;i<data.length;i++){
                     this.streamArray[data[i].id] = data[i].stream; 
                 }

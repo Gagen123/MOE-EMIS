@@ -6,19 +6,19 @@
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label class="mb-0.5">Disaster Type:<i class="text-danger">*</i></label>
-                      <select v-model="form.diastertype" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastertype') }" class="form-control select2" name="diastertype" id="diastertype">
-                         <option v-for="(item, index) in Disaster_Committee_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                      <select v-model="form.disastertype" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('disastertype') }" class="form-control select2" name="disastertype" id="disastertype">
+                         <option v-for="(item, index) in disasterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                      </select> 
                   <!--<input type="text" class="form-control" @change="removeerror('diastertype')" :class="{ 'is-invalid': form.errors.has('diastertype') }" id="diastertype" v-model="form.diastertype">-->
-                     <has-error :form="form" field="diastertype"></has-error>
+                     <has-error :form="form" field="disastertype"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label class="mb-0.5">Disaster Committe:<i class="text-danger">*</i></label>
-                       <select v-model="form.diastercomm" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('diastercomm') }" class="form-control select2" name="diastercomm" id="diastercomm">
+                       <select v-model="form.disastercomm" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('disastercomm') }" class="form-control select2" name="disastercomm" id="disastercomm">
                          <option v-for="(item, index) in Disaster_Committee_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                        </select> 
                     <!--    <input type="text" class="form-control" @change="removeerror('diastercomm')" :class="{ 'is-invalid': form.errors.has('diastercomm') }" id="fullname" v-model="form.diastercomm"> -->
-                      <has-error :form="form" field="diastercomm"></has-error>
+                      <has-error :form="form" field="disastercomm"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -88,8 +88,8 @@ export default {
            
             form: new form({
                 id: '', 
-                diastertype:'',
-                diastercomm:'', 
+                disastertype:'',
+                disastercomm:'', 
                 cid_passport: '',
                 fullname:'',
                 sex_id: '',
@@ -118,8 +118,8 @@ export default {
          */
         restForm(){
             this.form.id= '';
-            this.form.diastertype ='';
-            this.form.diastercomm = '';
+            this.form.disastertype ='';
+            this.form.disastercomm = '';
             this.form.cid_passport = '';
             this.form.fullname= '';
             this.form.sex_id= '';

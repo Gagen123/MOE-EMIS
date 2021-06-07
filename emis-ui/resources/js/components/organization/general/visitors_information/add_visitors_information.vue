@@ -4,7 +4,9 @@
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-1">Visitor Information:<i class="text-danger">*</i></label>
-                    <input type="text" @change="remove_error('visitor_information')" v-model="form.visitor_information" :class="{ 'is-invalid': form.errors.has('visitor_information') }" class="form-control" name="visitor_information" id="visitor_information" >
+                    <select v-model="form.visitor_information" class="form-control" name="visitor_information" id="visitor_information">
+                        <option v-for="(item, index) in visitorTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
                     <has-error :form="form" field="visitor_information"></has-error>
                 </div>
             </div>
@@ -34,6 +36,8 @@ export default {
     data(){
         return {
             dataList:[],
+            visitorTypeList:[],
+
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             form: new form({
@@ -57,6 +61,13 @@ export default {
             })
             .catch(function (error) {
                 console.log("Error......"+error)
+            });
+        },
+        getVisitorTypeDropdown(uri = '/organization/getVisitorTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.visitorTypeList = data;
             });
         },
         remove_error(field_id){
@@ -94,6 +105,7 @@ export default {
         },
     },
      mounted() {
+        this.getVisitorTypeDropdown();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

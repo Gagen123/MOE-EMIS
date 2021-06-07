@@ -89,6 +89,13 @@ class ClassStreamController extends Controller
                 ->orderBy('displayOrder', 'asc')
                 ->get();
             }
+            else if($type=="multiGrade"){
+                $data = DB::table('master_multiage_grade')
+                ->select('*')
+                ->where('type',0)
+                ->orderBy('displayOrder', 'asc')
+                ->get();
+            }
             else{
                 $data = DB::table('classes')
                 ->select('classes.*')

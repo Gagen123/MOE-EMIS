@@ -23,10 +23,10 @@ class DisasterController extends Controller
     }
 
     public function saveDisasterInformation(Request $request){
-      //  dd('from UI');
+      //  dd($request);
         $rules = [
-            'diastertype'           =>  'required',
-            'diastercomm'           =>  'required',
+            'disastertype'          =>  'required',
+            'disastercomm'           =>  'required',
             'cid_passport'          =>  'required',
             'fullname'              =>  'required',
             'sex_id'                =>  'required',
@@ -36,8 +36,8 @@ class DisasterController extends Controller
             'fulladdress'           => 'required',
         ];
         $customMessages = [
-            'diastertype.required'          => 'Disastertype is required',
-            'diastercomm.required'          => 'Disaster Committee is required',
+            'disastertype.required'         => 'Disastertertype is required',
+            'disastercomm.required'          => 'Disaster Committee is required',
             'cid_passport.required'         => 'CID is required',
             'fullname.required'             => 'Name is required',
             'sex_id.required'               => 'Gender is required',
@@ -49,8 +49,8 @@ class DisasterController extends Controller
         $this->validate($request, $rules, $customMessages);
         $loc =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
-            'diastertype'                   =>  $request['diastertype'],
-            'diastercomm'                   =>  $request['diastercomm'],
+            'disastertype'                  =>  $request['disastertype'],
+            'disastercomm'                   =>  $request['disastercomm'],
             'cid_passport'                  =>  $request['cid_passport'],
             'fullname'                      =>  $request['fullname'],
             'sex_id'                        =>  $request['sex_id'],
@@ -62,7 +62,7 @@ class DisasterController extends Controller
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-       // dd($loc);
+      //  dd($loc);
         try{
             $response_data= $this->apiService->createData('emis/organization/disaster/saveDisasterInformation', $loc);
             return $response_data;

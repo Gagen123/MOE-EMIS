@@ -53,13 +53,14 @@ class RestructuringController extends Controller
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
                             'saveapplication_number'     =>  $request->applicationNo,
-                            // 'remark'                 =>  $remarks[$index]
                         )
                     );
                 }
             }
         }
-
+        $request['attachment_details'] = $attachment_details;
+        $establishment_data="";
+        $validation ="";
         switch($request['application_type']){
             case "name_change" : {
                     $validation = $this->validateNameChangeFields($request);
@@ -126,18 +127,13 @@ class RestructuringController extends Controller
                 break;
             }
         }
-        $establishment_data=$establishment_data+[
-            'attachment_details'           =>   $attachment_details,
-        ];
-        // dd($establishment_data);
+        // $rules = $validation['rules'];
+        // $customMessages = $validation['messages'];
 
-        $rules = $validation['rules'];
-        $customMessages = $validation['messages'];
-
-        $this->validate($request, $rules, $customMessages);
+        // $this->validate($request, $rules, $customMessages);
 
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-        // dd( $workflowdet,$request->application_for);
+        // dd($workflowdet,$request->application_for);
         $screen_id="";
         $status="";
         $app_role="";
@@ -153,9 +149,11 @@ class RestructuringController extends Controller
         if($screen_id==null || $screen_id==""){
             return 'No Screen';
         }
-
+        // $establishment_data['action_type'] = "add";
+        // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
-        // dd( $response_data);
+        // return $response_data; 
+        // dd($response_data);
     //    dd($request->action_type);
         if($request->action_type!="edit"){
             $service_name=json_decode($response_data)->data->establishment_type;
@@ -559,7 +557,7 @@ class RestructuringController extends Controller
     }
 
     public function saveClosure(Request $request){
-        dd($request);
+        // dd($request);
         $file = $request->attachments;
         $path="";
         $file_store_path='Closure';
@@ -594,11 +592,11 @@ class RestructuringController extends Controller
         //get submitter role
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet,$request->application_for);
             $screen_id="";
             $status="";
             $screen_name="";
             $app_role="";
-            // $service_name=json_decode($response_data)->data->establishment_type;
             foreach($workflowdet as $work){
                 if($work->screenName==$request->application_for){
                     $screen_id=$work->SysSubModuleId;
@@ -625,6 +623,7 @@ class RestructuringController extends Controller
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
+            // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             // dd(json_decode($response_data));
         }
@@ -1200,11 +1199,11 @@ class RestructuringController extends Controller
 
     private function validateChangeInLevel($request){
         $rules = [
-            'level'                       =>  'required',
+            // 'level'                       =>  'required',
             'organizationId'              =>  'required'
         ];
         $customMessages = [
-            'level.required'                => 'New Level is required',
+            // 'level.required'                => 'New Level is required',
             'organizationId.required'       => 'Organization is required'
         ];
         $this->validate($request, $rules, $customMessages);
@@ -1356,6 +1355,9 @@ class RestructuringController extends Controller
             'status'                    =>  $request['status'],
             'id'                        =>  $request['id'],
             'app_level_change_id'       =>  $request['app_level_change_id'],
+            'stream'                    =>   $request->stream,
+            'changetype'                =>   $request->changetype,
+            'attachment_details'            =>  $request['attachment_details'],
             'user_id'                   =>  $this->userId()
         ];
 

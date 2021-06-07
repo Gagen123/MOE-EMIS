@@ -19,22 +19,47 @@
                         </select>
                         <has-error :form="form" field="item"></has-error>
                     </div>
-                </div>  
+                </div> 
+                <br>
                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                     <label class="required">Condition of Equipment:</label>
+                    </div>
+                </div>
+                    <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Usuable:<span class="text-danger">*</span></label> 
+                           <input name="usable" class="form-control" v-model="form.usable" :class="{ 'is-invalid': form.errors.has('usable') }" id="usable" @change="remove_err('usable')" type="number">
+                            <has-error :form="form" field="usable"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Not Usable:<span class="text-danger">*</span></label> 
+                        <input name="notusable" class="form-control" v-model="form.notusable" :class="{ 'is-invalid': form.errors.has('notusable') }" id="notusable" @change="remove_err('notusable')" type="number">
+                        <has-error :form="form" field="notusable"></has-error>
+                    </div>
+                </div> 
+                <!-- <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Cost:<span class="text-danger">*</span></label> 
                         <input name="cost" class="form-control" v-model="form.cost" :class="{ 'is-invalid': form.errors.has('cost') }" id="cost" @change="remove_err('cost')" type="cost">
                         <has-error :form="form" field="cost"></has-error>
                     </div>
-                </div> 
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                </div>  -->
+                <!-- <div class="row form-group">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label class="required">Condition of Equipment:</label>
-                        <br>
-                        <label><input v-model="form.condition"  type="radio" value="1" tabindex="2"/> Usable</label>
-                        <label><input v-model="form.condition"  type="radio" value="0" tabindex="3"/> Not Usable</label>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Usable:<span class="text-danger">*</span></label> 
+                            <input name="usable" class="form-control" v-model="form.usable" :class="{ 'is-invalid': form.errors.has('usable') }" id="usable" @change="remove_err('usable')" type="number">
+                            <has-error :form="form" field="usable"></has-error>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Not Usable:<span class="text-danger">*</span></label> 
+                            <input name="notusable" class="form-control" v-model="form.notusable" :class="{ 'is-invalid': form.errors.has('notusable') }" id="notusable" @change="remove_err('notusable')" type="number">
+                            <has-error :form="form" field="notusable"></has-error>
+                        </div>
                     </div>
-                </div>         
+                </div>          -->
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -51,13 +76,13 @@ export default {
             typeList:[],
             itemList:[],
             locationUse:[],
-            form: new form({
+            form: new form({ 
                 id: '',
                 organizationId:'',
                 type: '',
                 item: '',
-                cost: '',
-                condition: 1,
+                usable: '',
+                notusable: '',
                 action_type:'add',
             })
         }
@@ -80,7 +105,8 @@ export default {
             if(type=="reset"){
                 this.form.type= '';
                 this.form.item= '';
-                this.form.cost= '';
+                this.form.usable= '';
+                this.form.notusable='';
             }
             if(type=="save"){
                 this.form.post('/organization/saveEquipment',this.form)
@@ -133,6 +159,7 @@ export default {
 
     mounted() { 
         this.getType();
+        this.getItem();
     }
 }
 </script>
