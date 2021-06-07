@@ -100,7 +100,7 @@ class FinanceController extends Controller
     }
 
     public function saveFinancialInfo(Request $request){
-        // dd($request);
+        dd($request);
         $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
