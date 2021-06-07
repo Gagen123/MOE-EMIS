@@ -74,7 +74,7 @@ export default {
                 // this.$Progress.start();
 
                 let formData = new FormData(); 
-                // formData.append('type', this.finacial_form.type);
+                formData.append('financialInformationId', this.finacial_form.financialInformationId);
                 formData.append('amount', this.finacial_form.amount);
                 formData.append('date', this.finacial_form.date);
                 formData.append('remarks', this.finacial_form.remarks);
@@ -124,9 +124,7 @@ export default {
         
     },
     created() {
-    // this.typeList();
     this.loadtypeList();
-    this.submitForm();
    
     
        
