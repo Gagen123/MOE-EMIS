@@ -98,15 +98,15 @@ class QuestionAnswerController extends Controller{
                     );
                 }
             }
-            if($request->record_type=="Question"){
-                $data=array_merge($data,
-                    array(
-                    'service_id'      =>  $request->parent_field,
-                    'category_id'      =>  $request->category,
-                    'category_type_id'  =>  $request->category_type,
-                    'answer_type'      =>  $request->answer_type,)
-                );
-            }
+            // if($request->record_type=="Question"){
+            //     $data=array_merge($data,
+            //         array(
+            //         'service_id'      =>  $request->parent_field,
+            //         'category_id'      =>  $request->category,
+            //         'category_type_id'  =>  $request->category_type,
+            //         'answer_type'      =>  $request->answer_type,)
+            //     );
+            // }
             $response_data = $model::create($data);
         }
         if($request->actiontype=="edit"){
@@ -127,12 +127,12 @@ class QuestionAnswerController extends Controller{
             if($request->record_type=="Service" || $request->record_type=="Category" || $request->record_type=="CategoryType"){
                 $data->parent_id    =  $request->parent_field;
             }
-            if($request->record_type=="Question"){
-                $data->service_id    =  $request->parent_field;
-                $data->category_id    =  $request->category;
-                $data->category_type_id    =  $request->category_type;
-                $data->answer_type  =  $request->answer_type;
-            }
+            // if($request->record_type=="Question"){
+            //     $data->service_id    =  $request->parent_field;
+            //     $data->category_id    =  $request->category;
+            //     $data->category_type_id    =  $request->category_type;
+            //     $data->answer_type  =  $request->answer_type;
+            // }
             $data->status           = $request->status;
             $data->updated_by       = $request->user_id;
             $data->updated_at       = date('Y-m-d h:i:s');
@@ -189,7 +189,7 @@ class QuestionAnswerController extends Controller{
                     return $this->successResponse($model::where("service_id",$sub_parent[0])->where("category_type_id",$sub_parent[1])->where('status',1)->get());
                 }
                 if($sub_parent[2]=="cat"){
-                    return $this->successResponse($model::where("service_id",explode("__",$sub_parent)[0])->where("category_id",explode("__",$sub_parent)[1])->where('status',1)->get());
+                    return $this->successResponse($model::where("service_id",explode("__",$sub_parent)[0])->where("parent_id",explode("__",$sub_parent)[1])->where('status',1)->get());
                 }
             }
             else{
@@ -200,7 +200,7 @@ class QuestionAnswerController extends Controller{
 
         if(strpos($type,"withwhere_")!==false){
             $questionlist = DB::table('question_details as q')
-                ->join('question_category as c', 'q.category_id', '=', 'c.id')
+                ->join('question_category as c', 'q.parent_id', '=', 'c.id')
                 ->select('q.name', 'q.id', 'q.answer_type')
                 ->where('q.status', '=', 1)
                 // ->where('c.name', '=', '%' . Input::get('name') . '%')

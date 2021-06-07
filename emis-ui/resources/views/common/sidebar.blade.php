@@ -374,14 +374,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <!-- <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/program_clubs_index" class="nav-link">
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','org_programs')">
+                        <router-link to="/org_programs" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Programs & Clubs
                             </p>
                         </router-link>
-                    </li> -->
+                    </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
@@ -395,6 +395,14 @@
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Facilities & others
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="sen_module_index" onclick="setclass('organizationlink','','sen_module_index')">
+                        <router-link to="/sen_module_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                SEN Module
                             </p>
                         </router-link>
                     </li>
