@@ -11,6 +11,15 @@ const routes = [
                     { path: '/edit_org_service', name:'edit_org_service', component: require('./components/masters/organization_masters/service/edit_service.vue').default },
                   ]    
               },
+              { path: '/income_facility_index',  
+                component: require('./components/masters/organization_masters/income_facility/income_facility_index.vue').default ,
+                  children: [
+                    { path: '/',name:'income_facility_index', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
+                    { path: '/list_income_facility',name:'list_income_facility', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
+                    { path: '/create_income_facility',name:'create_income_facility', component: require('./components/masters/organization_masters/income_facility/create_income_facility.vue').default },
+                    { path: '/edit_income_facility',name:'edit_income_facility', component: require('./components/masters/organization_masters/income_facility/edit_income_facility.vue').default },
+                  ]     
+              },
               { path: '/department_index', 
                   component: require('./components/masters/organization_masters/department/department_index.vue').default ,
                   children: 
@@ -182,6 +191,15 @@ const routes = [
                     { path: '/furniture_usage_list', name:'furniture_usage_list', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_list.vue').default },
                 ]    
             },
+            { path: '/financial_information_index',  
+              component: require('./components/masters/organization_masters/financial_information/financial_information_index.vue').default ,
+              children: [
+                { path: '/',name:'financial_information_index', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
+                { path: '/list_financial_information',name:'list_financial_information', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
+                { path: '/create_financial_information',name:'create_financial_information', component: require('./components/masters/organization_masters/financial_information/create_financial_information.vue').default },
+                { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
+              ]     
+            }, 
             { path: '/sport_facility_index', 
                 component: require('./components/masters/organization_masters/sport_facility/sport_facility_index.vue').default ,
                 children: 
@@ -615,6 +633,7 @@ const routes = [
             { path: '/location_change_acknowledgement', name:'location_change_acknowledgement', component: require('./components/organization/restructuring/location_change/acknowledgement.vue').default },
           ]    
       },
+      
       { path: '/fee_structure_change_index',   
         component: require('./components/organization/restructuring/fee_structure/fee_structure_index.vue').default ,
           children: [
@@ -624,6 +643,17 @@ const routes = [
             { path: '/edit_fee_structure',name:'edit_fee_structure', component: require('./components/organization/restructuring/fee_structure/edit_fee_structure.vue').default },
             { path: '/view_fee_structure',name:'view_fee_structure', component: require('./components/organization/restructuring/fee_structure/view_fee_structure.vue').default },
             { path: '/fee_structure_acknowledgement', name:'fee_structure_acknowledgement', component: require('./components/organization/restructuring/fee_structure/acknowledgement.vue').default },
+          ]    
+      },
+      { path: '/bording_change_index',   
+        component: require('./components/organization/restructuring/boarding/boarding_index.vue').default ,
+          children: [
+            { path: '/',name:'bording_change_index', component: require('./components/organization/restructuring/boarding/list_boarding.vue').default },
+            { path: '/list_boarding',name:'list_boarding', component: require('./components/organization/restructuring/boarding/list_boarding.vue').default },
+            { path: '/create_boarding',name:'create_boarding', component: require('./components/organization/restructuring/boarding/create_boarding.vue').default },
+            { path: '/edit_boarding',name:'edit_boarding', component: require('./components/organization/restructuring/boarding/edit_boarding.vue').default },
+            { path: '/view_boarding',name:'view_boarding', component: require('./components/organization/restructuring/boarding/view_boarding.vue').default },
+            { path: '/boarding_acknowledgement', name:'boarding_acknowledgement', component: require('./components/organization/restructuring/boarding/acknowledgement.vue').default },
           ]    
       },
       
@@ -644,6 +674,16 @@ const routes = [
             { path: '/list_autonomous',name:'list_autonomous', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
             { path: '/create_autonomous',name:'create_autonomous', component: require('./components/organization/restructuring/autonomous/create_autonomous.vue').default },
             { path: '/autonomous_acknowledgement', name:'autonomous_acknowledgement', component: require('./components/organization/restructuring/autonomous/acknowledgement.vue').default },
+          ]    
+      },
+      
+      { path: '/stream_change_index',  
+        component: require('./components/organization/restructuring/stream_change/stream_change_index.vue').default ,
+          children: [
+            { path: '/',name:'stream_change_index', component: require('./components/organization/restructuring/stream_change/list_stream_change.vue').default },
+            { path: '/list_stream_change',name:'list_stream_change', component: require('./components/organization/restructuring/stream_change/list_stream_change.vue').default },
+            { path: '/create_stream_change',name:'create_stream_change', component: require('./components/organization/restructuring/stream_change/create_stream_change.vue').default },
+            { path: '/stream_change_acknowledgement', name:'stream_change_acknowledgement', component: require('./components/organization/restructuring/stream_change/acknowledgement.vue').default },
           ]    
       },
 
@@ -714,24 +754,8 @@ const routes = [
     // Organisational Routes (structural facility route)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
-        { path: '/income_facility_index',  
-            component: require('./components/masters/organization_masters/income_facility/income_facility_index.vue').default ,
-              children: [
-                { path: '/',name:'income_facility_index', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
-                { path: '/list_income_facility',name:'list_income_facility', component: require('./components/masters/organization_masters/income_facility/list_income_facility.vue').default },
-                { path: '/create_income_facility',name:'create_income_facility', component: require('./components/masters/organization_masters/income_facility/create_income_facility.vue').default },
-                { path: '/edit_income_facility',name:'edit_income_facility', component: require('./components/masters/organization_masters/income_facility/edit_income_facility.vue').default },
-              ]     
-          },
-          { path: '/financial_information_index',  
-            component: require('./components/masters/organization_masters/financial_information/financial_information_index.vue').default ,
-              children: [
-                { path: '/',name:'financial_information_index', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
-                { path: '/list_financial_information',name:'list_financial_information', component: require('./components/masters/organization_masters/financial_information/list_financial_information.vue').default },
-                { path: '/create_financial_information',name:'create_financial_information', component: require('./components/masters/organization_masters/financial_information/create_financial_information.vue').default },
-                { path: '/edit_financial_information',name:'edit_financial_information', component: require('./components/organization/financials/financial_information/edit_financial_information.vue').default },
-              ]     
-          }, 
+        
+          
         { path: '/infrastructure_index', 
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [
@@ -766,6 +790,24 @@ const routes = [
             { path: '/add_income_information', name:'add_income_information', component: require('./components/organization/financials/income_information/add_income_information.vue').default },
             { path: '/edit_income_information', name:'edit_income_information', component: require('./components/organization/financials/income_information/edit_income_information.vue').default },
             { path: '/list_income_information', name:'list_income_information', component: require('./components/organization/financials/income_information/list_income_information.vue').default },
+          ] 
+        },
+        { path: '/disasters_information', 
+          component: require('./components/organization/general/disasters_information/disasters_information.vue').default ,
+          children: [
+            { path: '',name:'disasters_information', component: require('./components/organization/general/disasters_information/list_disasters_information.vue').default },
+            { path: '/add_disasters_information', name:'add_disasters_information', component: require('./components/organization/general/disasters_information/add_disasters_information.vue').default },
+            { path: '/edit_disasters_information', name:'edit_disasters_information', component: require('./components/organization/general/disasters_information/edit_disasters_information.vue').default },
+            { path: '/list_disasters_information', name:'list_disasters_information', component: require('./components/organization/general/disasters_information/list_disasters_information.vue').default },
+          ] 
+        },
+        { path: '/compound_information', 
+          component: require('./components/organization/general/compound_details/compound_details.vue').default ,
+          children: [
+            { path: '',name:'compound_information', component: require('./components/organization/general/compound_details/list_compound_details.vue').default },
+            { path: '/add_compound_details', name:'add_compound_details', component: require('./components/organization/general/compound_details/add_compound_details.vue').default },
+            { path: '/edit_compound_details', name:'edit_compound_details', component: require('./components/organization/general/compound_details/edit_compound_details.vue').default },
+            { path: '/list_compound_details', name:'list_compound_details', component: require('./components/organization/general/compound_details/list_compound_details.vue').default },
           ] 
         },
         { path: '/wash',name:'wash', component: require('./components/organization/structuralFacility/wash.vue').default },
@@ -849,15 +891,9 @@ const routes = [
             { path: '/list_projections', name:'list_projections', component: require('./components/organization/general/projections/list_projections.vue').default },
           ] 
         },
-        { path: '/disasters_information', 
-          component: require('./components/organization/general/disasters_information/disasters_information.vue').default ,
-          children: [
-            { path: '',name:'disasters_information', component: require('./components/organization/general/disasters_information/list_disasters_information.vue').default },
-            { path: '/add_disasters_information', name:'add_disasters_information', component: require('./components/organization/general/disasters_information/add_disasters_information.vue').default },
-            { path: '/edit_disasters_information', name:'edit_disasters_information', component: require('./components/organization/general/disasters_information/edit_disasters_information.vue').default },
-            { path: '/list_disasters_information', name:'list_disasters_information', component: require('./components/organization/general/disasters_information/list_disasters_information.vue').default },
-          ] 
-        },
+        
+       
+        
         { path: '/location_details', 
           component: require('./components/organization/general/location_details/location_details.vue').default ,
           children: [

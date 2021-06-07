@@ -8,6 +8,7 @@
                 <span class="fa-pull-right pr-2 py-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_private_eccd')"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_private_eccd')"><i class="fa fa-plus"></i> Apply for New Establishment</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-print"></i> Print</button>
                 </span>
             </div>
             <div class="card-body pt-1 pb-0">  

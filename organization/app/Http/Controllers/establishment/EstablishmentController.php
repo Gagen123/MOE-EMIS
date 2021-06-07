@@ -952,6 +952,7 @@ class EstablishmentController extends Controller
     public function updateOrgBasicDetials(Request $request){
 
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
+<<<<<<< HEAD
 
         $org_data =[
             'id'                        =>  $org_det->id,
@@ -970,6 +971,26 @@ class EstablishmentController extends Controller
 
         HistoryForOrganizaitonDetail::create($org_data); //pushing in history
 
+=======
+        if($org_det!=null && $org_det!=""){
+            $org_data =[
+                'id'                        =>  $org_det->id,
+                'isAspNetSchool'            =>  $org_det->isAspNetSchool,
+                'isColocated'               =>  $org_det->isColocated,
+                'isGeoPoliticallyLocated'   =>  $org_det->isGeoPoliticallyLocated,
+                'hasCounselingRoom'         =>  $org_det->hasCounselingRoom,
+                'hasShiftSystem'            =>  $org_det->hasShiftSystem,
+                'hasCE'                     =>  $org_det->hasCE,
+                'mofCode'                   =>  $org_det->mofCode,
+                'zestAgencyCode'            =>  $org_det->zestAgencyCode,
+                'recorded_on'               =>  date('Y-m-d h:i:s'),
+                'recorded_for'              =>  'Basic Detials Update', 
+                'recorded_by'               =>  $request->user_id, 
+            ];
+            HistoryForOrganizaitonDetail::create($org_data); //pushing in history
+        }
+        
+>>>>>>> 5bd8eb5d3d0cd826d50d340792ffa6f3d2d3a7aa
         $org_update_data = [
             'isAspNetSchool'            =>  $request['isAspNetSchool'],
             'isColocated'               =>  $request['isColocated'],
@@ -994,16 +1015,28 @@ class EstablishmentController extends Controller
 
         $location = [
             'organizationId'        =>  $request->org_id,
+<<<<<<< HEAD
             'landOwnership'         =>  $request['landOwnership'],
             //'compoundFencing'       =>  $request['compoundFencing'],
+=======
+            // 'landOwnership'         =>  $request['landOwnership'],
+            'compoundFencing'       =>  $request['compoundFencing'],
+>>>>>>> 5bd8eb5d3d0cd826d50d340792ffa6f3d2d3a7aa
             'entranceGate'          =>  $request['entranceGate'],
             'longitude'             =>  $request['longitude'],
             'latitude'              =>  $request['latitude'],
             'altitude'              =>  $request['altitude'],
+<<<<<<< HEAD
             //'thramNo'               =>  $request['thramNo'],
             // 'cid'                   =>  $request['cid'],
             // 'name'                  =>  $request['name'],
             // 'compoundArea'          =>  $request['compoundArea'],
+=======
+            'thramNo'               =>  $request['thramNo'],
+            // 'cid'                   =>  $request['cid'],
+            // 'name'                  =>  $request['name'],
+            'compoundArea'          =>  $request['compoundArea'],
+>>>>>>> 5bd8eb5d3d0cd826d50d340792ffa6f3d2d3a7aa
             'googleMapPath'         =>  $request['map_path'],
             // 'climate_type'          =>  $request['climate_type'],
             //'disasterArea'          =>  implode($request['disasterArea'],', '),
@@ -1034,6 +1067,7 @@ class EstablishmentController extends Controller
                 }
             Locations::create($location); 
         }
+<<<<<<< HEAD
 
         //Contact details is no longer an add more array
         //also the contact details and table have been changed
@@ -1051,6 +1085,22 @@ class EstablishmentController extends Controller
         // );
         //     $org_det = ContactDetails::create($contact_details);
         // }
+=======
+        ContactDetails::where('organizationId',$request->org_id)->delete();
+        // dd($request->users);
+        foreach ($request->users as $i=> $user){
+            $contact_details = array(
+                'organizationId'    =>  $request->org_id,
+                'phone'             =>  $user['phone'],
+                'mobile'            =>  $user['mobile'],
+                'email'             =>  $user['email'],
+                'type'              =>  2,
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s')
+            );
+            $org_det = ContactDetails::create($contact_details);
+        }
+>>>>>>> 5bd8eb5d3d0cd826d50d340792ffa6f3d2d3a7aa
         
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }

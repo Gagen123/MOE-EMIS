@@ -7,7 +7,6 @@
                     <th >Type</th>
                     <th >Amount</th>
                     <th >Date</th>
-                    <th >Remarks</th>
                     <th >Action</th>
                   
                 </tr>
@@ -15,10 +14,9 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.incomeFacilitiesId}}</td>
+                    <td>{{ typeArry[item.incomeFacilitiesId]}}</td>
                     <td>{{ item.amount}}</td>
                     <td>{{ item.date}}</td>
-                    <td>{{ item.status}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -34,11 +32,24 @@ export default {
     data(){
         return{
             org_id:'',
+            typeArry:{},
             dataList:[], 
         }
     },
     methods:{
-        
+        loadtypeList(){
+            axios.get('masters/organizationMasterController/loadFinacialtype')
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.typeArry[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+
+        },
         loadDataList(uri='organization/loadFinancialInformation/'){
             axios.get(uri)
             .then(response => {
@@ -56,7 +67,9 @@ export default {
         },
     },
     mounted(){
+        this.loadtypeList();
         this.loadDataList();
+        
     },
 }
 </script>

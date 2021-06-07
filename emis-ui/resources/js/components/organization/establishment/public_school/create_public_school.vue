@@ -146,7 +146,7 @@
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>                                
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
@@ -203,7 +203,9 @@
                                     <tr>
                                         <th>Classes</th>
                                         <th class="strm_clas">Stream</th>  
-                                        <th></th>                     
+                                        <th></th>   
+                                        <th>Applicable Class Stream</th> 
+                                                               
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -222,7 +224,6 @@
                                         </td>
                                         <td v-else>  
                                             <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
-                                            
                                         </td>
                                     </tr> 
                                 </tbody>
@@ -267,6 +268,7 @@ export default {
             fileUpload: [],
             draft_data:[],
             proposed_by_list:[],
+            multiAgeIdList:[],
             file_form: new form({
                 id:'',
                 file_name: '',
@@ -287,7 +289,7 @@ export default {
             }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Public School', status:'Submitted',application_number:'',
-                action_type:'add',submit_type:'',remarks:'',proposedName:'',
+                action_type:'add',submit_type:'',remarks:'',proposedName:'',multiAgeId:[],
             }) 
         } 
     },
@@ -544,7 +546,7 @@ export default {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
                             this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
-                            this.loadpendingdetails('Public_School');
+                            // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -555,31 +557,46 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
+                    let clasArray=[];
+                    $("input[name='attachment']:checked").each( function () {
+                        clasArray.push($(this).val());
+                    });
+                    if(clasArray.length<1){
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
                         }
+                        let formData = new FormData();
+                        formData.append('id', this.file_form.id);
+                        formData.append('ref_docs[]', this.file_form.ref_docs);
+                        for(let i=0;i<this.file_form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                        }
+                        formData.append('application_number', this.file_form.application_number);
+                        
+                        axios.post('organization/saveUploadedFiles', formData, config)
+                        .then((response) => {
+                            if(response.data!=""){
+                                this.change_tab(nextclass);
+                            }
+                        })
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.change_tab('organization-tab');
+                            console.log("Error:"+error)
+                        })
                     }
-                    let formData = new FormData();
-                    formData.append('id', this.file_form.id);
-                    formData.append('ref_docs[]', this.file_form.ref_docs);
-                    for(let i=0;i<this.file_form.ref_docs.length;i++){
-                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                    else{
+                        Swal.fire({
+                            text: "Please attach files ",
+                            icon: 'info',
+                            confirmButtonText: 'OK',
+                            showCancelButton: true,
+                        });
                     }
-                    formData.append('application_number', this.file_form.application_number);
                     
-                    axios.post('organization/saveUploadedFiles', formData, config)
-                    .then((response) => {
-                        if(response.data!=""){
-                            this.change_tab(nextclass);
-                        }
-                    })
-                    .catch((error) => {
-                        this.applyselect2();
-                        this.change_tab('organization-tab');
-                        console.log("Error:"+error)
-                    })
                 }else{
                     this.change_tab(nextclass);
                 }
@@ -666,6 +683,8 @@ export default {
          */
         getClassStream(text){
             $('.strm_clas').hide();
+            $('.multiageclass').prop('disabled',true);
+            $('.multiageclassval').val('');
             let level = text;
             if(level.toLowerCase().includes('middle')){
                 level="10";
@@ -675,6 +694,7 @@ export default {
             }
             else if(level.toLowerCase().includes('primary')){
                 level="6";
+                $('.multiageclass').prop('disabled',false);
             }
             else{
                 level="12";
@@ -732,7 +752,11 @@ export default {
             .catch(errors => { 
                 console.log(errors)
             });   
-        }
+        },
+        
+        
+        
+        
     },
     
     created(){
@@ -766,6 +790,7 @@ export default {
         });
         this.getClass();
         this.getStream();
+        this.getmultiGrade();
         this.getAttachmentType();
         this.getLocation();
         this.getOrgList();

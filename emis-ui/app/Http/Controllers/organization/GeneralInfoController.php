@@ -63,7 +63,7 @@ class GeneralInfoController extends Controller
     public function loadEquipment($orgId=""){
         if($orgId=="null" || $orgId==""){
             $orgId=$this->getWrkingAgencyId();
-            
+
         }
         $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$orgId);
         return $dis;
@@ -196,7 +196,7 @@ class GeneralInfoController extends Controller
         $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown');
         return $serviceProvider;
     }
-    
+
     public function getServiceProviderDropdown1(){
         $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown1');
         return $serviceProvider;
@@ -254,7 +254,7 @@ class GeneralInfoController extends Controller
                     );
                 }
             }
-        }   
+        }
         $loc =[
             'organizationId'        =>  $orgId,
             'landOwnership'         =>  $request['landOwnership'],
@@ -303,9 +303,11 @@ class GeneralInfoController extends Controller
             'class'         =>  $request['class'],
             'stream'        =>  $request['stream'],
             'sections'      =>  $request['sections'],
+            'multiAgeId'      =>  $request['multiAgeId'],
             'user_id'       =>  $this->userId(),
             'id'            =>  $request['id'],
         ];
+        // dd($class_section);
         $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $class_section);
         return $response_data;
     }
@@ -335,7 +337,7 @@ class GeneralInfoController extends Controller
         $orgList = $this->apiService->listData('emis/organization/getOrgList/'.$dzo_id);
         return $orgList;
     }
-    public function getClassByOrg($id=""){  
+    public function getClassByOrg($id=""){
         if($id=="sessionDet"){
             $id=$this->getWrkingAgencyId();
         }
@@ -343,7 +345,7 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
 
-    
+
     public function udpateOrgProfile(Request $request){
         $file = $request->attachments;
         $path="";
@@ -361,14 +363,14 @@ class GeneralInfoController extends Controller
             'org_id'            =>  $request['org_id'],
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
-            'attachments'       =>  $path, 
+            'attachments'       =>  $path,
             'user_id'           =>  $this->userId()
         ];
         // dd($org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
         return $response_data;
     }
-    
+
     public function getOrgProfile($id = ""){
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;

@@ -44,11 +44,9 @@ export default {
         return {
             incomeList:[],
             income_form: new form({
-                income: '',
                 amount: '',
                 date: '',
                 remarks: '',
-                org_id:'',
                 incomeFacilitiesId:'',
             }),
         }
@@ -58,8 +56,7 @@ export default {
             axios.get('masters/organizationMasterController/loadincomeList')
             .then(response => {
                 let data = response;
-                this.incomeList =  data.data.data[0];
-                // alert(JSON.stringify(data.data.data[0].name))
+                this.incomeList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -72,11 +69,10 @@ export default {
                     'content-type': 'multipart/form-data'
                 }
             }
-            // alert("dsadsads");
-            // this.$Progress.start();
             let formData = new FormData(); 
             formData.append('amount', this.income_form.amount);
             formData.append('date', this.income_form.date);
+            formData.append('incomeFacilitiesId', this.income_form.incomeFacilitiesId);
             formData.append('remarks', this.income_form.remarks);
             axios.post('/organization/saveIncomeinfo',formData,config)
             .then(()=>{
@@ -87,10 +83,6 @@ export default {
                  this.$router.push('/list_income_information');
             })
             .catch(()=>{console.log("Error.....")})
-            
-
-        
-
         },  
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
@@ -123,7 +115,6 @@ export default {
 
     },
     created() {
-        this.submitForm();
         this.getloadincomeList();
        
   },

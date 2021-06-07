@@ -27,19 +27,15 @@ class FinanceController extends Controller
     public function saveIncomeInformation(Request $request){
         //   dd($request);
           $rules = [
-            // 'income'                         =>  'required',
             'amount'                            =>  'required',
             'date'                              =>  'required',
             'remarks'                           =>  'required',
-            'organizationId'                    =>  'required',
             
         ];
         $customMessages = [
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
-            'organizationId.required'           => 'organizationId is required',
-            // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -47,15 +43,18 @@ class FinanceController extends Controller
             'date'                               =>  $request['date'],
             'remarks'                            =>  $request['remarks'],
             'organization_details_id'            =>  $request['organizationId'],
-            // 'incomeFacilitiesId'              =>  $request['income'],
+            'incomeFacilitiesId'                 =>  $request['incomeFacilitiesId'],
         ];
-        // dd($data);
+        try{
         $response_data = OrganizationIncomeFacilities::create($data);
+        }
+        catch(\Illuminate\Database\QueryException $ex){
+            dd($ex);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }
     } 
     public function updateIncomeInformation(Request $request){
         $id = $request->id;
-        //   dd($request);
           $rules = [
             // 'income'                         =>  'required',
             'id'                                =>  'required',
@@ -88,7 +87,6 @@ class FinanceController extends Controller
     
         
     public function saveFinancialInformation(Request $request){
-        // dd($request);
          $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
@@ -105,11 +103,15 @@ class FinanceController extends Controller
             'organizationId'                    =>  $request['organizationId'],
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
-            'status'                           =>  $request['remarks'],
-            // 'financialInformationId'         =>  $request['financialInformationId'],
+            'status'                            =>  $request['remarks'],
+            'financialInformationId'            =>  $request['financialInformationId'],
         ];
-        // dd($data);
+        try{
         $response_data = OrganizationFinancialInformation::create($data);
+        }catch(\Illuminate\Database\QueryException $ex){
+            dd($ex);
+
+        }
         return $response_data;
     }
     public function updateFinancialInfo(Request $request){

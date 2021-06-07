@@ -36,6 +36,8 @@ class OrganizationDetails extends Model
         'hasShiftSystem',
         'hasCE',
         'mofCode',
+        'current_fees',
+        'isAutonomy',
         'org_id'  ,
         'updated_by',
         'created_at',

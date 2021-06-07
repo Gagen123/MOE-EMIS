@@ -166,20 +166,20 @@
                     console.log("Error: "+error);
                 });
             },
+            remove_error(err){
+                if($('#'+err).val()!=""){
+                    $('#'+err).html('');
+                }
+            },
             updateorg(){
                 this.form.post('organization/updateBasicDetails')
                 .then((response) => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Basic Details has been saved successfully'
-                    })
+                    this.loadexsitingDetails();
+                    alert(response);
                 })
-                .catch((error) => {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Unexpected error occured:'+error
-                    });
-                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
             },
             getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
             axios.get(uri)
@@ -244,6 +244,17 @@
                   this.form.users.splice(index,1); 
                 }
             },
+            loadexsitingDetails(){
+                axios.get('common/getSessionDetail')
+                .then(response =>{
+                    let data = response.data.data;
+                    this.form.org_id=data['Agency_Code'];
+                    this.getorgProfile(data['Agency_Code']);
+                })    
+                .catch(errors =>{ 
+                    console.log(errors)
+                });
+            }
             
         },
         mounted(){
@@ -253,16 +264,7 @@
             this.loadfencingList();
             this.loadDisasterList();
             this.loadlcimateTypeList();
-            axios.get('common/getSessionDetail')
-            .then(response =>{
-                let data = response.data.data;
-                this.form.org_id=data['Agency_Code'];
-                this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
-                console.log(errors)
-            });
-            
+            this.loadexsitingDetails();
         }
     }
 </script>

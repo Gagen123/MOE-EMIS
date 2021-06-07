@@ -39,6 +39,17 @@ class SportController extends Controller
             ->where('organizationId',$orgId)->get();
         return $loadSport;
     }
+    public function loadeccd($orgId=""){
+        $loadSport = DB::table('eccds as a')
+            ->join('sport_facility_type as b', 'a.facility', '=', 'b.id')
+            ->join('sport_facility_subtypes as c', 'b.id', '=', 'c.sportFacilityId')
+            ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facilityName',
+             'a.type as typeId','c.name as type', 'a.yearOfEstablishment as yearOfEstablishment','a.status as status',
+             'a.noOfFacility as noOfFacility','a.accessibleToDisabled as accessibleToDisabled',
+            'a.facility as facility', 'a.supportedBy as supportedBy')
+            ->where('organizationId',$orgId)->get();
+        return $loadSport;
+    }
 
     /**
      * method to save sport details
@@ -117,14 +128,7 @@ class SportController extends Controller
                     'created_by'                            =>  $request->user_id,
                     'created_at'                            =>  date('Y-m-d h:i:s')
                 ];
-                // dd($sport);
-                try{
                 $spo = Eccd::create($sport);
-                }
-                catch(\Illuminate\Database\QueryException $e){
-                    dd($e);
-
-                }
                 return $this->successResponse($spo, Response::HTTP_CREATED);
             }
         
