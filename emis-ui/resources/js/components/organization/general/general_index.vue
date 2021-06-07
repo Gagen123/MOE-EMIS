@@ -11,14 +11,14 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('locations')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('locations')">
                     <router-link id="locations" to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Location
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('connectivity')">
-                    <router-link id="connectivity" to="/connectivity" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    </router-link> 
+                </li> -->
+                <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
+                    <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Connectivity
                     </router-link>
@@ -35,18 +35,18 @@
                         Furniture
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('section_index')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('section_index')">
                     <router-link id="section_index" to="/section_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Sections
                     </router-link>
-                </li> 
-                <li class="nav-item active pr-1" @click="activatelink('org_class_mapping')">
+                </li>  -->
+                <!-- <li class="nav-item active pr-1" @click="activatelink('org_class_mapping')">
                     <router-link id="org_class_mapping" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Class Mapping
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         <router-view></router-view>
         </div>

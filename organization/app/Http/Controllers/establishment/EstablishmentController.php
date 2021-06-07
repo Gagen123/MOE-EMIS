@@ -363,28 +363,28 @@ class EstablishmentController extends Controller
      */
     public function saveClassStream(Request $request){
         $classes=$request->class;
+        
         $classStream='';
         $inserted_class="";
         $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
         if($request['update_type']!="Document Update"){
             if($request['action_type']=="edit"){
                 ApplicationClassStream::where('ApplicationDetailsId', $application_details->id)->delete();
-            }                                          
+            }     
+            // return $request->class;                                     
             if($request->class){
                 foreach($request->class as $key => $classId){
-                    $stream_exists = $this->checkStreamExists($classId);
-                    if(empty($stream_exists)){
-                        $classStream = [
-                            'ApplicationDetailsId'  => $application_details->id,
-                            'classId'               => $classId,
-                            'streamId'              => '',
-                            'created_by'            => $request->user_id,
-                            'created_at'            => date('Y-m-d h:i:s'),
-                        ];
-                        
-                        $class = ApplicationClassStream::create($classStream);
-        
-                    } 
+                    // $stream_exists = $this->checkStreamExists($classId);
+                    // if(empty($stream_exists)){
+                    $classStream = [
+                        'ApplicationDetailsId'  => $application_details->id,
+                        'classId'               => $classId,
+                        'streamId'              => '',
+                        'created_by'            => $request->user_id,
+                        'created_at'            => date('Y-m-d h:i:s'),
+                    ];
+                    $class = ApplicationClassStream::create($classStream);
+                    // } 
                 }
             }
     
@@ -623,10 +623,10 @@ class EstablishmentController extends Controller
     }
 
     public function loadApprovedOrgs($type=""){
-        $response_data= ApplicationDetails::where('status','Approved')->where('establishment_type','like',$type.'%')->get();
+        $response_data= ApplicationDetails::where('status','Approved')->where('establishment_type','like','%'.$type.'%')->get();
         if($response_data!=null && $response_data!=""){
             foreach($response_data as $data){
-                if($data->establishment_type=="Private School"){
+                if($data->establishment_type=="Private School" || $data->establishment_type=="Private ECCD"){
                     $data->proposedName=ApplicationEstPrivate::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
                 else{
@@ -640,7 +640,7 @@ class EstablishmentController extends Controller
 
     public function getApprovedOrgDetails($type="",$key=""){
         $response_data= ApplicationDetails::where('status','Approved')->where('id',$key)->first();
-        if($response_data->establishment_type=="Private School"){
+        if($response_data->establishment_type=="Private School" ||$response_data->establishment_type=="Private ECCD"){
             $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
         else{
@@ -786,6 +786,7 @@ class EstablishmentController extends Controller
                 $stream_data = OrganizationClassStream::create($strm_details);
             }
         }
+
         $app_details=['status' => 'Registered','registered_org_code'=>$org_code];
         ApplicationDetails::where('application_no',$request->applicaitondetails['application_no'])->update($app_details);
         return $this->successResponse($establishment, Response::HTTP_CREATED);
@@ -1010,8 +1011,22 @@ class EstablishmentController extends Controller
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];
-            Locations::create($location);
+            Locations::create($location); 
         }
+        foreach ($request->input('users') as $i=> $user){
+            $contact_details = array(
+                'organizationId'    =>  $request->org_id,
+                'contactTypeId'     =>  $user['contactName'],
+                'phone'             =>  $user['phone'],
+                'mobile'            =>  $user['mobile'],
+                'email'             =>  $user['email'],
+                'type'              =>  2,
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s')
+        );
+            $org_det = ContactDetails::create($contact_details);
+        }
+        
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }
 

@@ -315,10 +315,11 @@ class EstablishmentController extends Controller
             } 
         }
         foreach($workflowdet as $work){
-            if(strpos(strtolower($work->Status_Name),'establishment')===false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            if(strpos(strtolower($work->Status_Name),'establishment')===false ){
                 $workflowstatus=$work->Status_Name;
             }
         }
+        // dd($workflowdet);
         if($loadOrganizationDetails!=null){
             $loadOrganizationDetails->app_stage=$workflowstatus;
         }
@@ -614,7 +615,7 @@ class EstablishmentController extends Controller
         $rules = [
             'initiatedBy'           =>  'required',
             'proposedName'          =>  'required',
-            'proposedLocation'      =>  'required',
+            // 'proposedLocation'      =>  'required',
             'category'              =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required'
@@ -622,7 +623,7 @@ class EstablishmentController extends Controller
         $customMessages = [
             'initiatedBy.required'          => 'Proposal Initiated By is required',
             'proposedName.required'         => 'Proposed Name is required',
-            'proposedLocation.required'     => 'Proposed Location is required',
+            // 'proposedLocation.required'     => 'Proposed Location is required',
             'category.required'             => 'Category is required',
             'dzongkhag.required'            => 'Dzongkhag is required',
             'gewog.required'                => 'Gewog is required',
@@ -644,9 +645,9 @@ class EstablishmentController extends Controller
             'proprietorPhone'       =>  'required|min:6|max:6',
             'proprietorMobile'      =>  'required|min:8|max:8',
             'proprietorEmail'       =>  'required|email',
-            'proposedInfrastructure'    =>  'required',
+            // 'proposedInfrastructure'    =>  'required',
             'proposedName'              =>  'required',
-            'proposedLocation'          =>  'required',
+            // 'proposedLocation'          =>  'required',
             'category'                  =>  'required',
             'dzongkhag'                 =>  'required',
             'gewog'                     =>  'required',
@@ -657,9 +658,9 @@ class EstablishmentController extends Controller
             'proprietorCid.required'            => 'Proprietor CID is required',
             'proprietorPhone.required'          => 'Phone No. is required',
             'proprietorMobile.required'         => 'Mobile No.  is required',
-            'proposedInfrastructure.required'   => 'Infrastructure to be housed in is required',
+            // 'proposedInfrastructure.required'   => 'Infrastructure to be housed in is required',
             'proposedName.required'             => 'Proposed Name is required',
-            'proposedLocation.required'         => 'Proposed Location is required',
+            // 'proposedLocation.required'         => 'Proposed Location is required',
             'category.required'                 => 'Category is required',
             'dzongkhag.required'                => 'Dzongkhag is required',
             'gewog.required'                    => 'Gewog is required',
@@ -744,7 +745,7 @@ class EstablishmentController extends Controller
             'dzongkhag'                    =>  $request['dzongkhag'],
             'gewog'                        =>  $request['gewog'],
             'chiwog'                       =>  $request['chiwog'],
-            'proposedLocation'             =>  $request['proposedLocation'],
+            // 'proposedLocation'             =>  $request['proposedLocation'],
             'locationType'                 =>  $request['locationType'],
             'status'                       =>  $request['status'],
             'establishment_type'           =>  $request['establishment_type'],
@@ -770,7 +771,7 @@ class EstablishmentController extends Controller
             'proprietorEmail'              =>  $request['proprietorEmail'],
             'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
             'proposedName'                 =>  $request['proposedName'],
-            'proposedLocation'             =>  $request['proposedLocation'],
+            // 'proposedLocation'             =>  $request['proposedLocation'],
             'category'                     =>  $request['category'],
             'dzongkhag'                    =>  $request['dzongkhag'],
             'gewog'                        =>  $request['gewog'],

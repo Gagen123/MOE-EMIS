@@ -41,7 +41,7 @@
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
                             <div class="form-group row"> 
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Public ECCD'">
                                     <label class="mb-0">Proposal Initiated By:</label>
                                     <span class="text-blue text-bold">{{proposed_by_list[applicationOrgdetails.initiated_by]}}</span>
                                 </div>
@@ -49,7 +49,7 @@
                                     <label class="mb-0">Proposed Name:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
                                 </div>  
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School' ||applicationdetails.establishment_type=='Public ECR'">
                                     <label class="mb-0">Level:</label>
                                     <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
                                 </div>  
@@ -92,7 +92,7 @@
                                     <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                                 </div>
                             </div> -->
-                            <div v-if="applicationdetails.establishment_type=='Private School'">
+                            <div v-if="applicationdetails.establishment_type=='Private School' || applicationdetails.establishment_type=='Private ECCD'">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <h5><u>Proprietor Details</u></h5>
@@ -168,9 +168,9 @@
                     </div> 
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
-                            <h4><u>Select classes and streams</u></h4>
+                            <h4><u>Classes / streams / Age Group</u></h4>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <table id="class-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Classes</th>
@@ -426,6 +426,7 @@ export default {
                 this.form.applicationNo=data.application_no;
                 this.form.servicename=data.establishment_type;
                 this.form.id=data.id;
+                this.class_section=data.org_class_stream;
                 if(data.org_details.isFeedingSchool==1){
                     for(let i=0;i<data.feeding_modality.length;i++){
                         if(data.feeding_modality[i].noOfMeals!=undefined){
@@ -434,6 +435,7 @@ export default {
                     }
                     $('#feedingDetails').show();
                 }
+                alert(response.data.app_stage.toLowerCase());
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
@@ -468,12 +470,11 @@ export default {
                         $('#approveId').hide();
                     }
                     else{
-                        if(data.establishment_type=="Private School" && data.status!="Document Updated"){
+                        if((data.establishment_type=="Private School" || data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
                             $('#verifyId').hide();
                             $('#approveId').hide();
                             $('#rejectbtn').hide();
                         }
-
                         this.showsearch=false;
                         this.form.update_type='final_verification';
                         this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
@@ -493,7 +494,7 @@ export default {
                 if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
                     $('.strm_clas').show();
                 }
-                this.class_section=data.org_class_stream;
+                
             })
             .catch((error) => {  
                 console.log("Error......"+error);

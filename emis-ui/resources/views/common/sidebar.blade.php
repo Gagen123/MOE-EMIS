@@ -7,7 +7,7 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            @if(session('User_Details')!=null)
+            <!-- @if(session('User_Details')!=null)
             @foreach (session('User_Details')['modules'] as $mod)
                 @if($mod['module_route']!=null || $mod['module_route']!="")
                 <li class="nav-item" >
@@ -60,7 +60,9 @@
                                         </li>
                                     @endif
                                 @endif
-                            @endforeach
+                            @endforeach -->
+
+
                             <!-- @foreach(session('User_Details')['screens'] as $i=> $scr)
                                 @if($scr['sub_mod_id']=="" && $scr['mod_id']==$mod['mod_id'])
                                 <li class="nav-item">
@@ -71,7 +73,9 @@
                                 </li>
                                 @endif
                             @endforeach -->
-                        @endif
+
+
+                        <!-- @endif
                         @foreach(session('User_Details')['screens'] as $scr)
                             @if($mod['mod_id'] == $scr['mod_id'] && $scr['sub_mod_id']==null)
                             <li class="nav-item">
@@ -100,7 +104,7 @@
             <br>
             <br>
             <hr>
-            Developers Menu
+            Developers Menu -->
             <li class="nav-item has-treeview" id="mastermanagment">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-database"></i>
@@ -312,10 +316,18 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/organization_visitor_index" class="nav-link">
+                        <router-link to="/visitors_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Organizaiton Visitor & SBM
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/org_class_section" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Class Section
                             </p>
                         </router-link>
                     </li>
@@ -328,7 +340,7 @@
                         </router-link>
                     </li> -->
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/equipment_index" class="nav-link">
+                        <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Equipments and Furnitures
@@ -336,37 +348,30 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/equipment_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Infrastructure
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/structural_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Structural Facilities
+                                Facilities & others
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
+                   
+                    <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Other Information
                             </p>
                         </router-link>
-                    </li>
-                    <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
+                    </li> -->
+                    <!-- <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
                         <router-link to="/financial_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Latest Missing Menus Added
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
             <li class="nav-header"></li>

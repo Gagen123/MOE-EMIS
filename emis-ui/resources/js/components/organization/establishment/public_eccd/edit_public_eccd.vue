@@ -33,7 +33,10 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/>
+                                <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control select2" @change="remove_error('initiatedBy')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
                                 <has-error :form="form" field="initiatedBy"></has-error>
                             </div>
                         </div>
@@ -44,13 +47,13 @@
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Location:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="text" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" @change="remove_error('proposedLocation')" class="form-control" id="proposedLocation" placeholder="Proposed Location"/>
                                 <has-error :form="form" field="proposedLocation"></has-error>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -119,20 +122,11 @@
                                         <thead>
                                             <tr>
                                                 <th>File Name</th>
-                                                <th>Upload File</th> 
-                                                <th>Action</th>                    
+                                                <th>Upload File</th>                     
                                             </tr>
                                         </thead>
+                                        
                                         <tbody>
-                                            <tr v-for='(attach,count) in attachment_details' :key="count+1">
-                                                <template v-if="attach.upload_type==null || attach.upload_type=='null'">
-                                                    <td>{{attach.user_defined_file_name}} </td>
-                                                    <td>  {{attach.name}}</td>
-                                                    <td>    
-                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                    </td>
-                                                </template>
-                                            </tr> 
                                             <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
                                                 <td>
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -142,7 +136,7 @@
                                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
-                                            </tr>
+                                            </tr> 
                                             <tr>
                                                 <td colspan="5"> 
                                                     <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
@@ -172,13 +166,24 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                    <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
-                                    <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                </span>
-                            </span> 
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age Group</th>
+                                        <th></th>                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td >  
+                                            <input type="checkbox" :id="'eccd'+item.id" name="eccdclass" v-model="classForm.class" :value="item.id">                               
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -197,6 +202,7 @@
 export default {
     data(){
         return{
+            record_id:'',
             dzongkhag:'',
             levelList:[],
             locationList:[],
@@ -207,14 +213,18 @@ export default {
             classList:[],
             streamList:[],
             classStreamList:[],
+            calssArray:{},
             fileUpload: [],
             draft_data:[],
-            record_id:'',
-            attachment_details:'',
+            gewog_listArray:{},
+            proposed_by_list:[],
+            classForm: new form({
+                id: '',class:[], proposedName:'',  proposed_establishment:'Public ECCD', status:'submitted',application_number:'',
+                 action_type:'edit',update_type:'',
+            }),
             form: new form({
                 id: '',initiatedBy:'',application_number:'', proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
-                coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending',
-                action_type:'edit',
+                coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'
             }),
             file_form: new form({
                 id:'',
@@ -228,51 +238,10 @@ export default {
                 }],
                 ref_docs:[],
             }),
-           
-            classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Public ECCD', status:'submitted',application_number:'',
-                action_type:'edit',
-            }) 
+            
         } 
     },
     methods: {
-        loadApplicaitonDetials(){
-            axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
-            .then(response => {
-                let data = response.data.data;
-                this.attachment_details=data.estb_attachments;
-                this.form.id=data.id;
-                this.form.application_number=data.application_no;
-                this.classStreamForm.application_number=data.application_no;
-                this.file_form.application_number=data.application_no;
-                this.form.initiatedBy=data.estb_details.initiated_by;
-                this.form.proposedName=data.estb_details.proposedName;
-                this.form.proposedLocation=data.estb_details.proposedLocation;
-                this.form.dzongkhag=data.dzongkhagId;
-                this.form.coLocatedParent=data.estb_details.coLocatedParent;
-                if(data.estb_details.coLocatedParent==1){
-                    $('#parentDetails').show();
-                }
-                this.form.parentSchool=data.estb_details.parentSchool;
-                $('#parentSchool').val(data.estb_details.parentSchool).trigger('change');
-                $('#dzongkhag').val(data.estb_details.dzongkhagId).trigger('change');
-                this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
-                this.getvillageListData(data.gewogId,data.chiwogId);
-                this.form.level=data.estb_details.levelId;
-                $('#level').val(data.estb_details.levelId).trigger('change');
-                this.form.locationType=data.estb_details.locationId;
-                $('#locationType').val(data.estb_details.locationId).trigger('change');
-                
-                if(data.estb_classStream.length>0){
-                    for(let i=0;i<data.estb_classStream.length;i++){
-                        $('input:radio[name="class_stream"][value="' + data.estb_classStream[i].classId + '"]').attr('checked', 'checked');
-                    }
-                }
-            })    
-            .catch(errors => { 
-                console.log('error in retrieving: '+errors)
-            });
-        },
         /**
          * method to remove error
          */
@@ -282,32 +251,8 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
-        getgewoglistunderdzo(dzongkhag,gewog_id){
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.gewog_list = data;
-                for(let i=0;i<data.length;i++){
-                    this.gewog_listArray[data[i].id] = data[i].name; 
-                }
-                if(gewog_id!="NA"){
-                    this.form.gewog=gewog_id;
-                    $('#gewog').val(gewog_id).trigger('change');
-                }
-            });
-        },
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
+       
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -339,7 +284,7 @@ export default {
             });
         },
 
-        async getvillagelist(id){
+        async getvillagelist(id,chewqogid){
             let gewogId=$('#gewog').val();
             if(id!="" && (gewogId==null || gewogId=="")){
                 gewogId=id;
@@ -349,17 +294,6 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        async getvillageListData(id,chewqogid){
-            let uri = 'masters/all_active_dropdowns/gewog/'+id;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                this.villageList = data;
                 for(let i=0;i<data.length;i++){
                     this.villagelistArray[data[i].id] = data[i].name; 
                 }
@@ -367,7 +301,6 @@ export default {
                     this.form.chiwog=chewqogid;
                     $('#chiwog').val(chewqogid).trigger('change');
                 }
-                
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -381,10 +314,7 @@ export default {
             this.count++;
             this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
-        addMoreStudents: function(){
-            this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+        
         /**
          * method to remove fields
          */
@@ -392,12 +322,6 @@ export default {
              if(this.file_form.roles.length>1){
                 this.count--;
                 this.file_form.roles.splice(index,1); 
-            }
-        },
-        removeStudents(index){    
-             if(this.file_form.assigned_student.length>1){
-                this.count--;
-                this.file_form.assigned_student.splice(index,1); 
             }
         },
 
@@ -413,15 +337,6 @@ export default {
             } 
         },
 
-
-        /**
-         * to load the respective pages depending on the type of establishment
-         */
-
-        loadRespectivePage(val){
-            this.$router.push({name:''+val,query: {data:id}});
-        },
-
         /**
          * method to populate dropdown
          */
@@ -430,6 +345,9 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="initiatedBy"){
+                this.form.initiatedBy=$('#initiatedBy').val();
             }
             if(id=="establishment_type"){
                 this.form.establishment_type=$('#establishment_type').val();     
@@ -445,7 +363,7 @@ export default {
             }
             if(id=="gewog"){
                 this.form.gewog=$('#gewog').val();
-                this.getvillagelist();
+                this.getvillagelist($('#gewog').val(),'NA');
             }
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
@@ -461,7 +379,11 @@ export default {
         getClassStream:function(){
             axios.get('/masters/loadClassStreamMapping/eccd')
               .then(response => {
-                this.classStreamList = response.data.data;
+                let data = response.data.data;
+                this.classStreamList = data;
+                 for(let i=0;i<data.length;i++){
+                    this.calssArray[data[i].id] = data[i].class; 
+                }
             });
         },
 
@@ -475,15 +397,6 @@ export default {
             });
         },
 
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
 
         /**
          * method to show next tab
@@ -499,7 +412,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.classStreamForm.post('organization/saveClassStream')
+                        this.classForm.post('organization/saveClassStream')
                         .then((response) => {
                             if(response.data=="No Screen"){
                                 Toast.fire({  
@@ -508,7 +421,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been updated and send for further action. <br><b>Thank You !</b>";
+                                let message="Applicaiton for new Establishment of ECCD has beed updated and submitted for approval. <br><b>Thank You !</b>";
                                 this.$router.push({name:'acknowledgement_public_eccd',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -569,12 +482,7 @@ export default {
                 }
             }
         },
-        loadpendingdetails(type){
-            axios.get('organization/loaddraftApplication/'+type)
-              .then(response => {
-                this.draft_data = response.data.data;
-            });
-        },
+       
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -608,29 +516,9 @@ export default {
         },
 
         /**
-         * method to get other category if the category is 'ECCD'
-         */
-        getCategory(){
-            let level = $('#level option:selected').text();
-            if(level == "ECCD"){
-                $(".eccd").show();
-            }
-            else{
-                $(".eccd").hide();
-            }
-        },
-
-        /**
          * method to show private fields
          */
-        showprivatedetails(type){
-            if(type=='private'){
-                $('#privatedetails').show();
-            }
-            else{
-                $('#privatedetails').hide();
-            }
-        },
+       
         show_parent_school_details(param){
             if(param){
                 $('#parentDetails').show();
@@ -639,26 +527,122 @@ export default {
                 $('#parentDetails').hide();
             }
         } ,
-       
-       
-    },
-    
-    created(){
-        this.getLevel();
-        this.getLocation();
-    },
-    mounted() {
-        axios.get('common/getSessionDetail')
+        getgewoglistunderdzo(dzongkhag,gewog_id){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                this.dzongkhag=data['Dzo_Id'];
-                this.form.dzongkhag=data['Dzo_Id'];
-                this.getGewogList(data['Dzo_Id']);
+                this.gewog_list = data;
+                for(let i=0;i<data.length;i++){
+                    this.gewog_listArray[data[i].id] = data[i].name; 
+                }
+                if(gewog_id!="NA"){
+                    this.form.gewog=gewog_id;
+                    $('#gewog').val(gewog_id).trigger('change');
+                }
+            });
+        },
+        
+        loadApplicaitonDetials(){
+            axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
+            .then(response => {
+                let data = response.data.data;
+                this.attachment_details=data.estb_attachments;
+                this.form.id=data.id;
+                this.form.application_number=data.application_no;
+                this.classForm.application_number=data.application_no;
+                this.file_form.application_number=data.application_no;
+                this.form.initiatedBy=data.estb_details.initiated_by;
+                $('#initiatedBy').val(data.estb_details.initiated_by).trigger('change');
+                this.form.proposedName=data.estb_details.proposedName;
+                this.form.dzongkhag=data.dzongkhagId;
+                $('#dzongkhag').val(data.estb_details.dzongkhagId).trigger('change');
+                this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
+                this.getvillagelist(data.gewogId,data.chiwogId);
+
+                this.form.locationType=data.estb_details.locationId;
+                $('#locationType').val(data.estb_details.locationId).trigger('change');
+
+                if(data.status=="Notified For Team Verification"){
+                    this.getAttachmentType('');//Attachment name here
+                    this.classForm.update_type="Document Update";
+                }
+                else{
+                    this.getAttachmentType('ForTransaction__Public_ECCD');
+                }
+                
+                if(data.estb_classStream.length>0){
+                    for(let i=0;i<data.estb_classStream.length;i++){
+                        $('#eccd'+data.estb_classStream[i].classId).prop('checked',true);
+                    }
+                }
+            })    
+            .catch(errors => { 
+                console.log('error in retrieving: '+errors)
+            });
+        },
+        getScreenAccess(){
+            axios.get('common/getScreenAccess/workflow__establishment__public_eccd')
+            .then(response => {
+                let data = response.data[0].total_count;
+                if(data<1){
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                    $('#message').html('This page is not accessible to you. Please contact system administrator for further assistant<br> Thank you');
+                }
             })    
             .catch(errors => { 
                 console.log(errors)
             });
-        
+        },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.proposed_by_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        getAttachmentType(type){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        }
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+
+        // checkPendingApplication(){
+        //     axios.get('organization/checkPendingApplication/establishment')
+        //     .then((response) => {  
+        //         let data=response.data;
+        //         if(data!=""){
+        //             $('#mainform').hide();
+        //             $('#applicaitonUnderProcess').show();
+        //             $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
+        //         }
+        //     })
+        //     .catch((error) => {  
+        //         console.log("Error: "+error);
+        //     });
+        // },
+    },
+    
+    created(){
+        this.getScreenAccess();
+        this.getLocation();
+        this.loadproposedBy();
+        // this.checkPendingApplication();
+    },
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -673,9 +657,7 @@ export default {
         });
        
         this.getClass();
-        this.getStream();
         this.getClassStream();
-        this.getLevel();
         this.getLocation();
         this.getOrgList();
         this.record_id=this.$route.params.id;

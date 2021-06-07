@@ -394,6 +394,7 @@ class GeneralInfoController extends Controller
             'fencingtype'               =>  $request['fencingtype'],
             'disasterArea'              =>  $request['disasterArea'],
             'entranceGate'              =>  $request['entranceGate'],
+            'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
         // dd($org_details);

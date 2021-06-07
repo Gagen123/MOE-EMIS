@@ -91,9 +91,17 @@
                                 <label><input  type="radio" v-model="form.geopoliticallyLocated" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" v-model="form.geopoliticallyLocated" value="0" tabindex=""/> No</label>
                             </div>
+                            </div>
+                         <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is SEN School:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                            </div>
                         </div>
+                         -->
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Implement feeding program?:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
                                 <label><input  type="radio" @change="show_feeding_details(true)" v-model="form.isfeedingschool" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" @change="show_feeding_details(false)" v-model="form.isfeedingschool" value="0" tabindex=""/> No</label>
@@ -105,13 +113,7 @@
                                 <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is SEN School:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
-                                <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
-                            </div>
-                        </div> -->
+                       
                         </form>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -513,7 +515,6 @@ export default {
                                         title: 'Technical Errors: please contact system administrator for further details'
                                     });
                                 }
-                                alert('ddd'+response);
                                 if(response!="" && response!="No Screen"){
                                     let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'acknowledgement_public_school',params: {data:message+res }});
@@ -737,7 +738,7 @@ export default {
     created(){
         this.getScreenAccess();
         this.getLevel();
-        this.loadproposedBy();
+        this.loadproposedBy(); 
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
