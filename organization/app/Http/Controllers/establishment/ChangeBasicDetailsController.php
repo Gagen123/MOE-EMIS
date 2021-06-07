@@ -50,8 +50,6 @@ class ChangeBasicDetailsController extends Controller
 
 
         if($request->action_type!="edit"){
-
-           
             $application_details_data =[
                 'application_no'       =>  $this->generateApplicationNo(),
                 'establishment_type'   =>  $request['application_for'],
@@ -486,53 +484,53 @@ class ChangeBasicDetailsController extends Controller
     }
     
     private function extractChangeInStreamData($request, $applicationDetailsId){
-        $data =[
-            'ApplicationDetailsId'      => $applicationDetailsId,
-            'organizationId'            =>  $request['organizationId'],
-            'change_type'              =>  $request['application_for'],
-            'proposedChange'               =>  $request['level'],
-            'created_by'                   =>  $request['user_id']  
-        ];
+        if($request['stream']!=""){
+            $data =[
+                'ApplicationDetailsId'          =>  $applicationDetailsId,
+                'organizationId'                =>  $request['organizationId'],
+                'change_type'                   =>  $request->changetype
+                'proposedChange'                =>  implode($request['stream'],', '),
+                'created_by'                    =>  $request['user_id']  
+            ];
+        }
 
         $changeDetails = ApplicationEstDetailsChange::create($data);
-        $EstDetailsChangeId = $changeDetails->id;
+        // $EstDetailsChangeId = $changeDetails->id;
 
-        if($request->class){
-            foreach($request->class as $key => $classId){
-                $stream_exists = $this->checkStreamExists($classId);
-                
-                if(empty($stream_exists)){
-    
-                    $classStream = [
-                        'ApplicationDetailsId'  => $EstDetailsChangeId,
-                        'classId'               => $classId,
-                        'streamId'              => '',
-                        'created_by'            => $request->user_id,
-                        'created_at'            => date('Y-m-d h:i:s'),
-                    ];
+        // if($request->class){
+        //     foreach($request->class as $key => $classId){
+        //         $stream_exists = $this->checkStreamExists($classId);
+        //         if(empty($stream_exists)){
+        //             $classStream = [
+        //                 'ApplicationDetailsId'  => $EstDetailsChangeId,
+        //                 'classId'               => $classId,
+        //                 'streamId'              => '',
+        //                 'created_by'            => $request->user_id,
+        //                 'created_at'            => date('Y-m-d h:i:s'),
+        //             ];
                     
-                    $class = ApplicationClassStream::create($classStream);
+        //             $class = ApplicationClassStream::create($classStream);
     
-                } 
-            }
-        }
+        //         } 
+        //     }
+        // }
         
-        if($request->stream!=null && $request->stream!=""){
-            foreach($request->stream as $key2 => $classStreamId){
-                $class_stream_data = $this->getClassStreamId($classStreamId);
+        // if($request->stream!=null && $request->stream!=""){
+        //     foreach($request->stream as $key2 => $classStreamId){
+        //         $class_stream_data = $this->getClassStreamId($classStreamId);
     
-                foreach($class_stream_data as $v){
-                    $classStream = [
-                        'ApplicationDetailsId'  => $EstDetailsChangeId,
-                        'classId'               => $v->classId,
-                        'streamId'              => $v->streamId,
-                        'created_by'            => $request->user_id,
-                        'created_at'            => date('Y-m-d h:i:s'),
-                    ];
-                    $class = ApplicationClassStream::create($classStream);
-                }
-            }
-        }
+        //         foreach($class_stream_data as $v){
+        //             $classStream = [
+        //                 'ApplicationDetailsId'  => $EstDetailsChangeId,
+        //                 'classId'               => $v->classId,
+        //                 'streamId'              => $v->streamId,
+        //                 'created_by'            => $request->user_id,
+        //                 'created_at'            => date('Y-m-d h:i:s'),
+        //             ];
+        //             $class = ApplicationClassStream::create($classStream);
+        //         }
+        //     }
+        // }
         return $changeDetails;
     }
 

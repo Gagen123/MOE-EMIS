@@ -208,7 +208,7 @@ export default {
                     file_name:'Proposal Letter',attachment:''
                 }],
                 ref_docs:[],
-                organizationId:'', stream:'', application_type:'stream_change', class:[], stream:[],changetype:'',
+                organizationId:'', stream:[], application_type:'stream_change', class:[],changetype:'',
                 application_for:'Change of Stream', action_type:'add', status:'Submitted',organization_type:''
             })
         } 
@@ -430,6 +430,7 @@ export default {
             axios.get('/organization/getStream')
               .then(response => {
                 let data = response.data;
+                this.streamList = response.data;
                 for(let i=0;i<data.length;i++){
                     this.streamArray[data[i].id] = data[i].stream; 
                 }

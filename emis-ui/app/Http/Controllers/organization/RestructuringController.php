@@ -128,6 +128,8 @@ class RestructuringController extends Controller
         }
         $establishment_data=$establishment_data+[
             'attachment_details'           =>   $attachment_details,
+            'stream'                        =>   $stream,
+            'changetype'                    =>   $changetype,
         ];
         // dd($establishment_data);
 
