@@ -25,6 +25,8 @@ class CompoundDetailController extends Controller
     }
     public function saveSchoolCompundDetails(Request $request){
       // dd('my services');
+      $id = $request->id;
+      if($id ! = null){
         $data =[
             'organizationId'                => $request->organizationId,
             'thramNo'                       => $request->thramno,
@@ -43,9 +45,32 @@ class CompoundDetailController extends Controller
             'updated_at'                    =>date('Y-m-d h:i:s'),
         ];
         //dd($data);
+        $response_data = OrganizationCompoundDetail::where('id', $id)->update($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }else{
+            $data =[
+                'organizationId'                => $request->organizationId,
+                'thramNo'                       => $request->thramno,
+                'plotNo'                        => $request->plotno,
+                'pegInformation'                => $request->peginfo,
+                'compoundArea'                  => $request->sizecompound,
+                'playgroundArea'                => $request->sizeplayground,
+                'playgroundAreaUsable'          => $request->playgroundused,
+                'status'                        => $request->status,
+                'agricultureArea'               => $request->agriculturalarea,
+                'agricultureAreaUsed'           => $request->areaused,
+                'id'                            => $request->id,
+                'created_by'                    => $request['user_id'],
+                'updated_by'                    => $request['user_id'],
+                'created_at'                    =>date('Y-m-d h:i:s'),
+                'updated_at'                    =>date('Y-m-d h:i:s'),
+            ];
+
+        }
         $response_data = OrganizationCompoundDetail::create($data);
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+    
     }
    
     public function loadcompoundareadetials($orgId=""){

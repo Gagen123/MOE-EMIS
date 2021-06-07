@@ -42,8 +42,10 @@ class VisitorController extends Controller
             'visitor_information'       =>  $request['visitor_information'],
             'date'                      =>  $request['date'],
             'remarks'                  =>  $request['remarks'],
-            'user_id'                   =>  $this->userId()
+            'user_id'                   =>  $this->userId(),
+            'id'                        =>  $request['id'],
         ];
+       // dd($data);
     
             $response_data= $this->apiService->createData('emis/organization/visitor/saveVisitorInformation', $data);
             return $response_data;

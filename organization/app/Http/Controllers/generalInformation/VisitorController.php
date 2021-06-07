@@ -22,9 +22,27 @@ class VisitorController extends Controller
     {
         //
     }
+    public function loadVisitorInformation($orgId=""){
+      //  dd('from microservice');
+        $info = Visitor::where('organizationId',$orgId)->get();
+        return $info;
+    }
 
     public function saveVisitorInformation(Request $request){
+        $id = $request->id;
+     //   dd($id);
+        if( $id != null){
+        $data =[
+            'organizationId'           =>  $request['organizationId'],
+            'visitor'                  =>  $request['visitor_information'],
+            'dateOfVisit'              =>  $request['date'],
+            'remarks'                  =>  $request['remarks'],
+        ];
 
+        $response_data = Visitor::where('id', $id)->update($data);
+        
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+         }else{
         $data =[
             'organizationId'           =>  $request['organizationId'],
             'visitor'                  =>  $request['visitor_information'],
@@ -36,10 +54,26 @@ class VisitorController extends Controller
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    }
+
+    // public function updateVisitorInformation(Request $request){
+
+    //     $data =[
+    //         'id'                                =>  $request['id'],
+    //         'organizationId'           =>  $request['organizationId'],
+    //         'visitor'                  =>  $request['visitor_information'],
+    //         'dateOfVisit'              =>  $request['date'],
+    //         'remarks'                  =>  $request['remarks'],
+    //     ];
+
+    //     $response_data = Visitor::where('id',$id)->update($data);
+        
+    //     return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+
+       
+    // }
 
     
-    public function loadVisitorInformation($orgId=""){
-        $info = Visitor::where('organizationId',$orgId)->get();
-        return $info;
-    }
+    
 }
