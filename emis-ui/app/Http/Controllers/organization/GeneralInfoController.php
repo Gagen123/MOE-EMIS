@@ -710,4 +710,34 @@ class GeneralInfoController extends Controller
     //     return $response_data;
     // }
 
+    public function updateSenDetials(Request $request){
+        $org_details =[
+            'org_id'                        =>  $request['org_id'],
+            'accessibleToilet'              =>  $request['accessibleToilet'],
+            'accessibleWash'                =>  $request['accessibleWash'],
+            'outdoorPlayground'             =>  $request['outdoorPlayground'],
+            'outdoorRoutes'                 =>  $request['outdoorRoutes'],
+            'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
+            'diningHall'                    =>  $request['hasCdiningHallE'],
+            'hostelWash'                    =>  $request['hostelWash'],
+            'boysHostelAccessible'          =>  $request['boysHostelAccessible'],
+            'enrollment'                    =>  $request['enrollment'],
+            'communityWithDisablities'      =>  $request['communityWithDisablities'],
+            'community'                     =>  $request['community'],
+            'senProgram'                    =>  $request['senProgram'],
+            'studentDisabilities'           =>  $request['studentDisabilities'],
+            'proprietorName'                =>  $request['proprietorName'],
+            'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
+            'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
+            'support_disabilitycommunity'   =>  $request['support_disabilitycommunity'],
+            'matrons'                       =>  $request['matrons'],
+            'wardens'                       =>  $request['wardens'],
+            'caregivers'                    =>  $request['caregivers'],
+            'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
+            'user_id'                       =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/organization/updateSenDetials', $org_details);
+        return $response_data;
+    }
+
 }

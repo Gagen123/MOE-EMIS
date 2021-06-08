@@ -180,7 +180,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
         $router->post('/updateBasicDetails', 'establishment\EstablishmentController@updateBasicDetails');
-
+        $router->post('/updateSenDetials', 'establishment\EstablishmentController@updateSenDetials');
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
             // $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');

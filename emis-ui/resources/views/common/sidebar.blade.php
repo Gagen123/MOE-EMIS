@@ -398,14 +398,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <!-- <li class="nav-item" id="sen_module_index" onclick="setclass('organizationlink','','sen_module_index')">
+                    <li class="nav-item" id="sen_module_index" onclick="setclass('organizationlink','','sen_module_index')">
                         <router-link to="/sen_module_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 SEN Module
                             </p>
                         </router-link>
-                    </li> -->
+                    </li>
                    
                     <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
