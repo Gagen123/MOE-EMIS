@@ -18,7 +18,8 @@
                         <div class="form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <span>Upload/Change logo</span>
-                                <input type="file" class="form-control" v-on:change="onChangeFileUpload">
+                                <input type="file" class="form-control" v-on:change="onChangeFileUpload" id="attachments" :class="{ 'is-invalid': form.errors.has('attachments') }">
+                                <has-error :form="form" field="attachments"></has-error>
                             </div>
                         </div>
                     </div>
@@ -111,10 +112,11 @@
                         title: 'Profile Details has been saved successfully'
                     })
                 })
-                .catch((error) => {
+                .catch((error, response) => {
+                    // alert(JSON.stringify(response));
                     Toast.fire({
                         icon: 'error',
-                        title: 'Unexpected error occured:'+error
+                        title: 'Required field is missing or Only jpeg, png, bmp,tiff can be uploaded.<br \> please check file extension.'
                     });
                 })
             }

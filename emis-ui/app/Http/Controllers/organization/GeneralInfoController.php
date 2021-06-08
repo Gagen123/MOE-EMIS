@@ -353,6 +353,16 @@ class GeneralInfoController extends Controller
 
 
     public function udpateOrgProfile(Request $request){
+
+        $this->validate($request, [
+            'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
+        ],
+            $messages = [
+                'required' => 'The :attribute field is required.',
+                'mimes' => 'Only jpeg, png, bmp,tiff are allowed.'
+            ]
+        );
+
         $file = $request->attachments;
         $path="";
         $file_store_path='orgProfile';
