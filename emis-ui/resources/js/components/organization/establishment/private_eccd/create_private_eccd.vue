@@ -107,6 +107,24 @@
                                 <has-error :form="form" field="chiwog"></has-error>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Co-located with Parent School:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="parentDetails">
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Parent School:</label>
+                                        <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  editable_fields">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         </form>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -234,7 +252,7 @@ export default {
                 ref_docs:[],
             }),
             form: new form({
-                id: '',initiatedBy:'', proposedName:'',application_number:'',level:'',category:'2',dzongkhag:'',gewog:'',chiwog:'0',
+                id: '',initiatedBy:'',coLocatedParent:'1',parentSchool:'', proposedName:'',application_number:'',level:'',category:'2',dzongkhag:'',gewog:'',chiwog:'0',
                 proprietorCid:'', proprietorName:'', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'', proposedInfrastructure:'',
                 status:'pending', establishment_type:'private_eccd',action_type:'add',
             }),

@@ -630,6 +630,7 @@ class EstablishmentController extends Controller
                     $data->proposedName=ApplicationEstPrivate::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
                 else{
+                    //dd('ddd');proposedName
                     $data->proposedName=ApplicationEstPublic::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
             }

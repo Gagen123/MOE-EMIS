@@ -530,23 +530,8 @@ export default {
                     }
                 }
                 if(nextclass=="final-tab"){
-                    let clasArray=[];
-                    $("input[name='class']:checked").each( function () {
-                        clasArray.push($(this).val());
-                    });
-                    if(clasArray.length<1){
-                        Swal.fire({
-                            text: "Please select Age group ",
-                            icon: 'info',
-                            confirmButtonText: 'OK',
-                            showCancelButton: true,
-                        });
-                        subform=false;
-                    }
-                    else{
-                        status="Are you sure you wish to submit this application for further approval ? ";
-                        message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
-                    }
+                    status="Are you sure you wish to submit this application for further approval ? ";
+                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
                     
