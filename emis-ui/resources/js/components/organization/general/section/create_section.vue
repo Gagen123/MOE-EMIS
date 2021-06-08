@@ -9,7 +9,7 @@
                 <input type="hidden" class="form-control" v-model="form.organizationId"/>
                 <input type="hidden" class="form-control" v-model="form.id"/>
                 <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <label>School:<span class="text-danger">*</span></label> 
+                    <label>School:<span class="text-danger">*</span></label>
                     <select name="school" id="school" class="form-control select2" v-model="form.school" :class="{ 'is-invalid': form.errors.has('school') }">
                         <option value="">--- Please Select ---</option>
                         <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -17,7 +17,7 @@
                     <has-error :form="form" field="school"></has-error>
                 </div> -->
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <label>Class:<span class="text-danger">*</span></label> 
+                    <label>Class:<span class="text-danger">*</span></label>
                     <select name="classes" id="classes" class="form-control select2" :class="{ 'is-invalid': form.errors.has('classes') }" v-model="form.classes">
                         <option value="">--- Please Select ---</option>
                         <option v-for="(item, index) in classList" :key="index" v-bind:value="item.record_id">{{ item.class }}</option>
@@ -25,17 +25,17 @@
                     <has-error :form="form" field="classes"></has-error>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="stream_section">
-                    <label>Stream:<span class="text-danger"></span></label> 
+                    <label>Stream:<span class="text-danger"></span></label>
                     <select name="stream" id="stream" class="form-control select2" v-model="form.stream">
                         <option value="">--- Please Select ---</option>
                         <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.record_id">{{ item.stream }}</option>
                     </select>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <label>No. of Sections:<span class="text-danger">*</span></label> 
+                    <label>No. of Sections:<span class="text-danger">*</span></label>
                     <input type="number" class="form-control" @keyup.enter="secSections()" @blur="secSections()" id="nosec" name="nosec"/>
-                </div> 
-            </div> 
+                </div>
+            </div>
             <div class="row form-group mb-0">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <label>Sections:<span class="text-danger">*</span></label>
@@ -44,7 +44,7 @@
             <div class="row form-group">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 pt-2" v-for='(user, index) in form.users' :key="index">
                     <input type="text" readonly class="form-control section" id="section" v-model="user.section"/>
-                </div> 
+                </div>
             </div>
             <hr>
             <div class="form-group fa-pull-right">
@@ -75,7 +75,7 @@ export default {
                 users:
                 [{
                     section:''
-                }]  
+                }]
             }),
         }
     },
@@ -97,7 +97,7 @@ export default {
                 this.form.users=sections;
             }
         },
-        
+
         /**
          * method to get current user organization
          */
@@ -118,7 +118,7 @@ export default {
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
 
@@ -140,7 +140,7 @@ export default {
          */
         formaction: function(type){
             if(type=="reset"){
-                this.resetForm();  
+                this.resetForm();
             }
             if(type=="save"){
                 this.form.post('/organization/saveSection',this.form)
@@ -151,7 +151,7 @@ export default {
                     })
                     this.resetForm();
                     this.applyselect();
-                    this.resetForm(); 
+                    this.resetForm();
                     this.form.school= '';
                     this.form.classes= '';
                     this.form.class_stream_id='';
@@ -172,7 +172,7 @@ export default {
             }
             if(!$('#stream').attr('class').includes('select2-hidden-accessible')){
                 $('#stream').addClass('select2-hidden-accessible');
-            } 
+            }
          },
          changefunction(id){
             if($('#'+id).val()!=""){
@@ -219,7 +219,6 @@ export default {
             axios.get('/organization/getStreamByClassId/'+classid)
               .then(response => {
                 let data = response.data;
-                alert(data);
                 if(data==""){
                     this.form.class_stream_id=classid;
                     $('#stream_section').hide();
@@ -261,7 +260,7 @@ export default {
          */
         getSectionDetails(id){
             axios.get('organization/getSectionDetails/'+id)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.school  = data[0].organizationId;
                 this.getClassByOrganizationId();
@@ -274,7 +273,7 @@ export default {
                 this.count=data.length;
                 this.form.users=sections;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
             });
         },
@@ -284,25 +283,25 @@ export default {
             this.count++;
             this.form.users.push({section:''})
         },
-        
+
         /** method to remove field */
-        remove(index){    
+        remove(index){
              if(this.form.users.length>1){
                 this.count--;
-                this.form.users.splice(index,1); 
+                this.form.users.splice(index,1);
             }
         },
 
     },
 
     mounted(){
-        this.form.organizationId = this.$route.query.orgId; 
+        this.form.organizationId = this.$route.query.orgId;
         // this.getschoolDetials();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -320,8 +319,8 @@ export default {
                 $('#mainformid').hide();
                 $('#existmessage').html('This page is not accessible to you');
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
     }

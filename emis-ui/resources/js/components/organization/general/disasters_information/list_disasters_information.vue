@@ -8,7 +8,7 @@
                     <th >CID</th>
                     <th >Name</th>
                     <th >Contact No</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -26,14 +26,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
            // org_id:'2',
-            dataList:[], 
+            dataList:[],
             Disaster_Committee_list:{},
         }
     },
@@ -53,25 +53,26 @@ export default {
                 $("#award-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_disasters_information',params: {data:data}});
         },
-    },
-        loadlDisasterCommitteeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/DisasterCommittee'){
+         loadlDisasterCommitteeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/DisasterCommittee'){
             axios.get(uri)
             .then(response => {
              let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.Disaster_Committee_list[data.data.data[i].id] = data.data.data[i].name; 
+                    this.Disaster_Committee_list[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
                 console.log('error: '+error);
             });
         },
+    },
+
     mounted(){
         this.loadDataList();
         this.loadlDisasterCommitteeList();
