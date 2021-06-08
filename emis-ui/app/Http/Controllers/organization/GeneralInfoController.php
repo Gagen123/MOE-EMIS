@@ -88,6 +88,7 @@ class GeneralInfoController extends Controller
      */
 
     public function getFurnitureType(){
+       // dd('m here');
         $type = $this->apiService->listData('emis/organization/furniture/getFurnitureType');
         return $type;
     }
@@ -180,6 +181,11 @@ class GeneralInfoController extends Controller
     public function getRoadTypeDropdown(){
         $roadType = $this->apiService->listData('emis/organization/connectivity/getRoadTypeDropdown');
         return $roadType;
+    }
+    public function getVisitorTypeDropdown(){
+       // dd('m here at UI');
+        $visitortype = $this->apiService->listData('emis/organization/connectivity/getVisitorTypeDropdown');
+        return $visitortype;
     }
 
     public function getElectricitySourceDropdown(){
@@ -347,6 +353,16 @@ class GeneralInfoController extends Controller
 
 
     public function udpateOrgProfile(Request $request){
+
+        $this->validate($request, [
+            'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
+        ],
+            $messages = [
+                'required' => 'The :attribute field is required.',
+                'mimes' => 'Only jpeg, png, bmp,tiff are allowed.'
+            ]
+        );
+
         $file = $request->attachments;
         $path="";
         $file_store_path='orgProfile';

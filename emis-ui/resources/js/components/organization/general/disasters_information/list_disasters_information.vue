@@ -14,7 +14,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.diastercomm }}</td>
+                    <td>{{ Disaster_Committee_list[item.disastercomm] }}</td>
                     <td>{{ item.cid}}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.contactNo}}</td>
@@ -34,6 +34,7 @@ export default {
         return{
            // org_id:'2',
             dataList:[], 
+            Disaster_Committee_list:{},
         }
     },
     methods:{
@@ -59,8 +60,21 @@ export default {
             this.$router.push({name:'edit_disasters_information',params: {data:data}});
         },
     },
+        loadlDisasterCommitteeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/DisasterCommittee'){
+            axios.get(uri)
+            .then(response => {
+             let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.Disaster_Committee_list[data.data.data[i].id] = data.data.data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
     mounted(){
         this.loadDataList();
+        this.loadlDisasterCommitteeList();
 
     },
 }

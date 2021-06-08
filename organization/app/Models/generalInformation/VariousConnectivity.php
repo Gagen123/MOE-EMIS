@@ -33,12 +33,14 @@ class VariousConnectivity extends Model
         'independent',
         'sharedconnection',
         'connectionsharedtype',
-        'sharedspeed',
+        // 'sharedspeed',
         'internetAccessible',
         'electricity',
         'electricitysubstation',
+        'electricitysource',           
         'created_by',
         'created_at',
+ 
     ];
 
 }

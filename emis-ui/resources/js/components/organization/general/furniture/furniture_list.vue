@@ -6,10 +6,10 @@
                     <th>SL#</th>
                     <th>Type</th>
                     <th>Item</th>
-                    <th>Location/Use</th>
-                    <th>Number</th>
-                    <th>Received Date</th>
-                    <th>Life Expectancy</th>
+                    <th>Usable</th>
+                    <th>Not Usable</th>
+                    <!-- <th>Received Date</th>
+                    <th>Life Expectancy</th> -->
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -18,10 +18,10 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.type}}</td>
                     <td>{{ item.item}}</td>
-                    <td>{{ item.locationUse}}</td>
-                    <td>{{ item.number}}</td>
-                    <td>{{ item.dateReceived}} </td>
-                    <td>{{ item.lifeExpectancy }}</td>
+                    <td>{{ item.usable}}</td>
+                    <td>{{ item.notusable}}</td>
+                    <!-- <td>{{ item.dateReceived}} </td>
+                    <td>{{ item.lifeExpectancy }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewFurnitureList(item)"><i class="fas fa-edit"></i ></a>

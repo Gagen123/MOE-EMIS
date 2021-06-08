@@ -49,26 +49,26 @@ class StudentProgramController extends Controller
             'CeaProgrammeSupporterId'   => $request->supporter,
             'EstablishmentYear'         => $request->year,
             'Remarks'                   => $request->remarks,
-            'assigned_staff'            => $request->assigned_staff
+            // 'assigned_staff'            => $request->assigned_staff
         ];
 
-        $assigned_staff_details = $data['assigned_staff'];
+        // $assigned_staff_details = $data['assigned_staff'];
 
-        unset($data['assigned_staff']);
+        // unset($data['assigned_staff']);
 
-        $response = CeaSchoolProgramme::create($data);
-        $lastInsertId = $response->id;
+        $response_data = CeaSchoolProgramme::create($data);
+        // $lastInsertId = $response->id;
 
         
 
-        foreach($assigned_staff_details as $key => $value){
-            $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
-            $assigned_staff_data['CeaRoleId'] = $value['role'];
-            $assigned_staff_data['StfStaffId'] = $value['teacher'];
-            $assigned_staff_data['Remarks'] = $value['remarks'];
+        // foreach($assigned_staff_details as $key => $value){
+        //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
+        //     $assigned_staff_data['CeaRoleId'] = $value['role'];
+        //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
+        //     $assigned_staff_data['Remarks'] = $value['remarks'];
 
-            $response_data = CeaRoleStaff::create($assigned_staff_data);
-        }
+        //     $response_data = CeaRoleStaff::create($assigned_staff_data);
+        // }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }

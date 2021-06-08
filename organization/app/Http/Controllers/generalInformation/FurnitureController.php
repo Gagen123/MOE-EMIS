@@ -45,6 +45,7 @@ class FurnitureController extends Controller
      * method to get type in dropdown
      */
     public function getFurnitureType(){
+      //  dd('m here at microservice');
         return FurnitureType::where('status',1)->get();
     }
 
@@ -76,12 +77,12 @@ class FurnitureController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'locationUse'               =>  $request['location'],
-                'cost'                      =>  $request['cost'],
-                'number'                    =>  $request['number'],
-                'condition'                 =>  $request['condition'],
-                'lifeExpectancy'            =>  $request['life_expectancy'],
-                'dateReceived'              =>  $request['date_received'],
+                'usable'               =>  $request['usable'],
+                'notusable'                      =>  $request['notusable'],
+                // 'number'                    =>  $request['number'],
+                // 'condition'                 =>  $request['condition'],
+                // 'lifeExpectancy'            =>  $request['life_expectancy'],
+                // 'dateReceived'              =>  $request['date_received'],
                 'updated_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];
@@ -92,12 +93,12 @@ class FurnitureController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'locationUse'               =>  $request['location'],
-                'cost'                      =>  $request['cost'],
-                'number'                    =>  $request['number'],
-                'condition'                 =>  $request['condition'],
-                'lifeExpectancy'            =>  $request['life_expectancy'],
-                'dateReceived'              =>  $request['date_received'],
+                'usable'                    =>  $request['location'],
+                'notusable'                      =>  $request['cost'],
+                // 'number'                    =>  $request['number'],
+                // 'condition'                 =>  $request['condition'],
+                // 'lifeExpectancy'            =>  $request['life_expectancy'],
+                // 'dateReceived'              =>  $request['date_received'],
                 'created_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
             ];

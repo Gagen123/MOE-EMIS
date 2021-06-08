@@ -21,9 +21,11 @@ class Equipment extends Model
         'organizationId',
         'type', 
         'item', 
-        'cost', 
-        'condition',
+        'usable', 
+        'notusable',
         'created_by',
-        'updated_by'
+        'created_at',
+        'updated_by',
+        'updated_at',
     ];
 }

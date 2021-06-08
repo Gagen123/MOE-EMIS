@@ -15,6 +15,12 @@ class LoadOrganizaitonController extends Controller{
         $this->apiService = $apiService;
     }
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
+        //if Ministry then give entire list
+        $access_level = $this->getAccessLevel();
+        if($access_level == 'Ministry'){
+            $type = "allorganizationList";
+        }
+
         $param="";
         //type=allorganizationList: to list entire organization
         if($type=="allorganizationList"){
