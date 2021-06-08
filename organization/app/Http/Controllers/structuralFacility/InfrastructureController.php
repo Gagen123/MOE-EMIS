@@ -116,6 +116,7 @@ class InfrastructureController extends Controller
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
             // dd(Infrastructure::createOrFail($infrastructure));
+            // dd($infrastructure);
             $infra = Infrastructure::create($infrastructure);
             $infrastructureId = $infra->id;
             foreach ($request->input('users') as $i=> $user){

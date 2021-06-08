@@ -402,13 +402,13 @@ class GeneralInfoController extends Controller
             'officialWebsite'   =>  'required',
             'officialEmail'     =>  'required|email',
         ];
-        
+
         $customMessages = [
             'mofCode.required'           =>  'The MOF Code is Required',
             'contactNo.required'         =>  'Contact No is required|min:8|max:8',
             'officialWebsite.required'   =>  'Website is required|email',
             'officialEmail.required'     =>  'Email is required',
-            
+
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -448,7 +448,7 @@ class GeneralInfoController extends Controller
                     break;
                 }
             default : {
-                
+
                 break;
             }
         }
@@ -477,7 +477,7 @@ class GeneralInfoController extends Controller
             'contactNo.required'         =>  'Contact No is required|min:8|max:8',
             'officialWebsite.required'   =>  'Website is required|email',
             'officialEmail.required'     =>  'Email is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -520,7 +520,7 @@ class GeneralInfoController extends Controller
             'proprietorCid.required'             =>  'This field is required',
             'proprietorPhone.required'           =>  'This field is required',
             'proprietorEmail.required'           =>  'This field is required',
-            
+
         ];
 
         $validation = array();
@@ -556,7 +556,7 @@ class GeneralInfoController extends Controller
             'distance_from_dzo.required'         =>  'This field is required',
             'fencingtype.required'               =>  'This field is required',
             'entranceGate.required'              =>  'This field is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -604,7 +604,7 @@ class GeneralInfoController extends Controller
             'distance_from_dzo.required'         =>  'This field is required',
             //'fencingtype.required'               =>  'This field is required',
             'entranceGate.required'              =>  'This field is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -677,7 +677,7 @@ class GeneralInfoController extends Controller
         return $estd;
     }
 
-    
+
     //Old function written by Tshewang
 
     // public function updateOrgBasicDetials(Request $request){
@@ -737,6 +737,12 @@ class GeneralInfoController extends Controller
             'user_id'                       =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/updateSenDetials', $org_details);
+        return $response_data;
+    }
+
+    public function loadSeenDetailsByOrgId($orgId=""){
+        // dd($orgId);
+        $response_data= $this->apiService->listData('emis/organization/getcurrentSenDetails/'.$orgId);
         return $response_data;
     }
 

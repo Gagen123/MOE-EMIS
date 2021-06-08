@@ -406,19 +406,36 @@
         },
         methods:{
             getCurrentSenDetials(org_id){
-                axios.get('organization/loadSeenDetailsByOrgId/'+org_id)
+                axios.get('/organization/loadSeenDetailsByOrgId/'+ org_id)
                 .then(response => {
                     let response_data=response.data.data;
-                    this.form.isAspNetSchool=response_data.isAspNetSchool;
-                    this.form.isColocated=response_data.isColocated;
-                    this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
-                    this.form.isResourceCenter=response_data.isResourceCenter;
-                    this.form.isSenSchool=response_data.isSenSchool;
-                    this.form.hasCounselingRoom=response_data.hasCounselingRoom;
-                    this.form.hasShiftSystem=response_data.hasShiftSystem;
-                    this.form.hasCE=response_data.hasCE;
-                    this.form.mofCode=response_data.mofCode;
-                    this.form.zestAgencyCode=response_data.zestAgencyCode;
+                    this.form.newConstruction=response_data.newConstruction;
+                    this.form.accessibleToilet=response_data.accessibleToilet;
+                    this.form.accessibleWash=response_data.accessibleWash;
+                    this.form.outdoorPlayground=response_data.outdoorPlayground;
+                    this.form.outdoorRoutes=response_data.outdoorRoutes;
+                    this.form.girlsHostelAccessible=response_data.girlsHostelAccessible;
+                    this.form.diningHall=response_data.diningHall;
+                    this.form.hostelWash=response_data.hostelWash;
+                    this.form.boysHostelAccessible=response_data.boysHostelAccessible;
+                    this.form.enrollment=response_data.enrollment;
+                    this.form.communityWithDisablities=response_data.communityWithDisablities;
+                    this.form.community=response_data.community;
+                    this.form.senProgram=response_data.senProgram;
+                    this.form.studentDisabilities=response_data.studentDisabilities;
+                    this.form.support_disabilitycommunity=response_data.support_disabilitycommunity;
+                    this.form.adultWorkingwithChildren=response_data.adultWorkingwithChildren;
+                    this.form.support_service=response_data.support_service;
+                    this.form.matrons=response_data.matrons;
+                    this.form.wardens=response_data.wardens;
+                    this.form.caregivers=response_data.caregivers;
+                    this.form.disabilitiesInHostal=response_data.disabilitiesInHostal;
+                    for(let i=0;i<response_data.professionalsSupportChildren.split(', ').length;i++){
+                        this.form.professionalsSupportChildren.push(response_data.professionalsSupportChildren.split(', ')[i]);
+                    }
+                    for(let i=0;i<response_data.adultWorkingwithChildren.split(', ').length;i++){
+                        this.form.adultWorkingwithChildren.push(response_data.adultWorkingwithChildren.split(', ')[i]);
+                    }
                 })
                 .catch((error) => {  
                     console.log("Error: "+error);
@@ -437,6 +454,7 @@
                         icon: 'error',
                         title: 'Unexpected error occured:'+error
                     });
+                    this.getcurrentSenDetails();
                 })
             },
             showtextbox(value){
@@ -456,11 +474,25 @@
                 if(param==1){
                     $('#senDetailSection').show();
                 }
+            },
+            getcurrentSenDetails(){
+                // let org_id=this.form.org_id;
+                // axios.get('organization/getcurrentSenDetails/'+org_id)
+                // .then(response =>{
+                //     let data = response.data.data;
+                //     this.form.org_id=data['Agency_Code'];
+                //     this.form.org_id=data['Agency_Code'];
+                //     this.getCurrentSenDetials(data['Agency_Code']);
+                // })    
+                // .catch(errors =>{ 
+                //     console.log(errors)
+                // });
             }
             
         },
 
         mounted(){
+            this.getcurrentSenDetails();
             axios.get('common/getSessionDetail')
             .then(response =>{
                 let data = response.data.data;
