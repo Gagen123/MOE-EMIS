@@ -117,7 +117,6 @@ class InfrastructureController extends Controller
             ];
             // dd(Infrastructure::createOrFail($infrastructure));
             $infra = Infrastructure::create($infrastructure);
-            dd($infra);
             $infrastructureId = $infra->id;
             foreach ($request->input('users') as $i=> $user){
                 $facilityInStructure = array(

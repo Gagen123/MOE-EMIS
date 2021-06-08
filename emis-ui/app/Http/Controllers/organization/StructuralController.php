@@ -117,6 +117,7 @@ class StructuralController extends Controller
             // 'presentCondition.required'         => 'Present Condition of Structure is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
         $infrastructure =[
             'organizationId'            =>  $this->getWrkingAgencyId(),
             'category'                  =>  $request['category'],

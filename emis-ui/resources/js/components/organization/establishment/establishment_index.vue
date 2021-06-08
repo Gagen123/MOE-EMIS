@@ -48,13 +48,13 @@
                 </router-link>
             </li> 
             -->
-            <li class="nav-item pr-1" @click="activatelink('register')">
+            <li class="nav-item pr-1">
                 <router-link to ="/register" id="register" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     Register
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('head_quater_office')">
+            <li class="nav-item pr-1">
                 <router-link to="/headquaters_index" id="head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     New HQ/Dzongkhag Office
