@@ -64,7 +64,7 @@
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Capacity:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
+                                <input class="form-control editable_fields " id="totalCapacity" type="number" v-model="form.totalCapacity">
                             </div>
                         </div>
                         <div class="form-group row">

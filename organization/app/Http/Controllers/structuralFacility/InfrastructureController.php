@@ -65,7 +65,6 @@ class InfrastructureController extends Controller
      */
     public function saveInfrastructure(Request $request){
         $id = $request->id;
-
         if($id != null){
             $infrastructure = [
                 'organizationId'            =>  $request['organizationId'],
@@ -116,13 +115,13 @@ class InfrastructureController extends Controller
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
                 ];
-                
+
                 $infra = Infrastructure::create($infrastructure);
-                $infrastructureId = DB::table('infrastructures')->orderBy('id','desc')->limit(1)->pluck('id');
+                $infrastructureId = $infra->id;
     
                 foreach ($request->input('users') as $i=> $user){
                     $facilityInStructure = array(
-                        'infrastructureId'              =>  $infrastructureId[0],
+                        'infrastructureId'              =>  $infrastructureId,
                         'facilityTypeId'                =>  $user['facility'],
                         'facilityName'                  =>  $user['facilityNo'],
                         'capacity'                      =>  $user['capacity'],
