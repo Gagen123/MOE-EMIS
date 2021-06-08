@@ -394,7 +394,7 @@
                         <router-link to="/structural_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Facilities & others
+                                Facilities
                             </p>
                         </router-link>
                     </li>
