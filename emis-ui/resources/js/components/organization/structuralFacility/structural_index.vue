@@ -7,11 +7,11 @@
             <ul class="nav nav-pills mb-2" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                        <span :class="item.screen_icon"></span> 
+                        <span :class="item.screen_icon"></span>
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                
+
                 <li class="nav-item active pr-1">
                     <router-link id="volunteer" to="/sport_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
@@ -42,7 +42,7 @@
                         Infrastructure
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('financial_information')">
+                <li class="nav-item active pr-1">
                     <router-link id="financial_information" to="/financial_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Financial Information
@@ -66,7 +66,7 @@
                         Compound Details
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
+                <li class="nav-item active pr-1">
                     <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Connectivity
@@ -92,9 +92,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("Error:"+error)
             });
         },

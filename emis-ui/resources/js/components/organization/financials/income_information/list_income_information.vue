@@ -7,8 +7,8 @@
                     <th >Income Facilities</th>
                     <th >Amount generated</th>
                     <th >Date</th>
-                    <th >Remarks</th> 
-                    <th >Action</th> 
+                    <th >Remarks</th>
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -26,14 +26,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             org_id:'',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -50,8 +50,8 @@ export default {
                 $("#award-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_income_information',params: {data:data}});
@@ -59,7 +59,6 @@ export default {
     },
     mounted(){
         this.loadIncomeList();
-        this.axios();
     },
 }
 </script>

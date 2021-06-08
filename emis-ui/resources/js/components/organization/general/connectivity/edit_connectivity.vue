@@ -246,7 +246,6 @@ export default {
         loadDataList(org_id){
         axios.get('organization/loadConnectivityInformation/' +org_id)
             .then(response => {
-                alert(response);
                 let response_data=response.data; 
                 this.display=response.data;
                 this.form.connectedtoroad=response_data.connectedtoroad;

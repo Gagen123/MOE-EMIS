@@ -326,7 +326,6 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        alert();
                         const config = { 
                             headers: {
                                 'content-type': 'multipart/form-data'
