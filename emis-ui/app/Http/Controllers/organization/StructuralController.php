@@ -133,9 +133,11 @@ class StructuralController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
+        $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
+        return $response_data;
         // try{
-            $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
-            return $response_data;
+            // $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
+            // return $response_data;
         // }
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;

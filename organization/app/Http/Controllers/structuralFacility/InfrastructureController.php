@@ -32,7 +32,7 @@ class InfrastructureController extends Controller
     /**
      * method to get category in dropdown
      */
-    public function getCategoryInDropdown(){  
+    public function getCategoryInDropdown(){
         return StructureCategory::where('status',1)->get();
     }
 
@@ -73,7 +73,7 @@ class InfrastructureController extends Controller
                 'structureNo'               =>  $request['structureNo'],
                 'yearOfConstruction'        =>  $request['yearOfConstruction'],
                 'plintchArea'               =>  $request['plintchArea'],
-                'noOfFloor'                 =>  $request['noOfFloor'], 
+                'noOfFloor'                 =>  $request['noOfFloor'],
                 'totalCapacity'             =>  $request['totalCapacity'],
                 'rampAccess'                =>  $request['rampAccess'],
                 'presentCondition'          =>  $request['presentCondition'],
@@ -107,32 +107,32 @@ class InfrastructureController extends Controller
                 'structureNo'               =>  $request['structureNo'],
                 'yearOfConstruction'        =>  $request['yearOfConstruction'],
                 'plintchArea'               =>  $request['plintchArea'],
-                'noOfFloor'                 =>  $request['noOfFloor'], 
+                'noOfFloor'                 =>  $request['noOfFloor'],
                 'totalCapacity'             =>  $request['totalCapacity'],
                 'rampAccess'                =>  $request['rampAccess'],
                 'presentCondition'          =>  $request['presentCondition'],
                 'design'                    =>  $request['design'],
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
-                ];
-
-                $infra = Infrastructure::create($infrastructure);
-                $infrastructureId = $infra->id;
-    
-                foreach ($request->input('users') as $i=> $user){
-                    $facilityInStructure = array(
-                        'infrastructureId'              =>  $infrastructureId,
-                        'facilityTypeId'                =>  $user['facility'],
-                        'facilityName'                  =>  $user['facilityNo'],
-                        'capacity'                      =>  $user['capacity'],
-                        'noOfFacility'                  =>  $user['noOfFacility'],
-                        'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
-                        'noWithInternetConnection'      =>  $user['internetConnection'],
-                        'created_by'                    =>  $request->user_id,
-                        'created_at'                    =>  date('Y-m-d h:i:s')
+            ];
+            // dd(Infrastructure::createOrFail($infrastructure));
+            $infra = Infrastructure::create($infrastructure);
+            dd($infra);
+            $infrastructureId = $infra->id;
+            foreach ($request->input('users') as $i=> $user){
+                $facilityInStructure = array(
+                    'infrastructureId'              =>  $infrastructureId,
+                    'facilityTypeId'                =>  $user['facility'],
+                    'facilityName'                  =>  $user['facilityNo'],
+                    'capacity'                      =>  $user['capacity'],
+                    'noOfFacility'                  =>  $user['noOfFacility'],
+                    'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
+                    'noWithInternetConnection'      =>  $user['internetConnection'],
+                    'created_by'                    =>  $request->user_id,
+                    'created_at'                    =>  date('Y-m-d h:i:s')
                 );
-                    $infra = FacilityInStructure::create($facilityInStructure);
-                }
+                $infra = FacilityInStructure::create($facilityInStructure);
+            }
             return $this->successResponse($infra, Response::HTTP_CREATED);
         }
     }
@@ -144,7 +144,7 @@ class InfrastructureController extends Controller
             ->select('a.id AS id','b.name AS categorgName', 'c.subCategoryName AS subCategoryName',
             'a.structureNo AS structureNo','a.organizationId AS organizationId',
             'a.yearOfConstruction AS yearOfConstruction','a.plintchArea AS plintchArea',
-            'a.noOfFloor AS noOfFloor','a.totalCapacity AS totalCapacity', 
+            'a.noOfFloor AS noOfFloor','a.totalCapacity AS totalCapacity',
             'a.rampAccess AS rampAccess', 'a.presentCondition AS presentCondition',
             'a.design AS design','a.categoryId AS categoryId','a.subCategoryId AS subCategoryId')
             ->where('organizationId',$orgId)->get();
@@ -154,10 +154,10 @@ class InfrastructureController extends Controller
     public function getInfrastructureDetails($infraId=""){
         $response_data=Infrastructure::where('id',$infraId)->first();
         $response_data->facility=FacilityInStructure::where('infrastructureId',$response_data->id)->get();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
-    
+
     public function saveWashFeeding(Request $request){
         // dd($request->questionList);
         $inserted_data ="";
@@ -197,6 +197,6 @@ class InfrastructureController extends Controller
 
     public function getWashFeeding($type=""){
         $wash_feeding_detials=WashFeeding::where('type',explode('SSS',$type)[0])->where('orgId',explode('SSS',$type)[1])->get();
-        return $this->successResponse($wash_feeding_detials); 
+        return $this->successResponse($wash_feeding_detials);
     }
 }

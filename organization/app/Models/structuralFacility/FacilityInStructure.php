@@ -14,10 +14,20 @@ class FacilityInStructure extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array 
+     * @var array
      */
     protected $fillable = [
-        'id','infrastructureId','facilityTypeId','facilityName','capacity',
-        'noOfFacility','noAccessibleToDisabled','noWithInternetConnection','created_by','updated_by'
+        'id',
+        'infrastructureId',
+        'facilityTypeId',
+        'facilityName',
+        'capacity',
+        'noOfFacility',
+        'noAccessibleToDisabled',
+        'noWithInternetConnection',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 }
