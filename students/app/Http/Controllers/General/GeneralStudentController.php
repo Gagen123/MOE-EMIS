@@ -44,6 +44,7 @@ class GeneralStudentController extends Controller
                     ->where('IsTransferred','0')
                     ->get();
         return $records;
+       
     }
 
     /**

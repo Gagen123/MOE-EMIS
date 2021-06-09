@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
+use App\Models\Masters\StudentAwardType;
+
 
 use App\Models\Masters\CeaRole;
 use App\Models\Masters\CeaProgram;
@@ -83,10 +85,16 @@ class StudentMasterController extends Controller
 
         } else if(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
+
+        }else if($param= '$student_award_type'){
+            $vacinetype = StudentAwardType::all();
+            return $vacinetype;
+
         }
         return $this->successResponse($model::all());
     }
 
+    
     /**
      * method to list students masters of active records for dropdown
     */
