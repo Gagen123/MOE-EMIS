@@ -24,9 +24,12 @@ class CreateSportsTable extends Migration
             $table->integer('yearOfEstablishment');
             $table->char('supportedBy',36);
             $table->foreign('supportedBy')->references('id')->on('sport_supporter');
+            // $table->char('size');
+            // $table->integer('courts');
             $table->tinyInteger('status');
             $table->integer('noOfFacility');
-            $table->integer('accessibleToDisabled');
+            $table->integer('rampAccess');
+            $table->char('accessible');
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

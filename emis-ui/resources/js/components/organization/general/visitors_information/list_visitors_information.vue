@@ -13,7 +13,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.visitor}}</td>
+                    <td>{{ visitorArray[item.visitor]}}</td>
                     <td>{{ item.dateOfVisit}}</td>
                     <td>{{ item.remarks}}</td>
                     <td>
@@ -31,7 +31,8 @@ export default {
     data(){
         return{
             org_id:'2',
-            dataList:[], 
+            dataList:[],  
+            visitorArray:{},
         }
     },
     methods:{
@@ -54,10 +55,20 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_visitors_information',params: {data:data}});
+        },
+        getVisitorTypeDropdown(uri = '/organization/getVisitorTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.visitorArray[data[i].id] = data[i].name; 
+                }
+            });
         },
     },
     mounted(){
+        this.getVisitorTypeDropdown();
         this.loadDataList();
     },
 }

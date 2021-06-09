@@ -35,7 +35,7 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                <input type="number" max="11" min="11" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
                                 <has-error :form="form" field="proprietorCid"></has-error>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                         </div>
                         
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:</label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input type="number" v-model="form.proprietorPhone" :class="{ 'is-invalid': form.errors.has('proprietorPhone') }" @change="remove_error('proprietorPhone')" class="form-control" id="proprietorPhone" placeholder="Phone No" />
                                 <has-error :form="form" field="proprietorPhone"></has-error>
@@ -82,13 +82,13 @@
                                 <has-error :form="form" field="proposedLocation"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed ECCD Infrastructure:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="text" v-model="form.proposedInfrastructure" :class="{ 'is-invalid': form.errors.has('proposedInfrastructure') }" @change="remove_error('proposedInfrastructure')" class="form-control" id="proposedInfrastructure" placeholder="Proposed ECCD Housed In (e.g. Residential House etc)"/>
                                 <has-error :form="form" field="proposedInfrastructure"></has-error>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -105,6 +105,24 @@
                                     <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="chiwog"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Co-located with Parent School:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
+                                <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="parentDetails">
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0">Parent School:</label>
+                                        <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  editable_fields">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         </form>
@@ -139,7 +157,7 @@
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>                                
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr> 
@@ -172,12 +190,24 @@
                             </div>
                         </div><br>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                            <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                <input type="checkbox" v-model="classStreamForm.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
-                                    <span v-if="item.class=='Class 11' || item.class=='Class 12'">
-                                        <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
-                                    </span>
-                            </span> 
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Age Group</th>
+                                        <th></th>                     
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td >  
+                                            <input type="checkbox" name="class" v-model="classStreamForm.class" :value="item.id">                              
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -222,12 +252,12 @@ export default {
                 ref_docs:[],
             }),
             form: new form({
-                id: '',initiatedBy:'', proposedName:'',application_number:'',level:'',category:'2',dzongkhag:'',gewog:'',chiwog:'0',
+                id: '',initiatedBy:'',coLocatedParent:'1',parentSchool:'', proposedName:'',application_number:'',level:'',category:'2',dzongkhag:'',gewog:'',chiwog:'0',
                 proprietorCid:'', proprietorName:'', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'', proposedInfrastructure:'',
                 status:'pending', establishment_type:'private_eccd',action_type:'add',
             }),
             classStreamForm: new form({
-                id: '',class:[], stream:[], proposed_establishment:'Private ECCD', status:'submitted',application_number:'',action_type:'add',
+                id: '',proposedName:'', class:[],  proposed_establishment:'Private ECCD', status:'submitted',application_number:'',action_type:'add',
             }) 
         } 
     },
@@ -242,16 +272,7 @@ export default {
             }
         }, 
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
+       
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -326,10 +347,7 @@ export default {
             this.count++;
             this.file_form.fileUpload.push({file_name:'', file_upload:''})
         },
-        addMoreStudents: function(){
-            this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+        
         /**
          * method to remove fields
          */
@@ -337,12 +355,6 @@ export default {
              if(this.file_form.roles.length>1){
                 this.count--;
                 this.file_form.roles.splice(index,1); 
-            }
-        },
-        removeStudents(index){    
-             if(this.file_form.assigned_student.length>1){
-                this.count--;
-                this.file_form.assigned_student.splice(index,1); 
             }
         },
 
@@ -358,14 +370,6 @@ export default {
             } 
         },
 
-
-        /**
-         * to load the respective pages depending on the type of establishment
-         */
-
-        loadRespectivePage(val){
-            this.$router.push({name:''+val,query: {data:id}});
-        },
 
         /**
          * method to populate dropdown
@@ -420,15 +424,6 @@ export default {
             });
         },
 
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
 
         /**
          * method to show next tab
@@ -453,7 +448,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'acknowledgement_private_eccd',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
@@ -485,32 +480,47 @@ export default {
                     })
                 }
                 else if(nextclass=="class-tab"){
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
+                    let attachemnt=[];
+                    $("input[name='attachment']:checked").each( function () {
+                        attachemnt.push($(this).val());
+                    });
+                    if(attachemnt.length<1){
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
                         }
-                    }
-                    let formData = new FormData();
-                    formData.append('id', this.file_form.id);
-                    formData.append('ref_docs[]', this.file_form.ref_docs);
-                    for(let i=0;i<this.file_form.ref_docs.length;i++){
-                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                        // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
-                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
-                    }
-                    formData.append('application_number', this.file_form.application_number);
-                    axios.post('organization/saveUploadedFiles', formData, config)
-                    // this.file_form.post('organization/saveUploadedFiles',this.form)
-                    .then((response) => {
-                        if(response.data!=""){
-                            this.change_tab(nextclass);
+                        let formData = new FormData();
+                        formData.append('id', this.file_form.id);
+                        formData.append('ref_docs[]', this.file_form.ref_docs);
+                        for(let i=0;i<this.file_form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                            // formData.append('attachmentname[]', this.form.ref_docs[i].attachment.name+', '+this.form.ref_docs[i].file_name);
+                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
                         }
-                    })
-                    .catch((error) => {
-                       this.applyselect2();
-                        this.change_tab('organization-tab');
-                        console.log("Error:"+error)
-                    })
+                        formData.append('application_number', this.file_form.application_number);
+                        axios.post('organization/saveUploadedFiles', formData, config)
+                        // this.file_form.post('organization/saveUploadedFiles',this.form)
+                        .then((response) => {
+                            if(response.data!=""){
+                                this.change_tab(nextclass);
+                            }
+                        })
+                        .catch((error) => {
+                        this.applyselect2();
+                            this.change_tab('organization-tab');
+                            console.log("Error:"+error)
+                        })
+                    }
+                    else{
+                        Swal.fire({
+                            text: "Please attach files ",
+                            icon: 'info',
+                            confirmButtonText: 'OK',
+                            showCancelButton: true,
+                        });
+                    }
+                    
                 }else{
                     this.change_tab(nextclass);
                 }
@@ -554,18 +564,6 @@ export default {
             this.applyselect2();
         },
 
-        /**
-         * method to get other category if the category is 'ECCD'
-         */
-        getCategory(){
-            let level = $('#level option:selected').text();
-            if(level == "ECCD"){
-                $(".eccd").show();
-            }
-            else{
-                $(".eccd").hide();
-            }
-        },
 
         /**
          * method to show private fields
@@ -586,14 +584,7 @@ export default {
                 $('#parentDetails').hide();
             }
         } ,
-        show_feeding_details(param){
-            if(param){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
-        },
+     
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {  
@@ -623,13 +614,26 @@ export default {
                 console.log(errors)
             });
         },
+        getAttachmentType(){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Private_ECCD/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        }
 
     },
     
     created(){
-        this.getScreenAccess();
-        this.getLevel();
+        // this.getScreenAccess();
         this.getLocation();
+        this.getAttachmentType();
     },
     mounted() {
         axios.get('common/getSessionDetail')
@@ -657,9 +661,7 @@ export default {
         });
        
         this.getClass();
-        this.getStream();
         this.getClassStream();
-        this.getLevel();
         this.getLocation();
         this.getOrgList();
         this.loadpendingdetails('Private_ECCD');

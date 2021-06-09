@@ -4,20 +4,19 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Student Name</th>
-                    <th >Student Id</th>
-                    <th >Class</th>
-                    <th >Section</th>
-                    <th >Action</th> 
+                    <th >Type</th>
+                    <th >Amount</th>
+                    <th >Date</th>
+                    <th >Action</th>
+                  
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ typeArry[item.incomeFacilitiesId]}}</td>
+                    <td>{{ item.amount}}</td>
+                    <td>{{ item.date}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -32,35 +31,45 @@
 export default {
     data(){
         return{
-            org_id:'2',
+            org_id:'',
+            typeArry:{},
             dataList:[], 
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentWhereabouts/'+this.org_id){
-            axios.get(uri)
+        loadtypeList(){
+            axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
-                let data = response;
-                this.dataList =  data.data.data;
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.typeArry[data[i].id] = data[i].name; 
+                }
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error......"+error)
             });
-            setTimeout(function(){
-                $("#award-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
+
+        },
+        loadDataList(uri='organization/loadFinancialInformation/'){
+            axios.get(uri)
+            .then(response => {
+                
+                let data = response;
+                this.dataList =  data.data;
+
+            })
+            .catch(function (error) {
+               console.log(error);
+            });
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_financial_info',params: {data:data}});
         },
     },
     mounted(){
+        this.loadtypeList();
         this.loadDataList();
+        
     },
 }
 </script>

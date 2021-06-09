@@ -21,13 +21,14 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organizationMasterController'], function () use ($router) {
         $router->post('/saveOrganizationMaster', 'OrganizationMasterController@saveOrganizationMaster');
         $router->get('/loadOrganizaitonmasters/{type}/{model}', 'OrganizationMasterController@loadOrganizaitonmasters');
-    }); 
+        $router->get('/loadFinacialtype', 'OrganizationMasterController@loadFinacialtype');
+        $router->get('/loadincomeList', 'OrganizationMasterController@loadincomeList');
+    });
 
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {
         // disaster route
         $router->get('/loadDisaster', 'Masters\DisasterController@loadDisaster');
         $router->post('/saveDisaster', 'Masters\DisasterController@saveDisaster');
-
 
     });
     $router->group(['prefix' => 'masters/location'], function () use ($router) {
@@ -121,7 +122,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassInDropdown', 'Masters\StreamController@getClassInDropdown');
 
     });
-	
+
 	$router->group(['prefix' => 'masters/classstream'], function () use ($router) {
         $router->get('/getClassStream', 'Masters\ClassStreamController@getClassStream');
     });
@@ -167,17 +168,38 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadStructureDesigner', 'Masters\StructureDesignerController@loadStructureDesigner');
     });
 
+    $router->group(['prefix' => 'masters/disastercomm'], function () use ($router) {
+        $router->post('/saveDisasterCommittee', 'Masters\DisasterCommitteeController@saveDisasterCommittee');
+        $router->get('/loadDisasterComm', 'Masters\DisasterCommitteeController@loadDisasterComm');
+    });
     //Organization Transactions Routes
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
+        $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
+
+        $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
+        $router->post('/updateBasicDetails', 'establishment\EstablishmentController@updateBasicDetails');
+        $router->post('/updateSenDetials', 'establishment\EstablishmentController@updateSenDetials');
+        $router->get('/getCurrentSenDetails/{orgId}', 'establishment\EstablishmentController@getcurrentSenDetails');
+
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
-            $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
+            // $router->post('/saveEquipmentAndFurniture', 'generalInformation\EquipmentController@saveEquipmentAndFurniture');
+            // $router->get('/loadEquipment/{orgId}', 'generalInformation\EquipmentController@loadEquipment');
+            $router->post('/saveEquipment', 'generalInformation\EquipmentController@saveEquipment');
             $router->get('/loadEquipment/{orgId}', 'generalInformation\EquipmentController@loadEquipment');
             $router->get('/getType', 'generalInformation\EquipmentController@getType');
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');
             $router->get('/getLocationUse', 'generalInformation\EquipmentController@getLocationUse');
+        });
+
+        $router->group(['prefix' => 'furniture'], function () use ($router) {
+            $router->post('/saveFurniture', 'generalInformation\FurnitureController@saveFurniture');
+            $router->get('/loadFurniture/{orgId}', 'generalInformation\FurnitureController@loadFurniture');
+            $router->get('/getFurnitureType', 'generalInformation\FurnitureController@getFurnitureType');
+            $router->get('/getFurnitureItem/{typeId}', 'generalInformation\FurnitureController@getFurnitureItem');
+            $router->get('/getFurnitureUse', 'generalInformation\FurnitureController@getFurnitureUse');
         });
 
         //newly added routes
@@ -185,19 +207,35 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'visitor'], function () use ($router) {
             $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
             $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
+            $router->get('/getVisitorTypeDropdown', 'generalInformation\VisitorController@getVisitorTypeDropdown');
+        });
+        $router->group(['prefix' => 'connectivity'], function () use ($router) {
+            $router->post('/saveConnectivityDetails', 'generalInformation\VariousConnectivityController@saveConnectivityDetails');
+            $router->get('/loadConnectivityInformation/{org_id}', 'generalInformation\VariousConnectivityController@loadConnectivityInformation');
+
+        });
+
+        $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
+            $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails');
+             $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
         });
 
         $router->group(['prefix' => 'disaster'], function () use ($router) {
             $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
             $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');
+           // dd('m hee');
         });
 
         $router->group(['prefix' => 'finance'], function () use ($router) {
             $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
+            $router->post('/updateIncomeInformation', 'generalInformation\FinanceController@updateIncomeInformation');
             $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
+
             $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
+            $router->post('/updateFinancialInfo', 'generalInformation\FinanceController@updateFinancialInfo');
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
         });
+
 
         $router->group(['prefix' => 'projections'], function () use ($router) {
             $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
@@ -234,6 +272,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getServiceProviderDropdown1', 'generalInformation\ConnectivityController@getServiceProviderDropdown1');
             $router->get('/getContactTypeDropdown', 'generalInformation\ConnectivityController@getContactTypeDropdown');
 
+
         });
         $router->group(['prefix' => 'location'], function () use ($router) {
             // locations route
@@ -244,8 +283,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
 
         $router->group(['prefix' => 'sport'], function () use ($router) {
+            $router->post('/saveEccd', 'structuralFacility\SportController@saveEccd');
             $router->post('/saveSport', 'structuralFacility\SportController@saveSport');
             $router->get('/loadSport/{orgId}', 'structuralFacility\SportController@loadSport');
+            $router->get('/loadeccd/{orgId}', 'structuralFacility\SportController@loadeccd');
             $router->get('/getFacilityInDropdown', 'structuralFacility\SportController@getFacilityInDropdown');
             $router->get('/getSupportInDropdown', 'structuralFacility\SportController@getSupportInDropdown');
             $router->get('/getSubFacilityDropdown/{id}', 'structuralFacility\SportController@getSubFacilityDropdown');
@@ -306,6 +347,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getLocationDetails/{id}', ['uses' => 'establishment\EstablishmentController@getLocationDetails']);
             $router->get('/getConnectivityDetails/{id}', ['uses' => 'establishment\EstablishmentController@getConnectivityDetails']);
             $router->get('/getSectionDetails/{id}', ['uses' => 'establishment\EstablishmentController@getSectionDetails']);
+
+            $router->get('/loadBifurcationApplications/{user_id}/{dzo_id}', ['uses' => 'establishment\EstablishmentController@loadBifurcationApplications']);
+            $router->get('/loadMergerApplications/{user_id}/{dzo_id}', ['uses' => 'establishment\EstablishmentController@loadMergerApplications']);
+            $router->get('/loadClosureApplications/{user_id}/{dzo_id}', ['uses' => 'establishment\EstablishmentController@loadClosureApplications']);
+            $router->get('/loadReopeningApplications/{user_id}/{dzo_id}', ['uses' => 'establishment\EstablishmentController@loadReopeningApplications']);
         });
 
         $router->group(['prefix' => 'headQuater'], function () use ($router) {
@@ -320,6 +366,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'changeDetails'], function () use ($router) {
             $router->post('/saveChangeBasicDetails', 'establishment\ChangeBasicDetailsController@saveChangeBasicDetails');
+            // $router->post('/saveAllChangeBasicDetailsOK', 'establishment\ChangeBasicDetailsController@saveAllChangeBasicDetailsOK');
+            $router->get('/getChangeBasicDetails/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@getChangeBasicDetails']);
             $router->post('/saveChangeClass', 'establishment\ChangeBasicDetailsController@saveChangeClass');
             $router->get('/loadCurrentOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentOrgDetails']);
             $router->get('/loadCurrentProprietorDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadCurrentProprietorDetails']);
@@ -333,30 +381,41 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'bifurcation'], function () use ($router) {
             $router->post('/saveBifurcation', 'restructuring\BifurcationController@saveBifurcation');
-            $router->get('/loadbifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadbifurcationForVerification']);
+            $router->get('/loadBifurcationForVerification/{appNo}', ['uses' => 'restructuring\BifurcationController@loadBifurcationForVerification']);
             // $router->get('/loadBifurcation', 'restructuring\BifurcationController@loadBifurcation');
             $router->post('/updateBifurcation', 'restructuring\BifurcationController@updateBifurcation');
+            $router->post('/updateBifurcationDetails', 'restructuring\BifurcationController@updateBifurcationDetails');
         });
 
         $router->group(['prefix' => 'merger'], function () use ($router) {
             $router->post('/saveMerger', 'restructuring\MergerController@saveMerger');
             $router->get('/loadMergerForVerification/{appNo}', ['uses' => 'restructuring\MergerController@loadMergerForVerification']);
             $router->post('/updateMergerApplication', 'restructuring\MergerController@updateMergerApplication');
+            $router->post('/updateMergerDetails', 'restructuring\MergerController@updateMergerDetails');
 
         });
         $router->group(['prefix' => 'closure'], function () use ($router) {
             $router->post('/saveClosure', 'restructuring\ClosureController@saveClosure');
             $router->get('/loadClosureApplicationDetails/{appNo}', ['uses' => 'restructuring\ClosureController@loadClosureApplicationDetails']);
+            $router->get('/loadClosureForVerification/{appNo}', ['uses' => 'restructuring\ClosureController@loadClosureForVerification']);
             $router->post('/updateClosure', 'restructuring\ClosureController@updateClosure');
+            $router->post('/updateClosureDetails', 'restructuring\ClosureController@updateClosureDetails');
+
 
         });
-        
-        $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
-       
-        
+
+        $router->group(['prefix' => 'reopening'], function () use ($router) {
+            $router->post('/saveReopening', 'restructuring\ReopeningController@saveReopening');
+            $router->get('/loadReopeningForVerification/{appNo}', ['uses' => 'restructuring\ReopeningController@loadReopeningForVerification']);
+            $router->post('/updateReopeningDetails', 'restructuring\ReopeningController@updateReopeningDetails');
+
+        });
+
+
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
+        $router->get('/loadInactiveOrgList/{dzo_id}', ['uses' => 'LoadOrganizationController@loadInactiveOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
@@ -372,6 +431,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
         $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
-        
+
     });
 });

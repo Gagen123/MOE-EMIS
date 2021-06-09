@@ -17,6 +17,7 @@
                                 <th>Sl No</th>
                                 <th>Application Number</th>
                                 <th>Service Name</th>
+                                <th>Name</th>
                                 <th>Submitted By</th>
                                 <th>Submitted On</th>
                                 <th>Last Action By</th>
@@ -30,6 +31,7 @@
                                     <a href="#" data-toggle="tooltip" title="Click here to open and claim application" @click="loadApplicationDetals(commontask,'claim')"> {{ commontask.application_number }}</a>
                                 </td>
                                 <td>{{ commontask.service_name }}</td>
+                                <td>{{ commontask.name }}</td>
                                 <td>{{ commontask.applicant_name }} ({{ commontask.applicant_role }})</td>
                                 <td>{{ commontask.applied_on }}</td>
                                 <td>{{ commontask.user_name }} ({{ commontask.role_name }})</td>
@@ -52,6 +54,7 @@
                                 <th>Sl No</th>
                                 <th>Application Number</th>
                                 <th>Service Name</th>
+                                <th>Name</th>
                                 <th>Submitted By</th>
                                 <th>Submitted On</th>
                                 <th>Last Action By</th>
@@ -67,6 +70,7 @@
                                     <a href="#" data-toggle="tooltip" title="Click here to open application" @click="loadApplicationDetals(mytask,'open')"> {{ mytask.application_number }}</a>
                                 </td> 
                                 <td>{{ mytask.service_name }}</td>
+                                <td>{{ mytask.name }}</td>
                                 <td>{{ mytask.applicant_name }} ({{ mytask.applicant_role }})</td>
                                 <td>{{ mytask.applied_on }}</td>
                                 <td>{{ mytask.user_name }} ({{ mytask.role_name }})</td>
@@ -167,6 +171,9 @@
                 }
                 if(data.service_name.includes('Leave')){ 
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Reopen')){ 
+                    this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
                 }
             }   
         }

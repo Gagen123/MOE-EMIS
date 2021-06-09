@@ -45,7 +45,7 @@
                             <div class="form-group row"> 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
                                     <label class="mb-0">Proposal Initiated By:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.initiated_by}}</span>
+                                    <span class="text-blue text-bold">{{proposed_by_list[applicationOrgdetails.initiated_by]}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
@@ -73,35 +73,35 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationTypeId]}}</span>
+                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
                                 </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
                                         {{ applicationOrgdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
-                                </div> 
+                                </div>  -->
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Feeding School:</label>
                                     <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
                                 </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                     <label class="mb-0">Feeding Modality:</label><br>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                                 </div> 
-                            </div>
-                            <div class="form-group row">
+                            </div> -->
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is SEN School:</label>
                                     <span class="text-blue text-bold">
                                         {{ applicationOrgdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
                                 </div> 
-                            </div>
+                            </div> -->
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -139,8 +139,7 @@
                             </div>
                         </div>
 
-
-                        <div class="callout callout-success" v-if="verification.verifyingAgency!=null">
+                        <div class="callout callout-success" v-if="verification!='NA'">
                             <h4><u>Site Visit and Verification Details</u></h4>
                             <div class="row pb-2" style="display:none" id="tentativeAttachment">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -263,12 +262,34 @@
                         <div class="callout callout-success">
                             <h4><u>Select classes and streams</u></h4>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl#</th> 
+                                            <th>Class</th> 
+                                            <th class="strm_clas">Stream</th> 
+                                            <th></th> 
+                                        </tr>
+                                    </thead> 
+                                    <tbody>
+                                        <tr v-for='(item,count) in class_section' :key="count+1">
+                                            <td>{{count+1 }} </td>
+                                            <td>{{calssArray[item.classId] }} </td>
+                                            <td class="strm_clas" v-if="item.streamId">  {{streamArray[item.streamId]}}</td>
+                                            <td class="strm_clas" v-else> </td>
+                                             <td>
+                                                <input type="checkbox" checked="true">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <span v-for="(item, index) in  class_section" :key="index">
                                         <br>
                                         <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                                     </span> 
-                                </div> 
+                                </div>  -->
+                                <!-- <Workflow :appNo="application_number" /> -->
                             </div>
                         </div>
                         <hr>
@@ -284,11 +305,14 @@
     </div>
 </template>
 <script>
+import Workflow from "../../../common/view_workflow_details";
 export default {
     components: {
+        Workflow,
     },
     data(){
         return{ 
+            application_number:'',
             calssArray:{},
             streamArray:{},
             levelList:{},
@@ -298,27 +322,34 @@ export default {
             class_section:[],
             nomi_staffList:[],
             feeding:[],
-            verification:'',
+            verification:'NA',
+            proposed_by_list:{},
         } 
     },
     methods:{
         loadestablishmentapplicationdetails(appId){
+            $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForView/'+appId)
             .then((response) => {  
                 let data=response.data.data;
                 this.applicationdetails=data;
+                this.application_number=this.applicationdetails.application_no;
                 this.applicationOrgdetails=data.org_details;
-                this.class_section=data.org_class_stream;
-                this.verification=data.app_verification;
-               
-                if(data.org_details.isFeedingSchool==1){
-                    for(let i=0;i<data.feeding_modality.length;i++){
-                        if(data.feeding_modality[i].noOfMeals!=undefined){
-                            $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
-                        }
-                    }
-                    $('#feedingDetails').show();
+                if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
+                    $('.strm_clas').show();
                 }
+                this.class_section=data.org_class_stream;
+                if(data.app_verification!=null){
+                    this.verification=data.app_verification;
+                }
+                // if(data.org_details.isFeedingSchool==1){
+                //     for(let i=0;i<data.feeding_modality.length;i++){
+                //         if(data.feeding_modality[i].noOfMeals!=undefined){
+                //             $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
+                //         }
+                //     }
+                //     $('#feedingDetails').show();
+                // }
                 if(data.app_verification!=""){
                     $('#tentativeAttachment').show();
                 }
@@ -376,6 +407,7 @@ export default {
               .then(response => {
                 this.classStreamList = response.data.data;
                 let data = response.data.data;
+               
                 //this.calssArray[data[i].id] = data[i].name;
             });
         },
@@ -402,8 +434,22 @@ export default {
                 }
             });
         },
+        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.proposed_by_list[data[i].id] = data[i].name; 
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
     },
     mounted(){
+        this.application_number=this.$route.query.id;
+        this.loadproposedBy();
         this.getLevel();
         this.getLocation();
         this.getClassStream();

@@ -15,6 +15,12 @@ class LoadOrganizaitonController extends Controller{
         $this->apiService = $apiService;
     }
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
+        //if Ministry then give entire list
+        $access_level = $this->getAccessLevel();
+        if($access_level == 'Ministry'){
+            $type = "allorganizationList";
+        }
+
         $param="";
         //type=allorganizationList: to list entire organization
         if($type=="allorganizationList"){
@@ -42,6 +48,12 @@ class LoadOrganizaitonController extends Controller{
         }
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
+
+    public function loadInactiveOrgList(){
+        $dzo_id = $this->getUserDzoId();
+        return $this->apiService->getListData('emis/common_services/loadInactiveOrgList/'.$dzo_id);
+    }
+
     //type can be Orgbyid,Headquarterbyid,user_login_access_id, orgcode etc and id shoulb be their respective values
     public function loadOrgDetails($type="",$id=""){
         if($type=="full_user_logedin_dzo_id"){

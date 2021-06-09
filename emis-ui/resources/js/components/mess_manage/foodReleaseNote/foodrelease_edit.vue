@@ -405,7 +405,7 @@ export default {
         },
        
     },
-     mounted() { 
+    mounted() { 
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -425,17 +425,16 @@ export default {
         
         //this.$route.params.data.dateOfprocure;
       //  this.student_form.cid_passport=this.$route.query.data[0].CidNo;
-
+    },
+    created() {
         this.form.id=this.$route.params.data.id;
         this.form.dateOfrelease=this.$route.params.data.dateOfrelease;
-        this.form.dzongkhag=this.$route.params.data.dzongkhag;
-        this.form.organizaiton=this.$route.params.data.organizaiton;
+        this.form.dzongkhag=this.$route.params.data.dzongkhag_id;
+        this.form.organizaiton=this.$route.params.data.org_id;
         this.form.quarter=this.$route.params.data.quarter;
         this.form.remarks=this.$route.params.data.remarks;
         this.attachments.file_name=this.$route.params.data.file_name;
         this.attachment.attachment=this.$route.params.data.attachment;
-
-
     }
 }
 </script>

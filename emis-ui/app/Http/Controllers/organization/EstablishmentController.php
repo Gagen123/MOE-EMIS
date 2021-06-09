@@ -76,6 +76,10 @@ class EstablishmentController extends Controller
         $customMessages = $validation['messages'];
 
         $this->validate($request, $rules, $customMessages);
+        $establishment_data=$establishment_data+[
+            'app_id'                =>  $request['app_id'],
+            'ap_estb_id'            =>  $request['ap_estb_id'],
+        ];
         // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $establishment_data);
         // dd($response_data);
@@ -130,12 +134,17 @@ class EstablishmentController extends Controller
         //     'class.required'         => 'Class is required',
         // ];
         // $this->validate($request, $rules, $customMessages);
+        $form_status=$request['status'];
+        if($request->submit_type=="reject"){
+            $form_status='Rejected';
+        }
         $classStream =[
             'class'                 =>  $request['class'],
             'stream'                =>  $request['stream'],
             'proposed_establishment'    =>  $request['proposed_establishment'],
             'application_number'    =>  $request['application_number'],
-            'status'                =>  $request['status'],
+            'status'                =>  $form_status,
+            'update_type'           =>  $request['update_type'],
             'action_type'           =>  $request['action_type'],
             'user_id'               =>  $this->userId() ,
         ];
@@ -156,15 +165,19 @@ class EstablishmentController extends Controller
                     $app_role=$work->SysRoleId;
                 }
             }
+            if($request->submit_type=="reject"){
+                $status='0__submitterRejects';
+            }
 
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>$service_name,//service name 
+                'name'              =>$request['proposedName'],//service name 
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
-                'remarks'           =>null,
+                'remarks'           =>$request['remarks'],
                 'app_role_id'       => $app_role,
                 'user_dzo_id'       =>$this->getUserDzoId(),
                 'access_level'      =>$this->getAccessLevel(),
@@ -198,6 +211,30 @@ class EstablishmentController extends Controller
     public function loadOrgChangeApplications($type=""){
         $loadOrgChangeApplications = $this->apiService->listData('emis/organization/establishment/loadOrgChangeApplications/'.$this->userId().'/'.$type );
         return $loadOrgChangeApplications;
+    }
+
+    public function loadMergerApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadMergerApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
+    }
+
+    public function loadClosureApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadClosureApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
+    }
+
+    public function loadBifurcationApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadBifurcationApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
+    }
+
+    public function loadReopeningApplications(){
+        $dzo_id = $this->getUserDzoId();
+        $loadMergerApplications = $this->apiService->listData('emis/organization/establishment/loadReopeningApplications/'.$this->userId().'/'.$dzo_id );
+        return $loadMergerApplications;
     }
 
     public function loadOrganizationDetails(){        
@@ -278,10 +315,11 @@ class EstablishmentController extends Controller
             } 
         }
         foreach($workflowdet as $work){
-            if(strpos(strtolower($work->Status_Name),'establishment')===false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            if(strpos(strtolower($work->Status_Name),'establishment')===false ){
                 $workflowstatus=$work->Status_Name;
             }
         }
+        // dd($workflowdet);
         if($loadOrganizationDetails!=null){
             $loadOrganizationDetails->app_stage=$workflowstatus;
         }
@@ -506,7 +544,7 @@ class EstablishmentController extends Controller
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
             'locationType'          =>  'required',
-            'senSchool'             =>  'required',
+            // 'senSchool'             =>  'required',
         ];
         $customMessages = [
             'initiatedBy.required'          => 'Proposal Initiated By is required',
@@ -517,7 +555,7 @@ class EstablishmentController extends Controller
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
             'locationType.required'         => 'Location Type  is required',
-            'senSchool.required'            => 'Sen School is required',
+            // 'senSchool.required'            => 'Sen School is required',
             
         ];
         $validation = array();
@@ -535,9 +573,9 @@ class EstablishmentController extends Controller
             'proprietorPhone'       =>  'required|min:6|max:6',
             'proprietorMobile'      =>  'required|min:8|max:8',
             'proprietorEmail'       =>  'required|email',
-            'totalLand'             =>  'required',
-            'enrollmentBoys'        =>  'required',
-            'enrollmentGirls'       =>  'required',
+            // 'totalLand'             =>  'required',
+            // 'enrollmentBoys'        =>  'required',
+            // 'enrollmentGirls'       =>  'required',
             'proposedName'          =>  'required',
             'proposedLocation'      =>  'required',
             'typeOfSchool'          =>  'required',
@@ -552,9 +590,9 @@ class EstablishmentController extends Controller
             'proprietorCid.required'        => 'Proprietor CID is required',
             'proprietorPhone.required'      => 'Phone No. is required',
             'proprietorMobile.required'     => 'Mobile No.  is required',
-            'totalLand.required'            => 'Total Land proposed is required',
-            'enrollmentBoys.required'       => 'Expected Enrollment is required',
-            'enrollmentGirls.required'      => 'Expected Enrollment is required',
+            // 'totalLand.required'            => 'Total Land proposed is required',
+            // 'enrollmentBoys.required'       => 'Expected Enrollment is required',
+            // 'enrollmentGirls.required'      => 'Expected Enrollment is required',
             'typeOfSchool.required'         => 'Type of School is required',
             'proposedName.required'         => 'Proposed Name is required',
             'proposedLocation.required'     => 'Proposed Location is required',
@@ -577,7 +615,7 @@ class EstablishmentController extends Controller
         $rules = [
             'initiatedBy'           =>  'required',
             'proposedName'          =>  'required',
-            'proposedLocation'      =>  'required',
+            // 'proposedLocation'      =>  'required',
             'category'              =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required'
@@ -585,7 +623,7 @@ class EstablishmentController extends Controller
         $customMessages = [
             'initiatedBy.required'          => 'Proposal Initiated By is required',
             'proposedName.required'         => 'Proposed Name is required',
-            'proposedLocation.required'     => 'Proposed Location is required',
+            // 'proposedLocation.required'     => 'Proposed Location is required',
             'category.required'             => 'Category is required',
             'dzongkhag.required'            => 'Dzongkhag is required',
             'gewog.required'                => 'Gewog is required',
@@ -604,12 +642,12 @@ class EstablishmentController extends Controller
         $rules = [
             'proprietorName'        =>  'required',
             'proprietorCid'         =>  'required|min:11|max:11',
-            'proprietorPhone'       =>  'required|min:6|max:6',
+            // 'proprietorPhone'       =>  'required|min:6|max:6',
             'proprietorMobile'      =>  'required|min:8|max:8',
             'proprietorEmail'       =>  'required|email',
-            'proposedInfrastructure'    =>  'required',
+            // 'proposedInfrastructure'    =>  'required',
             'proposedName'              =>  'required',
-            'proposedLocation'          =>  'required',
+            // 'proposedLocation'          =>  'required',
             'category'                  =>  'required',
             'dzongkhag'                 =>  'required',
             'gewog'                     =>  'required',
@@ -618,11 +656,11 @@ class EstablishmentController extends Controller
         $customMessages = [
             'proprietorName.required'           => 'Proprietor Name is required',
             'proprietorCid.required'            => 'Proprietor CID is required',
-            'proprietorPhone.required'          => 'Phone No. is required',
+            // 'proprietorPhone.required'          => 'Phone No. is required',
             'proprietorMobile.required'         => 'Mobile No.  is required',
-            'proposedInfrastructure.required'   => 'Infrastructure to be housed in is required',
+            // 'proposedInfrastructure.required'   => 'Infrastructure to be housed in is required',
             'proposedName.required'             => 'Proposed Name is required',
-            'proposedLocation.required'         => 'Proposed Location is required',
+            // 'proposedLocation.required'         => 'Proposed Location is required',
             'category.required'                 => 'Category is required',
             'dzongkhag.required'                => 'Dzongkhag is required',
             'gewog.required'                    => 'Gewog is required',
@@ -707,7 +745,7 @@ class EstablishmentController extends Controller
             'dzongkhag'                    =>  $request['dzongkhag'],
             'gewog'                        =>  $request['gewog'],
             'chiwog'                       =>  $request['chiwog'],
-            'proposedLocation'             =>  $request['proposedLocation'],
+            // 'proposedLocation'             =>  $request['proposedLocation'],
             'locationType'                 =>  $request['locationType'],
             'status'                       =>  $request['status'],
             'establishment_type'           =>  $request['establishment_type'],
@@ -733,7 +771,7 @@ class EstablishmentController extends Controller
             'proprietorEmail'              =>  $request['proprietorEmail'],
             'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
             'proposedName'                 =>  $request['proposedName'],
-            'proposedLocation'             =>  $request['proposedLocation'],
+            // 'proposedLocation'             =>  $request['proposedLocation'],
             'category'                     =>  $request['category'],
             'dzongkhag'                    =>  $request['dzongkhag'],
             'gewog'                        =>  $request['gewog'],

@@ -107,7 +107,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/listStudentPrograms/program_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;

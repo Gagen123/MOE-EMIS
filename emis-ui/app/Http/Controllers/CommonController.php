@@ -55,36 +55,41 @@ class CommonController extends Controller{
     }
     public function getApprovalWorkStatus(){
         $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
-        $w_status_screen=[];
-        foreach($work_status as $i=> $work){
-            if($work->Sequence>1){
-                array_push($w_status_screen,$work->SysSubModuleId.'SSS'.($work->Sequence - 1).'SSS'.$work->Establishment_type);
-            }
-        }
-        return $w_status_screen;
+        // $w_status_screen=[];
+        // foreach($work_status as $i=> $work){
+        //     if($work->Sequence>1){
+        //         array_push($w_status_screen,$work->SysSubModuleId.'SSS'.($work->Sequence - 1).'SSS'.$work->Establishment_type);
+        //     }
+        // }
+        return $work_status;
     }
     public function getTaskList($type=""){
-        $work_status=$this->getApprovalWorkStatus();
-        // dd($work_status);
-        $param="NA";
+        $param="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
             // dd($response_data);
-            if($response_data!=null && $response_data!=[]){
-                foreach($response_data as $work){
-                    $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
-                }
-            }
+            // if($response_data!=null && $response_data!=[]){
+            //     foreach($response_data as $work){
+            //         $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
+            //     }
+            // }
+            $response_data= $param;
         }
         else{
-            foreach($work_status as $work){
-                $param.=$work.'OUTSEP';
-            }
+            $response_data=$this->getApprovalWorkStatus();
         }
-        $param2=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
-        // dd($type.'/'.$this->userId().'/'.$param.'/'.$param2);
+        $data =[
+            'access_level'          =>  $this->getAccessLevel(),
+            'work_status'           =>  $response_data,
+            'org'                   =>  $this->getWrkingAgencyId(),
+            'dzongkhag'             =>  $this->getUserDzoId(),
+            'user_id'               =>  $this->userId(),
+            'type'                  =>  $type,
+        ];
+        // dd($data);
+        $param = http_build_query($data);
         if($param!="NA"){
-            $response_data=$this->apiService->getListData('emis/common/getTaskList/'.$type.'/'.$this->userId().'/'.$param.'/'.$param2);
+            $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
             return $response_data;
         }
         else{

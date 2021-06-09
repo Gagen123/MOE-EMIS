@@ -41,7 +41,7 @@
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
                             <div class="form-group row"> 
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Public ECCD'">
                                     <label class="mb-0">Proposal Initiated By:</label>
                                     <span class="text-blue text-bold">{{proposed_by_list[applicationOrgdetails.initiated_by]}}</span>
                                 </div>
@@ -49,7 +49,7 @@
                                     <label class="mb-0">Proposed Name:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
                                 </div>  
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School' ||applicationdetails.establishment_type=='Public ECR'">
                                     <label class="mb-0">Level:</label>
                                     <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
                                 </div>  
@@ -71,16 +71,16 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationTypeId]}}</span>
+                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
                                 </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
                                         {{ applicationdetails.geopolicaticallyLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
-                                </div> 
+                                </div>  -->
                             </div>
-                            <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
+                            <!-- <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Feeding School:</label>
                                     <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
@@ -91,8 +91,8 @@
                                     <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                                 </div>
-                            </div>
-                            <div v-if="applicationdetails.establishment_type=='Private School'">
+                            </div> -->
+                            <div v-if="applicationdetails.establishment_type=='Private School' || applicationdetails.establishment_type=='Private ECCD'">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <h5><u>Proprietor Details</u></h5>
@@ -168,14 +168,43 @@
                     </div> 
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
-                            <h4><u>Select classes and streams</u></h4>
+                            <h4><u>Classes / streams / Age Group</u></h4>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <table id="class-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Classes</th>
+                                            <th class="strm_clas">Stream</th>  
+                                            <th></th>                     
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, key, index) in  class_section" :key="index">
+                                            <td>
+                                                <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                            </td>
+                                            <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                {{  streamArray[item.streamId]  }}
+                                            </td>
+                                            <td class="strm_clas" v-else>                                
+                                            
+                                            </td>
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                            </td>
+                                            <td v-else>  
+                                                <input type="checkbox" checked="true">                           
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                                <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <span v-for="(item, index) in  class_section" :key="index">
                                         <br>
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
+                                        <input type="checkbox" checked="true"><label class="pr-4">
+                                         &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                                     </span> 
-                                </div> 
+                                </div>  -->
                             </div>
                         </div>
                         <div class="callout callout-success">
@@ -328,8 +357,8 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i>Update </button>
-                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i><span id="update_btn_level"></span> </button>
+                                <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
@@ -376,14 +405,28 @@ export default {
         } 
     },
     methods:{
+        getAttachmentType(type){
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.count++;
+                    this.form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });   
+        },
         loadestablishmentapplicationdetails(appId,type){
-            
+            $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {  
                 let data=response.data.data;
                 this.form.applicationNo=data.application_no;
                 this.form.servicename=data.establishment_type;
                 this.form.id=data.id;
+                this.class_section=data.org_class_stream;
                 if(data.org_details.isFeedingSchool==1){
                     for(let i=0;i<data.feeding_modality.length;i++){
                         if(data.feeding_modality[i].noOfMeals!=undefined){
@@ -400,6 +443,8 @@ export default {
                 }
 
                 if(data.app_verification==null){
+                    this.getAttachmentType('ForTransaction__Update_Tentative_Date_for_Public');
+                    $('#update_btn_level').html('Notify For Tentative Date');
                     this.form.update_type='tentative';
                     $('#updateBtn').show();
                     $('#verifyId').hide();
@@ -414,16 +459,29 @@ export default {
                     $('#tentative_date').prop('readonly',true);
                     $('#verifier_team').show();
                     if(data.app_verification_team.length==0){
-                        this.form.update_type='team_verification';
+                        // this.form.update_type='team_verification';
+                        // this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
+                        // // $('#update_btn_level').html('Notify For team Verification');
+                        // this.showsearch=true;
+                        // $('#updateBtn').hide();
+                        // $('#verifyId').show();
+                        // $('#approveId').show();
+                        // $('#update_btn_level').hide();
                         this.showsearch=true;
-                        $('#updateBtn').show();
-                        $('#verifier_team').show();
-                        $('#verifyId').hide();
-                        $('#approveId').hide();
+                        this.form.update_type='final_verification';
+                        this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
+                        $('#removeBtn').hide();
+                        $('#team_verificationAttachment').show();
                     }
                     else{
+                        if((data.establishment_type=="Private School" || data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
+                            $('#verifyId').hide();
+                            $('#approveId').hide();
+                            $('#rejectbtn').hide();
+                        }
                         this.showsearch=false;
                         this.form.update_type='final_verification';
+                        this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
                         $('#removeBtn').hide();
                         $('#team_verificationAttachment').show();
                         for(let i=0;i<data.app_verification_team.length;i++){
@@ -437,7 +495,10 @@ export default {
                 }
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
-                this.class_section=data.org_class_stream;
+                if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
+                    $('.strm_clas').show();
+                }
+                
             })
             .catch((error) => {  
                 console.log("Error......"+error);

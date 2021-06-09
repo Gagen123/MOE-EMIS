@@ -72,6 +72,13 @@ class StudentMasterController extends Controller{
             ];
             $data = $data + $additional_data;
         }
+
+        if($request->record_type == 'vaccine_type'){
+            $additional_data = [
+                'vaccineFor' => $request->vaccineFor
+            ];
+            $data = $data + $additional_data;
+        }
         
         try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);

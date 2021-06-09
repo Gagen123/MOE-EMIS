@@ -7,7 +7,7 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            @if(session('User_Details')!=null)
+            <!-- @if(session('User_Details')!=null)
             @foreach (session('User_Details')['modules'] as $mod)
                 @if($mod['module_route']!=null || $mod['module_route']!="")
                 <li class="nav-item" >
@@ -60,7 +60,9 @@
                                         </li>
                                     @endif
                                 @endif
-                            @endforeach
+                            @endforeach -->
+
+
                             <!-- @foreach(session('User_Details')['screens'] as $i=> $scr)
                                 @if($scr['sub_mod_id']=="" && $scr['mod_id']==$mod['mod_id'])
                                 <li class="nav-item">
@@ -71,7 +73,9 @@
                                 </li>
                                 @endif
                             @endforeach -->
-                        @endif
+
+
+                        <!-- @endif
                         @foreach(session('User_Details')['screens'] as $scr)
                             @if($mod['mod_id'] == $scr['mod_id'] && $scr['sub_mod_id']==null)
                             <li class="nav-item">
@@ -100,7 +104,7 @@
             <br>
             <br>
             <hr>
-            Developers Menu
+            Developers Menu -->
             <li class="nav-item has-treeview" id="mastermanagment">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-database"></i>
@@ -242,6 +246,34 @@
                 <li class="nav-item has-treeview" id="organizationlink">
             </li>
 
+            <li class="nav-item has-treeview" id="organization">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-save"></i>
+                    <p>
+                        Approval
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
+                        <router-link to="/establishment_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Establish Organization
+                            </p>
+                        </router-link> 
+                    </li>
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/restructuring_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Change In Organization
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -252,12 +284,33 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item has-treeview" >
-                        <router-link to="/view_organization_profile" class="nav-link pt-1 pb-1">
-                        <i class="fa fa-angle-double-right nav-icon"></i>
-                            View Org Profile
-                        </router-link>
-                    </li>
+                    @if(session('User_Details')!=null)
+                        @if(session('User_Details')['acess_level']=="Org")
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/view_organization_profile" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    View Org Profile
+                                </router-link>
+                            </li>
+                        @endif
+                        @if(session('User_Details')['acess_level']=="Dzongkhag")
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/view_dzongkhag_profile" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    View Org Profile
+                                </router-link>
+                            </li>
+                        @endif
+                        @if(session('User_Details')['acess_level']=="Ministry")
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/view_department_profile" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    View Org Profile
+                                </router-link>
+                            </li>
+                        @endif
+                    @endif
+                    
                     <li class="nav-item" id="organization_list" @click="setclass('organizationlink','','organization_list')">
                         <router-link to="/organization_list" class="nav-link">
                             <p>
@@ -266,22 +319,7 @@
                             </p>
                         </router-link> 
                     </li>
-                    <li class="nav-item" id="establishment" @click="setclass('organizationlink','','establishment')">
-                        <router-link to="/establishment_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Establishment Organization
-                            </p>
-                        </router-link> 
-                    </li>
-                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/restructuring_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Change Organization Details
-                            </p>
-                        </router-link>
-                    </li>
+                   
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
                         <router-link to="/mission_vission" class="nav-link">
                             <p>
@@ -294,28 +332,58 @@
                         <router-link to="/basic_details_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Organization Basic Details
+                                Basic Details
+                            </p>
+                        </router-link>
+                    </li>
+                    @if(session('User_Details')!=null)
+                        @if(session('User_Details')['acess_level']=="Org")
+                            @foreach(session('User_Details')['roles'] as $key => $user_role)
+                                @if($user_role->roleName == "ECCD Principal")
+                                    <li class="nav-item has-treeview" >
+                                        <router-link to="/detailed_information_eccd" class="nav-link pt-1 pb-1">
+                                        <i class="fa fa-angle-double-right nav-icon"></i>
+                                            Detailed Information
+                                        </router-link>
+                                    </li>
+                                @else
+                                    <li class="nav-item has-treeview" >
+                                        <router-link to="/detailed_information_school" class="nav-link pt-1 pb-1">
+                                        <i class="fa fa-angle-double-right nav-icon"></i>
+                                            Detailed Information
+                                        </router-link>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endif
+                    
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                        <router-link to="/visitors_information" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Organizaiton Visitor
                             </p>
                         </router-link>
                     </li>
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
-                        <router-link to="/organization_visitor_index" class="nav-link">
+                        <router-link to="/org_class_section" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Organizaiton Visitor & SBM
+                                Class Section
                             </p>
                         </router-link>
                     </li>
-                    <!-- <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/program_clubs_index" class="nav-link">
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','org_programs')">
+                        <router-link to="/org_programs" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Programs & Clubs
                             </p>
                         </router-link>
-                    </li> -->
+                    </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/equipment_index" class="nav-link">
+                        <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Equipments and Furnitures
@@ -323,37 +391,38 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/equipment_index" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Infrastructure
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/structural_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Structural Facilities
+                                Facilities
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
+                    <li class="nav-item" id="sen_module_index" onclick="setclass('organizationlink','','sen_module_index')">
+                        <router-link to="/sen_module_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                SEN Module
+                            </p>
+                        </router-link>
+                    </li>
+                   
+                    <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Other Information
                             </p>
                         </router-link>
-                    </li>
-                    <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
+                    </li> -->
+                    <!-- <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
                         <router-link to="/financial_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Latest Missing Menus Added
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                 </ul>
             </li>
             <li class="nav-header"></li>
@@ -426,7 +495,7 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
+                    <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -434,7 +503,15 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
+                    <li class="nav-item" id="studentservices" @click="setclass('class_section','','class_section')">
+                        <router-link to="/class_section" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Class Section Allocation
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
                         <router-link to="/student_services" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>

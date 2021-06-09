@@ -11,41 +11,24 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li> -->
-                <li class="nav-item active pr-1" @click="activatelink('financial_information')">
-                    <router-link id="financial_information" to="/financial_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Financial Information
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('income_information')">
-                    <router-link id="income_information" to="/income_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Income Facilities
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('visitors_information')">
+                
+                <!-- <li class="nav-item active pr-1" @click="activatelink('visitors_information')">
                     <router-link id="visitors_information" to="/visitors_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Visitor's Information
                     </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('projections')">
+                </li> -->
+                
+                <!-- <li class="nav-item active pr-1" @click="activatelink('projections')">
                     <router-link id="projections" to="/projections" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Projections
                     </router-link>
                 </li> 
-                 
                 <li class="nav-item active pr-1" @click="activatelink('disasters_information')">
                     <router-link id="disasters_information" to="/disasters_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Disasters Information
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('location_details')">
-                    <router-link id="location_details" to="/location_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Location Details
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('compound_details')">
@@ -53,7 +36,14 @@
                         <span class=""></span>
                         Compound Details
                     </router-link>
-                </li>
+                </li> -->
+                <!-- <li class="nav-item active pr-1" @click="activatelink('location_details')">
+                    <router-link id="location_details" to="/location_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Location Details
+                    </router-link>
+                </li> -->
+               
             </ul>
         <router-view></router-view>
         </div>

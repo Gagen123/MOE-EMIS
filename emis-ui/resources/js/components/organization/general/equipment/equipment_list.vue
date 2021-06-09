@@ -6,9 +6,8 @@
                     <th>SL#</th>
                     <th>Type</th>
                     <th>Item</th>
-                    <th>Location/Use</th>
-                    <th>Number</th>
-                    <!-- <th>Created Date</th> -->
+                    <th>Usable</th>
+                    <th>Not Usable</th>
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -17,9 +16,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.type}}</td>
                     <td>{{ item.item}}</td>
-                    <td>{{ item.location}}</td>
-                    <td>{{ item.number}}</td>
-                    <!-- <td>{{ item.Created_At }}</td> -->
+                    <td>{{ item.usable}}</td>
+                    <td>{{ item.notusable}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewEquipmentList(item)"><i class="fas fa-edit"></i ></a>
@@ -44,7 +42,7 @@ export default {
         /**
          * method ti load equipment list
          */
-        loadEquipmentList(uri = 'organization/loadEquipment/null'){
+        loadEquipmentList(uri = 'organization/loadEquipment'){
             axios.get(uri)
             .then(response => {
                 let data = response;

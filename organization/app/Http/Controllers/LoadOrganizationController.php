@@ -15,6 +15,9 @@ use App\Models\generalInformation\SectionDetails;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrgProfile;
 use App\Models\Masters\Classes;
+use App\Models\generalInformation\Locations;
+use App\Models\OrganizationFeedingDetails;
+use App\Models\ContactDetails;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -25,7 +28,9 @@ class LoadOrganizationController extends Controller{
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
-            $response_data=OrganizationDetails::where('id',$id)->select( 'id','name','levelId','dzongkhagId')->get();
+            $response_data=OrganizationDetails::where('id',$id)
+                                ->where('status','1')    
+                                ->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="gewoggwise"){
             $response_data=OrganizationDetails::where('gewogId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
@@ -44,16 +49,52 @@ class LoadOrganizationController extends Controller{
         }
         return $this->successResponse($response_data);
     }
+
+    public function loadInactiveOrgList($dzo_id){
+        $response_data=OrganizationDetails::where('status','0')
+                            ->where('dzongkhagId',$dzo_id)
+                            ->select( 'id','name','levelId','dzongkhagId')->get();
+        return $response_data;
+    }
+
     public function loadOrgDetails($type="", $id=""){
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
+            $data = DB::table('classes as c')
+            ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
+            ->select('cl.*', 'c.class', 'c.id AS classId')
+            ->where('cl.organizationId',$response_data->id)
+            ->orderBy('c.displayOrder', 'asc')
+            ->get();
+            $response_data->classes=$data;
+            
+            if($response_data->category=="private_school"){
+                $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
+            }
+            else{
+                $response_data->meals=OrganizationFeedingDetails::where('organizationId',$id)->get();
+            }
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
-            $response_data->classes=OrganizationClassStream::where('organizationId',$response_data->id)->get();
+            // $response_data->classes=OrganizationClassStream::where('organizationId',$response_data->id)->get();
+            $response_data->classes=DB::table('classes as c')
+            ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
+            ->select('cl.*', 'c.class', 'c.id AS classId')
+            ->where('cl.organizationId',$response_data->id)
+            ->orderBy('c.displayOrder', 'asc')
+            ->get();
             if($response_data->category=="private_school"){
                 $response_data->proprioter=OrganizationProprietorDetails::where('organizationId',$response_data->id)->first();
+            }
+            $loc=Locations::where('organizationId',$response_data->id)->first();
+            if($loc!=null && $loc!=""){
+                $response_data->locationDetials=$loc;
+            }
+            $contact = ContactDetails::where('organizationId',$response_data->id)->first();
+            if($contact!=null && $contact!=""){
+                $response_data->contactDetails=$contact;
             }
         }
         if($type=="Headquarterbyid"){

@@ -59,25 +59,49 @@ class ClassStreamController extends Controller
 
     public function loadClassStreamMapping($type=""){
         if($type!="NA"){
-            if(strpos('_',$type)===false && strpos('school',$type)===false){
+            if(strpos($type,'_')!==false){
+                if(strpos('school',$type)===false && explode('_',$type)[1]+1 <8){
+                    $data = DB::table('classes')
+                    ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
+                    ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
+                    ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+                    ->where('category',explode('_',$type)[0])
+                    ->where('displayOrder','<=',explode('_',$type)[1]+1)
+                    ->orWhere('category', 'mg')
+                    ->orderBy('classes.displayOrder', 'asc')
+                    ->get();
+                }
+                else if(strpos('school',$type)===false && explode('_',$type)[1]+1 >8){
+                    $data = DB::table('classes')
+                    ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
+                    ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
+                    ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+                    ->where('category',explode('_',$type)[0])
+                    ->where('displayOrder','<=',explode('_',$type)[1]+1)
+                    ->orderBy('classes.displayOrder', 'asc')
+                    ->get();
+                }
+            }
+            else if($type=="School"){
                 $data = DB::table('classes')
-                ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
-                ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
-                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
-                ->where('category',explode('_',$type)[0])
-                ->where('displayOrder','<=',explode('_',$type)[1]+1)
-                ->orWhere('category', 'mg')
-                ->orderBy('classes.displayOrder', 'asc')
+                ->select('classes.*')
+                ->where('category',$type)
+                ->orderBy('displayOrder', 'asc')
+                ->get();
+            }
+            else if($type=="multiGrade"){
+                $data = DB::table('master_multiage_grade')
+                ->select('*')
+                ->where('type',0)
+                ->orderBy('displayOrder', 'asc')
                 ->get();
             }
             else{
                 $data = DB::table('classes')
-                ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
-                ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
-                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+                ->select('classes.*')
                 ->where('category',$type)
                 ->orWhere('category', 'ma')
-                ->orderBy('classes.displayOrder', 'asc')
+                ->orderBy('displayOrder', 'asc')
                 ->get();
             }
         }

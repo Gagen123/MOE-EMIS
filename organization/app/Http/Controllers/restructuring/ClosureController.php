@@ -12,7 +12,9 @@ use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\ApplicationSequence;
 use App\Models\Masters\Level;
 use App\Models\Masters\Location;
-
+use App\Models\establishment\ApplicationEstClosure;
+use App\Models\HistoryForOrganizaitonDetail;
+use App\Models\OrganizationDetails;
 
 class ClosureController extends Controller
 {
@@ -60,43 +62,35 @@ class ClosureController extends Controller
             else if(strlen($last_seq)==4){
                 $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
             }
-        $closure =[
-            'proposedName'             =>  $request['name'],
-            'category'                 =>  $request['category'],
-            'levelId'                  =>  $request['level'],
-            'dzongkhagId'              =>  $request['dzongkhag'],
-            'gewogId'                  =>  $request['gewog'],
-            'chiwogId'                 =>  $request['chiwog'],
-            'locationId'               =>  $request['location'],
-            'isGeopoliticallyLocated'  =>  $request['geoLocated'],
-            'isSenSchool'              =>  $request['senSchool'],
-            'parentSchoolId'           =>  $request['parentSchool'],
-            'coLocatedParent'          =>  $request['coLocatedParent'],
-            'status'                   =>  $request['status'],
-            'applicationNo'            =>  $application_no,
-            'service'                  =>  "Closure",
-            'created_by'               =>  $request->user_id,
-            'created_at'               =>  date('Y-m-d h:i:s'),
-            'reason'                   =>  $request['reason'],
-            'remark'                   =>  $request['remark'],
-            'id'                       =>  $request['id'],
+        
+        $data =[
+            'application_no'       =>  $application_no,
+            'establishment_type'   =>  'public_school',
+            'application_type'     =>  'Closure',
+            'dzongkhagId'          =>   '',
+            'gewogId'              =>   '',
+            'chiwogId'             =>   '',
+            'year'                 =>   date('Y'),
+            'status'               =>  'Submitted',
+            'created_by'           =>  $request['user_id'],
+            'created_at'           =>  date('Y-m-d h:i:s')
         ];
-        // dd($closure);
-        $closure_data = ApplicationDetails::create($closure);
-        // save proprietor details if category is private
-        // if($request['category'] == 0){
-        //     $pvtDetails = [
-        //         'applicationId'            =>  $cls->id,
-        //         'cid'                      =>  $request['cid'],
-        //         'fullName'                 =>  $request['fullName'],
-        //         'phoneNo'                  =>  $request['phoneNo'],
-        //         'email'                    =>  $request['email'],
-        //         'created_by'               =>  $request->user_id,
-        //         'created_at'               =>  date('Y-m-d h:i:s')
-        //         ];
-        //     $cls = ApplicationProprietorDetails::create($pvtDetails);
-        // }
-        return $this->successResponse($closure_data, Response::HTTP_CREATED);
+        
+        $establishment = ApplicationDetails::create($data);
+    
+        $closure =[
+        'ApplicationDetailsId'     =>  $establishment->id,
+        'organizationId'           =>  $request['organizationId'],
+        'remarksForClosure'        =>  $request['reason'],
+        'remark'                   =>  $request['remark'],
+        'dateOfClosure'            =>  date('Y-m-d'),
+        'id'                       =>  $request['id'],
+        'user_id'                  =>  $request['user_id']
+        ];
+
+        $closure_data = ApplicationEstClosure::create($closure);
+
+        return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
 
     /**
@@ -123,5 +117,100 @@ class ClosureController extends Controller
         ];
         $close = ApplicationDetails::where('applicationNo', $request->application_number)->update($estd);
         return $this->successResponse($close, Response::HTTP_CREATED);
+    }
+
+    /**
+     * details of closure for verification
+     */
+
+    public function loadClosureForVerification($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        // $response_data->application_date=date_format(Carbon::parse($response_data->created_at), 'Y-m-d h:i:s');
+        $closure = ApplicationEstClosure::where('ApplicationDetailsId',$response_data->id)->first();
+        
+        $response_data->closure=$closure;
+        
+        // if($merger->isfeedingschool==1){
+        //     $response_data->feeding=ApplicationNoMeals::where('ApplicationDetailsId',$merger->id)->get();
+        // }
+        
+        // $response_data->level=Level::where('id',$merger->levelId)->first()->name;
+        // $response_data->locationType=Location::where('id',$merger->locationId)->first()->name;
+        // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
+        // $classSection=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->groupBy('classId')->get();
+        // $sections=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->where('streamId','<>',null)->get();
+        // foreach($classSection as $cls){
+        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
+        // }
+        // $response_data->class_section=$classSection;
+        // if($sections!="" && sizeof($sections)>0){
+        //     foreach($sections as $sec){
+        //         $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
+        //     }
+        //     $response_data->stream=$sections;
+        // }
+        return $this->successResponse($response_data); 
+    }
+
+    /**
+     * Updating the closure details
+     */
+
+    public function updateClosureDetails(Request $request){
+
+        //Code is copied from updateChangeBasicDetails
+        // to update the applications table
+        $estd =[
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id, 
+        ];
+        ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+       
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id, 
+                    ];
+                    $doc = ApplicationAttachments::create($attach);
+                }
+            }
+        }
+
+        $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
+
+        // $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
+        // $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
+        // $change_details_data="";
+
+        // $org_data =[
+        //     'id'                        =>  $org_details->id,
+        //     'name'                      =>  $org_details->name,
+        //     'updated_by'                =>  $org_details->updated_by,
+        //     'updated_at'                =>  $org_details->updated_at,
+        //     'recorded_on'               =>  date('Y-m-d h:i:s'),
+        //     'recorded_for'              =>  'Name Change', 
+        //     'recorded_by'               =>  $request->user_id, 
+        // ];
+        // HistoryForOrganizaitonDetail::create($org_data);
+        // $org_update_data =[
+        //     'name'                      =>  $change_details->proposedChange,
+        //     'updated_by'                =>  date('Y-m-d h:i:s'),
+        //     'updated_at'                =>  $request->user_id, 
+        // ];
+        // $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+
+        // return $this->successResponse($change_details_data, Response::HTTP_CREATED);
     }
 }

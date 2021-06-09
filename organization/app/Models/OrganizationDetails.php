@@ -29,8 +29,18 @@ class OrganizationDetails extends Model
         'status',
         'yearOfEstablishment',
         'created_by',
-        'updated_by',
         'isFeedingSchool',
-        'remarks'
+        'remarks',
+        'isAspNetSchool',
+        'hasCounselingRoom',
+        'hasShiftSystem',
+        'hasCE',
+        'mofCode',
+        'current_fees',
+        'isAutonomy',
+        'org_id'  ,
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 }

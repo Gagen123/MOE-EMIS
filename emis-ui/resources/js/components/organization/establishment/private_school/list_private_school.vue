@@ -20,7 +20,7 @@
                     <td>{{ item.status}}</td>
                     <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
-                        <a href="#" v-if="item.status=='submitted' || item.status=='Submitted'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                        <a href="#" v-if="item.status=='submitted' ||item.status=='Notified For Team Verification' || item.status=='Submitted'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
                 </tr>
             </tbody>
@@ -63,7 +63,6 @@ export default {
         showview(data){
             this.$router.push({name:'show_private_school',query: {id:data.application_no}});
         },
-        
     },
     mounted(){
         this.loadDataList();

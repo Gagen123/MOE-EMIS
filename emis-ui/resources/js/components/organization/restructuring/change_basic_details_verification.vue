@@ -4,7 +4,6 @@
             <li class="pl-2 form-inline "><h6 class="pt-1">Basic Change Application Verification/Approval</h6></li>
         </ol>
         <div class="card card-primary card-outline card-outline-tabs">
-            
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
@@ -14,7 +13,6 @@
                                     <label><u>Current Details</u></label>
                                 </div>
                             </div>
-                            
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:</label>
@@ -24,23 +22,19 @@
                                     <label>Level:</label>
                                     <span class="text-blue text-bold">{{levelArray[existing_details.levelId]}}</span>
                                 </div>
-                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Category:</label>
-                                    <span class="text-blue text-bold">{{existing_details.organizationType == 'public_school' ? "Public" : existing_details.organizationType == 'public_eccd' ? "sss" : "Private"}}</span>
-                                </div> -->
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
                                     <label>Zest Code:</label>
                                     <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
-                                    <span class="text-blue text-bold">{{existing_details.category == 1 ? "Public" : "Private"}}</span>
+                                    <span class="text-blue text-bold">{{existing_details.category}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -57,6 +51,37 @@
                                     <span class="text-blue text-bold">{{selected_village}}</span>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Classes</th>
+                                                <th class="strm_clas">Stream</th>  
+                                                <th></th>                     
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, key, index) in  existing_details.classes" :key="index">
+                                                <td>
+                                                    <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                                </td>
+                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                    {{  streamArray[item.streamId]  }}
+                                                </td>
+                                                <td class="strm_clas" v-else> </td>
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    <input type="checkbox" checked="true">
+                                                </td>
+                                                <td v-else>  
+                                                    <input type="checkbox" checked="true">                           
+                                                </td>
+                                            </tr> 
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>is SEN School:</label>
@@ -94,7 +119,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="appicationDetails.application_type=='level_change'">
+                            <!-- <div v-if="appicationDetails.application_type=='level_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label><u>Classes Details</u></label>
@@ -107,7 +132,7 @@
                                         </span> 
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="callout callout-info">
                             <div class="form-group row">
@@ -122,9 +147,10 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Type of Change:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.establishment_type}}</span>
+                                <span class="text-blue text-bold">{{appicationDetails.establishment_type}} </span>
                                 </div>
                             </div>
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='name_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Propose New Name:</label>
@@ -135,12 +161,14 @@
                                     <span class="text-blue text-bold">{{proposed_by_list[appicationDetails.change_details.initiatedBy]}}</span>
                                 </div>
                             </div>
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='location_type_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Proposed Location:</label>
                                     <span class="text-blue text-bold">{{locationArray[appicationDetails.change_details.proposedChange]}}</span>
                                 </div>
                             </div>
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='expension_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Current Capacity:</label>
@@ -151,6 +179,7 @@
                                     <span class="text-blue text-bold">{{appicationDetails.change_details.changeInDetails}}</span>
                                 </div>
                             </div>
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='feeding_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Is Feeding School:</label>
@@ -164,6 +193,19 @@
                                     <label><input  type="checkbox" v-model="feeding3" value="3" /> Three Meals</label>
                                 </div>
                             </div>
+                            <div class="form-group row" v-if="appicationDetails.application_type=='autonomus_change'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Is Autonomy:</label>
+                                    <label><input  type="radio" v-model="existing_details.isAutonomy" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" v-model="existing_details.isAutonomy" value="0" tabindex=""/> No</label>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                    <label class="mb-0">Proposed for Autonmy:</label> 
+                                    <label><input  type="radio" v-model="appicationDetails.change_details.proposedChange" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" v-model="appicationDetails.change_details.proposedChange" value="0" tabindex=""/> No</label>
+                                </div>
+                            </div>
+
                             <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Is SEN School:</label>
@@ -171,6 +213,30 @@
                                     <label><input  type="radio" v-model="senSchool" value="0" tabindex=""/> No</label>
                                 </div>
                             </div>
+
+                            <div class="form-group row" v-if="appicationDetails.application_type=='fee_structure_change'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Curent Fees:</label>
+                                    <span class="text-blue text-bold">{{existing_details.current_fees}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Propose New Fees:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.change_details.proposedChange}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="appicationDetails.application_type=='boadring_change'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Boadring (Current):</label>
+                                    <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Propose for Boadring Change:</label>
+                                    <label><input  type="radio" disabled v-model="appicationDetails.change_details.proposedChange" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" disabled v-model="appicationDetails.change_details.proposedChange" value="0" tabindex=""/> No</label>
+                                </div>
+                            </div>
+
                             <div v-if="appicationDetails.application_type=='proprietor_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -184,7 +250,7 @@
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proposedName}}</span>
+                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorName}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -202,7 +268,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="appicationDetails.application_type=='level_change'">
+
+
+                            <div v-if="appicationDetails.application_type=='level_change' || appicationDetails.application_type=='stream_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Proposed Level:</label>
@@ -212,7 +280,7 @@
                                
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Classes Details</u></label>
+                                        <label><u>Change In Classes Details</u></label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -223,11 +291,9 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="callout callout-info">
-                            <h4><u>Any Supporting Documents and Attachments (if applicable)</u></h4>
-                            <div class="row pb-2" style="display:none" id="team_verificationAttachment">
+                            <div class="row pb-2" id="team_verificationAttachment">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -240,7 +306,7 @@
                                         </thead> 
                                         <tbody>
                                             <tr v-for='(attach,count) in appicationDetails.attachments' :key="count+1">
-                                                <template v-if="attach.upload_type=='team_verification'">
+                                                <template>
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
                                                     <td>    
@@ -252,9 +318,9 @@
                                     </table>
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                    <h5><u>Any Supporting Documents and Attachments (if applicable)</u></h5>
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -262,7 +328,7 @@
                                                 <th>Upload File</th>                     
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody>  
                                             <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
                                                 <td>
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -286,6 +352,12 @@
                                 </div>
                             </div>
                          </div>
+                        <div class="row form-group" v-if="appicationDetails.establishment_type=='Change in Name' || appicationDetails.establishment_type=='Upgrade Downgrade'">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <input type="date" class="form-control" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
+                                <span class="text-danger" id="effective_date_err"></span>
+                            </div>
+                        </div>
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
@@ -296,7 +368,8 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <!-- <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button> -->
+                                <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i><span id="update_btn_level"></span> </button>
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
@@ -304,7 +377,7 @@
                         </div>
                     </div>
                     
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -345,9 +418,7 @@
                                 </div>
                             </div>
                         </div>
-                        
-                       
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -381,7 +452,7 @@ export default {
             senSchool:'',
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',
-                ref_docs:[],fileUpload: [],sequence:'',screen_id:'',
+                ref_docs:[],fileUpload: [],sequence:'',screen_id:'',effective_date:'',
             }), 
         }
     },
@@ -480,6 +551,51 @@ export default {
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
+                // if(data.app_verification==null){
+                //     $('#update_btn_level').html('Notify For Tentative Date');
+                //     this.form.update_type='tentative';
+                //     $('#updateBtn').show();
+                //     $('#verifyId').hide();
+                //     $('#approveId').hide();
+                // }
+                // else{
+                //     $('#tentativeAttachment').show();
+                //     this.form.verifying_agency=data.app_verification.verifyingAgency;
+                //     this.form.id=data.app_verification.id;
+                //     $('#verifying_agency').prop('readonly',true);
+                //     this.form.tentative_date=data.app_verification.tentativeDate;
+                //     $('#tentative_date').prop('readonly',true);
+                //     $('#verifier_team').show();
+                //     if(data.app_verification_team.length==0){
+                //         this.form.update_type='team_verification';
+                //         this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
+                //         $('#update_btn_level').html('Notify For team Verification');
+                //         this.showsearch=true;
+                //         $('#updateBtn').show();
+                //         $('#verifier_team').show();
+                //         $('#verifyId').hide();
+                //         $('#approveId').hide();
+                //     }
+                //     else{
+                //         if((data.establishment_type=="Private School" || data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
+                //             $('#verifyId').hide();
+                //             $('#approveId').hide();
+                //             $('#rejectbtn').hide();
+                //         }
+                //         this.showsearch=false;
+                //         this.form.update_type='final_verification';
+                //         this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
+                //         $('#removeBtn').hide();
+                //         $('#team_verificationAttachment').show();
+                //         for(let i=0;i<data.app_verification_team.length;i++){
+                //             this.form.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
+                //                 name:data.app_verification_team[i].name,
+                //                 cid:data.app_verification_team[i].cid,
+                //                 po_title:data.app_verification_team[i].po_title,
+                //             })
+                //         }
+                //     }
+                // }
             })
             .catch((error) => {  
                 console.log("Error......"+error);
@@ -579,6 +695,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name; 
                 }
+                alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
             })
             .catch(function (error) {

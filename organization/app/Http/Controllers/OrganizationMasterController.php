@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use App\Models\Masters\IncomeType;
+use App\Models\Masters\FinancialInformation;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Models\Masters\Service;
 
 class OrganizationMasterController extends Controller{
     use ApiResponser;
@@ -39,7 +42,7 @@ class OrganizationMasterController extends Controller{
         ];
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
-                'applicableTo'              =>  implode($request->addfield_1,', '),
+                'applicableTo'              =>  implode($request->addfield_1),
             ];
         }
         if($request->model=="FinancialInformation"){
@@ -80,5 +83,25 @@ class OrganizationMasterController extends Controller{
         } else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         } 
+        else if(strpos($type,'ForTransaction')!==false){
+            // return str_replace('_',' ',explode('__',$type)[1]);
+            $response_data="";
+            $service=Service::where('name','like','%'.str_replace('_',' ',explode('__',$type)[1]).'%')->first();//get service name
+            if($service!=null && $service!=""){
+                $response_data=$model::where('status',1)->where('applicableTo','like','%'.$service->id.'%')->get();
+            }
+            return $response_data;
+        }
+        else{
+            return $this->successResponse($model::where('status',1)->get());
+        }
+    }
+    public function loadFinacialtype(){
+        $response_data = FinancialInformation::all();
+        return $this->successResponse($response_data);
+    }
+    public function loadincomeList(){
+        $response_data = IncomeType::all();
+        return $response_data;
     }
 }

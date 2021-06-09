@@ -17,7 +17,21 @@ class Infrastructure extends Model
      * @var array
      */
     protected $fillable = [
-        'id','organizationId','categoryId','subCategoryId','structureNo','yearOfConstruction',
-        'plintchArea','noOfFloor','totalCapacity','rampAccess','presentCondition','design','created_by','updated_by'
+        'id',
+        'organizationId',
+        'categoryId',
+        'subCategoryId',
+        'structureNo',
+        'yearOfConstruction',
+        'plintchArea',
+        'noOfFloor',
+        'totalCapacity',
+        'rampAccess',
+        'presentCondition',
+        'design',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 }

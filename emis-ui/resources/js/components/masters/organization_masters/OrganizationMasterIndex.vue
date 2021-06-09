@@ -53,10 +53,17 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/location_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Location Type
+                    <router-link to="/fencing_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Fencing Type
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/climate_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Climate Type
+                    </router-link>
+                </li>
+
+
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/level_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Level Type 
@@ -65,6 +72,11 @@
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/structure_category_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Structure Category
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/str_sub_category_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Structure Sub Category
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
@@ -83,6 +95,21 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/furniture_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Furniture Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/furniture_item_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Furniture
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/furniture_usage_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Furniture Usage Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/sport_facility_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Sport Facility Type
                     </router-link>
@@ -95,11 +122,6 @@
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/sport_supporter_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Sport Supporter
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
-                    <router-link to="/str_sub_category_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Structure Sub Category
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
@@ -155,6 +177,31 @@
                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
                     <router-link to="/attachment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Attachment
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/disastercommittee_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Disaster Committee
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/internet_accessible_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Internet Accessible
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/internetconn_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Internet Connection Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/visitor_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Visitor Type
+                        </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/accessible_sen_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Accessible Type
                     </router-link>
                 </li>
             </ul>

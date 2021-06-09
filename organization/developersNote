@@ -30,3 +30,6 @@ in the application_est_public
     added  'coLocatedParent',
         'parentSchool',
 
+added two history table: master_fencing_type and master_climate_type
+added recorded_for on class history,
+in application_proprietor: change proprietorName from proposedName

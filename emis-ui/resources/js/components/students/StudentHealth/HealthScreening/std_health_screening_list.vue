@@ -13,17 +13,17 @@
                             <th>Month</th>
                             <th>Screened</th>
                             <th>Referred</th>
-                            <th>Action</th>                     
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.screening_type}}</td>
-                            <td>{{ classList[item.class]}}</td>
-                            <td>{{ sectionList[item.section]}}</td>
+                            <td>{{ classArray[item.class]}} </td>
+                            <td>{{ sectionList[item.section]}} </td>
                             <td v-if="item.stream">{{ item.stream}}</td>
-                            <td v-else>{{ NA }}</td>
+                            <td v-else>NA</td>
                             <td>{{ item.date}}</td>
                             <td>{{ item.not_screened}}</td>
                             <td>{{ item.referred}}</td>
@@ -48,7 +48,8 @@ export default {
             id:'2',
             dataList:[],
             sectionList:{},
-            classList:{},
+            classList:[],
+            classArray:{},
             streamList:{},
             
         }
@@ -81,12 +82,9 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.classList[data[i].id] = data[i].class;
+                    this.classArray[data[i].id] = data[i].class;
                 }
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
         },
         loadSectionArrayList(uri="loadCommons/getSectionArray"){
             axios.get(uri)
@@ -120,10 +118,13 @@ export default {
         },
     },
     mounted(){
-        this.loadDataList();
         this.loadClassArrayList();
-        this.loadStreamArrayList();
         this.loadSectionArrayList();
+        this.loadStreamArrayList();
+        
+        this.loadDataList();
+        
+       
     },
 }
 </script>

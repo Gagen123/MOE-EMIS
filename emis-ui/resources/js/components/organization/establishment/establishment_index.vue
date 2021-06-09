@@ -11,50 +11,50 @@
                     {{ item.screen_name}}
                 </router-link>
             </li>
-            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+            <li class="nav-item pr-1">
                 <router-link to="/public_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                    Public School
                 </router-link>
             </li> 
-            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+            <li class="nav-item pr-1">
                 <router-link to="/public_eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Public ECCD 
                 </router-link>
             </li>
-            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+            <li class="nav-item pr-1">
                 <router-link to="/private_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Private School 
                 </router-link>
             </li>
-            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+            <li class="nav-item pr-1">
                 <router-link to="/private_eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Private ECCD 
                 </router-link>
             </li>
-            <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+            <li class="nav-item pr-1">
                 <router-link to="/ecr_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Public ECR
                 </router-link>
             </li>
-            <!-- <li class="nav-item pr-1"  @click="activatelink('new_establishment_index')">
+            <!-- <li class="nav-item pr-1">
                 <router-link id="new_establishment_index" to="/new_establishment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                    New Establishment
                 </router-link>
             </li> 
             -->
-            <li class="nav-item pr-1" @click="activatelink('register')">
+            <li class="nav-item pr-1">
                 <router-link to ="/register" id="register" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     Register
                 </router-link>
             </li>
-            <li class="nav-item pr-1" @click="activatelink('head_quater_office')">
+            <li class="nav-item pr-1">
                 <router-link to="/headquaters_index" id="head_quater_office" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>
                     New HQ/Dzongkhag Office
@@ -82,27 +82,27 @@ export default {
     },
 
     methods:{
-        activatelink(btnid){
-            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-            $('#'+btnid).addClass('btn-primary text-white');
-        },
-        getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;  
-            })
-            .catch(function (error) { 
-                console.log("Error:"+error)
-            });
-        },
+        // activatelink(btnid){
+        //     $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
+        //     $('#'+btnid).addClass('btn-primary text-white');
+        // },
+        // getmenus(sub_mod_id){
+        //     let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.menubar =  data.data;  
+        //     })
+        //     .catch(function (error) { 
+        //         console.log("Error:"+error)
+        //     });
+        // },
         
     },
     mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        // this.getmenus(routeparam);
     },
 }
 </script>

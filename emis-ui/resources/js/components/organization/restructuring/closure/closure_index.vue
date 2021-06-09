@@ -8,10 +8,11 @@
             <div class="card-header">
                 <span class="fa-pull-right">
                     <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('closure_list')"><i class="fa fa-list"></i> List</button>
+                    <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('closure')"><i class="fa fa-list"></i> Close Organization</button>
                 </span>
             </div>
-            <div class="card-body">  
-                <router-view></router-view> 
+            <div class="card-body">
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -19,11 +20,6 @@
 
 <script>
 export default {
-    data(){
-        return{
-
-        }
-    },
     methods:{
         showadprocess(type){
             this.$router.push(type);
@@ -38,16 +34,16 @@ export default {
         //             $('#screenPermission').show();
         //             $('#existmessage').html('You have no access to this page.');
         //         }
-                
-        //     })    
-        //     .catch(errors => { 
+
+        //     })
+        //     .catch(errors => {
         //         console.log(errors)
         //     });
         // }
     },
 
     mounted(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
     }
 }
 </script>

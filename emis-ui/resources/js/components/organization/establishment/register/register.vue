@@ -10,8 +10,9 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Category:<span class="text-danger">*</span></label>
                         <select name="category" id="category" v-model="applicaitondetailsform.category" class="form-control select2" >
-                            <option value="1">Public</option>
-                            <option value="0">Private & Others</option>
+                            <option value="Public">Public</option>
+                            <option value="Private">Private</option>
+                            <option value="ECCD">ECCD</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -37,7 +38,7 @@
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                                 <br/>
-                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('public')"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails()"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div> 
                         </div>
                     </div>
@@ -52,7 +53,7 @@
                             </div> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                                 <br/>
-                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails('private')"><i class="fa fa-search">&nbsp;Search</i></span>
+                                <span type="button" class="btn  btn-primary" @click="getApprovedOrgDetails()"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div> 
                         </div>
                     </span>           
@@ -64,9 +65,9 @@
                         <div class="form-group row"> 
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Proposed Name:</label>
-                                <span class="text-blue text-bold">{{proposedName}}</span>
+                                <span class="text-blue text-bold">{{applicant_rog_details.proposedName}}</span>
                             </div>  
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicaitondetails.establishment_type=='Private School' || applicaitondetails.establishment_type=='Public School'">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicaitondetails.establishment_type!='Private ECCD' && applicaitondetails.establishment_type=='Public ECCD'">
                                 <label class="mb-0">Level:</label>
                                 <span class="text-blue text-bold">{{levelArray[orgLevel]}}</span>
                             </div>  
@@ -187,6 +188,7 @@ export default {
             streamArray:{},
             orgLevel:'',
             proposedName:'',
+            applicant_rog_details:[],
             applicaitondetails:[],
             org_class_details:[],
             applicaitondetailsform: new form({
@@ -204,16 +206,19 @@ export default {
         }
     },
     methods:{
-        display_respective_section: function(){
+        display_respective_section: function(school_type){
             $("#zest_code_section").hide();
             $("#approved_schol_list").hide();
-            if(this.applicaitondetailsform.category == 1){
-               $("#zest_code_section").show();
-                this.loadApproveSchoolname('Public');
-            }else{
-                this.loadApproveSchoolname('Private');
-                $("#approved_schol_list").show();
-            }
+             this.loadApproveSchoolname(this.applicaitondetailsform.category);
+             $("#approved_schol_list").show();
+            // if(this.applicaitondetailsform.category == 1){
+            //    $("#zest_code_section").show();
+            //     this.loadApproveSchoolname('Public');
+            //     //integration with Zest
+            // }else{
+               
+            //     $("#approved_schol_list").show();
+            // }
         },
         // getClassStream:function(){
         //     axios.get('/masters/loadClassStreamMapping')
@@ -241,15 +246,17 @@ export default {
             });
         },
         loadApproveSchoolname(type){
+            this.orgList=[];
             axios.get('organization/loadApprovedOrgs/'+type)
             .then((response) => {  
                 let data=response.data.data;
-                if(type=="Private"){
-                    this.orgList   =   data;
-                }
-                else{
-                    this.publicorgList   =   data;
-                }
+                // if(type=="Private"){
+                //     this.orgList   =   data;
+                // }
+                // else{
+                //     this.publicorgList   =   data;
+                // }
+                this.orgList   =   data;
             })
             .catch((error) => {  
                 console.log("Error:"+error);
@@ -264,7 +271,7 @@ export default {
         async changefunction(id){
             if(id=="category"){
                 this.applicaitondetailsform.category=$('#category').val();
-                this.display_respective_section();
+                this.display_respective_section($('#category').val());
             }
             if(id=="organizationid"){
                 this.applicaitondetailsform.organizationid=$('#organizationid').val();
@@ -273,24 +280,28 @@ export default {
 
         getApprovedOrgDetails(type){
             let key="";
-            if(type==1){
-                key=this.applicaitondetailsform.zestcode;
-            }
-            if(type=="private"){
-                key=$('#pri_organizationid').val();
-            }
-            if(type=="public"){
-                key=$('#organizationid').val();
-            }
+            // if(type==1){
+            //     key=this.applicaitondetailsform.zestcode;
+            // }
+            // if(type=="private"){
+            //     key=$('#pri_organizationid').val();
+            // }
+            // if(type=="public"){
+            //     key=$('#organizationid').val();
+            // }
+            key=$('#pri_organizationid').val();
+            type=$('#category').val();
             axios.get('organization/getApprovedOrgDetails/'+type+'/'+key)
             .then((response) => {  
                 let data=response.data.data;
-                if(type==0){
-                    this.applicaitondetails=data;
+                this.applicaitondetails=data;
+                if(data.establishment_type!="Private ECCD" && data.establishment_type!="Public ECCD"){
                     this.orgLevel=data.org_details.levelId;
-                    this.proposedName=data.org_details.proposedName;
-                    this.org_class_details=data.org_class_stream;
-                    
+                }
+                this.proposedName=data.org_details.proposedName;
+                this.applicant_rog_details=data.org_details;
+                this.org_class_details=data.org_class_stream;
+                if(type==0){
                     // this.applicaitondetailsform.applicationNo           =data.application_no;
                     // this.applicaitondetailsform.dzongkhagId             =data.dzongkhagId;
                     // // this.applicaitondetailsform.dzongkhag               =data.dzongkhag;

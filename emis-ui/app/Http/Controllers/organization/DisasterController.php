@@ -23,34 +23,46 @@ class DisasterController extends Controller
     }
 
     public function saveDisasterInformation(Request $request){
+      //  dd($request);
         $rules = [
-            'name'          =>  'required',
-            'cid'          =>  'required',
-            'email'      =>  'required',
-            'contact_no'        =>  'required',
-            'address'       => 'required'
+            'disastertype'          =>  'required',
+            'disastercomm'           =>  'required',
+            'cid_passport'          =>  'required',
+            'fullname'              =>  'required',
+            'sex_id'                =>  'required',
+            'email'                 =>  'required',
+            'contactno'             =>  'required',
+          //  'servining_as'          =>  'required',
+            'fulladdress'           => 'required',
         ];
         $customMessages = [
-            'name.required'         => 'Name is required',
-            'cid.required'         => 'CID is required',
-            'email.required'     => 'email is required',
-            'contact_no.required'       => 'Number is required',
-            'address.required'       => 'Address is required',
+            'disastertype.required'         => 'Disastertertype is required',
+            'disastercomm.required'          => 'Disaster Committee is required',
+            'cid_passport.required'         => 'CID is required',
+            'fullname.required'             => 'Name is required',
+            'sex_id.required'               => 'Gender is required',
+            'email.required'                => 'Email is required',
+            'contactno.required'            => 'Contact is required',
+         //   'servining_as.required'         => 'Address is required',
+            'fulladdress.required'          => 'Address is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $loc =[
-            'organizationId'            =>  $this->getWrkingAgencyId(),
-            'name'                      =>  $request['name'],
-            'cid'                      =>  $request['cid'],
-            'email'                  =>  $request['email'],
-            'contact_no'                    =>  $request['contact_no'],
-            'serving_as'             => $request['serving_as'],
-            'address'                    =>  $request['address'],
-            'actiontype'                =>  $request['action_type'],
-            'id'                        =>  $request['id'],
-            'user_id'                   =>  $this->userId()
+            'organizationId'                =>  $this->getWrkingAgencyId(),
+            'disastertype'                  =>  $request['disastertype'],
+            'disastercomm'                   =>  $request['disastercomm'],
+            'cid_passport'                  =>  $request['cid_passport'],
+            'fullname'                      =>  $request['fullname'],
+            'sex_id'                        =>  $request['sex_id'],
+            'email'                         =>  $request['email'],
+            'contactno'                     =>  $request['contactno'],
+            'servining_as'                  =>  $request['servining_as'],
+            'fulladdress'                   =>  $request['fulladdress'],
+            'actiontype'                    =>  $request['actiontype'],
+            'id'                            =>  $request['id'],
+            'user_id'                       =>  $this->userId()
         ];
-
+      //  dd($loc);
         try{
             $response_data= $this->apiService->createData('emis/organization/disaster/saveDisasterInformation', $loc);
             return $response_data;
@@ -61,6 +73,7 @@ class DisasterController extends Controller
     }
 
     public function loadDisasterInformation(){
+      //  dd('loading');
         $orgId=$this->getWrkingAgencyId();
         $dis = $this->apiService->listData('emis/organization/disaster/loadDisasterInformation/'.$orgId);
         return $dis;

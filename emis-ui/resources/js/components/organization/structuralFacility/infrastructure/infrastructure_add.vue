@@ -62,9 +62,9 @@
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
                             </div>
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Capacity:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Capacity: </label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
+                                <input class="form-control editable_fields " id="totalCapacity" type="number" v-model="form.totalCapacity">
                             </div>
                         </div>
                         <div class="form-group row">
@@ -125,10 +125,15 @@
                                         <input type="number" name="noOfFacility" class="form-control" v-model="user.noOfFacility"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="accessibleDisabled" class="form-control" v-model="user.accessibleDisabled"/>
+                                        <!-- <input type="number" name="accessibleDisabled" class="form-control" v-model="user.accessibleDisabled"/> -->
+                                        <label><input v-model="user.accessibleDisabled"  type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="user.accessibleDisabled"  type="radio" value="0" /> No</label>
+
                                     </td>
                                     <td>
-                                        <input type="number" name="internetConnection" class="form-control" v-model="user.internetConnection"/>
+                                        <!-- <input type="number" name="internetConnection" class="form-control" v-model="user.internetConnection"/> -->
+                                        <label><input v-model="user.internetConnection"  type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="user.internetConnection"  type="radio" value="0" /> No</label>
                                     </td>
                                 </tr> 
                                 <tr>

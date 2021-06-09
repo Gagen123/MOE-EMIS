@@ -1102,10 +1102,38 @@ class AdministrationController extends Controller{
             return $e;
         }
     }
-
-    
-    
-
-    
+    public function saveDisasterCommittee(Request $request){
+       // dd('m here');
+        $rules = [
+            'disasterCommName'  =>  'required',
+            'status'            =>  'required',
+        ];
+        $customMessages = [
+            'disasterCommName.required'         => 'Disaster Committee Name is required',
+            'status.required'                   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $disComm =[
+            'disasterCommName'   =>  $request['disasterCommName'],
+            'description'        =>  $request['description'],
+            'status'             =>  $request['status'],
+            'actiontype'         =>  $request['action_type'],
+            'id'                 =>  $request['id'],
+            'user_id'            =>$this->userId()
+        ];
+       // dd($disComm);
+        try{
+            $response_data= $this->apiService->createData('emis/masters/disasterComm/saveDisasterCommittee', $disComm);
+            return $response_data;
+        }
+        catch(\GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+    public function loadDisasterComm(Request $request){
+      //  dd('loading');
+        $dis = $this->apiService->listData('emis/masters/disasterComm/loadDisasterComm');
+        return $dis;
+    }
 
 }

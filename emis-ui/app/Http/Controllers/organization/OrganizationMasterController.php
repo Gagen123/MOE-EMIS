@@ -44,4 +44,15 @@ class OrganizationMasterController extends Controller{
         $type = $this->apiService->listData('emis/organization/organizationMasterController/loadOrganizaitonmasters/'.$type.'/'.$model);
         return $type;
     }
+    public function loadFinacialtype(){
+        $type = $this->apiService->listData('emis/organization/organizationMasterController/loadFinacialtype/');
+        return $type;
+
+    }
+    public function loadincomeList(){
+        $type = $this->apiService->listData('emis/organization/organizationMasterController/loadincomeList/');
+        return $type;
+
+    }
+    
 }

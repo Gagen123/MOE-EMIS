@@ -52,7 +52,7 @@ class ServiceProviderController extends Controller
             $loc = [
                 'serviceType'          => $request['serviceType'],
                 'name'                 => $request['serviceName'],
-                'description'          => $request['description']
+                'description'          => $request['description'],
                 'status'               => $request['status'],
                 'created_by'           =>$request['user_id'],
                 'created_at'           =>date('Y-m-d h:i:s'),

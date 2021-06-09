@@ -11,61 +11,59 @@
                         <div class="card-body">
                             <div class="tab-pane">
                                 <form class="form-horizontal">
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Name:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.name" disabled>
-                                        </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Level:</label>
-                                            <input type="text" class="form-control" :value="levelArray[orgDetails.levelId]" disabled>
-                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Category:</label>
-                                            <input type="text" class="form-control" :value="category" disabled>
-                                        </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Year Of Establishment:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.yearOfEstablishment" disabled>
-                                         </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Category:</label>
-                                            <input type="text" class="form-control" :value="category" disabled>
-                                        </div>
-                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Year Of Establishment:</label>
-                                            <input type="text" class="form-control" :value="orgDetails.yearOfEstablishment" disabled>
-                                         </div>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                        <label class="mb-0"><i><u>Basic Details</u></i></label>
                                     </div>
                                     <hr>
                                     <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Is AspNet School:</label><br>
-                                            <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>MOF Code:</label>
+                                            <input type="text" class="form-control" v-model="form.mofCode" :class="{ 'is-invalid': form.errors.has('mofCode') }" >
+                                            <has-error :form="form" field="mofCode"></has-error>
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                            <label>Co-Located to Parent School:</label><br>
-                                            <label><input  type="radio" v-model="form.isColocated" value="1" tabindex=""/> Yes</label>
-                                            <label><input  type="radio" v-model="form.isColocated" value="0" tabindex=""/> No</label>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>RCSC/Zest Code:</label>
+                                            <input type="text" class="form-control" v-model="form.zestAgencyCode" :class="{ 'is-invalid': form.errors.has('zestAgencyCode') }" >
+                                        </div>  
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Organization code:</label>
+                                            <input type="text" readonly class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" >
                                         </div>
                                     </div>
-                                    isFeedingSchool:'',
-                                    isGeoPoliticallyLocated:'',
-                                    isResourceCenter:'',
-                                    isSenSchool:'',
-                                    hasCounselingRoom:'',
-                                    hasShiftSystem:'',
-                                    hasCE:'',
-                                    mofCode:'',
-                                    zestAgencyCode:''
+                                    <hr>
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                        <label class="mb-0"><i><u>Contact Details</u></i></label>
+                                    </div>
+                                    <hr>
+                                    <div class="row invoice-info">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 invoice-col">
+                                           <div class="form-group row">
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Official Contact No:</label>
+                                                    <input type="number" class="form-control" v-model="form.contactNo" :class="{ 'is-invalid': form.errors.has('contactNo') }" >
+                                                    <has-error :form="form" field="contactNo"></has-error>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Official Email:</label>
+                                                    <input type="text" class="form-control" v-model="form.officialEmail" :class="{ 'is-invalid': form.errors.has('officialEmail') }" >
+                                                    <has-error :form="form" field="officialEmail"></has-error>
+                                                </div>  
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Official Website:</label>
+                                                    <input type="text" class="form-control" v-model="form.officialWebsite" :class="{ 'is-invalid': form.errors.has('officialWebsite') }" >
+                                                    <has-error :form="form" field="officialWebsite"></has-error>
+                                                </div>
+                                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                                    <label>Facebook Link:</label>
+                                                    <input type="text" class="form-control" v-model="form.facebookLink" :class="{ 'is-invalid': form.errors.has('facebookLink') }" >
+                                                    <has-error :form="form" field="facebookLink"></has-error>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row form-group fa-pull-right">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <button class="btn btn-flat btn-primary" @click="updateorg('details-tab')"><i class="fa fa-check"></i> Update</button>
+                                            <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
                                         </div>
                                     </div>
                                 </form>
@@ -82,24 +80,25 @@
     export default {
         data(){
             return{
+                users: [],
+                contactTypeList:[],
                 orgDetails:'',
                 isprofile:false,
                 levelArray:{},
                 category:'',
+                fence_list:[],
+                disasterList:[],
+                climate_type_list:[],
                 form: new form({
                     org_id: '',
-                    isAspNetSchool:'',
-                    isColocated: '',
-                    isFeedingSchool:'',
-                    isGeoPoliticallyLocated:'',
-                    isResourceCenter:'',
-                    isSenSchool:'',
-                    hasCounselingRoom:'',
-                    hasShiftSystem:'',
-                    hasCE:'',
+                    code:'',
                     mofCode:'',
-                    zestAgencyCode:''
-                    
+                    zestAgencyCode:'',
+                    contactNo:'', 
+                    officialWebsite:'',
+                    officialEmail:'',
+                    facebookLink:'',
+                    fields_for:'organization'
                 }) 
             }
         },
@@ -135,37 +134,59 @@
                     this.form.hasCE=response_data.hasCE;
                     this.form.mofCode=response_data.mofCode;
                     this.form.zestAgencyCode=response_data.zestAgencyCode;
+                    if(response_data.locationDetials!=null && response_data.locationDetials!=""){
+                        this.form.altitude=response_data.locationDetials.altitude;
+                        this.form.climate_type=response_data.locationDetials.climate_type;
+                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
+                        this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
+                        this.form.entranceGate=response_data.locationDetials.entranceGate;
+                        this.form.fencingtypeId=response_data.locationDetials.fencingtypeId;
+                        this.form.map_path=response_data.locationDetials.googleMapPath;
+                        this.form.latitude=response_data.locationDetials.latitude;
+                        this.form.longitude=response_data.locationDetials.longitude;
+                        this.form.thramNo=response_data.locationDetials.thramNo;
+                    }
+                    if(response_data.contactDetails!=null && response_data.contactDetails!=""){
+                        this.form.contactNo=response_data.contactDetails.phone;
+                        this.form.facebookLink=response_data.contactDetails.facebookLink;
+                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
+                        this.form.officialEmail=response_data.contactDetails.email;
+                        this.form.officialWebsite=response_data.contactDetails.website;
+                    }
+                    let prop=data.contact;
+                    let contactDetails=[];
+                    for(let i=0;i<prop.length;i++){
+                     contactDetails.push({contactName:prop[i].contactTypeId,phone:prop[i].phone,mobile:prop[i].mobile,email:prop[i].email,});
+                    }
+                    this.count=data.length;
+                    this.form.users=contactDetails;
                     
                 })
                 .catch((error) => {  
                     console.log("Error: "+error);
                 });
             },
+            remove_error(err){
+                if($('#'+err).val()!=""){
+                    $('#'+err).html('');
+                }
+            },
             updateorg(){
-                const config = {
-                    headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                } 
-                let formData = new FormData();
-                formData.append('org_id', this.form.org_id);
-                formData.append('vission', this.form.vission);
-                formData.append('profile_path', this.form.profile_path);
-                formData.append('mission', this.form.mission);
-                formData.append('attachments', this.form.attachments);
-                axios.post('organization/udpateOrgProfile',formData, config)
+                this.form.post('organization/updateBasicDetails')
                 .then((response) => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Profile Details has been saved successfully'
-                    })
+                    this.loadexsitingDetails();
+                    alert(response);
                 })
-                .catch((error) => {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Unexpected error occured:'+error
-                    });
-                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
+            },
+            getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.contactTypeList = data;
+                });
             },
             getLevel(uri = '/organization/getLevelInDropdown'){
                 axios.get(uri)
@@ -176,20 +197,74 @@
                     }
                 });
             },
+            getLat: function(){
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(this.showPosition);
+                } 
+            },
+            showPosition(position){
+                $('#latitude').val(position.coords.latitude);
+                $('#longitude').val(position.coords.longitude);
+                $('#altitude').val(position.coords.altitude);
+            },
+            loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Disaster'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.disasterList =  data;
+                })
+            },
+            loadfencingList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/FencingType'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.fence_list =  data;
+                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
+            },
+            loadlcimateTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ClimateType'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.climate_type_list =  data;
+                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
+            },
+            addMore: function(){
+                this.count++;
+                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})    
+            }, 
+            remove(index){    
+                if(this.form.users.length>1){
+                  this.count--;
+                  this.form.users.splice(index,1); 
+                }
+            },
+            loadexsitingDetails(){
+                axios.get('common/getSessionDetail')
+                .then(response =>{
+                    let data = response.data.data;
+                    this.form.org_id=data['Agency_Code'];
+                    this.getorgProfile(data['Agency_Code']);
+                })    
+                .catch(errors =>{ 
+                    console.log(errors)
+                });
+            }
+            
         },
         mounted(){
+            this.getContactTypeDropdown();
+            this.getLat();
             this.getLevel();
-
-            axios.get('common/getSessionDetail')
-            .then(response =>{
-                let data = response.data.data;
-                this.form.org_id=data['Agency_Code'];
-                this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
-                console.log(errors)
-            });
-            
+            this.loadfencingList();
+            this.loadDisasterList();
+            this.loadlcimateTypeList();
+            this.loadexsitingDetails();
         }
     }
 </script>

@@ -20,11 +20,15 @@ class Disaster extends Model
         'id',
         'organizationId',
         'disasterTypeId',
+        'disastercomm',
         'name',
         'cid',
+        'sex_id',
         'email',
         'contactNo',
         'servingAs',
-        'placeOfWork'
+        'placeOfWork',
+        'created_at',
+        'created_by' 
     ];
 }

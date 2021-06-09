@@ -22,6 +22,11 @@ class GeneralInfoController extends Controller
         $this->apiService = $apiService;
     }
 
+    /**
+     * To save the equipments
+     * this function was created by Ugyen. No longer used for the new equipments
+     */
+
     public function saveEquipment(Request $request){
         $rules = [
             'type'          =>  'required',
@@ -58,7 +63,7 @@ class GeneralInfoController extends Controller
     public function loadEquipment($orgId=""){
         if($orgId=="null" || $orgId==""){
             $orgId=$this->getWrkingAgencyId();
-            
+
         }
         $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$orgId);
         return $dis;
@@ -76,6 +81,25 @@ class GeneralInfoController extends Controller
     public function getLocationUse(){
         $locationUse = $this->apiService->listData('emis/organization/equipment/getLocationUse');
         return $locationUse;
+    }
+
+    /**
+     * For Furniture
+     */
+
+    public function getFurnitureType(){
+       // dd('m here');
+        $type = $this->apiService->listData('emis/organization/furniture/getFurnitureType');
+        return $type;
+    }
+    public function getFurnitureItem($itemId = ""){
+        $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
+        return $itemList;
+    }
+
+    public function getFurnitureUse(){
+        $furnitureUse = $this->apiService->listData('emis/organization/furniture/getFurnitureUse');
+        return $furnitureUse;
     }
 
     public function saveSection(Request $request){
@@ -158,6 +182,11 @@ class GeneralInfoController extends Controller
         $roadType = $this->apiService->listData('emis/organization/connectivity/getRoadTypeDropdown');
         return $roadType;
     }
+    public function getVisitorTypeDropdown(){
+       // dd('m here at UI');
+        $visitortype = $this->apiService->listData('emis/organization/connectivity/getVisitorTypeDropdown');
+        return $visitortype;
+    }
 
     public function getElectricitySourceDropdown(){
         $electriSource = $this->apiService->listData('emis/organization/connectivity/getElectricitySourceDropdown');
@@ -173,7 +202,7 @@ class GeneralInfoController extends Controller
         $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown');
         return $serviceProvider;
     }
-    
+
     public function getServiceProviderDropdown1(){
         $serviceProvider = $this->apiService->listData('emis/organization/connectivity/getServiceProviderDropdown1');
         return $serviceProvider;
@@ -231,7 +260,7 @@ class GeneralInfoController extends Controller
                     );
                 }
             }
-        }   
+        }
         $loc =[
             'organizationId'        =>  $orgId,
             'landOwnership'         =>  $request['landOwnership'],
@@ -266,29 +295,27 @@ class GeneralInfoController extends Controller
     }
 
     public function saveClassMapping(Request $request){
-        // $rules = [
-        //     'school'         =>  'required',
-        //     'class'          =>  'required',
-        // ];
-        // $customMessages = [
-        //     'school.required'        => 'School is required',
-        //     'class.required'         => 'Class is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
-        $loc =[
+        $rules = [
+            'school'         =>  'required',
+            'class.*'          =>  'required',
+        ];
+        $customMessages = [
+            'school.required'        => 'School is required',
+            'class.required'         => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $class_section =[
             'school'        =>  $request['school'],
             'class'         =>  $request['class'],
             'stream'        =>  $request['stream'],
+            'sections'      =>  $request['sections'],
+            'multiAgeId'      =>  $request['multiAgeId'],
             'user_id'       =>  $this->userId(),
             'id'            =>  $request['id'],
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $loc);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // dd($class_section);
+        $response_data= $this->apiService->createData('emis/organization/classMapping/saveClassMapping', $class_section);
+        return $response_data;
     }
     public function getCurrentClassStream($school_id = ""){
         $itemList = $this->apiService->listData('emis/organization/classMapping/getCurrentClassStream/'.$school_id);
@@ -316,7 +343,7 @@ class GeneralInfoController extends Controller
         $orgList = $this->apiService->listData('emis/organization/getOrgList/'.$dzo_id);
         return $orgList;
     }
-    public function getClassByOrg($id=""){  
+    public function getClassByOrg($id=""){
         if($id=="sessionDet"){
             $id=$this->getWrkingAgencyId();
         }
@@ -324,8 +351,18 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
 
-    
+
     public function udpateOrgProfile(Request $request){
+
+        $this->validate($request, [
+            'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
+        ],
+            $messages = [
+                'required' => 'The :attribute field is required.',
+                'mimes' => 'Only jpeg, png, bmp,tiff are allowed.'
+            ]
+        );
+
         $file = $request->attachments;
         $path="";
         $file_store_path='orgProfile';
@@ -342,17 +379,371 @@ class GeneralInfoController extends Controller
             'org_id'            =>  $request['org_id'],
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
-            'attachments'       =>  $path, 
+            'attachments'       =>  $path,
             'user_id'           =>  $this->userId()
         ];
         // dd($org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
         return $response_data;
     }
-    
+
     public function getOrgProfile($id = ""){
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;
+    }
+
+    //new function to update the basic details
+    //the old function does not cater to the new fields
+
+    public function updateBasicDetails(Request $request){
+        $rules = [
+            'mofCode'           =>  'required',
+            'contactNo'         =>  'required|min:8|max:8',
+            'officialWebsite'   =>  'required',
+            'officialEmail'     =>  'required|email',
+        ];
+
+        $customMessages = [
+            'mofCode.required'           =>  'The MOF Code is Required',
+            'contactNo.required'         =>  'Contact No is required|min:8|max:8',
+            'officialWebsite.required'   =>  'Website is required|email',
+            'officialEmail.required'     =>  'Email is required',
+
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $org_details =[
+            'mofCode'           =>  $request['mofCode'],
+            'zestAgencyCode'    =>  $request['zestAgencyCode'],
+            'facebookLink'      =>  $request['facebookLink'],
+            'contactNo'         =>  $request['contactNo'],
+            'officialWebsite'   =>  $request['officialWebsite'],
+            'officialEmail'     =>  $request['officialEmail'],
+            'user_id'           =>  $this->userId(),
+            'org_id'            =>  $this->getWrkingAgencyId()
+        ];
+
+        $response_data= $this->apiService->createData('emis/organization/updateBasicDetails', $org_details);
+        return $response_data;
+    }
+
+    //New function to update the basic organization details
+
+    public function updateOrgBasicDetials(Request $request){
+        switch($request['fields_for']){
+            case "eccd" : {
+                    $validation = $this->validateEccdFields($request);
+                    $org_details = $this->setEccdFields($request);
+                    break;
+                }
+            case "school" : {
+                    $validation = $this->validateSchoolFields($request);
+                    $org_details = $this->setSchoolFields($request);
+                    break;
+                }
+            case "organization" : {
+                    $validation = $this->validateOrganizationFields($request);
+                    $org_details = $this->setOrganizationFields($request);
+                    break;
+                }
+            default : {
+
+                break;
+            }
+        }
+
+        $rules = $validation['rules'];
+        $customMessages = $validation['messages'];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
+        return $response_data;
+
+
+    }
+
+    private function validateOrganizationFields($request){
+
+        $rules = [
+            'mofCode'           =>  'required',
+            'contactNo'         =>  'required|min:8|max:8',
+            'officialWebsite'   =>  'required',
+            'officialEmail'     =>  'required|email',
+        ];
+        $customMessages = [
+            'mofCode.required'           =>  'The MOF Code is Required',
+            'contactNo.required'         =>  'Contact No is required|min:8|max:8',
+            'officialWebsite.required'   =>  'Website is required|email',
+            'officialEmail.required'     =>  'Email is required',
+
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validatePrivateEccdFields($request){
+
+        $rules = [
+            'isGeoPoliticallyLocated'   =>  'required',
+            'category'                  =>  'required',
+            'longitude'                 =>  'required',
+            'latitude'                  =>  'required',
+            'altitude'                  =>  'required',
+            'map_path'                  =>  'required',
+            'climate_type'              =>  'required',
+            'distance_from_dzo'         =>  'required',
+            'fencingtype'               =>  'required',
+            'entranceGate'              =>  'required',
+            'proprietorName'            =>  'required',
+            'proprietorCid'             =>  'required',
+            'proprietorPhone'           =>  'required',
+            'proprietorEmail'           =>  'required',
+        ];
+
+        $customMessages = [
+            'isGeoPoliticallyLocated.required'   =>  'This field is required',
+            'category.required'                  =>  'This field is required',
+            'longitude.required'                 =>  'This field is required',
+            'latitude.required'                  =>  'This field is required',
+            'altitude.required'                  =>  'This field is required',
+            'map_path.required'                  =>  'This field is required',
+            'climate_type.required'              =>  'This field is required',
+            'distance_from_dzo.required'         =>  'This field is required',
+            'fencingtype.required'               =>  'This field is required',
+            'entranceGate.required'              =>  'This field is required',
+            'proprietorName.required'            =>  'This field is required',
+            'proprietorCid.required'             =>  'This field is required',
+            'proprietorPhone.required'           =>  'This field is required',
+            'proprietorEmail.required'           =>  'This field is required',
+
+        ];
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validateEccdFields($request){
+
+        $rules = [
+            'isGeoPoliticallyLocated'   =>  'required',
+            'category'                  =>  'required',
+            'longitude'                 =>  'required',
+            'latitude'                  =>  'required',
+            'altitude'                  =>  'required',
+            'map_path'                  =>  'required',
+            'climate_type'              =>  'required',
+            'distance_from_dzo'         =>  'required',
+            'fencingtype'               =>  'required',
+            'entranceGate'              =>  'required',
+        ];
+
+        $customMessages = [
+            'isGeoPoliticallyLocated.required'   =>  'This field is required',
+            'category.required'                  =>  'This field is required',
+            'longitude.required'                 =>  'This field is required',
+            'latitude.required'                  =>  'This field is required',
+            'altitude.required'                  =>  'This field is required',
+            'map_path.required'                  =>  'This field is required',
+            'climate_type.required'              =>  'This field is required',
+            'distance_from_dzo.required'         =>  'This field is required',
+            'fencingtype.required'               =>  'This field is required',
+            'entranceGate.required'              =>  'This field is required',
+
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    private function validateSchoolFields($request){
+
+        $rules = [
+            'isGeoPoliticallyLocated'   =>  'required',
+            'isAspNetSchool'            =>  'required',
+            'isColocated'               =>  'required',
+            'isResourceCenter'          =>  'required',
+            'isSenSchool'               =>  'required',
+            'hasCounselingRoom'         =>  'required',
+            'hasShiftSystem'            =>  'required',
+            'category'                  =>  'required',
+            'longitude'                 =>  'required',
+            'latitude'                  =>  'required',
+            'altitude'                  =>  'required',
+            'map_path'                  =>  'required',
+            //'climate_type'              =>  'required',
+            'distance_from_dzo'         =>  'required',
+            //'fencingtype'               =>  'required',
+            'entranceGate'              =>  'required',
+        ];
+
+        $customMessages = [
+            'isGeoPoliticallyLocated.required'   =>  'This field is required',
+            'category.required'                  =>  'This field is required',
+            'isAspNetSchool.required'            =>  'This field is required',
+            'isColocated.required'               =>  'This field is required',
+            'isFeedingSchool.required'           =>  'This field is required',
+            'isResourceCenter.required'          =>  'This field is required',
+            'isSenSchool.required'               =>  'This field is required',
+            'hasCounselingRoom.required'         =>  'This field is required',
+            'hasShiftSystem.required'            =>  'This field is required',
+            'longitude.required'                 =>  'This field is required',
+            'latitude.required'                  =>  'This field is required',
+            'altitude.required'                  =>  'This field is required',
+            'map_path.required'                  =>  'This field is required',
+            //'climate_type.required'              =>  'This field is required',
+            'distance_from_dzo.required'         =>  'This field is required',
+            //'fencingtype.required'               =>  'This field is required',
+            'entranceGate.required'              =>  'This field is required',
+
+        ];
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
+    /**
+     * The validation fields
+     */
+
+    private function setEccdFields($request){
+
+        $estd =[
+            'isGeoPoliticallyLocated'   =>  $request['initiatedby'],
+            'category'                  =>  $request['initiatedby'],
+            'longitude'                 =>  $request['initiatedby'],
+            'latitude'                  =>  $request['initiatedby'],
+            'altitude'                  =>  $request['initiatedby'],
+            'map_path'                  =>  $request['initiatedby'],
+            'climate_type'              =>  $request['initiatedby'],
+            'distance_from_dzo'         =>  $request['initiatedby'],
+            'fencingtype'               =>  $request['initiatedby'],
+            'entranceGate'              =>  $request['initiatedby'],
+            'user_id'                    =>  $this->userId(),
+            'org_id'                    =>  $this->getWrkingAgencyId()
+        ];
+
+        return $estd;
+    }
+
+    private function setSchoolFields($request){
+        $estd =[
+            'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
+            'isAspNetSchool'            =>  $request['isAspNetSchool'],
+            'isColocated'               =>  $request['isColocated'],
+            'isFeedingSchool'           =>  $request['isFeedingSchool'],
+            'isResourceCenter'          =>  $request['isResourceCenter'],
+            'isSenSchool'               =>  $request['isSenSchool'],
+            'hasCounselingRoom'         =>  $request['hasCounselingRoom'],
+            'hasShiftSystem'            =>  $request['hasShiftSystem'],
+            'category'                  =>  $request['category'],
+            'longitude'                 =>  $request['longitude'],
+            'latitude'                  =>  $request['latitude'],
+            'altitude'                  =>  $request['altitude'],
+            'map_path'                  =>  $request['map_path'],
+            'climate_type'              =>  $request['climate_type'],
+            'distance_from_dzo'         =>  $request['distance_from_dzo'],
+            'fencingtype'               =>  $request['fencingtype'],
+            'entranceGate'              =>  $request['entranceGate'],
+            'user_id'                    =>  $this->userId(),
+            'org_id'                    =>  $this->getWrkingAgencyId()
+        ];
+
+        return $estd;
+
+    }
+
+    private function setOrganizationFields($request){
+        $estd =[
+            'mofCode'           =>  $request['mofCode'],
+            'contactNo'         =>  $request['contactNo'],
+            'officialWebsite'   =>  $request['officialWebsite'],
+            'officialEmail'     =>  $request['officialEmail'],
+            'user_id'           =>  $this->userId(),
+            'org_id'            =>  $this->getWrkingAgencyId()
+        ];
+
+        return $estd;
+    }
+
+
+    //Old function written by Tshewang
+
+    // public function updateOrgBasicDetials(Request $request){
+
+    //     $org_details =[
+    //         'org_id'                    =>  $request['org_id'],
+    //         'isAspNetSchool'            =>  $request['isAspNetSchool'],
+    //         'isColocated'               =>  $request['isColocated'],
+    //         'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
+    //         'hasCounselingRoom'         =>  $request['hasCounselingRoom'],
+    //         'hasShiftSystem'            =>  $request['hasShiftSystem'],
+    //         'hasCE'                     =>  $request['hasCE'],
+    //         'mofCode'                   =>  $request['mofCode'],
+    //         'zestAgencyCode'            =>  $request['zestAgencyCode'],
+    //         'longitude'                 =>  $request['longitude'],
+    //         'latitude'                  =>  $request['latitude'],
+    //         'altitude'                  =>  $request['altitude'],
+    //         'map_path'                  =>  $request['map_path'],
+    //         'climate_type'              =>  $request['climate_type'],
+    //         'distance_from_dzo'         =>  $request['distance_from_dzo'],
+    //         'thramNo'                   =>  $request['thramNo'],
+    //         'fencingtype'               =>  $request['fencingtype'],
+    //         'disasterArea'              =>  $request['disasterArea'],
+    //         'entranceGate'              =>  $request['entranceGate'],
+    //         'users'                     =>  $request['users'],
+    //         'user_id'                   =>  $this->userId()
+    //     ];
+    //     // dd($org_details);
+    //     $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
+    //     return $response_data;
+    // }
+
+    public function updateSenDetials(Request $request){
+        $org_details =[
+            'org_id'                        =>  $request['org_id'],
+            'accessibleToilet'              =>  $request['accessibleToilet'],
+            'accessibleWash'                =>  $request['accessibleWash'],
+            'outdoorPlayground'             =>  $request['outdoorPlayground'],
+            'outdoorRoutes'                 =>  $request['outdoorRoutes'],
+            'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
+            'diningHall'                    =>  $request['hasCdiningHallE'],
+            'hostelWash'                    =>  $request['hostelWash'],
+            'boysHostelAccessible'          =>  $request['boysHostelAccessible'],
+            'enrollment'                    =>  $request['enrollment'],
+            'communityWithDisablities'      =>  $request['communityWithDisablities'],
+            'community'                     =>  $request['community'],
+            'senProgram'                    =>  $request['senProgram'],
+            'studentDisabilities'           =>  $request['studentDisabilities'],
+            'proprietorName'                =>  $request['proprietorName'],
+            'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
+            'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
+            'support_disabilitycommunity'   =>  $request['support_disabilitycommunity'],
+            'matrons'                       =>  $request['matrons'],
+            'wardens'                       =>  $request['wardens'],
+            'caregivers'                    =>  $request['caregivers'],
+            'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
+            'user_id'                       =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/organization/updateSenDetials', $org_details);
+        return $response_data;
+    }
+
+    public function loadSeenDetailsByOrgId($orgId=""){
+        // dd($orgId);
+        $response_data= $this->apiService->listData('emis/organization/getcurrentSenDetails/'.$orgId);
+        return $response_data;
     }
 
 }

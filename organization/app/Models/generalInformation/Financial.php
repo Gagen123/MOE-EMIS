@@ -18,10 +18,10 @@ class Financial extends Model
      */
     protected $fillable = [
         'id',
-        'organizationId',
-        'financialInformationId',
+        'type',
         'amount',
-        'date',
-        'status'
+        'year',
+        'year',
+        'remarks'
     ];
 }

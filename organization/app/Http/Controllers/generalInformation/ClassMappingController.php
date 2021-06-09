@@ -9,6 +9,9 @@ use App\Traits\ApiResponser;
 use App\Models\generalInformation\ClassMapping;
 use Illuminate\Support\Facades\DB;
 use App\Models\OrganizationClassStream;
+use App\Models\Masters\ClassStream;
+use App\Models\generalInformation\SectionDetails;
+
 
 class ClassMappingController extends Controller
 {
@@ -34,36 +37,75 @@ class ClassMappingController extends Controller
             
         //     $cla = ClassMapping::create($class);
         // }
+        $existclassStream=OrganizationClassStream::where('organizationId',$request->school)->get();
+        if(sizeof($existclassStream)>0){
+            foreach($existclassStream as $cls){
+                SectionDetails::where('classSectionId',$cls['id'])->delete();
+            }
+        }
         OrganizationClassStream::where('organizationId',$request->school)->delete();
         $response_data="";
         if($request->class){
             foreach($request->class as $key => $classId){
                 $stream_exists = $this->checkStreamExists($classId);
                 if(empty($stream_exists)){
+                    $multigrade="";
+                    $ismultigrade='';
+                    if($request->multiAgeId!=""){
+                        foreach($request->multiAgeId as $sec => $multiage){
+                            if(explode('__',$multiage)[0]==$classId){
+                                $multigrade=explode('__',$multiage)[1];
+                                $ismultigrade=1;
+                            }
+                        }
+                    }
                     $classStream = [
                         'organizationId'        => $request->school,
                         'classId'               => $classId,
                         'streamId'              => '',
+                        'isMultiGrade'          => $ismultigrade,
+                        'multiGradeId'          => $multigrade,
                         'created_by'            => $request->user_id,
                         'created_at'            => date('Y-m-d h:i:s'),
                     ];
                     $class = OrganizationClassStream::create($classStream);
+                    if($request->sections!=null && $request->sections!=""){
+                        foreach($request->sections as $sec => $secion){
+                            if(explode('#',$secion)[0]==$classId){
+                                $section_details = array(
+                                    'classSectionId'    =>  $class->id,
+                                    'section'           =>  explode('#',$secion)[1],
+                                );
+                                $sec = SectionDetails::create($section_details);
+                            }
+                        }
+                    }
                 } 
             }
         }
 
         if($request->stream!=null && $request->stream!=""){
             foreach($request->stream as $key2 => $classStreamId){
-                $class_stream_data = $this->getClassStreamId($classStreamId);
-                foreach($class_stream_data as $v){
-                    $classStream = [
-                        'organizationId'        => $request->school,
-                        'classId'               => $v->classId,
-                        'streamId'              => $v->streamId,
-                        'created_by'            => $request->user_id,
-                        'created_at'            => date('Y-m-d h:i:s'),
-                    ];
-                    $response_data = OrganizationClassStream::create($classStream);
+                // $class_stream_data = $this->getClassStreamId($classStreamId);
+                $class_stream_data = ClassStream::where('id',$classStreamId)->first();
+                $classStream = [
+                    'organizationId'        => $request->school,
+                    'classId'               => $class_stream_data->classId,
+                    'streamId'              => $class_stream_data->streamId,
+                    'created_by'            => $request->user_id,
+                    'created_at'            => date('Y-m-d h:i:s'),
+                ];
+                $response_data = OrganizationClassStream::create($classStream);
+                if($request->sections!=null && $request->sections!=""){
+                    foreach($request->sections as $sec => $secion){
+                        if(explode('#',$secion)[0]==$classStreamId){
+                            $section_details = array(
+                                'classSectionId'    =>  $response_data->id,
+                                'section'           =>  explode('#',$secion)[1],
+                            );
+                            $sec = SectionDetails::create($section_details);
+                        }
+                    }
                 }
             }
         }
@@ -101,7 +143,6 @@ class ClassMappingController extends Controller
         return $data;
     }
 
-    
     public function getCurrentClassStream($school_id=""){
         $response_data = OrganizationClassStream::where('organizationId',$school_id)->get();
         if($response_data!=null && $response_data!=""){
@@ -113,8 +154,10 @@ class ClassMappingController extends Controller
                 else{
                     $class_stream->classStreamId= "";
                 }
+                $class_stream->sectionCount=SectionDetails::where('classSectionId',$class_stream['id'])->count();
             }
         }
         return $response_data;
     }
+
 }
