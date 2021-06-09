@@ -7,7 +7,7 @@
                     <th >Name</th>
                     <th >Status</th>
                     <th >Created At</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -24,13 +24,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            scholarList:[], 
+            scholarList:[],
         }
     },
     methods:{
@@ -41,17 +41,16 @@ export default {
                 this.scholarList =  data.data.data;
             })
             .catch(function (error) {
-                alert(error); 
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="5" class="text-center text-danger text-bold">Seems this server is down. Please try later</td></tr>');
                 }
-            }); 
+            });
             setTimeout(function(){
                 $("#responsibilities-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'scholar_edit',params: {data:data}});

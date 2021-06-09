@@ -459,14 +459,19 @@ export default {
                     $('#tentative_date').prop('readonly',true);
                     $('#verifier_team').show();
                     if(data.app_verification_team.length==0){
-                        this.form.update_type='team_verification';
-                        this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
-                        $('#update_btn_level').html('Notify For team Verification');
+                        // this.form.update_type='team_verification';
+                        // this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
+                        // // $('#update_btn_level').html('Notify For team Verification');
+                        // this.showsearch=true;
+                        // $('#updateBtn').hide();
+                        // $('#verifyId').show();
+                        // $('#approveId').show();
+                        // $('#update_btn_level').hide();
                         this.showsearch=true;
-                        $('#updateBtn').show();
-                        $('#verifier_team').show();
-                        $('#verifyId').hide();
-                        $('#approveId').hide();
+                        this.form.update_type='final_verification';
+                        this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
+                        $('#removeBtn').hide();
+                        $('#team_verificationAttachment').show();
                     }
                     else{
                         if((data.establishment_type=="Private School" || data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){

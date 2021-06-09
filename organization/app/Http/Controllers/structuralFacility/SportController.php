@@ -148,11 +148,13 @@ class SportController extends Controller
 
     /**
      * method to get sport subtype in dropdown by category
+     * the sportFacilityId commented for Demo (June)
+     * Check and fix
      */
     public function getSubFacilityDropdown($id){
         $equi = DB::table('sport_facility_subtypes as a')
             ->select('a.id as id', 'a.name as typeName')
-            ->where('sportFacilityId','=',$id)
+            //->where('sportFacilityId','=',$id)
             ->get();
         return $equi;
     }

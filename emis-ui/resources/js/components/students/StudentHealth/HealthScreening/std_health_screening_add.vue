@@ -110,6 +110,7 @@
 export default {
    data(){
         return{
+            dt:'',
             screeningList:[],
             screeningTitle:[],
             screeningEndorser:[],
@@ -346,8 +347,17 @@ export default {
         this.loadActiveScreeningEndorserList();
         
         this.loadClassList();
-        this.loadSectionList();
-        this.loadStreamList();
+        // this.loadSectionList();
+        // this.loadStreamList();
+        this.dt =  $("#student-list-table").DataTable()
+    },
+    watch: {
+        studentList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#student-list-table").DataTable()
+            });
+        }
     },
     
 }

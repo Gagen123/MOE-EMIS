@@ -47,7 +47,7 @@ class ChangeBasicDetailsController extends Controller
      * method to save change basic details
     */
     public function saveChangeBasicDetails(Request $request){
-
+        // dd($request);
 
         if($request->action_type!="edit"){
             $application_details_data =[
@@ -58,6 +58,8 @@ class ChangeBasicDetailsController extends Controller
                 'status'               =>  $request['status'],
                 'created_by'           =>  $request['user_id']
             ];
+            // dd($application_details_data);
+            // dd($request);
             $inserted_application_data = ApplicationDetails::create($application_details_data);
             $applicationDetailsId = $inserted_application_data->id;
             switch($request['application_type']){
@@ -484,17 +486,18 @@ class ChangeBasicDetailsController extends Controller
     }
     
     private function extractChangeInStreamData($request, $applicationDetailsId){
+        $changeDetails =[];
         if($request['stream']!=""){
             $data =[
                 'ApplicationDetailsId'          =>  $applicationDetailsId,
                 'organizationId'                =>  $request['organizationId'],
-                'change_type'                   =>  $request->changetype
+                'change_type'                   =>  $request->changetype,
                 'proposedChange'                =>  implode($request['stream'],', '),
                 'created_by'                    =>  $request['user_id']  
             ];
+            $changeDetails = ApplicationEstDetailsChange::create($data);
         }
 
-        $changeDetails = ApplicationEstDetailsChange::create($data);
         // $EstDetailsChangeId = $changeDetails->id;
 
         // if($request->class){

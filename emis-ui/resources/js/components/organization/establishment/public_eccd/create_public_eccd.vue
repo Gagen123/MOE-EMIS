@@ -88,7 +88,7 @@
                                 <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="parentDetails" style="display:none">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="parentDetails">
                                 <div class="form-group row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label class="mb-0">Parent School:</label>
@@ -219,7 +219,7 @@ export default {
             }),
             form: new form({
                 id: '',initiatedBy:'', proposedName:'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
-                coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'
+                coLocatedParent:'1',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'
             }),
             file_form: new form({
                 id:'',
@@ -523,6 +523,7 @@ export default {
             axios.get('organization/loaddraftApplication/'+type)
               .then(response => {
                 let data = response.data.data;
+                proposedName
                 // this.form.proposedName=data.
                 // id: '',initiatedBy:'', :'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
                 // coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'

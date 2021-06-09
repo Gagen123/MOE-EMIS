@@ -203,7 +203,6 @@
                                     <tr>
                                         <th>Classes</th>
                                         <th class="strm_clas">Stream</th>  
-                                        <th></th>   
                                         <th>Applicable Class Stream</th> 
                                                                
                                     </tr>
@@ -692,7 +691,7 @@ export default {
             else if(level.toLowerCase().includes('lower')){
                 level="8";
             }
-            else if(level.toLowerCase().includes('primary')){
+            else if(level.toLowerCase().includes('primary') || level.toLowerCase().includes('ecr')){
                 level="6";
                 $('.multiageclass').prop('disabled',false);
             }
@@ -776,6 +775,14 @@ export default {
         this.getLocation();
     },
     mounted() {
+        this.count++;
+        this.file_form.fileUpload.push({file_name:'Forwarding letter', file_upload:''});
+         this.count++;
+        this.file_form.fileUpload.push({file_name:'Minutes/resolution of GT', file_upload:''});
+         this.count++;
+        this.file_form.fileUpload.push({file_name:'Student enrolment Projection Report', file_upload:''});
+        this.count++;
+        this.file_form.fileUpload.push({file_name:'Form for Establishment of School', file_upload:''});
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -790,11 +797,11 @@ export default {
         });
         this.getClass();
         this.getStream();
-        this.getmultiGrade();
-        this.getAttachmentType();
+        // this.getAttachmentType();
         this.getLocation();
         this.getOrgList();
         this.loadpendingdetails('Public_School');
+        
     }, 
 }
 </script>

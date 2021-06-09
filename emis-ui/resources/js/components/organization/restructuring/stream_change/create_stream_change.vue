@@ -114,7 +114,7 @@
                                                         <tr v-for="(item, key, index) in  streamList" :key="index">
                                                             <td> {{item.stream}}</td>
                                                             <td>  
-                                                                <input type="checkbox" v-model="item.stream" :value="item.id">                              
+                                                                <input type="checkbox" v-model="item.streams" :value="item.id">                              
                                                             </td>
                                                         </tr> 
                                                     </tbody>
@@ -208,7 +208,7 @@ export default {
                     file_name:'Proposal Letter',attachment:''
                 }],
                 ref_docs:[],
-                organizationId:'', stream:[], application_type:'stream_change', class:[],changetype:'',
+                organizationId:'', streams:[], application_type:'stream_change', class:[],changetype:'',
                 application_for:'Change of Stream', action_type:'add', status:'Submitted',organization_type:''
             })
         } 
@@ -237,7 +237,7 @@ export default {
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
-                this.file_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
                 $('#fileName'+currentcount).prop('readonly',true);
             }
             else{
@@ -326,19 +326,29 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        const config = {
+                        const config = { 
                             headers: {
                                 'content-type': 'multipart/form-data'
                             }
                         }
                         let formData = new FormData();
-                        formData.append('id', this.file_form.id);
-                        formData.append('ref_docs[]', this.file_form.ref_docs);
-                        for(let i=0;i<this.file_form.ref_docs.length;i++){
-                            formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                            formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                        formData.append('id', this.form.id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
                         }
-                        formData.append('application_number', this.file_form.application_number);
+                        formData.append('application_number', this.form.application_number);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('streams', this.form.streams);
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('class', this.form.class);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('organization_type', this.form.organization_type);
+                        formData.append('status', this.form.status);
+                        formData.append('changetype', this.form.changetype);
+                        formData.append('action_type', 'add');
                         axios.post('organization/saveChangeBasicDetails', formData, config)
                         .then((response) => {
                             if(response.data!=""){

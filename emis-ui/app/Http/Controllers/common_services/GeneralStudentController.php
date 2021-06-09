@@ -32,7 +32,16 @@ class GeneralStudentController extends Controller{
 
     public function loadBasicStudentList($param=""){
         $param = $this->getWrkingAgencyId();
-        $student_list = $this->apiService->listData('emis/students/loadStudentList/'.$param);
+        $student_list = $this->apiService->listData('emis/students/loadBasicStudentList/'.$param);
+        return $student_list;
+    }
+
+    /**
+     * Get the student list by class
+     */
+
+    public function loadStudentByClass($class=""){
+        $student_list = $this->apiService->listData('emis/students/loadStudentByClass/'.$class);
         return $student_list;
     }
 

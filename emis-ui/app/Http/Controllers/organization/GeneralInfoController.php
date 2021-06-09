@@ -354,6 +354,16 @@ class GeneralInfoController extends Controller
 
 
     public function udpateOrgProfile(Request $request){
+
+        $this->validate($request, [
+            'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
+        ],
+            $messages = [
+                'required' => 'The :attribute field is required.',
+                'mimes' => 'Only jpeg, png, bmp,tiff are allowed.'
+            ]
+        );
+
         $file = $request->attachments;
         $path="";
         $file_store_path='orgProfile';
@@ -393,13 +403,13 @@ class GeneralInfoController extends Controller
             'officialWebsite'   =>  'required',
             'officialEmail'     =>  'required|email',
         ];
-        
+
         $customMessages = [
             'mofCode.required'           =>  'The MOF Code is Required',
             'contactNo.required'         =>  'Contact No is required|min:8|max:8',
             'officialWebsite.required'   =>  'Website is required|email',
             'officialEmail.required'     =>  'Email is required',
-            
+
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -439,7 +449,7 @@ class GeneralInfoController extends Controller
                     break;
                 }
             default : {
-                
+
                 break;
             }
         }
@@ -468,7 +478,7 @@ class GeneralInfoController extends Controller
             'contactNo.required'         =>  'Contact No is required|min:8|max:8',
             'officialWebsite.required'   =>  'Website is required|email',
             'officialEmail.required'     =>  'Email is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -511,7 +521,7 @@ class GeneralInfoController extends Controller
             'proprietorCid.required'             =>  'This field is required',
             'proprietorPhone.required'           =>  'This field is required',
             'proprietorEmail.required'           =>  'This field is required',
-            
+
         ];
 
         $validation = array();
@@ -547,7 +557,7 @@ class GeneralInfoController extends Controller
             'distance_from_dzo.required'         =>  'This field is required',
             'fencingtype.required'               =>  'This field is required',
             'entranceGate.required'              =>  'This field is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -595,7 +605,7 @@ class GeneralInfoController extends Controller
             'distance_from_dzo.required'         =>  'This field is required',
             //'fencingtype.required'               =>  'This field is required',
             'entranceGate.required'              =>  'This field is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -668,7 +678,7 @@ class GeneralInfoController extends Controller
         return $estd;
     }
 
-    
+
     //Old function written by Tshewang
 
     // public function updateOrgBasicDetials(Request $request){
@@ -700,5 +710,41 @@ class GeneralInfoController extends Controller
     //     $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
     //     return $response_data;
     // }
+
+    public function updateSenDetials(Request $request){
+        $org_details =[
+            'org_id'                        =>  $request['org_id'],
+            'accessibleToilet'              =>  $request['accessibleToilet'],
+            'accessibleWash'                =>  $request['accessibleWash'],
+            'outdoorPlayground'             =>  $request['outdoorPlayground'],
+            'outdoorRoutes'                 =>  $request['outdoorRoutes'],
+            'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
+            'diningHall'                    =>  $request['hasCdiningHallE'],
+            'hostelWash'                    =>  $request['hostelWash'],
+            'boysHostelAccessible'          =>  $request['boysHostelAccessible'],
+            'enrollment'                    =>  $request['enrollment'],
+            'communityWithDisablities'      =>  $request['communityWithDisablities'],
+            'community'                     =>  $request['community'],
+            'senProgram'                    =>  $request['senProgram'],
+            'studentDisabilities'           =>  $request['studentDisabilities'],
+            'proprietorName'                =>  $request['proprietorName'],
+            'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
+            'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
+            'support_disabilitycommunity'   =>  $request['support_disabilitycommunity'],
+            'matrons'                       =>  $request['matrons'],
+            'wardens'                       =>  $request['wardens'],
+            'caregivers'                    =>  $request['caregivers'],
+            'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
+            'user_id'                       =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/organization/updateSenDetials', $org_details);
+        return $response_data;
+    }
+
+    public function loadSeenDetailsByOrgId($orgId=""){
+        // dd($orgId);
+        $response_data= $this->apiService->listData('emis/organization/getcurrentSenDetails/'.$orgId);
+        return $response_data;
+    }
 
 }

@@ -10,8 +10,6 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('EccdList')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('EccdAdd')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>
@@ -29,7 +27,6 @@ export default {
 
         }
     },
-
     methods:{
         loadpage:function(type){
             if(type=="EccdAdd" || type=="EccdList"){

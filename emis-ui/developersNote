@@ -32,4 +32,8 @@ Setting up the system administration, and user management:
     leadership nomination form setup
 
 
+    *************Students******************
+    For the table std_student_class_stream, an additional field, "academic year" was added to take care of history
+
+
 

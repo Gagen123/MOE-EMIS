@@ -18,6 +18,7 @@ use App\Models\Students\CeaSchoolProgramme;
 use App\Models\Students\CeaProgrammeMembership;
 use App\Models\Students\CeaRoleStaff;
 use App\Models\Students\CeaRoleStudent;
+use App\Models\Masters\CeaProgramType;
 
 
 class StudentProgramController extends Controller
@@ -49,26 +50,26 @@ class StudentProgramController extends Controller
             'CeaProgrammeSupporterId'   => $request->supporter,
             'EstablishmentYear'         => $request->year,
             'Remarks'                   => $request->remarks,
-            'assigned_staff'            => $request->assigned_staff
+            // 'assigned_staff'            => $request->assigned_staff
         ];
 
-        $assigned_staff_details = $data['assigned_staff'];
+        // $assigned_staff_details = $data['assigned_staff'];
 
-        unset($data['assigned_staff']);
+        // unset($data['assigned_staff']);
 
-        $response = CeaSchoolProgramme::create($data);
-        $lastInsertId = $response->id;
+        $response_data = CeaSchoolProgramme::create($data);
+        // $lastInsertId = $response->id;
 
         
 
-        foreach($assigned_staff_details as $key => $value){
-            $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
-            $assigned_staff_data['CeaRoleId'] = $value['role'];
-            $assigned_staff_data['StfStaffId'] = $value['teacher'];
-            $assigned_staff_data['Remarks'] = $value['remarks'];
+        // foreach($assigned_staff_details as $key => $value){
+        //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
+        //     $assigned_staff_data['CeaRoleId'] = $value['role'];
+        //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
+        //     $assigned_staff_data['Remarks'] = $value['remarks'];
 
-            $response_data = CeaRoleStaff::create($assigned_staff_data);
-        }
+        //     $response_data = CeaRoleStaff::create($assigned_staff_data);
+        // }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -78,10 +79,12 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
+        $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
         return $this->successResponse($records);
@@ -92,11 +95,47 @@ class StudentProgramController extends Controller
     */
 
     public function listStudentPrograms($param=""){
+        $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $id ="1";
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
+                ->get();
+
+        return $this->successResponse($records);
+    }
+
+    /*
+    * Function is to load the list of student clubs
+    */
+
+    public function loadStudentClubs($param=""){
+        $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+
+        $records = DB::table('cea_school_programme')
+                ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
+                ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
+                ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
+                ->get();
+
+        return $this->successResponse($records);
+    }
+
+    /*
+    * Function is to list Programs for drop down
+    */
+
+    public function listStudentClubs($param=""){
+        $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+        $id ="1";
+
+        $records = DB::table('cea_school_programme')
+                ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
+                ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
         return $this->successResponse($records);
