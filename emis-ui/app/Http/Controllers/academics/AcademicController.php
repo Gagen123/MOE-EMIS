@@ -303,11 +303,9 @@ class AcademicController extends Controller
         $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
 
         $consolidatedResult = json_decode($this->apiService->listData($uri),true);
-        $instructionalDaysPerYear = [];
-        foreach($consolidatedResult["data"]['instructionalDays'] as $instructionalDay){
-            $instructionalDaysPerYear['instructionalDayPerYear'] =  $instructionalDay['instructional_days'];
-        }
-       $overAllInstructionalDays = array_sum($instructionalDaysPerYear);
+
+        $instructionalDaysPerYear = array_column($consolidatedResult["data"]['instructionalDays'],"instructional_days");
+        $overAllInstructionalDays = array_sum($instructionalDaysPerYear);
         $terms = [];
         $subjects = [];
         $areas = [];
@@ -362,9 +360,10 @@ class AcademicController extends Controller
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = "Pass";
                     }
                 }
+                // dd($consolidatedResult["data"]['absentDays']);
                 foreach($consolidatedResult["data"]['absentDays'] as $absentDay){
                     if($absentDay['std_student_id'] == $students[$i]["std_student_id"]){
-                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]['present'] = ($overAllInstructionalDays - $absentDay['absent_days']);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["present"] = ($overAllInstructionalDays - $absentDay['absent_days']);
                     }
                 }
                 
