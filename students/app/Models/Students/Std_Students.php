@@ -4,6 +4,7 @@ namespace App\Models\students;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 class Std_Students extends Model
 {
     use HasFactory, Uuid;
@@ -14,6 +15,7 @@ class Std_Students extends Model
         'OrgOrganizationId',
         'CidNo',
         'Name',
+        'student_code',
         'CmnSexId',
         'DateOfBirth',
         'CmnCountryId',
@@ -23,6 +25,7 @@ class Std_Students extends Model
         'Remarks',
         'IsNewAdmission',
         'IsTransferred',
+        'isSenStudent',
         'IsRejoined',
         'PhotoPath',
         'PrimaryContact',

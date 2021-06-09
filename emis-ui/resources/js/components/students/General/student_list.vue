@@ -6,7 +6,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
-                    <div class="card-header pt-0 mt-0 pb-0"> 
+                    <div class="card-header pt-0 mt-0 pb-0">
                         <div>
                             <table id="award-list-table" class="table table-bordered text-sm table-striped">
                                 <thead>
@@ -16,7 +16,7 @@
                                         <th >Student Code</th>
                                         <th >Class</th>
                                         <th >Section</th>
-                                        <th >Action</th> 
+                                        <th >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
@@ -38,15 +38,15 @@
                     </div>
                 </div>
             </div>
-        </section>  
-    </div>     
+        </section>
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             org_id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -65,8 +65,8 @@ export default {
                 $("#award-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'student_profile',params: {data:data}});
