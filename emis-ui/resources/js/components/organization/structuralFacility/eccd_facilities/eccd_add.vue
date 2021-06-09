@@ -14,7 +14,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -62,7 +62,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -74,7 +74,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -86,7 +86,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                         <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -94,30 +94,29 @@
                     </div>
                  </div>
                  <hr>
-                    <div class="row invoice-info">
-                        <div class="col-sm-2 invoice-col">
+                <div class="row invoice-info">
+                    <div class="col-sm-2 invoice-col">
                         <label class="mb-0"><i><u>INDOOR SPACE</u></i></label>
                     </div>
-                       <div class="col-sm-10 invoice-col">
+                     <div class="col-sm-10 invoice-col">
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label"> Walls and ceiling in the rooms are strong  and free from holes/peeling papers/ paints?:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
                         </div> 
-
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label"> Does it have a minimum indoor play space of two square metre of floor area per child for daily activies?:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -128,7 +127,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -139,7 +138,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -150,7 +149,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -161,7 +160,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -172,7 +171,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -181,29 +180,28 @@
                     </div> 
 
                          <hr>
-                        <div class="row invoice-info">
-                            <div class="col-sm-2 invoice-col">
+                    <div class="row invoice-info">
+                        <div class="col-sm-2 invoice-col">
                             <label class="mb-0"><i><u>INDOOR SPACE & EQUIPMENTS</u></i></label>
                         </div>
                        <div class="col-sm-10 invoice-col">
-
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label">No of Sets of building blocks( minimum of 20 pieces in a set):<span class="text-danger">*</span></label>
-                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }" >
-                                </div>
+                             <div class="col-lg-4 col-md-4 col-sm-4">
+                                <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }" >
+                            </div>
                         </div> 
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label">No of Item for table activities ( matching game/ lotto/ string beads, etc).:<span class="text-danger">*</span></label>
-                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }">
-                                </div>
+                              <div class="col-lg-4 col-md-4 col-sm-4">
+                                <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }">
+                            </div>
                         </div> 
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label">No of puzzles.:<span class="text-danger">*</span></label>
-                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }">
-                                </div>
+                             <div class="col-lg-4 col-md-4 col-sm-4">
+                                <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }">
+                            </div>
                         </div> 
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label">No of Small hand-held toys:<span class="text-danger">*</span></label>
@@ -213,7 +211,7 @@
                         </div> 
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label">No Of Art supplier such as paper, play dough..etc:<span class="text-danger">*</span></label>
-                                 <div class="col-lg-4 col-md-4 col-sm-4">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
                                     <input class="form-control editable_fields "  type="text" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('facility') }">
                                 </div>
                         </div> 
@@ -251,17 +249,17 @@
                 </div>
                 <hr>
                 <div class="row invoice-info">
-                      <div class="col-sm-2 invoice-col">
-                        <label class="mb-0"><i><u>OUTDOOR SPACE & EQUIPMENTS</u></i></label>
-                    </div>
-                       <div class="col-sm-10 invoice-col">
+                <div class="col-sm-2 invoice-col">
+                    <label class="mb-0"><i><u>OUTDOOR SPACE & EQUIPMENTS</u></i></label>
+                </div>
+                 <div class="col-sm-10 invoice-col">
                         <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label">Does the centre have a a minimum outdoor play space of 50 square metre for every group of15 children for routine use by children?:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -272,7 +270,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -284,7 +282,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -296,7 +294,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                                 </div>
@@ -308,19 +306,19 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
                          </div> 
 
-                             <div class="form-group row">
+                        <div class="form-group row">
                             <label class="col-lg-8 col-md-8 col-sm-8 col-form-label"> Does the centre Has a sand pit for every group of 14 children?:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -332,7 +330,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -344,7 +342,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -355,7 +353,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -366,7 +364,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -377,7 +375,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>
@@ -388,7 +386,7 @@
                                     <select name="facility" id="facility" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                                         <option value="">--- Please Select ---</option>
                                             <option value="">yes</option>
-                                            <option value="">no</option>
+                                        <option value="">no</option>
                                     </select>
                                     <has-error :form="form" field="facility"></has-error>
                              </div>

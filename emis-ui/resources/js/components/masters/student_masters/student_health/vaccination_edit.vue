@@ -6,7 +6,7 @@
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Vaccine Type Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.studeName" :class="{ 'is-invalid': form.errors.has('dis_name') }" id="studenthealthName" @change="remove_err('studenthealthName')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('dis_name') }" id="studenthealthName" @change="remove_err('studenthealthName')" type="text">
                         <has-error :form="form" field="dis_name"></has-error>
                     </div>
                     
@@ -34,8 +34,8 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                studenthealthName: '',
-                status: 1,
+                name: '',
+                status: '',
                 // action_type:'edit',
             })
         }
@@ -69,9 +69,9 @@ export default {
     },
 
     created() {
-        this.form.studenthealthName=this.$route.params.data.name;
-        this.form.status=this.$route.params.data.status;
-        this.form.id=this.$route.params.data.id;
+        this.form.name=this.$route.params.data.data.name;
+        this.form.status=this.$route.params.data.data.status;
+        this.form.id=this.$route.params.data.data.id;
         // this.form.action_type=this.$route.params.data.action;
     },
 }

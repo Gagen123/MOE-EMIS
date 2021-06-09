@@ -8,6 +8,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
+use App\Models\Masters\StudentType;
+
 use App\Models\Masters\CeaRole;
 
 class StudentMasterController extends Controller
@@ -26,11 +28,9 @@ class StudentMasterController extends Controller
     */
 
     public function saveStudentMasters(Request $request){
-        
         $rules = [
             'name'  =>  'required',
         ];
-
         $this->validate($request, $rules);
 
         $record_type = $request['recordtype'];
@@ -41,6 +41,7 @@ class StudentMasterController extends Controller
 
         if($request->actiontype=="add"){
             $response_data = $this->insertData($data, $databaseModel);
+
 
         } else if($request->actiontype=="edit"){
             $response_data = $this->updateData($request,$data, $databaseModel);
@@ -88,15 +89,10 @@ class StudentMasterController extends Controller
             $assigned_to = '2';
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
 
-        } else {
+        } else if($param == 'vaccine_type'){
+            $vacinetype = StudentType::all();
+            return $vacinetype;
 
-            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
-
-            $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
-            $model = new $modelName();
-            $status = '1';
-
-            return $this->successResponse($model::where('status',$status)->get());
         }
         
 

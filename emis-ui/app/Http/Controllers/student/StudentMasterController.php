@@ -80,13 +80,13 @@ class StudentMasterController extends Controller{
             $data = $data + $additional_data;
         }
         
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
         
     }
 
@@ -97,7 +97,6 @@ class StudentMasterController extends Controller{
     }
 
     public function loadActiveStudentMasters($param=""){
-      //  dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }

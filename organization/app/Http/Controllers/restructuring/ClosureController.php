@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?php
 
 namespace App\Http\Controllers\restructuring;
@@ -215,7 +214,6 @@ class ClosureController extends Controller
         // return $this->successResponse($change_details_data, Response::HTTP_CREATED);
     }
 }
-=======
 <?php
 
 namespace App\Http\Controllers\restructuring;
@@ -369,4 +367,3 @@ class ClosureController extends Controller
         return $this->successResponse($response_data);
     }
 }
->>>>>>> 5bd8eb5d3d0cd826d50d340792ffa6f3d2d3a7aa
