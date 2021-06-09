@@ -22,6 +22,9 @@
                                 <th >Student Code</th>
                                 <th >Class</th>
                                 <th >Section</th>
+                                <th >No. of Meals</th>
+                                <th >Boarder</th>
+                                <th >SF/GS</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -41,6 +44,12 @@
                                     </select>
                                     <has-error :form="student_form" field="std_section"></has-error>
                                     <!-- <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/> -->
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
                                 </td>
                             </tr>
                         </tbody>
@@ -76,43 +85,15 @@ export default {
                 date: '',
                 std_id: [],
                 std_class:[],
-                std_section:[]
+                std_section:[],
+                std_meals:[],
+                std_finance:[],
+                std_boarder:[]
             }),
         }
     },
 
     methods: {
-        loadActiveScreeningList(uri="masters/loadActiveStudentMasters/health_screening"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.screeningList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveScreeningTitleList(uri="masters/loadActiveStudentMasters/screening_position"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.screeningTitle =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveScreeningEndorserList(uri="masters/loadActiveStudentMasters/screening_endorser"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.screeningEndorser =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
         /**
          * to load the class list
          */
@@ -284,10 +265,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        this.loadActiveScreeningList();
-        this.loadActiveScreeningTitleList();
-        this.loadActiveScreeningEndorserList();
         
         this.loadClassList();
         // this.loadSectionList();
