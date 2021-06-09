@@ -59,7 +59,7 @@ export default {
     methods:{
         getStudents(){
            let uri = 'academics/getStudentsForAttendance'
-           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
+           uri += ('?action='+this.action+'&OrgClassStreamId='+this.OrgClassStreamId+'&attendance_date='+this.attendance_date+'&classId='+this.classId)
            if(this.streamId !== null){
                     uri += ('&streamId='+this.streamId)
                 }

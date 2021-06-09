@@ -39,7 +39,7 @@
                                         <span v-else><i class="fas fa-plus"></i >Add</span>
                                     </div>
                                 </div>
-                                <div v-if="item.std_assmt_id" class="ml-2 btn-group btn-group-sm">
+                                <div v-if="item.std_assmt_id" class="ml-2 mt-1 btn-group btn-group-sm">
                                     <router-link :to="{name:'view_term_result', params: {data:item}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
                                 </div>
                               

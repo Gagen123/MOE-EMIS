@@ -156,10 +156,9 @@ class StudentProgramController extends Controller
     /*
     * Save Program Members
     */
-
     public function saveProgramMembers(Request $request){
-       dd('m here');
-    //  $rules = [
+     //dd('m here');
+      $rules = [
             'student'                    => 'required',
             // 'program'                    => 'required',
             'responsibilities'           => 'required',
@@ -184,7 +183,7 @@ class StudentProgramController extends Controller
             //'user_id'        => $this->user_id() 
         ];
        // dd($status);
-        //dd($data);
+      //  dd($data);
         $assigned_student_details = $data['role'];
 
         unset($data['role']);

@@ -53,7 +53,7 @@ class GeneralStudentController extends Controller
     public function loadStudentBySection($param1){
         $id = $param1;
         $class_details = explode('__', $id);
-        
+
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
@@ -67,7 +67,7 @@ class GeneralStudentController extends Controller
 
     /**
      * Get the student list by class
-     * 
+     *
      * This function gets all the basic details such as feeding, scholarship etc.
      * If you want only student and class, create another function
      */
@@ -75,7 +75,7 @@ class GeneralStudentController extends Controller
 
     public function loadStudentByClass($class){
         $id = $class;
-        
+
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
@@ -88,7 +88,7 @@ class GeneralStudentController extends Controller
 
     public function getStudents($org_id,Request $request){
         $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name, t1.CidNo, t2.OrgClassStreamId, t2.SectionDetailsId
-        FROM std_student t1 
+        FROM std_student t1
         LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId WHERE t1.OrgOrganizationId = ? AND t2.OrgClassStreamId = ?";
         $params = [$org_id,$request->OrgClassStreamId];
 
@@ -96,8 +96,8 @@ class GeneralStudentController extends Controller
             $query .= ' AND t2.SectionDetailsId = ?';
             array_push($params,$request->sectionId);
         }
-  
-        return $this->successResponse (DB::select($query,$params)); 
+
+        return $this->successResponse (DB::select($query,$params));
     }
-    
+
 }

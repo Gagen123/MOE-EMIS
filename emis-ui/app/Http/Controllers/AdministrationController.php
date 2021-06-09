@@ -245,16 +245,7 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
-        // if($request['record_type'] == 'national_holiday') {
-        //     $rules = [
-        //         'holiday_date'  =>  'required',
-        //         'description' => 'required',
-        //     ];
-        //     $customMessages = [
-        //         'holiday_date.required' => 'This field is required',
-        //         'description.required' => 'This field is required',
-        //     ];
-        // }
+ 
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();
         $data = $request->all();
@@ -298,7 +289,7 @@ class AdministrationController extends Controller{
            'data.*.aca_assmt_frequency_id' => 'required',
         ];
         $customMessages = [
-            'data.*.aca_assmt_frequency_id.required' => 'This field is required',
+            'data.*.aca_assmt_frequency_id.required' => 'All the fields are required',
         ];
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();

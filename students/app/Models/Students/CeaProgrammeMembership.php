@@ -17,6 +17,8 @@ class CeaProgrammeMembership extends Model
         'StdStudentId',
         'JoiningDate',
         'Responsibility',
-        'Achievement'
+        'Achievement',
+        'status',
+        'role',
     ];
 }

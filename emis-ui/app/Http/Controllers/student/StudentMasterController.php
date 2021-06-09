@@ -26,7 +26,7 @@ class StudentMasterController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
         
-        $data =[
+        $data =[ 
             'id'             =>  $request->id,
             'name'           =>  $request->name,
             'description'    =>  $request->description,

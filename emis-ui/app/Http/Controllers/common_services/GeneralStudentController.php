@@ -16,6 +16,8 @@ class GeneralStudentController extends Controller{
         $this->apiService = $apiService;
     }
 
+
+
     /**
      * Get the basic student list (id, name, student code)
      */
@@ -57,5 +59,5 @@ class GeneralStudentController extends Controller{
         $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1);
         return $student_list;
     }
-    
+
 }

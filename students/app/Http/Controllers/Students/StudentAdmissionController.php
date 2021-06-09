@@ -10,7 +10,7 @@ use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
-use App\Models\requestForAdmission; 
+use App\Models\requestForAdmission;
 use App\Models\Students\StudentGuardainDetails;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
@@ -34,7 +34,7 @@ class StudentAdmissionController extends Controller
             'dob'                       => 'required',
             'sex_id'                    => 'required',
             'mother_tongue'             => 'required',
-            
+
         ];
         $customMessages = [
             'snationality.required'             => 'This field is required',
@@ -55,18 +55,18 @@ class StudentAdmissionController extends Controller
                 'Name'                      =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
                 'DateOfBirth'               =>  $request->dob,
                 'CmnSexId'                  =>  $request->sex_id,
-                'CmnChiwogId'               =>  $request->village_id, 
+                'CmnChiwogId'               =>  $request->village_id,
                 'CmnGewogId'                =>  $request->gewog,
                 'IsNewAdmission'            =>1,
                 'Address'                   =>  $request->fulladdress,
-                'CmnLanguageId'             =>  $request->mother_tongue, 
-                'PhotoPath'                 =>  $request->attachments, 
-                'Status'                    =>  $request->status, 
+                'CmnLanguageId'             =>  $request->mother_tongue,
+                'PhotoPath'                 =>  $request->attachments,
+                'Status'                    =>  $request->status,
             ];
             $response_data = Std_Students::where('id',$request->student_id)->update($data);
-        } 
+        }
         else if($request->type=="update_transfer"){
-            //keep history 
+            //keep history
             $data =[
                 'OrgOrganizationId'         =>  $request->snationality,
                 'CmnCountryId'              =>  $request->snationality,
@@ -74,12 +74,12 @@ class StudentAdmissionController extends Controller
                 'Name'                      =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
                 'DateOfBirth'               =>  $request->dob,
                 'CmnSexId'                  =>  $request->sex_id,
-                'CmnChiwogId'               =>  $request->village_id, 
+                'CmnChiwogId'               =>  $request->village_id,
                 'CmnGewogId'                =>  $request->gewog,
                 'IsNewAdmission'            =>1,
                 'Address'                   =>  $request->fulladdress,
-                'CmnLanguageId'             =>  $request->mother_tongue, 
-                'PhotoPath'                 =>  $request->attachments, 
+                'CmnLanguageId'             =>  $request->mother_tongue,
+                'PhotoPath'                 =>  $request->attachments,
             ];
             $updated_data = Std_Students::where('id',$request->student_id)->update($data);
             $response_data = Std_Students::where('id',$request->student_id)->first();
@@ -94,12 +94,12 @@ class StudentAdmissionController extends Controller
                     'Name'                      =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
                     'DateOfBirth'               =>  $request->dob,
                     'CmnSexId'                    =>  $request->sex_id,
-                    'CmnChiwogId'                =>  $request->village_id, 
+                    'CmnChiwogId'                =>  $request->village_id,
                     'CmnGewogId'                  =>  $request->gewog,
                     'IsNewAdmission'            =>1,
                     'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue, 
-                    'PhotoPath'               =>  $request->attachments, 
+                    'CmnLanguageId'             =>  $request->mother_tongue,
+                    'PhotoPath'               =>  $request->attachments,
                     'created_by'                =>  $request->user_id,
                     'created_at'                =>  date('Y-m-d h:i:s'),
                 ];
@@ -113,18 +113,18 @@ class StudentAdmissionController extends Controller
                     'Name'                =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
                     'DateOfBirth'                       =>  $request->dob,
                     'CmnSexId'                    =>  $request->sex_id,
-                    'CmnChiwogId'                =>  $request->village_id, 
+                    'CmnChiwogId'                =>  $request->village_id,
                     'CmnGewogId'                  =>  $request->gewog,
                     'IsNewAdmission'            =>1,
                     'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue, 
-                    'PhotoPath'               =>  $request->attachments, 
+                    'CmnLanguageId'             =>  $request->mother_tongue,
+                    'PhotoPath'               =>  $request->attachments,
                 ];
                 $updated_data = Std_Students::where('CidNo',$request->cid_passport)->update($data);
                 $response_data = Std_Students::where('CidNo',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
             }
         }
-        
+
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -136,7 +136,7 @@ class StudentAdmissionController extends Controller
             'first_name'                => 'required',
             'dob'                       => 'required',
             'sex_id'                    => 'required',
-            
+
         ];
         $customMessages = [
             'snationality.required'             => 'This field is required',
@@ -157,16 +157,16 @@ class StudentAdmissionController extends Controller
                 'last_name'                 =>  $request->last_name,
                 'DateOfBirth'               =>  $request->dob,
                 'CmnSexId'                  =>  $request->sex_id,
-                'dzongkhag'                 =>  $request->dzongkhag, 
-                'CmnGewogId'                =>  $request->gewog, 
-                'village_id'                =>  $request->village_id, 
-                // 'village_id'                =>  $request->s_dzongkhag, 
-                'OrgOrganizationId'         =>  $request->s_school, 
-                'class_id'                =>  $request->s_class, 
+                'dzongkhag'                 =>  $request->dzongkhag,
+                'CmnGewogId'                =>  $request->gewog,
+                'village_id'                =>  $request->village_id,
+                // 'village_id'                =>  $request->s_dzongkhag,
+                'OrgOrganizationId'         =>  $request->s_school,
+                'class_id'                =>  $request->s_class,
                 'address'                   =>  $request->fulladdress,
-                'attachments'               =>  $request->attachments, 
-                'student_type'              =>  $request->type, 
-                'Status'              =>  $request->Status, 
+                'attachments'               =>  $request->attachments,
+                'student_type'              =>  $request->type,
+                'Status'              =>  $request->Status,
             ];
         $response_data = std_admission::create($data);
         }
@@ -175,8 +175,8 @@ class StudentAdmissionController extends Controller
          }
         return $response_data;
     }
-    
-    
+
+
     public function saveStudentGardianDetails(Request $request){
         // dd($request);
         $rules = [
@@ -226,7 +226,7 @@ class StudentAdmissionController extends Controller
                     'father_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'father_dzongkhag.required'                      => 'This field is required',
                     'father_gewog.required'                          => 'This field is required',
@@ -275,7 +275,7 @@ class StudentAdmissionController extends Controller
                     'mother_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'mother_dzongkhag.required'                      => 'This field is required',
                     'mother_gewog.required'                          => 'This field is required',
@@ -322,7 +322,7 @@ class StudentAdmissionController extends Controller
                     'gardain_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'gardain_dzongkhag.required'                      => 'This field is required',
                     'gardain_gewog.required'                          => 'This field is required',
@@ -331,17 +331,17 @@ class StudentAdmissionController extends Controller
                 $customMessages = $customMessages + $additional_message;
             }
         }
-        
+
         $this->validate($request, $rules, $customMessages);
         $update_data =[
             'CmnParentsMaritalStatusId'     =>  $request->merital_status,
             'PrimaryContact'           =>  $request->primary_contact,
         ];
-      
+
         $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
         $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
-            $data =[                
+            $data =[
                 'student_id'                =>  $request->student_id,
                 'contact_type'              =>  'Father',
                 'nationality'               =>  $request->father_nationality,
@@ -361,7 +361,7 @@ class StudentAdmissionController extends Controller
             $response_data = StudentGuardainDetails::create($data);
         }
         if($request->mother_cid_passport!="" && $request->mother_cid_passport!=null){
-            $data =[                
+            $data =[
                 'student_id'                =>  $request->student_id,
                 'contact_type'              =>  'Mother',
                 'nationality'               =>  $request->mother_nationality,
@@ -381,7 +381,7 @@ class StudentAdmissionController extends Controller
             $response_data = StudentGuardainDetails::create($data);
         }
         if($request->gardain_cid_passport!="" && $request->gardain_cid_passport!=null){
-            $std_admission =[                
+            $std_admission =[
                 'student_id'                =>  $request->student_id,
                 'contact_type'              =>  'Guardian',
                 'nationality'               =>  $request->gardain_nationality,
@@ -399,8 +399,8 @@ class StudentAdmissionController extends Controller
                 'created_at'                =>  date('Y-m-d h:i:s'),
             ];
             $response_data = StudentGuardainDetails::create($std_admission);
-           
-            
+
+
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -414,7 +414,7 @@ class StudentAdmissionController extends Controller
                 'dateOfapply.required'        => 'This field is required',
             ];
         $this->validate($request, $rules, $customMessages);
-                $data =[    
+                $data =[
                         'snationality'                   => $request->snationality,
                         'OrgOrganizationId'              =>  $request->OrgOrganizationId,
                         'CidNo'                          =>  $request->cid_passport,
@@ -458,7 +458,7 @@ class StudentAdmissionController extends Controller
             $customMessages = [
                 'dateOfapply.required'        => 'This field is required',
             ];
-        
+
         $this->validate($request, $rules, $customMessages);
             $data =[
                 'OrgOrganizationId'          =>  $request->OrgOrganizationId,
@@ -476,9 +476,9 @@ class StudentAdmissionController extends Controller
             $response_data = std_admission::create($data);
          return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
-    
-   
+
+
+
     public function saveStudentClassDetails(Request $request){
         $rules = [
             'student_type'                      => 'required',
@@ -491,7 +491,7 @@ class StudentAdmissionController extends Controller
             'no_meals.required'                 => 'This field is required',
             'disability.required'               => 'This field is required',
         ];
-        
+
         $this->validate($request, $rules, $customMessages);
         $scholar="";
         $special_benifit="";
@@ -500,7 +500,7 @@ class StudentAdmissionController extends Controller
         //         $scholar.=$scho.', ';
         //     }
         // }
-        
+
         // if($request->special_benifit!=null && !sizeof($request->special_benifit)>0){
         //     foreach($request->special_benifit as $bn){
         //         $special_benifit.=$bn.', ';
@@ -555,14 +555,14 @@ class StudentAdmissionController extends Controller
                 $app_details = [
                     'service_name'                  =>  'Student Admission',
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::create($app_details);
             }
             else{
                 $last_seq=$last_seq->last_sequence+1;
                 $app_details = [
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::where('service_name', 'Student Admission')->update($app_details);
             }
             $appNo='201.00005.11.';
@@ -612,7 +612,7 @@ class StudentAdmissionController extends Controller
         // $updated_data = StudentPersonalDetails::where('id',$request->student_id)->update($update_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadStudentList($param=""){
         if(strpos($param,'SSS')){
             $access_level=explode('SSS',$param)[0];
@@ -628,7 +628,6 @@ class StudentAdmissionController extends Controller
                 )->where('p.OrgOrganizationId', explode('SSS',$param)[1])->get();
             }
             if($access_level=="Org"){
-                dd(explode('SSS',$param)[2]);
                 $response_data = DB::table('std_student as p')
                 ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
                 'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
@@ -666,6 +665,8 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data);
     }
+
+
     /**
      * load the list of students who have applied for admission
      */
@@ -674,7 +675,7 @@ class StudentAdmissionController extends Controller
                     ->where('OrgOrganizationId', $org_id)
                     ->get();
     }
-    
+
     public function getStudentDetails(){
         $response_data=Std_Students::all();
         return $this->successResponse($response_data);
@@ -683,7 +684,7 @@ class StudentAdmissionController extends Controller
         $response_data=Std_Students::select('CidNo')->get();
         return $this->successResponse($response_data);
     }
- 
+
     //getting student details std_student table using cid number
     public function getstudentdetailsbyCid($cid){
         $response_data = std_admission:: where ('CidNo', $cid)->first();
@@ -699,16 +700,16 @@ class StudentAdmissionController extends Controller
     public function getstudentGuardainClassDetails($std_id="",$type=""){
         if($type=="guardian"){
             $response_data=StudentGuardainDetails::where('student_id',$std_id)->get();
-        }  
+        }
         if($type=="class"){
             $response_data=StudentClassDetails::where('StdStudentId',$std_id)->first();
-        }  
+        }
         return $this->successResponse($response_data);
     }
 
     public function getEnrolledStudents($std_id=""){
         $response_data=std_admission::where('id',$std_id)->first();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
 
     }
 
@@ -727,7 +728,7 @@ class StudentAdmissionController extends Controller
         // dd($request);
         $rules = [
             'dateOfapply'               => 'required',
-            
+
         ];
         $customMessages = [
             'dateOfapply.required'      => 'This field is required',
@@ -748,5 +749,5 @@ class StudentAdmissionController extends Controller
          return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
-    
+
 }
