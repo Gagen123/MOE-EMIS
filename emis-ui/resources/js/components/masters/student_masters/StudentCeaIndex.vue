@@ -15,6 +15,11 @@
                     Program Name 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('club_name_list')">
+                    <router-link to="/club_name_list" id="club_name_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Club Name 
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('program_support_list')">
                     <router-link to="/program_support_list" id="program_support_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Program Support 

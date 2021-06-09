@@ -79,8 +79,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });  
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
+        $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
-
+        $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
 		//route by chimi to get temporary
         $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
         
@@ -91,6 +92,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentTransfers/{param}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
         $router->post('/saveStudentWhereabouts',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentWhereabouts']);
         $router->get('/loadStudentWhereabouts/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentWhereabouts']);
+
+        $router->post('/saveStudentClassAllocation',['uses' => 'Students\StudentClassController@saveStudentClassAllocation']);
+        $router->get('/loadStudentClassAllocations/{param}',['uses' => 'Students\StudentClassController@loadStudentClassAllocations']);
 
         $router->post('/saveStudentAward',['uses' => 'Students\StudentAwardController@saveStudentAward']);
         $router->get('/loadStudentAwards/{param}',['uses' => 'Students\StudentAwardController@loadStudentAwards']);
@@ -142,6 +146,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getProgramDetails/{param}', ['uses' => 'Students\StudentProgramController@getProgramDetails']);
         $router->post('/saveProgramMembers', ['uses' => 'Students\StudentProgramController@saveProgramMembers']);
         $router->get('/listProgramMembers/{param}', ['uses' => 'Students\StudentProgramController@listProgramMembers']);
+
+        $router->get('/loadStudentClubs/{param}', ['uses' => 'Students\StudentProgramController@loadStudentClubs']);
+        $router->get('/listStudentClubs/{param}', ['uses' => 'Students\StudentProgramController@listStudentClubs']);
         $router->post('/saveProgramActionPlan', ['uses' => 'Students\StudentProgramController@saveProgramActionPlan']);
         $router->get('/loadProgramActionPlan/{param}', ['uses' => 'Students\StudentProgramController@loadProgramActionPlan']);
         $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);

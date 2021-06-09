@@ -55,42 +55,6 @@ const routes = [
                     { path: '/roles_responsibilities_list', name:'RolesResponsibilitiesList', component: require('./components/masters/student_masters/roles_responsibilities/roles_responsibilities_list.vue').default },
                 ]    
             },
-            { path: '/program_name_index', 
-                component: require('./components/masters/student_masters/programs_clubs/program_name_index.vue').default ,
-                children: [
-                    { path: '', component: require('./components/masters/student_masters/programs_clubs/program_name_index.vue').default },
-                    { path: '/program_name_add', name:'ProgramNameAdd', component: require('./components/masters/student_masters/programs_clubs/program_name_add.vue').default },
-                    { path: '/program_name_edit', name:'ProgramNameEdit', component: require('./components/masters/student_masters/programs_clubs/program_name_edit.vue').default },
-                    { path: '/program_name_list', name:'ProgramNameList', component: require('./components/masters/student_masters/programs_clubs/program_name_list.vue').default },
-                ]    
-            },
-            { path: '/program_support_index', 
-                component: require('./components/masters/student_masters/programs_clubs/program_support_index.vue').default ,
-                children: [
-                    { path: '', component: require('./components/masters/student_masters/programs_clubs/program_support_index.vue').default },
-                    { path: '/program_support_add', name:'ProgramSupportAdd', component: require('./components/masters/student_masters/programs_clubs/program_support_add.vue').default },
-                    { path: '/program_support_edit', name:'ProgramSupportEdit', component: require('./components/masters/student_masters/programs_clubs/program_support_edit.vue').default },
-                    { path: '/program_support_list', name:'ProgramSupportList', component: require('./components/masters/student_masters/programs_clubs/program_support_list.vue').default },
-                ]    
-            },
-            { path: '/program_roles_index', 
-                component: require('./components/masters/student_masters/programs_clubs/program_roles_index.vue').default ,
-                children: [
-                    { path: '', component: require('./components/masters/student_masters/programs_clubs/program_roles_index.vue').default },
-                    { path: '/program_roles_add', name:'ProgramRolesAdd', component: require('./components/masters/student_masters/programs_clubs/program_roles_add.vue').default },
-                    { path: '/program_roles_edit', name:'ProgramRolesEdit', component: require('./components/masters/student_masters/programs_clubs/program_roles_edit.vue').default },
-                    { path: '/program_roles_list', name:'ProgramRolesList', component: require('./components/masters/student_masters/programs_clubs/program_roles_list.vue').default },
-                ]    
-            },
-            { path: '/project_type_index', 
-                component: require('./components/masters/student_masters/projects_initiatives/project_type_index.vue').default ,
-                children: [
-                    { path: '', component: require('./components/masters/student_masters/projects_initiatives/project_type_index.vue').default },
-                    { path: '/project_type_add', name:'ProjectTypeAdd', component: require('./components/masters/student_masters/projects_initiatives/project_type_add.vue').default },
-                    { path: '/project_type_edit', name:'ProjectTypeEdit', component: require('./components/masters/student_masters/projects_initiatives/project_type_edit.vue').default },
-                    { path: '/project_type_list', name:'ProjectTypeList', component: require('./components/masters/student_masters/projects_initiatives/project_type_list.vue').default },
-                ]    
-            },
         ] 
     },
     //STUDENT MASTER
@@ -105,6 +69,51 @@ const routes = [
         { path: '/program_type_edit', name:'ProgramTypeEdit', component: require('./components/masters/student_masters/programs_clubs/program_type_edit.vue').default },
         { path: '/program_type_list', name:'ProgramTypeList', component: require('./components/masters/student_masters/programs_clubs/program_type_list.vue').default },
       ]    
+    },
+    { path: '/program_name_index', 
+        component: require('./components/masters/student_masters/programs_clubs/program_name_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/programs_clubs/program_name_index.vue').default },
+            { path: '/program_name_add', name:'ProgramNameAdd', component: require('./components/masters/student_masters/programs_clubs/program_name_add.vue').default },
+            { path: '/program_name_edit', name:'ProgramNameEdit', component: require('./components/masters/student_masters/programs_clubs/program_name_edit.vue').default },
+            { path: '/program_name_list', name:'ProgramNameList', component: require('./components/masters/student_masters/programs_clubs/program_name_list.vue').default },
+        ]    
+    },
+    { path: '/club_name_index', 
+        component: require('./components/masters/student_masters/programs_clubs/club_name_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/programs_clubs/club_name_index.vue').default },
+            { path: '/club_name_add', name:'club_name_add', component: require('./components/masters/student_masters/programs_clubs/club_name_add.vue').default },
+            { path: '/club_name_edit', name:'club_name_edit', component: require('./components/masters/student_masters/programs_clubs/club_name_edit.vue').default },
+            { path: '/club_name_list', name:'club_name_list', component: require('./components/masters/student_masters/programs_clubs/club_name_list.vue').default },
+        ]    
+    },
+    { path: '/program_support_index', 
+        component: require('./components/masters/student_masters/programs_clubs/program_support_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/programs_clubs/program_support_index.vue').default },
+            { path: '/program_support_add', name:'ProgramSupportAdd', component: require('./components/masters/student_masters/programs_clubs/program_support_add.vue').default },
+            { path: '/program_support_edit', name:'ProgramSupportEdit', component: require('./components/masters/student_masters/programs_clubs/program_support_edit.vue').default },
+            { path: '/program_support_list', name:'ProgramSupportList', component: require('./components/masters/student_masters/programs_clubs/program_support_list.vue').default },
+        ]    
+    },
+    { path: '/program_roles_index', 
+        component: require('./components/masters/student_masters/programs_clubs/program_roles_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/programs_clubs/program_roles_index.vue').default },
+            { path: '/program_roles_add', name:'ProgramRolesAdd', component: require('./components/masters/student_masters/programs_clubs/program_roles_add.vue').default },
+            { path: '/program_roles_edit', name:'ProgramRolesEdit', component: require('./components/masters/student_masters/programs_clubs/program_roles_edit.vue').default },
+            { path: '/program_roles_list', name:'ProgramRolesList', component: require('./components/masters/student_masters/programs_clubs/program_roles_list.vue').default },
+        ]    
+    },
+    { path: '/project_type_index', 
+        component: require('./components/masters/student_masters/projects_initiatives/project_type_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/projects_initiatives/project_type_index.vue').default },
+            { path: '/project_type_add', name:'ProjectTypeAdd', component: require('./components/masters/student_masters/projects_initiatives/project_type_add.vue').default },
+            { path: '/project_type_edit', name:'ProjectTypeEdit', component: require('./components/masters/student_masters/projects_initiatives/project_type_edit.vue').default },
+            { path: '/project_type_list', name:'ProjectTypeList', component: require('./components/masters/student_masters/projects_initiatives/project_type_list.vue').default },
+        ]    
     },
     { path: '/training_type_index', 
     component: require('./components/masters/student_masters/trainings/training_type_index.vue').default ,
@@ -395,6 +404,21 @@ const routes = [
 
         ] 
     },
+    //Student => Class Section Allocation
+    { path: '/class_section', component: require('./components/students/ClassSection/index.vue').default,
+        children: [
+            { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
+            //Student => Class Section Allocation
+            { path: '/class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/class_section_allocation.vue').default,
+                children: [
+                    { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
+                    { path: '/list_class_section_allocation', name:'list_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
+                    { path: '/allocate_class_section', name:'allocate_class_section', component: require('./components/students/ClassSection/ClassSectionAllocation/allocate_class_section.vue').default },
+                    { path: '/edit_class_section_allocation', name:'edit_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/edit_class_section_allocation.vue').default },
+                ] 
+            },
+        ] 
+    },
 
 
     //Student Services Routes
@@ -459,6 +483,23 @@ const routes = [
                 { path: '/add_student_programs_members', name:'add_student_programs_members', component: require('./components/students/StudentExtraCurricular/Programs/add_student_programs_members.vue').default },
                 { path: '/register_student_programs_members', name:'register_student_programs_members', component: require('./components/students/StudentExtraCurricular/Programs/register_student_programs_members.vue').default },
                 { path: '/edit_student_programs_members', name:'edit_student_programs_members', component: require('./components/students/StudentExtraCurricular/Programs/edit_student_programs_members.vue').default },
+            ] 
+        },
+        { path: '/student_clubs', name:'student_clubs', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_index.vue').default,
+            children: [
+                { path: '/', name:'student_clubs', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_list.vue').default },
+                { path: '/student_clubs_list', name:'student_clubs_list', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_list.vue').default },
+                { path: '/student_clubs_add', name:'student_clubs_add', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_add.vue').default },
+                { path: '/student_clubs_edit', name:'student_clubs_edit', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_edit.vue').default },
+            ] 
+        },
+        { path: '/student_clubs_members', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_members.vue').default,
+            children: [
+                { path: '/', name:'student_clubs_members', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_members_list.vue').default },
+                { path: '/student_clubs_members_list', name:'student_clubs_members_list', component: require('./components/students/StudentExtraCurricular/Programs/student_clubs_members_list.vue').default },
+                { path: '/add_student_clubs_members', name:'add_student_clubs_members', component: require('./components/students/StudentExtraCurricular/Programs/add_student_clubs_members.vue').default },
+                { path: '/register_student_clubs_members', name:'register_student_clubs_members', component: require('./components/students/StudentExtraCurricular/Programs/register_student_clubs_members.vue').default },
+                { path: '/edit_student_clubs_members', name:'edit_student_clubs_members', component: require('./components/students/StudentExtraCurricular/Programs/edit_student_clubs_members.vue').default },
             ] 
         },
         { path: '/program_action_plan', component: require('./components/students/StudentExtraCurricular/Programs/program_action_plan.vue').default,

@@ -495,7 +495,7 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
+                    <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -503,7 +503,15 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
+                    <li class="nav-item" id="studentservices" @click="setclass('class_section','','class_section')">
+                        <router-link to="/class_section" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Class Section Allocation
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
                         <router-link to="/student_services" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
