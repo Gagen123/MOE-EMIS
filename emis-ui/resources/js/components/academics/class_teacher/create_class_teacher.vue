@@ -77,7 +77,6 @@ export default {
                     finalTeachers.push(obj);
                 }))
                 this.teacherList = finalTeachers
-                // console.log(this.teacherList);
             }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -133,10 +132,15 @@ export default {
                         title: 'Data saved successfully.'
                     })
                     this.$router.push('/create-class-teacher');
-                })
-                .catch(function(error){
-                this.errors = response.error;
-            });
+                }).catch(function(errors){
+                    if(errors.response.status === 422){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'All the fields are required!',
+                        })
+                    }
+                });
         },
 	 
     },

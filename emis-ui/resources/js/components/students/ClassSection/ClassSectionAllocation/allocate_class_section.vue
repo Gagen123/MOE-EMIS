@@ -22,6 +22,9 @@
                                 <th >Student Code</th>
                                 <th >Class</th>
                                 <th >Section</th>
+                                <th >No. of Meals</th>
+                                <th >Boarder</th>
+                                <th >SF/GS</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -30,17 +33,23 @@
                                 <td>{{ item.Name}}</td>
                                 <td>{{ item.student_code}}</td>
                                 <td>
-                                    <select v-model="student_form.std_class[index]" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
+                                    <select v-model="item.orgClassStreamId"  :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
                                         <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
                                     </select>
                                     <has-error :form="student_form" field="class"></has-error>
                                 </td>
                                 <td>
-                                    <select v-model="student_form.std_section[index]" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
+                                    <select v-model="item.sectionId" :class="{ 'is-invalid  select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
                                         <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
                                     </select>
                                     <has-error :form="student_form" field="std_section"></has-error>
                                     <!-- <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/> -->
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td>
                                 </td>
                             </tr>
                         </tbody>
@@ -69,54 +78,22 @@ export default {
             studentList:[],
 
             student_form: new form({
-                screening: '',
-                screening_position: '',
-                prepared_by: '',
-                screening_endorsed_by: '',
                 std_class: '',
                 std_stream: '',
                 std_section: '',
+                class_section_stream:[],
                 date: '',
                 std_id: [],
-                std_screened:[],
-                std_referred:[]
+                std_class:[],
+                std_section:[],
+                std_meals:[],
+                std_finance:[],
+                std_boarder:[]
             }),
-
         }
     },
 
     methods: {
-        loadActiveScreeningList(uri="masters/loadActiveStudentMasters/health_screening"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.screeningList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveScreeningTitleList(uri="masters/loadActiveStudentMasters/screening_position"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.screeningTitle =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveScreeningEndorserList(uri="masters/loadActiveStudentMasters/screening_endorser"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.screeningEndorser =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
         /**
          * to load the class list
          */
@@ -201,15 +178,15 @@ export default {
                 $("input[name='weight']:checked").each( function () {
                     referredArray.push($(this).val());
                 });
-                this.student_form.std_referred=referredArray;
 
-                this.student_form.post('/students/addHealthScreeningRecords',this.student_form)
+                this.student_form.class_section_stream = this.studentList;
+                this.student_form.post('/students/saveStudentClassAllocation',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/std_health_screening_list');
+                    this.$router.push('/class_section');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -288,10 +265,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        this.loadActiveScreeningList();
-        this.loadActiveScreeningTitleList();
-        this.loadActiveScreeningEndorserList();
         
         this.loadClassList();
         // this.loadSectionList();

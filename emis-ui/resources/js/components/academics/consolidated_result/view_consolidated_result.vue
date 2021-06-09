@@ -5,6 +5,9 @@
               <div class="mr-3">
                 <strong>Class: </strong> {{class_stream_section }}
               </div>
+               <div class="mr-3">
+                <strong>Instructional Days: </strong> {{ instructional_days }}
+              </div>
             </div>          
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -18,15 +21,19 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th v-for="(item1,index1) in subjects" :key="index1" :colspan="areasPerSubject(item1.aca_sub_id)" class="text-center">
-                                    {{item1.subject}} <span v-if="item1.sub_dzo_name">( {{item1.sub_dzo_name }} )</span>
-                                </th> 
+                                <template v-for="(item1,index1) in subjects">
+                                    <th :rowspan="item1.is_aggregate ? 2 : 1" :key="index1" :colspan="areasPerSubject(item1.aca_sub_id)" class="text-center">
+                                        {{item1.subject}} <span v-if="item1.sub_dzo_name">( {{item1.sub_dzo_name }} )</span>
+                                    </th>
+                                </template>
                             </tr>
                              <tr>
-                                <th v-for="(item2,index2) in areas" :key="index2" class="text-center">
-                                    {{item2.assessment_area}} <span v-if="item2.assmt_area_dzo_name">( {{item2.assmt_area_dzo_name }} )</span>
-                                    <span v-if="item2.input_type==1">({{item2.weightage}}%)</span>
-                                </th> 
+                                <template v-for="(item2,index2) in areas">
+                                    <th v-if="item2.assessment_area" :key="index2" class="text-center">
+                                        {{item2.assessment_area}} <span v-if="item2.assmt_area_dzo_name">( {{item2.assmt_area_dzo_name }} )</span>
+                                        <span v-if="item2.input_type==1 && item2.weightage">({{item2.weightage}}%)</span>
+                                    </th> 
+                                </template>
                             </tr>
                         </thead>
                         <tbody>
@@ -34,7 +41,7 @@
                                 <td>{{item3.CidNo}}</td>
                                 <td>{{ item3.Name }}</td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
-                                    <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)">
+                                    <span v-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
                                        {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
                                     </span>
                                     <!-- <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)"> -->
@@ -59,6 +66,7 @@
     data(){
            return{
             consolidatedResultList:[],
+            instructional_days:'',
             terms:[],
             subjects:[],
             areas:[],
@@ -84,6 +92,7 @@
             }
             try{
                 let consolidatedResult = await axios.get(uri).then(response => response.data)
+                this.instructional_days = consolidatedResult.overAllInstructionalDays
                 this.terms = consolidatedResult.terms
                 this.subjects = consolidatedResult.subjects
                 this.areas = consolidatedResult.areas

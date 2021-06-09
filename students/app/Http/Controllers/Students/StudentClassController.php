@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
-use App\Models\Students\CeaStudentAward;
+use App\Models\Students\StudentClassAllocation;
 use App\Models\Students\Student;
 
 class StudentClassController extends Controller
@@ -24,54 +24,44 @@ class StudentClassController extends Controller
 
     public function saveStudentClassAllocation(Request $request){
         
-        // $rules = [
-        //     'student'       => 'required',
-        //     'award_given_by'=> 'required',
-        //     'award_type_id' => 'required',
-        //     'place'         => 'required',
-        //     'date'          => 'required'
-        // ];
-        // $customMessages = [
-        //     'student.required'          => 'This field is required',
-        //     'award_given_by.required'   => 'This field is required',
-        //     'award_type_id.required'    => 'This field is required',
-        //     'place.required'            => 'This field is required',
-        //     'date.required'             => 'This field is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
+        $data =[
+            'id'                            => $request['id'],
+            'class_section_stream'          => $request['class_section_stream'],
+            'user_id'                       => $request['user_id'],
+            'working_agency_id'             => $request['working_agency_id']
+        ];
 
-        // $data =[
-        //     'id'                => $request->id,
-        //     'StdStudentId'           =>  $request->student,
-        //     'AwardedBy'    =>  $request->award_given_by,
-        //     'CeaAwardId'     =>  $request->award_type_id,
-        //     'Place'             =>  $request->place,
-        //     'AwardDate'              =>  $request->date,
-        //     'Remarks'           =>  $request->remarks,
-        //     'actiontype'        =>  $request->actiontype,
-        //     'recordtype'        =>  $request->recordtype, 
-        //     //'user_id'           => $this->user_id() 
-        // ];
+        $class_section_stream = $data['class_section_stream'];
 
-        if($request->actiontype=="add"){
-            $response_data = CeaStudentAward::create($data);
+        foreach($class_section_stream as $key => $value){
+            if(array_key_exists('orgClassStreamId', $value)){
+                $check_value = StudentClassAllocation::where('OrgClassStreamId', '=', $value['orgClassStreamId'])->select('id')->first();
+                //If not null, then 
+                if($check_value != NULL || (!empty($check_value))){
+                    $deletedRows = StudentClassAllocation::where('OrgClassStreamId', '=', $value['orgClassStreamId'])
+                                    ->where('academicYear', '=', date('Y'))
+                                    ->delete();
 
-        } else if($request->actiontype=="edit"){
+                    //insert after deleting
+                    $class_allocation_data = [
+                        'StdStudentId'          => $value['id'],
+                        'OrgClassStreamId'      => $value['orgClassStreamId'],
+                        'SectionDetailsId'      => $value['sectionId'],
+                        'academicYear'          => date('Y')
+                    ];
+                    $response_data = StudentClassAllocation::create($class_allocation_data);
 
-            //Audit Trails
-            // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
-
-            $app_data = [
-                'StdStudentId' => $request['student'],
-                'awarded_by'    =>  $request['award_given_by'],
-                'CeaAwardId'     =>  $request['award_type_id'],
-                'Place'             =>  $request['place'],
-                'AwardDate'              =>  $request['date'],
-                'Remarks'           =>  $request['remarks'],
-            ];
-
-            CeaStudentAward::where('id', $request['id'])->update($app_data);
+                } else{
+                    $class_allocation_data = [
+                        'StdStudentId'          => $value['id'],
+                        'OrgClassStreamId'      => $value['orgClassStreamId'],
+                        'SectionDetailsId'      => $value['sectionId'],
+                        'academicYear'          => date('Y')
+                    ];
+                    $response_data = StudentClassAllocation::create($class_allocation_data);
+                }
+                
+            }
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
