@@ -31,10 +31,12 @@ class StudentMasterController extends Controller{
             'name'           =>  $request->name,
             'description'    =>  $request->description,
             'status'         =>  $request->status,
-            'actiontype'     =>  $request->action_type,
+            'actiontype'     =>  $request->action_type,  
             'recordtype'     =>  $request->record_type, 
+         
             'user_id'        => $this->userId() 
         ];
+        //dd($data);
         if($request->record_type == 'student_awards'){
             $additional_data = [
                 'award_type_id' => $request->award_type_id,

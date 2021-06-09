@@ -92,7 +92,8 @@ class GeneralInfoController extends Controller
         $type = $this->apiService->listData('emis/organization/furniture/getFurnitureType');
         return $type;
     }
-    public function getFurnitureItem($itemId = ""){
+    public function getFurnitureItem($itemId=""){
+     //   dd('m here');
         $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
         return $itemList;
     }
