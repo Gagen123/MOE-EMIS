@@ -13,7 +13,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Program Type:<span class="text-danger">*</span></label> 
                         <select v-model="form.program_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_type') }" class="form-control select2" name="program_type" id="program_type">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
                     <has-error :form="form" field="program_type"></has-error>
                     </div>
@@ -107,6 +107,7 @@ export default {
     created() {
     },
     mounted() {
+         this.loadActiveProgramList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

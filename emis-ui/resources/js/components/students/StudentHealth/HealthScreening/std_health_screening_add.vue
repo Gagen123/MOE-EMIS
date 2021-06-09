@@ -6,7 +6,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Screening:</label>
                         <select v-model="student_form.screening" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('screening') }" class="form-control select2" name="screening" id="screening">
-                            <option v-for="(item, index) in screeningList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in screeningList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="screening"></has-error>
                     </div> 
@@ -25,11 +25,11 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Position Title:</label>
                         <select v-model="student_form.screening_position" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('screening_position') }" class="form-control select2" name="screening_position" id="screening_position">
-                            <option v-for="(item, index) in screeningTitle" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in screeningTitle" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="screening_position"></has-error>
                     </div> 
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Endorsed By:</label>
                         <select v-model="student_form.screening_endorsed_by" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('screening_endorsed_by') }" class="form-control select2" name="screening_endorsed_by" id="screening_endorsed_by">
                             <option v-for="(item, index) in screeningEndorser" :key="index" v-bind:value="item.id">{{ item.Name }}</option>

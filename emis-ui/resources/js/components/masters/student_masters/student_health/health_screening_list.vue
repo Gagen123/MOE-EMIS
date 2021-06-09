@@ -14,9 +14,9 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.description}}</td>
-                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.Name}}</td>
+                    <td>{{ item.Description}}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.created_at }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">

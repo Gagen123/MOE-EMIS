@@ -58,6 +58,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
+     //   dd('m here at microservice');
         if(strpos($param,'_Active')){
             $param=explode('_',$param)[0];
         }
@@ -74,6 +75,7 @@ class StudentMasterController extends Controller
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
+         //   dd($response_data);
             
         } elseif($param == 'club_name'){
             
