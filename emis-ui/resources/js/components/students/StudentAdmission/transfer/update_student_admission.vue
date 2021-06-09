@@ -14,11 +14,11 @@
     <div class="card">
         <div class="card-body">
             <div class="row-12">
-                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                 <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
                     <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
                     <span class="text-danger" id="snationality_err"></span>
-                  </div>
+                  </div> -->
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >CID No/Reference  : </label>
@@ -50,15 +50,15 @@
                  <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Dzongkhag : </label>
-                        <label class="text-primary">{{std_admission_details.CidNo}}</label>
+                        <label class="text-primary">{{loadactivedzongkhagList[std_admission_details.dzongkhag]}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Gewog : </label>
-                        <label class="text-primary">{{ std_admission_details.student_code}}</label>
+                        <label class="text-primary">{{gewogArray[std_admission_details.CmnGewogId]}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Village :</label>
-                        <label class="text-primary">{{ std_admission_details.first_name}} </label>
+                        <label class="text-primary">{{villageArray[std_admission_details.village_id]}}</label>
                     </div>
                 </div>
             </div>
@@ -145,6 +145,9 @@ export default {
             schoolList:[],
             classList:[],
             genderArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
             form: new form({
                 id:'',
                 contact_no:'',
@@ -175,6 +178,8 @@ export default {
                 let data = response.data.data;
                 if(data != ""){
                     this.std_admission_details=data;
+                    this.getGewogList(response.data.dzongkhagId);
+                    this.getvillagelist(response.data.gewogId);
                 }
             });
         },
@@ -233,13 +238,13 @@ export default {
         //         std_admission_details.schoolName = this.student_details.schoolName;
         //     }).catch(error => console.log(error));
         // },
-        getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
-            axios.get(uri)
-            .then(Response =>{
-            let data = Response.data.data;
-            this.dzongkhagList = data;
-            }).catch(error => console.log(error));
-        },
+        // getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
+        //     axios.get(uri)
+        //     .then(Response =>{
+        //     let data = Response.data.data;
+        //     this.dzongkhagList = data;
+        //     }).catch(error => console.log(error));
+        // },
 
         // getschoolList(id){
         //     let dzoId=$('#dzongkhag').val();
@@ -265,6 +270,44 @@ export default {
         //     })
         // },
 
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        getGewogList(dzongkhag){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name;
+                }
+            });
+        },
+
+        getvillagelist(gewogId){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
         applyselect(){
             if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
                 $('#dzongkhag').addClass('select2-hidden-accessible');
@@ -280,30 +323,31 @@ export default {
             }
         },
 
-            async changefunction(id){
-        if($('#'+id).val()!=""){
-            $('#'+id).removeClass('is-invalid select2');
-            $('#'+id+'_err').html('');
-            $('#'+id).addClass('select2');
-        }
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
 
-        if(id=="dzongkhag"){
-            this.form.dzongkhag=$('#dzongkhag').val();
-            this.getschoolList($('#dzongkhag').val());
-        }
-        if(id=="school"){
-            this.form.school=$('#school').val();
-            // this.getclassList($('#school').val());
-        }
-        if(id=="class"){
-            this.form.class=$('#class').val();
-        }
+            if(id=="dzongkhag"){
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.getschoolList($('#dzongkhag').val());
+            }
+            if(id=="school"){
+                this.form.school=$('#school').val();
+                // this.getclassList($('#school').val());
+            }
+            if(id=="class"){
+                this.form.class=$('#class').val();
+            }
 
         }
 
     },
     mounted() {
         this.loadgenderList();
+        this.loadactivedzongkhagList();
         // this.getStudentdetials();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
