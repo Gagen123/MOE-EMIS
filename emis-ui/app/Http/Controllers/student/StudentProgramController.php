@@ -71,6 +71,24 @@ class StudentProgramController extends Controller
         return $student_records;
     }
 
+     /*
+    * Function is to list Clubs for drop down
+    */
+
+    public function listStudentClubs($param=""){
+        $student_records = $this->apiService->listData('emis/students/listStudentClubs/'.$param);
+        return $student_records;
+    }
+
+    /*
+    * Function is to load the list of student clubs
+    */
+
+    public function loadStudentClubs($param=""){
+        $student_records = $this->apiService->listData('emis/students/loadStudentClubs/'.$param);
+        return $student_records;
+    }
+
     /**
      * Get the program details based on id while editing
      * 

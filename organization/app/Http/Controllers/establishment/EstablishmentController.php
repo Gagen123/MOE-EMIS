@@ -30,6 +30,7 @@ use App\Models\OrganizationFeedingDetails;
 use App\Models\OrganizationProprietorDetails;
 use App\Models\OrganizationClassStream;
 use App\Models\OrgProfile;
+use App\Models\OrganizaitonSenModule;
 use App\Models\HistoryForOrganizaitonDetail;
 use App\Models\establishment\HeadQuaterDetails;
 use App\Models\establishment\ApplicationEstPublic;
@@ -37,12 +38,9 @@ use App\Models\establishment\ApplicationEstPrivate;
 use App\Models\establishment\ApplicationVerification;
 use App\Models\establishment\ApplicationNoMeals;
 use App\Models\establishment\ApplicationVerificationTeam;
-
 use App\Models\establishment\ApplicationAttachments;
 
-
-class EstablishmentController extends Controller
-{
+class EstablishmentController extends Controller{
     use ApiResponser;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
@@ -1142,6 +1140,52 @@ class EstablishmentController extends Controller
         $app_details->estb_attachments=ApplicationAttachments::where('ApplicationDetailsId',$app_details->id)->get();
         $app_details->estb_classStream=ApplicationClassStream::where('ApplicationDetailsId',$app_details->id)->get();
         return $this->successResponse($app_details);
+    }
+
+    public function updateSenDetials(Request $request){
+        $org_details =[
+
+            'org_id'                        =>  $request['org_id'],
+            'newConstruction'               =>  $request['newConstruction'],
+            'accessibleToilet'              =>  $request['accessibleToilet'],
+            'accessibleWash'                =>  $request['accessibleWash'],
+            'outdoorPlayground'             =>  $request['outdoorPlayground'],
+            'outdoorRoutes'                 =>  $request['outdoorRoutes'],
+            'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
+            'diningHall'                    =>  $request['hasCdiningHallE'],
+            'hostelWash'                    =>  $request['hostelWash'],
+            'boysHostelAccessible'          =>  $request['boysHostelAccessible'],
+            'enrollment'                    =>  $request['enrollment'],
+            'communityWithDisablities'      =>  $request['communityWithDisablities'],
+            'community'                     =>  $request['community'],
+            'senProgram'                    =>  $request['senProgram'],
+            'studentDisabilities'           =>  $request['studentDisabilities'],
+            'proprietorName'                =>  $request['proprietorName'],
+            'professionalsSupportChildren'  =>  implode($request['professionalsSupportChildren'],', '),
+            'adultWorkingwithChildren'      =>  implode($request['adultWorkingwithChildren'],', '),
+            'support_disabilitycommunity'   =>  $request['support_disabilitycommunity'],
+            'matrons'                       =>  $request['matrons'],
+            'wardens'                       =>  $request['wardens'],
+            'caregivers'                    =>  $request['caregivers'],
+            'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
+            'support_service'               =>  $request['support_service'],
+            'created_by'                    =>  $request['user_id'],
+
+        ];
+        // dd($org_details);
+        $update_data= OrganizaitonSenModule::where('id',$request['org_id'])->first();
+        if($update_data!=""){
+            OrganizaitonSenModule::where('id',$request['org_id'])->update($org_details);
+        }
+        else{
+            $update_data=OrganizaitonSenModule::create($org_details);
+        }
+        return $this->successResponse($update_data, Response::HTTP_CREATED);
+    }
+
+    public function getcurrentSenDetails($orgId=""){
+        $response_data = OrganizaitonSenModule::where('org_id',$orgId)->first();
+        return $this->successResponse($response_data);
     }
 
 }

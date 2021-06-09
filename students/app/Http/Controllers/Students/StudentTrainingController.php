@@ -89,24 +89,21 @@ class StudentTrainingController extends Controller
 
         $rules = [
             'student'            => 'required',
-            'project'            => 'required',
-            'task'            => 'required',
+            'program'            => 'required',
         ];
 
         $customMessages = [
             'student.required'  => 'This field is required',
-            'project.required'     => 'This field is required',
-            'task.required'  => 'This field is required',
+            'program.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
             'id'               => $request->id,
             'student'          => $request->student,
-            'project'          => $request->project,
-            'task'             => $request->task
-
-            //'user_id'        => $this->user_id() 
+            'program'          => $request->program,
+            'organization_id'  => $request['organization_id'],
+            'user_id'        => $request['user_id']
         ];
 
         $response_data = CeaTrainingParticipant::create($data);

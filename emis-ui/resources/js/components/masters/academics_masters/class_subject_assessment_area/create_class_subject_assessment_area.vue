@@ -30,19 +30,20 @@
                                     <div class="form-check">
                                         <input v-model="classSubAssessmentList[index].assmt_area_selected" :value="item.aca_assmt_area_id" class="form-check-input" type="checkbox" id="assessment_area">
                                         <label class="form-check-label" for="assessment_area">
-                                            {{item.assessment_area}} <span v-if="item.dzo_name">( {{item.dzo_name}} )</span>
+                                            <span style="display:none;">{{item.display_order}}</span>
+                                          {{item.assessment_area}} <span v-if="item.dzo_name">( {{item.dzo_name}} )</span>
                                         </label>
                                     </div>
                                 </td>
                                 <td v-if="input_type==1">
                                     <div v-if="classSubAssessmentList[index].input_type==null" class="input-group">
-                                        <input v-model="classSubAssessmentList[index].weightage" type="number" step="0.1" max="100" min="0" class="form-control text-right" aria-label="weightage">
+                                        <input :disabled="!classSubAssessmentList[index].assmt_area_selected" v-model="classSubAssessmentList[index].weightage" type="number" step="0.1" max="100" min="0" class="form-control text-right" required aria-label="weightage">
                                         <span class="input-group-text">%</span>
                                     </div>
                                 </td>
                                  <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                       <input class="form-control text-right" v-model="classSubAssessmentList[index].display_order" type="number" max="100" min="0"> 
+                                       <input class="form-control text-right" :disabled="!classSubAssessmentList[index].assmt_area_selected" v-model="classSubAssessmentList[index].display_order" type="number" max="100" min="0" required> 
                                     </div>
                                 </td>
                             </tr>
@@ -107,7 +108,13 @@ export default {
                     this.$router.push('/list-subject-assessment-area');
                 })
                 .catch(function (error){
-                this.errors = response.error;
+                    if(error.response.status === 422){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'All fields are required for a selected Assessment Area.',
+                        })
+                    }
             });
         },
 	 

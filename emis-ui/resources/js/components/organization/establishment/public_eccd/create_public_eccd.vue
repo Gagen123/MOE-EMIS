@@ -523,6 +523,7 @@ export default {
             axios.get('organization/loaddraftApplication/'+type)
               .then(response => {
                 let data = response.data.data;
+                proposedName
                 // this.form.proposedName=data.
                 // id: '',initiatedBy:'', :'',level:'',category:'1',dzongkhag:'',gewog:'',chiwog:'0',locationType:'',
                 // coLocatedParent:'0',parentSchool:'', proposedLocation:'', establishment_type:'public_eccd', status:'pending'

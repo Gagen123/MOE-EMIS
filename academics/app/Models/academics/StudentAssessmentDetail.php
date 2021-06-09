@@ -18,6 +18,7 @@ class StudentAssessmentDetail extends Model
         'aca_assmt_area_id',
         'aca_rating_type_id',
         'score',
+        'descriptive_score',
         'remarks',
         'created_by',
         'created_at',

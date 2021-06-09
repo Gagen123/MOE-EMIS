@@ -31,7 +31,7 @@
                             </td>
                             <td>
                                 <div v-if="item.is_class_teacher && item.subject_teachers_finalized && !item.class_teacher_finalized" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
+                                    <router-link :to="{name:'edit_consolidated_result', params: {data:item}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit</router-link>
                                 </div>
                                   <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>

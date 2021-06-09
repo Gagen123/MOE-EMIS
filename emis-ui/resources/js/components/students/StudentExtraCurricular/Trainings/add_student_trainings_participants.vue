@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div> 
@@ -15,7 +15,7 @@
                     <div class="form-group">
                         <label>Training:</label>
                         <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
                     </div>
@@ -41,16 +41,13 @@ export default {
         return {
             studentList:[],
             trainingList:[],
-            projectList:[],
+            programList:[],
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 student: '',
-                award_given_by: '',
-                award_type_id: '',
-                place: '',
-                date: '',
-                remarks:'',
+                program: '',
+                remarks: '',
             }),
         }
     },
@@ -101,7 +98,7 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveStudentAward',this.student_form)
+                this.student_form.post('/students/saveTrainingParticipants',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -123,8 +120,8 @@ export default {
             if(id=="student"){
                 this.student_form.student=$('#student').val();
             }
-            if(id=="award_type_id"){
-                this.student_form.award_type_id=$('#award_type_id').val();
+            if(id=="program"){
+                this.student_form.award_type_id=$('#program').val();
             }
         },
     },

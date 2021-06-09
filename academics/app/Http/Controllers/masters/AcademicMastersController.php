@@ -226,7 +226,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse($Activesubject);
         }
         if($param == "all_active_rating_type"){
-            return $this->successResponse(RatingType::where ('status', '1')->get());
+            return $this->successResponse(RatingType::where ('status', '1')->get(["id","name","input_type"]));
         }
         if($param == "all_assessment_area"){
             $assessment_area = DB::select('SELECT t1.id,t1.display_order, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id, t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order');
@@ -235,6 +235,13 @@ class AcademicMastersController extends Controller
         if($param == "all_assessment_frequency"){
             $frequency = DB::select('SELECT id, name FROM aca_assessment_frequency WHERE status=1 order by name');
             return $this->successResponse($frequency);
+        }
+        if($param == "assessed_classes") {
+            $class_assessment_frequency = DB::select('SELECT t1.org_class_id,t1.org_stream_id 
+                                                    FROM aca_class_assessment_frequency t1 
+                                                        JOIN aca_assessment_frequency t2 ON t1.aca_assmt_frequency_id = t2.id
+                                                    WHERE IFNULL(t2.not_assessed,0) = 0');
+            return $this->successResponse($class_assessment_frequency);
         }
     }
     public function loadClassSubject($class_id="",$stream_id=""){
@@ -264,14 +271,16 @@ class AcademicMastersController extends Controller
           } 
         DB::transaction(function() use($request, $query, $params) {
             DB::delete($query, $params);
-            foreach($request['data'] as $classSubject){
-                $classSubject['class_stream'] =  $request['class_stream'];
-                $classSubject['org_class_id'] =  $request['org_class_id'];
-                $classSubject['org_stream_id'] =  $request['org_stream_id'];
-                $classSubject['created_by'] =  $request['user_id'];
-                $classSubject['created_at'] =   date('Y-m-d h:i:s');
+            if($request['data']){
+                foreach($request['data'] as $classSubject){
+                    $classSubject['class_stream'] =  $request['class_stream'];
+                    $classSubject['org_class_id'] =  $request['org_class_id'];
+                    $classSubject['org_stream_id'] =  $request['org_stream_id'];
+                    $classSubject['created_by'] =  $request['user_id'];
+                    $classSubject['created_at'] =   date('Y-m-d h:i:s');
 
-                SubjectAssessmentType::create($classSubject);
+                    SubjectAssessmentType::create($classSubject);
+                }
             }
         });
         return $this->successResponse(1, Response::HTTP_CREATED);
@@ -285,7 +294,7 @@ class AcademicMastersController extends Controller
            'data.*.aca_assmt_frequency_id' => 'required',
         ];
         $customMessages = [
-            'data.*.aca_assmt_frequency_id.required' => 'This field is required',
+            'data.*.aca_assmt_frequency_id.required' => 'All the fields are required',
         ];
         $this->validate($request, $rules, $customMessages);
         DB::transaction(function() use($request) {
@@ -313,7 +322,7 @@ class AcademicMastersController extends Controller
           array_push($params,$stream_id);
         } 
         array_push($params,$sub_id);
-        return $this->successResponse(DB::select($query.' WHERE t1.aca_sub_id = ?', $params)); 
+        return $this->successResponse(DB::select($query.' WHERE t1.aca_sub_id = ? ORDER BY display_order', $params)); 
 
     }
     public function saveclassSubjectAssessment(Request $request){ 
