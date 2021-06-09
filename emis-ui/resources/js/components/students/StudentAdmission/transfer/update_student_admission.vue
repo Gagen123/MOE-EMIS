@@ -16,21 +16,21 @@
             <div class="row-12">
                  <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
-                    <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
+                    <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
                     <span class="text-danger" id="snationality_err"></span>
                   </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >CID No/Reference  : </label>
-                        <label class="text-primary">11305004488</label>
+                        <label class="text-primary">{{std_admission_details.CidNo}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Student Code : </label>
-                        <label class="text-primary">{{ this.student_form.student_code}}</label>
+                        <label class="text-primary">{{ std_admission_details.student_code}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Name of Student :</label>
-                        <label class="text-primary">Full Name</label>
+                        <label class="text-primary">{{ std_admission_details.first_name}} {{ std_admission_details.middle_name}} {{ std_admission_details.last_name}}/label>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -40,7 +40,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label >Date of Birth :</label>
-                        <label class="text-primary">{{this.student_form.dob}}</label>
+                        <label class="text-primary">{{std_admission_details.dob}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Qualification :</label>
@@ -64,7 +64,7 @@
                             <td class="text-primary">0001</td>
                             <td class="text-primary">Gelephu HSS</td>
                             <td class="text-primary">Sarpang</td>
-                            <td class="text-primary">{{this.student_form.gewog_name}}</td>
+                            <td class="text-primary">{{std_admission_details.gewog_name}}</td>
                         </tbody>
                     </table>
                 </div>
@@ -88,7 +88,7 @@
                         <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                     </select>
                 </div>
-                                        
+
                 <div class="form-group col-md-4">
                     <label>School <span class="text-danger">*</span></label>
                     <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('school') }" class="form-control select2" name="school" id="school">
@@ -117,7 +117,7 @@
                     <has-error :form="form" field="remarks"></has-error>
                 </div>
             </div>
-            <hr>                        
+            <hr>
             <div class="footer float-right" >
                 <button type="button" v-on:click="resetForm" class="btn btn-danger"><i class="fas fa-redo"></i> Reset</button>
                 <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Apply</button>
@@ -162,12 +162,12 @@ export default {
     },
     methods:{
         getstudentPersonalDetails(id){
-            axios.get('students/admission/getStudentDetails/'+id)
+            axios.get('students/admission/getStudentDetails/admission_'+id)
             .then(response => {
                 let data = response.data.data;
                 if(data != ""){
                     this.std_admission_details=data;
-                }   
+                }
             });
         },
 
@@ -182,12 +182,12 @@ export default {
             }
             this.$Progress.start();
             let formData = new FormData();
-            formData.append('student_id', this.student_form.student_id);
-            formData.append('dzongkhag', this.student_form.dzongkhag);
-            formData.append('school', this.student_form.school);
-            formData.append('class', this.student_form.class);
-            formData.append('dateOfapply', this.student_form.dateOfapply); 
-            formData.append('remarks', this.student_form.remarks);
+            formData.append('student_id', std_admission_details.student_id);
+            formData.append('dzongkhag', std_admission_details.dzongkhag);
+            formData.append('school', std_admission_details.school);
+            formData.append('class', std_admission_details.class);
+            formData.append('dateOfapply', std_admission_details.dateOfapply);
+            formData.append('remarks', std_admission_details.remarks);
 
                 axios.post('/savedetailsEnrolledStd',formData,config)
             .then(()=>{
@@ -203,14 +203,14 @@ export default {
             axios.get('/getstudentdetails')
             .then(response => {
                 this.student_details  = response.data
-                this.student_form.id  =this.student_details.id;
-                this.student_form.cid = this.student_details.cid;
-                this.student_form.student_code = this.student_details.student_code;
-                this.student_form.name = this.student_details.name;
-                this.student_form.dob = this.student_details.dob;
-                this.student_form.gender = this.student_details.gender;
-                this.student_form.school_code = this.student_details.school_code;
-                this.student_form.schoolName = this.student_details.schoolName;
+                std_admission_details.id  =this.student_details.id;
+                std_admission_details.cid = this.student_details.cid;
+                std_admission_details.student_code = this.student_details.student_code;
+                std_admission_details.name = this.student_details.name;
+                std_admission_details.dob = this.student_details.dob;
+                std_admission_details.gender = this.student_details.gender;
+                std_admission_details.school_code = this.student_details.school_code;
+                std_admission_details.schoolName = this.student_details.schoolName;
             }).catch(error => console.log(error));
         },
         getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
@@ -225,7 +225,7 @@ export default {
             let dzoId=$('#dzongkhag').val();
             if(id!=""){
             dzoId=id;
-        } 
+        }
         axios.get('/masters/getOrgList/' +dzoId)
         .then(Response =>{
             let data = Response.data.data;
@@ -238,7 +238,7 @@ export default {
             if(id!=""){
                 orgId=id;
                 console.log(orgId);
-            } 
+            }
             axios.get('/masters/getClassByOrganizationId/' +orgId)
             .then(Response =>{
             let data = Response.data.data;
@@ -267,7 +267,7 @@ export default {
             $('#'+id+'_err').html('');
             $('#'+id).addClass('select2');
         }
-            
+
         if(id=="dzongkhag"){
             this.form.dzongkhag=$('#dzongkhag').val();
             this.getschoolList($('#dzongkhag').val());
@@ -279,7 +279,7 @@ export default {
         if(id=="class"){
             this.form.class=$('#class').val();
         }
-        
+
         }
 
     },
@@ -287,9 +287,9 @@ export default {
         this.getStudentdetials();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-        Fire.$emit('changefunction',$(this).attr('id')); 
+        Fire.$emit('changefunction',$(this).attr('id'));
     });
-    
+
     Fire.$on('changefunction',(id)=> {
         this.changefunction(id);
     });
