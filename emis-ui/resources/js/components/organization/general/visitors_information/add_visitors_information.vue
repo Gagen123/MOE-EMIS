@@ -119,7 +119,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadMasterList();
+        // this.loadMasterList();
     },
     
 }
