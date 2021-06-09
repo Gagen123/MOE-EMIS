@@ -887,6 +887,26 @@ const routes = [
         { path: '/list_visitors_information', name:'list_visitors_information', component: require('./components/organization/general/visitors_information/list_visitors_information.vue').default },
       ] 
     },
+    { path: '/sen_module_index', 
+      component: require('./components/organization/general/sen_module/sen_module.vue').default ,
+      children: [
+        { path: '',name:'sen_module_index', component: require('./components/organization/general/sen_module/list_sen_module.vue').default },
+        { path: '/add_sen_module', name:'add_sen_module', component: require('./components/organization/general/sen_module/add_sen_module.vue').default },
+        { path: '/edit_sen_module', name:'edit_sen_module', component: require('./components/organization/general/sen_module/edit_sen_module.vue').default },
+        { path: '/list_sen_module', name:'list_sen_module', component: require('./components/organization/general/sen_module/list_sen_module.vue').default },
+      ] 
+    },
+
+    { path: '/org_programs', 
+      component: require('./components/organization/general/programs_clubs/org_programs.vue').default ,
+      children: [
+        { path: '',name:'org_programs', component: require('./components/organization/general/programs_clubs/list_org_programs.vue').default },
+        { path: '/add_org_programs', name:'add_org_programs', component: require('./components/organization/general/programs_clubs/add_org_programs.vue').default },
+        { path: '/edit_org_programs', name:'edit_org_programs', component: require('./components/organization/general/programs_clubs/edit_org_programs.vue').default },
+        { path: '/list_org_programs', name:'list_org_programs', component: require('./components/organization/general/programs_clubs/list_org_programs.vue').default },
+      ] 
+    },
+
     //Latest Routes (31st May - All missing information as per the requirement gathering and discussion)
     { path: '/financials', component: require('./components/organization/financials/index.vue').default,
       children:[
@@ -910,9 +930,6 @@ const routes = [
             { path: '/list_projections', name:'list_projections', component: require('./components/organization/general/projections/list_projections.vue').default },
           ] 
         },
-        
-       
-        
         { path: '/location_details', 
           component: require('./components/organization/general/location_details/location_details.vue').default ,
           children: [
@@ -922,8 +939,6 @@ const routes = [
             { path: '/list_location_details', name:'list_location_details', component: require('./components/organization/general/location_details/list_location_details.vue').default },
           ] 
         },
-        
-        
       ] 
     },
 

@@ -11,6 +11,8 @@ use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 
 use App\Models\Masters\CeaRole;
+use App\Models\Masters\CeaProgram;
+use App\Models\Masters\CeaProgramType;
 
 class StudentMasterController extends Controller
 {
@@ -64,7 +66,22 @@ class StudentMasterController extends Controller
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         
         $model = new $modelName();
-        if(strpos($param,'_Active')){
+
+        //need to separate programs from clubs
+
+        if($param == 'program_name'){
+            
+            $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
+            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            return $this->successResponse($response_data);
+            
+        } elseif($param == 'club_name'){
+            
+            $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            return $this->successResponse($response_data);
+
+        } else if(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
         }
         return $this->successResponse($model::all());
@@ -214,6 +231,10 @@ class StudentMasterController extends Controller
                         ];
                         $data = $data + $additional_data;
                     }
+                    break;
+                }
+            case "club_name" : {
+                    $databaseModel = "CeaProgram";
                     break;
                 }
             case "program_type" : {

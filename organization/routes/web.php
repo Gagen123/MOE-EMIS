@@ -23,7 +23,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrganizaitonmasters/{type}/{model}', 'OrganizationMasterController@loadOrganizaitonmasters');
         $router->get('/loadFinacialtype', 'OrganizationMasterController@loadFinacialtype');
         $router->get('/loadincomeList', 'OrganizationMasterController@loadincomeList');
-    }); 
+    });
 
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {
         // disaster route
@@ -122,7 +122,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassInDropdown', 'Masters\StreamController@getClassInDropdown');
 
     });
-	
+
 	$router->group(['prefix' => 'masters/classstream'], function () use ($router) {
         $router->get('/getClassStream', 'Masters\ClassStreamController@getClassStream');
     });
@@ -180,6 +180,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->post('/updateOrgBasicDetials', 'establishment\EstablishmentController@updateOrgBasicDetials');
         $router->post('/updateBasicDetails', 'establishment\EstablishmentController@updateBasicDetails');
+        $router->post('/updateSenDetials', 'establishment\EstablishmentController@updateSenDetials');
+        $router->get('/getCurrentSenDetails/{orgId}', 'establishment\EstablishmentController@getcurrentSenDetails');
 
             // equipment route
         $router->group(['prefix' => 'equipment'], function () use ($router) {
@@ -210,11 +212,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'connectivity'], function () use ($router) {
             $router->post('/saveConnectivityDetails', 'generalInformation\VariousConnectivityController@saveConnectivityDetails');
             $router->get('/loadConnectivityInformation/{org_id}', 'generalInformation\VariousConnectivityController@loadConnectivityInformation');
-           
+
         });
 
         $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
-            $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails'); 
+            $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails');
              $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
         });
 
@@ -228,7 +230,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveIncomeInformation', 'generalInformation\FinanceController@saveIncomeInformation');
             $router->post('/updateIncomeInformation', 'generalInformation\FinanceController@updateIncomeInformation');
             $router->get('/loadIncomeInformation/{orgId}', 'generalInformation\FinanceController@loadIncomeInformation');
-            
+
             $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
             $router->post('/updateFinancialInfo', 'generalInformation\FinanceController@updateFinancialInfo');
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
@@ -269,7 +271,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getServiceProviderDropdown', 'generalInformation\ConnectivityController@getServiceProviderDropdown');
             $router->get('/getServiceProviderDropdown1', 'generalInformation\ConnectivityController@getServiceProviderDropdown1');
             $router->get('/getContactTypeDropdown', 'generalInformation\ConnectivityController@getContactTypeDropdown');
-           
+
 
         });
         $router->group(['prefix' => 'location'], function () use ($router) {
@@ -408,8 +410,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateReopeningDetails', 'restructuring\ReopeningController@updateReopeningDetails');
 
         });
-       
-        
+
+
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
@@ -429,6 +431,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
         $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
-        
+
     });
 });

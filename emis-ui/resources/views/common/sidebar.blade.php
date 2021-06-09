@@ -362,7 +362,7 @@
                         <router-link to="/visitors_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Organizaiton Visitor & SBM
+                                Organizaiton Visitor
                             </p>
                         </router-link>
                     </li>
@@ -374,14 +374,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <!-- <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                        <router-link to="/program_clubs_index" class="nav-link">
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','org_programs')">
+                        <router-link to="/org_programs" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Programs & Clubs
                             </p>
                         </router-link>
-                    </li> -->
+                    </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
@@ -394,7 +394,15 @@
                         <router-link to="/structural_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Facilities & others
+                                Facilities
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="sen_module_index" onclick="setclass('organizationlink','','sen_module_index')">
+                        <router-link to="/sen_module_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                SEN Module
                             </p>
                         </router-link>
                     </li>
@@ -487,7 +495,7 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
+                    <li class="nav-item" id="admission" @click="setclass('studentadmission','','admission')">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -495,7 +503,15 @@
                             </p>
                         </router-link>
                     </li>
-                   <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
+                    <li class="nav-item" id="studentservices" @click="setclass('class_section','','class_section')">
+                        <router-link to="/class_section" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Class Section Allocation
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="studentservices" @click="setclass('studentservices','','studentservices')">
                         <router-link to="/student_services" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>

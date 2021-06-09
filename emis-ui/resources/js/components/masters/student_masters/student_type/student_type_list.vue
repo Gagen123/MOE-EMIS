@@ -41,7 +41,6 @@ export default {
                 this.typeList =  data.data.data;
             })
             .catch(function (error) {
-                alert(error); 
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="5" class="text-center text-danger text-bold">Seems this server is down. Please try later</td></tr>');
                 }

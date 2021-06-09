@@ -27,7 +27,6 @@ export default {
 
         }
     },
-
     methods:{
         loadpage:function(type){
             if(type=="EccdAdd" || type=="EccdList"){

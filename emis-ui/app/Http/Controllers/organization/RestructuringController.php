@@ -588,6 +588,7 @@ class RestructuringController extends Controller
             'user_id'           =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
+        // dd($response_data);
         //Work Flow Process (based on Public School Establishment)
         //get submitter role
         if($request['action_type']!="edit"){
