@@ -30,24 +30,39 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Name of Student :</label>
-                        <label class="text-primary">{{ std_admission_details.first_name}} {{ std_admission_details.middle_name}} {{ std_admission_details.last_name}}/label>
+                        <label class="text-primary">{{ std_admission_details.first_name}} {{ std_admission_details.middle_name}} {{ std_admission_details.last_name}}</label>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Gender :</label>
-                        <label class="text-primary">M</label>
+                        <label class="text-primary">{{ genderArray[std_admission_details.CmnSexId]}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label >Date of Birth :</label>
-                        <label class="text-primary">{{std_admission_details.dob}}</label>
+                        <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="required" >Qualification :</label>
+                        <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
+                    </div> -->
+                </div>
+                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="required" >Dzongkhag : </label>
+                        <label class="text-primary">{{std_admission_details.CidNo}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >Qualification :</label>
-                        <label class="text-primary">x</label>
+                        <label class="required" >Gewog : </label>
+                        <label class="text-primary">{{ std_admission_details.student_code}}</label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="required" >Village :</label>
+                        <label class="text-primary">{{ std_admission_details.first_name}} </label>
                     </div>
                 </div>
             </div>
+
             <div class="row-12">
                 <div class="card">
                     <label class="card-header"><strong>School Information</strong></label>
@@ -88,19 +103,11 @@
                         <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                     </select>
                 </div>
-
-                <div class="form-group col-md-4">
-                    <label>School <span class="text-danger">*</span></label>
-                    <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('school') }" class="form-control select2" name="school" id="school">
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                    </select>
-                </div>
                 <div class="form-group col-md-4">
                     <label>Class<span class="text-danger">*</span></label>
-                    <select v-model="student_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('class') }" class="form-control select2" name="class" id="class">
+                    <select v-model="std_admission_details.class_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('class') }" class="form-control select2" name="class" id="class">
                         <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.name}}</option>
+                        <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.name}}</option>
                     </select>
                 </div>
             </div>
@@ -137,6 +144,7 @@ export default {
             dzongkhagList:[],
             schoolList:[],
             classList:[],
+            genderArray:{},
             form: new form({
                 id:'',
                 contact_no:'',
@@ -170,6 +178,18 @@ export default {
                 }
             });
         },
+        loadgenderList(uri = 'masters/loadGlobalMasters/all_active_gender'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error){
+               console.log('Error: '+error);
+            });
+        },
 
         resetForm: function(event){
             this.form.reset();
@@ -199,20 +219,20 @@ export default {
             })
             .catch(()=>{console.log("Error.....")})
         },
-        getStudentdetials(){
-            axios.get('/getstudentdetails')
-            .then(response => {
-                this.student_details  = response.data
-                std_admission_details.id  =this.student_details.id;
-                std_admission_details.cid = this.student_details.cid;
-                std_admission_details.student_code = this.student_details.student_code;
-                std_admission_details.name = this.student_details.name;
-                std_admission_details.dob = this.student_details.dob;
-                std_admission_details.gender = this.student_details.gender;
-                std_admission_details.school_code = this.student_details.school_code;
-                std_admission_details.schoolName = this.student_details.schoolName;
-            }).catch(error => console.log(error));
-        },
+        // getStudentdetials(){
+        //     axios.get('/getstudentdetails')
+        //     .then(response => {
+        //         this.student_details  = response.data
+        //         std_admission_details.id  =this.student_details.id;
+        //         std_admission_details.cid = this.student_details.cid;
+        //         std_admission_details.student_code = this.student_details.student_code;
+        //         std_admission_details.name = this.student_details.name;
+        //         std_admission_details.dob = this.student_details.dob;
+        //         std_admission_details.gender = this.student_details.gender;
+        //         std_admission_details.school_code = this.student_details.school_code;
+        //         std_admission_details.schoolName = this.student_details.schoolName;
+        //     }).catch(error => console.log(error));
+        // },
         getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
             axios.get(uri)
             .then(Response =>{
@@ -221,30 +241,29 @@ export default {
             }).catch(error => console.log(error));
         },
 
-        getschoolList(id){
-            let dzoId=$('#dzongkhag').val();
-            if(id!=""){
-            dzoId=id;
-        }
-        axios.get('/masters/getOrgList/' +dzoId)
-        .then(Response =>{
-            let data = Response.data.data;
-            this.schoolList = data;
-            })
-
-        },
-        getclassList(id){
-            let orgId=$('#school').val();
-            if(id!=""){
-                orgId=id;
-                console.log(orgId);
-            }
-            axios.get('/masters/getClassByOrganizationId/' +orgId)
-            .then(Response =>{
-            let data = Response.data.data;
-            this.classList = data;
-            })
-        },
+        // getschoolList(id){
+        //     let dzoId=$('#dzongkhag').val();
+        //     if(id!=""){
+        //         dzoId=id;
+        //     }
+        //     axios.get('/masters/getOrgList/' +dzoId)
+        //     .then(Response =>{
+        //         let data = Response.data.data;
+        //         this.schoolList = data;
+        //     })
+        // },
+        // getclassList(id){
+        //     let orgId=$('#school').val();
+        //     if(id!=""){
+        //         orgId=id;
+        //         console.log(orgId);
+        //     }
+        //     axios.get('/masters/getClassByOrganizationId/' +orgId)
+        //     .then(Response =>{
+        //     let data = Response.data.data;
+        //     this.classList = data;
+        //     })
+        // },
 
         applyselect(){
             if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
@@ -274,7 +293,7 @@ export default {
         }
         if(id=="school"){
             this.form.school=$('#school').val();
-            this.getclassList($('#school').val());
+            // this.getclassList($('#school').val());
         }
         if(id=="class"){
             this.form.class=$('#class').val();
@@ -284,20 +303,21 @@ export default {
 
     },
     mounted() {
-        this.getStudentdetials();
+        this.loadgenderList();
+        // this.getStudentdetials();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-        Fire.$emit('changefunction',$(this).attr('id'));
-    });
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
 
-    Fire.$on('changefunction',(id)=> {
-        this.changefunction(id);
-    });
-    },
-    created() {
-        this.getschoolList();
-        this.getclassList();
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
         this.getstudentPersonalDetails(this.$route.params.data);
+        // this.getschoolList();
+        // this.getclassList();
     },
+
+
 }
 </script>
