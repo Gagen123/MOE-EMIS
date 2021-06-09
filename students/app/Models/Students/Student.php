@@ -13,7 +13,7 @@ class Student extends Model
 
     protected $fillable = [
         'id',
-        'OrgOrganizationId', 
+        'OrgOrganizationId',
         'CidNo',
         'student_code',
         'Name',
@@ -26,11 +26,17 @@ class Student extends Model
         'Remarks',
         'IsNewAdmission',
         'IsTransferred',
+        'isSenStudent',
         'IsRejoined',
         'PhotoPath',
         'PrimaryContact',
         'CmnParentsMaritalStatusId',
-        'Remarks'
+        'Remarks',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+
     ];
 
     public function CeaStudentAwards(){
