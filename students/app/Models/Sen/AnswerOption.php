@@ -3,6 +3,7 @@
 namespace App\Models\Sen;
 
 use App\Traits\Uuid;
+use App\Models\Sen\Question;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -18,4 +19,7 @@ class AnswerOption extends Model
         'can_hav_remarks',
     ];
 
+    public function question(){
+        return $this->belongsTo(Question::class,'question_id', 'id');
+    }
 }

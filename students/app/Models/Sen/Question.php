@@ -2,6 +2,9 @@
 
 namespace App\Models\Sen;
 
+use App\Models\Sen\Answer;
+use App\Models\Sen\AnswerOption;
+use App\Models\Sen\QuestionTypes;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
@@ -23,4 +26,18 @@ class Question extends Model
         'updated_by',
         'updated_at'
     ];
+
+    public function questionType(){
+        return $this->belongsTo(QuestionTypes::class,'question_types_id');
+    }
+    
+    public function answerOptions()
+    {
+        return $this->hasMany(AnswerOption::class, 'question_id', 'id');
+    }
+
+    public function questionAnswers()
+    {
+        return $this->hasMany(Answer::class, 'question_id', 'id');
+    }
 }

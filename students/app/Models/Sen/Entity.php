@@ -11,5 +11,4 @@ class Entity extends Model
 
     public $fillable = ['id', 'name'];
 
-
 }
