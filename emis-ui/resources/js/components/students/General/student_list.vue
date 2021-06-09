@@ -39,8 +39,6 @@
                                         <th >SL#</th>
                                         <th >Student Name</th>
                                         <th >Student Code</th>
-                                        <th >Class</th>
-                                        <th >Section</th>
                                         <th >Action</th> 
                                     </tr>
                                 </thead>
@@ -49,8 +47,6 @@
                                         <td>{{ index + 1 }}</td>
                                         <td>{{ item.Name}}</td>
                                         <td>{{ item.student_code}}</td>
-                                        <td>{{ studentClassArray[item.OrgClassStreamId] }}</td>
-                                        <td>{{ studentSectionArray[item.OrgClassStreamId] }}</td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
                                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i > View</a>
@@ -72,8 +68,7 @@ export default {
         return{
             dt:'',
             org_id:'2',
-            dataList:[],
-            testData:[],
+            studentList:[],
             sectionList:{},
             classList:[],
             studentClassArray:{},
@@ -98,24 +93,6 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadBasicStudentList/'+this.org_id){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dataList =  data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-                $("#award-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
-        },
         /**
          * to load the class list
          */
@@ -285,12 +262,12 @@ export default {
             this.changefunction(id);
         });
         
-        this.loadClassList();
         this.loadClassArrayList();
         this.loadSectionArrayList();
         this.loadStreamArrayList();
         this.loadClassStreamSectionList();
-        this.loadDataList();
+        this.loadClassList();
+        
         this.dt =  $("#student-list-table").DataTable()
     },
     watch: {

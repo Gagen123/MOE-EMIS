@@ -19,37 +19,14 @@ class StudentClassController extends Controller
     }
 
     public function saveStudentClassAllocation(Request $request){
+        //array validation is need
         
-        // $rules = [
-        //     'student'       => 'required',
-        //     'class_given_by'=> 'required',
-        //     'class_type_id' => 'required',
-        //     'place'         => 'required',
-        //     'date'          => 'required'
-        // ];
-        // $customMessages = [
-        //     'student.required'          => 'This field is required',
-        //     'class_given_by.required'   => 'This field is required',
-        //     'class_type_id.required'    => 'This field is required',
-        //     'place.required'            => 'This field is required',
-        //     'date.required'             => 'This field is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
-        
-        // $data =[
-        //     'id'                => $request->id,
-        //     'student'           =>  $request->student,
-        //     'class_given_by'    =>  $request->class_given_by,
-        //     'class_type_id'     =>  $request->class_type_id,
-        //     'place'             =>  $request->place,
-        //     'date'              =>  $request->date,
-        //     'remarks'           =>  $request->remarks,
-        //     'actiontype'        =>  $request->action_type,
-        //     'recordtype'        =>  $request->record_type, 
-        //     'user_id'           => $this->userId(),
-        //     'working_agency_id' => $this->getWrkingAgencyId()
-        //];
-        $data = [];
+        $data =[
+            'id'                            => $request->id,
+            'class_section_stream'          =>  $request->class_section_stream,
+            'user_id'                       => $this->userId(),
+            'working_agency_id'             => $this->getWrkingAgencyId()
+        ];
 
         try{
             $response_data= $this->apiService->createData('emis/students/saveStudentClassAllocation', $data);
