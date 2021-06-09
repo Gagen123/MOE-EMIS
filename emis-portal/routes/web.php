@@ -60,7 +60,7 @@ Route::prefix('RequestadmissionController')->group(function () {
     //Getting details by cid from std_student table
     Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
 
-    Route::post('/saveStudentDetails', [App\Http\Controllers\NotenrolledController::class, 'saveStudentDetails'])->name('saveStudentDetails');
+    Route::post('/saveStudentDetailsFromPortal', [App\Http\Controllers\NotenrolledController::class, 'saveStudentDetailsFromPortal'])->name('saveStudentDetailsFromPortal');
     Route::post('/saveStudentGardianDetails', [App\Http\Controllers\NotenrolledController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
     Route::get('/getstudentdetails', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetails'])->name('getstudentdetails');
 

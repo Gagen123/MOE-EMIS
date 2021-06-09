@@ -33,7 +33,7 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <label id="level_name"></label>
-                                                    <input type="text" class="form-control" @keyup.enter="getChildDetailsbyCID('cid_passport','std')" @blur="getChildDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': student_form.errors.has('cid_passport') }" id="cid_passport" v-model="student_form.cid_passport" placeholder="Identification No">
+                                                    <input type="text" class="form-control"  @change="removeerror('cid_passport')" :class="{ 'is-invalid': student_form.errors.has('cid_passport') }" id="cid_passport" v-model="student_form.cid_passport" placeholder="Identification No">
                                                     <has-error :form="student_form" field="cid_passport"></has-error>
                                                 </div>
                                             </div>
@@ -119,32 +119,32 @@
                              <div class="form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>School Information</label><br><br>
-                                        <div class="row form-group" id="dzo_gewog_village">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Dzongkhag/Thromde:  <span class="text-danger">*</span> </label>
-                                                <select v-model="school_form.s_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_dzongkhag') }" class="form-control select2" name="s_dzongkhag" id="s_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in s_dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="school_form" field="s_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label> School:  <span class="text-danger">*</span></label>
-                                                <select v-model="school_form.s_school" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_school') }" class="form-control select2" name="s_school" id="s_school">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in s_schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="school_form" field="s_school"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Class:  <span class="text-danger">*</span></label>
-                                                <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
-                                                </select>
-                                                <has-error :form="school_form" field="s_class"></has-error>
-                                            </div>
+                                    <div class="row form-group" id="dzo_gewog_village">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Dzongkhag/Thromde:  <span class="text-danger">*</span> </label>
+                                            <select v-model="school_form.s_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_dzongkhag') }" class="form-control select2" name="s_dzongkhag" id="s_dzongkhag">
+                                                <option value=""> --Select--</option>
+                                                <option v-for="(item, index) in s_dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            </select>
+                                            <has-error :form="school_form" field="s_dzongkhag"></has-error>
                                         </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label> School:  <span class="text-danger">*</span></label>
+                                            <select v-model="school_form.s_school" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_school') }" class="form-control select2" name="s_school" id="s_school">
+                                                <option value=""> --Select--</option>
+                                                <option v-for="(item, index) in s_schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            </select>
+                                            <has-error :form="school_form" field="s_school"></has-error>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Class:  <span class="text-danger">*</span></label>
+                                            <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
+                                                <option value=""> --Select--</option>
+                                                <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
+                                            </select>
+                                            <has-error :form="school_form" field="s_class"></has-error>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <hr>
@@ -191,7 +191,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Father's CID, Immigration ID/Other Document ID  </label>
-                                                <input type="text" v-model="guardian_form.father_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('father_cid_passport','father')" @blur="getDetailsbyCID('father_cid_passport','father')" @change="removeerror('father_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('father_cid_passport') }" id="father_cid_passport" placeholder="Identification No">
+                                                <input type="text" v-model="guardian_form.father_cid_passport" class="form-control" @keyup.enter="getChildDetailsbyCID('father_cid_passport','father')" @blur="getChildDetailsbyCID('father_cid_passport','father')" @change="removeerror('father_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('father_cid_passport') }" id="father_cid_passport" placeholder="Identification No">
                                                 <has-error :form="guardian_form" field="father_cid_passport"></has-error>
                                             </div>
                                         </div>
@@ -318,7 +318,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Mother's CID, Immigration ID/Other Document ID  </label>
-                                                <input type="text" v-model="guardian_form.mother_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('mother_cid_passport','mother')" @blur="getDetailsbyCID('mother_cid_passport','mother')" @change="removeerror('mother_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('mother_cid_passport') }" id="mother_cid_passport" placeholder="Identification No">
+                                                <input type="text" v-model="guardian_form.mother_cid_passport" class="form-control" @keyup.enter="getChildDetailsbyCID('mother_cid_passport','mother')" @blur="getChildDetailsbyCID('mother_cid_passport','mother')" @change="removeerror('mother_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('mother_cid_passport') }" id="mother_cid_passport" placeholder="Identification No">
                                                 <has-error :form="guardian_form" field="mother_cid_passport"></has-error>
                                             </div>
                                         </div>
@@ -447,7 +447,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>CID, Immigration ID/Other Document ID  </label>
-                                                <input type="text" v-model="guardian_form.gardain_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('gardain_cid_passport','gardain')" @blur="getDetailsbyCID('gardain_cid_passport','gardain')" @change="removeerror('gardain_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_cid_passport') }" id="gardain_cid_passport" placeholder="Identification No">
+                                                <input type="text" v-model="guardian_form.gardain_cid_passport" class="form-control" @keyup.enter="getChildDetailsbyCID('gardain_cid_passport','gardain')" @blur="getChildDetailsbyCID('gardain_cid_passport','gardain')" @change="removeerror('gardain_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_cid_passport') }" id="gardain_cid_passport" placeholder="Identification No">
                                                 <has-error :form="guardian_form" field="gardain_cid_passport"></has-error>
                                             </div>
                                         </div>
@@ -698,6 +698,11 @@ export default {
             this.student_form.attachments = e.target.files[0];
         },
         getChildDetailsbyCID(cid,type){
+            this.student_form.cid_passport = cid;
+            $('#cid_passport').prop('readonly',true);
+            if(type=="std"){
+                cid=  $('#cid').val();
+            }
             this.getPersonalDetailsbyCID(cid,type);
             let fatherCid="";
             let motherCid="";
@@ -715,9 +720,10 @@ export default {
             axios.get('adminstratorController/getpersonbycid/'+ cid)
             .then(res => {
                 if(JSON.stringify(res.data)!='{}'){
-                    if(type=="std"){
-                        this.student_form.cid_passport = cid;
-                        $('#cid_passport').prop('readonly',true);
+                    alert(res); 
+                    if(type=="std" && res!=""){
+                        $('#snationality').prop('checked',true);
+                        this.form.snationality='Bhutanese';
                         let student_detail = res.data.citizenDetail[0];
                         this.student_form.first_name = student_detail.firstName;
                         $('#first_name').prop('readonly',true);
@@ -1003,9 +1009,9 @@ export default {
         },
         
         shownexttab(nextclass){
-            if(nextclass=="basic-tabs"){
-                this.changetab('basic-tabs');
-            }
+            // if(nextclass=="basic-tabs"){
+            //     this.changetab('basic-tabs');
+            // }
             if(nextclass=="guardians-tab"){
                 const config = {
                     headers: {
@@ -1029,7 +1035,7 @@ export default {
                 formData.append('s_class', this.school_form.s_class);
                 formData.append('type','new');
                 formData.append('Status', 'pending'); 
-                axios.post('/saveStudentDetails',formData, config)
+                axios.post('/saveStudentDetailsFromPortal',formData, config)
                 .then((response) => {
                     this.guardian_form.student_id=response.data.id;
                     Toast.fire({
@@ -1354,14 +1360,13 @@ export default {
         this.getdzongkhagList();
     },
 
-     created() { 
+    created() { 
          let cid=this.$route.query.cid;
          this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
         //  this.getschoolList();
          this.getclassList();
-        }
-
+    }
    
 }
 </script>

@@ -714,28 +714,42 @@ class GeneralInfoController extends Controller
         $org_details =[
             'org_id'                        =>  $request['org_id'],
             'accessibleToilet'              =>  $request['accessibleToilet'],
-            'accessibleWash'                =>  $request['accessibleWash'],
+            'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
+            
+            'adjustmentsAccomodatte'        =>  $request['adjustmentsAccomodatte'],
             'outdoorPlayground'             =>  $request['outdoorPlayground'],
             'outdoorRoutes'                 =>  $request['outdoorRoutes'],
+            'newConstruction'               =>  $request['newConstruction'],
+            
             'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
-            'diningHall'                    =>  $request['hasCdiningHallE'],
+            'diningHall'                    =>  $request['diningHall'],
             'hostelWash'                    =>  $request['hostelWash'],
             'boysHostelAccessible'          =>  $request['boysHostelAccessible'],
+
             'enrollment'                    =>  $request['enrollment'],
+            'proprietorName'                =>  $request['proprietorName'],
             'communityWithDisablities'      =>  $request['communityWithDisablities'],
             'community'                     =>  $request['community'],
+
             'senProgram'                    =>  $request['senProgram'],
             'studentDisabilities'           =>  $request['studentDisabilities'],
-            'proprietorName'                =>  $request['proprietorName'],
+            
             'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
             'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
-            'support_disabilitycommunity'   =>  $request['support_disabilitycommunity'],
-            'matrons'                       =>  $request['matrons'],
-            'wardens'                       =>  $request['wardens'],
+            'supportDisabilitycommunity'    =>  $request['supportDisabilitycommunity'],
+            'supportService'                =>  $request['supportService'],
+            'schoolEndrosed'                =>  $request['schoolEndrosed'],
+            'disabledGraduated'             =>  $request['disabledGraduated'],
+            'disabledMovedToOtherSchool'    =>  $request['disabledMovedToOtherSchool'],
+            'disabledTransaction'           =>  $request['disabledTransaction'],
+            'disabledDropOut'               =>  $request['disabledDropOut'],
+            'disabilitiesDropoutCurrenly'   =>  $request['disabilitiesDropoutCurrenly'],
+            'disabledTransactionLastYear'   =>  $request['disabledTransactionLastYear'],
             'caregivers'                    =>  $request['caregivers'],
             'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
             'user_id'                       =>  $this->userId()
         ];
+        // dd($org_details);
         $response_data= $this->apiService->createData('emis/organization/updateSenDetials', $org_details);
         return $response_data;
     }

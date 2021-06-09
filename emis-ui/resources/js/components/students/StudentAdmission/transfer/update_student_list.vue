@@ -19,10 +19,10 @@
                     <td>{{ std.student_code }}</td>
                     <td>{{ std.Name }}</td>
                     <td>{{ std.CidNo }}</td>
-                    <td>{{ sex_idList[std.CmnSexId] }}</td>
+                    <td>{{ sex_idList[std.CmnSexId] }} </td>
                     <td>Transfer Student</td>
                     <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('transfer',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
                     </td>
                 </tr>
                 <tr v-for="(std, index) in newAdmissionList" :key="index">
@@ -30,10 +30,10 @@
                     <td>{{ }}</td>
                     <td>{{ std.first_name }} {{ std.last_name }} </td>
                     <td>{{ std.CidNo }}</td>
-                    <td>{{ sex_idList[std.CmnSexId] }}</td>
+                    <td>{{ sex_idList[std.CmnSexId] }} </td>
                     <td>New Admission</td>
                     <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
                     </td>
                 </tr>
             </tbody>
@@ -80,8 +80,13 @@ export default {
             $('#samplemodal').modal('hide');
         }, 
         
-        loadeditpage(id){
-            this.$router.push({name:'update_student_transfer',params: {data:id}});
+        loadeditpage(type,id){
+            if(type=="admission"){
+                this.$router.push({name:'update_student_admission',params: {data:id}});
+            }
+            else{
+
+            }
         },
         loadStudentList(param){
             this.stdList =[];
@@ -98,7 +103,7 @@ export default {
             let uri="";
             uri='students/admission/loadStudentList/admission';
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response.data;
                 this.newAdmissionList = data;
             });
@@ -106,11 +111,10 @@ export default {
     
     },
     mounted() {
+        this.loadAllActiveMasters('all_active_gender');
         this.dt = $("#list-student-left").DataTable();
         this.loadStudentList('session');
         this.loadStudentAdmissionList('session');
-        this.loadAllActiveMasters('all_active_gender');
-
         // $("#list-student-left").DataTable({
         //     "responsive": true,
         //     "autoWidth": false,

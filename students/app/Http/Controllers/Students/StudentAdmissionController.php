@@ -160,7 +160,6 @@ class StudentAdmissionController extends Controller
                 'dzongkhag'                 =>  $request->dzongkhag, 
                 'CmnGewogId'                =>  $request->gewog, 
                 'village_id'                =>  $request->village_id, 
-                // 'village_id'                =>  $request->s_dzongkhag, 
                 'OrgOrganizationId'         =>  $request->s_school, 
                 'class_id'                =>  $request->s_class, 
                 'address'                   =>  $request->fulladdress,
@@ -172,7 +171,7 @@ class StudentAdmissionController extends Controller
         }
         catch(Exception $e){
             dd($e);
-         }
+        }
         return $response_data;
     }
     
@@ -628,7 +627,6 @@ class StudentAdmissionController extends Controller
                 )->where('p.OrgOrganizationId', explode('SSS',$param)[1])->get();
             }
             if($access_level=="Org"){
-                dd(explode('SSS',$param)[2]);
                 $response_data = DB::table('std_student as p')
                 ->select('p.id','p.CmnCountryId', 'p.CidNo','p.Name','p.Address',
                 'p.DateOfBirth','p.CmnSexId','p.CmnChiwogId','p.CmnLanguageId',
@@ -640,10 +638,14 @@ class StudentAdmissionController extends Controller
         else if($param=="transfered"){
             $response_data=Std_Students::where('IsTransferred',1)->get();
         }
-        //to get new admission students
-        else if($param == "admission"){
-            $response_data = DB::table('std_admissions')->get();
-            return $response_data;
+        else if(strpos($param,'__')){
+            if(explode('__',$param)[0] == "admission"){
+                $response_data = DB::table('std_admissions')->where('OrgOrganizationId',explode('__',$param)[1])->get();
+                return $response_data;
+            }
+            else{
+                $response_data="";
+            }
         }
         else{
             parse_str($param,$output); //revert query string to array and stored to $output
@@ -675,8 +677,9 @@ class StudentAdmissionController extends Controller
                     ->get();
     }
     
-    public function getStudentDetails(){
-        $response_data=Std_Students::all();
+    public function getStudentDetails($std_id=""){
+        $response_data=Std_Students::where('id',$std_id)->first();
+        
         return $this->successResponse($response_data);
     }
     public function getAllStudentCid(){

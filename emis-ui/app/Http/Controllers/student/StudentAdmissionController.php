@@ -324,6 +324,9 @@ class StudentAdmissionController extends Controller{
         if($param=="session"){
             $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         }
+        if($param=="admission"){
+            $param='admission__'.$this->getWrkingAgencyId();
+        }
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$param);
         return $student_list;
     }

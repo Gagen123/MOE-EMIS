@@ -53,8 +53,8 @@
                                     <td> 1. If you had new buildings constructed this year, were they built to consider the need for children/students with disabilities? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="pl-3"><input  type="radio" v-model="form.newConstruction" value="Yes" tabindex=""/> Yes</label>
-                                            <label class="pl-3"><input  type="radio" v-model="form.newConstruction" value="No" tabindex=""/> No</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.newConstruction" value="1" tabindex=""/> Yes</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.newConstruction" value="0" tabindex=""/> No</label>
                                             <label class="pl-3"><input  type="radio" v-model="form.newConstruction" value="No New Buildings" tabindex=""/> No New Buildings</label>
                                         </div>
                                     </td>
@@ -63,8 +63,8 @@
                                     <td> 2. Have you made adjustments to the existing buildings to accommodate the needs of children/students with disabilities?</td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="pl-3"><input  type="radio" v-model="form.adjustmentsAccomodatte" value="Yes" tabindex=""/> Yes</label>
-                                            <label class="pl-3"><input  type="radio" v-model="form.adjustmentsAccomodatte" value="No" tabindex=""/> No</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.adjustmentsAccomodatte" value="1" tabindex=""/> Yes</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.adjustmentsAccomodatte" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -145,16 +145,21 @@
                                 </tr>
                                 <tr id="record8">
                                     <td>
-                                        9.Have you had to turn children/students away due to their disability this year? 
-                                        If yes, what were the barriers to admitting them?
+                                        9. Have you had to turn children/students away due to their disability this year? 
                                     </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="pl-3"><input  type="radio" v-model="form.enrollment" value="Yes" tabindex="" @click="showtextbox('1')"/> Yes</label>
-                                            <label class="pl-3"><input  type="radio" v-model="form.enrollment" value="No" tabindex="" @click="showtextbox('0')"/> No</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.enrollment" value="1" tabindex="" @click="showtextbox('1')"/> Yes</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.enrollment" value="0" tabindex="" @click="showtextbox('0')"/> No</label>
                                         </div>
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="enrollment">
-                                            <textarea v-model="form.proprietorName" class="form-control editable_fields" id="proprietorName"></textarea>
+                                       
+                                    </td>
+                                </tr>
+                                <tr id="enrollment" style="display:none">
+                                    <td> 9.1 what were the barriers to admitting them? </td>
+                                    <td>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                            <textarea v-model="form.proprietorName" class="form-control" id="proprietorName"></textarea>
                                             <has-error :form="form" field="proprietorName"></has-error>
                                         </div>
                                     </td>
@@ -166,16 +171,22 @@
                                     </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="pl-3"><input  type="radio" v-model="form.communityWithDisablities" value="Yes" tabindex="" @click="showtextbox2('1')"/> Yes</label>
-                                            <label class="pl-3"><input  type="radio" v-model="form.communityWithDisablities" value="No" tabindex="" @click="showtextbox2('0')"/> No</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.communityWithDisablities" value="1" tabindex="" @click="showtextbox2('1')"/> Yes</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.communityWithDisablities" value="0" tabindex="" @click="showtextbox2('0')"/> No</label>
                                         </div>
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="communitydiv">
-                                            <textarea v-model="form.community" class="form-control editable_fields" id="community"></textarea>
+                                    </td>
+                                </tr>
+                                <tr style="display:none" id="communitydiv">
+                                     <td>
+                                        10.1 How many of them?
+                                    </td>
+                                    <td>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                            <input type="number" v-model="form.community" class="form-control" id="community" />
                                             <has-error :form="form" field="community"></has-error>
                                         </div>
                                     </td>
                                 </tr>
-                               
                                 <tr class="bg-cyan">
                                     <td colspan="2"><b>Others</b></td>
                                 </tr>
@@ -183,8 +194,8 @@
                                     <td>11. Does your school have SEN program?</td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="pl-3"><input  type="radio" v-model="form.senProgram" @change="showSendDetails(1)" value="Yes" tabindex=""/> Yes</label>
-                                            <label class="pl-3"><input  type="radio" v-model="form.senProgram" @change="showSendDetails(0)" value="No" tabindex=""/> No</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.senProgram" @change="showSendDetails(1)" value="1" tabindex=""/> Yes</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.senProgram" @change="showSendDetails(0)" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -192,8 +203,8 @@
                                     <td>12. Does your school have children with disabilities?</td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="pl-3"><input  type="radio" v-model="form.studentDisabilities" @change="showSendDetails(1)" value="Yes" tabindex=""/> Yes</label>
-                                            <label class="pl-3"><input  type="radio" v-model="form.studentDisabilities" @change="showSendDetails(0)" value="No" tabindex=""/> No</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.studentDisabilities" @change="showSendDetails(1)" value="1" tabindex=""/> Yes</label>
+                                            <label class="pl-3"><input  type="radio" v-model="form.studentDisabilities" @change="showSendDetails(0)" value="0" tabindex=""/> No</label>
                                         </div>
                                     </td>
                                 </tr>
@@ -201,14 +212,10 @@
                             
                             <tbody id="senDetailSection" style="display:none">
                                 <tr class="bg-cyan">
-                                    <td colspan="2"><b>  Questionnaire</b></td>
-                                </tr>
-                                <hr>
-                                <tr class="bg-cyan">
                                     <td colspan="2"><b>  Other Support Services and student1</b></td>
                                 </tr>
                                 <tr id="questiond1">
-                                    <td>1.1 Do any other professionals support children/students with disabilities within your ECCD centre/school? (select all that applies) </td>
+                                    <td>13. Do any other professionals support children/students with disabilities within your ECCD centre/school? (select all that applies) </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <label class="pl-3"><input  type="checkbox" v-model="form.professionalsSupportChildren" value="Physiotherapist and abc" tabindex=""/> Physiotherapist and abc</label>
@@ -225,7 +232,7 @@
                                     </td>
                                 </tr>
                                 <tr id="questiond2">
-                                    <td>1.2. Do you currently have other adults working in the classroom with children/students with disabilities? (select all that applies) </td>
+                                    <td>14. Do you currently have other adults working in the classroom with children/students with disabilities? (select all that applies) </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <label class="pl-3"><input  type="checkbox" v-model="form.adultWorkingwithChildren" value=" Additional Teachers" tabindex=""/>  Additional Teachers</label>
@@ -238,31 +245,31 @@
                                 </tr>
 
                                 <tr id="questiond3">
-                                    <td>1.3. Do you have any support from the community to support the education of children/students with disabilities? </td>
+                                    <td>15. Do you have any support from the community to support the education of children/students with disabilities? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <textarea v-model="form.support_disabilitycommunity" class="form-control editable_fields" id="support_disabilitycommunity"></textarea>
-                                            <has-error :form="form" field="support_disabilitycommunity"></has-error>
+                                            <textarea v-model="form.supportDisabilitycommunity" class="form-control" id="supportDisabilitycommunity"></textarea>
+                                            <has-error :form="form" field="supportDisabilitycommunity"></has-error>
                                         </div>
                                     </td>
                                 </tr>
 
                                 <tr id="questiond4">
-                                    <td>1.4. What other support services are there? </td>
+                                    <td>16. What other support services are there? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <textarea v-model="form.support_service" class="form-control editable_fields" id="support_service"></textarea>
-                                            <has-error :form="form" field="support_service"></has-error>
+                                            <textarea v-model="form.supportService" class="form-control" id="supportService"></textarea>
+                                            <has-error :form="form" field="supportService"></has-error>
                                         </div>
                                     </td>
                                 </tr>
 
                                 <tr id="questiond5">
-                                    <td>1.5. When was the school endorsed for Inclusive and SEN program? </td>
+                                    <td>17. When was the school endorsed for Inclusive and SEN program? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <textarea v-model="form.school_endrosed" class="form-control editable_fields" id="school_endrosed"></textarea>
-                                            <has-error :form="form" field="school_endrosed"></has-error>
+                                            <textarea v-model="form.schoolEndrosed" class="form-control" id="schoolEndrosed"></textarea>
+                                            <has-error :form="form" field="schoolEndrosed"></has-error>
                                         </div>
                                     </td>
                                 </tr>
@@ -270,55 +277,55 @@
                                     <td colspan="2"><b>Achievement/Transition of Children/Student with disabilities</b></td>
                                 </tr>
                                 <tr id="questiond6">
-                                    <td>2.1 How many students with disabilities have successfully graduated from the highest grade in your school last year? </td>
+                                    <td>18 How many students with disabilities have successfully graduated from the highest grade in your school last year? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.disabledGraduated" class="form-control editable_fields" id="disabledGraduated"/>
+                                            <input type="number" min="0" v-model="form.disabledGraduated" class="form-control" id="disabledGraduated"/>
                                             <has-error :form="form" field="disabledGraduated"></has-error>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr id="questiond6">
-                                    <td>2.2 How many students with disabilities have moved to another educational institution last year? </td>
+                                    <td>19 How many students with disabilities have moved to another educational institution last year? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.disabledMovedToOtherSchool" class="form-control editable_fields" id="disabledMovedToOtherSchool"/>
+                                            <input type="number" min="0" v-model="form.disabledMovedToOtherSchool" class="form-control" id="disabledMovedToOtherSchool"/>
                                             <has-error :form="form" field="disabledMovedToOtherSchool"></has-error>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr id="questiond7">
-                                    <td>2.3 How many students with disabilities have transitioned to post-school education or training programs last year? </td>
+                                    <td>20 How many students with disabilities have transitioned to post-school education or training programs last year? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.disabledTransaction" class="form-control editable_fields" id="disabledTransaction"/>
+                                            <input type="number" min="0" v-model="form.disabledTransaction" class="form-control" id="disabledTransaction"/>
                                             <has-error :form="form" field="disabledTransaction"></has-error>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr id="questiond8">
-                                    <td>2.4 How many students with disabilities dropped out last year? </td>
+                                    <td>21 How many students with disabilities dropped out last year? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.disabledTransaction" class="form-control editable_fields" id="disabledTransaction"/>
-                                            <has-error :form="form" field="disabledTransaction"></has-error>
+                                            <input type="number" min="0" v-model="form.disabledDropOut" class="form-control" id="disabledDropOut"/>
+                                            <has-error :form="form" field="disabledDropOut"></has-error>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr id="questiond5">
-                                    <td>2.5. what are the children/students with disabilities who dropped out, currently doing? </td>
+                                    <td>22 what are the children/students with disabilities who dropped out, currently doing? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <textarea v-model="form.disabilitiesDropout" class="form-control editable_fields" id="disabilitiesDropout"></textarea>
-                                            <has-error :form="form" field="disabilitiesDropout"></has-error>
+                                            <textarea v-model="form.disabilitiesDropoutCurrenly" class="form-control" id="disabilitiesDropoutCurrenly"></textarea>
+                                            <has-error :form="form" field="disabilitiesDropoutCurrenly"></has-error>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr id="questiond9">
-                                    <td>2.6 How many children with disabilities have transitioned to school last year? </td>
+                                    <td>23 How many children with disabilities have transitioned to school last year? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.disabledTransactionLastYear" class="form-control editable_fields" id="disabledTransactionLastYear"/>
+                                            <input type="number" min="0" v-model="form.disabledTransactionLastYear" class="form-control" id="disabledTransactionLastYear"/>
                                             <has-error :form="form" field="disabledTransactionLastYear"></has-error>
                                         </div>
                                     </td>
@@ -326,11 +333,11 @@
                                 <tr class="bg-cyan">
                                     <td colspan="2"><b>Hostels</b></td>
                                 </tr>
-                                <tr id="questiond6">
+                                <!-- <tr id="questiond6">
                                     <td>3.1 How many matrons are there in your school? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.matrons" class="form-control editable_fields" id="matrons"/>
+                                            <input v-model="form.matrons" class="form-control" id="matrons"/>
                                             <has-error :form="form" field="matrons"></has-error>
                                         </div>
                                     </td>
@@ -339,25 +346,25 @@
                                     <td>3.2 How many wardens are there in your school? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.wardens" class="form-control editable_fields" id="wardens"/>
+                                            <input v-model="form.wardens" class="form-control" id="wardens"/>
                                             <has-error :form="form" field="wardens"></has-error>
                                         </div>
                                     </td>
-                                </tr>
+                                </tr> -->
                                 <tr id="questiond7">
-                                    <td>3.3 How many caregivers are there in your school? </td>
+                                    <td>24 How many caregivers are there in your school? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.caregivers" class="form-control editable_fields" id="caregivers"/>
+                                            <input type="number" min="0" v-model="form.caregivers" class="form-control" id="caregivers"/>
                                             <has-error :form="form" field="caregivers"></has-error>
                                         </div>
                                     </td>
                                 </tr>
                                 <tr id="questiond8">
-                                    <td>3.4 How many students with disabilities reside in hostels? </td>
+                                    <td>25 How many students with disabilities reside in hostels? </td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input v-model="form.disabilitiesInHostal" class="form-control editable_fields" id="disabilitiesInHostal"/>
+                                            <input  type="number" min="0" v-model="form.disabilitiesInHostal" class="form-control" id="disabilitiesInHostal"/>
                                             <has-error :form="form" field="disabilitiesInHostal"></has-error>
                                         </div>
                                     </td>
@@ -383,24 +390,37 @@
                 form: new form({
                     org_id: '',
                     newConstruction:'',
-                    accessibleToilet: '',
-                    accessibleWash:  '',
-                    outdoorPlayground :  '',
-                    outdoorRoutes :  '',
-                    girlsHostelAccessible :  '',
-                    diningHall :  '',
-                    hostelWash   :  '',
-                    boysHostelAccessible :  '',
-                    enrollment  :  '',
+                    adjustmentsAccomodatte:'',
+
+                    outdoorPlayground:  '',
+                    outdoorRoutes:  '',
+
+                    girlsHostelAccessible:  '',
+                    diningHall:  '',
+                    hostelWash:  '',
+                    boysHostelAccessible:  '',
+
+                    enrollment:  '',
+                    proprietorName :  '',
                     communityWithDisablities:  '',
                     community :  '',
+
                     senProgram:  '',
                     studentDisabilities:  '',
-                    proprietorName :  '',
+
                     professionalsSupportChildren:[],
                     adultWorkingwithChildren:[],
-                    support_disabilitycommunity:'',
-                    support_service:'',matrons:'',wardens:'',caregivers:'',disabilitiesInHostal:''
+                    supportDisabilitycommunity:'',
+                    supportService:'',
+                    schoolEndrosed:'',
+                    disabledGraduated:'',
+                    disabledMovedToOtherSchool:'',
+                    disabledTransaction:'',
+                    disabledDropOut:'',
+                    disabilitiesDropoutCurrenly:'',
+                    disabledTransactionLastYear:'',
+                    caregivers:'',
+                    disabilitiesInHostal:'',
                 }) 
             }
         },
@@ -410,6 +430,10 @@
                 .then(response => {
                     let response_data=response.data.data;
                     this.form.newConstruction=response_data.newConstruction;
+                    this.form.adjustmentsAccomodatte=response_data.adjustmentsAccomodatte;
+                    this.form.enrollment=response_data.enrollment;
+                    this.showtextbox(response_data.enrollment);
+                    this.form.proprietorName=response_data.proprietorName;
                     this.form.accessibleToilet=response_data.accessibleToilet;
                     this.form.accessibleWash=response_data.accessibleWash;
                     this.form.outdoorPlayground=response_data.outdoorPlayground;
@@ -418,18 +442,26 @@
                     this.form.diningHall=response_data.diningHall;
                     this.form.hostelWash=response_data.hostelWash;
                     this.form.boysHostelAccessible=response_data.boysHostelAccessible;
-                    this.form.enrollment=response_data.enrollment;
+                  
                     this.form.communityWithDisablities=response_data.communityWithDisablities;
+                    this.showtextbox2(response_data.communityWithDisablities);
                     this.form.community=response_data.community;
                     this.form.senProgram=response_data.senProgram;
                     this.form.studentDisabilities=response_data.studentDisabilities;
-                    this.form.support_disabilitycommunity=response_data.support_disabilitycommunity;
-                    this.form.adultWorkingwithChildren=response_data.adultWorkingwithChildren;
-                    this.form.support_service=response_data.support_service;
-                    this.form.matrons=response_data.matrons;
-                    this.form.wardens=response_data.wardens;
+                    if(response_data.senProgram==1 || response_data.studentDisabilities==1){
+                        this.showSendDetails(1);
+                    }
+                    this.form.supportDisabilitycommunity=response_data.supportDisabilitycommunity;
+                    this.form.supportService=response_data.supportService;
                     this.form.caregivers=response_data.caregivers;
+                    this.form.schoolEndrosed=response_data.schoolEndrosed;
+                    this.form.disabledGraduated=response_data.disabledGraduated;
                     this.form.disabilitiesInHostal=response_data.disabilitiesInHostal;
+                    this.form.disabledMovedToOtherSchool=response_data.disabledMovedToOtherSchool;
+                    this.form.disabledTransaction=response_data.disabledTransaction;
+                    this.form.disabledDropOut=response_data.disabledDropOut;
+                    this.form.disabledTransactionLastYear=response_data.disabledTransactionLastYear;
+                    this.form.disabilitiesDropoutCurrenly=response_data.disabilitiesDropoutCurrenly;
                     for(let i=0;i<response_data.professionalsSupportChildren.split(', ').length;i++){
                         this.form.professionalsSupportChildren.push(response_data.professionalsSupportChildren.split(', ')[i]);
                     }
@@ -442,6 +474,21 @@
                 });
             },
             shownexttab(){
+                if(this.form.senProgram==0 && this.form.studentDisabilities==0){
+                    this.form.professionalsSupportChildren=[];
+                    this.form.adultWorkingwithChildren=[];
+                    this.form.supportDisabilitycommunity='';
+                    this.form.supportService='';
+                    this.form.schoolEndrosed='';
+                    this.form.disabledGraduated='';
+                    this.form.disabledMovedToOtherSchool='';
+                    this.form.disabledTransaction='';
+                    this.form.disabledDropOut='';
+                    this.form.disabilitiesDropoutCurrenly='';
+                    this.form.disabledTransactionLastYear='';
+                    this.form.caregivers='';
+                    this.form.disabilitiesInHostal='';
+                }
                 this.form.post('organization/updateSenDetials')
                 .then((response) => {
                     Toast.fire({
@@ -459,13 +506,15 @@
             },
             showtextbox(value){
                 $('#enrollment').hide();
-                if(value=="Yes"){
+                this.form.proprietorName='';
+                if(value=="1"){
                     $('#enrollment').show();
                 }
             },
             showtextbox2(value){
+                this.form.community='';
                 $('#communitydiv').hide();
-                if(value=="Yes"){
+                if(value=="1"){
                     $('#communitydiv').show();
                 }
             },

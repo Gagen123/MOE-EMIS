@@ -12,7 +12,7 @@ class NotenrolledController extends Controller
     }
     // public $database="student_db";
 
-    public function saveStudentDetails(Request $request){
+    public function saveStudentDetailsFromPortal(Request $request){
         // dd($request);
         $rules = [
             'snationality'                    => 'required',
@@ -43,7 +43,7 @@ class NotenrolledController extends Controller
             $path=$file_store_path.'/'.$file_name;
         }
         $data = $request->all();
-        $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetails', $data);
+        $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetailsFromPortal', $data);
         return $response_data;
 
     }
@@ -258,6 +258,7 @@ class NotenrolledController extends Controller
             'gardain_cntct_no'                  =>  $request->gardain_cntct_no,
             // 'user_id'                           =>  $this->userId() 
         ];
+        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentGardianDetails', $data);
         return $response_data;
     }
