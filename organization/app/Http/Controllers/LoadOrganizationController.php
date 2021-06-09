@@ -144,7 +144,7 @@ class LoadOrganizationController extends Controller{
 
         $response_data = DB::table('organization_class_streams')
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
-                    ->select('organization_class_streams.*', 'classes.class AS class')
+                    ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
                     ->where('organizationId', $org_id)
                     ->orderBy('classes.displayOrder', 'asc')
                     ->groupBy('organization_class_streams.classId') //added by Tshewang as required only class

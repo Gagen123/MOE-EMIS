@@ -38,6 +38,9 @@ class GeneralStudentController extends Controller{
 
     /**
      * Get the student list by class
+     * 
+     * This function gets all the basic details such as feeding, scholarship etc.
+     * If you want only student and class, create another function
      */
 
     public function loadStudentByClass($class=""){
