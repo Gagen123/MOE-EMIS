@@ -245,6 +245,7 @@ class StudentAdmissionRelatedController extends Controller
             'fulladdress'               =>  $request->fulladdress,
             'country'                   =>  $request->country,
             'city'                      =>  $request->city,
+            'phone'                     =>  $request->phone,
         ];
         // dd($data);
       //  dd('m here from services');                   
