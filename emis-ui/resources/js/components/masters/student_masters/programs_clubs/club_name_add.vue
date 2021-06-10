@@ -11,7 +11,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Program Type:<span class="text-danger">*</span></label> 
+                        <label>Program Type:</label> 
                         <select v-model="form.program_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_type') }" class="form-control select2" name="program_type" id="program_type">
                         <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>

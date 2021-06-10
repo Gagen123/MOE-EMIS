@@ -35,7 +35,13 @@ Setting up the system administration, and user management:
     *************Students******************
     For the table std_student_class_stream, an additional field, "academic year" was added to take care of history
 
-    For the table std_student, a field noOfMealsId added
+    For the table std_student, the following fields are added 
+        noOfMealsId
+        scholarshipType
+        isBoarder
+
+    When adding new registration for admissions, the guardians details do not work. Need to fix it after the demo. 
+    Also need a page to be able to edit the guardians details
 
 
 

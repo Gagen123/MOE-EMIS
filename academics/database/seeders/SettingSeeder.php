@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+<<<<<<< HEAD
+=======
+use Carbon\Carbon;
+>>>>>>> 93527b4b5829b875cdf6612a182d5333b02a60fd
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

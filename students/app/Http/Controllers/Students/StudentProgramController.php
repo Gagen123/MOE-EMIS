@@ -19,6 +19,8 @@ use App\Models\Students\CeaProgrammeMembership;
 use App\Models\Students\CeaRoleStaff;
 use App\Models\Students\CeaRoleStudent;
 use App\Models\Masters\CeaProgramType;
+use App\Models\Masters\StudentClub;
+
 
 
 class StudentProgramController extends Controller
@@ -157,7 +159,8 @@ class StudentProgramController extends Controller
     * Save Program Members
     */
     public function saveProgramMembers(Request $request){
-     //dd('m here');
+        $status = $request->$status;
+       
       $rules = [
             'student'                    => 'required',
             // 'program'                    => 'required',
@@ -170,7 +173,6 @@ class StudentProgramController extends Controller
             'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-      //  $status = $request->status;
         $data =[
             'id'                        => $request->id,
             'StdStudentId'              => $request->student,
@@ -183,7 +185,7 @@ class StudentProgramController extends Controller
             //'user_id'        => $this->user_id() 
         ];
        // dd($status);
-      //  dd($data);
+       dd($data);
         $assigned_student_details = $data['role'];
 
         unset($data['role']);

@@ -147,7 +147,7 @@ export default {
          */
         loadClassArrayList(uri="loadCommons/getClassArray"){
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
                     this.classArray[data[i].id] = data[i].class;

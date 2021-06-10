@@ -13,11 +13,11 @@
                             <label>Student Guardian Details</label>
                         </a>
                     </li>
-                    <li class="nav-item details-tab"  @click="shownexttab('details-tab')">
+                    <!-- <li class="nav-item details-tab"  @click="shownexttab('details-tab')">
                         <a class="nav-link"  id="details-tab-head" data-toggle="pill" href="#details-tab" role="tab" aria-controls="custom-tabs-four-details" aria-selected="false">
                             <label>Other Details</label>
                         </a>  
-                    </li>  
+                    </li>   -->
                 </ul>
             </div>  
             <div class="card-body">
@@ -32,7 +32,6 @@
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
                                     <span class="text-danger" id="snationality_err"></span>
                                 </div>
-                                
                                 <div class="row form-group col-lg-9 col-md-9 col-sm-9">
                                     <div class="card card-primary">
                                         <div class="card-body">
@@ -112,13 +111,16 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="row form-group">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
-                                    <label>Student Code:</label>
-                                    <input type="text" @change="removeerror('studentcode','studentcode_err')" class="form-control" id="studentcode" v-model="personal_form.studentcode" readonly placeholder="generated automatically"/>
-                                    <has-error :form="personal_form" field="studentcode"></has-error>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Please Select the Class for Admission:<span class="text-danger">*</span></label>
+                                    <select v-model="personal_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('std_class') }"  class="form-control select2" name="std_class" id="std_class">
+                                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="std_class"></has-error>
                                 </div>
+                            </div>
+                            <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Mother Tongue:<span class="text-danger">*</span></label>
                                     <select v-model="personal_form.mother_tongue" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('mother_tongue') }" class="form-control select2" name="mother_tongue" id="mother_tongue">
@@ -127,8 +129,6 @@
                                     </select>
                                     <has-error :form="personal_form" field="mother_tongue"></has-error>
                                 </div>
-                            </div>
-                            <div class="form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Upload Photo</label>
                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload">
@@ -190,6 +190,13 @@
                                                 <has-error :form="guardian_form" field="father_first_name"></has-error>
                                             </div>
                                         </div>
+                                        <!-- <div class="row form-group" id="father_type" style="display:none">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label >Please Specify Type:</label>
+                                                <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
+                                                <has-error :form="guardian_form" field="type"></has-error>
+                                            </div>
+                                        </div> -->
                                         <div class="row form-group" id="father_dzo_gewog_village">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
@@ -318,7 +325,13 @@
                                                 <has-error :form="guardian_form" field="mother_first_name"></has-error>
                                             </div>
                                         </div>
-                                      
+                                        <!-- <div class="row form-group" id="father_type" style="display:none">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <label >Please Specify Type:</label>
+                                                <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
+                                                <has-error :form="guardian_form" field="type"></has-error>
+                                            </div>
+                                        </div> -->
                                         <div class="row form-group" id="mothers_dzo_gewog_village">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label>Dzongkhag/Thromde: </label>
@@ -555,39 +568,15 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-flat btn-success"  @click="shownexttab('basic-tabs')"><i class="fa fa-arrow-left"></i> Previous </button>
-                                <button class="btn btn-flat btn-primary" @click="shownexttab('details-tab')"> Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-flat btn-primary" @click="submitfinalform('')"> Submit <i class="fa fa-arrow-save"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="details-tab" role="tabpanel" aria-labelledby="custom-tabs-four-details">
+                    <!-- <div class="tab-pane fade tab-content-details" id="details-tab" role="tabpanel" aria-labelledby="custom-tabs-four-details">
                         <div id="schoolsections">
                             <dt>Class Details</dt>
                             <hr>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Class:</label>
-                                    <select v-model="class_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('class') }" @change="aboveClass10()"  class="form-control select2" name="class" id="class">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in clasList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
-                                    </select>
-                                    <has-error :form="class_form" field="class"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
-                                    <label>Streams:</label>
-                                    <select v-model="class_form.stream" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('stream') }" class="form-control select2" name="stream" id="stream">
-                                        <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
-                                    </select>
-                                    <has-error :form="class_form" field="stream"></has-error>
-                                </div> 
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
-                                    <label>Section:</label>
-                                    <select v-model="class_form.section" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('section') }" class="form-control select2" name="section" id="section">
-                                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
-                                    </select>
-                                    <has-error :form="class_form" field="section"></has-error>
-                                </div>
-                            </div>
-                            <!-- <div class="row form-group">
+                            <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Student Class: <span class="text-danger">*</span></label>
                                     <select v-model="class_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('class') }" class="form-control select2" name="class" id="class">
@@ -612,8 +601,8 @@
                                     </select>
                                     <has-error :form="class_form" field="section"></has-error>
                                 </div>
-                            </div> -->
-                            <!-- <div class="row form-group">
+                            </div>
+                            <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Student Type: <span class="text-danger">*</span></label>
                                     <select v-model="class_form.student_type" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('student_type') }" class="form-control select2" name="student_type" id="student_type">
@@ -630,26 +619,7 @@
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" name="no_meals" v-model="class_form.no_meals" value="0" id="no_meals3"> None
                                     <has-error :form="class_form" field="no_meals"></has-error>
                                 </div>
-                            </div> -->
-
-                            <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Student Type:<span class="text-danger">*</span></label>
-                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Student Type: <span class="text-danger">*</span></label>
-                                    <select v-model="class_form.student_type" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('student_type') }" class="form-control select2" name="student_type" id="student_type">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in studentTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="class_form" field="student_type"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"  id="feedingDetails" style="display:none">
-                                    <label class="mb-0">Feeding Modality:</label><br>
-                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
-                                </div>
                             </div>
-
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category: <span class="text-danger">*</span></label><br>
@@ -670,8 +640,8 @@
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for="(item, index) in studentscholarshipList" :key="index">
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" :name="'scholarship'+item" :id="'customCheckbox'+index" v-model="class_form.scholarship" type="checkbox" :value="item.id">
-                                        <label :for="'customCheckbox'+index" :name="'scholarship'+item" class="font-weight-normal custom-control-label">{{item.name}}</label>
+                                        <input class="custom-control-input" name="scholarship" :id="'customCheckbox'+index" v-model="class_form.scholarship" type="checkbox" :value="item.id">
+                                        <label :for="'customCheckbox'+index" name="scholarship" class="font-weight-normal custom-control-label">{{item.name}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -701,7 +671,7 @@
                                 <button class="btn btn-flat btn-primary" @click="submitfinalform('')"> Submit <i class="fa fa-arrow-save"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -730,6 +700,7 @@ export default {
             p_gardain_villageList:[],
             gardain_villageList:[],
             motherTongueList:[],
+            classList:[],
             clasList:[],
             streamList:[],
             streamListSelected:[],
@@ -737,9 +708,9 @@ export default {
             studentscholarshipList:[],
             studentbenefitList:[],
             sectionList:[],
-            orgid:'',
             personal_form: new form({
                 student_id:'',
+                std_class:'',
                 snationality:'',
                 cid_passport:'',
                 first_name:'',
@@ -759,7 +730,7 @@ export default {
                 student_id:'',
                 merital_status:'',
                 primary_contact:'',
-                type:'add',
+                type:'edit',
                 
                 father_nationality:'Bhutanese',
                 father_cid_passport:'',
@@ -816,14 +787,6 @@ export default {
                 gardain_cntct_no:'',
                 
             }),
-            class_form: new form({
-                student_id:'',
-                disability:'',
-                special_benifit:[],
-                scholarship:[],
-                feeding_type:'',
-                meal_type:'', no_meals:'', student_type:'', section:'', stream:'', class:'',class_stream_id:'',
-            }),
         }
     },
     methods: {
@@ -858,7 +821,7 @@ export default {
             if(selectedVal.includes('Bhutan')){
                 if ($('#'+fieldId).val().length != 11){
                     Swal.fire({
-                        html: "Please enter 11 digit CID",
+                        html: "Please ender 11 digit CID",
                         icon: 'error'
                     });
                 }
@@ -887,17 +850,17 @@ export default {
                                 this.personal_form.dob = year+ "-"+month + "-" + day;
                                 $('#dob').val(year+ "-"+month + "-" + day);
                                 $('#dob').prop('readonly',true);
-                                if(personal_detail.genter=="M"){
-                                    personal_detail.genter="male";
+                                if(personal_detail.gender=="M"){
+                                    personal_detail.gender="male";
                                 }
-                                else if(personal_detail.genter=="F"){
-                                    personal_detail.genter="female";
+                                else if(personal_detail.gender=="F"){
+                                    personal_detail.gender="female";
                                 }
                                 else{
-                                    personal_detail.genter="others";
+                                    personal_detail.gender="others";
                                 }
                                 for(let i=0; i<this.sex_idList.length;i++){
-                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.genter){
+                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
                                         $('#sex_id').val(this.sex_idList[i].id).trigger('change');
                                         this.personal_form.sex_id =  this.sex_idList[i].id;
                                         $('#sex_id').prop('disabled',true);
@@ -916,10 +879,9 @@ export default {
                             }
                             
                             if(type=="father"){
-                                
-                                if(personal_detail.genter=="F"){
+                                if(personal_detail.gender=="F"){
                                     Swal.fire({
-                                        html: "Genter of this person Female. Please provide correct CID",
+                                        html: "Gender of this person Female. Please provide correct CID",
                                         icon: 'error'
                                     });
                                     this.guardian_form.father_first_name = "";
@@ -949,9 +911,9 @@ export default {
                                 }
                             }
                             if(type=="mother"){
-                                if(personal_detail.genter=="M"){
+                                if(personal_detail.gender=="M"){
                                     Swal.fire({
-                                        html: "Genter of this person is Male. Please provide correct CID",
+                                        html: "Gender of this person is Male. Please provide correct CID",
                                         icon: 'error'
                                     });
                                     this.guardian_form.mother_first_name = "";
@@ -1168,7 +1130,31 @@ export default {
                 console.log("Error:"+error)
             });
         },
-      
+        loadclasses(id){
+            let uri = 'organization/getFullSchoolDetials/sessionDet';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.clasList=data.data.data.class_section;
+                this.streamList=data.data.data.sections;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        /**
+         * to load the class list
+         */
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         
         shownexttab(nextclass){
             if(nextclass=="basic-tabs"){
@@ -1182,7 +1168,6 @@ export default {
                 } 
                 let formData = new FormData();
                 formData.append('snationality', this.personal_form.snationality);
-                formData.append('student_id', this.personal_form.student_id);
                 formData.append('cid_passport', this.personal_form.cid_passport);
                 formData.append('first_name', this.personal_form.first_name);
                 formData.append('middle_name', this.personal_form.middle_name);
@@ -1192,18 +1177,22 @@ export default {
                 formData.append('dzongkhag', this.personal_form.dzongkhag);
                 formData.append('gewog', this.personal_form.gewog);
                 formData.append('village_id', this.personal_form.village_id);
+                formData.append('std_class', this.personal_form.std_class);
                 formData.append('mother_tongue', this.personal_form.mother_tongue);
                 formData.append('fulladdress', this.personal_form.fulladdress);
                 formData.append('attachments', this.personal_form.attachments);
                 formData.append('type','add');
+                formData.append('student_id', this.personal_form.student_id);
+                //this.personal_form.post('students/admission/saveStudentDetials',formData.serialize(), config)
                 axios.post('students/admission/saveStudentDetails',formData, config)
                 .then((response) => {
-                    this.guardian_form.student_id=response.data.id;
-                    this.class_form.student_id=response.data.id;
+                    this.guardian_form.student_id=response.data.data.id;
+                    // this.class_form.student_id=response.data.data.id;
                     Toast.fire({
                         icon: 'success',
                         title: 'Student Personal Details has been saved successfully'
-                    })
+                    });
+                    this.getstudentGuardainClassDetails(this.$route.params.data,'guardian');
                     this.changetab(nextclass);
                 })
                 .catch((error) => {
@@ -1223,7 +1212,8 @@ export default {
                     Toast.fire({
                         icon: 'success',
                         title: 'Instructor Registration  successful'
-                    })
+                    });
+                    this.getstudentGuardainClassDetails(this.$route.params.data,'class');
                     this.changetab(nextclass);
                 })
                 .catch((error) => {
@@ -1248,14 +1238,13 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) =>{
                 if (result.isConfirmed){
-                    this.class_form.class_stream_id=this.class_form.class;
                     this.class_form.post('students/admission/saveStudentClassDetails')
                     .then((response) => {
                         Swal.fire(
                             'Submitted!',
-                            'Student details has been added successfully.',
+                            'Student details has been updated successfully.',
                             'success',
-                            this.$router.push('/student_new_admission')
+                            this.$router.push('/student_updates')
                         );
                     })
                     .catch((error) =>{
@@ -1366,6 +1355,20 @@ export default {
                     $('#gardain_occupation').addClass('select2-hidden-accessible');
                 }
             }
+            if(type=="class"){
+                if(!$('#class').attr('class').includes('select2-hidden-accessible')){
+                    $('#class').addClass('select2-hidden-accessible');
+                }
+                if(!$('#stream').attr('class').includes('select2-hidden-accessible')){
+                    $('#stream').addClass('select2-hidden-accessible');
+                }
+                if(!$('#section').attr('class').includes('select2-hidden-accessible')){
+                    $('#section').addClass('select2-hidden-accessible');
+                }
+                if(!$('#student_type').attr('class').includes('select2-hidden-accessible')){
+                    $('#student_type').addClass('select2-hidden-accessible');
+                }
+            }
             
         },
         
@@ -1394,6 +1397,9 @@ export default {
             }
             if(id=="village_id"){
                 this.personal_form.village_id=$('#village_id').val();
+            }
+            if(id=="std_class"){
+                this.personal_form.std_class=$('#std_class').val();
             }
             if(id=="mother_tongue"){
                 this.personal_form.mother_tongue=$('#mother_tongue').val();
@@ -1482,53 +1488,24 @@ export default {
 
             if(id=="class"){
                 this.class_form.class=$('#class').val();
-                let class_selected = $("#class").val();
-                this.getStreamList(class_selected);
-                this.getSectionList();
-                if(class_selected == 11 || class_selected == 12){
-                    $(".stream_selection").show();
-                    $(".section_selection").show();
-                }else{
-                    $(".section_selection").show();
-                    $(".stream_selection").hide();
+                $('#stream_section').hide();
+                if($('#class option:selected').text()=="XI" || $('#class option:selected').text()=="XII"){
+                    $('#stream_section').show();
+                    this.showstream($('#class').val());
+                }
+                else{
+                    this.getExistingSection($('#class').val());
                 }
             }
-
             if(id=="stream"){
                 this.class_form.stream=$('#stream').val();
+                this.getExistingSection($('#stream').val());
             }
-            // if(id=="section"){
-            //     axios.get('/students/loadStudentBySection/'+$('#class').val()+'__'+$('#stream').val()+'__'+$('#section').val())
-            //         .then((response) => {
-            //             this.studentList = response.data;  
-            //     })
-            //     .catch(() => {
-            //         consoele.log("Error:"+e)
-            //     });
-            //     this.class_form.section=$('#section').val();
-            // }
-
-            // if(id=="class"){
-            //     this.class_form.class=$('#class').val();
-            //     $('#stream_section').hide();
-            //     if($('#class option:selected').text()=="XI" || $('#class option:selected').text()=="XII"){
-            //         $('#stream_section').show();
-            //         this.showstream($('#class').val());
-            //     }
-            //     else{
-            //         this.getExistingSection($('#class').val());
-            //     }
-            // }
-            // if(id=="stream"){
-            //     this.class_form.stream=$('#stream').val();
-            //     this.getExistingSection($('#stream').val());
-            // }
-            // if(id=="section"){
-            //     this.class_form.section=$('#section').val();
-            // }
+            if(id=="section"){
+                this.class_form.section=$('#section').val();
+            }
             if(id=="student_type"){
                 this.class_form.student_type=$('#student_type').val();
-                this.show_feeding_details($('#student_type').val());
             }
         },
         showstream(valu){
@@ -1588,73 +1565,110 @@ export default {
                 $('#gardain_section').show();
             } 
         },
-        // loadDetails(org_id){
-        //     axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
-        //     .then(response => {
-        //         this.existing_details=response.data.data;
-        //         this.clasList= response.data.data.classes; 
-        //     })
-        //     .catch((error) => {  
-        //         console.log("Error: "+error);
-        //     });
-        // },
-        loadClassList(uri="loadCommons/getOrgClassStream"){
-            axios.get(uri)
+        getstudentPersonalDetails(id){
+            axios.get('students/admission/getStudentDetails/'+id)
             .then(response => {
-                let data = response;
-                this.clasList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
+                let data = response.data.data;
+                if(data != ""){
+                    this.personal_
+                    this.personal_form.student_id=id;
+                    this.showstdidentity(data.CmnCountryId);
+                    this.personal_form.snationality=data.CmnCountryId;
+                    this.personal_form.cid_passport=data.CidNo;
+                    this.personal_form.first_name=data.Name.split(' ')[0];
+                    if(data.Name.split(' ').length>2){
+                        this.personal_form.middle_name=data.Name.split(' ')[1];
+                        this.personal_form.last_name=data.Name.split(' ')[2];
+                    }
+                    if(data.Name.split(' ').length<2){
+                         this.personal_form.last_name=data.Name.split(' ')[1];
+                    }
+                    this.personal_form.dob=data.DateOfBirth;
+                    this.personal_form.sex_id=data.CmnSexId;
+                    // this.personal_form.dzongkhag=data.snationality;
+                    // this.personal_form.gewog=data.snationality;
+                    this.personal_form.village_id=data.CmnChiwogId;
+                    this.personal_form.fulladdress=data.Address;
+                    this.personal_form.mother_tongue=data.CmnLanguageId;
+                }   // this.personal_form.attachments=data.snationality;
             });
         },
-        /**
-         * method to get stream list
-         */
-        getStreamList(id){
-            let classId=$('#class').val();
-            if(id!="" && classId==null){
-                classId=id; 
-            }
-            let uri = 'loadCommons/loadStreamList/'+classId;
-            this.streamList =[];
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.streamList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
+        getstudentGuardainClassDetails(id,type){
+            axios.get('students/admission/getstudentGuardainClassDetails/'+id+'/'+type)
+            .then(response => {
+                let data = response.data.data;
+                this.guardian_form.student_id=id;
+                if(type=="guardian"){
+                    for(let i=0;i<data.length;i++){
+                        if(data[i].contact_type=="Father"){
+                            this.guardian_form.father_nationality=data[i].nationality;
+                            this.guardian_form.father_cid_passport=data[i].cid_passport;
+                            this.guardian_form.father_first_name=data[i].name;
+                            // this.guardian_form.father_dzongkhag=data[i].cid_passport;
+                            // this.guardian_form.father_gewog=data[i].cid_passport;
+                            // this.guardian_form.father_village_id=data[i].cid_passport;
+                            this.guardian_form.father_fulladdress=data[i].address;
+                            // this.guardian_form.father_present_dzongkhag=data[i].cid_passport;
+                            this.guardian_form.father_present_gewog=data[i].cid_passport;
+                            // this.guardian_form.father_present_village_id=data[i].cid_passport;
+                            this.guardian_form.father_work_address=data[i].work_address;
+                            this.guardian_form.father_residence_address=data[i].residence_address;
+                            this.guardian_form.father_occupation=data[i].occupation;
+                            this.guardian_form.father_email=data[i].email;
+                            this.guardian_form.father_cntct_no=data[i].cntct_no;
+                        }
+                        if(data[i].contact_type=="Mother"){
+                            this.guardian_form.mother_nationality=data[i].nationality;
+                            this.guardian_form.mother_cid_passport=data[i].cid_passport;
+                            this.guardian_form.mother_first_name=data[i].name;
+                            // this.guardian_form.mother_dzongkhag=data[i].cid_passport;
+                            // this.guardian_form.mother_gewog=data[i].cid_passport;
+                            // this.guardian_form.mother_village_id=data[i].cid_passport;
+                            this.guardian_form.mother_fulladdress=data[i].address;
+                            // this.guardian_form.mother_present_dzongkhag=data[i].cid_passport;
+                            this.guardian_form.mother_present_gewog=data[i].cid_passport;
+                            // this.guardian_form.mother_present_village_id=data[i].cid_passport;
+                            this.guardian_form.mother_work_address=data[i].work_address;
+                            this.guardian_form.mother_residence_address=data[i].residence_address;
+                            this.guardian_form.mother_occupation=data[i].occupation;
+                            this.guardian_form.mother_email=data[i].email;
+                            this.guardian_form.mother_cntct_no=data[i].cntct_no;
+                        }
+                        if(data[i].contact_type=="Others"){
+                            this.guardian_form.gardain_nationality=data[i].nationality;
+                            this.guardian_form.gardain_cid_passport=data[i].cid_passport;
+                            this.guardian_form.gardain_first_name=data[i].name;
+                            // this.guardian_form.gardain_dzongkhag=data[i].cid_passport;
+                            // this.guardian_form.gardain_gewog=data[i].cid_passport;
+                            // this.guardian_form.gardain_village_id=data[i].cid_passport;
+                            this.guardian_form.gardain_fulladdress=data[i].address;
+                            // this.guardian_form.gardain_present_dzongkhag=data[i].cid_passport;
+                            this.guardian_form.gardain_present_gewog=data[i].cid_passport;
+                            // this.guardian_form.gardain_present_village_id=data[i].cid_passport;
+                            this.guardian_form.gardain_work_address=data[i].work_address;
+                            this.guardian_form.gardain_residence_address=data[i].residence_address;
+                            this.guardian_form.gardain_occupation=data[i].occupation;
+                            this.guardian_form.gardain_email=data[i].email;
+                            this.guardian_form.gardain_cntct_no=data[i].cntct_no;
+                        }
+                    }
+                }
+                if(type=="class"){
+                    this.class_form.student_id=id;
+                    this.class_form.class=data.class_stream_id;
+                    this.class_form.stream=data.class_stream_id;
+                    this.class_form.class_stream_id=data.class_stream_id;
+                    this.class_form.section=data.section;
+                    this.class_form.student_type=data.student_type;
+                    this.class_form.no_meals=data.snationality;
+                    this.class_form.scholarship=data.snationality;
+                    this.class_form.special_benifit=data.snationality;
+                    this.class_form.disability=data.disability;
+                }
             });
-        },
-        getSectionList(id){
-            let classId=$('#class').val();
-            if(id!="" && classId==null){
-                classId=id;
-            }
-            let uri = 'loadCommons/loadSectionList/'+classId;
-            this.sectionList =[];
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.sectionList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        //to hide and show no of meals
-        show_feeding_details(param){
-            if(param == 'Boarding'){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
-        },
-       
+        }
+        
     },
-
     mounted() {
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('all_active_dzongkhag');
@@ -1662,22 +1676,17 @@ export default {
         this.loadAllStudentMasters('StudentType_Active');
         this.loadAllStudentMasters('ScholarType_Active');
         this.loadAllStudentMasters('SpBenefit_Active');
-        // this.loadclasses('clasList');
-        axios.get('common/getSessionDetail')
-        .then(response =>{
-            let data = response.data.data;
-            this.orgid=data['Agency_Code'];
-        }) ;
-        this.loadClassList();
-         
+        this.loadclasses('clasList');
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
-        
-        Fire.$on('changefunction',(id)=>{
+        Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.getstudentPersonalDetails(this.$route.params.data);
+        this.loadClassList();
+        
     },
 }
 </script>
