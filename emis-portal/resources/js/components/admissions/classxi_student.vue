@@ -12,28 +12,29 @@
         </div>
       </div>
       <div class="card">
-          <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-              <label>Admission Types:<span class="text-danger">*</span></label><br>
-                  <input type="radio" name="student_type" v-model="student_form.student_type" value="classxi" id="classXI" @click="showAndHideField('classXI')" checked> Class XI and above <br>
-                  <input type="radio" name="student_type" v-model="student_form.student_type" value="others" id="others" @click="showAndHideField('others')" checked>Class X and below(including ECCD)<br>
-                  <span class="text-danger" id="option_err"></span>
-          </div>
-      <div class="card-body">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label>Admission Types:<span class="text-danger">*</span></label><br>
+            <input type="radio" name="student_type" v-model="student_form.student_type" value="classxi" id="classXI" @click="showAndHideField('classXI')" checked> Class XI and above <br>
+            <input type="radio" name="student_type" v-model="student_form.student_type" value="others" id="others" @click="showAndHideField('others')" checked> Contunue Education (ECCD, Class X and below)<br>
+            <input type="radio" name="student_type" v-model="student_form.student_type" value="Rejoin" id="Rejoin" @click="showAndHideField('Rejoin')" checked> Rejoining (Dis-continue Education for some times)<br>
+            <span class="text-danger" id="option_err"></span>
+        </div>
+        <div class="card-body">
         <form id="" class="form-horizontal" enctype="multipart/form-data" action="#" method="POST">
             <div class="row-12">
                 <div class="row form-group">
-                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <label class="required" >CID No/Reference  : </label>
-                            <label class="text-primary">{{ this.student_form.cid_passport}}</label>
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <label class="required" >Name of Student :</label>
-                            <label class="text-primary">{{ this.student_form.Name}}</label>
-                      </div>
-                      <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <label class="required" >Gender :</label>
-                            <label class="text-primary">{{ this.student_form.gender}}</label>
-                      </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="required" >CID No/Reference  : </label>
+                        <label class="text-primary">{{ this.student_form.cid_passport}}</label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="required" >Name of Student :</label>
+                        <label class="text-primary">{{ this.student_form.Name}}</label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label class="required" >Gender :</label>
+                        <label class="text-primary">{{ this.student_form.gender}}</label>
+                    </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -49,23 +50,23 @@
             <div class="row-12">
                 <div class="card">
                     <label class="card-header"><strong>School Information</strong></label>
-                        <table class="table table-bordered table-striped" id="OrgDetails">
-                            <thead>
-                                <tr>
-                                  <th>School Code</th>
-                                  <th>Name of School</th>
-                                  <th>Dzongkhag/ Thromde</th>
-                                  <th>Gewog / Thromde Demkhong</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <td class="text-primary">{{OrgDetails.code}}</td>
-                                <td class="text-primary">{{OrgDetails.name}}</td>
-                                <td class="text-primary">{{getDzoName.name}}</td>     
-                                <td class="text-primary">{{getGewogName.name}}</td>
+                    <table class="table table-bordered table-striped" id="OrgDetails">
+                        <thead>
+                            <tr>
+                                <th>School Code</th>
+                                <th>Name of School</th>
+                                <th>Dzongkhag/ Thromde</th>
+                                <th>Gewog / Thromde Demkhong</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <td class="text-primary">{{OrgDetails.code}}</td>
+                            <td class="text-primary">{{OrgDetails.name}}</td>
+                            <td class="text-primary">{{getDzoName.name}}</td>
+                            <td class="text-primary">{{getGewogName.name}}</td>
 
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="content-header pb-0">
@@ -81,22 +82,22 @@
             </div>
             <div class="row md-12">
                 <div class="form-group col-md-4">
-                      <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
-                          <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag"  >
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                          </select>
+                    <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
+                    <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag"  >
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                    </select>
                 </div>
                 <div class="form-group col-md-4">
-                      <label>School <span class="text-danger">*</span></label>
-                        <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
-                              <option value="">--- Please Select ---</option>
-                              <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                        </select>
+                    <label>School <span class="text-danger">*</span></label>
+                    <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                    </select>
                 </div>
                 <div class="form-group col-md-4" id="seat">
                       <label>Seats available </label>
-                        <input v-model="student_form.seats" id="seat" type="text" name="seats" 
+                        <input v-model="student_form.seats" id="seat" type="text" name="seats"
                         class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }"  disabled="true" />
                         <has-error :student_form="student_form.seats" field="seat"></has-error>
                 </div>
@@ -122,7 +123,7 @@
                               <has-error :student_form="student_form.dateOfapply" field="date"></has-error>
                 </div>
             </div>
-              <hr>                        
+              <hr>
               <div class="footer float-right" >
                   <button type="button" v-on:click="resetForm" class="btn btn-danger"><i class="fas fa-redo"></i> Reset</button>
                   <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Apply</button>
@@ -171,7 +172,7 @@
                   remarks:'',
                   CidNo:'',
                   std_decission:'',
-                   
+
                 })
             }
         },
@@ -183,7 +184,7 @@
              if(type=="classXI"){
             $('#stream').show();
             }
-            
+
              if(type=="others"){
             $('#stream').hide();
             }
@@ -207,11 +208,11 @@
                   formData.append('school', this.student_form.school);
                   formData.append('class', this.student_form.class);
                   formData.append('stream', this.student_form.stream);
-                  formData.append('dateOfapply', this.student_form.dateOfapply); 
-                  formData.append('remarks', this.student_form.remarks); 
-                  formData.append('status', 'pending'); 
-                  
-                  formData.append('std_decission', 'pending'); 
+                  formData.append('dateOfapply', this.student_form.dateOfapply);
+                  formData.append('remarks', this.student_form.remarks);
+                  formData.append('status', 'pending');
+
+                  formData.append('std_decission', 'pending');
 
                 axios.post('/savedetailsEnrolledStd',formData,config)
                 .then(()=>{
@@ -235,7 +236,7 @@
             let dzoId=$('#dzongkhag').val();
                 if(id!=""){
                 dzoId=id;
-              } 
+              }
 
             axios.get('/masters/getOrgList/' +dzoId)
               .then(response =>{
@@ -247,7 +248,7 @@
              let orgId=$('#school').val();
                 if(id!=""){
                  orgId=id;
-            } 
+            }
               axios.get('/masters/loadClassStreamSection/NA/' +orgId)
               .then(Response =>{
                 let data = Response.data;
@@ -260,7 +261,7 @@
             let classId=$('#class').val();
               if(id!=""){
                 classId=id;
-          } 
+          }
             axios.get('/masters/getStreamByclassId/' +classId)
             .then(Response =>{
               let data = Response.data;
@@ -272,7 +273,7 @@
                let orgId=$('#school').val();
                 if(id!=""){
                  orgId=id;
-            } 
+            }
               axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
               .then(Response =>{
                 let data = Response.data.data;
@@ -302,7 +303,7 @@
             .then(response =>{
               let data = response.data.data;
               this.getDzoName=data;
-              
+
             })
 
         },
@@ -332,7 +333,7 @@
           removeerror(fieldid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
 
@@ -342,7 +343,7 @@
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-             
+
             if(id=="dzongkhag"){
                 this.student_form.dzongkhag=$('#dzongkhag').val();
                 this.getschoolList($('#dzongkhag').val());
@@ -354,7 +355,7 @@
             if(id=="class"){
                 this.student_form.class=$('#class').val();
                   this.getstreamListByid($('#class').val());
-                
+
             }
             if(id=="stream"){
                 this.student_form.stream=$('#stream').val();
@@ -369,30 +370,30 @@
             theme: 'bootstrap4'
            });
           $('.select2').on('select2:select', function (el){
-              Fire.$emit('changefunction',$(this).attr('id')); 
+              Fire.$emit('changefunction',$(this).attr('id'));
             });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         },
 
-        
-        created() { 
+
+        created() {
             this.getdzongkhagList();
             this.getclassList();
             this.getstreamList();
             this.getseatdetailsbyOrgId();
             this.getdzongkhagName();
             this.getgewogName();
-           
+
             this.student_form.cid_passport=this.$route.query.data.CidNo;
             this.student_form.Name=this.$route.query.data.first_name + ' ' + this.$route.query.data.last_name;
             this.student_form.gender=this.$route.query.data.CmnSexId;
-            this.student_form.DateOfBirth=this.$route.query.data.DateOfBirth; 
+            this.student_form.DateOfBirth=this.$route.query.data.DateOfBirth;
             this.student_form.address=this.$route.query.data.Address;
             this.getOrgDetails(this.$route.query.data.OrgOrganizationId);
-            
+
   },
     }
 </script>

@@ -2,20 +2,20 @@
     <div class="container-fluid">
         <div class="card card-primary card-outline">
             <div class="card-body">
-                 <div class="form-group"> 
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="mb-0">ReferNo/CidNo:</label>
-                        <label class="mb-0"><span class="text-danger">*</span><span class="cus-tooltips">Press Enter</span></label>
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label id="level_name"></label>
-                                <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport')" :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="Ref/cid No">
-                                <has-error :form="form" field="cid_passport"></has-error>
-                            </div>
+                <div class="form-group"> 
+                    <label class="mb-0">CidNo/Student Code:</label>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label id="level_name"></label>
+                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('cid_std_code') }" id="cid_std_code" v-model="form.cid_std_code" placeholder="Ref/cid No">
+                            <has-error :form="form" field="cid_std_code"></has-error>
                         </div>
-                        <has-error :form="form" field="admission"></has-error>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pt-4">
+                            <button class="btn btn-primary" @click="getDetailsbyCID('cid_std_code')"><i class="fa fa-search"></i> Search</button>
+                        </div>
                     </div>
-                </div>  
+                </div> 
+                <has-error :form="form" field="admission"></has-error> 
             </div>
         </div>
         <hr>
@@ -32,40 +32,36 @@ export default {
         } 
     },
     methods: {
-     getDetailsbyCID(cid_passport){
-        if ($('#'+cid_passport).val().length != 11){
+     getDetailsbyCID(cid_std_code){
+        if ($('#'+cid_std_code).val().length != 11){
             Swal.fire({
                 html: "Please enter 11 digit CID",
                 icon: 'error'
             });
         }
         else {
-            axios.get('/getstudentdetailsbyCid/' +$('#'+cid_passport).val())
+            axios.get('/getstudentdetailsbyCid/' +$('#'+cid_std_code).val())
             .then(response => {
                 let data = response.data.data;
-                // alert(JSON.stringify(data.CidNo));
-                
                 data = data==null ? "" : data;
-                    if(data!=""){
-                    //Already for enrolled students 
-                        this.$Progress.start();
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'please fill the details before you apply'
-                            });
-                            this.$router.push({name:'classxi_student',query: {data:data}});
-                            this.$Progress.finish() 
-                    }
-                    else{
-                        //new adminssion form
-                        this.$Progress.start();
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'please fill the details before you apply'
-                            })
-                        this.$router.push({name:'notenrolled_student',query: {cid:$('#'+cid_passport).val()}});
-                        this.$Progress.finish() 
-                    }
+                if(data!=""){
+                    this.$Progress.start();
+                    // Toast.fire({
+                    //     icon: 'success',
+                    //     title: 'please fill the details before you apply'
+                    // });
+                    this.$router.push({name:'classxi_student',query: {data:data}});
+                    this.$Progress.finish() 
+                }
+                else{
+                    this.$Progress.start();
+                    // Toast.fire({
+                    //     icon: 'success',
+                    //     title: 'please fill the details before you apply'
+                    // })
+                    this.$router.push({name:'notenrolled_student',query: {cid:$('#'+cid_std_code).val()}});
+                    this.$Progress.finish() 
+                }
                 
                 }).catch(function (error){
                     console.log("Retrieving error: "+error)
@@ -81,9 +77,9 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         }, 
-        loadRespectivePage(val){
-            this.$router.push("/"+val);
-        },
+        // loadRespectivePage(val){
+        //     this.$router.push("/"+val);
+        // },
 
         /**
          * method to populate dropdown
@@ -100,9 +96,7 @@ export default {
             }
         },
     },
-    
-    created(){
-    },
+   
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();

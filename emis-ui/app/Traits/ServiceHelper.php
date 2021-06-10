@@ -22,5 +22,5 @@ trait ServiceHelper
             return $e->getResponse()->getBody()->getContents();
         }
     }
-    
+
 }
