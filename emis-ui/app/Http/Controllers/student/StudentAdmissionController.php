@@ -13,17 +13,21 @@ class StudentAdmissionController extends Controller{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
+
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
+
     public function saveStudentDetails(Request $request){
+
         $rules = [
             'snationality'              => 'required',
             'cid_passport'              => 'required',
             'first_name'                => 'required',
             'dob'                       => 'required',
             'sex_id'                    => 'required',
-            'mother_tongue'             => 'required', 
+            'mother_tongue'             => 'required',
+            'std_class'                 => 'required'
             
         ];
         $customMessages = [
@@ -33,7 +37,9 @@ class StudentAdmissionController extends Controller{
             'dob.required'                      => 'This field is required',
             'sex_id.required'                   => 'This field is required',
             'mother_tongue.required'            => 'This field is required',
+            'std_class.required'                => 'This field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
 
         $file = $request->attachments;
@@ -50,6 +56,7 @@ class StudentAdmissionController extends Controller{
         
         $data =[
             'snationality'              =>  $request->snationality,
+            'std_class'                 =>  $request->std_class,
             'student_id'                =>  $request->student_id,
             'cid_passport'              =>  $request->cid_passport,
             'first_name'                =>  $request->first_name,
@@ -63,14 +70,17 @@ class StudentAdmissionController extends Controller{
             'fulladdress'               =>  $request->fulladdress, 
             'mother_tongue'             =>  $request->mother_tongue, 
             'type'                      =>  $request->type, 
-            'attachments'               =>  $path, 
+            'attachments'               =>  $path,
+            'OrgOrganizationId'         =>  $this->getWrkingAgencyId(),
             'user_id'                   =>  $this->userId() 
         ];
+        
         //changed the route link to saveAdmissionStudentDetails from saveStudentDetails
         $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionStudentDetails', $data);
         return $response_data;
     }
-      public function saveStudentGardianDetails(Request $request){
+    
+    public function saveStudentGardianDetails(Request $request){
         $rules = [
             'merital_status'                        => 'required',
             'primary_contact'                       => 'required',

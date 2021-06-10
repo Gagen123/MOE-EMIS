@@ -73,7 +73,10 @@ class LoadOrganizationController extends Controller{
                 $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
             }
             else{
-                $response_data->meals=OrganizationFeedingDetails::where('organizationId',$id)->get();
+                $feed_det=OrganizationFeedingDetails::where('organizationId',$id)->get();
+                if($feed_det!= NULL && $feed_det !=""){
+                    $response_data->meals=$feed_det;
+                }
             }
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
