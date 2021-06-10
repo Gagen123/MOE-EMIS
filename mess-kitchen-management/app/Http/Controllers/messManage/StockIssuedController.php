@@ -75,27 +75,5 @@ class StockIssuedController extends Controller
             $list = DB::table('stock_issueds')
             ->select('organizationId', 'dateOfissue as dateOfissue','item_id as item', 'quantity as quantity','unit_id as unit')->where('organizationId',$org_Id)->get();
             return $list;
-<<<<<<< HEAD
-        }catch(Exception $e){
-            dd($e);
-
-        }
     }
-    // public function getStockIssueItem($org_Id=''){
-    //     $list = DB::table('stock_issueds')
-    //     ->select( 'dateOfissue as dateOfissue','item_id as item','quantity as quantity','unit as unit','damagequantity as damageqty','remarks as remarks')->where('organizationId',$org_Id)->get();
-    //     return $list;
-    //   }
-         //  dd('m here');
-        // return $this->successResponse($item, Response::HTTP_CREATED);
-    // }
-    // public function loadStockIssuedList(){
-     //return 'from service of mine';
-    //     $list = DB::table('stock_issueds')
-    //     ->select( 'dateOfissue as dateOfissue',)->get();
-    //     return $list;
-    // }
-=======
-    }
->>>>>>> 93527b4b5829b875cdf6612a182d5333b02a60fd
 }

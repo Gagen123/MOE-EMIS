@@ -297,13 +297,8 @@ export default {
         this.loadAllActiveMasters('all_country');
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('active_mother_tongue');
-<<<<<<< HEAD
-      
-        $('.select2').select2();
-=======
 
-           $('.select2').select2();
->>>>>>> 93527b4b5829b875cdf6612a182d5333b02a60fd
+        $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
