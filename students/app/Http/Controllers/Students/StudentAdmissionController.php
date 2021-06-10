@@ -71,13 +71,8 @@ class StudentAdmissionController extends Controller
                 'PhotoPath'                 =>  $request->attachments,
                 'Status'                    =>  $request->status,
             ];
-<<<<<<< HEAD
             $response_data = std_admission::where('id',$request->student_id)->update($data);
         } 
-=======
-            $response_data = Std_Students::where('id',$request->student_id)->update($data);
-        }
->>>>>>> 24afb974e6c9136d512039c21c65351bfa2c35d0
         else if($request->type=="update_transfer"){
             //keep history
             $data =[
@@ -94,14 +89,9 @@ class StudentAdmissionController extends Controller
                 'class_id'                  =>  $request->std_class, 
                 'IsNewAdmission'            =>  1,
                 'Address'                   =>  $request->fulladdress,
-<<<<<<< HEAD
                 'CmnLanguageId'             =>  $request->mother_tongue, 
                 'PhotoPath'                 =>  $request->attachments, 
                 'Status'                    =>  $request->status, 
-=======
-                'CmnLanguageId'             =>  $request->mother_tongue,
-                'PhotoPath'                 =>  $request->attachments,
->>>>>>> 24afb974e6c9136d512039c21c65351bfa2c35d0
             ];
 
             $updated_data = std_admission::where('id',$request->student_id)->update($data);
@@ -118,7 +108,6 @@ class StudentAdmissionController extends Controller
                     'middle_name'               =>  $request->middle_name,
                     'last_name'                 =>  $request->last_name,
                     'DateOfBirth'               =>  $request->dob,
-<<<<<<< HEAD
                     'CmnSexId'                  =>  $request->sex_id,
                     'CmnChiwogId'               =>  $request->village_id, 
                     'CmnGewogId'                =>  $request->gewog,
@@ -128,15 +117,6 @@ class StudentAdmissionController extends Controller
                     'CmnLanguageId'             =>  $request->mother_tongue, 
                     'PhotoPath'                 =>  $request->attachments, 
                     'Status'                    =>  $request->status, 
-=======
-                    'CmnSexId'                    =>  $request->sex_id,
-                    'CmnChiwogId'                =>  $request->village_id,
-                    'CmnGewogId'                  =>  $request->gewog,
-                    'IsNewAdmission'            =>1,
-                    'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue,
-                    'PhotoPath'               =>  $request->attachments,
->>>>>>> 24afb974e6c9136d512039c21c65351bfa2c35d0
                     'created_by'                =>  $request->user_id,
                     'created_at'                =>  date('Y-m-d h:i:s'),
                 ];
@@ -146,7 +126,6 @@ class StudentAdmissionController extends Controller
                 $data =[
                     'OrgOrganizationId'         =>  $request->OrgOrganizationId,
                     'CmnCountryId'              =>  $request->snationality,
-<<<<<<< HEAD
                     'CidNo'                     =>  $request->cid_passport,
                     'first_name'                =>  $request->first_name,
                     'middle_name'               =>  $request->middle_name,
@@ -161,18 +140,6 @@ class StudentAdmissionController extends Controller
                     'CmnLanguageId'             =>  $request->mother_tongue, 
                     'PhotoPath'                 =>  $request->attachments, 
                     'Status'                    =>  $request->status, 
-=======
-                    'CidNo'              =>  $request->cid_passport,
-                    'Name'                =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
-                    'DateOfBirth'                       =>  $request->dob,
-                    'CmnSexId'                    =>  $request->sex_id,
-                    'CmnChiwogId'                =>  $request->village_id,
-                    'CmnGewogId'                  =>  $request->gewog,
-                    'IsNewAdmission'            =>1,
-                    'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue,
-                    'PhotoPath'               =>  $request->attachments,
->>>>>>> 24afb974e6c9136d512039c21c65351bfa2c35d0
                 ];
                 
                 $updated_data = std_admission::where('CidNo',$request->cid_passport)->update($data);
@@ -201,7 +168,6 @@ class StudentAdmissionController extends Controller
             'sex_id.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-<<<<<<< HEAD
 
         $data =[
             'application_id'            =>  $request->application_id,
@@ -224,30 +190,6 @@ class StudentAdmissionController extends Controller
             'student_type'              =>  $request->type, 
             'Status'              =>  $request->Status, 
         ];
-=======
-         try{
-            $data =[
-                'application_id'            =>  $request->application_id,
-                'snationality'              =>  $request->snationality,
-                'student_id'                =>  $request->student_id,
-                'CidNo'                     =>  $request->cid_passport,
-                'first_name'                =>  $request->first_name,
-                'middle_name'               =>  $request->middle_name,
-                'last_name'                 =>  $request->last_name,
-                'DateOfBirth'               =>  $request->dob,
-                'CmnSexId'                  =>  $request->sex_id,
-                'dzongkhag'                 =>  $request->dzongkhag,
-                'CmnGewogId'                =>  $request->gewog,
-                'village_id'                =>  $request->village_id,
-                // 'village_id'                =>  $request->s_dzongkhag,
-                'OrgOrganizationId'         =>  $request->s_school,
-                'class_id'                =>  $request->s_class,
-                'address'                   =>  $request->fulladdress,
-                'attachments'               =>  $request->attachments,
-                'student_type'              =>  $request->type,
-                'Status'              =>  $request->Status,
-            ];
->>>>>>> 24afb974e6c9136d512039c21c65351bfa2c35d0
         $response_data = std_admission::create($data);
 
         return $response_data;
