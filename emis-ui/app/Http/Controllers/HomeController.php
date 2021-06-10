@@ -47,22 +47,22 @@ class HomeController extends Controller{
                         if($priv->moudle_name != "" && strpos($mod_ids,$priv->module_id)===false){
                             $mod_ids.=$priv->module_id.',';
                             $mod=[
-                                'mod_id'=> $priv->module_id,
-                                'mod_name' => $priv->moudle_name,
-                                'module_icon'=>$priv->module_icon,
-                                'module_route'=>$priv->module_route,
-                                'Sequence'=>$priv->Sequence,
+                                'mod_id'        =>$priv->module_id,
+                                'mod_name'      =>$priv->moudle_name,
+                                'module_icon'   =>$priv->module_icon,
+                                'module_route'  =>$priv->module_route,
+                                'Sequence'      =>$priv->Sequence,
                             ];
                             array_push($module,$mod);
                         }
                         if($priv->sub_module_name != "" && $priv->Type == "Sub_module" && strpos($sub_mod_ids,$priv->sub_module_id)===false){
                             $sub_mod_ids.=$priv->sub_module_id.',';
                             $sub_mod=[
-                                'mod_id'=> $priv->module_id,
-                                'sub_mod_id'=> $priv->sub_module_id,
-                                'sub_mod_name' => $priv->sub_module_name,
-                                'submod_icon'=>$priv->submod_icon,
-                                'submod_route' =>$priv->sub_mod_route,
+                                'mod_id'        =>$priv->module_id,
+                                'sub_mod_id'    =>$priv->sub_module_id,
+                                'sub_mod_name'  =>$priv->sub_module_name,
+                                'submod_icon'   =>$priv->submod_icon,
+                                'submod_route'  =>$priv->sub_mod_route,
                             ];
                             array_push($sub_modules,$sub_mod);
                         }
@@ -71,14 +71,14 @@ class HomeController extends Controller{
                                 $actions=$this->apiService->listData('load_action/'.$priv->Id, [], $headers);
                                 $screens_ids.=$priv->Id.',';
                                 $screen=[
-                                    'mod_id'=> $priv->module_id,
-                                    'sub_mod_id'=> $priv->sub_module_id,
-                                    'screen_id' => $priv->Id,
-                                    'screen_name' => $priv->screenName,
-                                    'route' =>$priv->Route,
-                                    'work_flow_status'=>'NA',
-                                    'actions' => json_decode($actions)[0]->action_name,
-                                    'screen_icon'=>$priv->screen_icon,
+                                    'mod_id'            =>$priv->module_id,
+                                    'sub_mod_id'        =>$priv->sub_module_id,
+                                    'screen_id'         =>$priv->Id,
+                                    'screen_name'       =>$priv->screenName,
+                                    'route'             =>$priv->Route,
+                                    'work_flow_status'  =>'NA',
+                                    'actions'           =>json_decode($actions)[0]->action_name,
+                                    'screen_icon'       =>$priv->screen_icon,
                                 ];
                                 array_push($screens,$screen);
                             }
@@ -131,24 +131,24 @@ class HomeController extends Controller{
                 //dd($screen);
                 $roles=json_decode($user_Det)->user_details->roles;
                 $user_details=[
-                    'User_Id'=>$user->id,
-                    'staff_id'=>$user->staff_id,
-                    'Passport_CID'  => $user->cid_emp_id,
-                    'Full_Name'  => $user->full_name,
-                    'Contact_Number'  =>  $user->phone_number,
-                    'Email'  =>  $user->email,
+                    'User_Id'           =>$user->id,
+                    'staff_id'          =>$user->staff_id,
+                    'Passport_CID'      =>$user->cid_emp_id,
+                    'Full_Name'         =>$user->full_name,
+                    'Contact_Number'    =>$user->phone_number,
+                    'Email'             =>$user->email,
                     //'Role_Id'=>  $user->id,
-                    'Agency_Code' =>  $user->org_organization_id,
-                    'Dzo_Id' =>  $user->dzon_id,
-                    'Geo_Id' =>  $user->gewog_id,
-                    'Village_Id' =>  $user->village_id,
-                    'Center_Id' =>  $user->nfe_center_id,
-                    'modules'  => $module,
-                    'sub_modules' =>$sub_modules,
-                    'screens'=>$screens,
-                    'acess_level'=>$user->ministry_user,
-                    'roles' => $roles,//roles will be multiple
-                    'system_id' =>json_decode($user_Det)->system_id,
+                    'Agency_Code'       =>$user->org_organization_id,
+                    'Dzo_Id'            =>$user->dzon_id,
+                    'Geo_Id'            =>$user->gewog_id,
+                    'Village_Id'        =>$user->village_id,
+                    'Center_Id'         =>$user->nfe_center_id,
+                    'modules'           =>$module,
+                    'sub_modules'       =>$sub_modules,
+                    'screens'           =>$screens,
+                    'acess_level'       =>$user->ministry_user,
+                    'roles'             =>$roles,//roles will be multiple
+                    'system_id'         =>json_decode($user_Det)->system_id,
                 ];
 
                 // dd($user_details);
@@ -200,14 +200,14 @@ class HomeController extends Controller{
                 if(strpos($screens_ids,$work->screen_id)===false){
                     $screens_ids.=$work->screen_id.',';
                     $screen=[
-                        'mod_id'=> $work->mod_id,
-                        'sub_mod_id'=> $work->sub_mod_id,
-                        'screen_id' => $work->screen_id,
-                        'screen_name' => $work->screen_name,
-                        'route' =>$work->Route,
-                        'work_flow_status'=>$work->workflow_status,
+                        'mod_id'            =>$work->mod_id,
+                        'sub_mod_id'        =>$work->sub_mod_id,
+                        'screen_id'         =>$work->screen_id,
+                        'screen_name'       =>$work->screen_name,
+                        'route'             =>$work->Route,
+                        'work_flow_status'  =>$work->workflow_status,
                         // 'actions' => 'NA',
-                        'screen_icon'=>$work->screen_icon,
+                        'screen_icon'       =>$work->screen_icon,
                     ];
                     array_push($screens,$screen);
                 }

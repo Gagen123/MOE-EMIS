@@ -1,15 +1,17 @@
 <template>
-<div>
-    <form class="bootbox-form" id="health_screening_Id">
+    <div>
+        <form class="bootbox-form" id="studentAwardId">
             <div class="card-body">
                 <div class="row form-group">
-                    <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Health Screening Type:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.screeningName" :class="{ 'is-invalid': form.errors.has('src_name') }" id="screeningName" @change="remove_err('screeningName')" type="text">
-                        <has-error :form="form" field="src_name"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -23,25 +25,23 @@
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-</div>
-    
+    </div>     
 </template>
-
 <script>
 export default {
-    data(){
-        return{
-            count:10,
+    data() {
+        return {
             form: new form({
                 id: '',
-                screeningName: '',
+                name: '',
+                description:'',
                 status: 1,
-                // action_type:'edit',
+                record_type:'health_screening',
+                action_type:'edit',
             })
         }
     },
-
-    methods:{
+    methods: {
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -49,15 +49,16 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.screeningName= '';
+                this.form.name= '';
+                this.form.description='';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveScreening',this.form)
+                this.form.post('/masters/saveStudentMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Screening Type details updated successfully'
+                        title: 'Details added successfully'
                     })
                     this.$router.push('/health_screening_list');
                 })
@@ -65,14 +66,15 @@ export default {
                     console.log("Error......")
                 })
             }
-		},
+		}, 
     },
-
     created() {
-        this.form.screeningName=this.$route.params.data.name;
+        this.form.name=this.$route.params.data.name;
+        this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
         // this.form.action_type=this.$route.params.data.action;
     },
+    
 }
 </script>

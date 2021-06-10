@@ -421,7 +421,7 @@ export default {
         this.loadActiveQuarterList();
         this.loadActiveItemList();
         this.loadActiveUnitList(); 
-        this.allOrgList();
+        this.allOrgList(); 
     }
 }
 </script>

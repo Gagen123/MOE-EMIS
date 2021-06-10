@@ -170,8 +170,18 @@ export default {
             designerList:[],
             users: [],
             form: new form({
-                id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '',
-                plintchArea: '',noOfFloor: '',totalCapacity: '',rampAccess: '1',presentCondition: '1',design: '',
+                id: '',
+                organizationId:'',
+                category: '',
+                subCategory: '',
+                structureNo: '',
+                yearOfConstruction: '',
+                plintchArea: '',
+                noOfFloor: '',
+                totalCapacity: '',
+                rampAccess: '1',
+                presentCondition: '1',
+                design: '',
                 users:
                 [{
                     facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''

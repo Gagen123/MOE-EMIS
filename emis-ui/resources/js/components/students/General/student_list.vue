@@ -6,7 +6,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
-                    <div class="card-header pt-0 mt-0 pb-0"> 
+                    <div class="card-header pt-0 mt-0 pb-0">
                         <hr>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -22,7 +22,7 @@
                                     <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
                                 </select>
                                 <has-error :form="student_form" field="std_stream"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
                                 <label>Section:</label>
                                 <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
@@ -39,7 +39,7 @@
                                         <th >SL#</th>
                                         <th >Student Name</th>
                                         <th >Student Code</th>
-                                        <th >Action</th> 
+                                        <th >Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbody">
@@ -59,8 +59,8 @@
                     </div>
                 </div>
             </div>
-        </section>  
-    </div>     
+        </section>
+    </div>
 </template>
 <script>
 export default {
@@ -229,7 +229,7 @@ export default {
             if(id=="std_section"){
                 axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
                     .then((response) => {
-                        this.studentList = response.data;  
+                        this.studentList = response.data;
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
@@ -237,7 +237,7 @@ export default {
 
                 this.student_form.std_section=$('#std_section').val();
             }
-            
+
         },
 
         showedit(data){
@@ -255,19 +255,19 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        
+
         this.loadClassArrayList();
         this.loadSectionArrayList();
         this.loadStreamArrayList();
         this.loadClassStreamSectionList();
         this.loadClassList();
-        
+
         this.dt =  $("#student-list-table").DataTable()
     },
     watch: {

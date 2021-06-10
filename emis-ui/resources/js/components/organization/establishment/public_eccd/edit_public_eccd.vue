@@ -421,7 +421,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="Applicaiton for new Establishment of ECCD has beed updated and submitted for approval. <br><b>Thank You !</b>";
+                                let message="Application for new Establishment of ECCD has beed updated and submitted for approval. <br><b>Thank You !</b>";
                                 this.$router.push({name:'acknowledgement_public_eccd',params: {data:message}});
                                 Toast.fire({  
                                     icon: 'success',
