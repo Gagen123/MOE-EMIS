@@ -95,7 +95,6 @@ export default {
              try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data)
                 let subjectTeachers = await axios.get('academics/getSubjectTeacher').then(response => response.data.data)
-                console.log(classSections)
                 classSections.forEach((classSection) => {
                     subjectTeachers["classSubjects"].forEach(item => {
                         let aa = [];
@@ -144,10 +143,15 @@ export default {
                         title: 'Data saved successfully.'
                     })
                     this.$router.push('/create-subject-teacher');
-                })
-                .catch(function(error){
-                this.errors = response.error;
-            });
+                }).catch(function(errors){
+                    if(errors.response.status === 422){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'You have not selected subject teacher!',
+                        })
+                    }
+                });
         },
 	 
     },

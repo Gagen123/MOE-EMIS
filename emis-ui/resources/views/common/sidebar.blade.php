@@ -20,7 +20,7 @@
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link pt-1 pb-1">
                         <i class="{{ $mod['module_icon']}}"></i>
-                        <p>{{$mod['mod_name']}}  
+                        <p>{{$mod['mod_name']}}
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -121,7 +121,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item has-treeview" id="org_master">
-                        
+
                         <router-link to="/OrganizationMasterIndex" class="nav-link">
                             <i class="nav-icon fas fa-database"></i>
                             <p>
@@ -141,7 +141,7 @@
                             <li class="nav-item" id="dzongkhagmaster">
                                 <router-link to="/staff_link" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
-                                    Staff  
+                                    Staff
                                 </router-link>
                             </li>
                             <li class="nav-item" id="dzongkhagmaster">
@@ -153,7 +153,7 @@
                             <li class="nav-item" id="dzongkhagmaster">
                                 <router-link to="/position_directory_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
-                                    Position Directory 
+                                    Position Directory
                                 </router-link>
                             </li>
                             <li class="nav-item" id="dzongkhagmaster">
@@ -261,7 +261,7 @@
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Establish Organization
                             </p>
-                        </router-link> 
+                        </router-link>
                     </li>
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
                         <router-link to="/restructuring_index" class="nav-link">
@@ -310,16 +310,16 @@
                             </li>
                         @endif
                     @endif
-                    
+
                     <li class="nav-item" id="organization_list" @click="setclass('organizationlink','','organization_list')">
                         <router-link to="/organization_list" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 View Org List
                             </p>
-                        </router-link> 
+                        </router-link>
                     </li>
-                   
+
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
                         <router-link to="/mission_vission" class="nav-link">
                             <p>
@@ -357,7 +357,7 @@
                             @endforeach
                         @endif
                     @endif
-                    
+
                     <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
                         <router-link to="/visitors_information" class="nav-link">
                             <p>
@@ -406,7 +406,7 @@
                             </p>
                         </router-link>
                     </li>
-                   
+
                     <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
@@ -550,6 +550,14 @@
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Trainings & Workshop
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="send" @click="setclass('clubs','','studenttrainings')">
+                        <router-link to="/student_sen_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                SEN
                             </p>
                         </router-link>
                     </li>

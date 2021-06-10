@@ -18,6 +18,7 @@ class AcaAssessmentFrequency extends Migration
         Schema::create('aca_assessment_frequency', function (Blueprint $table) {
             $table->char('id',36)->primary();
             $table->string('name',100)->unique();
+            $table->unsignedTinyInteger('not_assessed')->index()->default(0);
             $table->unsignedTinyInteger('status')->index()->default(1)->comment('0 - Disabled');
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();

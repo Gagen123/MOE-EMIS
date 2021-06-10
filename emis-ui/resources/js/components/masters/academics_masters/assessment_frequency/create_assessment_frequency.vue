@@ -15,23 +15,14 @@
                             <tr  v-for="(item, index) in classAssessmentFrequencyList" :key="index">
                                 <td class="text-right">{{ index + 1 }}</td>
                                 <td>
-                                    <!-- <input v-model="classAssessmentFrequencyList[index].org_class_id" class="form-control" type="hidden"> -->
                                     {{ item.class_stream }}
                                 </td>                                                                              
-                                <!-- <td>
-                                    <input v-model="classAssessmentFrequencyList[index].org_stream_id" class="form-control" type="hidden">
-                                    {{ item.stream }}
-                                </td> -->
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <!-- :class="{ 'is-invalid': classAssessmentFrequencyList.errors.data.has('aca_assmnt_frequency_id') }"  @change="remove_err('aca_assmnt_frequency_id')" -->
                                         <select v-model="classAssessmentFrequencyList[index].aca_assmt_frequency_id" class="form-control  editable_fields" id="aca_assmnt_frequency_id" > 
-                                            <option selected value="">--SELECT--</option>
+                                            <option selected="selected" value="">--SELECT--</option>
                                             <option v-for="(item1, index1) in assesmentFrequencyList" :key="index1" :value="item1.id">{{ item1.name }}</option>
                                         </select>
-                                        <!-- {{errMessage}} -->
-                                        <!-- {{classAssessmentFrequencyList}}------error -->
-                                        <!-- <has-error :form="classAssessmentFrequencyList[index]" field="aca_assmnt_frequency_id"></has-error> -->
                                     </div>
                                 </td>
                             </tr>
@@ -92,9 +83,6 @@ export default {
         
                 finalClassStreams.forEach((classStream,index) => {
                     classAssessmentFrequencies.forEach(item => {
-                          // if(!studentsConsolidatedResult[index].class_stream_section){
-                            //     studentsConsolidatedResult[index].class_stream_section = item1.class + ' ' + item1.stream + ' ' + item1.section
-                            // }
                         if(classStream.org_class_id == item.org_class_id && (classStream.org_stream_id == item.org_stream_id || classStream.org_stream_id == null)){
                             finalClassStreams[index].aca_assmt_frequency_id = item.aca_assmt_frequency_id
                            
@@ -117,12 +105,15 @@ export default {
                     })
                     this.$router.push('/create-assessment-frequency');
                 })
-                .catch(function(error){
-                    if(error.response.status === 422){
-                        this.errMessage = error.response.data.message;
+                .catch(function(errors){
+                    if(errors.response.status === 422){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'All the fields are required!',
+                        })
                     }
-                    console.log(error.response.data.errors);
-            });
+                });
         },
 	 
     },
@@ -132,7 +123,6 @@ export default {
         this.dt =  $("#class-assessment-frequency-table").DataTable({
             columnDefs: [
                     { width: 2, targets: 0},
-                    // { width: 80, targets:[2,3]},
                 ],
         })
     },
@@ -147,3 +137,6 @@ export default {
     
 }
 </script>
+<style>
+
+</style>

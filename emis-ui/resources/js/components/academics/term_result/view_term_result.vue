@@ -17,8 +17,12 @@
                     <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th>Student Code</th>
-                                <th>Name</th>
+                                <th>Student Code 
+                                    <span v-if="term_dzo_name && sub_dzo_name"> ( སློབ་ཕྲུག་གི་གསང་ཡིག )</span>
+                                </th> 
+                                <th>Name 
+                                    <span v-if="term_dzo_name && sub_dzo_name"> ( མིང་། )</span>
+                                </th>
                                 <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
 
                                  <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} 
@@ -27,7 +31,9 @@
                                 </th>
                                 <th v-if="totalWeightage>-1">
                                     Total 
-                                    <span v-if="term_dzo_name && sub_dzo_name"> ( བསྡོམས། ) </span> ({{totalWeightage}}%)</th>
+                                    <span v-if="term_dzo_name && sub_dzo_name"> ( བསྡོམས། ) </span> 
+                                    ({{totalWeightage}}%)
+                                </th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -62,9 +68,6 @@
         }
     },
     methods:{
-        rating(rating_type_id){
-             return this.ratingList.filter(item => item.aca_rating_type_id == rating_type_id)
-        },
        async loadStudentAssessments(){
          let uri = 'academics/loadStudentAssessments'
             uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
@@ -114,9 +117,6 @@
            }
            return totalWeightage
         },
-        // totalScore(){
-        //  let totalScore = 0
-        // }
     },
 
     created() {
@@ -135,24 +135,9 @@
     },
     mounted(){ 
         this.loadStudentAssessments()
-        // this.dt = $("#term-result-view-table").DataTable({
-        //     scrollX: true,
-        //     scrollCollapse: true,
-        //     fixedColumns:   {
-        //         leftColumns: 2
-        //     }
-        // })
 
     },
-    // watch: {
-    //     studentAssessmentList() {
-    //         this.dt.destroy();
-    //         this.$nextTick(() => {
-    //             this.dt = $("#term-result-view-table").DataTable()
-    //         });
-    //     }
-    // }
-}
+ }
 </script>
 <style scoped>
    th, td { white-space: nowrap; }

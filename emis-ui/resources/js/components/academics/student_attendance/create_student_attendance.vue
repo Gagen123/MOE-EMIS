@@ -1,9 +1,13 @@
 <template>
    <div>
         <form @submit.prevent="save" class="bootbox-form">
-            <!-- <div id='message' v-if="message" class="alert alert-info" role="alert">
-                <i class="fa fa-info-circle"></i>{{ message }}</div> -->
+            <div id='message' v-if="message" class="alert alert-info" role="alert">
+                <i class="fa fa-info-circle"></i>{{ errorMessage }}</div>
             <div class="row form-group">
+                <div class="ml-4 col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Date:<span class="text-danger">*</span></label>
+                    <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  type="date">
+                </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Select Class:<span class="text-danger">*</span></label> 
                     <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id">
@@ -13,12 +17,8 @@
                         </option>
                     </select> 
                 </div>
-                <div v-if="!studentList.length" class="col-auto pt-1 mt-4">
+                <div class="col-auto pt-1 mt-4">
                     <button type="button" class="btn btn-primary btn-sm btn-flat" @click="getStudents()"><i class="fa fa-download"></i> Load Student </button>
-                </div>
-                <div class="ml-4 col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Date:<span class="text-danger">*</span></label>
-                    <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  type="date">
                 </div>
             </div>
             <div v-if="studentList.length" class="form-group row">
@@ -67,6 +67,7 @@ export default {
             message:'',
             action:'add',
             dt:'',
+            errorMessage: '',
         }
     },
     methods:{
@@ -108,25 +109,32 @@ export default {
         },
         getStudents(){
            let uri = 'academics/getStudentsForAttendance'
-            uri += ('?OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
-           if(this.class_stream_section_id[1] !== null){
+            uri += ('?action='+this.action+'&attendance_date='+this.attendance_date+'&class_stream_section='+this.class_stream_section_id[4]+'&OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
+           if(this.class_stream_section_id[2] !== null){
                     uri += ('&streamId='+this.class_stream_section_id[2])
                 }
-                if(this.class_stream_section_id[2] !== null){
+                if(this.class_stream_section_id[3] !== null){
                     uri += ('&sectionId='+this.class_stream_section_id[3])
                 }
                 axios.get(uri)
                 .then(response => {
-                    let studentList = response.data.student
-                    let aa = []
-                    studentList.forEach((item)=>{
-                        aa['CidNo'] = item.CidNo
-                        aa['Name'] = item.Name
-                        aa['std_student_id'] = item.std_student_id
-                        aa['is_present'] = 1 
-                        const obj = {...aa};
-                        this.studentList.push(obj);
-                    })
+                    if(response.data.error){
+                          Swal.fire({
+                            icon: 'warning',
+                            text: response.data.error,
+                        })
+                    }else{
+                        let studentList = response.data.student 
+                        let aa = []
+                        studentList.forEach((item)=>{
+                            aa['CidNo'] = item.CidNo
+                            aa['Name'] = item.Name
+                            aa['std_student_id'] = item.std_student_id
+                            aa['is_present'] = 1 
+                            const obj = {...aa};
+                            this.studentList.push(obj);
+                        })
+                    }
 
                 }).catch(function (error) {
                     if(error.toString().includes("500")){

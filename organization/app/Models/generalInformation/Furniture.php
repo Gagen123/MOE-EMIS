@@ -21,12 +21,9 @@ class Furniture extends Model
         'organizationId',
         'type', 
         'item', 
-        'cost',
-        'number',
-        'locationUse',
-        'lifeExpectancy',
-        'dateReceived', 
-        'condition',
+        'usable',
+        'notusable',
+       
         'created_by',
         'updated_by'
     ];

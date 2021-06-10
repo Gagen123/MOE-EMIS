@@ -36,30 +36,34 @@ export default {
         }
     },
     methods:{
-        getClassStreamList(uri = 'masters/loadClassStreamMapping/NA'){
-            axios.get(uri)
-            .then(response => {
-                let datas = response.data.data;
-                let classStreams = []
-                let renameId = [] 
-                datas.forEach(element => {
-                    if(element.stream){
-                       renameId['class_stream'] = element.class+' '+element.stream
-                    }else{
-                        renameId['class_stream'] = element.class
-                    }
-                    renameId['org_class_id'] = element.classId
-                    renameId['org_stream_id'] = element.streamId
-                     const obj = {...renameId};
-                    classStreams.push(obj);
+        async getClassStreamList(){
+                let classStreams = await axios('masters/loadClassStreamMapping/NA').then(response => response.data.data);
+                let assessedClasses = await axios('masters/loadAcademicMasters/assessed_classes').then(response => response.data.data) 
+                let selectedClassStreams = []
+                let renameId = []
+                classStreams.forEach((element) => {
+                    assessedClasses.forEach((element1)=>{
+                        if(element.classId == element1.org_class_id && (element.streamId == element1.org_stream_id || (element.streamId == null && element1.org_stream_id == null))){
+                            if(element.stream){
+                                renameId['class_stream'] = element.class+' '+element.stream
+                            }else{
+                                renameId['class_stream'] = element.class
+                            }
+                            renameId['org_class_id'] = element.classId
+                            renameId['org_stream_id'] = element.streamId
+                            const obj = {...renameId};
+                            selectedClassStreams.push(obj);
+                        }
+                    })
+                    
                 });
-                this.classesStreamsList = classStreams
-            })
-            .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
+                this.classesStreamsList = selectedClassStreams
+            // a
+            // .catch(function (error){
+            //     if(error.toString().includes("500")){
+            //         $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+            //     }
+            // });
         },
         showedit(data){
             this.$router.push({name:'aca_edit_subject_assessment_type',params: {data:data}});

@@ -99,7 +99,7 @@ const routes = [
                 { path: '', component:require('./components/academics/consolidated_result/list_consolidated_result.vue').default},
                 { path: '/list-consolidated-result', name: 'list_consolidated_result', component: require('./components/academics/consolidated_result/list_consolidated_result.vue').default },
                 { path: '/view-consolidated-result', name: 'view_consolidated_result', component: require('./components/academics/consolidated_result/view_consolidated_result.vue').default },
-                { path: '/edit-consolidated-result',name:'edit_consolidated_result', component:require('./components/academics/consolidated_result/view_consolidated_result.vue').default},
+                { path: '/edit-consolidated-result',name:'edit_consolidated_result', component:require('./components/academics/consolidated_result/edit_consolidated_result.vue').default},
                 { path: '/view-detail-consolidated-result', name: 'view_detail_consolidated_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
 
             ]
