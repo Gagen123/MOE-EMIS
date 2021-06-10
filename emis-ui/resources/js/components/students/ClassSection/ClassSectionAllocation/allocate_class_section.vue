@@ -22,9 +22,10 @@
                                 <th >Student Code</th>
                                 <th >Class</th>
                                 <th >Section</th>
-                                <th >No. of Meals</th>
-                                <th >Boarder</th>
-                                <th >SF/GS</th>
+                                <th >Stream</th>
+                                <th class="no_sec">No. of Meals</th>
+                                <th class="private_sec">Boarder</th>
+                                <th class="private_sec">SF/GS</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -43,13 +44,25 @@
                                         <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
                                     </select>
                                     <has-error :form="student_form" field="std_section"></has-error>
-                                    <!-- <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/> -->
                                 </td>
                                 <td>
+                                    <select v-model="item.streamId" :class="{ 'is-invalid  select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
+                                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.stream }}</option>
+                                    </select>
+                                    <has-error :form="student_form" field="std_stream"></has-error>
                                 </td>
-                                <td>
+                                <td class="no_sec">
+                                    <label><input  type="radio" v-model="item.noOfMeals" name="feeding1" id="feeding1" value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="radio" v-model="item.noOfMeals" name="feeding2" id="feeding2" value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="radio" v-model="item.noOfMeals" name="feeding3" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                                 </td>
-                                <td>
+                                <td class="private_sec">
+                                    <label><input  type="radio" v-model="item.isBoarder" name="boarder1" id="feeding1" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" v-model="item.isBoarder" name="boarder2" id="feeding2" value="2" tabindex=""/> No</label>
+                                </td>
+                                <td class="private_sec">
+                                    <label class="private_sec"><input  type="radio" v-model="item.scholarshipType" name="scholarshipType1" id="feeding1" value="1" tabindex=""/> Gov.</label>
+                                    <label class="private_sec"><input  type="radio" v-model="item.scholarshipType" name="scholarshipType2" id="feeding2" value="2" tabindex=""/> Self Financed</label>
                                 </td>
                             </tr>
                         </tbody>
@@ -67,16 +80,14 @@ export default {
    data(){
         return{
             dt:'',
-            screeningList:[],
-            screeningTitle:[],
-            screeningEndorser:[],
+            orgDetails:'',
             classStreamSections:[],
             classList:[],
             sectionList:[],
             streamList:[],
             byClass:[],
             studentList:[],
-
+            cat_data:'',
             student_form: new form({
                 std_class: '',
                 std_stream: '',
@@ -215,8 +226,9 @@ export default {
                 this.getSectionList();
 
                 axios.get('/students/loadStudentByClass/'+$('#std_class').val())
-                    .then((response) => {
-                        this.studentList = response.data;  
+                .then((response) => {
+                    this.studentList = response.data;  
+                    this.showhidetable();
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
@@ -239,6 +251,36 @@ export default {
             }
             
         },
+
+        getorgName(rogId,accessLevel){
+            let type="Headquarterbyid";
+            if(accessLevel=="Org"){
+                type="Orgbyid";
+            }
+            axios.get('loadCommons/loadOrgDetails/'+type+'/'+rogId)
+            .then(response => {
+                let data = response.data.data;
+                this.orgDetails=data;
+                this.cat_data=data.category;
+                this.showhidetable();
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
+        },
+
+        showhidetable(){
+            // alert(this.cat_data);
+            if(this.cat_data=="public_school"){
+                $('.private_sec').hide();
+                $('.no_sec').show();
+            }
+            else{
+                $('.private_sec').show();
+                $('.no_sec').hide();
+            }
+        },
+            
         checkall(class_to_check,id){
             if($('#'+id).prop('checked')){
                 $("."+class_to_check).prop("checked",true);
@@ -265,17 +307,38 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+
+        //get the session details to find out private or public
+        axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                let roleName="";
+                for(let i=0;i<data['roles'].length;i++){
+                    if(i==data['roles'].length-1){
+                        roleName+=data['roles'][i].roleName;
+                    }
+                    else{
+                        roleName+=data['roles'][i].roleName+', ';
+                    }
+                }
+
+                this.getorgName(data['Agency_Code'],data['acess_level']);
+            })    
+            .catch(errors => { 
+                console.log(errors)
+            });
         
         this.loadClassList();
         // this.loadSectionList();
         // this.loadStreamList();
-        this.dt =  $("#student-list-table").DataTable()
+        this.dt =  $("#allocation-list-table").DataTable()
     },
     watch: {
         studentList(){
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#student-list-table").DataTable()
+                this.dt =  $("#allocation-list-table").DataTable();
+                this.showhidetable();
             });
         }
     },

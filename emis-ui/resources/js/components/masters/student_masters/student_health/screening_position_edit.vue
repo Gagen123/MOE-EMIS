@@ -1,15 +1,17 @@
 <template>
-<div>
-    <form class="bootbox-form" id="termId">
+    <div>
+        <form class="bootbox-form" id="studentAwardId">
             <div class="card-body">
                 <div class="row form-group">
-                    <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Term Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.termName" :class="{ 'is-invalid': form.errors.has('ter_name') }" id="termName" @change="remove_err('termName')" type="text">
-                        <has-error :form="form" field="ter_name"></has-error>
+                        <label>Health Screening Position Title:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -23,24 +25,23 @@
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-</div>
+    </div>     
 </template>
-
 <script>
 export default {
-    data(){
-        return{
-            count:10,
+    data() {
+        return {
             form: new form({
                 id: '',
-                termName: '',
-                status: '',
-                // action_type:'edit',
+                name: '',
+                description:'',
+                status: 1,
+                record_type:'screening_position',
+                action_type:'edit',
             })
         }
     },
-
-    methods:{
+    methods: {
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -48,28 +49,31 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.termName= '';
+                this.form.name= '';
+                this.form.description='';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveTerm',this.form)
+                this.form.post('/masters/saveStudentMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Term details updated successfully'
+                        title: 'Details added successfully'
                     })
-                    this.$router.push('/term_list');
+                    this.$router.push('/screening_position_index');
                 })
                 .catch(() => {
                     console.log("Error......")
                 })
             }
-		},
+		}, 
     },
-
     created() {
-        this.form.termName=this.$route.params.data.name;
+    },
+    created() {
+        this.form.name=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
+        this.form.description=this.$route.params.data.description;
         this.form.id=this.$route.params.data.id;
         // this.form.action_type=this.$route.params.data.action;
     },

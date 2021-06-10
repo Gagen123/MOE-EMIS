@@ -597,7 +597,7 @@ export default {
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" these application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -643,7 +643,7 @@ export default {
                             .catch((err) => {
                                 Swal.fire(
                                     'error!',
-                                    'Not able to update this application details. Please contact system administrator.Error: '+err,
+                                    'Not able to update these application details. Please contact system administrator.Error: '+err,
                                     'error',
                                 ); 
                                 console.log("Error:"+err)

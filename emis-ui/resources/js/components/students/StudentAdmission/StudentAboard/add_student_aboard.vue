@@ -5,7 +5,7 @@
                 <div class="form-group row">
                     <input type="hidden" class="form-control" v-model="form.organizationId"/>
                       <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                        <label class="">CID:<span class="text-danger">*</span></label> 
+                        <label class="">CID:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @blur="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="Identification No">
                         <has-error :form="form" field="cid_passport"></has-error>
                     </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Is the child currently  studying?:<span class="text-danger">*</span></label> 
+                        <label class="">Is the child currently  studying?:<span class="text-danger">*</span></label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1"/> Yes</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> No</label>
@@ -62,7 +62,7 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label >Present Address: </label>
-                        <textarea class="form-control" rows="3" @change="removeerror('fulladdress')" :class="{ 'is-invalid': form.errors.has('fulladdress') }" id="fulladdress" v-model="form.fulladdress" placeholder="Permanent Address"></textarea>
+                        <textarea class="form-control" rows="3" @change="removeerror('fulladdress')" :class="{ 'is-invalid': form.errors.has('fulladdress') }" id="fulladdress" v-model="form.fulladdress" placeholder="  Address"></textarea>
                         <has-error :form="form" field="fulladdress"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -79,14 +79,14 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                           
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
-    
+
 </template>
 
 <script>
@@ -100,8 +100,8 @@ export default {
             std_villageList:[],
             motherTongueList:[],
             form: new form({
-                id: '', 
-                organizationId:'', 
+                id: '',
+                organizationId:'',
                 cid_passport: '',
                 first_name: '',
                 middle_name:'',
@@ -197,12 +197,12 @@ export default {
                     $('#mother_tongue').addClass('select2-hidden-accessible');
                 }
             }
-            
+
         },
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
         async changefunction(id){
@@ -220,7 +220,7 @@ export default {
             if(id=="country"){
                 this.form.country=$('#country').val();
             }
-             
+
         },
         getDetailsbyCID(fieldId){
             if ($('#'+fieldId).val().length != 11){
@@ -253,7 +253,7 @@ export default {
                      //   this.form.dob = month+ "-"+day + "-" + year;
                      //    $('#dob').val(month+ "-"+day + "-" + year);
                         this.form.dob = year+ "-"+month + "-" + day;
-                         $('#dob').val(year+ "-"+month + "-" + day); 
+                         $('#dob').val(year+ "-"+month + "-" + day);
                         if(personal_detail.gender=="M"){
                              personal_detail.gender="male";
                         }
@@ -267,7 +267,7 @@ export default {
                             if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
                                 $('#sex_id').val(this.sex_idList[i].id).trigger('change');
                                 this.form.sex_id =  this.sex_idList[i].id;
-                            }  
+                            }
                         }
                         // this.form.dzongkhag =personal_detail.dzongkhagId;
                         //  $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
@@ -290,19 +290,19 @@ export default {
                     });
                 });
             }
-            
+
         },
     },
-     mounted() { 
+     mounted() {
         this.loadAllActiveMasters('all_country');
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('active_mother_tongue');
-      
+
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

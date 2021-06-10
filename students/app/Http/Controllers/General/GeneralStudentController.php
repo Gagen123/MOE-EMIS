@@ -60,7 +60,7 @@ class GeneralStudentController extends Controller
                     'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
                     ->where('std_student_class_stream.OrgClassStreamId',$class_details[0])
                     ->where('std_student_class_stream.SectionDetailsId',$class_details[2])
-                    ->where('academicYear', date('Y'))
+                    //->where('academicYear', date('Y'))
                     ->get();
         return $records;
     }
@@ -79,7 +79,7 @@ class GeneralStudentController extends Controller
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
-                                'std_student_class_stream.OrgClassStreamId')
+                                'std_student_class_stream.OrgClassStreamId', 'std_student.noOfMeals', 'std_student.scholarshipType', 'std_student.isBoarder')
                     ->where('std_student_class_stream.OrgClassStreamId',$class)
                     //->where('academicYear', date('Y'))
                     ->get();

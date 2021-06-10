@@ -200,7 +200,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getLocationUse', [App\Http\Controllers\organization\GeneralInfoController::class, 'getLocationUse'])->name('getLocationUse');
 
     Route::get('/getFurnitureType', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureType'])->name('getFurnitureType');
-    Route::get('/getFurnitureItem/{typeId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureItem'])->name('getFurnitureItem');
+    Route::get('/getFurnitureItem/{itemId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureItem'])->name('getFurnitureItem');
     Route::get('/getFurnitureUse', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureUse'])->name('getFurnitureUse');
 
     Route::post('/udpateOrgProfile', [App\Http\Controllers\organization\GeneralInfoController::class, 'udpateOrgProfile'])->name('udpateOrgProfile');
@@ -249,6 +249,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveClassStream', [App\Http\Controllers\organization\EstablishmentController::class, 'saveClassStream'])->name('saveClassStream');
     Route::get('/getClass', [App\Http\Controllers\organization\EstablishmentController::class, 'getClass'])->name('getClass');
     Route::get('/getStream', [App\Http\Controllers\organization\EstablishmentController::class, 'getStream'])->name('getStream');
+    Route::get('/getClassMappingDetails/{mapping_id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getClassMappingDetails'])->name('getClassMappingDetails');
     Route::get('/loadOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
     Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
@@ -491,7 +492,7 @@ Route::prefix('students')->group(function () {
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
-
+        Route::post('/updateAdmissionStd', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateAdmissionStd'])->name('updateAdmissionStd');
     });
 
     Route::prefix('sen')->group(function (){
@@ -527,7 +528,7 @@ Route::prefix('students')->group(function () {
 
     Route::post('/saveStudentAward', [App\Http\Controllers\student\StudentAwardController::class, 'saveStudentAward'])->name('saveStudentAward');
     Route::get('/loadStudentAwards/{param}', [App\Http\Controllers\student\StudentAwardController::class, 'loadStudentAwards'])->name('loadStudentAwards');
-    
+
     Route::post('/saveStudentClassAllocation', [App\Http\Controllers\student\StudentClassController::class, 'saveStudentClassAllocation'])->name('saveStudentClassAllocation');
     Route::get('/loadStudentClassAllocations/{param}', [App\Http\Controllers\student\StudentClassController::class, 'loadStudentClassAllocations'])->name('loadStudentClassAllocations');
 

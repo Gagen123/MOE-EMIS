@@ -21,13 +21,13 @@ class StudentProgramController extends Controller
     public function saveStudentProgram(Request $request){
 
         $rules = [
-            'program'            => 'required',
+            // 'program'            => 'required',
             'supporter'            => 'required',
             'year'            => 'required',
         ];
 
         $customMessages = [
-            'program.required'  => 'This field is required',
+            // 'program.required'  => 'This field is required',
             'supporter.required'     => 'This field is required',
             'year.required'  => 'This field is required',
         ];
@@ -35,7 +35,7 @@ class StudentProgramController extends Controller
         
         $data =[
             'id'                => $request->id,
-            'organisation_id'       => $this->getWrkingAgencyId(),
+            'organisation_id'   => $this->getWrkingAgencyId(),
             'program'           => $request->program,
             'supporter'         => $request->supporter,
             'year'              => $request->year,
@@ -104,22 +104,22 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramMembers(Request $request){
-
         $rules = [
-            'student'            => 'required',
-            'program'            => 'required',
+            'student'                      => 'required',
+            // 'program'                  => 'required',
             'responsibilities'            => 'required',
         ];
 
         $customMessages = [
             'student.required'  => 'This field is required',
-            'program.required'     => 'This field is required',
+            // 'program.required'     => 'This field is required',
             'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
             'id'                    => $request->id,
+            'status'                => $request->status,
             'student'               => $request->student,
             'program'               => $request->program,
             'date'                  => $request->date,
@@ -128,15 +128,10 @@ class StudentProgramController extends Controller
 
             //'user_id'        => $this->user_id() 
         ];
-
-
-        try{
+      //  dd($data);
             $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+       
     }
 
     /*
