@@ -22,56 +22,52 @@ class StudentTrainingController extends Controller
     }
 
     public function saveStudentTraining(Request $request){
-
         $rules = [
             'name'            => 'required',
             'training_type'   => 'required',
-            'program_id'      => 'required',
+            'program'         => 'required',
             'place'           => 'required',
             'country'         => 'required',
             'from_date'       => 'required',
             'to_date'         => 'required'
         ];
-
         $customMessages = [
-            'name.required'         => 'This field is required',
-            'place.required'        => 'This field is required',
-            'training_type.required'        => 'This field is required',
-            'program_id.required'        => 'This field is required',
-            'country.required'      => 'This field is required',
-            'from_date.required'    => 'This field is required',
-            'to_date.required'      => 'This field is required',
+            'name.required'             => 'This field is required',
+            'place.required'            => 'This field is required',
+            'training_type.required'    => 'This field is required',
+            'program.required'          => 'This field is required',
+            'country.required'          => 'This field is required',
+            'from_date.required'        => 'This field is required',
+            'to_date.required'          => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
         $data =[
-            'id'                    => $request->id,
-            'name'                  => $request->name,
-            'place'                 => $request->place,
-            'CeaTrainingTypeId'     => $request->training_type,
-            'CeaProgrammeId'        => $request->program_id,
-            'country_id'            => 1,
-            //country_id'            => $request->country,
-            'from_date'             => $request->from_date,
-            'to_date'               => $request->to_date,
-            'description'           => $request->details,
-            'status'                => 1
-
-            //'user_id'        => $this->user_id() 
+            'TrainingTypeName'              => $request->name,
+            'place'             => $request->place,
+            'CeaTrainingId'     => $request->training_type,
+            'program_id'        => $request->program,
+            'country'           => $request->country,
+            'from_date'         => $request->from_date,
+            'to_date'           => $request->to_date,
+            'details'           => $request->details,
+            'created_at'        => date('Y-m-d h:i:s'),
+            'created_by'        => $request->user_id 
         ];
-
         $response_data = CeaTraining::create($data);
-
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    
 
     /*
     * Function is to list Trainings for drop down
     */
+    // public function listStudentTrainings($param="",$orgId){
+    //     $response_data= $this->successResponse($this->studentservice->listData('students/listStudentTrainings/'.$param.'/'.$orgId));
+    //     return $response_data;
+    // }
 
-    public function listStudentTrainings($param=""){
-        
-        $id ="1";
+    public function listStudentTrainings($param="",$orgId){
+        // cea_student_training
 
         $records = DB::table('cea_training')
                 ->join('cea_training_type', 'cea_training.CeaTrainingTypeId', '=', 'cea_training_type.id')

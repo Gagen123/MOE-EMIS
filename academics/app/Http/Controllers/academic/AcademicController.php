@@ -33,7 +33,7 @@ class AcademicController extends Controller
         return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id FROM aca_class_teacher WHERE org_id = ?', [$orgId]));
     }
     public function getClassTeacherClasss($orgId,$staffId){
-        return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_stream_id, org_section_id, stf_staff_id,class_stream_section FROM aca_class_teacher WHERE org_id = ? AND stf_staff_id = ?', [$orgId,$staffId]));
+        return $this->successResponse (DB::select('SELECT org_id,org_class_id, org_class_stream_id,org_stream_id, org_section_id, stf_staff_id,class_stream_section FROM aca_class_teacher WHERE org_id = ? AND stf_staff_id = ?', [$orgId,$staffId]));
     }
     public function saveClassTeacher(Request $request){
         $rules = [

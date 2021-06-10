@@ -87,15 +87,13 @@ class StockIssuedController extends Controller
     //     ->select( 'dateOfissue as dateOfissue','item_id as item','quantity as quantity','unit as unit','damagequantity as damageqty','remarks as remarks')->where('organizationId',$org_Id)->get();
     //     return $list;
     //   }
-=======
          //  dd('m here');
-        return $this->successResponse($item, Response::HTTP_CREATED);
-    }
-    public function loadStockIssuedList(){
+        // return $this->successResponse($item, Response::HTTP_CREATED);
+    // }
+    // public function loadStockIssuedList(){
      //return 'from service of mine';
-        $list = DB::table('stock_issueds')
-        ->select( 'dateOfissue as dateOfissue',)->get();
-        return $list;
-    }
->>>>>>> 9149ce33cb5c495b39ab8f76700b00bd7cc5b238
+    //     $list = DB::table('stock_issueds')
+    //     ->select( 'dateOfissue as dateOfissue',)->get();
+    //     return $list;
+    // }
 }
