@@ -156,33 +156,34 @@ class StudentProgramController extends Controller
     /*
     * Save Program Members
     */
-
     public function saveProgramMembers(Request $request){
-
-        $rules = [
-            'student'            => 'required',
-            'program'            => 'required',
-            'responsibilities'            => 'required',
+     //dd('m here');
+      $rules = [
+            'student'                    => 'required',
+            // 'program'                    => 'required',
+            'responsibilities'           => 'required',
         ];
 
         $customMessages = [
-            'student.required'  => 'This field is required',
-            'program.required'     => 'This field is required',
+            'student.required'           => 'This field is required',
+            // 'program.required'           => 'This field is required',
             'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+      //  $status = $request->status;
         $data =[
-            'id'                    => $request->id,
-            'StdStudentId'               => $request->student,
-            'CeaSchoolProgrammeId'               => $request->program,
-            'Responsibility'      => $request->responsibilities,
-            'JoiningDate'           => $request->date,
-            'role'                  => $request->role
+            'id'                        => $request->id,
+            'StdStudentId'              => $request->student,
+            'status'                    => $request->status,
+            'CeaSchoolProgrammeId'      => $request->program,
+            'Responsibility'            => $request->responsibilities,
+            'JoiningDate'               => $request->date,
+            'role'                      => $request->role
 
             //'user_id'        => $this->user_id() 
         ];
-        
+       // dd($status);
+      //  dd($data);
         $assigned_student_details = $data['role'];
 
         unset($data['role']);

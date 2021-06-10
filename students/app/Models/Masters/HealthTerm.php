@@ -14,6 +14,7 @@ class HealthTerm extends Model
     protected $fillable = [
         'id',
         'Name', 
+        'Description', 
         'Status'
     ];
 }

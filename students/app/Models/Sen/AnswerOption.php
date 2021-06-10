@@ -22,4 +22,8 @@ class AnswerOption extends Model
     public function question(){
         return $this->belongsTo(Question::class,'question_id', 'id');
     }
+    public function answers()
+    {
+        return $this->hasMany(Answer::class, 'answer_id', 'id');
+    }
 }

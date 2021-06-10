@@ -461,6 +461,9 @@ class EstablishmentController extends Controller{
     public function getStream(){
         return Stream::where('status',1)->get();
     }
+    public function getClassMappingDetails($mapping_id=""){
+        return OrganizationClassStream::where('id',$mapping_id)->first();
+    }
 
     /**
      * method to load organization details
@@ -902,7 +905,7 @@ class EstablishmentController extends Controller{
     }
 
     public function saveUploadedFiles(Request $request){
-        // $doc;
+        $doc="";
         if($request->attachment_details!=null && $request->attachment_details!=""){
             $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
             foreach($request->attachment_details as $att){
@@ -1092,7 +1095,7 @@ class EstablishmentController extends Controller{
                 'updated_by'            =>  $request->user_id,
                 'updated_at'            =>  date('Y-m-d h:i:s')
             ];
-            $response_data = ContactDetails::where('organizationId', $request->org_id)->update($location);
+            $response_data = ContactDetails::where('organizationId', $request->org_id)->update($contact_details);
         }
         else{
             $contact_details = $contact_details+[
@@ -1143,39 +1146,59 @@ class EstablishmentController extends Controller{
     }
 
     public function updateSenDetials(Request $request){
+        $professionalsSupportChildren="";
+        if($request['professionalsSupportChildren']!=""){
+            $professionalsSupportChildren=implode($request['professionalsSupportChildren'], ', ');
+        }
+        $adultWorkingwithChildren="";
+        if($request['adultWorkingwithChildren']!=""){
+            $adultWorkingwithChildren=implode($request['adultWorkingwithChildren'], ", ");
+        }
         $org_details =[
-
             'org_id'                        =>  $request['org_id'],
-            'newConstruction'               =>  $request['newConstruction'],
-            'accessibleToilet'              =>  $request['accessibleToilet'],
-            'accessibleWash'                =>  $request['accessibleWash'],
+            // 'accessibleToilet'              =>  $request['accessibleToilet'],
+            'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
+
+            'adjustmentsAccomodatte'        =>  $request['adjustmentsAccomodatte'],
             'outdoorPlayground'             =>  $request['outdoorPlayground'],
             'outdoorRoutes'                 =>  $request['outdoorRoutes'],
+            'newConstruction'               =>  $request['newConstruction'],
+
             'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
             'diningHall'                    =>  $request['hasCdiningHallE'],
             'hostelWash'                    =>  $request['hostelWash'],
             'boysHostelAccessible'          =>  $request['boysHostelAccessible'],
+
             'enrollment'                    =>  $request['enrollment'],
+            'proprietorName'                =>  $request['proprietorName'],
             'communityWithDisablities'      =>  $request['communityWithDisablities'],
             'community'                     =>  $request['community'],
+
             'senProgram'                    =>  $request['senProgram'],
             'studentDisabilities'           =>  $request['studentDisabilities'],
-            'proprietorName'                =>  $request['proprietorName'],
-            'professionalsSupportChildren'  =>  implode($request['professionalsSupportChildren'],', '),
-            'adultWorkingwithChildren'      =>  implode($request['adultWorkingwithChildren'],', '),
-            'support_disabilitycommunity'   =>  $request['support_disabilitycommunity'],
-            'matrons'                       =>  $request['matrons'],
-            'wardens'                       =>  $request['wardens'],
+
+            'professionalsSupportChildren'  =>  $professionalsSupportChildren,
+            'adultWorkingwithChildren'      =>  $adultWorkingwithChildren,
+            'supportDisabilitycommunity'    =>  $request['supportDisabilitycommunity'],
+            'supportService'                =>  $request['supportService'],
+            'schoolEndrosed'                =>  $request['schoolEndrosed'],
+            'disabledGraduated'             =>  $request['disabledGraduated'],
+            'disabledMovedToOtherSchool'    =>  $request['disabledMovedToOtherSchool'],
+            'disabledTransaction'           =>  $request['disabledTransaction'],
+            'disabledDropOut'               =>  $request['disabledDropOut'],
+            'disabilitiesDropoutCurrenly'   =>  $request['disabilitiesDropoutCurrenly'],
+            'disabledTransactionLastYear'   =>  $request['disabledTransactionLastYear'],
             'caregivers'                    =>  $request['caregivers'],
             'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
-            'support_service'               =>  $request['support_service'],
+
             'created_by'                    =>  $request['user_id'],
 
         ];
         // dd($org_details);
-        $update_data= OrganizaitonSenModule::where('id',$request['org_id'])->first();
+        $update_data= OrganizaitonSenModule::where('org_id',$request['org_id'])->first();
+        // dd($update_data);
         if($update_data!=""){
-            OrganizaitonSenModule::where('id',$request['org_id'])->update($org_details);
+            OrganizaitonSenModule::where('org_id',$request['org_id'])->update($org_details);
         }
         else{
             $update_data=OrganizaitonSenModule::create($org_details);

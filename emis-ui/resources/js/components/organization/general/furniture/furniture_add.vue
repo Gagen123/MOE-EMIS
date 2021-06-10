@@ -153,6 +153,7 @@ export default {
          * method to get item by type
          */
         getItem(uri = '/organization/getFurnitureItem/'+this.form.type){
+          //  dd('m here');
             axios.get(uri)
             .then(response => {
                 let data = response.data;

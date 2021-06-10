@@ -1,15 +1,34 @@
 <template>
-<div>
-    <form class="bootbox-form" id="studenthealthId">
+    <div>
+        <form class="bootbox-form" id="studentAwardId">
             <div class="card-body">
                 <div class="row form-group">
-                    <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+<<<<<<< HEAD
                         <label>Vaccine Type Name:<span class="text-danger">*</span></label> 
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('dis_name') }" id="studenthealthName" @change="remove_err('studenthealthName')" type="text">
                         <has-error :form="form" field="dis_name"></has-error>
+=======
+                        <label>Vaccination Type/Name:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
-                    
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
+                </div>          
+            </div>
+            <div class="card-body">
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Vaccination For:</label>
+                        <br>
+                        <label><input v-model="form.vaccineFor"  type="radio" value="0" /> Both</label>
+                        <label><input v-model="form.vaccineFor"  type="radio" value="1" /> Boys</label>
+                        <label><input v-model="form.vaccineFor"  type="radio" value="2" /> Girls</label>
+>>>>>>> 9454f15876d78d0f74165d906256bcd1ca96d21b
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -23,25 +42,29 @@
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-</div>
-    
+    </div>     
 </template>
-
 <script>
 export default {
-    data(){
-        return{
-            count:10,
+    data() {
+        return {
             form: new form({
                 id: '',
                 name: '',
+<<<<<<< HEAD
                 status: '',
                 // action_type:'edit',
+=======
+                description:'',
+                vaccineFor:0,
+                status: 1,
+                record_type:'vaccine_type',
+                action_type:'edit',
+>>>>>>> 9454f15876d78d0f74165d906256bcd1ca96d21b
             })
         }
     },
-
-    methods:{
+    methods: {
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -49,30 +72,39 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.studenthealthName= '';
+                this.form.name= '';
+                this.form.description='';
                 this.form.status= 1;
+                this.form.vaccineFor= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStudentHealth',this.form)
+                this.form.post('/masters/saveStudentMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Health Type details updated successfully'
+                        title: 'Details added successfully'
                     })
-                    this.$router.push('/studenthealth_list');
+                    this.$router.push('/vaccination_list');
                 })
                 .catch(() => {
                     console.log("Error......")
                 })
             }
-		},
+		}, 
     },
-
     created() {
+<<<<<<< HEAD
         this.form.name=this.$route.params.data.data.name;
         this.form.status=this.$route.params.data.data.status;
         this.form.id=this.$route.params.data.data.id;
+=======
+        this.form.name=this.$route.params.data.name;
+        this.form.description=this.$route.params.data.description;
+        this.form.status=this.$route.params.data.status;
+        this.form.id=this.$route.params.data.id;
+>>>>>>> 9454f15876d78d0f74165d906256bcd1ca96d21b
         // this.form.action_type=this.$route.params.data.action;
     },
+    
 }
 </script>

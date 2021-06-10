@@ -33,6 +33,7 @@ class StudentClassController extends Controller
 
         $class_section_stream = $data['class_section_stream'];
 
+        //allocating the class
         foreach($class_section_stream as $key => $value){
             if(array_key_exists('orgClassStreamId', $value)){
                 $check_value = StudentClassAllocation::where('OrgClassStreamId', '=', $value['orgClassStreamId'])->select('id')->first();
@@ -60,7 +61,32 @@ class StudentClassController extends Controller
                     ];
                     $response_data = StudentClassAllocation::create($class_allocation_data);
                 }
-                
+            }
+            //updating the students No of Meals detail
+            if($value['noOfMeals'] != NULL){
+                $meals=[
+                    'noOfMeals' => $value['noOfMeals']
+                ];
+
+                $no_meals = Student::where('id', $value['id'])->update($meals);
+            }
+
+            //updating the students boarder detail
+            if($value['isBoarder'] != NULL){
+                $boarder=[
+                    'isBoarder' => $value['isBoarder']
+                ];
+
+                $no_meals = Student::where('id', $value['id'])->update($boarder);
+            }
+
+            //updating the students scholarship details
+            if($value['scholarshipType'] != NULL){
+                $scholarship=[
+                    'scholarshipType' => $value['scholarshipType']
+                ];
+
+                $no_meals = Student::where('id', $value['id'])->update($scholarship);
             }
         }
 

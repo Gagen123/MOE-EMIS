@@ -1,15 +1,14 @@
 <template>
     <div>
-        <form>
             <div class="form-group row">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
                         <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
                         <label> Program</label>
                         <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
@@ -19,19 +18,24 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <!-- text input -->
-                    <div class="form-group">
-                        <label>Joining Date:</label>
-                        <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
-                        <has-error :form="student_form" field="date"></has-error>
-                    </div>
+
+            <div class="form-group row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label class="mb-0.5">Joining Date:<i class="text-danger">*</i></label>
+                    <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <has-error :form="student_form" field="date"></has-error>
                 </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label class="mb-0.5">Status:<i class="text-danger">*</i></label><br>
+                        <label><input  type="radio" v-model="student_form.status" value="1" /> Active</label>
+                        <label><input  type="radio" v-model="student_form.status" value="0"/> InActive</label>
+                    <has-error :form="student_form" field="status"></has-error>
+                </div>
+               
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <!-- textarea -->
                     <div class="form-group">
                         <label>Responsibilities:</label>
                         <textarea @change="remove_error('responsibilities')" class="form-control" v-model="student_form.responsibilities" :class="{ 'is-invalid': student_form.errors.has('responsibilities') }" name="responsibilities" id="responsibilities"></textarea>
@@ -49,11 +53,11 @@
                     </div>
                 </div>
             </div>
+          
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
-        </form>
     </div>
 </template>
 <script>
@@ -64,14 +68,14 @@ export default {
             roleList:[],
             programList:[],
             roles: [],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 student: '',
                 program: '',
-                date: '',
                 role: [],
                 date: '',
+                status:'1',
                 responsibilities:'',
             }),
         }
@@ -93,6 +97,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
+                // alert(JSON.stringify(response.data));
                 this.programList =  data.data.data;
             })
             .catch(function (error) {

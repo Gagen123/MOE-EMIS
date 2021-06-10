@@ -38,6 +38,7 @@ export default {
                 status: 1,
                 record_type:'health_screening',
                 action_type:'add',
+                model:'',
             })
         }
     },

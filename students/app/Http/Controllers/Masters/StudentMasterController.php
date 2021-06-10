@@ -21,6 +21,7 @@ class StudentMasterController extends Controller
     //
     use ApiResponser;
     public $audit_database;
+    public $database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
         $this->audit_database = config('services.constant.auditdb');
@@ -60,6 +61,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
+     //   dd('m here at microservice');
         if(strpos($param,'_Active')){
             $param=explode('_',$param)[0];
         }
@@ -76,6 +78,7 @@ class StudentMasterController extends Controller
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
+         //   dd($response_data);
             
         } elseif($param == 'club_name'){
             
@@ -147,7 +150,7 @@ class StudentMasterController extends Controller
         $model = new $modelName();
 
         $response_data = $model::create($data);
-        
+       // dd($data);
         return $response_data;
     }
 
@@ -156,23 +159,33 @@ class StudentMasterController extends Controller
      */
 
     private function updateData($request,$dataRequest, $databaseModel){
+      //  dd('m here');
         $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
         $model = new $modelName();
         $data = $model::find($request->id);
+      //   dd($data);
         //Audit Trails
         $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-        $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
-        
+        // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
+    //    dd('m here',$dataRequest);
+
         //data to be updated
-        $data->name = $dataRequest['name'];
+        $data->name = $dataRequest['Name'];
+        // dd($data);
         if($request['recordtype']!="StudentType" && $request['recordtype']!="ScholarType" && $request['recordtype']!="SpBenefit"){
-            $data->description = $dataRequest['description'];
+            $data->description = $dataRequest['Description'];
         }
-        $data->status = $dataRequest['status'];
+        if($request['recordtype']!="vaccine_type" ){
+            $data->description = $dataRequest['vaccineFor'];  
+        }
+        $data->description = $dataRequest['Description'];
+        $data->status = $dataRequest['Status'];
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
+        // dd($data);
         $data->update();
         return $data;
+       
     }
 
     /*

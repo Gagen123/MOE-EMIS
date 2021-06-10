@@ -324,6 +324,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
+            $router->get('/getClassMappingDetails/{mapping_id}', 'establishment\EstablishmentController@getClassMappingDetails');
             $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
             $router->get('/loadEstablishmentApplciaiton/{record_id}', 'establishment\EstablishmentController@loadEstablishmentApplciaiton');
             $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
