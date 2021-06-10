@@ -32,19 +32,12 @@ class Student extends Model
         'PrimaryContact',
         'CmnParentsMaritalStatusId',
         'Remarks',
-<<<<<<< HEAD
         'Address',
         'Status',
-=======
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         'created_by',
         'created_at',
         'updated_by',
         'updated_at'
-<<<<<<< HEAD
-=======
-
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
     ];
 
     public function CeaStudentAwards(){

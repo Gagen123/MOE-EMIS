@@ -64,20 +64,15 @@ class StudentAdmissionController extends Controller
                 'CmnSexId'                  =>  $request->sex_id,
                 'CmnChiwogId'               =>  $request->village_id,
                 'CmnGewogId'                =>  $request->gewog,
-                'class_id'                  =>  $request->std_class, 
+                'class_id'                  =>  $request->std_class,
                 'IsNewAdmission'            =>  1,
                 'Address'                   =>  $request->fulladdress,
                 'CmnLanguageId'             =>  $request->mother_tongue,
                 'PhotoPath'                 =>  $request->attachments,
                 'Status'                    =>  $request->status,
             ];
-<<<<<<< HEAD
-            $response_data = Std_Students::where('id',$request->student_id)->update($data);
-        }
-=======
             $response_data = std_admission::where('id',$request->student_id)->update($data);
-        } 
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
+        }
         else if($request->type=="update_transfer"){
             //keep history
             $data =[
@@ -91,17 +86,12 @@ class StudentAdmissionController extends Controller
                 'CmnSexId'                  =>  $request->sex_id,
                 'CmnChiwogId'               =>  $request->village_id,
                 'CmnGewogId'                =>  $request->gewog,
-                'class_id'                  =>  $request->std_class, 
+                'class_id'                  =>  $request->std_class,
                 'IsNewAdmission'            =>  1,
                 'Address'                   =>  $request->fulladdress,
-<<<<<<< HEAD
                 'CmnLanguageId'             =>  $request->mother_tongue,
                 'PhotoPath'                 =>  $request->attachments,
-=======
-                'CmnLanguageId'             =>  $request->mother_tongue, 
-                'PhotoPath'                 =>  $request->attachments, 
-                'Status'                    =>  $request->status, 
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
+                'Status'                    =>  $request->status,
             ];
 
             $updated_data = std_admission::where('id',$request->student_id)->update($data);
@@ -118,25 +108,15 @@ class StudentAdmissionController extends Controller
                     'middle_name'               =>  $request->middle_name,
                     'last_name'                 =>  $request->last_name,
                     'DateOfBirth'               =>  $request->dob,
-<<<<<<< HEAD
-                    'CmnSexId'                    =>  $request->sex_id,
-                    'CmnChiwogId'                =>  $request->village_id,
-                    'CmnGewogId'                  =>  $request->gewog,
-                    'IsNewAdmission'            =>1,
-                    'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue,
-                    'PhotoPath'               =>  $request->attachments,
-=======
                     'CmnSexId'                  =>  $request->sex_id,
-                    'CmnChiwogId'               =>  $request->village_id, 
+                    'CmnChiwogId'               =>  $request->village_id,
                     'CmnGewogId'                =>  $request->gewog,
-                    'class_id'                  =>  $request->std_class, 
+                    'class_id'                  =>  $request->std_class,
                     'IsNewAdmission'            =>  1,
                     'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue, 
-                    'PhotoPath'                 =>  $request->attachments, 
-                    'Status'                    =>  $request->status, 
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
+                    'CmnLanguageId'             =>  $request->mother_tongue,
+                    'PhotoPath'                 =>  $request->attachments,
+                    'Status'                    =>  $request->status,
                     'created_by'                =>  $request->user_id,
                     'created_at'                =>  date('Y-m-d h:i:s'),
                 ];
@@ -146,35 +126,22 @@ class StudentAdmissionController extends Controller
                 $data =[
                     'OrgOrganizationId'         =>  $request->OrgOrganizationId,
                     'CmnCountryId'              =>  $request->snationality,
-<<<<<<< HEAD
-                    'CidNo'              =>  $request->cid_passport,
-                    'Name'                =>  $request->first_name. ' '.$request->middle_name. ' '. $request->last_name,
-                    'DateOfBirth'                       =>  $request->dob,
-                    'CmnSexId'                    =>  $request->sex_id,
-                    'CmnChiwogId'                =>  $request->village_id,
-                    'CmnGewogId'                  =>  $request->gewog,
-                    'IsNewAdmission'            =>1,
-                    'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue,
-                    'PhotoPath'               =>  $request->attachments,
-=======
                     'CidNo'                     =>  $request->cid_passport,
                     'first_name'                =>  $request->first_name,
                     'middle_name'               =>  $request->middle_name,
                     'last_name'                 =>  $request->last_name,
                     'DateOfBirth'               =>  $request->dob,
                     'CmnSexId'                  =>  $request->sex_id,
-                    'CmnChiwogId'               =>  $request->village_id, 
+                    'CmnChiwogId'               =>  $request->village_id,
                     'CmnGewogId'                =>  $request->gewog,
-                    'class_id'                  =>  $request->std_class, 
+                    'class_id'                  =>  $request->std_class,
                     'IsNewAdmission'            =>  1,
                     'Address'                   =>  $request->fulladdress,
-                    'CmnLanguageId'             =>  $request->mother_tongue, 
-                    'PhotoPath'                 =>  $request->attachments, 
-                    'Status'                    =>  $request->status, 
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
+                    'CmnLanguageId'             =>  $request->mother_tongue,
+                    'PhotoPath'                 =>  $request->attachments,
+                    'Status'                    =>  $request->status,
                 ];
-                
+
                 $updated_data = std_admission::where('CidNo',$request->cid_passport)->update($data);
                 $response_data = std_admission::where('CidNo',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
             }
@@ -201,34 +168,6 @@ class StudentAdmissionController extends Controller
             'sex_id.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-<<<<<<< HEAD
-         try{
-            $data =[
-                'application_id'            =>  $request->application_id,
-                'snationality'              =>  $request->snationality,
-                'student_id'                =>  $request->student_id,
-                'CidNo'                     =>  $request->cid_passport,
-                'first_name'                =>  $request->first_name,
-                'middle_name'               =>  $request->middle_name,
-                'last_name'                 =>  $request->last_name,
-                'DateOfBirth'               =>  $request->dob,
-                'CmnSexId'                  =>  $request->sex_id,
-                'dzongkhag'                 =>  $request->dzongkhag,
-                'CmnGewogId'                =>  $request->gewog,
-                'village_id'                =>  $request->village_id,
-                'OrgOrganizationId'         =>  $request->s_school,
-                'class_id'                =>  $request->s_class,
-                'address'                   =>  $request->fulladdress,
-                'attachments'               =>  $request->attachments,
-                'student_type'              =>  $request->type,
-                'Status'              =>  $request->Status,
-            ];
-            $response_data = std_admission::create($data);
-        }
-        catch(Exception $e){
-            dd($e);
-        }
-=======
 
         $data =[
             'application_id'            =>  $request->application_id,
@@ -240,20 +179,19 @@ class StudentAdmissionController extends Controller
             'last_name'                 =>  $request->last_name,
             'DateOfBirth'               =>  $request->dob,
             'CmnSexId'                  =>  $request->sex_id,
-            'dzongkhag'                 =>  $request->dzongkhag, 
-            'CmnGewogId'                =>  $request->gewog, 
-            'village_id'                =>  $request->village_id, 
-            // 'village_id'                =>  $request->s_dzongkhag, 
-            'OrgOrganizationId'         =>  $request->s_school, 
-            'class_id'                =>  $request->s_class, 
+            'dzongkhag'                 =>  $request->dzongkhag,
+            'CmnGewogId'                =>  $request->gewog,
+            'village_id'                =>  $request->village_id,
+            // 'village_id'                =>  $request->s_dzongkhag,
+            'OrgOrganizationId'         =>  $request->s_school,
+            'class_id'                =>  $request->s_class,
             'address'                   =>  $request->fulladdress,
-            'attachments'               =>  $request->attachments, 
-            'student_type'              =>  $request->type, 
-            'Status'              =>  $request->Status, 
+            'attachments'               =>  $request->attachments,
+            'student_type'              =>  $request->type,
+            'Status'              =>  $request->Status,
         ];
         $response_data = std_admission::create($data);
 
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         return $response_data;
     }
 
@@ -419,11 +357,7 @@ class StudentAdmissionController extends Controller
             'PrimaryContact'           =>  $request->primary_contact,
         ];
 
-<<<<<<< HEAD
         // $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
-=======
-        $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
             $data =[
@@ -484,11 +418,6 @@ class StudentAdmissionController extends Controller
                 'created_at'                =>  date('Y-m-d h:i:s'),
             ];
             $response_data = StudentGuardainDetails::create($std_admission);
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -701,7 +630,6 @@ class StudentAdmissionController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-<<<<<<< HEAD
     public function updateAdmissionStd(Request $request){
         $data =[
             'Dzo_Id'                    =>  $request->dzo_id,
@@ -758,8 +686,6 @@ class StudentAdmissionController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-=======
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
     public function loadStudentList($param=""){
         if(strpos($param,'SSS')){
             $access_level=explode('SSS',$param)[0];
@@ -827,7 +753,6 @@ class StudentAdmissionController extends Controller
             ->get();
     }
 
-<<<<<<< HEAD
     public function getStudentDetails($std_id=""){
         if(strpos($std_id,'_')){
             $response_data=std_admission::where('id',explode('_',$std_id)[1])->first();
@@ -838,10 +763,6 @@ class StudentAdmissionController extends Controller
         else{
             $response_data=Std_Students::where('id',$std_id)->first();
         }
-=======
-    public function getStudentDetails(){
-        $response_data=Std_Students::all();
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         return $this->successResponse($response_data);
     }
     public function getAllStudentCid(){

@@ -48,14 +48,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadActiveStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
 
-<<<<<<< HEAD
-=======
     });
 
     $router->group(['prefix' => 'sen'], function () use ($router) {
         $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
 
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
@@ -63,10 +60,6 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/saveStudentDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentDetails']);
             $router->post('/saveStudentDetailsFromPortal', ['uses' => 'Students\StudentAdmissionController@saveStudentDetailsFromPortal']);
             $router->post('/saveStudentGardianDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentGardianDetails']);
-<<<<<<< HEAD
-
-=======
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
             //This route is used in emis portal
             $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
@@ -88,11 +81,6 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
 
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
-<<<<<<< HEAD
-        });
-=======
-
-
         });
 
         //SEN
@@ -100,10 +88,6 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             //GET SEN STUDENT LIST
             $router->get('/getSenStudentList',['uses' => 'Sen\SenStudentController@getSenStudentList']);
         });
-
-
-
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
@@ -174,7 +158,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveProgramMembers', ['uses' => 'Students\StudentProgramController@saveProgramMembers']);
         $router->get('/listProgramMembers/{param}', ['uses' => 'Students\StudentProgramController@listProgramMembers']);
         $router->post('/saveStudentClub', ['uses' => 'Students\StudentProgramClubController@saveStudentClub']);
-        
+
         $router->get('/loadStudentClubs/{param}', ['uses' => 'Students\StudentProgramController@loadStudentClubs']);
         $router->get('/listStudentClubs/{param}', ['uses' => 'Students\StudentProgramController@listStudentClubs']);
         $router->post('/saveProgramActionPlan', ['uses' => 'Students\StudentProgramController@saveProgramActionPlan']);
