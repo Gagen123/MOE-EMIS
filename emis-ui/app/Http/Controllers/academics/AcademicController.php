@@ -360,10 +360,10 @@ class AcademicController extends Controller
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = "Pass";
                     }
                 }
-                // dd($consolidatedResult["data"]['absentDays']);
                 foreach($consolidatedResult["data"]['absentDays'] as $absentDay){
                     if($absentDay['std_student_id'] == $students[$i]["std_student_id"]){
-                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["present"] = ($overAllInstructionalDays - $absentDay['absent_days']);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = ($overAllInstructionalDays - $absentDay['absent_days']);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["final_attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"]/$overAllInstructionalDays),0);
                     }
                 }
                 
@@ -405,6 +405,11 @@ class AcademicController extends Controller
                  array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"no_of_days_attended", "subject"=>"No. of Days Attended","sub_dzo_name"=>""]]);
                  array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"no_of_days_attended","aca_assmt_area_id"=>"", "assessment_area"=>"area_total", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
                  $indexAddTerm++; //To adjust the index after inserting no. of days attended column
+
+                  //Insert final_attendance_in_percentage column at a term
+                 array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"final_attendance_in_percentage", "subject"=>"Final Attendance in %","sub_dzo_name"=>""]]);
+                 array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"final_attendance_in_percentage","aca_assmt_area_id"=>"", "assessment_area"=>"area_total", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                 $indexAddTerm++; //To adjust the index after inserting final_attendance_in_percentage column
                 //Reset total to 0
                 $totalWeightageTerm = 0;
             }
@@ -443,6 +448,10 @@ class AcademicController extends Controller
 
             array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"no_of_days_attended", "subject"=>"No. of Days Attended", "sub_dzo_name"=>"","is_aggregate"=>1]);
             array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"no_of_days_attended","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
+
+            array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"final_attendance_in_percentage", "subject"=>"Final Attendance in %", "sub_dzo_name"=>"","is_aggregate"=>1]);
+            array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"final_attendance_in_percentage","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
+
 
         }
        return json_encode(["results"=>$students,"terms"=>$terms,"subjects"=>$subjects,"areas"=>$originalAreas,"overAllInstructionalDays" => $overAllInstructionalDays]);

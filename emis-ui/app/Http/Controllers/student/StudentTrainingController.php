@@ -19,7 +19,6 @@ class StudentTrainingController extends Controller
     }
 
     public function saveStudentTraining(Request $request){
-
         $rules = [
             'name'            => 'required',
             'training_type'   => 'required',
@@ -80,7 +79,6 @@ class StudentTrainingController extends Controller
     */
 
     public function saveTrainingParticipants(Request $request){
-
         $rules = [
             'student'            => 'required',
             'program'            => 'required',
@@ -96,8 +94,9 @@ class StudentTrainingController extends Controller
             'id'               => $request->id,
             'student'          => $request->student,
             'program'          => $request->program,
-            'organization_id'  => $this->getWrkingAgencyId(),
-            'user_id'        => $this->user_id() 
+            'remarks'          => $request->remarks,
+            // 'organization_id'  => $this->getWrkingAgencyId(),
+            // 'user_id'        => $this->user_id() 
         ];
 
 

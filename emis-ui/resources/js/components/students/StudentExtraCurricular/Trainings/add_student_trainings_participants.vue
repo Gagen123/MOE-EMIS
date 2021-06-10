@@ -14,9 +14,9 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label>Training:</label>
-                        <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                    </select>
+                        <select v-model="student_form.program" :class="{'is-invalid is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                            <option v-for="(item1, index1) in programList" :key="index1" :value="item1.id">{{ item1.name }}</option>
+                        </select>
                     <has-error :form="student_form" field="program"></has-error>
                     </div>
                 </div>
@@ -58,7 +58,6 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                console.log(data);
                 this.studentList =  data.data.data;
             })
             .catch(function (error) {
@@ -85,10 +84,10 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
+        remove_error(fieldid,errid){
+            if($('#'+fieldid).val()!=""){
+                $('#'+fieldid).removeClass('is-invalid');
+                $('#'+errid).html(''); 
             }
         },
         formaction: function(type){
@@ -104,10 +103,11 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_awards_list');
+                    this.$router.push('/student_trainings_participants_list');
                 })
                 .catch(() => {
                     console.log("Error......")
+                     this.applyselect();
                 })
             }
 		},
@@ -121,11 +121,14 @@ export default {
                 this.student_form.student=$('#student').val();
             }
             if(id=="program"){
-                this.student_form.award_type_id=$('#program').val();
+                this.student_form.program=$('#program').val();
             }
         },
     },
      mounted() {
+        this.loadStudentList();
+        this.loadActiveProgramList();
+        this.loadActiveTrainingList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -139,9 +142,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
-        this.loadActiveProgramList();
-        this.loadActiveTrainingList();
+
     },
     
 }

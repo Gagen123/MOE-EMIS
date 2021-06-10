@@ -108,7 +108,6 @@ export default {
                     finalClassStreamsSection.push(obj);
                 }))
                 let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
-
                 finalClassStreamsSection.forEach((classSection,index) => {
                     classTeachers.forEach(item => {
                         if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){

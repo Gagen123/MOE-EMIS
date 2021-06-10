@@ -10,6 +10,8 @@ use App\Traits\ApiResponser;
 use App\Models\Students\Student;
 use App\Models\Students\CeaTraining;
 use App\Models\Students\CeaTrainingParticipant;
+use Exception;
+use Mockery\Expectation;
 
 class StudentTrainingController extends Controller
 {
@@ -94,19 +96,22 @@ class StudentTrainingController extends Controller
 
         $customMessages = [
             'student.required'  => 'This field is required',
-            'program.required'     => 'This field is required',
+            'program.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+     
         $data =[
-            'id'               => $request->id,
-            'student'          => $request->student,
-            'program'          => $request->program,
-            'organization_id'  => $request['organization_id'],
-            'user_id'        => $request['user_id']
+            'StdStudentId'          => $request->student,
+            'CeaStudentTrainingId'  => $request->program,
+            'Remarks'               =>$request->remarks
+            // 'organization_id'  => $request['organization_id'],
+            // 'user_id'        => $request['user_id']
         ];
-
-        $response_data = CeaTrainingParticipant::create($data);
+      try{ 
+          $response_data = CeaTrainingParticipant::create($data);
+       } catch(Exception $e){
+          dd($e);
+      }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
