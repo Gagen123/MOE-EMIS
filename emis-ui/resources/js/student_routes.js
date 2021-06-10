@@ -393,12 +393,8 @@ const routes = [
                     { path: '/',name:'student_transfers', component: require('./components/students/StudentAdmission/transfer/update_student_list.vue').default },
                     { path: '/student_transfers_list',name:'student_transfers_list', component: require('./components/students/StudentAdmission/transfer/update_student_list.vue').default },
                     { path: '/update_student_transfer', name:'update_student_transfer', component: require('./components/students/StudentAdmission/transfer/update_student_transfer.vue').default },
-<<<<<<< HEAD
                     { path: '/update_student_admission', name:'update_student_admission', component: require('./components/students/StudentAdmission/transfer/update_student_admission.vue').default },
-                ] 
-=======
                 ]
->>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
             },
             // Aboard Student WhereAbouts
             { path: '/abroad_student',
