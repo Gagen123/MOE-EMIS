@@ -10,10 +10,8 @@ use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
-
-
-use App\Models\Masters\CeaRole;
 use App\Models\Masters\CeaProgram;
+
 use App\Models\Masters\CeaProgramType;
 
 class StudentMasterController extends Controller
@@ -89,8 +87,13 @@ class StudentMasterController extends Controller
         } else if(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
 
-        }else if($param= '$student_award_type'){
+        }else if($param= 'student_award_type'){
             $vacinetype = StudentAwardType::all();
+            return $vacinetype;
+
+        }
+        else if($param= 'program_type'){
+            $vacinetype = CeaProgram::all();
             return $vacinetype;
 
         }
