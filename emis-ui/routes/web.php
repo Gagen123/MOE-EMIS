@@ -200,7 +200,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getLocationUse', [App\Http\Controllers\organization\GeneralInfoController::class, 'getLocationUse'])->name('getLocationUse');
 
     Route::get('/getFurnitureType', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureType'])->name('getFurnitureType');
-    Route::get('/getFurnitureItem/{typeId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureItem'])->name('getFurnitureItem');
+    Route::get('/getFurnitureItem/{itemId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureItem'])->name('getFurnitureItem');
     Route::get('/getFurnitureUse', [App\Http\Controllers\organization\GeneralInfoController::class, 'getFurnitureUse'])->name('getFurnitureUse');
 
     Route::post('/udpateOrgProfile', [App\Http\Controllers\organization\GeneralInfoController::class, 'udpateOrgProfile'])->name('udpateOrgProfile');
@@ -494,6 +494,19 @@ Route::prefix('students')->group(function () {
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
         Route::post('/updateAdmissionStd', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateAdmissionStd'])->name('updateAdmissionStd');
     });
+
+    Route::prefix('sen')->group(function (){
+        //GET SEN STUDNETS
+        Route::get('/getSenStudentList', [App\Http\Controllers\student\SenStudentController::class, 'getSenStudentList']);
+
+    });
+
+
+
+
+
+
+
 
     Route::post('/reportStudents', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'reportStudents'])->name('reportStudents');
     Route::get('/loadUnreportedStudents/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadUnreportedStudents'])->name('loadUnreportedStudents');

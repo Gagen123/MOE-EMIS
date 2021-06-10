@@ -905,7 +905,11 @@ class EstablishmentController extends Controller{
     }
 
     public function saveUploadedFiles(Request $request){
+<<<<<<< HEAD
         $doc="";
+=======
+        // $doc;
+>>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         if($request->attachment_details!=null && $request->attachment_details!=""){
             $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
             foreach($request->attachment_details as $att){

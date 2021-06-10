@@ -358,7 +358,11 @@
                         @endif
                     @endif
 
+<<<<<<< HEAD
                     <li class="nav-item" id="restructuring">
+=======
+                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+>>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
                         <router-link to="/visitors_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -550,6 +554,14 @@
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Trainings & Workshop
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="send" @click="setclass('clubs','','studenttrainings')">
+                        <router-link to="/student_sen_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                SEN
                             </p>
                         </router-link>
                     </li>

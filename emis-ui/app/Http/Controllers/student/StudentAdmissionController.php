@@ -13,10 +13,13 @@ class StudentAdmissionController extends Controller{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
+
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
+
     public function saveStudentDetails(Request $request){
+
         $rules = [
             'snationality'              => 'required',
             'cid_passport'              => 'required',
@@ -24,7 +27,12 @@ class StudentAdmissionController extends Controller{
             'dob'                       => 'required',
             'sex_id'                    => 'required',
             'mother_tongue'             => 'required',
+<<<<<<< HEAD
 
+=======
+            'std_class'                 => 'required'
+            
+>>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         ];
         $customMessages = [
             'snationality.required'             => 'This field is required',
@@ -33,7 +41,9 @@ class StudentAdmissionController extends Controller{
             'dob.required'                      => 'This field is required',
             'sex_id.required'                   => 'This field is required',
             'mother_tongue.required'            => 'This field is required',
+            'std_class.required'                => 'This field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
 
         $file = $request->attachments;
@@ -50,6 +60,7 @@ class StudentAdmissionController extends Controller{
 
         $data =[
             'snationality'              =>  $request->snationality,
+            'std_class'                 =>  $request->std_class,
             'student_id'                =>  $request->student_id,
             'cid_passport'              =>  $request->cid_passport,
             'first_name'                =>  $request->first_name,
@@ -57,6 +68,7 @@ class StudentAdmissionController extends Controller{
             'last_name'                 =>  $request->last_name,
             'dob'                       =>  $request->dob,
             'sex_id'                    =>  $request->sex_id,
+<<<<<<< HEAD
             'dzongkhag'                 =>  $request->dzongkhag,
             'gewog'                     =>  $request->gewog,
             'village_id'                =>  $request->village_id,
@@ -65,12 +77,25 @@ class StudentAdmissionController extends Controller{
             'type'                      =>  $request->type,
             'attachments'               =>  $path,
             'user_id'                   =>  $this->userId()
+=======
+            'dzongkhag'                 =>  $request->dzongkhag, 
+            'gewog'                     =>  $request->gewog, 
+            'village_id'                =>  $request->village_id, 
+            'fulladdress'               =>  $request->fulladdress, 
+            'mother_tongue'             =>  $request->mother_tongue, 
+            'type'                      =>  $request->type, 
+            'attachments'               =>  $path,
+            'OrgOrganizationId'         =>  $this->getWrkingAgencyId(),
+            'user_id'                   =>  $this->userId() 
+>>>>>>> 82ad1363475d97a217b55f394329bbd3d58a4dc9
         ];
+        
         //changed the route link to saveAdmissionStudentDetails from saveStudentDetails
         $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionStudentDetails', $data);
         return $response_data;
     }
-      public function saveStudentGardianDetails(Request $request){
+    
+    public function saveStudentGardianDetails(Request $request){
         $rules = [
             'merital_status'                        => 'required',
             'primary_contact'                       => 'required',
