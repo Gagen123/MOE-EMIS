@@ -21,7 +21,7 @@ class StudentScoutController extends Controller
     }
 
     public function saveStudentScouts(Request $request){
-        
+
         $rules = [
             'scout'       => 'required',
             'year'       => 'required'
@@ -31,7 +31,7 @@ class StudentScoutController extends Controller
             'year.required'          => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                => $request->id,
             'OrgOrganizationId' => $request->working_agency_id,
@@ -39,7 +39,7 @@ class StudentScoutController extends Controller
             'EstablishmentYear'           =>  $request->year,
             'Remarks'           =>  $request->remarks
         ];
-        
+
         if($request->action_type=="add"){
             $response_data = CeaSchoolScout::create($data);
 
@@ -62,8 +62,8 @@ class StudentScoutController extends Controller
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
-        
+
+
     }
 
     public function loadStudentScouts($param=""){
@@ -73,20 +73,19 @@ class StudentScoutController extends Controller
                 ->select('cea_school_scouts.*', 'cea_scouts.name AS scout_name')
                 ->where('cea_school_scouts.OrgOrganizationId', $param)
                 ->get();
-        
+
         return $this->successResponse($roles);
 
     }
 
     public function listStudentScouts($param=""){
         $id = $param;
-
         $roles = DB::table('cea_school_scouts')
                 ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
                 ->select('cea_scouts.name AS scout_name', 'cea_school_scouts.Id AS id')
                 ->where('cea_school_scouts.OrgOrganizationId', $id)
                 ->get();
-        
+
         return $this->successResponse($roles);
 
     }
@@ -98,7 +97,7 @@ class StudentScoutController extends Controller
             'scout'       => 'required',
             'date'          => 'required'
         ];
-        
+
         $customMessages = [
             'student.required'          => 'This field is required',
             'scout.required'          => 'This field is required',
@@ -106,7 +105,7 @@ class StudentScoutController extends Controller
         ];
 
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                => $request->id,
             'StdStudentId'           =>  $request->student,
@@ -147,7 +146,7 @@ class StudentScoutController extends Controller
                 ->select('cea_scouts_membership.*', 'cea_scouts.name AS scout_name', 'std_student.name as student_name')
                 ->where('cea_school_scouts.OrgOrganizationId', $param)
                 ->get();
-        
+
         return $this->successResponse($roles);
     }
 }

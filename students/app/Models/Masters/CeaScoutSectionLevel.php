@@ -15,7 +15,7 @@ class CeaScoutSectionLevel extends Model
         'id',
         'CeaScoutSectionId',
         'name',
-        'description', 
+        'description',
         'status'
     ];
 }

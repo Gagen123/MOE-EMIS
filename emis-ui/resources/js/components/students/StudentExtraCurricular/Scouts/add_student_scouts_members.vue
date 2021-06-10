@@ -54,8 +54,11 @@ export default {
             studentList:[],
             scoutList:[],
             scoutSectionList:[],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
-
+            classTecherClass:[],
+            // org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            classId:'',
+            streamId:'',
+            sectionId:'',
             student_form: new form({
                 id:'',
                 student: '',
@@ -66,38 +69,80 @@ export default {
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.org_id){
+        getClassTeacher(){
+            axios.get('academics/getClassTeacherClasss')
+            .then(response =>{
+                let data = response.data.data
+                data.forEach((item)=>{
+                    this.classId = item.org_class_id
+                    if(item.org_stream_id != null){
+                        this.streamId = item.org_stream_id;
+                    }else if(item.org_section_id != null){
+                        this.sectionId = item.org_section_id;
+                    }else{
+                    this.classId = item.org_class_id
+                    }
+                })
+            })
+        },
+        getStudentBasedOnTeacherClassSect(){
+            let uri = 'academics/getStudentsForAttendance'
+            uri += ('?ClassId='+this.classId)
+            if(this.streamId !== null){
+                    uri += ('&streamId='+this.streamId)
+            }
+            if(this.streamId !== null){
+                    uri += ('&sectionId='+this.sectionId)
+            }
             axios.get(uri)
             .then(response => {
-                let data = response;
-                console.log(data);
-                this.studentList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
+                this.studentList = response.data.student
+
+            }).catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
             });
         },
-        loadActiveScoutList(uri='students/listStudentScouts/'+this.org_id){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.scoutList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveRoleList(uri="masters/loadActiveStudentMasters/scout_section"){
+        loadActiveScoutSection(uri="masters/loadActiveStudentMasters/scout_section"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.scoutSectionList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
+            }).catch(function (error) { console.log("Error......"+error)});
         },
+        loadActiveScoutLevel(uri=""){
+            axios.get(uri)
+            .then(response => {
+
+            })
+
+        },
+
+
+        //need to get the organisation id and pass it as a parameter
+        // loadStudentList(uri='students/loadStudentList/'+this.org_id){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         console.log(data);
+        //         this.studentList =  data.data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
+
+        // loadActiveScoutList(uri='students/listStudentScouts/'+this.org_id){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.scoutList =  data.data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -145,17 +190,19 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        this.loadStudentList();
-        this.loadActiveScoutList();
-        this.loadActiveRoleList();
+        this.getClassTeacher();
+        this.getStudentBasedOnTeacherClassSect();
+        // this.loadStudentList();
+        // this.loadActiveScoutList();
+        this.loadActiveScoutSection();
+        this.loadActiveScoutLevel();
     },
-    
+
 }
 </script>
