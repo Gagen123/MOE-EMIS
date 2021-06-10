@@ -497,7 +497,7 @@ Route::prefix('students')->group(function () {
     Route::prefix('sen')->group(function (){
         //GET SEN STUDNETS
         Route::get('/getSenStudentList', [App\Http\Controllers\student\SenStudentController::class, 'getSenStudentList']);
-
+        Route::get('/getquestionnaire/{StudentId}', [App\Http\Controllers\student\SenQuestionnaireController::class, 'getQuestionnaire']);
     });
 
 

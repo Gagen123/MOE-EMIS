@@ -50,10 +50,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
     });
 
-    $router->group(['prefix' => 'sen'], function () use ($router) {
-        $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
-
-    });
+    
 
     $router->group(['prefix' => 'students'], function () use ($router) {
         $router->group(['prefix' => 'admission'], function () use ($router) {
@@ -83,15 +80,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
 
         });
-
-        //SEN
+        
         $router->group(['prefix' => 'sen'], function () use ($router) {
-            //GET SEN STUDENT LIST
             $router->get('/getSenStudentList',['uses' => 'Sen\SenStudentController@getSenStudentList']);
+            $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
         });
-
-
-
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
