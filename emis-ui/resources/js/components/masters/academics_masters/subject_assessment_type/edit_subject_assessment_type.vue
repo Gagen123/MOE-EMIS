@@ -43,7 +43,7 @@
                                             v-model="classSubjects[index].pass_score"
                                             class="form-check-input text-right" 
                                             type="number" id="pass-score" max="100" min="0"
-                                            :disabled="!classSubjects[index].sub_selected"
+                                            :disabled="!classSubjects[index].sub_selected || classSubjects[index].aca_rating_type_id=='ad1aacc8-b8c5-11eb-b80d-b07b2586b8c6'"
                                         >
                                      
                                     </div>
@@ -131,7 +131,13 @@ export default {
                     this.$router.push('/list-subject-assessment-type');
                 })
                 .catch(function (error){
-                this.errors = response.error;
+                    if(error.response.status === 422){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'All fields are required for a selected Subject.',
+                        })
+                    }
             });
         },
 	 

@@ -24,13 +24,22 @@ class LoadOrganizationController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    
+
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)
-                                ->where('status','1')    
-                                ->select( 'id','name','levelId','dzongkhagId')->get();
+            ->where('status','1')
+            ->select( 'id','name','levelId','dzongkhagId')->get();
+        }
+        if($type=="public_eccd"){
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_eccd','private_eccd'])->get();
+        }
+        if($type=="school" || $type=="ce"){
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','private_school'])->get();
+        }
+        if($type=="ECR"){
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','public_ecr')->get();
         }
         if($type=="gewoggwise"){
             $response_data=OrganizationDetails::where('gewogId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
@@ -68,7 +77,7 @@ class LoadOrganizationController extends Controller{
             ->orderBy('c.displayOrder', 'asc')
             ->get();
             $response_data->classes=$data;
-            
+
             if($response_data->category=="private_school"){
                 $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
             }
@@ -102,7 +111,7 @@ class LoadOrganizationController extends Controller{
         }
         return $this->successResponse($response_data);
     }
-    
+
     public function loadHeaquarterList($type="", $id=""){
         $response_data="";
         if($type=="all_dzongkhag_headquarters" || $type=="all_ministry_headquarters"){
@@ -115,11 +124,24 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadClassStreamSection($type="", $id=""){
-        $section = DB::select('SELECT t1.id AS OrgClassStreamId, t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
-        t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1 
-        JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id 
-        LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
-        return $section;
+        if($type=='school'){
+            $response_data = DB::table('organization_class_streams')
+            ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+            ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
+            ->where('organizationId', $id)
+            ->orderBy('classes.displayOrder', 'asc')
+            ->groupBy('organization_class_streams.classId')
+            ->get();
+            return $this->successResponse($response_data);
+        }
+        else{
+            $section = DB::select('SELECT t1.id AS OrgClassStreamId, t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
+            t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1
+            JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id
+            LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
+            return $section;
+        }
+
     }
 
     public function getOrgProfile($id=""){
@@ -131,7 +153,7 @@ class LoadOrganizationController extends Controller{
         }
         return $this->successResponse($response_data);
     }
-    
+
     public function getClassByType($type=""){
         return Classes::where('status',1)->where('category',$type)->orderBy('displayOrder', 'asc')->get();
     }
@@ -184,7 +206,7 @@ class LoadOrganizationController extends Controller{
         //             ->where('streamId', '<>', 'NULL')
         //             ->get();
         // }
-    } 
+    }
 
     public function loadSectionList($id){
 

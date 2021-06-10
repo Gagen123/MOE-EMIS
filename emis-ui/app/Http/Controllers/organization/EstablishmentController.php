@@ -34,7 +34,7 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
-        
+
         switch($request['establishment_type']){
             case "public_school" : {
                     $this->service_name = "Public School";
@@ -67,7 +67,7 @@ class EstablishmentController extends Controller
                     break;
                 }
             default : {
-                
+
                 break;
             }
         }
@@ -118,7 +118,7 @@ class EstablishmentController extends Controller
         $request_data =[
             'attachment_details'                =>  $attachment_details,
             'application_number'                =>  $application_number,
-            'user_id'                           =>  $this->userId() 
+            'user_id'                           =>  $this->userId()
         ];
         // dd( $request_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
@@ -172,8 +172,8 @@ class EstablishmentController extends Controller
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>$service_name,//service name 
-                'name'              =>$request['proposedName'],//service name 
+                'service_name'      =>$service_name,//service name
+                'name'              =>$request['proposedName'],//service name
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
@@ -187,7 +187,7 @@ class EstablishmentController extends Controller
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
-        
+
         return $response_data;
     }
 
@@ -202,6 +202,11 @@ class EstablishmentController extends Controller
         $streamInCheckbox = $this->apiService->listData('emis/organization/establishment/getStream' );
         return $streamInCheckbox;
     }
+    public function getClassMappingDetails($mapping_id=""){
+        $classmappiongdetails = $this->apiService->listData('emis/organization/establishment/getClassMappingDetails/'.$mapping_id );
+        return $classmappiongdetails;
+    }
+
 
     public function loadOrgApplications($type=""){
         $loadOrgApplications = $this->apiService->listData('emis/organization/establishment/loadOrgApplications/'.$this->userId().'/'.$type );
@@ -237,12 +242,12 @@ class EstablishmentController extends Controller
         return $loadMergerApplications;
     }
 
-    public function loadOrganizationDetails(){        
+    public function loadOrganizationDetails(){
         $loadOrganizationDetails = $this->apiService->listData('emis/organization/establishment/loadOrganizationDetails/'.$this->userId() );
         return $loadOrganizationDetails;
     }
 
-    public function loadProprietorDetails(){  
+    public function loadProprietorDetails(){
         $loadProprietorDetails = $this->apiService->listData('emis/organization/establishment/loadProprietorDetails');
         return $loadProprietorDetails;
     }
@@ -273,12 +278,12 @@ class EstablishmentController extends Controller
         return $response_data;
     }
 
-    public function loadBasicDetails(){ 
+    public function loadBasicDetails(){
         $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/loadBasicDetails/'.$this->userId() );
         return $loadBasicDetails;
     }
-    
-    public function loadheadQuarterDetails($id=""){ 
+
+    public function loadheadQuarterDetails($id=""){
         $orgDetails = $this->apiService->listData('emis/organization/headQuater/loadheadQuarterDetails/'.$id);
         return $orgDetails;
     }
@@ -299,11 +304,11 @@ class EstablishmentController extends Controller
             'type'              =>  $type,
             'user_id'           =>  $this->userId(),
         ];
-        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data);
         // $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $workflowstatus="";
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
-        
+
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
         $service_name=$loadOrganizationDetails->data->establishment_type;
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
@@ -312,7 +317,7 @@ class EstablishmentController extends Controller
                 $vteam->name=$response_data->name;
                 $vteam->cid=$response_data->cid_work_permit;
                 $vteam->po_title=$response_data->position_title;
-            } 
+            }
         }
         foreach($workflowdet as $work){
             if(strpos(strtolower($work->Status_Name),'establishment')===false ){
@@ -333,7 +338,7 @@ class EstablishmentController extends Controller
                 $vteam->name=$response_data->name;
                 $vteam->cid=$response_data->cid_work_permit;
                 $vteam->po_title=$response_data->position_title;
-            } 
+            }
         }
         return json_encode($loadOrganizationDetails);
     }
@@ -386,7 +391,7 @@ class EstablishmentController extends Controller
         }
         if($request->actiontype!="update"){
             $workflow_data=[
-                'service_name'      =>$service_name,//service name 
+                'service_name'      =>$service_name,//service name
                 'screen_id'         =>$screen_id,
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
@@ -400,7 +405,7 @@ class EstablishmentController extends Controller
             ];
             $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
-       
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
@@ -411,36 +416,36 @@ class EstablishmentController extends Controller
             'update_type'                  =>   $request->update_type,
             'nomi_staffList'               =>   json_decode($request->nomi_staffList),
             'attachment_details'           =>  $attachment_details,
-            'user_id'                      =>   $this->userId() 
+            'user_id'                      =>   $this->userId()
         ];
-        
+
         $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $response_data;
     }
-    
-    public function loadApprovedOrgs($type=""){  
+
+    public function loadApprovedOrgs($type=""){
         $response_data = $this->apiService->listData('emis/organization/establishment/loadApprovedOrgs/'.$type);
         return $response_data;
     }
 
-    public function getApprovedOrgDetails($type="",$key=""){  
+    public function getApprovedOrgDetails($type="",$key=""){
         $response_data ="";
         if($type=="1"){
             //Invoke Zest for details
         }else{
             $response_data = $this->apiService->listData('emis/organization/establishment/getApprovedOrgDetails/'.$type.'/'.$key);
         }
-        
+
         return $response_data;
     }
-    
+
     public function registerOrganizationDetails(Request $request){
         $estd=[
             'category'                  =>$request->category,
             'yearestb'                  =>$request->yearestb,
             'zestcode'                  =>$request->zestcode,
             'applicaitondetails'        =>$request->applicaitondetails,
-            
+
             'organizationid'            =>$request->organizationid,
             'applicationNo'             =>$request->applicationNo,
             'application_date'          =>$request->application_date,
@@ -470,24 +475,24 @@ class EstablishmentController extends Controller
             'status'                       =>   'Registered',
             'application_number'           =>   $request->applicationNo,
             'remarks'                      =>   $request->remarks,
-            'user_id'                      =>   $this->userId() 
+            'user_id'                      =>   $this->userId()
         ];
         $estd_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $response_data;
     }
-    
-    public function getschoolDetials(){  
+
+    public function getschoolDetials(){
         $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         $response_data = $this->apiService->listData('emis/organization/establishment/getschoolDetials/'.$param);
         return $response_data;
     }
-    
-    public function getschoolList($dzoid=""){  
+
+    public function getschoolList($dzoid=""){
         $param='MinistrySSS'.$dzoid.'SSS'.$this->getWrkingAgencyId();
         $response_data = $this->apiService->listData('emis/organization/establishment/getschoolDetials/'.$param);
         return $response_data;
     }
-    public function getFullSchoolDetials($id=""){  
+    public function getFullSchoolDetials($id=""){
         if($id=="sessionDet"){
             $id=$this->getWrkingAgencyId();
         }
@@ -495,41 +500,41 @@ class EstablishmentController extends Controller
         // dd($response_data);
         return $response_data;
     }
-    
-    public function checkPendingApplication($type=""){  
+
+    public function checkPendingApplication($type=""){
         $response_data = $this->apiService->listData('emis/common/checkPendingApplication/'.$type.'/'.$this->userId());
         return $response_data;
     }
-    
-    public function getsAgencyList($param=""){ 
+
+    public function getsAgencyList($param=""){
         if($param=="session"){
             $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         }
         $loadBasicDetails = $this->apiService->listData('emis/organization/headQuater/getsAgencyList/'.$param);
         return $loadBasicDetails;
     }
-    
-    public function getHeadQuarterDetails($id=""){ 
+
+    public function getHeadQuarterDetails($id=""){
         $response_data = $this->apiService->listData('emis/organization/headQuater/getHeadQuarterDetails/'.$id);
         return $response_data;
     }
 
-    public function getLocationDetails($id=""){  
+    public function getLocationDetails($id=""){
         $response_data = $this->apiService->listData('emis/organization/establishment/getLocationDetails/'.$id);
         // dd($response_data);
         return $response_data;
     }
 
-    public function getConnectivityDetails($id=""){  
+    public function getConnectivityDetails($id=""){
         $response_data = $this->apiService->listData('emis/organization/establishment/getConnectivityDetails/'.$id);
         return $response_data;
-    } 
+    }
 
-    public function getSectionDetails($id=""){  
+    public function getSectionDetails($id=""){
         $response_data = $this->apiService->listData('emis/organization/establishment/getSectionDetails/'.$id);
         return $response_data;
     }
-    
+
     /**
      * Validation function for various types of Establishments
      */
@@ -556,7 +561,7 @@ class EstablishmentController extends Controller
             'chiwog.required'               => 'Chiwog is required',
             'locationType.required'         => 'Location Type  is required',
             // 'senSchool.required'            => 'Sen School is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -601,7 +606,7 @@ class EstablishmentController extends Controller
             'dzongkhag.required'            => 'Dzongkhag is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -628,7 +633,7 @@ class EstablishmentController extends Controller
             'dzongkhag.required'            => 'Dzongkhag is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -665,7 +670,7 @@ class EstablishmentController extends Controller
             'dzongkhag.required'                => 'Dzongkhag is required',
             'gewog.required'                    => 'Gewog is required',
             'chiwog.required'                   => 'Chiwog is required'
-            
+
         ];
         $validation = array();
         $validation['rules'] = $rules;
@@ -699,7 +704,7 @@ class EstablishmentController extends Controller
             'id'                           =>  $request['id'],
             'action_type'                  =>  $request['action_type'],
             'application_number'           =>  $request['application_number'],
-            'user_id'                      =>  $this->userId() 
+            'user_id'                      =>  $this->userId()
         ];
 
         return $estd;
@@ -730,7 +735,7 @@ class EstablishmentController extends Controller
             'action_type'                  =>  $request['action_type'],
             'application_number'           =>  $request['application_number'],
             'id'                           =>  $request['id'],
-            'user_id'                      =>  $this->userId() 
+            'user_id'                      =>  $this->userId()
         ];
 
         return $estd;
@@ -755,7 +760,7 @@ class EstablishmentController extends Controller
             'action_type'                  =>  $request['action_type'],
             'application_number'           =>  $request['application_number'],
             'id'                           =>  $request['id'],
-            'user_id'                      =>  $this->userId() 
+            'user_id'                      =>  $this->userId()
         ];
 
         return $estd;
@@ -782,19 +787,19 @@ class EstablishmentController extends Controller
             'application_number'           =>  $request['application_number'],
             'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
-            'user_id'                      =>  $this->userId() 
+            'user_id'                      =>  $this->userId()
         ];
 
         return $estd;
     }
-    
-    public function loaddraftApplication($type=""){  
+
+    public function loaddraftApplication($type=""){
         $response_data = $this->apiService->listData('emis/organization/establishment/loaddraftApplication/'.$type.'/'.$this->userId());
         // dd($response_data);
         return $response_data;
     }
 
-    public function loadEstablishmentApplciaiton($record_id=""){  
+    public function loadEstablishmentApplciaiton($record_id=""){
         $response_data = $this->apiService->listData('emis/organization/establishment/loadEstablishmentApplciaiton/'.$record_id);
         return $response_data;
     }

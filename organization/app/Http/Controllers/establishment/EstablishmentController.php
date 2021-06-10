@@ -461,6 +461,9 @@ class EstablishmentController extends Controller{
     public function getStream(){
         return Stream::where('status',1)->get();
     }
+    public function getClassMappingDetails($mapping_id=""){
+        return OrganizationClassStream::where('id',$mapping_id)->first();
+    }
 
     /**
      * method to load organization details
@@ -902,7 +905,7 @@ class EstablishmentController extends Controller{
     }
 
     public function saveUploadedFiles(Request $request){
-        $doc;
+        $doc="";
         if($request->attachment_details!=null && $request->attachment_details!=""){
             $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
             foreach($request->attachment_details as $att){
@@ -1092,7 +1095,7 @@ class EstablishmentController extends Controller{
                 'updated_by'            =>  $request->user_id,
                 'updated_at'            =>  date('Y-m-d h:i:s')
             ];
-            $response_data = ContactDetails::where('organizationId', $request->org_id)->update($location);
+            $response_data = ContactDetails::where('organizationId', $request->org_id)->update($contact_details);
         }
         else{
             $contact_details = $contact_details+[
@@ -1145,11 +1148,11 @@ class EstablishmentController extends Controller{
     public function updateSenDetials(Request $request){
         $professionalsSupportChildren="";
         if($request['professionalsSupportChildren']!=""){
-            $professionalsSupportChildren=implode($request['professionalsSupportChildren'],', ');
+            $professionalsSupportChildren=implode($request['professionalsSupportChildren'], ', ');
         }
         $adultWorkingwithChildren="";
         if($request['adultWorkingwithChildren']!=""){
-            $adultWorkingwithChildren=implode($request['adultWorkingwithChildren'],', ');
+            $adultWorkingwithChildren=implode($request['adultWorkingwithChildren'], ", ");
         }
         $org_details =[
             'org_id'                        =>  $request['org_id'],

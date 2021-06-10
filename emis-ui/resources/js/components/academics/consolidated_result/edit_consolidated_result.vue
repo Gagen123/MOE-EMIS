@@ -5,6 +5,9 @@
               <div class="mr-3">
                 <strong>Class: </strong> {{class_stream_section }}
               </div>
+               <div class="mr-3">
+                <strong>Instructional Days: </strong> {{ instructional_days }}
+              </div>
             </div>          
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -34,9 +37,19 @@
                                 <td>{{item3.CidNo}}</td>
                                 <td>{{ item3.Name }}</td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
-                                    <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)">
+                                    <!-- <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)"> -->
+                                        <!-- <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
+                                        <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
+                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.1" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
+                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control" id="assmt_area" type="text">
+                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control ditable_fields" :id="item1.assessment_area"> 
+                                            <option selected value="">--SELECT--</option>
+                                            <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
+                                        </select>
+                                    </span> -->
+                                    <!-- <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)">
                                        {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
-                                    </span>
+                                    </span> -->
                                     <!-- <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)"> -->
                                 </td> 
                             </tr>
@@ -59,6 +72,7 @@
     data(){
            return{
             consolidatedResultList:[],
+            instructional_days:'',
             terms:[],
             subjects:[],
             areas:[],
@@ -84,6 +98,7 @@
             }
             try{
                 let consolidatedResult = await axios.get(uri).then(response => response.data)
+                this.instructional_days = consolidatedResult.overAllInstructionalDays
                 this.terms = consolidatedResult.terms
                 this.subjects = consolidatedResult.subjects
                 this.areas = consolidatedResult.areas

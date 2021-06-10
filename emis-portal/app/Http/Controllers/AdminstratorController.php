@@ -30,7 +30,7 @@ class AdminstratorController extends Controller
         $personal_data=$this->apiService->listData('getchildDetailsOncid/'. $cid);
         return json_decode($personal_data)->parentDetailResponse->parentDetail;
     }
-    
+
 
     public function loadGlobalMasters($param=""){
         $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
@@ -42,8 +42,20 @@ class AdminstratorController extends Controller
         return $response_data;
     }
 
-    public function getOrgList($dzoId=""){
+    public function getOrgList($dzoId="",$orgType=""){
         $param="dzongkhagwise";
+        if($orgType=="ECCD"){
+            $param='public_eccd';
+        }
+        if($orgType=="School"){
+            $param='school';
+        }
+        if($orgType=="ECR"){
+            $param='ecr';
+        }
+        if($orgType=="CE"){
+            $param='ce';
+        }
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$param.'/'.$dzoId);
     }
 
@@ -53,7 +65,7 @@ class AdminstratorController extends Controller
     }
 
 
-    public function loadOrganizationDetailsbyOrgId($id){        
+    public function loadOrganizationDetailsbyOrgId($id){
         $loadOrganizationDetails = $this->apiService->listData('emis/common_services/loadOrgDetails/fullOrgDetbyid/'.$id );
         return $loadOrganizationDetails;
     }
@@ -73,7 +85,7 @@ class AdminstratorController extends Controller
 
     }
 
-    
 
-    
+
+
 }

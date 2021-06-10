@@ -7,7 +7,7 @@
             <ul class="nav nav-pills mb-2" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                        <span :class="item.screen_icon"></span> 
+                        <span :class="item.screen_icon"></span>
                         {{ item.screen_name}}
                     </router-link>
                 </li>
@@ -15,7 +15,7 @@
                     <router-link id="locations" to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Location
-                    </router-link>  
+                    </router-link>
                 </li> -->
                 <!-- <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
                     <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
@@ -35,6 +35,12 @@
                         Furniture
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('projections')">
+                    <router-link id="projections" to="/projections" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        Projections
+                    </router-link>
+                </li>
                 <!-- <li class="nav-item active pr-1" @click="activatelink('section_index')">
                     <router-link id="section_index" to="/section_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
@@ -50,7 +56,7 @@
             </ul>
         <router-view></router-view>
         </div>
-        
+
     </div>
 </template>
 
@@ -72,9 +78,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("Error:"+error)
             });
         },

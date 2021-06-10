@@ -3,18 +3,18 @@
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item basic-tabs" @click="shownexttab('basic-tabs')">  
-                        <a class="nav-link active" id="basic-tabs-head" data-toggle="pill"  href="#basic-tabs" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true"> 
-                            <label> Basic Details </label>                               
+                    <li class="nav-item basic-tabs" @click="shownexttab('basic-tabs')">
+                        <a class="nav-link active" id="basic-tabs-head" data-toggle="pill"  href="#basic-tabs" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
+                            <label> Basic Details </label>
                         </a>
-                    </li>   
+                    </li>
                     <li class="nav-item guardians-tab"  @click="shownexttab('guardians-tab')">
                         <a class="nav-link" id="guardians-tab-head" data-toggle="pill" href="#guardians-tab" role="tab" aria-controls="custom-tabs-four-guardians" aria-selected="false">
                             <label>Student Guardian Details</label>
                         </a>
                     </li>
                 </ul>
-            </div>  
+            </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="basic-tabs" role="tabpanel" aria-labelledby="basicdetails">
@@ -24,7 +24,7 @@
                                     <label> Student Nationality:<span class="text-danger">*</span></label><br>
                                     <input type="radio" name="snationality" v-model="student_form.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
                                     <input type="radio" name="snationality" v-model="student_form.snationality" value="Bhutanese Under Process" id="s-bhutanese-underprocess" @click="showstdidentity('Student-Bhutanese-underprocess')" checked> Bhutanese (under process)<br>
-                                    <input type="radio" name="snationality" v-model="student_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
+                                    <input type="radio" name="snationality" v-model="student_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
                                     <span class="text-danger" id="snationality_err"></span>
                                 </div>
                                 <div class="row form-group col-lg-9 col-md-9 col-sm-9 col-xs-12">
@@ -87,7 +87,7 @@
                                                     <has-error :form="student_form" field="gewog"></has-error>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                     
+
                                             <label>Village: </label>
                                                     <select v-model="student_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
                                                         <option value=""> --Select--</option>
@@ -96,7 +96,7 @@
                                                     <has-error :form="student_form" field="village_id"></has-error>
                                                 </div>
                                             </div>
-                                            <div class="row form-group">
+                                            <div class="row form-group" id="permanentAddr">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <label >Permanent Address: </label>
                                                     <textarea class="form-control" rows="3" @change="removeerror('fulladdress')" :class="{ 'is-invalid': student_form.errors.has('fulladdress') }" id="fulladdress" v-model="student_form.fulladdress" placeholder="Permanent Address"></textarea>
@@ -118,7 +118,17 @@
                             <hr>
                              <div class="form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label>School Information</label><br><br>
+                                    <label>School Information</label><br>
+                                    <div class="row form-group" id="dzo_gewog_village">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Admission for:  <span class="text-danger">*</span> </label>
+                                            <select v-model="school_form.orgType" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('orgType') }" class="form-control select2" name="orgType" id="orgType">
+                                                <option value="ECCD"> ECCD</option>
+                                                <option value="School"> School/ Class PP / ECR</option>
+                                            </select>
+                                            <has-error :form="school_form" field="orgType"></has-error>
+                                        </div>
+                                    </div>
                                     <div class="row form-group" id="dzo_gewog_village">
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Dzongkhag/Thromde:  <span class="text-danger">*</span> </label>
@@ -129,10 +139,10 @@
                                             <has-error :form="school_form" field="s_dzongkhag"></has-error>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label> School:  <span class="text-danger">*</span></label>
+                                            <label> School/ECR/ECCD:  <span class="text-danger">*</span></label>
                                             <select v-model="school_form.s_school" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_school') }" class="form-control select2" name="s_school" id="s_school">
                                                 <option value=""> --Select--</option>
-                                                <option v-for="(item, index) in s_schoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                <option v-for="(item, index) in s_schoolList" :key="index" v-bind:value="item.id">{{ item.name }} ({{item.category}})</option>
                                             </select>
                                             <has-error :form="school_form" field="s_school"></has-error>
                                         </div>
@@ -172,9 +182,9 @@
                                 <label> Student Primary Contact:</label><br>
                                     <input type="radio" value="Father" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact" @click="showidentity('primary-contact-father')" checked> Father
                                     <input type="radio" value="Mother" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact1" @click="showidentity('primary-contact-mother')" > Mother
-                                    <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian 
+                                    <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian
                                 <has-error :form="guardian_form" field="primary_contact"></has-error>
-                            </div> 
+                            </div>
                         </div>
 
                         <div class="row form-group">
@@ -624,6 +634,7 @@ export default {
                 village_id:'',
                 studentcode:'',
                 attachments:'',
+                orgType:'',
             }),
 
             school_form: new form({
@@ -631,7 +642,7 @@ export default {
                 s_school:'',
                 s_class:'',
             }),
-            
+
 
             guardian_form: new form({
                 student_id:'',
@@ -689,7 +700,7 @@ export default {
                 gardain_occupation:'',
                 gardain_email:'',
                 gardain_cntct_no:'',
-                
+
             }),
         }
     },
@@ -720,7 +731,7 @@ export default {
             axios.get('adminstratorController/getpersonbycid/'+ cid)
             .then(res => {
                 if(JSON.stringify(res.data)!='{}'){
-                    alert(res); 
+                    alert(res);
                     if(type=="std" && res!=""){
                         $('#snationality').prop('checked',true);
                         this.form.snationality='Bhutanese';
@@ -744,7 +755,7 @@ export default {
                         this.student_form.dob = year+ "-"+month + "-" + day;
                         $('#dob').val(year+ "-"+month + "-" + day);
                         $('#dob').prop('readonly',true);
-                        
+
                         if(student_detail.genter=="M"){
                             student_detail.genter="male";
                         }
@@ -759,7 +770,7 @@ export default {
                                 $('#sex_id').val(this.sex_idList[i].id).trigger('change');
                                 this.student_form.sex_id =  this.sex_idList[i].id;
                                 $('#sex_id').prop('disabled',true);
-                            }  
+                            }
                         }
 
                         this.student_form.dzongkhag =student_detail.dzongkhagId;
@@ -808,12 +819,12 @@ export default {
                         }
                             }
                     if(type=="mother"){
-                        
+
                     }
                 }
             });
         },
-        
+
         loadAllActiveMasters(type){
             axios.get('masters/loadGlobalMasters/'+type)
             .then(response =>{
@@ -835,34 +846,34 @@ export default {
               .then(Response =>{
                 let data = Response.data.data;
                 this.s_dzongkhagList = data;
-                
+
               }).catch(error => console.log(error));
 
           },
          getschoolList(id){
-             let dzoId=$('#s_dzongkhag').val();
-                 if(id!=""){
-                 dzoId=id;
-              
-            } 
-            axios.get('/masters/getOrgList/' +dzoId)
+            let type=$('#orgType').val();
+            let dzoId=$('#s_dzongkhag').val();
+            if(id!=""){
+                dzoId=id;
+            }
+            this.s_schoolList = [];
+            axios.get('/masters/getOrgList/'+dzoId+'/'+type)
               .then(Response =>{
                 let data = Response.data.data;
                 this.s_schoolList = data;
               })
           },
          getclassList(id){
-             let orgId=$('#school').val();
+            let orgId=$('#school').val();
                 if(id!=""){
-                 orgId=id;
-            } 
+                orgId=id;
+            }
             this.classList = [];
               axios.get('/masters/loadClassStreamSection/school/' +orgId)
               .then(Response =>{
-                let data = Response.data;
+                let data = Response.data.data;
                 this.s_classList = data;
-              })
-
+            })
           },
           applyselect()
             {
@@ -879,7 +890,7 @@ export default {
             removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
         getgewoglist(id,type){
@@ -989,7 +1000,7 @@ export default {
                 if(type=="gardain"){
                     this.gardain_villageList=data.data.data;
                 }
-                
+
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -1007,7 +1018,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        
+
         shownexttab(nextclass){
             // if(nextclass=="basic-tabs"){
             //     this.changetab('basic-tabs');
@@ -1017,7 +1028,7 @@ export default {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
-                } 
+                }
                 let formData = new FormData();
                 formData.append('snationality', this.student_form.snationality);
                 formData.append('student_id', this.student_form.student_id);
@@ -1025,7 +1036,7 @@ export default {
                 formData.append('first_name', this.student_form.first_name);
                 formData.append('middle_name', this.student_form.middle_name);
                 formData.append('last_name', this.student_form.last_name);
-                formData.append('dob', this.student_form.dob); 
+                formData.append('dob', this.student_form.dob);
                 formData.append('sex_id', this.student_form.sex_id);
                 formData.append('dzongkhag', this.student_form.dzongkhag);
                 formData.append('gewog', this.student_form.gewog);
@@ -1034,7 +1045,7 @@ export default {
                 formData.append('s_school', this.school_form.s_school);
                 formData.append('s_class', this.school_form.s_class);
                 formData.append('type','new');
-                formData.append('Status', 'pending'); 
+                formData.append('Status', 'pending');
                 axios.post('/saveStudentDetailsFromPortal',formData, config)
                 .then((response) => {
                     this.guardian_form.student_id=response.data.id;
@@ -1059,11 +1070,10 @@ export default {
                 this.guardian_form.post('/saveStudentGardianDetails')
                 .then((response) => {
                     Swal.fire(
-                            'Submitted!',
-                            'The details has been saved successfully.',
-                            'success',
-                            this.$router.push('#')
-                        );
+                        'Submitted!',
+                        'The details has been saved successfully.',
+                        'success',
+                    );
                     this.changetab(nextclass);
                 })
                 .catch((error) => {
@@ -1076,7 +1086,7 @@ export default {
                     console.log("Error:"+error);
                 })
             }
-            
+
         },
         changetab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -1088,7 +1098,6 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
         applyselect(type){
-
             if(type=="std"){
                 if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
                     $('#sex_id').addClass('select2-hidden-accessible');
@@ -1173,14 +1182,14 @@ export default {
                     $('#gardain_occupation').addClass('select2-hidden-accessible');
                 }
             }
-            
+
         },
-        
+
 
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
         changefunction(id){
@@ -1192,15 +1201,15 @@ export default {
             if(id=="s_dzongkhag"){
                 this.school_form.s_dzongkhag=$('#s_dzongkhag').val();
                 this.getschoolList($('#s_dzongkhag').val());
-                
+
             }
-            if(id=="s_school"){ 
+            if(id=="s_school"){
                 this.school_form.s_school=$('#s_school').val();
                 this.getclassList($('#s_school').val());
             }
             if(id=="s_class"){
                 this.school_form.s_class=$('#s_class').val();
-                
+
             }
 
             if(id=="sex_id"){
@@ -1217,7 +1226,7 @@ export default {
             if(id=="village_id"){
                 this.student_form.village_id=$('#village_id').val();
             }
-          
+
 
             if(id=="merital_status"){
                 this.guardian_form.merital_status=$('#merital_status').val();
@@ -1226,8 +1235,8 @@ export default {
                 this.guardian_form.father_dzongkhag=$('#father_dzongkhag').val();
                 this.getgewoglist($('#father_dzongkhag').val(),'p_father');
             }
-            
-            if(id=="father_gewog"){ 
+
+            if(id=="father_gewog"){
                 this.guardian_form.father_gewog=$('#father_gewog').val();
                 this.getvillagelist($('#father_gewog').val(),'p_father');
             }
@@ -1238,7 +1247,7 @@ export default {
                 this.guardian_form.father_present_dzongkhag=$('#father_present_dzongkhag').val();
                 this.getgewoglist($('#father_present_dzongkhag').val(),'father');
             }
-            if(id=="father_present_gewog"){ 
+            if(id=="father_present_gewog"){
                 this.guardian_form.father_present_gewog=$('#father_present_gewog').val();
                 this.getvillagelist($('#father_present_gewog').val(),'father');
             }
@@ -1274,7 +1283,7 @@ export default {
             if(id=="mother_occupation"){
                 this.guardian_form.mother_occupation=$('#mother_occupation').val();
             }
-             
+
             if(id=="gardain_dzongkhag"){
                 this.guardian_form.gardain_dzongkhag=$('#gardain_dzongkhag').val();
                 this.getgewoglist($('#gardain_dzongkhag').val(),'p_gardain');
@@ -1300,13 +1309,17 @@ export default {
             if(id=="gardain_occupation"){
                 this.guardian_form.gardain_occupation=$('#gardain_occupation').val();
             }
-           
+            if(id=="orgType"){
+                this.guardian_form.orgType=$('#orgType').val();
+            }
+
         },
-      
         showstdidentity:function(type){
             $('#dzo_gewog_village').hide();
+            $('#permanentAddr').hide();
             if(type=="Student-Non-Bhutanese"){
                 $('#level_name').html('Immigration/Passport/Other Identification No: *');
+                $('#permanentAddr').show();
             }
             if(type=="Student-Bhutanese"){
                 $('#level_name').html('CID No: *');
@@ -1339,7 +1352,7 @@ export default {
             $('#gardain_section').hide();
             if(type=="primary-contact-guardian"){
                 $('#gardain_section').show();
-            } 
+            }
         }
     },
 
@@ -1349,9 +1362,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -1360,14 +1373,13 @@ export default {
         this.getdzongkhagList();
     },
 
-    created() { 
+    created() {
          let cid=this.$route.query.cid;
          this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
         //  this.getschoolList();
          this.getclassList();
     }
-   
+
 }
 </script>
- 

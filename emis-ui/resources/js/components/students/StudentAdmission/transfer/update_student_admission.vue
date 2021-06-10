@@ -42,92 +42,78 @@
                         <label >Date of Birth :</label>
                         <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >Qualification :</label>
-                        <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
-                    </div> -->
                 </div>
                  <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Dzongkhag : </label>
-                        <label class="text-primary">{{loadactivedzongkhagList[std_admission_details.dzongkhag]}}</label>
+                        <label class="text-primary">{{dzongkhagArray[std_admission_details.dzongkhag]}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Gewog : </label>
-                        <label class="text-primary">{{gewogArray[std_admission_details.CmnGewogId]}}</label>
+                        <label class="text-primary"><span id="gewogid"></span>{{gewogArray[std_admission_details.CmnGewogId]}}</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Village :</label>
-                        <label class="text-primary">{{villageArray[std_admission_details.village_id]}}</label>
+                        <label class="text-primary"><span id="vilageId"></span> {{villageArray[std_admission_details.village_id]}}</label>
                     </div>
                 </div>
             </div>
 
             <div class="row-12">
                 <div class="card">
-                    <label class="card-header"><strong>School Information</strong></label>
+                    <label class="card-header"><strong>Parent/Guardian Details</strong></label>
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>School Code</th>
-                                <th>Name of School</th>
-                                <th>Dzongkhag/ Thromde</th>
-                                <th>Gewog / Thromde Demkhong</th>
+                                <th>CID</th>
+                                <th>Name</th>
+                                <th>Relation</th>
+                                <th>Contact Number</th>
+                                <th>Email</th>
+                                <th>Occupation</th>
+                                <th>Residence Address</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <td class="text-primary">0001</td>
-                            <td class="text-primary">Gelephu HSS</td>
-                            <td class="text-primary">Sarpang</td>
-                            <td class="text-primary">{{std_admission_details.gewog_name}}</td>
+                            <tr v-for="(item, index) in std_parents" :key="index">
+                                <td>{{ item.cid_passport}}</td>
+                                <td>{{ item.name}}</td>
+                                <td>{{ item.contact_type}}</td>
+                                <td>{{ item.cntct_no}}</td>
+                                <td>{{ item.email}}</td>
+                                <td>{{ item.occupation}}</td>
+                                <td>{{ item.residence_address}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="content-header pb-0">
-                <div class="content-header pt-1 pb-0">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h5><b>Select School</b></h5>
-                        </div>
-                        </div>
-                    </div>
+            <div class="row md-12">
+                <div class="form-group col-md-4">
+                    <h5><b>Class Stream </b></h5>
                 </div>
             </div>
             <div class="row md-12">
-                <div class="form-group col-md-4">
-                    <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
-                    <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag"  >
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>Class<span class="text-danger">*</span></label>
-                    <select v-model="std_admission_details.class_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('class') }" class="form-control select2" name="class" id="class">
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.name}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="row md-12">
-                <div class="form-group col-md-4">
-                    <label>Apply Date:<span class="text-danger">*</span></label>
-                    <input type="date" class="form-control" @change="removeerror('dateOfapply')" :class="{ 'is-invalid': form.errors.has('dateOfapply') }" id="dateOfapply" v-model="student_form.dateOfapply" placeholder="Date of apply">
-                    <has-error :form="form" field="date"></has-error>
-                </div>
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label>Class: <span class="text-danger">*</span></label>
+                    <select v-model="std_admission_details.class_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="std_class_id">
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.class}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row md-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Remarks</label>
                     <textarea v-model="student_form.remarks" id="remarks" type="text" name="remarks"  placeholder=" Enter Remarks"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('remarks') }" />
-                    <has-error :form="form" field="remarks"></has-error>
+                    class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }" />
+                    <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
             <hr>
             <div class="footer float-right" >
-                <button type="button" v-on:click="resetForm" class="btn btn-danger"><i class="fas fa-redo"></i> Reset</button>
-                <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Apply</button>
+                <button type="button" @click="submitForm('reject')" class="btn btn-danger"><i class="fas fa-times"></i> Reject</button>
+                <button type="button" @click="submitForm('accept')" class="btn btn-success"> <i class="fas fa-save"></i> Admit</button>
             </div>
         </div>
     </div>
@@ -140,6 +126,7 @@ export default {
     data(){
         return{
             std_admission_details:[],
+            std_parents:[],
             instructor_details:[],
             dzongkhagList:[],
             schoolList:[],
@@ -148,17 +135,7 @@ export default {
             dzongkhagArray:{},
             gewogArray:{},
             villageArray:{},
-            form: new form({
-                id:'',
-                contact_no:'',
-                alternative_email:'',
-                dzongkhag:'',
-                school:'',
-                class:'',
-                stream:'',
-                date:'',
-                remarks:''
-            }),
+            class_id:'',
             student_form: new form({
                 id:'',
                 student_id:'',
@@ -166,7 +143,7 @@ export default {
                 school:'',
                 class:'',
                 stream:'',
-                dateOfapply:'',
+                action_type:'',
                 remarks:'',
             })
         }
@@ -178,9 +155,23 @@ export default {
                 let data = response.data.data;
                 if(data != ""){
                     this.std_admission_details=data;
-                    this.getGewogList(response.data.dzongkhagId);
-                    this.getvillagelist(response.data.gewogId);
+                    this.student_form.id=data.id;
+                    this.std_parents=data.parents;
+                    this.getGewogList(data.dzongkhag,data.CmnGewogId);
+                    this.getvillagelist(data.CmnGewogId,data.village_id);
+                    this.getClassId(data.class_id);
                 }
+            });
+        },
+        getClassId(mappId){
+            axios.get('/organization/getClassMappingDetails/'+mappId)
+            .then(response => {
+                let data = response.data;
+                this.std_admission_details.class_id=data.classId;
+                $('#std_class_id').val(data.classId).trigger('change');
+            })
+            .catch(function (error){
+               console.log('Error: '+error);
             });
         },
         loadgenderList(uri = 'masters/loadGlobalMasters/all_active_gender'){
@@ -196,79 +187,27 @@ export default {
             });
         },
 
-        resetForm: function(event){
+        resetForm: function(){
             this.form.reset();
         },
-        submitForm(){
-                const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
+        submitForm(type){
+            this.student_form.action_type=type;
+            this.student_form.post('students/admission/updateAdmissionStd')
+            .then((response) => {
+                if(response!=null && response!=""){
+                    let message="Application details has been updated.  <br><b>Thank You !</b>";
+                    this.$router.push({name:'acknowledgement',params: {data:message}});
+                    Swal.fire(
+                        'Success!',
+                        'Data  updated successfully',
+                        'success',
+                    );
                 }
-            }
-            this.$Progress.start();
-            let formData = new FormData();
-            formData.append('student_id', std_admission_details.student_id);
-            formData.append('dzongkhag', std_admission_details.dzongkhag);
-            formData.append('school', std_admission_details.school);
-            formData.append('class', std_admission_details.class);
-            formData.append('dateOfapply', std_admission_details.dateOfapply);
-            formData.append('remarks', std_admission_details.remarks);
-
-                axios.post('/savedetailsEnrolledStd',formData,config)
-            .then(()=>{
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data  updated successfully'
-                })
-                this.$Progress.finish()
             })
-            .catch(()=>{console.log("Error.....")})
+            .catch((error) => {
+                console.log("Error:"+error)
+            });
         },
-        // getStudentdetials(){
-        //     axios.get('/getstudentdetails')
-        //     .then(response => {
-        //         this.student_details  = response.data
-        //         std_admission_details.id  =this.student_details.id;
-        //         std_admission_details.cid = this.student_details.cid;
-        //         std_admission_details.student_code = this.student_details.student_code;
-        //         std_admission_details.name = this.student_details.name;
-        //         std_admission_details.dob = this.student_details.dob;
-        //         std_admission_details.gender = this.student_details.gender;
-        //         std_admission_details.school_code = this.student_details.school_code;
-        //         std_admission_details.schoolName = this.student_details.schoolName;
-        //     }).catch(error => console.log(error));
-        // },
-        // getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
-        //     axios.get(uri)
-        //     .then(Response =>{
-        //     let data = Response.data.data;
-        //     this.dzongkhagList = data;
-        //     }).catch(error => console.log(error));
-        // },
-
-        // getschoolList(id){
-        //     let dzoId=$('#dzongkhag').val();
-        //     if(id!=""){
-        //         dzoId=id;
-        //     }
-        //     axios.get('/masters/getOrgList/' +dzoId)
-        //     .then(Response =>{
-        //         let data = Response.data.data;
-        //         this.schoolList = data;
-        //     })
-        // },
-        // getclassList(id){
-        //     let orgId=$('#school').val();
-        //     if(id!=""){
-        //         orgId=id;
-        //         console.log(orgId);
-        //     }
-        //     axios.get('/masters/getClassByOrganizationId/' +orgId)
-        //     .then(Response =>{
-        //     let data = Response.data.data;
-        //     this.classList = data;
-        //     })
-        // },
 
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
@@ -279,11 +218,11 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error:"+error)
             });
         },
 
-        getGewogList(dzongkhag){
+        getGewogList(dzongkhag,gewog_id){
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
             axios.get(uri)
             .then(response => {
@@ -291,10 +230,11 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
+                $('#gewogid').html(this.gewogArray[gewog_id]);
             });
         },
 
-        getvillagelist(gewogId){
+        getvillagelist(gewogId,vilId){
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
             axios.get(uri)
             .then(response =>{
@@ -302,6 +242,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.villageArray[data[i].id] = data[i].name;
                 }
+                $('#vilageId').html(this.villageArray[vilId]);
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -341,13 +282,20 @@ export default {
             if(id=="class"){
                 this.form.class=$('#class').val();
             }
-
-        }
+        },
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                this.classList = response.data;
+            });
+        },
 
     },
     mounted() {
         this.loadgenderList();
+        this.getClass();
         this.loadactivedzongkhagList();
+        // this.getschoolList();
         // this.getStudentdetials();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
@@ -358,7 +306,7 @@ export default {
             this.changefunction(id);
         });
         this.getstudentPersonalDetails(this.$route.params.data);
-        // this.getschoolList();
+
         // this.getclassList();
     },
 
