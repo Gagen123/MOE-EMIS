@@ -50,10 +50,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
     });
 
-    $router->group(['prefix' => 'sen'], function () use ($router) {
-        $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
-
-    });
+    
 
     $router->group(['prefix' => 'students'], function () use ($router) {
         $router->group(['prefix' => 'admission'], function () use ($router) {
@@ -82,11 +79,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
         });
-
-        //SEN
+        
         $router->group(['prefix' => 'sen'], function () use ($router) {
-            //GET SEN STUDENT LIST
             $router->get('/getSenStudentList',['uses' => 'Sen\SenStudentController@getSenStudentList']);
+            $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
         });
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
@@ -141,8 +137,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/listProjectMembers/{param}', ['uses' => 'Students\StudentProjectController@listProjectMembers']);
 
         $router->post('/saveStudentTraining', ['uses' => 'Students\StudentTrainingController@saveStudentTraining']);
-        $router->get('/loadStudentTrainings/{param}', ['uses' => 'Students\StudentTrainingController@loadStudentTrainings']);
-        $router->get('/listStudentTrainings/{param}', ['uses' => 'Students\StudentTrainingController@listStudentTrainings']);
+        $router->get('/loadStudentTrainings/{param}/{orgId}', ['uses' => 'Students\StudentTrainingController@loadStudentTrainings']);
+        $router->get('/listStudentTrainings/{param}/{orgId}', ['uses' => 'Students\StudentTrainingController@listStudentTrainings']);
         $router->post('/saveTrainingParticipants', ['uses' => 'Students\StudentTrainingController@saveTrainingParticipants']);
 
         $router->post('/saveStudentScouts', ['uses' => 'Students\StudentScoutController@saveStudentScouts']);

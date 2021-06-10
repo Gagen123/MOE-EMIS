@@ -47,9 +47,13 @@
                 <div class="col-sm-6">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label >Roles:</label><br>
-                        <span v-for="(item, index) in  roleList" :key="index">
+                        <!-- <span v-for="(item, index) in  roleList" :key="index">
                             <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
-                        </span>
+                        </span> -->
+                        <label  v-for="(item, key, index) in  roleList" :key="index" class="pr-4">
+                            <input  type="checkbox" v-model="form.role" :value="item.id" tabindex=""/> 
+                            {{item.name}}
+                        </label>
                     </div>
                 </div>
             </div>
@@ -69,6 +73,8 @@ export default {
             programList:[],
             roles: [],
             // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            type:'clubmem',
+            
 
             student_form: new form({
                 student: '',
@@ -86,6 +92,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
+                
                 console.log(data);
                 this.studentList =  data.data.data;
             })
@@ -144,11 +151,21 @@ export default {
             }
             if(type=="save"){
                 this.student_form.post('/students/saveProgramMembers',this.student_form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
+                    .then((response) => {
+                        let data=response.data.data;
+                        if(data!="" && data=="exist"){
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Tihs stuent is already registered in the club'
+                            });
+                        }
+                        else{
+                             Toast.fire({
+                                icon: 'success',
+                                title: 'Details has been saved successfully '
+                            });
+                        }
+                   
                     this.$router.push('/student_programs_members_list');
                 })
                 .catch(() => {

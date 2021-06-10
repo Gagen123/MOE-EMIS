@@ -44,6 +44,7 @@ export default {
             roleList:[],
             //id is set to default and is not used
             id:'2',
+            action_type:'add',
 
             student_form: new form({
                 student: '',

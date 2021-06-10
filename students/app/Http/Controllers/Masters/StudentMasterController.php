@@ -111,6 +111,7 @@ class StudentMasterController extends Controller
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
 
         } else if($param == 'program_student_roles'){
+          //  dd($program_student_roles);
 
             $status = '1';
             $assigned_to = '2';
@@ -127,6 +128,11 @@ class StudentMasterController extends Controller
             return $this->successResponse($model::where('status',$status)->get());
         }
 
+<<<<<<< HEAD
+=======
+        dd($program_student_roles);
+        
+>>>>>>> 1b9fcd240c409d25b82f5de618eafc651c04da60
 
     }
 

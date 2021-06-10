@@ -19,35 +19,37 @@ use App\Models\Students\CeaProgrammeMembership;
 use App\Models\Students\CeaRoleStaff;
 use App\Models\Students\CeaRoleStudent;
 use App\Models\Masters\CeaProgramType;
+use App\Models\Students\StudentClub;
+
 
 class StudentProgramClubController extends Controller
 {
     //
     use ApiResponser;
-    public $database="emis_student_db";
+  //  public $database="emis_student_db";
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveStudentClub(Request $request){
    // dd('from services');
-        
-        $data =[
-            'id'                        => $request->id,
-            'StdStudentId'              => $request->student,
-            'status'                    => $request->status,
-            'CeaSchoolProgrammeId'      => $request->program,
-            'Responsibility'            => $request->responsibilities,
-            'JoiningDate'               => $request->date,
-            'role'                      => $request->role
-
-            //'user_id'        => $this->user_id() 
-        ];
-           dd($data);
-        //  dd('m here from services');                   
-          $persondata = StudentClub::create($data);
-  
-          return $this->successResponse($persondata, Response::HTTP_CREATED);
-         // dd($persondata);
+        $std_id = $request->student;
+        $status = $request->status;
+        $status =  StudentClub:: where ('status', $status)->where ('StdStudentId', $std_id)->first();
+        if($status!=null && $status!=""){
+            $persondata = "exist" ;
+        }
+        else{
+            $data =[
+                'id'                        => $request->id,
+                'StdStudentId'              => $request->student,
+                'status'                    => $request->status,
+                'CeaSchoolProgrammeId'      => $request->program,
+                'Responsibility'            => $request->responsibilities,
+                'JoiningDate'               => $request->date,
+                'role'                      => $request->role
+            ];
+            $persondata = StudentClub::create($data);
+        }
+        return $this->successResponse($persondata, Response::HTTP_CREATED);
     }
-  
 }
