@@ -47,10 +47,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
         $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadActiveStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
-
+        //get Scouts Section Level By Scouts Section Id
+        $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
     });
 
-    
+
 
     $router->group(['prefix' => 'students'], function () use ($router) {
         $router->group(['prefix' => 'admission'], function () use ($router) {
@@ -79,11 +80,14 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
         });
-        
+        //SEN Controller
         $router->group(['prefix' => 'sen'], function () use ($router) {
             $router->get('/getSenStudentList',['uses' => 'Sen\SenStudentController@getSenStudentList']);
             $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
         });
+
+        //Get Student List by orgId, Orgclassstreamid
+        $router->get('/getStudentList/{orgId}/{orgClassStreamId}',['uses' => 'General\GeneralStudentController@getStudentList']);
 
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);

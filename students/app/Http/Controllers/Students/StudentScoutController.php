@@ -91,31 +91,33 @@ class StudentScoutController extends Controller
     }
 
     public function saveScoutParticipants(Request $request){
-
         $rules = [
-            'student'       => 'required',
-            'scout'       => 'required',
-            'date'          => 'required'
+            'StdStudentId'              => 'required',
+            'CeaSchoolScoutsId'         => 'required',
+            'CeaSchoolSectionLevelId'   => 'required',
+            'date'                      => 'required'
         ];
 
         $customMessages = [
-            'student.required'          => 'This field is required',
-            'scout.required'          => 'This field is required',
-            'date.required'          => 'This field is required'
+            'StdStudentId.required'             => 'This field is required',
+            'CeaSchoolScoutsId.required'        => 'This field is required',
+            'CeaSchoolSectionLevelId.required'  => 'This field is required',
+            'date.required'                     => 'This field is required'
         ];
 
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'                => $request->id,
-            'StdStudentId'           =>  $request->student,
-            'CeaSchoolScoutsId'           =>  $request->scout,
-            'JoiningDate'           =>  $request->date
+            'id'                       =>$request->id,
+            'StdStudentId'             =>$request->StdStudentId,
+            'CeaSchoolScoutsId'        =>$request->CeaSchoolScoutsId,
+            'CeaSchoolSectionLevelId'  =>$request->CeaSchoolSectionLevelId,
+            'JoiningDate'              =>$request->date,
+            'action_type'              =>$request->action_type,
+            'created_by'               =>$request->user_id,
         ];
-
         if($request->action_type=="add"){
             $response_data = CeaSchoolScoutMembers::create($data);
-
         } else if($request->action_type=="edit"){
 
             //Audit Trails

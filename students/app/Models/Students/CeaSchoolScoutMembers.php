@@ -9,13 +9,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class CeaSchoolScoutMembers extends Model
 {
     use HasFactory, Uuid;
-    protected $table="cea_scouts_membership";
+    protected $table="cea_scout_membership";
 
     protected $fillable = [
         'id',
-        'CeaSchoolScoutsId',
         'StdStudentId',
-        'JoiningDate'
+        'CeaSchoolScoutsId',
+        'CeaSchoolSectionLevelId',
+        'JoiningDate',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 
 }

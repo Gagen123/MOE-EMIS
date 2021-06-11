@@ -25,5 +25,5 @@ class ClassTeacher extends Model
         'updated_by',
         'updated_at',
     ];
-    
+
 }

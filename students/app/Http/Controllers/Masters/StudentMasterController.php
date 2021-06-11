@@ -15,8 +15,9 @@ use App\Models\Masters\CeaScoutSectionLevel;
 
 class StudentMasterController extends Controller
 {
-    //
+
     use ApiResponser;
+
     public $audit_database;
     public $database;
     public function __construct() {
@@ -26,10 +27,10 @@ class StudentMasterController extends Controller
     }
 
 
-    /**Get Scout Level in Dropdown*/
-    public function getScoutSectionLevel(){
-        $data=CeaScoutSectionLevel
-
+    /**Get Scout Level in Dropdown By ScoutSectionID*/
+    public function getScoutSectionLevel($scoutSectionId){
+        $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
     }
 
     /**
@@ -128,11 +129,7 @@ class StudentMasterController extends Controller
             return $this->successResponse($model::where('status',$status)->get());
         }
 
-<<<<<<< HEAD
-=======
-        dd($program_student_roles);
-        
->>>>>>> 1b9fcd240c409d25b82f5de618eafc651c04da60
+
 
     }
 
