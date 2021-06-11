@@ -20,28 +20,32 @@ Setting up the system administration, and user management:
             - Add Screen and submodule: Screens can be added under modules, submodules and without them.
 
     4)  - Add role from Role management under Role Priv. Management.
-        - Now to mapp role with privileges, select role, system, module and submodule from Role Priv. Manamgement. then 
+        - Now to mapp role with privileges, select role, system, module and submodule from Role Priv. Manamgement. then
           click on load detials to lod screens and actions. from there set check radio button to give access.
 
-    5)  - Now add user and assign designated role with that user.   
+    5)  - Now add user and assign designated role with that user.
 
     6) - for the workflow configuration, you need to check workflow radio while adding screens. then to configure, click on workflow management and proceed.
 
     *********Leadership selection setup********
-    For the leadership selection, you need to add type as Leadership in the table (category_type,question_service) to appear required data in the 
+    For the leadership selection, you need to add type as Leadership in the table (category_type,question_service) to appear required data in the
     leadership nomination form setup
 
 
     *************Students******************
     For the table std_student_class_stream, an additional field, "academic year" was added to take care of history
 
-    For the table std_student, the following fields are added 
+    For the table std_student, the following fields are added
         noOfMealsId
         scholarshipType
         isBoarder
 
-    When adding new registration for admissions, the guardians details do not work. Need to fix it after the demo. 
+    When adding new registration for admissions, the guardians details do not work. Need to fix it after the demo.
     Also need a page to be able to edit the guardians details
+
+    changed the table std_admissions and set IsNewAdmission,IsTransferred and IsRejoined to tiny int with comments.
+        and added field
+        Remarks, Student_Decision,School_Decision
 
 
 

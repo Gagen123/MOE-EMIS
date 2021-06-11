@@ -1,7 +1,108 @@
 <template>
 <div class="container-fluid">
-      <div class="content-header pb-0">
-          <div class="content-header pt-1 pb-0">
+    <div class="card card-primary card-outline">
+        <div class="card-body">
+            <div class="form-group">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label class="mb-0">Admission Form:</label>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >CID No/Reference  : </label>
+                    <label class="text-primary">{{std_admission_details.CidNo}}</label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >Student Code : </label>
+                    <label class="text-primary">{{ std_admission_details.student_code}}</label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >Name of Student :</label>
+                    <label class="text-primary">{{ std_admission_details.first_name}} {{ std_admission_details.middle_name}} {{ std_admission_details.last_name}}</label>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >Gender :</label>
+                    <label class="text-primary">{{ genderArray[std_admission_details.CmnSexId]}}</label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label >Date of Birth :</label>
+                    <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
+                </div>
+            </div>
+                <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >Dzongkhag : </label>
+                    <label class="text-primary">{{dzongkhagArray[std_admission_details.dzongkhag]}}</label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >Gewog : </label>
+                    <label class="text-primary"><span id="gewogid"></span>{{gewogArray[std_admission_details.CmnGewogId]}}</label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required" >Village :</label>
+                    <label class="text-primary"><span id="vilageId"></span> {{villageArray[std_admission_details.village_id]}}</label>
+                </div>
+            </div>
+            <hr>
+            <div class="row form-group">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label class="card-header"><strong>Parent/Guardian Details</strong></label>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>CID</th>
+                                <th>Name</th>
+                                <th>Relation</th>
+                                <th>Contact Number</th>
+                                <th>Email</th>
+                                <th>Occupation</th>
+                                <th>Residence Address</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in std_parents" :key="index">
+                                <td>{{ item.cid_passport}}</td>
+                                <td>{{ item.name}}</td>
+                                <td>{{ item.contact_type}}</td>
+                                <td>{{ item.cntct_no}}</td>
+                                <td>{{ item.email}}</td>
+                                <td>{{ item.occupation}}</td>
+                                <td>{{ item.residence_address}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
+                    <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag"  >
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label>School <span class="text-danger">*</span></label>
+                    <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
+                        <option value="">--- Please Select ---</option>
+                        <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                    </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label>Seats available </label>
+                    <input v-model="student_form.seats" id="seat" type="text" name="seats"
+                    class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }"  disabled="true" />
+                    <has-error :student_form="student_form.seats" field="seat"></has-error>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+</div>
+<div class="container-fluid">
+    <div class="content-header pb-0">
+        <div class="content-header pt-1 pb-0">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
@@ -10,125 +111,18 @@
                 </div>
             </div>
         </div>
-      </div>
-      <div class="card">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <label>Admission Types:<span class="text-danger">*</span></label><br>
-            <input type="radio" name="student_type" v-model="student_form.student_type" value="classxi" id="classXI" @click="showAndHideField('classXI')" checked> Class XI and above <br>
-            <input type="radio" name="student_type" v-model="student_form.student_type" value="others" id="others" @click="showAndHideField('others')" checked> Contunue Education (ECCD, Class X and below)<br>
-            <input type="radio" name="student_type" v-model="student_form.student_type" value="Rejoin" id="Rejoin" @click="showAndHideField('Rejoin')" checked> Rejoining (Dis-continue Education for some times)<br>
-            <span class="text-danger" id="option_err"></span>
-        </div>
-        <div class="card-body">
-        <form id="" class="form-horizontal" enctype="multipart/form-data" action="#" method="POST">
+    </div>
+    <div class="card">
             <div class="row-12">
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >CID No/Reference  : </label>
-                        <label class="text-primary">{{ this.student_form.cid_passport}}</label>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >Name of Student :</label>
-                        <label class="text-primary">{{ this.student_form.Name}}</label>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >Gender :</label>
-                        <label class="text-primary">{{ this.student_form.gender}}</label>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label >Date of Birth :</label>
-                        <label class="text-primary">{{this.student_form.DateOfBirth}}</label>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >Address :</label>
-                        <label class="text-primary">{{this.student_form.address}}</label>
-                    </div>
-                </div>
+                 <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
+                    <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
+                    <span class="text-danger" id="snationality_err"></span>
+                  </div> -->
+
             </div>
-            <div class="row-12">
-                <div class="card">
-                    <label class="card-header"><strong>School Information</strong></label>
-                    <table class="table table-bordered table-striped" id="OrgDetails">
-                        <thead>
-                            <tr>
-                                <th>School Code</th>
-                                <th>Name of School</th>
-                                <th>Dzongkhag/ Thromde</th>
-                                <th>Gewog / Thromde Demkhong</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <td class="text-primary">{{OrgDetails.code}}</td>
-                            <td class="text-primary">{{OrgDetails.name}}</td>
-                            <td class="text-primary">{{getDzoName.name}}</td>
-                            <td class="text-primary">{{getGewogName.name}}</td>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="content-header pb-0">
-                  <div class="content-header pt-1 pb-0">
-                      <div class="container-fluid">
-                          <div class="row mb-2">
-                              <div class="col-sm-6">
-                                <h5><b>School Details</b></h5>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-            </div>
-            <div class="row md-12">
-                <div class="form-group col-md-4">
-                    <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
-                    <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag"  >
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4">
-                    <label>School <span class="text-danger">*</span></label>
-                    <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-4" id="seat">
-                      <label>Seats available </label>
-                        <input v-model="student_form.seats" id="seat" type="text" name="seats"
-                        class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }"  disabled="true" />
-                        <has-error :student_form="student_form.seats" field="seat"></has-error>
-                </div>
-            </div>
-            <div class="row md-12">
-                <div class="form-group col-md-4">
-                        <label>Class<span class="text-danger">*</span></label>
-                          <select v-model="student_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
-                                <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.class}}</option>
-                          </select>
-                </div>
-                <div class="form-group col-md-4" id="stream">
-                      <label>stream<span class="text-danger">*</span></label>
-                          <select v-model="student_form.stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('stream') }" class="form-control select2" name="stream" id="stream">
-                              <option value="">--- Please Select ---</option>
-                              <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{item.stream}}</option>
-                          </select>
-                </div>
-                <div class="form-group col-md-4">
-                            <label>Apply Date:<span class="text-danger">*</span></label>
-                              <input type="date" class="form-control" @change="removeerror('dateOfapply')" :class="{ 'is-invalid': student_form.errors.has('dateOfapply') }" id="dateOfapply" v-model="student_form.dateOfapply" placeholder="Date of apply">
-                              <has-error :student_form="student_form.dateOfapply" field="date"></has-error>
-                </div>
-            </div>
-              <hr>
-              <div class="footer float-right" >
-                  <button type="button" v-on:click="resetForm" class="btn btn-danger"><i class="fas fa-redo"></i> Reset</button>
-                  <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Apply</button>
-              </div>
-             </form>
-      </div>
+
+
     </div>
 </div>
 </template>
@@ -136,6 +130,10 @@
     export default {
         data(){
             return{
+                genderArray:{},
+                dzongkhagArray:{},
+                gewogArray:{},
+                villageArray:{},
                 OrgDetails:'',
                 getDzoName:'',
                 getGewogName:'',
@@ -146,8 +144,8 @@
                 getSeats:'',
                 dzongkhagId:'null',
                 gewogId:'null',
-                form:new form({
-                }),
+                std_admission_details:'',
+                std_parents:'',
                 student_form: new form({
                   id:'',
                   cid_passport:'',
@@ -180,7 +178,7 @@
                 this.student_form.reset();
             },
             showAndHideField:function(type){
-             if(type=="classXI"){
+            if(type=="classXI"){
             $('#stream').show();
             }
 
@@ -189,7 +187,7 @@
             }
             },
             submitForm(){
-                  const config = {
+                const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
@@ -231,17 +229,20 @@
             }).catch(error => console.log(error));
 
         },
-          getschoolList(id){
-            let dzoId=$('#dzongkhag').val();
-                if(id!=""){
-                dzoId=id;
-              }
-
-            axios.get('/masters/getOrgList/' +dzoId)
-              .then(response =>{
+        getstudentPersonalDetails(id){
+            axios.get('students/admission/getStudentDetails/admissionCid_'+id)
+            .then(response => {
                 let data = response.data.data;
-                this.schoolList = data;
-            })
+                if(data != ""){
+                    this.std_admission_details=data;
+                    this.student_form.id=data.id;
+                    this.student_form.student_id=data.id;
+                    this.std_parents=data.parents;
+                    this.getGewogList(data.dzongkhag,data.CmnGewogId);
+                    this.getvillagelist(data.CmnGewogId,data.village_id);
+                    this.getClassId(data.class_id);
+                }
+            });
         },
          getclassList(id){
              let orgId=$('#school').val();
@@ -268,17 +269,17 @@
               this.classList = data;
             })
         },
-         getseatdetailsbyOrgId(id){
-               let orgId=$('#school').val();
-                if(id!=""){
-                 orgId=id;
+         getseatdetailsbyOrgId(){
+            let orgId=$('#school').val();
+            if(id!=""){
+                orgId=id;
             }
-              axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
-              .then(Response =>{
+            axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
+            .then(Response =>{
                 let data = Response.data.data;
                 this.getSeats = data;data
-              })
-          },
+            })
+        },
          getstreamList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
               axios.get(uri)
                 .then(Response =>{
@@ -292,27 +293,48 @@
                 .then(response =>{
                   let data = response.data.data;
                   this.OrgDetails=data;
-                  this.getdzongkhagName(this.OrgDetails.dzongkhagId);
-                  this.getgewogName(this.OrgDetails.gewogId);
+                //   this.getdzongkhagName(this.OrgDetails.dzongkhagId);
+                //   this.getgewogName(this.OrgDetails.gewogId);
               })
 
           },
-        getdzongkhagName(dzo_id){
-          axios.get('load_dzongkhag_details_by_id/' +dzo_id)
-            .then(response =>{
-              let data = response.data.data;
-              this.getDzoName=data;
-
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name;
+                }
             })
-
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
         },
-        getgewogName(gewog_id){
-            axios.get('load_gewog_details_by_id/' +gewog_id)
-            .then(response =>{
-              let data = response.data.data;
-              this.getGewogName=data;
-            })
+        getGewogList(dzongkhag,gewog_id){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name;
+                }
+                $('#gewogid').html(this.gewogArray[gewog_id]);
+            });
+        },
 
+        getvillagelist(gewogId,vilId){
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name;
+                }
+                $('#vilageId').html(this.villageArray[vilId]);
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
         },
         applyselect()
           {
@@ -354,12 +376,15 @@
             if(id=="class"){
                 this.student_form.class=$('#class').val();
                   this.getstreamListByid($('#class').val());
+
             }
             if(id=="stream"){
                 this.student_form.stream=$('#stream').val();
                 this.getstreamList($('#stream').val);
+
             }
            }
+
         },
         mounted() {
           $('.select2').select2({
@@ -373,23 +398,17 @@
             this.changefunction(id);
         });
         },
-
-
         created() {
+            // let cid=this.$route.query.cid;
+            this.getstudentPersonalDetails(this.$route.query.cid);
             this.getdzongkhagList();
             this.getclassList();
             this.getstreamList();
             this.getseatdetailsbyOrgId();
-            this.getdzongkhagName();
-            this.getgewogName();
+            // this.getdzongkhagName();
+            // this.getgewogName();
 
-            this.student_form.cid_passport=this.$route.query.data.CidNo;
-            this.student_form.Name=this.$route.query.data.first_name + ' ' + this.$route.query.data.last_name;
-            this.student_form.gender=this.$route.query.data.CmnSexId;
-            this.student_form.DateOfBirth=this.$route.query.data.DateOfBirth;
-            this.student_form.address=this.$route.query.data.Address;
-            this.getOrgDetails(this.$route.query.data.OrgOrganizationId);
 
   },
-    }
+}
 </script>
