@@ -6,7 +6,7 @@
                     <!-- text input -->
                     <div class="form-group">
                         <label>Training/Workshop/Seminar Title:</label>
-                        <input class="form-control" v-model="student_form.name" :class="{ 'is-invalid': student_form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="student_form.name" :class="{ 'is-invalid': student_form.errors.has('name') }" id="name" @change="remove_error('name')" type="text">
                         <has-error :form="student_form" field="name"></has-error>
                     </div>
                 </div>
@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label> Training Type</label>
                         <select v-model="student_form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
-                        <option v-for="(item, index) in trainingList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in trainingList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="training_type"></has-error>
                     </div>
@@ -24,10 +24,10 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label>Program</label>
-                        <select v-model="student_form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
-                    <has-error :form="student_form" field="program_id"></has-error>
+                    <has-error :form="student_form" field="program"></has-error>
                     </div>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label> Place</label>
-                        <input class="form-control" v-model="student_form.place" :class="{ 'is-invalid': student_form.errors.has('place') }" id="place" @change="remove_err('place')" type="text">
+                        <input class="form-control" v-model="student_form.place" :class="{ 'is-invalid': student_form.errors.has('place') }" id="place" @change="remove_error('place')" type="text">
                         <has-error :form="student_form" field="place"></has-error>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label>Country</label>
                         <select v-model="student_form.country" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('country') }" class="form-control select2" name="country" id="country">
-                        <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.country">{{ item.country }}</option>
+                        <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                     </select>
                     <has-error :form="student_form" field="country"></has-error>
                     </div>
@@ -52,12 +52,12 @@
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>From Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_err('from_date')" type="date">
+                    <input class="form-control" v-model="student_form.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_error('from_date')" type="date">
                     <has-error :form="student_form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>To Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_err('to_date')" type="date">
+                    <input class="form-control" v-model="student_form.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_error('to_date')" type="date">
                     <has-error :form="student_form" field="to_date"></has-error>
                 </div>
             </div>
@@ -81,11 +81,13 @@ export default {
         return {
             programList:[],
             trainingList:[],
-            countryList:[{country:"Bhutan"}],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            countryList:[],
+            id:'',
 
             student_form: new form({
                 name:'',
+                training_type:'',
+                program:'',
                 country: '',
                 place: '',
                 from_date: '',
@@ -115,6 +117,16 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        loadcountryList(uri = 'masters/loadGlobalMasters/all_country'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.countryList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            })
+        },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -127,6 +139,7 @@ export default {
                 this.student_form.name='';
             }
             if(type=="save"){
+                console.log(this.student_form);
                 this.student_form.post('/students/saveStudentTraining',this.student_form)
                     .then(() => {
                     Toast.fire({
@@ -152,8 +165,8 @@ export default {
             if(id=="training_type"){
                 this.student_form.training_type=$('#training_type').val();
             }
-            if(id=="program_id"){
-                this.student_form.program_id=$('#program_id').val();
+            if(id=="program"){
+                this.student_form.program=$('#program').val();
             }
         },
     },
@@ -173,6 +186,7 @@ export default {
 
         this.loadActiveProgramList();
         this.loadActiveTrainingList();
+        this.loadcountryList();
         //load country list
         //this.loadActiveTrainingList();
     },
