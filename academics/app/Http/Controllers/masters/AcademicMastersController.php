@@ -206,7 +206,6 @@ class AcademicMastersController extends Controller
     }
     public function loadAcademicMasters($param=""){
         if($param == "all_subject_group"){
-            // dd($param);
             $subject = DB::select('SELECT * FROM aca_subject_group ORDER BY display_order');
             return $this->successResponse($subject);
         }

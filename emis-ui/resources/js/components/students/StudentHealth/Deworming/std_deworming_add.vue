@@ -107,7 +107,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                alert(JSON.stringify(response));
+                // alert(JSON.stringify(response));
                 this.termList =  data.data.data;
             })
             .catch(function (error) {

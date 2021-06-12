@@ -88,13 +88,6 @@ class StudentScoutController extends Controller
         ];
         $response_data= $this->apiService->createData('emis/students/saveScoutParticipants', $data);
         return $response_data;
-
-
     }
 
-    public function loadScoutMembers($param=""){
-        $param = $this->getWrkingAgencyId();
-        $assigned_roles = $this->apiService->listData('emis/students/loadScoutMembers/'.$param);
-        return $assigned_roles;
-    }
 }

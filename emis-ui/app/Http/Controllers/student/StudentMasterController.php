@@ -83,7 +83,12 @@ class StudentMasterController extends Controller{
         }
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
             return $response_data;
+    }
 
+    //get Scouts Section
+    public function getScoutSection(){
+        $scout_section = $this->apiService->listData('emis/masters/students/getScoutSection');
+        return $scout_section;
 
     }
 

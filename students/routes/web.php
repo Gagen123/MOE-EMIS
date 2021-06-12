@@ -49,9 +49,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         //get Scouts Section Level By Scouts Section Id
         $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
+        //Get Scouts Section
+        $router->get('/getScoutSection','Masters\StudentMasterController@getScoutSection');
     });
-
-
 
     $router->group(['prefix' => 'students'], function () use ($router) {
         $router->group(['prefix' => 'admission'], function () use ($router) {
@@ -88,7 +88,6 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
         //Get Student List by orgId, Orgclassstreamid
         $router->get('/getStudentList/{orgId}/{orgClassStreamId}',['uses' => 'General\GeneralStudentController@getStudentList']);
-
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
@@ -148,8 +147,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentScouts', ['uses' => 'Students\StudentScoutController@saveStudentScouts']);
         $router->get('/loadStudentScouts/{param}', ['uses' => 'Students\StudentScoutController@loadStudentScouts']);
         $router->get('/listStudentScouts/{param}', ['uses' => 'Students\StudentScoutController@listStudentScouts']);
+        //SAVE SCOUT PARTICIPANTS
         $router->post('/saveScoutParticipants', ['uses' => 'Students\StudentScoutController@saveScoutParticipants']);
-        $router->get('/loadScoutMembers/{param}', ['uses' => 'Students\StudentScoutController@loadScoutMembers']);
 
         $router->post('/saveStudentProgram', ['uses' => 'Students\StudentProgramController@saveStudentProgram']);
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);

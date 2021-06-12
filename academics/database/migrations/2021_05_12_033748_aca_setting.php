@@ -19,10 +19,6 @@ class AcaSetting extends Migration
             $table->string('description',100);
             $table->string('value',100);
             $table->string('description_of_value',200);
-<<<<<<< HEAD
-          
-=======
->>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
         });
         $seeder = new SettingSeeder();
         $seeder->run();

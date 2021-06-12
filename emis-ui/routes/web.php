@@ -112,6 +112,8 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
     Route::get('/loadActiveStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveStudentMasters'])->name('loadActiveStudentMasters');
     Route::get('/allActiveStudentDropdowns/{model}/{parent_id}', [App\Http\Controllers\student\StudentMasterController::class, 'allActiveStudentDropdowns'])->name('allActiveStudentDropdowns');
+    //GET Scout Section
+    Route::get('/getScoutSection', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSection'])->name('');
     //Get Scouts Section Level By Scouts Section Level
     Route::get('/getScoutSectionLevel/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSectionLevel'])->name('getScoutSectionLevel');
 
@@ -505,13 +507,6 @@ Route::prefix('students')->group(function () {
         Route::get('/getSenStudentList', [App\Http\Controllers\student\SenStudentController::class, 'getSenStudentList']);
         Route::get('/getquestionnaire/{StudentId}', [App\Http\Controllers\student\SenQuestionnaireController::class, 'getQuestionnaire']);
     });
-
-
-
-
-
-
-
     Route::post('/reportStudents', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'reportStudents'])->name('reportStudents');
     Route::get('/loadUnreportedStudents/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadUnreportedStudents'])->name('loadUnreportedStudents');
     Route::post('/saveStudentTransfer', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentTransfer'])->name('saveStudentTransfer');
@@ -521,9 +516,6 @@ Route::prefix('students')->group(function () {
     Route::get('/loadAboardList/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAboardList'])->name('loadAboardList');
     Route::get('/loadAdmissionRequest/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
     Route::post('/saveStudentAboard', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentAboard'])->name('saveStudentAboard');
-
-
-
 
     Route::get('/loadStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentList'])->name('loadStudentList');
     Route::get('/loadBasicStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadBasicStudentList'])->name('loadBasicStudentList');
@@ -557,7 +549,6 @@ Route::prefix('students')->group(function () {
     Route::get('/getStudentScreenedDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getStudentScreenedDetails'])->name('getStudentScreenedDetails');
     Route::get('/getStudentReferredDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getStudentReferredDetails'])->name('getStudentReferredDetails');
 
-    // Route::get('/getStudents', [App\Http\Controllers\CommonController::class, 'getStudents'])->name('getStudents');
 
     Route::post('/addBmiRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addBmiRecords'])->name('addBmiRecords');
     Route::get('/loadBmiSummary/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadBmiSummary'])->name('loadBmiSummary');
@@ -591,8 +582,8 @@ Route::prefix('students')->group(function () {
     Route::post('/saveStudentScouts', [App\Http\Controllers\student\StudentScoutController::class, 'saveStudentScouts'])->name('saveStudentScouts');
     Route::get('/loadStudentScouts/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'loadStudentScouts'])->name('loadStudentScouts');
     Route::get('/listStudentScouts/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'listStudentScouts'])->name('listStudentScouts');
+    //SAVE STUDNET SCOUTS PARTICIPANTS
     Route::post('/saveScoutParticipants', [App\Http\Controllers\student\StudentScoutController::class, 'saveScoutParticipants'])->name('saveScoutParticipants');
-    Route::get('/loadScoutMembers/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'loadScoutMembers'])->name('loadScoutMembers');
 
 });
 Route::prefix('academics')->group(function () {

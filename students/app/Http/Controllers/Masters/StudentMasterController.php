@@ -14,6 +14,7 @@ use App\Models\Masters\CeaProgram;
 use App\Models\Masters\CeaRole;
 
 use App\Models\Masters\CeaProgramType;
+use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
 
 class StudentMasterController extends Controller
@@ -27,6 +28,12 @@ class StudentMasterController extends Controller
         date_default_timezone_set('Asia/Dhaka');
         $this->audit_database = config('services.constant.auditdb');
         $this->database = config('services.constant.studentdb');
+    }
+
+    /**Get Scout Section in Dropdown */
+    public function getScoutSection(){
+        $data=CeaScoutSection::select('id','name')->get();
+        return $data;
     }
 
 
@@ -110,11 +117,10 @@ class StudentMasterController extends Controller
         return $this->successResponse($model::all());
     }
 
-    
+
     /**
      * method to list students masters of active records for dropdown
     */
-
     public function loadActiveStudentMasters($param=""){
     //    dd('from services');
         if($param == 'program_teacher_roles'){
@@ -130,6 +136,7 @@ class StudentMasterController extends Controller
         } else if($param == 'vaccine_type'){
             $vacinetype = StudentType::all();
             return $vacinetype;
+
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';

@@ -79,15 +79,40 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/' +this.id){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.studentList =  data.data.data;
+        // loadStudentList(uri='students/loadStudentList/' +this.id){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.studentList =  data.data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
+        getClassTeacher(){
+            axios.get('academics/getClassTeacherClasss')
+            .then(response =>{
+                let data = response.data.data
+                data.forEach((item)=>{
+                    this.classId = item.org_class_id
+                    if(item.org_stream_id != null){
+                        this.streamId = item.org_stream_id;
+                    }else if(item.org_section_id != null){
+                        this.sectionId = item.org_section_id;
+                    }else{
+                        this.classId = item.org_class_id
+                    }
+                    this.OrgClassStreamId = item.org_class_stream_id;
+                    this.orgId = item.org_id;
+                    this.getStudentBasedOnTeacherClassSect();
+                })
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
+        },
+        getStudentBasedOnTeacherClassSect(){
+            axios.get("common/getStudentList/"+ this.orgId +'/'+ this.OrgClassStreamId)
+            .then(response => {
+                this.studentList = response.data;
+            })
         },
         loadActiveProgramList(uri='students/listStudentPrograms/'+this.id){
             axios.get(uri)
@@ -178,10 +203,10 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        this.loadStudentList();
+        this.getClassTeacher();
         this.loadActiveProgramList();
         this.loadActiveRolesList();
+
     },
     
 }

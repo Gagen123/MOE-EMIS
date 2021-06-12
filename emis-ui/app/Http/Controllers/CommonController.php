@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 use GuzzleHttp\Client;
-use App\Helper\EmisService;
-use App\Traits\ServiceHelper;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-
 use App\Traits\AuthUser;
-use Session;
+use App\Helper\EmisService;
+use Illuminate\Http\Request;
+use App\Traits\ServiceHelper;
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class CommonController extends Controller{
     use ServiceHelper;
@@ -86,7 +86,6 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        // dd($data);
         $param = http_build_query($data);
         if($param!="NA"){
             $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
@@ -134,17 +133,4 @@ class CommonController extends Controller{
         return $data;
     }
 
-  
-    // public function getStudents(Request $request){
-    //     $org_id = $this->getWrkingAgencyId();
-    //     $uri = 'emis/students/getStudents/'.$org_id;
-
-    //     $uri .= ('?OrgClassStreamId='.$request->OrgClassStreamId);
-
-    //     if($request->sectionId !== null){
-    //         $uri .= (('&sectionId='.$request->sectionId));
-    //     }
-    //     $students = json_decode($this->apiService->listData($uri),true);
-    //     return $students;
-    // }
 }
