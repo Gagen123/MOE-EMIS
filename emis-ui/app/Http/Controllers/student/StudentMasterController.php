@@ -81,20 +81,14 @@ class StudentMasterController extends Controller{
             ];
             $data = $data + $additional_data;
         }
-<<<<<<< HEAD
-        
-        // try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
             return $response_data;
-        // }
-        // catch(GuzzleHttp\Exception\ClientException $e){
-        //     return $e;
-        // }
-        
-=======
-            $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
-            return $response_data;
+    }
 
+    //get Scouts Section
+    public function getScoutSection(){
+        $scout_section = $this->apiService->listData('emis/masters/students/getScoutSection');
+        return $scout_section;
 
     }
 
@@ -102,7 +96,6 @@ class StudentMasterController extends Controller{
     public function getScoutSectionLevel($scoutSectionId){
         $student_masters = $this->apiService->listData('emis/masters/students/getScoutSectionLevel/'.$scoutSectionId);
         return $student_masters;
->>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
     }
 
     public function loadStudentMasters($param=""){

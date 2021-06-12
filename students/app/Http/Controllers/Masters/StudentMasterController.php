@@ -11,8 +11,8 @@ use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\CeaProgram;
-
 use App\Models\Masters\CeaProgramType;
+use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
 
 class StudentMasterController extends Controller
@@ -28,6 +28,12 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
+    /**Get Scout Section in Dropdown */
+    public function getScoutSection(){
+        $data=CeaScoutSection::select('id','name')->get();
+        return $data;
+    }
+
 
     /**Get Scout Level in Dropdown By ScoutSectionID*/
     public function getScoutSectionLevel($scoutSectionId){
@@ -40,10 +46,6 @@ class StudentMasterController extends Controller
     */
 
     public function saveStudentMasters(Request $request){
-<<<<<<< HEAD
-=======
-
->>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
         $rules = [
             'name'  =>  'required',
         ];
@@ -113,14 +115,11 @@ class StudentMasterController extends Controller
         return $this->successResponse($model::all());
     }
 
-    
+
     /**
      * method to list students masters of active records for dropdown
     */
-
     public function loadActiveStudentMasters($param=""){
-      //  dd('from services');
-
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
@@ -137,10 +136,6 @@ class StudentMasterController extends Controller
             $vacinetype = StudentType::all();
             return $vacinetype;
 
-<<<<<<< HEAD
-        }
-        
-=======
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';
@@ -149,7 +144,6 @@ class StudentMasterController extends Controller
         }
 
 
->>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
 
     }
 
