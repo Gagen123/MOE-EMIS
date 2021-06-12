@@ -36,7 +36,7 @@ class CommonController extends Controller{
         //@readfile($full_path);
 
     }
-    
+
     public function deleteFile($full_path="",$id=""){
         $full_path=str_replace('SSS','/',$full_path);
         $headers = ['Content-Type: application/pdf'];
@@ -49,7 +49,7 @@ class CommonController extends Controller{
         }
         return $response_data;
     }
-    
+
     public function getApplicationDetials($applicationId=""){
         return $this->apiService->getListData('emis/common/getApplicationDetials/'.$applicationId);
     }
@@ -95,12 +95,12 @@ class CommonController extends Controller{
         else{
             return null;
         }
-        
+
     }
     public function getTaskcount(){
         $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
     }
-    
+
     public function getSessionDetail($applicationId=""){
         if(Session::get('User_Details')!=""){
             return ['data' => Session::get('User_Details')];
@@ -117,7 +117,7 @@ class CommonController extends Controller{
     public function getGewogNameById($id=""){
         return $this->apiService->getListData('emis/common/getGewogNameById/'.$id);
     }
-    
+
     public function getScreenAccess($type=""){
         $work_status=$this->apiService->getListData('system/getScreenAccess/'.$type.'/'.$this->getRoleIds('roleIds'));
         return $work_status;
@@ -127,4 +127,24 @@ class CommonController extends Controller{
         $work_status=$this->apiService->getListData('emis/common/releaseApplication/'.$application_number);
         return $work_status;
     }
+
+    //Get Student List by orgId and OrgClassStream
+    public function getStudentList($orgId,$orgClassStreamId){
+        $data=$this->apiService->listData('emis/students/getStudentList/'.$orgId.'/'.$orgClassStreamId);
+        return $data;
+    }
+
+  
+    // public function getStudents(Request $request){
+    //     $org_id = $this->getWrkingAgencyId();
+    //     $uri = 'emis/students/getStudents/'.$org_id;
+
+    //     $uri .= ('?OrgClassStreamId='.$request->OrgClassStreamId);
+
+    //     if($request->sectionId !== null){
+    //         $uri .= (('&sectionId='.$request->sectionId));
+    //     }
+    //     $students = json_decode($this->apiService->listData($uri),true);
+    //     return $students;
+    // }
 }

@@ -14,7 +14,7 @@ class AcademicController extends Controller
     use ServiceHelper;
     use AuthUser;
     public $apiService;
-    
+
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
@@ -35,13 +35,13 @@ class AcademicController extends Controller
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/academics/saveClassTeacher', $data);
         return $response_data;
-       
+
     }
 
     public function getClassTeacher(){
         $orgId = $this->getWrkingAgencyId();
         $class_teacher = $this->apiService->listData('emis/academics/getClassTeacher/'.$orgId);
-        return $class_teacher;  
+        return $class_teacher;
     }
     public function getClassTeacherClasss(){
         $orgId = $this->getWrkingAgencyId();
@@ -71,7 +71,7 @@ class AcademicController extends Controller
 
         $response_data = $this->apiService->createData('emis/academics/saveStudentAttendance', $data);
         return $response_data;
-       
+
     }
     public function getStudentsForAttendance(Request $request){
         $org_id = $this->getWrkingAgencyId();
@@ -86,7 +86,7 @@ class AcademicController extends Controller
         if($request->sectionId !== null){
             $uri .= (('&org_section_id='.$request->sectionId));
         }
-        $studentAttendanceDetail = json_decode($this->apiService->listData($uri),true); 
+        $studentAttendanceDetail = json_decode($this->apiService->listData($uri),true);
         $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
            if(in_array($request->attendance_date, array_column($studentAttendanceDetail["data"]["hasAttendance"], 'attendance_date')) && $request->action =="add"){
                 return [
@@ -96,7 +96,7 @@ class AcademicController extends Controller
                 return json_encode([
                     "student"=>$students,
                     "studentAttendanceDetail"=>$studentAttendanceDetail["data"]["studentAttendanceDetail"]
-                ]); 
+                ]);
            }
     }
     public function saveSubjectTeacher(Request $request){
@@ -111,12 +111,12 @@ class AcademicController extends Controller
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/academics/saveSubjectTeacher', $data);
         return $response_data;
-       
+
     }
     public function getSubjectTeacher(){
         $orgId = $this->getWrkingAgencyId();
         $subjectTeacher = $this->apiService->listData('emis/academics/getSubjectTeacher/'.$orgId);
-        return $subjectTeacher;  
+        return $subjectTeacher;
     }
     public function saveStudentElectiveSubject(Request $request){
         $rules = [
@@ -131,19 +131,19 @@ class AcademicController extends Controller
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/academics/saveStudentElectiveSubject', $data);
         return $response_data;
-       
+
     }
     private function getElectiveSubjects($classId, $streamId=""){
         $uri = 'emis/academics/getElectiveSubjects/'.$classId;
         if($streamId){
             $uri .= ('/'.$streamId);
-        }  
-        $response_data = $this->apiService->listData($uri); 
+        }
+        $response_data = $this->apiService->listData($uri);
         return $response_data;
-    } 
+    }
     public function getStudents($org_id,$OrgClassStreamId,$org_section_id=""){
         $uri = 'emis/students/getStudents/'.$org_id;
-         
+
         $uri .= ('?OrgClassStreamId='.$OrgClassStreamId);
 
         if($org_section_id !== null){
@@ -155,7 +155,7 @@ class AcademicController extends Controller
     public function getStudentElectiveSubjects(Request $request){
     $org_id = $this->getWrkingAgencyId();
        $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
-        $studentElectiveSubjects = json_decode($this->apiService->listData('emis/academics/getStudentElectiveSubjects'),true);        
+        $studentElectiveSubjects = json_decode($this->apiService->listData('emis/academics/getStudentElectiveSubjects'),true);
         for($i=0;$i<count($students);$i++) {
             foreach ($studentElectiveSubjects["data"] as $studentElectiveSubject) {
                 if ($studentElectiveSubject["std_student_id"] == $students[$i]["std_student_id"]) {
@@ -164,7 +164,7 @@ class AcademicController extends Controller
             }
         }
         return json_encode(["students"=>$students, "electiveSubjects"=>json_decode($this->getElectiveSubjects($request->classId, $request->streamId),true)]);
-    } 
+    }
     public function loadStudentAttendance(){
         $orgId = $this->getWrkingAgencyId();
         $staffId = $this->staffId();
@@ -178,7 +178,7 @@ class AcademicController extends Controller
         $staffId = $this->staffId();
         $orgId=$this->getWrkingAgencyId();
         $class_subject_term= $this->apiService->listData('emis/academics/loadStudentAssessmentList/'.$staffId.'/'.$orgId);
-        return $class_subject_term;   
+        return $class_subject_term;
     }
     private function loadAssessmentAreas($term_id, $sub_id, $class_id, $stream_id=""){
         $uri = 'emis/academics/loadAssessmentAreas/'.$term_id.'/'.$sub_id.'/'.$class_id;
@@ -186,7 +186,7 @@ class AcademicController extends Controller
            $uri .= ('/'.$stream_id);
         }
         $response_data= $this->apiService->listData($uri);
-        return $response_data;   
+        return $response_data;
     }
      public function loadStudentAssessments(Request $request){
 
@@ -234,7 +234,7 @@ class AcademicController extends Controller
                     }
                     $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
 
-                   
+
                 }
                 // if(!array_key_exists($studentAssessment["aca_assmt_area_id"],$students[$i])){
                 //     $students[$i][$studentAssessment["aca_assmt_area_id"]]["score"] = null;
@@ -267,11 +267,11 @@ class AcademicController extends Controller
         $staffId = $this->staffId();
         $orgId= $this->getWrkingAgencyId();
         $class_term= $this->apiService->listData('emis/academics/loadConsolidatedResultList/'.$staffId.'/'.$orgId);
-        return $class_term;  
+        return $class_term;
     }
     public function loadAssessmentAreasForConsolidated($class_id, $stream_id="",$term_id=""){
         $uri = 'emis/academics/loadAssessmentAreasForConsolidated';
-     
+
         $uri .= ('?&org_class_id='.$class_id);
 
         if($stream_id!== null){
@@ -281,7 +281,7 @@ class AcademicController extends Controller
             $uri .= (('&aca_assmt_term_id='.$term_id));
         }
         $response_data= $this->apiService->listData($uri);
-        return $response_data;   
+        return $response_data;
     }
 
     public function loadConsolidatedResult(Request $request){
@@ -313,7 +313,7 @@ class AcademicController extends Controller
             if(array_key_exists($i, $students)){
                foreach ($consolidatedResult["data"]['consolidatedResult'] as $consolidated) {
                     if($consolidated["std_student_id"] == $students[$i]["std_student_id"]){
-                        
+
                         //Prepare unique list of terms
                         if(!$this->hasTerm($consolidated,$terms)){
                             array_push($terms, ["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"], "term"=>$consolidated["term"],"term_dzo_name"=>$consolidated["term_dzo_name"]]);
@@ -338,7 +338,7 @@ class AcademicController extends Controller
                                 $students[$i][$consolidated["aca_assmt_term_id"]]["weightage_total"] += $consolidated["weightage"];
 
                                 $students[$i][$consolidated["aca_assmt_term_id"]]["percentage"]["area_total"]['score'] = round(100 * ($students[$i][$consolidated["aca_assmt_term_id"]]["subject_total"]["area_total"]['score']/$students[$i][$consolidated["aca_assmt_term_id"]]["weightage_total"]),2);
-                                
+
                                 //If area_total column is already there, add score to the area_total (area_total = total for a subject)
                                 if(array_key_exists("area_total", $students[$i][$consolidated["aca_assmt_term_id"]][$consolidated["aca_sub_id"]])){
                                     $students[$i][$consolidated["aca_assmt_term_id"]][$consolidated["aca_sub_id"]]["area_total"]['score'] += $consolidated["score"];
@@ -360,13 +360,13 @@ class AcademicController extends Controller
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = "Pass";
                     }
                 }
-                // dd($consolidatedResult["data"]['absentDays']);
                 foreach($consolidatedResult["data"]['absentDays'] as $absentDay){
                     if($absentDay['std_student_id'] == $students[$i]["std_student_id"]){
-                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["present"] = ($overAllInstructionalDays - $absentDay['absent_days']);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = ($overAllInstructionalDays - $absentDay['absent_days']);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["final_attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"]/$overAllInstructionalDays),0);
                     }
                 }
-                
+
            }
        }
        $lastTermId = "";
@@ -376,11 +376,11 @@ class AcademicController extends Controller
        $originalAreas = $areas;
        $indexAddTerm = 0;
        $indexAddSubject = 0;
-       
+
        //For coulmn headers
        foreach($areas as $key => $area){
             if($totalWeightageTerm>0 && $area["aca_assmt_term_id"] != $lastTermId && $lastTermId != ""){
-            
+
                 //Insert Total column at the end of a term
                 array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"subject_total", "subject"=>"Total","sub_dzo_name"=>""]]);
                 array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"subject_total","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
@@ -405,6 +405,11 @@ class AcademicController extends Controller
                  array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"no_of_days_attended", "subject"=>"No. of Days Attended","sub_dzo_name"=>""]]);
                  array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"no_of_days_attended","aca_assmt_area_id"=>"", "assessment_area"=>"area_total", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
                  $indexAddTerm++; //To adjust the index after inserting no. of days attended column
+
+                  //Insert final_attendance_in_percentage column at a term
+                 array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"final_attendance_in_percentage", "subject"=>"Final Attendance in %","sub_dzo_name"=>""]]);
+                 array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"final_attendance_in_percentage","aca_assmt_area_id"=>"", "assessment_area"=>"area_total", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                 $indexAddTerm++; //To adjust the index after inserting final_attendance_in_percentage column
                 //Reset total to 0
                 $totalWeightageTerm = 0;
             }
@@ -444,6 +449,10 @@ class AcademicController extends Controller
             array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"no_of_days_attended", "subject"=>"No. of Days Attended", "sub_dzo_name"=>"","is_aggregate"=>1]);
             array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"no_of_days_attended","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
 
+            array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"final_attendance_in_percentage", "subject"=>"Final Attendance in %", "sub_dzo_name"=>"","is_aggregate"=>1]);
+            array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"final_attendance_in_percentage","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
+
+
         }
        return json_encode(["results"=>$students,"terms"=>$terms,"subjects"=>$subjects,"areas"=>$originalAreas,"overAllInstructionalDays" => $overAllInstructionalDays]);
     }
@@ -467,5 +476,5 @@ class AcademicController extends Controller
         $response_data = $this->apiService->createData('emis/academics/saveConsolidatedResut', $data);
         return $response_data;
     }
-  
+
 }

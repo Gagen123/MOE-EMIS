@@ -17,7 +17,7 @@ class StudentMasterController extends Controller{
     }
 
     public function saveStudentMasters(Request $request){
-        
+
         $rules = [
             'name'          =>  'required'
         ];
@@ -25,17 +25,17 @@ class StudentMasterController extends Controller{
             'name.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
-        $data =[ 
+
+        $data =[
             'id'             =>  $request->id,
             'name'           =>  $request->name,
             'description'    =>  $request->description,
             'status'         =>  $request->status,
-            'actiontype'     =>  $request->action_type,  
-            'recordtype'     =>  $request->record_type, 
-         
-            'user_id'        => $this->userId() 
-        ]; 
+            'actiontype'     =>  $request->action_type,
+            'recordtype'     =>  $request->record_type,
+
+            'user_id'        => $this->userId()
+        ];
         //dd($data);
         if($request->record_type == 'student_awards'){
             $additional_data = [
@@ -51,7 +51,7 @@ class StudentMasterController extends Controller{
                 'program_id'       => $request->program_id
             ];
             $data = $data + $additional_data;
-        } 
+        }
 
         if($request->record_type == 'program_role'){
             $additional_data = [
@@ -81,6 +81,7 @@ class StudentMasterController extends Controller{
             ];
             $data = $data + $additional_data;
         }
+<<<<<<< HEAD
         
         // try{
             $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
@@ -90,10 +91,21 @@ class StudentMasterController extends Controller{
         //     return $e;
         // }
         
+=======
+            $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
+            return $response_data;
+
+
+    }
+
+    //get Scouts Section Level By Scouts Section Id
+    public function getScoutSectionLevel($scoutSectionId){
+        $student_masters = $this->apiService->listData('emis/masters/students/getScoutSectionLevel/'.$scoutSectionId);
+        return $student_masters;
+>>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
     }
 
     public function loadStudentMasters($param=""){
-      //  dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
         return $student_masters;
     }
@@ -107,5 +119,5 @@ class StudentMasterController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/students/allActiveStudentDropdowns/'.$model."/".$parent_id);
         return $response_data;
     }
-    
+
 }

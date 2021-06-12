@@ -19,7 +19,7 @@ class StudentScoutController extends Controller
     }
 
     public function saveStudentScouts(Request $request){
-        
+
         $rules = [
             'scout'       => 'required',
             'year'       => 'required'
@@ -29,7 +29,7 @@ class StudentScoutController extends Controller
             'year.required'          => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                => $request->id,
             'scout'           =>  $request->scout,
@@ -40,19 +40,15 @@ class StudentScoutController extends Controller
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
-        try{
-            $response_data= $this->apiService->createData('emis/students/saveStudentScouts', $data);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-        
+        $response_data= $this->apiService->createData('emis/students/saveStudentScouts', $data);
+        return $response_data;
+
+
     }
 
     public function loadStudentScouts($param=""){
         $param = $this->getWrkingAgencyId();
-        
+
         $student_roles = $this->apiService->listData('emis/students/loadStudentScouts/'.$param);
         return $student_roles;
     }
@@ -64,38 +60,36 @@ class StudentScoutController extends Controller
     }
 
     public function saveScoutParticipants(Request $request){
-
         $rules = [
-            'student'       => 'required',
-            'scout'       => 'required',
-            'date'          => 'required'
+            'StdStudentId'              => 'required',
+            'CeaSchoolScoutsId'         => 'required',
+            'CeaSchoolSectionLevelId'   => 'required',
+            'date'                      => 'required'
         ];
-        
+
         $customMessages = [
-            'student.required'          => 'This field is required',
-            'scout.required'          => 'This field is required',
-            'date.required'          => 'This field is required'
+            'StdStudentId.required'             => 'This field is required',
+            'CeaSchoolScoutsId.required'        => 'This field is required',
+            'CeaSchoolSectionLevelId.required'  => 'This field is required',
+            'date.required'                     => 'This field is required'
         ];
 
         $this->validate($request, $rules, $customMessages);
-        
-        $data =[
-            'id'                => $request->id,
-            'student'           =>  $request->student,
-            'scout'           =>  $request->scout,
-            'date'           =>  $request->date,
-            'action_type'       => $request->action_type,
-            'user_id'           => $this->userId(),
-            'working_agency_id' => $this->getWrkingAgencyId()
-        ];
 
-        try{
-            $response_data= $this->apiService->createData('emis/students/saveScoutParticipants', $data);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        $data =[
+            'id'                        =>$request['id'],
+            'StdStudentId'              =>$request['StdStudentId']['id'],
+            'CeaSchoolScoutsId'         =>$request['CeaSchoolScoutsId']['id'],
+            'CeaSchoolSectionLevelId'   =>$request['CeaSchoolSectionLevelId']['id'],
+            'date'                      =>$request->date,
+            'action_type'               =>$request->action_type,
+            'user_id'                   =>$this->userId(),
+            // 'working_agency_id'         =>$this->getWrkingAgencyId()
+        ];
+        $response_data= $this->apiService->createData('emis/students/saveScoutParticipants', $data);
+        return $response_data;
+
+
     }
 
     public function loadScoutMembers($param=""){
