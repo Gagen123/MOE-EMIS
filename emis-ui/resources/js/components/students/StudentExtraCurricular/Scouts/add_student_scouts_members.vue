@@ -104,9 +104,7 @@ export default {
                     }
                     this.OrgClassStreamId = item.org_class_stream_id;
                     this.orgId = item.org_id;
-
                     this.getStudentBasedOnTeacherClassSect();
-
                 })
             })
         },
