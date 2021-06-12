@@ -44,13 +44,13 @@ class StudentProgramController extends Controller
             'user_id'        => $this->userId() 
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentProgram', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /*
@@ -105,15 +105,15 @@ class StudentProgramController extends Controller
 
     public function saveProgramMembers(Request $request){
         $rules = [
-            'student'                      => 'required',
-            // 'program'                  => 'required',
-            'responsibilities'            => 'required',
+            'student'                    => 'required',
+            'program'                    => 'required',
+            'responsibilities'           => 'required',
         ];
 
         $customMessages = [
-            'student.required'  => 'This field is required',
-            // 'program.required'     => 'This field is required',
-            'responsibilities.required'  => 'This field is required',
+            'student.required'            => 'This field is required',
+            'program.required'            => 'This field is required',
+            'responsibilities.required'   => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
@@ -128,7 +128,6 @@ class StudentProgramController extends Controller
 
             //'user_id'        => $this->user_id() 
         ];
-      //  dd($data);
             $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
             return $response_data;
        
@@ -174,13 +173,13 @@ class StudentProgramController extends Controller
         ];
 
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /*
@@ -222,13 +221,13 @@ class StudentProgramController extends Controller
         ];
 
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveProgramActionPlan', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /*

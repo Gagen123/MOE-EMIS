@@ -44,7 +44,7 @@
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label >Roles:</label><br>
                         <span v-for="(item, index) in  roleList" :key="index">
-                            <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                            <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.Name }}</label>
                         </span>
                     </div>
                 </div>
@@ -65,8 +65,7 @@ export default {
             programList:[],
             roles: [],
             // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
-            type:programmem,
-
+            // type:programmem,
 
             student_form: new form({
                 student: '',
@@ -80,11 +79,10 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+        loadStudentList(uri='students/loadStudentList/' +this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                console.log(data);
                 this.studentList =  data.data.data;
             })
             .catch(function (error) {
@@ -146,7 +144,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_programs_members_list');
+                    this.$router.push('/W');
                 })
                 .catch(() => {
                     console.log("Error......")

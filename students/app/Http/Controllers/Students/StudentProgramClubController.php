@@ -31,7 +31,7 @@ class StudentProgramClubController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveStudentClub(Request $request){
-   // dd('from services');
+//    dd('from services');
         $std_id = $request->student;
         $status = $request->status;
         $status =  StudentClub:: where ('status', $status)->where ('StdStudentId', $std_id)->first();

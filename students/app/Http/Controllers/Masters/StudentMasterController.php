@@ -11,6 +11,7 @@ use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\CeaProgram;
+use App\Models\Masters\CeaRole;
 
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSectionLevel;
@@ -40,10 +41,6 @@ class StudentMasterController extends Controller
     */
 
     public function saveStudentMasters(Request $request){
-<<<<<<< HEAD
-=======
-
->>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
         $rules = [
             'name'  =>  'required',
         ];
@@ -119,16 +116,13 @@ class StudentMasterController extends Controller
     */
 
     public function loadActiveStudentMasters($param=""){
-      //  dd('from services');
-
+    //    dd('from services');
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
-
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
 
         } else if($param == 'program_student_roles'){
-
             $status = '1';
             $assigned_to = '2';
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
@@ -136,11 +130,6 @@ class StudentMasterController extends Controller
         } else if($param == 'vaccine_type'){
             $vacinetype = StudentType::all();
             return $vacinetype;
-
-<<<<<<< HEAD
-        }
-        
-=======
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';
@@ -149,7 +138,6 @@ class StudentMasterController extends Controller
         }
 
 
->>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
 
     }
 

@@ -159,17 +159,16 @@ class StudentProgramController extends Controller
     * Save Program Members
     */
     public function saveProgramMembers(Request $request){
-        $status = $request->$status;
-       
+        // $status = $request->$status;
       $rules = [
             'student'                    => 'required',
-            // 'program'                    => 'required',
+            'program'                    => 'required',
             'responsibilities'           => 'required',
         ];
 
         $customMessages = [
             'student.required'           => 'This field is required',
-            // 'program.required'           => 'This field is required',
+            'program.required'           => 'This field is required',
             'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
@@ -184,12 +183,10 @@ class StudentProgramController extends Controller
 
             //'user_id'        => $this->user_id() 
         ];
-       // dd($status);
-       dd($data);
+    //    dd($data);
         $assigned_student_details = $data['role'];
-
+        
         unset($data['role']);
-
         $response = CeaProgrammeMembership::create($data);
         $lastInsertId = $response->id;
 
