@@ -50,13 +50,13 @@ class StudentAwardController extends Controller
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentAward', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
         
     }
 

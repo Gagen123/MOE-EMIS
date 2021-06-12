@@ -272,7 +272,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadActiveTermList();
+        this                                                                                                                                                                                        .loadActiveTermList();
         
         this.loadClassList();
         this.loadSectionList();

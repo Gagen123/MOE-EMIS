@@ -6,7 +6,7 @@
                     <th >SL#</th>
                     <th >Student Roles</th>
                     <th >Status</th>
-                    <th >Created At</th>
+                    <th >Description</th>
                     <th >Action</th> 
                 </tr>
             </thead>
@@ -15,7 +15,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{ item.Description }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -37,8 +37,8 @@ export default {
         loadProgramRolesList(uri = 'masters/loadStudentMasters/program_role'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.programRolesList =  data.data.data;
+                let data = response.data;
+                this.programRolesList =  data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

@@ -65,8 +65,14 @@ class AdminstratorController extends Controller
     }
 
 
+<<<<<<< HEAD
+    public function loadOrganizationDetailsbyOrgId($type="",$id=""){   
+        // dd($id);
+        $loadOrganizationDetails = $this->apiService->listData('emis/common_services/loadOrgDetails/Orgbyid/'.$type.'/' .$id );
+=======
     public function loadOrganizationDetailsbyOrgId($id){
         $loadOrganizationDetails = $this->apiService->listData('emis/common_services/loadOrgDetails/fullOrgDetbyid/'.$id );
+>>>>>>> 9454f15876d78d0f74165d906256bcd1ca96d21b
         return $loadOrganizationDetails;
     }
 
@@ -79,11 +85,11 @@ class AdminstratorController extends Controller
          return $response_data;
     }
 
-    public function getseatdetailsbyOrgId($orgId){
-        $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);
-        return $itemList;
+    // public function getseatdetailsbyOrgId($orgId){
+    //     $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);
+    //     return $itemList;
 
-    }
+    // }
 
 
 
