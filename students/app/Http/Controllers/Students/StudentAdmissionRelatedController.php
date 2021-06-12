@@ -29,18 +29,18 @@ class StudentAdmissionRelatedController extends Controller
     public function reportStudents(Request $request){
         
         $rules = [
-            'date'               => 'required'
+            'date'                  => 'required'
         ];
 
         $customMessages = [
-            'date.required'     => 'This field is required',
+            'date.required'         => 'This field is required',
         ];
         
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'date'             => $request->date,
+            'id'                    => $request->id,
+            'date'                  => $request->date,
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
             'std_section'           => $request->std_section,
@@ -78,26 +78,26 @@ class StudentAdmissionRelatedController extends Controller
     public function saveStudentTransfer(Request $request){
         
         $rules = [
-            'student'               => 'required',
-            'last_class_attended'               => 'required',
-            'date'               => 'required',
-            'reasons'               => 'required'
+            'student'                       => 'required',
+            'last_class_attended'           => 'required',
+            'date'                          => 'required',
+            'reasons'                       => 'required'
         ];
 
         $customMessages = [
-            'student.required'     => 'This field is required',
-            'last_class_attended.required'     => 'This field is required',
-            'date.required'     => 'This field is required',
-            'reasons.required'     => 'This field is required',
+            'student.required'              => 'This field is required',
+            'last_class_attended.required'  => 'This field is required',
+            'date.required'                 => 'This field is required',
+            'reasons.required'              => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'OrgOrganizationId' => $request->working_agency_id,
-            'LeavingDate'             => $request->date,
-            'StdStudentId'             => $request->student,
-            'Reasons'            => $request->reasons
+            'id'                            => $request->id,
+            'OrgOrganizationId'             => $request->working_agency_id,
+            'LeavingDate'                   => $request->date,
+            'StdStudentId'                  => $request->student,
+            'Reasons'                       => $request->reasons
         ];
         
         if($request->action_type=="add"){
@@ -111,12 +111,12 @@ class StudentAdmissionRelatedController extends Controller
             // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
 
             $app_data = [
-                'StdStudentId' => $request['student'],
-                'awarded_by'    =>  $request['award_given_by'],
-                'CeaAwardId'     =>  $request['award_type_id'],
-                'Place'             =>  $request['place'],
-                'AwardDate'              =>  $request['date'],
-                'Remarks'           =>  $request['remarks'],
+                'StdStudentId'             => $request['student'],
+                'awarded_by'               =>  $request['award_given_by'],
+                'CeaAwardId'               =>  $request['award_type_id'],
+                'Place'                    =>  $request['place'],
+                'AwardDate'                =>  $request['date'],
+                'Remarks'                  =>  $request['remarks'],
             ];
 
             StdSchoolLeaving::where('id', $request['id'])->update($app_data);
@@ -139,12 +139,12 @@ class StudentAdmissionRelatedController extends Controller
     public function saveStudentWhereabouts(Request $request){
         
         $rules = [
-            'student'               => 'required',
-            'last_class_attended'               => 'required',
-            'date'               => 'required',
-            'reasons'               => 'required',
-            'current_engagement'    => 'required',
-            'current_address'       => 'required'
+            'student'                   => 'required',
+            'last_class_attended'       => 'required',
+            'date'                      => 'required',
+            'reasons'                   => 'required',
+            'current_engagement'        => 'required',
+            'current_address'           => 'required'
         ];
 
         $customMessages = [
@@ -164,7 +164,6 @@ class StudentAdmissionRelatedController extends Controller
             'StdStudentId'             => $request->student,
             'last_class_attended'             => $request->last_class_attended,
             'action_type'       => $request->action_type,
-            //'reasons'            => $request->reasons,
             'CurrentEngagement'    => $request->current_engagement,
             'CurrentAddress'       => $request->current_address
         ];
@@ -217,21 +216,29 @@ class StudentAdmissionRelatedController extends Controller
      * method to save student aboard details
      */
     public function saveStudentAboard(Request $request){
-      //  dd($request);
-            // $rules = [
-            //  //   'organizationId'        =>  'required',
-            //     'cid_passport'          =>  'required',
-            //     // 'dob'                   =>  'required',
-            //     // 'sex_id'                =>  'required',
-            //     // 'mother_tongue'         =>  'required',
-            //     // 'status'                =>  'required',
-            //     // 'fulladdress'           =>  'required',
-            //     // 'country'               =>  'required',
-            //     // 'city'                  =>  'required',
-            // ];
-            // $this->validate($request, $rules);
-        
-            $data =[
+        $id = $request->id;
+        if( $id != null){
+                $data =[
+                'id'                        =>  $request->id,
+                'organizationId'            =>  $request->organizationId,
+                'cid_passport'              =>  $request->cid_passport,
+                'first_name'                =>  $request->first_name,
+                'middle_name'               =>  $request->middle_name,
+                'last_name'                 =>  $request->last_name,
+                'dob'                       =>  $request->dob,
+                'sex_id'                    =>  $request->sex_id,
+                'mother_tongue'             =>  $request->mother_tongue,
+                'status'                    =>  $request->status,
+                'fulladdress'               =>  $request->fulladdress,
+                'country'                   =>  $request->country,
+                'city'                      =>  $request->city,
+             ];
+            // dd($data);
+             //  dd('m here from services');      
+             $response_data = StudentAboard::where('id', $id)->update($data);
+        } else {
+
+        $data =[
             'id'                        =>  $request->id,
             'organizationId'            =>  $request->organizationId,
             'cid_passport'              =>  $request->cid_passport,
@@ -247,13 +254,16 @@ class StudentAdmissionRelatedController extends Controller
             'city'                      =>  $request->city,
             'phone'                     =>  $request->phone,
         ];
-        // dd($data);
-      //  dd('m here from services');                   
-        $persondata = StudentAboard::create($data);
+        }
 
+
+        $persondata = StudentAboard::create($data);
         return $this->successResponse($persondata, Response::HTTP_CREATED);
-       // dd($persondata);
     }
+
+      
+       // dd($persondata);
+    // }
 
     private function updateStudentStatus($type, $student_id){
         if($type == 'school_leaving'){
