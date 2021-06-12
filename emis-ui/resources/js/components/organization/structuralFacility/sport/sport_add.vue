@@ -3,7 +3,7 @@
         <form class="bootbox-form" id="stockReceivedId">
             <div class="card-body">
                 <div class="form-group row"> 
-                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Facility:<span class="text-danger">*</span></label>
+                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Facility:<span class="text-danger">*</span></label>
                     <div class="col-lg-8 col-md-8 col-sm-8">
                         <select name="facility" id="facility" class="form-control editable_fields" @change="getSubFacilityDropdown(),remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                             <option value="">--- Please Select ---</option>
@@ -11,7 +11,7 @@
                         </select>
                         <has-error :form="form" field="facility"></has-error>
                     </div>
-                    </div>
+                </div>
                   
             <div class="card">
                 <div class="form-group row">
@@ -36,33 +36,32 @@
                                       </select>
                                   </td>
                                   <td>                          
-                                    <input type="number" name="yoe" class="form-control" v-model="item.yoe"/>
+                                        <input type="number" name="yoe" class="form-control" v-model="item.yoe"/>
                                   </td>
                                   <td>
-                                         <select name="support"  class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="item.support">
+                                        <select name="support"  class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="item.support">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                   </td>
                                   <td id='sizeAndarea'> 
-                                    <input type="number" name="area" class="form-control" v-model="item.area"/>
-                                </td>
-                                
+                                        <input name="area" class="form-control" v-model="item.area"/>
+                                 </td>
                                   <td>                                
                                      <select name="access" id="access" class="form-control editable_fields" v-model="item.access">
                                            <option  value="">--- Please Select ---</option>
-                                                <option  value="0">yes-</option>
+                                                <option  value="0">yes</option>
                                                 <option value="1">no</option>
-                                                <option value="2">partial</option>
+                                            <option value="2">partial</option>
                                      </select> 
                                   </td>
                                   <td>                                
-                                    <label><input v-model="item.sportstype"  type="radio" value="1" /> Indoor</label>
-                                    <label><input v-model="item.sportstype"  type="radio" value="0" /> Outdoor</label>
+                                        <label><input v-model="item.sportstype"  type="radio" value="1" /> Indoor</label>
+                                        <label><input v-model="item.sportstype"  type="radio" value="0" /> Outdoor</label>
                                   </td>
                                   <td>                                
-                                    <label><input v-model="item.status"  type="radio" value="1" /> Usable</label>
-                                    <label><input v-model="item.status"  type="radio" value="0" /> Non_Usable</label>
+                                        <label><input v-model="item.status"  type="radio" value="1" /> Usable</label>
+                                        <label><input v-model="item.status"  type="radio" value="0" /> Non_Usable</label>
                                   </td>
                               </tr> 
                              <tr>
@@ -103,7 +102,7 @@ export default {
                  id: '',facility:'',
                   items_received:
                 [{
-                    type:'',yoe:'',access:'',area:'', status:'',sportstype:'',item:'',support:'',
+                    type:'',yoe:'',access:'',area:'', status:'',sportstype:'',support:'',
                 }], 
             })
         }
@@ -118,7 +117,7 @@ export default {
             this.form.facility= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({type:'',yoe:'',access:'',area:'', status:'',sportstype:'',item:'',support:'',})
+            this.form.items_received.push({type:'',yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})
         },
 
         /**
@@ -157,7 +156,8 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-         getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/' +this.form.facility){
+
+        getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/' +this.form.facility){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
@@ -204,22 +204,23 @@ export default {
         },
           showfield:function(type){
             let selecttype = $("#"+type+" option:selected").text();
-            if(selecttype =="standard"){
-                 $('#sizeAndarea').hide();
-                 $('#sizeAndarea1').hide();
-               
-            }
+                if(selecttype =="standard"){
+                    $('#sizeAndarea').hide();
+                    $('#sizeAndarea1').hide();
+                    
+                
+                }
 
-           else if(selecttype =="non standard"){ 
-                $('#sizeAndarea').show();
-                $('#sizeAndarea1').show();
+            else if(selecttype =="non standard"){ 
+                    $('#sizeAndarea').show();
+                    $('#sizeAndarea1').show();
 
-            }
-            else{
-                 $('#sizeAndarea').hide();
-                 $('#sizeAndarea1').hide();
+                }
+                else{
+                    $('#sizeAndarea').hide();
+                    $('#sizeAndarea1').hide();
 
-            }
+                }
 
         },
         /**
@@ -237,17 +238,10 @@ export default {
             }
         },
 
-        /**f
-         * method to get dzongkhag in dropdown
-         */
-
-        /**
-         * method to add more fields
-         */
         addMore: function(){
             this.count++;
             this.form.items_received.push({
-               type:'',yoe:'',access:'',area:'', status:'',sportstype:'',item:'',support:'',})    
+               type:'',yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})    
         }, 
         /**
          * method to remove fields
@@ -261,21 +255,21 @@ export default {
         
        
        
-    },
-     mounted() { 
-         $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
-        });
-         Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
-        });
-        this.getFacilityDropdown();
-        this.getSupportDropdown();
-       
-    }
+        },
+        mounted() { 
+            $('.select2').select2();
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+            $('.select2').on('select2:select', function (el){
+                Fire.$emit('changefunction',$(this).attr('id')); 
+            });
+            Fire.$on('changefunction',(id)=> {
+                this.changefunction(id);
+            });
+            this.getFacilityDropdown();
+            this.getSupportDropdown();
+        
+        }
 }
 </script>

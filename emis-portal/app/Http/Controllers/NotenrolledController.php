@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helper\EmisService;
@@ -12,7 +12,7 @@ class NotenrolledController extends Controller
     }
     // public $database="student_db";
 
-    public function saveStudentDetails(Request $request){
+    public function saveStudentDetailsFromPortal(Request $request){
         // dd($request);
         $rules = [
             'snationality'                    => 'required',
@@ -20,7 +20,7 @@ class NotenrolledController extends Controller
             'first_name'                      => 'required',
             'dob'                             => 'required',
             'sex_id'                          => 'required',
-            
+
         ];
         $customMessages = [
             'snationality.required'            => 'This field is required',
@@ -43,7 +43,7 @@ class NotenrolledController extends Controller
             $path=$file_store_path.'/'.$file_name;
         }
         $data = $request->all();
-        $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetails', $data);
+        $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetailsFromPortal', $data);
         return $response_data;
 
     }
@@ -97,7 +97,7 @@ class NotenrolledController extends Controller
                     'father_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'father_dzongkhag.required'                      => 'This field is required',
                     'father_gewog.required'                          => 'This field is required',
@@ -146,7 +146,7 @@ class NotenrolledController extends Controller
                     'mother_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'mother_dzongkhag.required'                      => 'This field is required',
                     'mother_gewog.required'                          => 'This field is required',
@@ -193,7 +193,7 @@ class NotenrolledController extends Controller
                     'gardain_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'gardain_dzongkhag.required'                      => 'This field is required',
                     'gardain_gewog.required'                          => 'This field is required',
@@ -202,13 +202,13 @@ class NotenrolledController extends Controller
                 $customMessages = $customMessages + $additional_message;
             }
         }
-        
+
         $this->validate($request, $rules, $customMessages);
         $data =[
             'merital_status'            =>  $request->merital_status,
             'primary_contact'           =>  $request->primary_contact,
             'student_id'                =>  $request->student_id,
-            'type'                      =>  $request->type, 
+            'type'                      =>  $request->type,
             'father_nationality'               =>  $request->father_nationality,
             'father_cid_passport'              =>  $request->father_cid_passport,
             'father_first_name'                =>  $request->father_first_name,
@@ -256,8 +256,9 @@ class NotenrolledController extends Controller
             'gardain_occupation'                =>  $request->gardain_occupation,
             'gardain_email'                     =>  $request->gardain_email,
             'gardain_cntct_no'                  =>  $request->gardain_cntct_no,
-            // 'user_id'                           =>  $this->userId() 
+            // 'user_id'                           =>  $this->userId()
         ];
+        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentGardianDetails', $data);
         return $response_data;
     }

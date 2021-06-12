@@ -19,13 +19,13 @@
                                     <input v-model="classTeacherList[index].org_stream_id" class="form-control" type="hidden">
                                     <input v-model="classTeacherList[index].org_section_id" class="form-control" type="hidden">
                                     {{ item.class_stream_section }}
-                                </td>                                                                              
+                                </td>
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <select v-model="classTeacherList[index].stf_staff_id" class="form-control editable_fields" id="class_teacher_id"> 
+                                        <select v-model="classTeacherList[index].stf_staff_id" class="form-control editable_fields" id="class_teacher_id">
                                             <option selected="selected" value="">---SELECT CLASS TEACHER---</option>
                                             <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
-                                                <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span> 
+                                                <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span>
                                                 {{ item1.name }}, {{item1.position_title}}
                                             </option>
                                         </select>
@@ -42,7 +42,7 @@
                 <button type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -81,9 +81,9 @@ export default {
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-             }  
+             }
         },
-        async classTeacher(){ 
+        async classTeacher(){
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let finalClassStreamsSection = [];
@@ -101,14 +101,14 @@ export default {
                     }
                     renameId['org_class_id'] = item.org_class_id;
                     renameId['org_stream_id'] = item.org_stream_id;
-                    renameId["org_section_id"] = item.org_section_id;
+                    renameId['org_section_id'] = item.org_section_id;
                     renameId['org_id'] = item.org_id;
+                    renameId['org_class_stream_id'] = item.OrgClassStreamId;
                     renameId['stf_staff_id'] = "";
                     const obj = {...renameId};
                     finalClassStreamsSection.push(obj);
                 }))
                 let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
-
                 finalClassStreamsSection.forEach((classSection,index) => {
                     classTeachers.forEach(item => {
                         if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || (classSection.org_stream_id == null && item.org_stream_id == null)) && (classSection.org_section_id == item.org_section_id || (classSection.org_section_id == null && item.org_section_id == null))){
@@ -116,13 +116,14 @@ export default {
                         }
                     })
                 })
+                console.log(finalClassStreamsSection);
                 this.classTeacherList = finalClassStreamsSection
 
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-             }                           
+             }
         },
         save(){
              axios.post('/academics/saveClassTeacher', {data:this.classTeacherList})
@@ -142,9 +143,9 @@ export default {
                     }
                 });
         },
-	 
+
     },
-    mounted(){ 
+    mounted(){
         this.classTeacher();
         this.getTeacher();
         this.dt = $("#class-teacher-table").DataTable({
@@ -152,7 +153,7 @@ export default {
                 { width: 50, targets: 0},
             ],
         })
-    }, 
+    },
     watch: {
         classTeacherList(val) {
             this.dt.destroy();
@@ -161,6 +162,6 @@ export default {
             });
         }
     }
-   
+
 }
 </script>

@@ -64,7 +64,9 @@ export default {
             roleList:[],
             programList:[],
             roles: [],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            type:programmem,
+
 
             student_form: new form({
                 student: '',

@@ -11,24 +11,20 @@
                             <th>Action</th>                     
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td> 1</td>
-                            <td>TD Vaccine</td>
-                            <td>2020-03-04</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_vaccine')"><i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                            <tr>
-                            <td> 2</td>
-                            <td>HPV Vaccine</td>
-                            <td>2020-05-25</td>
-                            <td> 
-                                <button type="button" class="btn btn-success btn-sm mb-0.5" @click="loadeditpage('edit_vaccine')"> <i class="fa fa-edit"></i> Edit</button>
-                            </td>
-                        </tr> 
-                    </tbody>
+                    <tbody id="tbody">
+                        <tr v-for="(item, index) in dataList" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.amountGenerated}}</td>
+                            <td>{{ item.date}}</td>
+                            <td>{{ item.remarks}}</td>
+                            <td>
+                             <div class="btn-group btn-group-sm">
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
                 </table>
             </div>
         </div>
@@ -42,9 +38,19 @@ export default {
         } 
     },
     methods: {
-        loadeditpage(type){
-            this.$router.push("/"+type);
-		},
+       loadIncomeList(uri='organization/loadIncomeInformation/'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        showedit(data){
+            this.$router.push({name:'edit_income_information',params: {data:data}});
+        },
     },
     mounted() {
         $("#training-table").DataTable({

@@ -20,8 +20,9 @@ class StudentScoutController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
 
+
     public function saveStudentScouts(Request $request){
-        
+
         $rules = [
             'scout'       => 'required',
             'year'       => 'required'
@@ -31,7 +32,7 @@ class StudentScoutController extends Controller
             'year.required'          => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                => $request->id,
             'OrgOrganizationId' => $request->working_agency_id,
@@ -39,7 +40,7 @@ class StudentScoutController extends Controller
             'EstablishmentYear'           =>  $request->year,
             'Remarks'           =>  $request->remarks
         ];
-        
+
         if($request->action_type=="add"){
             $response_data = CeaSchoolScout::create($data);
 
@@ -62,8 +63,8 @@ class StudentScoutController extends Controller
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
-        
+
+
     }
 
     public function loadStudentScouts($param=""){
@@ -73,50 +74,53 @@ class StudentScoutController extends Controller
                 ->select('cea_school_scouts.*', 'cea_scouts.name AS scout_name')
                 ->where('cea_school_scouts.OrgOrganizationId', $param)
                 ->get();
-        
+
         return $this->successResponse($roles);
 
     }
 
     public function listStudentScouts($param=""){
         $id = $param;
-
         $roles = DB::table('cea_school_scouts')
                 ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
                 ->select('cea_scouts.name AS scout_name', 'cea_school_scouts.Id AS id')
                 ->where('cea_school_scouts.OrgOrganizationId', $id)
                 ->get();
-        
+
         return $this->successResponse($roles);
 
     }
 
-    public function saveScoutParticipants(Request $request){
 
+    //SAVE SCOUT PARTICIPANTS
+    public function saveScoutParticipants(Request $request){
         $rules = [
-            'student'       => 'required',
-            'scout'       => 'required',
-            'date'          => 'required'
+            'StdStudentId'              => 'required',
+            'CeaSchoolScoutsId'         => 'required',
+            'CeaSchoolSectionLevelId'   => 'required',
+            'date'                      => 'required'
         ];
-        
+
         $customMessages = [
-            'student.required'          => 'This field is required',
-            'scout.required'          => 'This field is required',
-            'date.required'          => 'This field is required'
+            'StdStudentId.required'             => 'This field is required',
+            'CeaSchoolScoutsId.required'        => 'This field is required',
+            'CeaSchoolSectionLevelId.required'  => 'This field is required',
+            'date.required'                     => 'This field is required'
         ];
 
         $this->validate($request, $rules, $customMessages);
-        
-        $data =[
-            'id'                => $request->id,
-            'StdStudentId'           =>  $request->student,
-            'CeaSchoolScoutsId'           =>  $request->scout,
-            'JoiningDate'           =>  $request->date
-        ];
 
+        $data =[
+            'id'                       =>$request->id,
+            'StdStudentId'             =>$request->StdStudentId,
+            'CeaSchoolScoutsId'        =>$request->CeaSchoolScoutsId,
+            'CeaSchoolSectionLevelId'  =>$request->CeaSchoolSectionLevelId,
+            'JoiningDate'              =>$request->date,
+            'action_type'              =>$request->action_type,
+            'created_by'               =>$request->user_id,
+        ];
         if($request->action_type=="add"){
             $response_data = CeaSchoolScoutMembers::create($data);
-
         } else if($request->action_type=="edit"){
 
             //Audit Trails
@@ -137,17 +141,14 @@ class StudentScoutController extends Controller
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-
-    public function loadScoutMembers($param=""){
-
-        $roles = DB::table('cea_scouts_membership')
-                ->join('cea_school_scouts', 'cea_school_scouts.id', '=', 'cea_scouts_membership.CeaSchoolScoutsId')
-                ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
-                ->join('std_student', 'cea_scouts_membership.StdStudentId', '=', 'std_student.id')
-                ->select('cea_scouts_membership.*', 'cea_scouts.name AS scout_name', 'std_student.name as student_name')
-                ->where('cea_school_scouts.OrgOrganizationId', $param)
-                ->get();
-        
-        return $this->successResponse($roles);
-    }
+    // public function loadScoutMembers($param=""){
+    //     $roles = DB::table('cea_scouts_membership')
+    //             ->join('cea_school_scouts', 'cea_school_scouts.id', '=', 'cea_scouts_membership.CeaSchoolScoutsId')
+    //             ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
+    //             ->join('std_student', 'cea_scouts_membership.StdStudentId', '=', 'std_student.id')
+    //             ->select('cea_scouts_membership.*', 'cea_scouts.name AS scout_name', 'std_student.name as student_name')
+    //             ->where('cea_school_scouts.OrgOrganizationId', $param)
+    //             ->get();
+    //     return $this->successResponse($roles);
+    // }
 }

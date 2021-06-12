@@ -19,7 +19,6 @@ class StudentAdmissionController extends Controller{
     }
 
     public function saveStudentDetails(Request $request){
-
         $rules = [
             'snationality'              => 'required',
             'cid_passport'              => 'required',
@@ -28,7 +27,6 @@ class StudentAdmissionController extends Controller{
             'sex_id'                    => 'required',
             'mother_tongue'             => 'required',
             'std_class'                 => 'required'
-            
         ];
         $customMessages = [
             'snationality.required'             => 'This field is required',
@@ -53,7 +51,7 @@ class StudentAdmissionController extends Controller{
             move_uploaded_file($file,$file_store_path.'/'.$file_name);
             $path=$file_store_path.'/'.$file_name;
         }
-        
+
         $data =[
             'snationality'              =>  $request->snationality,
             'std_class'                 =>  $request->std_class,
@@ -64,22 +62,22 @@ class StudentAdmissionController extends Controller{
             'last_name'                 =>  $request->last_name,
             'dob'                       =>  $request->dob,
             'sex_id'                    =>  $request->sex_id,
-            'dzongkhag'                 =>  $request->dzongkhag, 
-            'gewog'                     =>  $request->gewog, 
-            'village_id'                =>  $request->village_id, 
-            'fulladdress'               =>  $request->fulladdress, 
-            'mother_tongue'             =>  $request->mother_tongue, 
-            'type'                      =>  $request->type, 
+            'dzongkhag'                 =>  $request->dzongkhag,
+            'gewog'                     =>  $request->gewog,
+            'village_id'                =>  $request->village_id,
+            'fulladdress'               =>  $request->fulladdress,
+            'mother_tongue'             =>  $request->mother_tongue,
+            'type'                      =>  $request->type,
             'attachments'               =>  $path,
             'OrgOrganizationId'         =>  $this->getWrkingAgencyId(),
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
-        
+
         //changed the route link to saveAdmissionStudentDetails from saveStudentDetails
         $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionStudentDetails', $data);
         return $response_data;
     }
-    
+
     public function saveStudentGardianDetails(Request $request){
         $rules = [
             'merital_status'                        => 'required',
@@ -128,7 +126,7 @@ class StudentAdmissionController extends Controller{
                     'father_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'father_dzongkhag.required'                      => 'This field is required',
                     'father_gewog.required'                          => 'This field is required',
@@ -177,7 +175,7 @@ class StudentAdmissionController extends Controller{
                     'mother_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'mother_dzongkhag.required'                      => 'This field is required',
                     'mother_gewog.required'                          => 'This field is required',
@@ -224,7 +222,7 @@ class StudentAdmissionController extends Controller{
                     'gardain_village_id'                     => 'required',
                 ];
                 $rules = $rules + $additional_rules;
-    
+
                 $additional_message = [
                     'gardain_dzongkhag.required'                      => 'This field is required',
                     'gardain_gewog.required'                          => 'This field is required',
@@ -233,13 +231,13 @@ class StudentAdmissionController extends Controller{
                 $customMessages = $customMessages + $additional_message;
             }
         }
-        
+
         $this->validate($request, $rules, $customMessages);
         $data =[
             'merital_status'            =>  $request->merital_status,
             'primary_contact'           =>  $request->primary_contact,
             'student_id'                =>  $request->student_id,
-            'type'                      =>  $request->type, 
+            'type'                      =>  $request->type,
             'father_nationality'               =>  $request->father_nationality,
             'father_cid_passport'              =>  $request->father_cid_passport,
             'father_first_name'                =>  $request->father_first_name,
@@ -287,7 +285,7 @@ class StudentAdmissionController extends Controller{
             'gardain_occupation'                =>  $request->gardain_occupation,
             'gardain_email'                     =>  $request->gardain_email,
             'gardain_cntct_no'                  =>  $request->gardain_cntct_no,
-            'user_id'                           =>  $this->userId() 
+            'user_id'                           =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentGardianDetails', $data);
         return $response_data;
@@ -306,11 +304,11 @@ class StudentAdmissionController extends Controller{
             'no_meals.required'                 => 'This field is required',
             'disability.required'               => 'This field is required',
         ];
-        
+
         $this->validate($request, $rules, $customMessages);
         $data =[
             'student_id'                =>  $request->student_id,
-            'type'                      =>  $request->type, 
+            'type'                      =>  $request->type,
             //org id and dzo id is pulled form the user who is currently loged in. cannot add record other then org user.
             'org_id'                    =>  $this->getWrkingAgencyId(),
             'dzo_id'                    =>  $this->getUserDzoId(),
@@ -323,16 +321,19 @@ class StudentAdmissionController extends Controller{
             'scholarship'               =>  $request->scholarship,
             'special_benifit'           =>  $request->special_benifit,
             'disability'                =>  $request->disability,
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
         // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentClassDetails', $data);
         return $response_data;
     }
-    
+
     public function loadStudentList($param=""){
         if($param=="session"){
             $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
+        }
+        if($param=="admission"){
+            $param='admission__'.$this->getWrkingAgencyId();
         }
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$param);
         return $student_list;
@@ -346,7 +347,7 @@ class StudentAdmissionController extends Controller{
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$org_id);
         return $student_list;
     }
-    
+
     public function loadStudentListwithsearch(Request $request){
         $rules = [
             'dzongkhag'                 => 'required',
@@ -380,7 +381,7 @@ class StudentAdmissionController extends Controller{
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$query);
         return $student_list;
     }
-    
+
     public function getStudentDetails($std_id=""){
         $student_list = $this->apiService->listData('emis/students/admission/getStudentDetails/'.$std_id);
         return $student_list;
@@ -389,5 +390,66 @@ class StudentAdmissionController extends Controller{
         $student_list = $this->apiService->listData('emis/students/admission/getstudentGuardainClassDetails/'.$std_id.'/'.$type);
         return $student_list;
     }
+
+    public function savedetailsEnrolledStd(Request $request){
+        $rules = [
+            'class'                             => 'required',
+            'student_type'                      => 'required',
+            'no_meals'                          => 'required',
+            'disability'                        => 'required',
+        ];
+        $customMessages = [
+            'class.required'                    => 'This field is required',
+            'student_type.required'             => 'This field is required',
+            'no_meals.required'                 => 'This field is required',
+            'disability.required'               => 'This field is required',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'student_id'                =>  $request->student_id,
+            'type'                      =>  $request->type,
+            //org id and dzo id is pulled form the user who is currently loged in. cannot add record other then org user.
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
+            'class_stream_id'           =>  $request->class_stream_id,
+            'section'                   =>  $request->section,
+            'student_type'              =>  $request->student_type,
+            'no_meals'                  =>  $request->no_meals,
+            'meal_type'                 =>  $request->meal_type,
+            'feeding_type'              =>  $request->feeding_type,
+            'scholarship'               =>  $request->scholarship,
+            'special_benifit'           =>  $request->special_benifit,
+            'disability'                =>  $request->disability,
+            'user_id'                   =>  $this->userId()
+        ];
+        // dd($data);
+        $response_data= $this->apiService->createData('emis/students/admission/saveStudentClassDetails', $data);
+        return $response_data;
+    }
+
+    public function updateAdmissionStd(Request $request){
+        $data =[
+            'student_id'                =>  $request->student_id,
+            'type'                      =>  $request->type,
+            'action_type'               =>  $request->action_type,
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
+            'class_stream_id'           =>  $request->class_stream_id,
+            'section'                   =>  $request->section,
+            'student_type'              =>  $request->student_type,
+            'no_meals'                  =>  $request->no_meals,
+            'meal_type'                 =>  $request->meal_type,
+            'feeding_type'              =>  $request->feeding_type,
+            'scholarship'               =>  $request->scholarship,
+            'special_benifit'           =>  $request->special_benifit,
+            'disability'                =>  $request->disability,
+            'user_id'                   =>  $this->userId()
+        ];
+        // dd($data);
+        $response_data= $this->apiService->createData('emis/students/admission/updateAdmissionStd', $data);
+        return $response_data;
+    }
+
 
 }

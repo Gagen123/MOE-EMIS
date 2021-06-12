@@ -7,7 +7,8 @@
                     <th >Training/Exchange Program</th>
                     <th >Type</th>
                     <th >Under Program</th>
-                    <th >Period</th>
+                    <th >From Date</th>
+                    <th >To Date</th>
                     <th >Place</th>
                     <th >Action</th>
                 </tr>
@@ -15,7 +16,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
+                    <td>{{ item.Name}}</td>
                     <td>{{ item.training_type}}</td>
                     <td>{{ item.program_name}}</td>
                     <td>{{ item.place}}</td>

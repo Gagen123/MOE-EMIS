@@ -358,7 +358,7 @@
                         @endif
                     @endif
 
-                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                    <li class="nav-item" id="restructuring">
                         <router-link to="/visitors_information" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -366,7 +366,7 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="restructuring" @click="setclass('organizationlink','','restructuring')">
+                    <li class="nav-item" id="restructuring">
                         <router-link to="/org_class_section" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -553,7 +553,7 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="send" @click="setclass('clubs','','studenttrainings')">
+                    <li class="nav-item" id="send">
                         <router-link to="/student_sen_list" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>

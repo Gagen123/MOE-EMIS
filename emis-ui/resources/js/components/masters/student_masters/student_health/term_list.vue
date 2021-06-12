@@ -37,6 +37,7 @@ export default {
         loadDataList(uri = 'masters/loadStudentMasters/term_type'){
             axios.get(uri)
             .then(response => {
+                // alert(JSON.stringify(response));
                 let data = response;
                 this.dataList =  data.data.data;
             })
@@ -45,12 +46,6 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#health-term-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'TermEdit',params: {data:data}});

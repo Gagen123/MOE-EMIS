@@ -8,14 +8,18 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
-use App\Models\Masters\CeaRole;
+use App\Models\Masters\StudentType;
+use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\CeaProgram;
 use App\Models\Masters\CeaProgramType;
+use App\Models\Masters\CeaScoutSection;
+use App\Models\Masters\CeaScoutSectionLevel;
 
 class StudentMasterController extends Controller
 {
-    //
+
     use ApiResponser;
+
     public $audit_database;
     public $database;
     public function __construct() {
@@ -24,33 +28,45 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
-    /** 
+    /**Get Scout Section in Dropdown */
+    public function getScoutSection(){
+        $data=CeaScoutSection::select('id','name')->get();
+        return $data;
+    }
+
+
+    /**Get Scout Level in Dropdown By ScoutSectionID*/
+    public function getScoutSectionLevel($scoutSectionId){
+        $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
+    }
+
+    /**
      * method to save or update student masters data
     */
 
     public function saveStudentMasters(Request $request){
-        
         $rules = [
             'name'  =>  'required',
         ];
-
         $this->validate($request, $rules);
 
         $record_type = $request['recordtype'];
 
         $data = $this->extractRequestInformation($request, $record_type, $type='data');
-        
+
         $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
 
         if($request->actiontype=="add"){
             $response_data = $this->insertData($data, $databaseModel);
+
 
         } else if($request->actiontype=="edit"){
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
+
     }
 
     /**
@@ -65,60 +81,69 @@ class StudentMasterController extends Controller
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
-        
+
         $model = new $modelName();
 
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-            
+
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
          //   dd($response_data);
-            
+
         } elseif($param == 'club_name'){
-            
+
             $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
 
         } else if(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
+
+        }else if($param= 'student_award_type'){
+            $vacinetype = StudentAwardType::all();
+            return $vacinetype;
+
+        }
+        else if($param= 'program_type'){
+            $vacinetype = CeaProgram::all();
+            return $vacinetype;
+
         }
         return $this->successResponse($model::all());
     }
 
+
     /**
      * method to list students masters of active records for dropdown
     */
-
     public function loadActiveStudentMasters($param=""){
-      //  dd('from services');
-       
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
 
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
-            
+
         } else if($param == 'program_student_roles'){
 
             $status = '1';
             $assigned_to = '2';
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
 
-        } else {
+        } else if($param == 'vaccine_type'){
+            $vacinetype = StudentType::all();
+            return $vacinetype;
 
-            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
-
-            $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';
 
             return $this->successResponse($model::where('status',$status)->get());
         }
-        
+
+
 
     }
 
@@ -127,14 +152,14 @@ class StudentMasterController extends Controller
     */
 
     public function allActiveStudentDropdowns($param="",$id=""){
-        
+
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+        $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
 
         return $this->successResponse($model::where('id',$id)->first());
-        
+
     }
 
     /**
@@ -142,7 +167,7 @@ class StudentMasterController extends Controller
      */
 
     private function insertData($data, $databaseModel){
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+        $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
 
         $response_data = $model::create($data);
@@ -156,7 +181,7 @@ class StudentMasterController extends Controller
 
     private function updateData($request,$dataRequest, $databaseModel){
       //  dd('m here');
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+        $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
         $data = $model::find($request->id);
       //   dd($data);
@@ -172,7 +197,7 @@ class StudentMasterController extends Controller
             $data->description = $dataRequest['Description'];
         }
         if($request['recordtype']!="vaccine_type" ){
-            $data->description = $dataRequest['vaccineFor'];  
+            $data->description = $dataRequest['vaccineFor'];
         }
         $data->description = $dataRequest['Description'];
         $data->status = $dataRequest['Status'];
@@ -181,7 +206,7 @@ class StudentMasterController extends Controller
         // dd($data);
         $data->update();
         return $data;
-       
+
     }
 
     /*
@@ -202,7 +227,7 @@ class StudentMasterController extends Controller
                 $additional_data = [
                     'Description'  =>  $request['description'],
                 ];
-                $data = $data + $additional_data; 
+                $data = $data + $additional_data;
             }
         }
 

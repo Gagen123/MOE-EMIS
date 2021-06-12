@@ -6,7 +6,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Vaccine Type:</label>
                         <select v-model="student_form.vaccination" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('vaccination') }"  class="form-control select2" name="vaccination" id="vaccination">
-                            <option v-for="(item, index) in vaccineList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                            <option v-for="(item, index) in vaccineList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="student_form" field="vaccination"></has-error>
                     </div> 
@@ -154,7 +154,8 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.vaccineList =  data.data.data;
+                alert(JSON.stringify(response.data.data.name));
+                this.vaccineList =  data.data[0];
             })
             .catch(function (error) {
                 console.log("Error......"+error)
