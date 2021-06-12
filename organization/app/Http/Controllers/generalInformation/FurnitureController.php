@@ -94,13 +94,13 @@ class FurnitureController extends Controller
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
                 'usable'                    =>  $request['location'],
-                'notusable'                      =>  $request['cost'],
-                // 'number'                    =>  $request['number'],
-                // 'condition'                 =>  $request['condition'],
-                // 'lifeExpectancy'            =>  $request['life_expectancy'],
-                // 'dateReceived'              =>  $request['date_received'],
-                'created_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s')
+                'notusable'                 =>  $request['cost'],
+                // 'number'                 =>  $request['number'],
+                // 'condition'              =>  $request['condition'],
+                // 'lifeExpectancy'         =>  $request['life_expectancy'],
+                // 'dateReceived'           =>  $request['date_received'],
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
             ];
 
             $response_data = Furniture::create($data);

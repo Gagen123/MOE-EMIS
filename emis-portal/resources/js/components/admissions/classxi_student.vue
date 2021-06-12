@@ -289,7 +289,7 @@
 
           },
          getOrgDetails(id){
-              axios.get('loadOrganizationDetailsbyOrgId/' +id)
+              axios.get('loadOrganizationDetailsbyOrgId/NA/' +id)
                 .then(response =>{
                   let data = response.data.data;
                   this.OrgDetails=data;

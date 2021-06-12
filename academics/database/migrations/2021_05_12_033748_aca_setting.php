@@ -19,9 +19,10 @@ class AcaSetting extends Migration
             $table->string('description',100);
             $table->string('value',100);
             $table->string('description_of_value',200);
-            $table->string('created_by',36)->index();
-            $table->string('updated_by',36)->index()->nullable();
-            $table->timestamps();
+<<<<<<< HEAD
+          
+=======
+>>>>>>> 76adf1671904dd9bfd47960df1f61a7ef856021c
         });
         $seeder = new SettingSeeder();
         $seeder->run();

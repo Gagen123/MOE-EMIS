@@ -15,6 +15,10 @@ class CeaScout extends Model
         'id',
         'CeaScoutTypeId',
         'Name',
-        'Status'
+        'Status',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 }

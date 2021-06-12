@@ -47,21 +47,21 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         $router->post('/updatefinalstaffDetails', ['uses' => 'staff\StaffController@updatefinalstaffDetails']);
         $router->post('/updatefinalPrivatestaffDetails', ['uses' => 'staff\StaffController@updatefinalPrivatestaffDetails']);
-        
+
         $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
         $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
-		
+
 		  //Method by Chimi thinley
         $router->get('/getTeacher/{orgId}', ['uses' => 'staff\StaffController@getTeacher']);
-        
+
 
         // $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
         // $router->get('/loadStaff/{type}/{param}', ['uses' => 'staff\StaffController@loadStaff']);
 
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
-        
-        
+
+
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
 
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
@@ -130,7 +130,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getApprovedLeaveCount/{staff_id}/{leave_type_id}', ['uses' => 'staff\StaffServicesController@getApprovedLeaveCount']);
             $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
             $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
-        }); 
+        });
         $router->group(['prefix' => 'staffLeadershipSerivcesController'], function () use ($router) {
             $router->post('/createLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@createLeadershipSelection']);
             $router->get('/loadLeadershipSelection/{type}/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadLeadershipSelection']);
@@ -147,8 +147,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'loadstaff'], function () use ($router) {
         $router->get('/loadStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadStaffList']);
         $router->get('/loadFewDetailsStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffList']);
+
+        // $router->get('/loadFewDetailsStaffList/{type}/{parent_id}', function(){
+        //     return 'ddddddd';
+        // });
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
-        
+
 
     });
 });

@@ -19,49 +19,42 @@ class StudentTrainingController extends Controller
     }
 
     public function saveStudentTraining(Request $request){
-
         $rules = [
             'name'            => 'required',
             'training_type'   => 'required',
-            'program_id'      => 'required',
+            'program'         => 'required',
             'place'           => 'required',
             'country'         => 'required',
             'from_date'       => 'required',
             'to_date'         => 'required'
         ];
-
         $customMessages = [
-            'name.required'         => 'This field is required',
-            'place.required'        => 'This field is required',
-            'training_type.required'        => 'This field is required',
-            'program_id.required'        => 'This field is required',
-            'country.required'      => 'This field is required',
-            'from_date.required'    => 'This field is required',
-            'to_date.required'      => 'This field is required',
+            'name.required'             => 'This field is required',
+            'place.required'            => 'This field is required',
+            'training_type.required'    => 'This field is required',
+            'program.required'          => 'This field is required',
+            'country.required'          => 'This field is required',
+            'from_date.required'        => 'This field is required',
+            'to_date.required'          => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
         $data =[
-            'id'                => $request->id,
             'name'              => $request->name,
             'place'             => $request->place,
             'training_type'     => $request->training_type,
-            'program_id'        => $request->program_id,
+            'program'           => $request->program,
             'country'           => $request->country,
             'from_date'         => $request->from_date,
             'to_date'           => $request->to_date,
             'details'           => $request->details,
-
-            //'user_id'        => $this->user_id() 
+            'user_id'           => $this->userId(),
+            'org_id'            => $this->getWrkingAgencyId() 
         ];
-        
-        $this->validate($request, $rules, $customMessages);
-
         try{
             $response_data= $this->apiService->createData('emis/students/saveStudentTraining', $data);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }
@@ -71,7 +64,8 @@ class StudentTrainingController extends Controller
     */
 
     public function listStudentTrainings($param=""){
-        $student_records = $this->apiService->listData('emis/students/listStudentTrainings/'.$param);
+        $orgId = $this->getWrkingAgencyId();
+        $student_records = $this->apiService->listData('emis/students/listStudentTrainings/'.$param).'/'.$orgId;
         return $student_records;
     }
 
@@ -80,7 +74,6 @@ class StudentTrainingController extends Controller
     */
 
     public function saveTrainingParticipants(Request $request){
-
         $rules = [
             'student'            => 'required',
             'program'            => 'required',
@@ -96,8 +89,9 @@ class StudentTrainingController extends Controller
             'id'               => $request->id,
             'student'          => $request->student,
             'program'          => $request->program,
-            'organization_id'  => $this->getWrkingAgencyId(),
-            'user_id'        => $this->user_id() 
+            'remarks'          => $request->remarks,
+            // 'organization_id'  => $this->getWrkingAgencyId(),
+            // 'user_id'        => $this->user_id() 
         ];
 
 
@@ -105,7 +99,7 @@ class StudentTrainingController extends Controller
             $response_data= $this->apiService->createData('emis/students/saveTrainingParticipants', $data);
             return $response_data;
         }
-        catch(GuzzleHttp\Exception\ClientException $e){
+        catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
     }

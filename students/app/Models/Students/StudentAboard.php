@@ -26,6 +26,7 @@ class StudentAboard extends Model
         'fulladdress',
         'country',
         'city',
+        'phone',
         // 'created_by',
         // 'updated_by'
     ];

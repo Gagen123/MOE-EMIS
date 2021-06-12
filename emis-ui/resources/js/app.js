@@ -10,6 +10,7 @@ Vue.use(VueRouter);
 Vue.use(VTooltip)
 //vue select
 import vSelect from 'vue-select';
+
 import { Form, HasError, AlertError } from 'vform';
 window.form = Form;
 Vue.component(HasError.name, HasError);
@@ -47,7 +48,7 @@ const routes = allRoutes;
 const router = new VueRouter({
     routes
 });
- 
+
 router.beforeEach((to, from, next) => {
   if ($("body").hasClass("request_loading"))
       $("body").removeClass("request_loading");
@@ -82,7 +83,7 @@ axios.interceptors.response.use(function (response) {
       $body.removeClass("request_loading");
   }
   return response;
-}, function (error) { 
+}, function (error) {
   numberOfAjaxCAllPending--;
   if (numberOfAjaxCAllPending == 0) {
       var $body = $("body");

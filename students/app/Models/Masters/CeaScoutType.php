@@ -13,7 +13,12 @@ class CeaScoutType extends Model
 
     protected $fillable = [
         'id',
-        'Name', 
-        'Status'
+        'Name',
+        'Status',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
+
     ];
 }

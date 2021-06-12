@@ -6,7 +6,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Term:</label>
                         <select v-model="student_form.term_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('term_id') }" class="form-control select2" name="term_id" id="term_id">
-                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="term_id"></has-error>
                     </div> 
