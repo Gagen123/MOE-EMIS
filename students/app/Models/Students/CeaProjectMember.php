@@ -10,7 +10,7 @@ class CeaProjectMember extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="cea_project_members";
+    protected $table="cea_project_membership";
 
     protected $fillable = [
         'id',

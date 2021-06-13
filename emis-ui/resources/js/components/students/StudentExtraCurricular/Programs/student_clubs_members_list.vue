@@ -5,8 +5,8 @@
                 <tr>
 
                      <th >No.</th>
-                     <th >Student Code</th>
                      <th >Student Name</th>
+                     <th >Student Code</th>
                      <th >Class</th>
                      <th >Program</th>
                      <th >Joining Date</th>
@@ -16,8 +16,8 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ }}</td>
                     <td>{{ item.student_name}}</td>
+                    <td>{{ item.student_code}}</td>
                     <td>{{ }}</td>
                     <td>{{ item.program_name}}</td>
                     <td>{{ item.JoiningDate}}</td>
@@ -40,7 +40,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/listProgramMembers/'+this.id){
+        loadDataList(uri='students/listClubMembers/'+this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;

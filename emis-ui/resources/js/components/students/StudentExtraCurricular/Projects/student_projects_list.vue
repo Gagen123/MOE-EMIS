@@ -19,7 +19,7 @@
                     <td>{{ item.project_type}}</td>
                     <td>{{ item.program_name}}</td>
                     <td>{{ item.FromDate}} - {{ item.ToDate}}</td>
-                    <td>{{ item.place}}</td>
+                    <td>{{ item.Place}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
