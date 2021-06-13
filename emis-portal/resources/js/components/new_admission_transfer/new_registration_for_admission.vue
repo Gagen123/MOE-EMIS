@@ -619,7 +619,10 @@ export default {
             studentscholarshipList:[],
             studentbenefitList:[],
             sectionList:[],
-
+            ppdob:'',
+            eccddob:'',
+            ppmonth:'',
+            eccdmonth:'',
             student_form: new form({
                 student_id:'',
                 snationality:'',
@@ -1354,6 +1357,20 @@ export default {
             if(type=="primary-contact-guardian"){
                 $('#gardain_section').show();
             }
+        },
+        loadVlidation(){
+            let uri='masters/loadValidationcondition';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.ppdob=data.date;
+                this.eccddob=data.date1;
+                this.ppmonth=data.no_months;
+                this.eccdmonth=data.no_months1;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
         }
     },
 
@@ -1375,6 +1392,7 @@ export default {
     },
 
     created() {
+        this.loadVlidation();
          let cid=this.$route.query.cid;
          this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
