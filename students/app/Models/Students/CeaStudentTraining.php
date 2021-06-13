@@ -13,16 +13,18 @@ class CeaStudentTraining extends Model
 
     protected $fillable = [
         'id',
-        'CeaTrainingTypeId',
-        'name',
+        'OrgId',
         'CeaTrainingId',
         'CeaProgrammeId',
-        'place',
-        'country_id',
+        'TrainingTypeName',
+        'Place',
+        'CmnCountryId',
         'FromDate',
         'ToDate',
-        'Place',
-        'Description',
-        'Status'
+        'DetailsOfTraining',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at',
     ];
 }

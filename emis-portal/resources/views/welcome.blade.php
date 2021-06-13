@@ -65,7 +65,7 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
+            {{-- @if (Route::has('login'))
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
@@ -76,8 +76,11 @@
                         @endif
                     @endauth
                 </div>
-            @endif
-
+            @endif --}}
+            <div class="top-right links">
+                <a href="{{ url('/home') }}">Home</a>
+                <a href="{{ url('login_screen') }}">Login</a>
+            </div>
             <div class="content">
                 <div class="title m-b-md">
                     EMIS Portal

@@ -8,7 +8,7 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created At</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -27,13 +27,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            dzongkhagList:[], 
+            dzongkhagList:[],
+            dt:'',
         }
     },
     methods:{
@@ -44,16 +45,8 @@ export default {
                 this.dzongkhagList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error in retrieve: '+error);
             });
-            setTimeout(function(){
-                $("#dzongkhag-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'edit_dzongkhag',params: {data:data}});
@@ -61,6 +54,15 @@ export default {
     },
     mounted(){
         this.loaddzongkhagList();
+        this.dt =  $("#dzongkhag-table").DataTable();
+    },
+    watch: {
+        dzongkhagList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#dzongkhag-table").DataTable()
+            });
+        }
     },
 }
 </script>

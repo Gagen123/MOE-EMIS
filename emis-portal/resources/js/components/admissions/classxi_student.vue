@@ -64,7 +64,6 @@
                             <td class="text-primary">{{OrgDetails.name}}</td>
                             <td class="text-primary">{{getDzoName.name}}</td>
                             <td class="text-primary">{{getGewogName.name}}</td>
-
                         </tbody>
                     </table>
                 </div>
@@ -355,15 +354,12 @@
             if(id=="class"){
                 this.student_form.class=$('#class').val();
                   this.getstreamListByid($('#class').val());
-
             }
             if(id=="stream"){
                 this.student_form.stream=$('#stream').val();
                 this.getstreamList($('#stream').val);
-
             }
            }
-
         },
         mounted() {
           $('.select2').select2({

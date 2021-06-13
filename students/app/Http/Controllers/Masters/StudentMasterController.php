@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdmissionValidationModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +71,56 @@ class StudentMasterController extends Controller
 
     }
 
+    public function saveValidationcondition(Request $request){
+        $rules = [
+            'date'          =>  'required',
+            'date1'         =>  'required',
+            'status'        =>  'required',
+            'no_months'     =>  'required',
+            'no_months1'    =>  'required',
+        ];
+        $customMessages = [
+            'date.required' => 'This field is required',
+            'date1.required' => 'This field is required',
+            'status.required' => 'This field is required',
+            'no_months.required' => 'This field is required',
+            'no_months1.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'date'                      =>  $request->date,
+            'date1'                     =>  $request->date1,
+            'status'                    =>  $request->status,
+            'no_months'                 =>  $request->no_months,
+            'no_months1'                =>  $request->no_months1,
+        ];
+        // dd($data);
+        $existing_data=AdmissionValidationModel::first();
+        if($existing_data!=null && $existing_data!=""){
+            $response_data = AdmissionValidationModel::first();
+            $data =$data+[
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>   date('Y-m-d h:i:s'),
+            ];
+            AdmissionValidationModel::where('id',$response_data->id)->update($data);
+            $response_data = AdmissionValidationModel::first();
+        }
+        else{
+            $data =$data+[
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>   date('Y-m-d h:i:s'),
+            ];
+            $response_data = AdmissionValidationModel::create($data);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+    }
+
+    public function loadValidationcondition(){
+        $response_data = AdmissionValidationModel::first();
+        return $this->successResponse($response_data);
+    }
+
     /**
      * method to list students masters
     */
@@ -85,7 +136,6 @@ class StudentMasterController extends Controller
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
 
         $model = new $modelName();
-
         //need to separate programs from clubs
 
         if($param == 'program_name'){
