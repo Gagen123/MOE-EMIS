@@ -18,7 +18,7 @@ use App\Models\masters\RatingType;
 use App\Models\masters\SubjectAssessmentType;
 use App\Models\masters\SubjectGroup;
 use App\Models\masters\SubjectCategory;
-
+use Exception;
 
 class AcademicMastersController extends Controller
 {

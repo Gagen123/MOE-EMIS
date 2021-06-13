@@ -6,9 +6,8 @@
                     <th >No.</th>
                     <th >Student Name </th>
                     <th >Student ID </th>
-                    <th >Project/Initiative</th>
-                    <th >Type</th>
-                    <th >Under Program</th>
+                    <th >Project</th>
+                    <th >Task Description</th>
                     <th >Action</th>
                 </tr>
             </thead>
@@ -16,10 +15,9 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.student_name}}</td>
-                    <td>{{ }}</td>
-                    <td>{{ item.project_name}}</td>
-                    <td>{{ item.program_name}}</td>
-                    <td>{{ item.place}}</td>
+                    <td>{{ item.StdStudentId}}</td>
+                    <td>{{ item.CeaProjectId}}</td>
+                    <td>{{ item.Task}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

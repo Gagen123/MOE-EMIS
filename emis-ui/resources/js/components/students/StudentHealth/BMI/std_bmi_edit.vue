@@ -229,13 +229,6 @@ export default {
      },
         
         shownexttab(presentclass,nextclass){  
-            
-          //  $('#tabhead >li >a').removeClass('active');
-          //  $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-          //  $('.'+nextclass+' >a').addClass('active');
-          //  $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-         //   $('.'+nextclass+' >a').removeClass('disabled');
-            //body
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
             if(nextclass=="final-tab"){ 

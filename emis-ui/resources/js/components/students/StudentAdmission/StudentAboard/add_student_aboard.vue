@@ -78,6 +78,15 @@
                         <input type="text" v-model="form.city" class="form-control editable_fields" id="city" />
                     </div>
                 </div>
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Contact No:</label>
+                        <input class="form-control editable_fields" name="phone" id="phone" type="number" 
+                        v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')">
+                        <has-error :form="form" field="phone"></has-error>
+                        <!-- <input type="text" v-model="form.phone" class="form-control editable_fields" id="phone" /> -->
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer text-right">
@@ -113,6 +122,7 @@ export default {
                 fulladdress: '',
                 country:'',
                 city: '',
+                phone:'',
             })
         }
     },
@@ -143,6 +153,7 @@ export default {
             this.form.fulladdress='';
             this.form.country = '';
             this.form.city = '';
+            this.form.phone ='';
         },
 
         /**

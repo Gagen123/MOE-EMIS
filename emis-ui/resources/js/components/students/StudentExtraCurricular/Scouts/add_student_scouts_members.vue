@@ -20,7 +20,7 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label> Scout Section</label>
-                            <v-select :options="this.scoutSectionList" label="Name" v-model="student_form.CeaSchoolScoutsId">
+                            <v-select :options="this.scoutSectionList" label="name" v-model="student_form.CeaSchoolScoutsId">
                                 <template #search="{attributes, events}">
                                 <input
                                     class="vs__search"
@@ -104,9 +104,7 @@ export default {
                     }
                     this.OrgClassStreamId = item.org_class_stream_id;
                     this.orgId = item.org_id;
-
                     this.getStudentBasedOnTeacherClassSect();
-
                 })
             })
         },
@@ -116,11 +114,10 @@ export default {
                 this.studentList = response.data;
             })
         },
-        loadActiveScoutSection(uri="masters/loadActiveStudentMasters/scout_section"){
+        loadActiveScoutSection(uri="masters/getScoutSection"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.scoutSectionList =  data.data.data;
+                this.scoutSectionList =  response.data;
             }).catch(function (error) { console.log("Error......"+error)});
         },
         formaction: function(type){

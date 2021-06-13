@@ -20,6 +20,7 @@ class StudentScoutController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
 
+
     public function saveStudentScouts(Request $request){
 
         $rules = [
@@ -90,6 +91,8 @@ class StudentScoutController extends Controller
 
     }
 
+
+    //SAVE SCOUT PARTICIPANTS
     public function saveScoutParticipants(Request $request){
         $rules = [
             'StdStudentId'              => 'required',
@@ -138,17 +141,14 @@ class StudentScoutController extends Controller
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-
-    public function loadScoutMembers($param=""){
-
-        $roles = DB::table('cea_scouts_membership')
-                ->join('cea_school_scouts', 'cea_school_scouts.id', '=', 'cea_scouts_membership.CeaSchoolScoutsId')
-                ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
-                ->join('std_student', 'cea_scouts_membership.StdStudentId', '=', 'std_student.id')
-                ->select('cea_scouts_membership.*', 'cea_scouts.name AS scout_name', 'std_student.name as student_name')
-                ->where('cea_school_scouts.OrgOrganizationId', $param)
-                ->get();
-
-        return $this->successResponse($roles);
-    }
+    // public function loadScoutMembers($param=""){
+    //     $roles = DB::table('cea_scouts_membership')
+    //             ->join('cea_school_scouts', 'cea_school_scouts.id', '=', 'cea_scouts_membership.CeaSchoolScoutsId')
+    //             ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
+    //             ->join('std_student', 'cea_scouts_membership.StdStudentId', '=', 'std_student.id')
+    //             ->select('cea_scouts_membership.*', 'cea_scouts.name AS scout_name', 'std_student.name as student_name')
+    //             ->where('cea_school_scouts.OrgOrganizationId', $param)
+    //             ->get();
+    //     return $this->successResponse($roles);
+    // }
 }

@@ -79,11 +79,11 @@ class AdminstratorController extends Controller
          return $response_data;
     }
 
-    public function getseatdetailsbyOrgId($orgId){
-        $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);
-        return $itemList;
+    // public function getseatdetailsbyOrgId($orgId){
+    //     $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);
+    //     return $itemList;
 
-    }
+    // }
 
 
 

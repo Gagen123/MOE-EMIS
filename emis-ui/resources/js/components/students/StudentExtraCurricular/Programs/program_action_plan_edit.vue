@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Program/Club:<i class="text-danger">*</i></label>
                     <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
                 </div> 
@@ -203,6 +203,9 @@ export default {
         this.loadActiveSupportList();
     },
     created() {
+        this.student_form.action_plan.CeaProgrammeActionPlanId=this.$route.params.data.CeaProgrammeActionPlanId;
+        this.student_form.action_plan.Title=this.$route.params.data.Title;
+        this.student_form.action_plan.Description=this.$route.params.data.Description;
         this.student_form.program=this.$route.params.data.CeaProgrammeId;
         this.student_form.from_date=this.$route.params.data.FromDate;
         this.student_form.to_date=this.$route.params.data.ToDate;

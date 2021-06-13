@@ -84,7 +84,6 @@ class StudentMasterController extends Controller{
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
         return $response_data;
 
-
     }
 
     public function saveValidationcondition(Request $request){
@@ -118,6 +117,11 @@ class StudentMasterController extends Controller{
 
     }
 
+    //get Scouts Section
+    public function getScoutSection(){
+        $scout_section = $this->apiService->listData('emis/masters/students/getScoutSection');
+        return $scout_section;
+    }
     public function loadValidationcondition(){
         $student_masters = $this->apiService->listData('emis/masters/students/loadValidationcondition/');
         return $student_masters;
@@ -135,6 +139,7 @@ class StudentMasterController extends Controller{
     }
 
     public function loadActiveStudentMasters($param=""){
+       // dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }

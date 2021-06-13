@@ -13,6 +13,7 @@ class StudentClub extends Model
     protected $table="student_club";
 
     protected $fillable = [
+        'organizationId',
         'id',
         'StdStudentId', 
         'status',

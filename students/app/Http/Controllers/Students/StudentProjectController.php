@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\Student;
 use App\Models\Students\CeaProject;
-use App\Models\Students\CeaProjectMembership;
+use App\Models\Students\CeaProjectMember;
 
 
 class StudentProjectController extends Controller
@@ -21,42 +21,75 @@ class StudentProjectController extends Controller
     }
 
     public function saveStudentProject(Request $request){
+        $id = $request->id;
+        if( $id != null){
         $rules = [
-            'name'            => 'required',
-            'place'            => 'required',
-            'project_type_id'            => 'required',
+            'name'                  => 'required',
+            'place'                 => 'required',
+            'project_type_id'       => 'required',
             'program_id'            => 'required',
-            'from_date'            => 'required',
+            'from_date'             => 'required',
             'to_date'               => 'required'
         ];
-
         $customMessages = [
-            'name.required'  => 'This field is required',
-            'place.required'     => 'This field is required',
-            'project_type_id.required'  => 'This field is required',
-            'program_id.required'     => 'This field is required',
-            'from_date.required'  => 'This field is required',
-            'to_date.required'     => 'This field is required',
+            'name.required'                     => 'This field is required',
+            'place.required'                    => 'This field is required',
+            'project_type_id.required'          => 'This field is required',
+            'program_id.required'               => 'This field is required',
+            'from_date.required'                => 'This field is required',
+            'to_date.required'                  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
         $data =[
-            'id'               => $request->id,
-            'name'          => $request->name,
-            'Place'             => $request->place,
-            'CeaProjectTypeId'            => $request->project_type_id,
-            'CeaProgrammeId'           => $request->program_id,
-            'FromDate'                => $request->from_date,
-            'ToDate'          => $request->to_date,
-            'Description'          => $request->description,
+            'id'                                => $request->id,
+            'name'                              => $request->name,
+            'Place'                             => $request->place,
+            'CeaProjectTypeId'                  => $request->project_type_id,
+            'CeaProgrammeId'                    => $request->program_id,
+            'FromDate'                          => $request->from_date,
+            'ToDate'                            => $request->to_date,
+            'Description'                       => $request->description,
             'Status' => '1',
             'OrgOrganizationId' => '1'
 
             //'user_id'        => $this->user_id() 
         ];
-
-        $response_data = CeaProject::create($data);
-
+       
+        $response_data = CeaProject::where('id', $id)->update($data);
+        }else {
+            $rules = [
+                'name'            => 'required',
+                'place'            => 'required',
+                'project_type_id'            => 'required',
+                'program_id'            => 'required',
+                'from_date'            => 'required',
+                'to_date'               => 'required'
+            ];
+            $customMessages = [
+                'name.required'  => 'This field is required',
+                'place.required'     => 'This field is required',
+                'project_type_id.required'  => 'This field is required',
+                'program_id.required'     => 'This field is required',
+                'from_date.required'  => 'This field is required',
+                'to_date.required'     => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+            $data =[
+                'id'                     => $request->id,
+                'name'                   => $request->name,
+                'Place'                  => $request->place,
+                'CeaProjectTypeId'       => $request->project_type_id,
+                'CeaProgrammeId'         => $request->program_id,
+                'FromDate'               => $request->from_date,
+                'ToDate'                 => $request->to_date,
+                'Description'            => $request->description,
+                'Status' => '1',
+                'OrgOrganizationId' => '1'
+    
+                //'user_id'        => $this->user_id() 
+            ];
+            $response_data = CeaProject::create($data);
+        }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -81,33 +114,59 @@ class StudentProjectController extends Controller
     */
 
     public function saveProjectMembers(Request $request){
+        $id = $request->id;
+        if( $id != null){
+            $rules = [
+             'student'            => 'required',
+             'project'            => 'required',
+             'task'               => 'required',
+            ];
 
-        $rules = [
-            'student'            => 'required',
-            'project'            => 'required',
-            'task'            => 'required',
-        ];
+            $customMessages = [
+             'student.required'      => 'This field is required',
+             'project.required'      => 'This field is required',
+             'task.required'         => 'This field is required',
+            ];
+         $this->validate($request, $rules, $customMessages);
+         $data =[
+             'id'                    => $request->id,
+             'StdStudentId'          => $request->student,
+             'CeaProjectId'          => $request->project,
+             'Task'                  => $request->task,
+             'updated_by'            => $request->user_id,
+             'updated_at'            =>  date('Y-m-d h:i:s')
 
-        $customMessages = [
-            'student.required'  => 'This field is required',
-            'project.required'     => 'This field is required',
-            'task.required'  => 'This field is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
-        
-        $data =[
-            'id'               => $request->id,
-            'StdStudentId'          => $request->student,
-            'CeaProjectId'             => $request->project,
-            'Task'             => $request->task
-
-            //'user_id'        => $this->user_id() 
-        ];
-
-        $response_data = CeaProjectMembership::create($data);
-
+             //'user_id'        => $this->user_id() 
+            ];
+            $response_data = CeaProjectMember::where('id', $id)->update($data);
+        }else{
+            $rules = [
+                'student'            => 'required',
+                'project'            => 'required',
+                'task'               => 'required',
+            ];
+    
+            $customMessages = [
+                'student.required'      => 'This field is required',
+                'project.required'      => 'This field is required',
+                'task.required'         => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+            
+            $data =[
+                'id'                    => $request->id,
+                'StdStudentId'          => $request->student,
+                'CeaProjectId'          => $request->project,
+                'Task'                  => $request->task,
+                'created_by'            => $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s')
+    
+                //'user_id'        => $this->user_id() 
+            ];
+         // dd( $data);
+            $response_data = CeaProjectMember::create($data);
+        }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-
     }
 
     /**
@@ -115,10 +174,11 @@ class StudentProjectController extends Controller
      */
 
     public function listProjectMembers($param){
-        $records = DB::table('cea_project')
-                ->join('cea_project_membership', 'cea_project.id', '=', 'cea_project_membership.CeaProjectId')
-                ->join('std_student', 'cea_project_membership.StdStudentId', '=', 'std_student.id')
-                ->select('cea_project.name AS project_name', 'std_student.Name AS student_name')
+       // dd('from services');
+        $records = DB::table('cea_project_members')
+                ->join('cea_project', 'cea_project.id', '=', 'cea_project_members.CeaProjectId')
+                ->join('std_student', 'cea_project_members.StdStudentId', '=', 'std_student.id')
+                ->select('cea_project.name AS project_name', 'std_student.Name AS student_name','cea_project_members.Task AS Task')
                 ->get();
 
         return $this->successResponse($records);
