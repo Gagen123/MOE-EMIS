@@ -49,6 +49,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         //get Scouts Section Level By Scouts Section Id
         $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
+        $router->post('/saveValidationcondition', ['uses' => 'Masters\StudentMasterController@saveValidationcondition']);
+        $router->get('/loadValidationcondition','Masters\StudentMasterController@loadValidationcondition');
         //Get Scouts Section
         $router->get('/getScoutSection','Masters\StudentMasterController@getScoutSection');
     });
@@ -62,7 +64,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
-            $router->post('/updateAdmissionStd', ['uses' => 'emis\student\StudentAdmissionController@updateAdmissionStd']);
+            $router->post('/studentAdmissionupdate', ['uses' => 'students\StudentAdmissionController@studentAdmissionupdate']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
             $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
@@ -85,6 +87,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getSenStudentList',['uses' => 'Sen\SenStudentController@getSenStudentList']);
             $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
         });
+
+        //Validate student data
+        $router->post('/validateStudentData',['uses' => 'General\StudentValidationController@validateStudentData']);
 
         //Get Student List by orgId, Orgclassstreamid
         $router->get('/getStudentList/{orgId}/{orgClassStreamId}',['uses' => 'General\GeneralStudentController@getStudentList']);

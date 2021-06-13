@@ -109,6 +109,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadDisasterComm', [App\Http\Controllers\AdministrationController::class, 'loadDisasterComm'])->name('loadDisasterComm');
     //Student Masters
     Route::post('/saveStudentMasters', [App\Http\Controllers\student\StudentMasterController::class, 'saveStudentMasters'])->name('saveStudentMasters');
+
     Route::get('/loadStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
     Route::get('/loadActiveStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveStudentMasters'])->name('loadActiveStudentMasters');
     Route::get('/allActiveStudentDropdowns/{model}/{parent_id}', [App\Http\Controllers\student\StudentMasterController::class, 'allActiveStudentDropdowns'])->name('allActiveStudentDropdowns');
@@ -116,6 +117,10 @@ Route::prefix('masters')->group(function () {
     Route::get('/getScoutSection', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSection'])->name('');
     //Get Scouts Section Level By Scouts Section Level
     Route::get('/getScoutSectionLevel/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSectionLevel'])->name('getScoutSectionLevel');
+
+    Route::post('/saveValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'saveValidationcondition'])->name('saveValidationcondition');
+    Route::get('/loadValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'loadValidationcondition'])->name('loadValidationcondition');
+
 
     // Academic Master
     Route::post('/saveAcademicMasters', [App\Http\Controllers\AdministrationController::class, 'saveAcademicMasters'])->name('saveAcademicMasters');
@@ -499,7 +504,7 @@ Route::prefix('students')->group(function () {
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
-        Route::post('/updateAdmissionStd', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateAdmissionStd'])->name('updateAdmissionStd');
+        Route::post('/studentAdmissionupdate', [App\Http\Controllers\student\StudentAdmissionController::class, 'studentAdmissionupdate'])->name('studentAdmissionupdate');
     });
 
     Route::prefix('sen')->group(function (){
@@ -566,8 +571,6 @@ Route::prefix('students')->group(function () {
     Route::get('/getProgramDetails/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'getProgramDetails'])->name('getProgramDetails');
     Route::post('/saveProgramMembers', [App\Http\Controllers\student\StudentProgramController::class, 'saveProgramMembers'])->name('saveProgramMembers');
     Route::get('/listProgramMembers/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listProgramMembers'])->name('listProgramMembers');
-    Route::get('/loadStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'loadStudentClubs'])->name('loadStudentClubs');
-    Route::get('/listStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listStudentClubs'])->name('listStudentClubs');
     Route::post('/saveProgramActionPlan', [App\Http\Controllers\student\StudentProgramController::class, 'saveProgramActionPlan'])->name('saveProgramActionPlan');
     Route::get('/loadProgramActionPlan/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'loadProgramActionPlan'])->name('loadProgramActionPlan');
     Route::post('/saveProgramInventory', [App\Http\Controllers\student\StudentProgramController::class, 'saveProgramInventory'])->name('saveProgramInventory');
@@ -579,14 +582,16 @@ Route::prefix('students')->group(function () {
     Route::post('/saveTrainingParticipants', [App\Http\Controllers\student\StudentTrainingController::class, 'saveTrainingParticipants'])->name('saveTrainingParticipants');
     Route::get('/listTrainingParticipants/{param}', [App\Http\Controllers\student\StudentTrainingController::class, 'listTrainingParticipants'])->name('listTrainingParticipants');
 
-    //Club Routes 
+    //Club Routes
+    Route::get('/loadStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'loadStudentClubs'])->name('loadStudentClubs');
+    Route::get('/listStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listStudentClubs'])->name('listStudentClubs');
     Route::post('/saveClubMembers', [App\Http\Controllers\student\StudentProgramController::class, 'saveClubMembers'])->name('saveClubMembers');
     Route::get('/listClubMember/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listClubMember'])->name('listClubMember');
 
     Route::post('/saveStudentScouts', [App\Http\Controllers\student\StudentScoutController::class, 'saveStudentScouts'])->name('saveStudentScouts');
     Route::get('/loadStudentScouts/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'loadStudentScouts'])->name('loadStudentScouts');
     Route::get('/listStudentScouts/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'listStudentScouts'])->name('listStudentScouts');
-    //SAVE STUDNET SCOUTS PARTICIPANTS
+    //SAVE STUDENT SCOUTS PARTICIPANTS
     Route::post('/saveScoutParticipants', [App\Http\Controllers\student\StudentScoutController::class, 'saveScoutParticipants'])->name('saveScoutParticipants');
     Route::get('/loadScoutMembers/{orgId}', [App\Http\Controllers\student\StudentScoutController::class, 'loadScoutMembers'])->name('loadScoutMembers');
 

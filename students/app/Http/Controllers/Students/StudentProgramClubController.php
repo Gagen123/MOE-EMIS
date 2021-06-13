@@ -30,6 +30,7 @@ class StudentProgramClubController extends Controller
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
+    
     public function saveStudentClub(Request $request){
 //    dd('from services');
         $std_id = $request->student;
@@ -54,6 +55,7 @@ class StudentProgramClubController extends Controller
         }
         return $this->successResponse($persondata, Response::HTTP_CREATED);
     }
+
     public function listProgramMembers($orgId=""){
         $id ="1";
 

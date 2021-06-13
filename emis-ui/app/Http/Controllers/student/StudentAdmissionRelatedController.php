@@ -177,7 +177,7 @@ class StudentAdmissionRelatedController extends Controller
     //save function 
     public function saveStudentAboard(Request $request){
         $rules = [
-            'cid_passport'          =>  'required',
+            'cid_passport'            =>  'required',
            // 'first_name'            =>  'required',
           //  'middle_name'           =>  'required',
           //  'last_name'             =>  'required',
@@ -185,9 +185,10 @@ class StudentAdmissionRelatedController extends Controller
             // 'sex_id'                =>  'required',
             // 'mother_tongue'         =>  'required',
             // 'status'                =>  'required',
-            // 'fulladdress'           =>  'required',
+            // 'fulladdress'           =>  'required','required|digits:10',
             // 'country'               =>  'required',
             // 'city'                  =>  'required',
+            'phone'                    =>  'required|digits:8',
         ];
         $customMessages = [
             'cid_passport.required'      => 'cid_passport is required',
@@ -201,6 +202,7 @@ class StudentAdmissionRelatedController extends Controller
             // 'fulladdress'                => 'fulladdress is required',
             // 'country'                    => 'country is required',
             // 'city'                       => 'city is required',
+            'phone'                    =>  'Phone number should be of 8 digit',
         ];
         $this->validate($request, $rules, $customMessages);
         $personal_details =[
@@ -221,7 +223,7 @@ class StudentAdmissionRelatedController extends Controller
             'user_id'                    =>  $this->userId()
 
         ];
-       //dd($personal_details);
+      // dd($personal_details);
         // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentAboard', $personal_details);
             return $response_data;

@@ -1,6 +1,6 @@
 <template>
     <div class="card-body">
-        <table id="dzongkhag-table" class="table table-bordered text-sm table-striped">
+        <table id="mother_tongue-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -8,7 +8,7 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created At</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -26,33 +26,26 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            mothertongueList:[], 
+            mothertongueList:[],
+            dt:'',
         }
     },
     methods:{
         loadmothertongueList(uri = 'masters/loadGlobalMasters/all_mother_tongue'){
             axios.get(uri)
-            .then(response => {   
+            .then(response => {
                 let data = response;
                 this.mothertongueList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#dzongkhag-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'edit_mother_tongue',params: {data:data}});
@@ -60,6 +53,15 @@ export default {
     },
     mounted(){
         this.loadmothertongueList();
+        this.dt =  $("#mother_tongue-table").DataTable();
+    },
+     watch: {
+        mothertongueList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#mother_tongue-table").DataTable()
+            });
+        }
     },
 }
 </script>

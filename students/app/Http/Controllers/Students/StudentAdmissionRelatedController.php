@@ -216,6 +216,7 @@ class StudentAdmissionRelatedController extends Controller
      * method to save student aboard details
      */
     public function saveStudentAboard(Request $request){
+     //   dd('m here at services');
         $id = $request->id;
         if( $id != null){
             $data =[
@@ -231,29 +232,31 @@ class StudentAdmissionRelatedController extends Controller
                 'status'                    =>  $request->status,
                 'fulladdress'               =>  $request->fulladdress,
                 'country'                   =>  $request->country,
+                'phone'                     =>  $request->phone,
                 'city'                      =>  $request->city,
-            ];
-             $response_data = StudentAboard::where('id', $id)->update($data);
+             ];
+            StudentAboard::where('id', $id)->update($data);
+            $persondata = StudentAboard::where('id', $id)->first();
         } else {
-
-        $data =[
-            'id'                        =>  $request->id,
-            'organizationId'            =>  $request->organizationId,
-            'cid_passport'              =>  $request->cid_passport,
-            'first_name'                =>  $request->first_name,
-            'middle_name'               =>  $request->middle_name,
-            'last_name'                 =>  $request->last_name,
-            'dob'                       =>  $request->dob,
-            'sex_id'                    =>  $request->sex_id,
-            'mother_tongue'             =>  $request->mother_tongue,
-            'status'                    =>  $request->status,
-            'fulladdress'               =>  $request->fulladdress,
-            'country'                   =>  $request->country,
-            'city'                      =>  $request->city,
-            'phone'                     =>  $request->phone,
-        ];
+            $data =[
+                'id'                        =>  $request->id,
+                'organizationId'            =>  $request->organizationId,
+                'cid_passport'              =>  $request->cid_passport,
+                'first_name'                =>  $request->first_name,
+                'middle_name'               =>  $request->middle_name,
+                'last_name'                 =>  $request->last_name,
+                'dob'                       =>  $request->dob,
+                'sex_id'                    =>  $request->sex_id,
+                'mother_tongue'             =>  $request->mother_tongue,
+                'status'                    =>  $request->status,
+                'fulladdress'               =>  $request->fulladdress,
+                'country'                   =>  $request->country,
+                'city'                      =>  $request->city,
+                'phone'                     =>  $request->phone,
+            ];
+            $persondata = StudentAboard::create($data);
         }
-        $persondata = StudentAboard::create($data);
+
         return $this->successResponse($persondata, Response::HTTP_CREATED);
     }
 
@@ -268,8 +271,8 @@ class StudentAdmissionRelatedController extends Controller
                 'IsRejoined' => '1',
             ];
         }
-
         Student::where('id', $student_id)->update($app_data);
-        return;
+        $response_data=Student::where('id', $student_id)->first();
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 }

@@ -103,7 +103,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.trainingList =  data.data;
+                this.trainingList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

@@ -9,7 +9,7 @@
                     <th>Code</th>
                     <th>Status</th>
                     <th>Created Date Time</th>
-                    <th>Action</th> 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -29,13 +29,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             countryList:[],
+            dt:'',
         }
     },
     methods:{
@@ -46,16 +47,8 @@ export default {
                 this.countryList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#nationality-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'edit_nationality',params: {data:data}});
@@ -63,6 +56,15 @@ export default {
     },
     mounted(){
         this.loadcountryList();
+        this.dt =  $("#nationality-table").DataTable();
+    },
+    watch: {
+        countryList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#nationality-table").DataTable()
+            });
+        }
     },
 }
 </script>

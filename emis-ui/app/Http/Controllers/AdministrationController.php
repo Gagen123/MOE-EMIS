@@ -48,15 +48,17 @@ class AdministrationController extends Controller{
         }
         $this->validate($request, $rules,$customMessages);
         $data =[
-            'name'          =>  $request['name'],
-            'nationality'   =>  $request['nationality'],
-            'parent_field'  =>  $request['parent_field'],
-            'code'          =>  $request['code'],
-            'status'        =>  $request['status'],
-            'actiontype'    =>  $request['action_type'],
-            'id'            =>  $request['id'],
-            'record_type'   =>$request['record_type'],
-            'user_id'       =>$this->userId()
+            'name'                  =>  $request['name'],
+            'nationality'           =>  $request['nationality'],
+            'parent_field'          =>  $request['parent_field'],
+            'code'                  =>  $request['code'],
+            'guideline_for'         =>  $request['guideline_for'],
+            'guidelines'            =>  $request['guidelines'],
+            'status'                =>  $request['status'],
+            'actiontype'            =>  $request['action_type'],
+            'id'                    =>  $request['id'],
+            'record_type'           =>$request['record_type'],
+            'user_id'               =>$this->userId()
         ];
         // dd($data);
         try{
@@ -170,17 +172,17 @@ class AdministrationController extends Controller{
         $response_data= $this->apiService->createData('emis/masters/saveLeaveConfigMasters', $data);
         return $response_data;
     }
-    
+
     public function loadLeaveConfigMasters($type="",$submitter=""){
         $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigMasters/'.$type.'/'.$submitter);
         return $response_data;
     }
-    
+
     public function loadAllLeaveConfigMasters(){
         $response_data = $this->apiService->listData('emis/masters/loadAllLeaveConfigMasters');
         return $response_data;
     }
-    
+
     public function loadLeaveConfigDetails($id=""){
         $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/'.$id);
         return $response_data;
@@ -204,7 +206,7 @@ class AdministrationController extends Controller{
                 'name'  =>  'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
-                
+
             ];
             $customMessages = [
                 'name.required' => 'This field is required',
@@ -245,7 +247,7 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
- 
+
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();
         $data = $request->all();
@@ -266,7 +268,7 @@ class AdministrationController extends Controller{
     }
     public function getClassAssessmentFrequency(){
         $global_masters = $this->apiService->listData('emis/masters/getClassAssessmentFrequency');
-        return $global_masters;   
+        return $global_masters;
     }
     public function saveClassSubject(Request $request){
         $rules = [
@@ -300,7 +302,7 @@ class AdministrationController extends Controller{
     }
     public function loadclassSubAssmtFrequency(){
         $global_masters = $this->apiService->listData('emis/masters/loadclassSubAssmtFrequency');
-        return $global_masters;   
+        return $global_masters;
     }
     public function loadclassSubjectAssessment($term_id, $sub_id, $class_id, $stream_id=""){
         $uri = 'emis/masters/loadclassSubjectAssessment/'.$term_id.'/'.$sub_id.'/'.$class_id;
@@ -308,9 +310,9 @@ class AdministrationController extends Controller{
            $uri .= ('/'.$stream_id);
         }
         $response_data = $this->apiService->listData($uri);
-        return $response_data; 
+        return $response_data;
     }
-    public function saveclassSubjectAssessment(Request $request){    
+    public function saveclassSubjectAssessment(Request $request){
         $rules = [
            'aca_assmt_term_id' => 'required',
            'aca_sub_id' => 'required',

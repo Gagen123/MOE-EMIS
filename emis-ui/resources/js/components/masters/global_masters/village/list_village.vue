@@ -1,6 +1,6 @@
 <template>
     <div class="card-body">
-        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
+        <table id="village-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -10,7 +10,7 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -30,13 +30,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             villageList:[],
+            dt:'',
         }
     },
     methods:{
@@ -47,18 +48,25 @@ export default {
                 this.villageList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="8" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+               console.log('error: '+error);
             });
         },
         showedit(data){
             this.$router.push({name:'edit_village',params: {data:data}});
         },
-        
+
     },
-    mounted(){ 
+    mounted(){
         this.loadvillageList();
+        this.dt =  $("#village-table").DataTable()
+    },
+    watch: {
+        villageList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#village-table").DataTable()
+            });
+        }
     },
 }
 </script>

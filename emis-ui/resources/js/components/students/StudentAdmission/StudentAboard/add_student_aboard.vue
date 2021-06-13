@@ -80,8 +80,11 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Phone:</label>
-                        <input type="text" v-model="form.phone" class="form-control editable_fields" id="phone" />
+                        <label>Contact No:</label>
+                        <input class="form-control editable_fields" name="phone" id="phone" type="number" 
+                        v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')">
+                        <has-error :form="form" field="phone"></has-error>
+                        <!-- <input type="text" v-model="form.phone" class="form-control editable_fields" id="phone" /> -->
                     </div>
                 </div>
             </div>

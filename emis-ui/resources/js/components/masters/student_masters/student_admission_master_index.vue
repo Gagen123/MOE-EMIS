@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">Student Admission Masters</h6></li>
         </ol>
@@ -45,7 +45,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
         },
         populate_pate(data,action){
@@ -57,7 +57,7 @@ export default {
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
     },
-    
+
 }
 </script>
 
