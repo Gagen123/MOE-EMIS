@@ -69,22 +69,16 @@ class FurnitureController extends Controller
      */
 
     public function saveFurniture(Request $request){
-
         $id = $request->id;
-
         if( $id != null){
             $data = [
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'usable'               =>  $request['usable'],
-                'notusable'                      =>  $request['notusable'],
-                // 'number'                    =>  $request['number'],
-                // 'condition'                 =>  $request['condition'],
-                // 'lifeExpectancy'            =>  $request['life_expectancy'],
-                // 'dateReceived'              =>  $request['date_received'],
-                'updated_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s')
+                'usable'                    =>  $request['usable'],
+                'notusable'                 =>  $request['notusable'],
+                'updated_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
             ];
 
             $response_data = Furniture::where('id', $id)->update($data);
@@ -95,15 +89,15 @@ class FurnitureController extends Controller
                 'item'                      =>  $request['item'],
                 'usable'                    =>  $request['location'],
                 'notusable'                 =>  $request['cost'],
-                // 'number'                 =>  $request['number'],
-                // 'condition'              =>  $request['condition'],
-                // 'lifeExpectancy'         =>  $request['life_expectancy'],
-                // 'dateReceived'           =>  $request['date_received'],
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
-
+            try{
             $response_data = Furniture::create($data);
+            }
+            catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+                 }
 
         }
 

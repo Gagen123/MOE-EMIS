@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\generalInformation\Equipment;
+use App\Models\Equipment;
 use App\Models\Masters\EquipmentType;
 use App\Models\Masters\EquipmentItem;
 use App\Models\Masters\EquipmentUsage;
@@ -30,8 +30,7 @@ class EquipmentController extends Controller
     */
     
     public function loadEquipment($orgId=""){
-
-        $equip = DB::table('organization_equipment as a')
+        $equip = DB::table('equipment as a')
             ->join('equipment_type as b', 'a.type', '=', 'b.id')
             ->join('equipment_items as c', 'a.item', '=', 'c.id')
             ->select('a.id as id','b.name as type', 'c.equipmentItem as item','a.usable as usable', 'a.notusable as notusable',
@@ -67,7 +66,6 @@ class EquipmentController extends Controller
      */
 
     public function saveEquipment(Request $request){
-
         $id = $request->id;
 
         if( $id != null){
@@ -87,13 +85,18 @@ class EquipmentController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'usable'                      =>  $request['usable'],
+                'usable'                    =>  $request['usable'],
                 'notusable'                 =>  $request['notusable'],
-                'created_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s')
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
             ];
-
+            // dd($data);
+        try{
             $response_data = Equipment::create($data);
+        }catch(\Illuminate\Database\QueryException $ex){
+           dd($ex);
+            }
+            
 
         }
 
