@@ -10,12 +10,15 @@ class CeaTrainingParticipant extends Model
 {
     use HasFactory,Uuid;
     protected $table="cea_student_training_participant";
-    public $timestamps = false;
-
     protected $fillable = [
         'id',
+        'OrgId',
         'CeaStudentTrainingId',
         'StdStudentId',
         'Remarks',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at',
     ];
 }
