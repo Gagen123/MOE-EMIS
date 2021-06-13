@@ -38,7 +38,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.actionTakenList =  data.data;
+                this.actionTakenList =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){

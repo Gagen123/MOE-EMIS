@@ -213,10 +213,10 @@
                                                        <td>Total Male Sports Instructors</td>
                                                        <td></td>
                                                   </tr>
-                                                  <tr>
+                                                  <!-- <tr>
                                                        <td>GeoPolitically Located</td>
                                                        <td></td>
-                                                  </tr>
+                                                  </tr> -->
                                               </tbody>
                                           </table>
                                         </div>
@@ -239,28 +239,12 @@
                                                         <td>{{existing_details.latitude}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Altitude</td>
+                                                        <td>Total Female Student with Disabilities</td>
                                                         <td>{{existing_details.altitude}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>School Contact No</td>
+                                                        <td>Total Male Student with Disabilities</td>
                                                         <td>{{existing_details.mofCode}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Principal Contact No</td>
-                                                        <td>{{existing_details.code}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Vice/Assistant Principal Contact No</td>
-                                                        <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                    <td>Mail ID</td>
-                                                        <td>{{existing_details.mailid}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                    <td>Website Link</td>
-                                                        <td>{{existing_details.wesitelink}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

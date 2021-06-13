@@ -4,18 +4,18 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Equipment Item:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.equipmentItem" :class="{ 'is-invalid': form.errors.has('sub_name') }" id="equipmentItem" @change="remove_err('equipmentItem')" type="text">
+                        <label>Furniture Item:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
 
-                        <has-error :form="form" field="spo_name"></has-error>
+                        <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Equipment Type:<span class="text-danger">*</span></label> 
-                        <select name="type" class="form-control" v-model="form.equipmentType" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="equipmentType" @change="remove_err('equipmentType')">
+                        <label>Furniture Type:<span class="text-danger">*</span></label> 
+                        <select name="type" class="form-control" v-model="form.furnitureType" :class="{ 'is-invalid': form.errors.has('furnitureType') }" id="furnitureType" @change="remove_err('furnitureType')">
                             <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in equipmentTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in furnitureTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="sub_name"></has-error>
+                        <has-error :form="form" field="furnitureType"></has-error>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                         <label>Description:</label> 
@@ -43,12 +43,12 @@
 export default {
     data(){
         return{
-            equipmentTypeList:[],
+            furnitureTypeList:[],
             count:10,
             form: new form({
                 id: '',
-                equipmentItem : '',
-                equipmentType: '',
+                name : '',
+                furnitureType: '',
                 description: '',
                 status: 1,
                 action_type:'add',
@@ -64,19 +64,19 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.equipmentItem= '';
-                this.form.equipmentType= '';
+                this.form.name= '';
+                this.form.furnitureType= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveEquipmentItem',this.form)
+                this.form.post('/masters/saveFurnitureItem',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Equipment Item is added successfully'
+                        title: ' Item is added successfully'
                     })
-                    this.$router.push('/equipment_item_list');
+                    this.$router.push('/furniture_item_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -84,17 +84,17 @@ export default {
             }
 		},
 
-        getEquipmentType(uri = 'masters/getEquipmentTypeDropdown'){
+        getFurnitureType(uri = 'masters/getFurnitureTypeDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                this.equipmentTypeList = data;
+                this.furnitureTypeList = data;
             });
         },
     },
 
     mounted(){
-        this.getEquipmentType();
+        this.getFurnitureType();
     }
 }
 </script>

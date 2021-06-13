@@ -287,6 +287,7 @@ class StudentAdmissionController extends Controller{
             'gardain_cntct_no'                  =>  $request->gardain_cntct_no,
             'user_id'                           =>  $this->userId()
         ];
+        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentGardianDetails', $data);
         return $response_data;
     }
@@ -332,8 +333,8 @@ class StudentAdmissionController extends Controller{
         if($param=="session"){
             $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         }
-        if($param=="admission"){
-            $param='admission__'.$this->getWrkingAgencyId();
+        if($param=="admission" || $param=="created"){
+            $param=$param.'__'.$this->userId();
         }
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$param);
         return $student_list;
@@ -428,28 +429,20 @@ class StudentAdmissionController extends Controller{
         return $response_data;
     }
 
-    public function updateAdmissionStd(Request $request){
+    public function studentAdmissionupdate(Request $request){
         $data =[
-            'student_id'                =>  $request->student_id,
+            'status'                    =>  $request->status,
+            'id'                        =>  $request->id,
             'type'                      =>  $request->type,
             'action_type'               =>  $request->action_type,
+            'remarks'                   =>  $request->remarks,
             'org_id'                    =>  $this->getWrkingAgencyId(),
             'dzo_id'                    =>  $this->getUserDzoId(),
-            'class_stream_id'           =>  $request->class_stream_id,
-            'section'                   =>  $request->section,
-            'student_type'              =>  $request->student_type,
-            'no_meals'                  =>  $request->no_meals,
-            'meal_type'                 =>  $request->meal_type,
-            'feeding_type'              =>  $request->feeding_type,
-            'scholarship'               =>  $request->scholarship,
-            'special_benifit'           =>  $request->special_benifit,
-            'disability'                =>  $request->disability,
             'user_id'                   =>  $this->userId()
         ];
         // dd($data);
-        $response_data= $this->apiService->createData('emis/students/admission/updateAdmissionStd', $data);
+        $response_data= $this->apiService->createData('emis/students/admission/studentAdmissionupdate', $data);
         return $response_data;
     }
-
 
 }

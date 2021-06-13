@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="card card-primary card-outline">
             <div class="card-body">
-                <div class="form-group"> 
+                <div class="form-group">
                     <label class="mb-0">CidNo/Student Code:</label>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -14,8 +14,8 @@
                             <button class="btn btn-primary" @click="getDetailsbyCID('cid_std_code')"><i class="fa fa-search"></i> Search</button>
                         </div>
                     </div>
-                </div> 
-                <has-error :form="form" field="admission"></has-error> 
+                </div>
+                <has-error :form="form" field="admission"></has-error>
             </div>
         </div>
         <hr>
@@ -29,7 +29,7 @@ export default {
             form: new form({
                 id: '',
             })
-        } 
+        }
     },
     methods: {
      getDetailsbyCID(cid_std_code){
@@ -46,12 +46,14 @@ export default {
                 data = data==null ? "" : data;
                 if(data!=""){
                     this.$Progress.start();
-                    // Toast.fire({
-                    //     icon: 'success',
-                    //     title: 'please fill the details before you apply'
-                    // });
-                    this.$router.push({name:'classxi_student',query: {data:data}});
-                    this.$Progress.finish() 
+                    if(data.IsNewAdmission==1){
+                        this.$router.push({name:'admission_initiated',query: {data:data.id}});
+                        this.$Progress.finish()
+                    }
+                    else{
+                        this.$router.push({name:'classxi_student',query: {data:data}});
+                        this.$Progress.finish()
+                    }
                 }
                 else{
                     this.$Progress.start();
@@ -60,9 +62,9 @@ export default {
                     //     title: 'please fill the details before you apply'
                     // })
                     this.$router.push({name:'notenrolled_student',query: {cid:$('#'+cid_std_code).val()}});
-                    this.$Progress.finish() 
+                    this.$Progress.finish()
                 }
-                
+
                 }).catch(function (error){
                     console.log("Retrieving error: "+error)
                 });
@@ -76,7 +78,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         // loadRespectivePage(val){
         //     this.$router.push("/"+val);
         // },
@@ -91,12 +93,12 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="admission"){
-                this.form.admission=$('#admission').val(); 
-                this.loadRespectivePage($('#admission').val());   
+                this.form.admission=$('#admission').val();
+                this.loadRespectivePage($('#admission').val());
             }
         },
     },
-   
+
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -104,12 +106,12 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-    }, 
+    },
 }
 </script>

@@ -6,21 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class StudentClub extends Model
+class CeaClubMembership extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="student_club";
+    protected $table="cea_club_membership";
 
     protected $fillable = [
-        'organizationId',
         'id',
-        'StdStudentId', 
-        'status',
         'CeaSchoolProgrammeId',
+        'StdStudentId', 
         'Responsibility',
         'JoiningDate',
-        'role',
-       
+        'Achievement',
+        'Role',
+        'Status'
     ];
 }
