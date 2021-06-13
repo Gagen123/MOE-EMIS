@@ -102,7 +102,7 @@
                                                      <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
                                                   </tr>
                                                   <tr>
-                                                      <td>Is SEN School</td>
+                                                      <td>Is an Inclusive School</td>
                                                        <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
                                                   </tr>
                                                    <tr>
@@ -146,8 +146,12 @@
                                                         <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
                                                     </tr>
                                                     <tr>
-                                                    <td>Is SEN School</td>
-                                                        <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
+                                                    <td>Mail ID</td>
+                                                        <td>{{existing_details.mailid}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>Website Link</td>
+                                                        <td>{{existing_details.wesitelink}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -155,7 +159,119 @@
                                     </div>
                                 </div>
                             </div>
+ 
+                            <!--- modified code  -->
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                                <div class="card-body p-0">
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                                            <table class="table table-sm">
+                                                <thead class="bg-info">
+                                                     <tr>
+                                                         <th>Staff Information</th>
+                                                         <th></th>
+                                                      </tr>
+                                                  </thead>
+                                                 <tbody>
+                                                  <tr>
+                                                     <td>Total Male Teachers</td>
+                                                     <td></td>
+                                                   </tr>
+                                                   <tr>
+                                                        <td>Total Female Teachers</td>
+                                                        <td></td>
+                                                  </tr>
+                                                  <tr>
+                                                      <td>Total Female Special Education Teachers</td>
+                                                     <td></td>
+                                                  </tr>
+                                                    <tr>
+                                                       <td>Total Male Special Education Teachers</td>
+                                                       <td></td>
+                                                   </tr>
+                                                  <tr>
+                                                     <td>Total Male Support Staff</td>
+                                                     <td></td>
+                                                 </tr>
+                                                 <tr>
+                                                     <td>Total Female Support Staff</td>
+                                                     <td></td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>Total Female Counselors</td>
+                                                     <td></td>
+                                                   </tr>
+                                                   <tr>
+                                                     <td>Total Male Counselors</td>
+                                                     <td></td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td>Total Female Sports Instructor</td>
+                                                      <td></td>
+                                                   </tr>
+                                                   <tr>
+                                                       <td>Total Male Sports Instructors</td>
+                                                       <td></td>
+                                                  </tr>
+                                                  <tr>
+                                                       <td>GeoPolitically Located</td>
+                                                       <td></td>
+                                                  </tr>
+                                              </tbody>
+                                          </table>
+                                        </div>
+
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
+                                            <table class="table table-sm">
+                                                <thead class="bg-info">
+                                                    <tr>
+                                                        <th>Student Information</th>
+                                                        <th><span class="text-bold"></span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Total Female Student</td>
+                                                        <td>{{existing_details.longitude}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Total Male Sudent</td>
+                                                        <td>{{existing_details.latitude}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Altitude</td>
+                                                        <td>{{existing_details.altitude}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>School Contact No</td>
+                                                        <td>{{existing_details.mofCode}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Principal Contact No</td>
+                                                        <td>{{existing_details.code}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Vice/Assistant Principal Contact No</td>
+                                                        <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>Mail ID</td>
+                                                        <td>{{existing_details.mailid}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>Website Link</td>
+                                                        <td>{{existing_details.wesitelink}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <!-- <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                                 <strong><i class="fas fa-users mr-1"></i> Staff</strong>
                                 <div class="card-body p-0">
                                     <table class="table table-sm">
@@ -198,8 +314,10 @@
                                     
                                     </table>
                                 </div>
-                            </div>
+                            </div> -->
                             
+
+
                             </div>
                         </div>
                         <!-- /.card -->
