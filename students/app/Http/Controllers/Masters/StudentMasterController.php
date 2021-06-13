@@ -64,6 +64,7 @@ class StudentMasterController extends Controller
 
 
         } else if($request->actiontype=="edit"){
+           
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
 
@@ -253,11 +254,11 @@ class StudentMasterController extends Controller
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
         $data = $model::find($request->id);
-      //   dd($data);
+       //  dd($data);
         //Audit Trails
-        $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+        $msg_det='Name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
-    //    dd('m here',$dataRequest);
+      // dd('m here',$dataRequest);
 
         //data to be updated
         $data->name = $dataRequest['Name'];

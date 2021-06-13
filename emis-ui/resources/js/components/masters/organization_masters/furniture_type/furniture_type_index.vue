@@ -2,12 +2,13 @@
     <div>
         <section class="content ml-n4 mr-n3">
             <div class="container-fluid">
-                <div class="row"> 
+                <div class="row">  
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('EquipmentItemList')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('EquipmentItemAdd')"><i class="fa fa-plus"></i> Add New</button>
+                                <label class="fa-pull-left">Furniture Type</label>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('FurnitureTypeList')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('FurnitureTypeAdd')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>
@@ -17,21 +18,18 @@
         </section>
     </div>
 </template>
-
 <script>
 export default {
-    data(){
-        return{
-
-        }
-    },
-
     methods:{
-        loadpage:function(type){
-            if(type=="EquipmentItemAdd"|| type=="EquipmentItemList" || type=="EquipmentItemReload"){
-                this.$router.push({name:type,params: {data:null}});
-            }
+         loadpage:function(type){
+            this.$router.push({name:type});
         },
-    }
+    },
+    mounted() {
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+    },
+   
 }
 </script>
+

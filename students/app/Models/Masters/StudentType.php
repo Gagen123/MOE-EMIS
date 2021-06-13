@@ -12,9 +12,9 @@ class StudentType extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'name',
-        'status',
-        'description',
+        'Name',
+        'Status',
+        'Description',
         'vaccineFor',
         'created_by',
         'created_at',

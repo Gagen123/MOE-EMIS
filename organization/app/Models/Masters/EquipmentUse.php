@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class EquipmentUsage extends Model
+class EquipmentUse extends Model
 {
+    //
     use HasFactory, Uuid;
     protected $table = "equipment_usage";
 
@@ -17,6 +18,6 @@ class EquipmentUsage extends Model
      * @var array
      */
     protected $fillable = [
-        'id','name','description','status','created_by','updated_by','created_at'
+        'id','name','description','status','created_by','updated_by','created_at','updated_at'
     ];
 }
