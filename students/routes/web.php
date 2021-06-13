@@ -139,10 +139,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveProjectMembers', ['uses' => 'Students\StudentProjectController@saveProjectMembers']);
         $router->get('/listProjectMembers/{param}', ['uses' => 'Students\StudentProjectController@listProjectMembers']);
 
-        $router->post('/saveStudentTraining', ['uses' => 'Students\StudentTrainingController@saveStudentTraining']);
+        $router->post('/saveStudentTraining',['uses' => 'Students\StudentTrainingController@saveStudentTraining']);
         $router->get('/loadStudentTrainings/{param}/{orgId}', ['uses' => 'Students\StudentTrainingController@loadStudentTrainings']);
         $router->get('/listStudentTrainings/{param}/{orgId}', ['uses' => 'Students\StudentTrainingController@listStudentTrainings']);
         $router->post('/saveTrainingParticipants', ['uses' => 'Students\StudentTrainingController@saveTrainingParticipants']);
+        $router->get('/listTrainingParticipants/{param}/{orgId}', ['uses' => 'Students\StudentTrainingController@listTrainingParticipants']);
 
         $router->post('/saveStudentScouts', ['uses' => 'Students\StudentScoutController@saveStudentScouts']);
         $router->get('/loadStudentScouts/{param}', ['uses' => 'Students\StudentScoutController@loadStudentScouts']);

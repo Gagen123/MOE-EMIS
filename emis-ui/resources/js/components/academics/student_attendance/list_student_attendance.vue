@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form @submit.prevent="save" class="bootbox-form" id="subjectTeacher">
+        <form class="bootbox-form" id="subjectTeacher">
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="list-student-attendence-table" class="table table-sm table-bordered table-striped">
