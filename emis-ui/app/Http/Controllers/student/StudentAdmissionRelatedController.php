@@ -41,13 +41,13 @@ class StudentAdmissionRelatedController extends Controller
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/reportStudents', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
         
     }
 
@@ -89,13 +89,13 @@ class StudentAdmissionRelatedController extends Controller
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentTransfer', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // // }
         
     }
 
@@ -139,13 +139,13 @@ class StudentAdmissionRelatedController extends Controller
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentWhereabouts', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
         
     }
 
@@ -217,16 +217,17 @@ class StudentAdmissionRelatedController extends Controller
             'country'                    =>  $request->country,        
             'city'                       =>  $request->city,            
             'id'                         =>  $request->id,
+            'phone'                      =>  $request->phone,
             'user_id'                    =>  $this->userId()
 
         ];
-     //   dd($personal_details);
-        try{
+       //dd($personal_details);
+        // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentAboard', $personal_details);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 }

@@ -61,7 +61,7 @@ export default {
                         icon: 'success',
                         title: 'Student Award details updated successfully'
                     })
-                    this.$router.push('/AwardTypeList');
+                    this.$router.push('/award_type_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -70,9 +70,9 @@ export default {
 		}, 
     },
     created() {
-        this.form.name=this.$route.params.data.name;
-        this.form.description=this.$route.params.data.description;
-        this.form.status=this.$route.params.data.status;
+        this.form.name=this.$route.params.data.Name;
+        this.form.description=this.$route.params.data.Description;
+        this.form.status=this.$route.params.data.Status;
         this.form.id=this.$route.params.data.id;
     },
     

@@ -107,6 +107,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
+                // alert(JSON.stringify(response));
                 this.termList =  data.data.data;
             })
             .catch(function (error) {
@@ -272,7 +273,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadActiveTermList();
+        this                                                                                                                                                                                        .loadActiveTermList();
         
         this.loadClassList();
         this.loadSectionList();

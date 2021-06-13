@@ -16,7 +16,11 @@ class CeaSchoolScout extends Model
         'OrgOrganizationId',
         'CeaScoutsId',
         'EstablishmentYear',
-        'Remarks'
+        'Remarks',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 
 }

@@ -86,17 +86,26 @@ class GeneralStudentController extends Controller
         return $records;
     }
 
+    /**Get Student List by orgid and org classstreamId */
+    public function getStudentList($orgId,$orgClassStreamId){
+        $data=DB::table('std_student as a')
+                ->join('std_student_class_stream as b', 'a.id','=','b.StdStudentId')
+                ->select('a.id','a.Name')
+                ->where('a.OrgOrganizationId',$orgId)
+                ->where('b.OrgClassStreamId',$orgClassStreamId)
+                ->get();
+        return $data;
+    }
+
     public function getStudents($org_id,Request $request){
         $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name, t1.CidNo, t2.OrgClassStreamId, t2.SectionDetailsId
         FROM std_student t1
         LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId WHERE t1.OrgOrganizationId = ? AND t2.OrgClassStreamId = ?";
         $params = [$org_id,$request->OrgClassStreamId];
-
         if($request->sectionId){
             $query .= ' AND t2.SectionDetailsId = ?';
             array_push($params,$request->sectionId);
         }
-
         return $this->successResponse (DB::select($query,$params));
     }
 

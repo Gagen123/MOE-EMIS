@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 use GuzzleHttp\Client;
-use App\Helper\EmisService;
-use App\Traits\ServiceHelper;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Storage;
-
 use App\Traits\AuthUser;
-use Session;
+use App\Helper\EmisService;
+use Illuminate\Http\Request;
+use App\Traits\ServiceHelper;
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 
 class CommonController extends Controller{
     use ServiceHelper;
@@ -36,7 +36,7 @@ class CommonController extends Controller{
         //@readfile($full_path);
 
     }
-    
+
     public function deleteFile($full_path="",$id=""){
         $full_path=str_replace('SSS','/',$full_path);
         $headers = ['Content-Type: application/pdf'];
@@ -49,7 +49,7 @@ class CommonController extends Controller{
         }
         return $response_data;
     }
-    
+
     public function getApplicationDetials($applicationId=""){
         return $this->apiService->getListData('emis/common/getApplicationDetials/'.$applicationId);
     }
@@ -86,7 +86,6 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        // dd($data);
         $param = http_build_query($data);
         if($param!="NA"){
             $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
@@ -95,12 +94,12 @@ class CommonController extends Controller{
         else{
             return null;
         }
-        
+
     }
     public function getTaskcount(){
         $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
     }
-    
+
     public function getSessionDetail($applicationId=""){
         if(Session::get('User_Details')!=""){
             return ['data' => Session::get('User_Details')];
@@ -117,7 +116,7 @@ class CommonController extends Controller{
     public function getGewogNameById($id=""){
         return $this->apiService->getListData('emis/common/getGewogNameById/'.$id);
     }
-    
+
     public function getScreenAccess($type=""){
         $work_status=$this->apiService->getListData('system/getScreenAccess/'.$type.'/'.$this->getRoleIds('roleIds'));
         return $work_status;
@@ -127,4 +126,11 @@ class CommonController extends Controller{
         $work_status=$this->apiService->getListData('emis/common/releaseApplication/'.$application_number);
         return $work_status;
     }
+
+    //Get Student List by orgId and OrgClassStream
+    public function getStudentList($orgId,$orgClassStreamId){
+        $data=$this->apiService->listData('emis/students/getStudentList/'.$orgId.'/'.$orgClassStreamId);
+        return $data;
+    }
+
 }

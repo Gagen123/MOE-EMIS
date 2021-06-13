@@ -51,14 +51,14 @@ class LoadStaffController extends Controller{
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;
     }
-    
+
     //load staff details: id,name,gender and position title
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         $param="";
         //type=allstaff: to listentire staff
         if($type=="allstaff"){
             $param='NA';
-        } 
+        }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
         if($type=="userdzongkhagwise"){
@@ -82,7 +82,7 @@ class LoadStaffController extends Controller{
         $response_data= $this->apiService->listData('emis/common_services/loadFewDetailsStaffList/'.$type.'/'.$param);
         return $response_data;
     }
-    
+
 
     //type can be id, cid, empid and id shoulb be their respective values
     public function viewStaffDetails($type="",$id=""){
