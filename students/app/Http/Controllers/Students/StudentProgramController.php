@@ -159,21 +159,21 @@ class StudentProgramController extends Controller
     * Save Program Members
     */
     public function saveProgramMembers(Request $request){
-        $status = $request->$status;
-       
+        // $status = $request->$status;
       $rules = [
             'student'                    => 'required',
-            // 'program'                    => 'required',
+            'program'                    => 'required',
             'responsibilities'           => 'required',
         ];
 
         $customMessages = [
             'student.required'           => 'This field is required',
-            // 'program.required'           => 'This field is required',
+            'program.required'           => 'This field is required',
             'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
+          //  'organizationId'            => $request->organizationId,
             'id'                        => $request->id,
             'StdStudentId'              => $request->student,
             'status'                    => $request->status,
@@ -185,11 +185,10 @@ class StudentProgramController extends Controller
             //'user_id'        => $this->user_id() 
         ];
        // dd($status);
-       dd($data);
+     //  dd($data);
         $assigned_student_details = $data['role'];
-
+        
         unset($data['role']);
-
         $response = CeaProgrammeMembership::create($data);
         $lastInsertId = $response->id;
 
@@ -243,7 +242,7 @@ class StudentProgramController extends Controller
             'id'                    => $request->id,
             'OrgOrganizationId'     => $request->organisation_id,
             'CeaProgrammeId'        => '17b2b454-6f86-49c1-b763-8f02202d3071',
-            // 'CeaProgrammeId'        => $request->program,
+           //  'CeaProgrammeId'        => $request->program,
             'ForMonth'              => $request->month,
             'Remarks'               => $request->remarks,
             'inventoryDetails'      => $request->inventoryDetails,
@@ -295,7 +294,7 @@ class StudentProgramController extends Controller
             
             $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
         }
-
+        //dd( $data);
         return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
     }
 
@@ -321,7 +320,7 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramActionPlan(Request $request){
-
+        
         $rules = [
             'program'            => 'required',
             'from_date'            => 'required',

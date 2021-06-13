@@ -94,12 +94,14 @@ class StudentProjectController extends Controller
         $data =[
             'id'               => $request->id,
             'student'          => $request->student,
-            'project'             => $request->project,
-            'task'             => $request->task
+            'project'          => $request->project,
+            'task'             => $request->task,
+            'user_id'          =>  $this->userId()
+
 
             //'user_id'        => $this->user_id() 
         ];
-
+     //  dd( $data);
 
         try{
             $response_data= $this->apiService->createData('emis/students/saveProjectMembers', $data);
@@ -111,6 +113,7 @@ class StudentProjectController extends Controller
     }
 
     public function listProjectMembers($param=""){
+        //dd('m here');
         $student_records = $this->apiService->listData('emis/students/listProjectMembers/'.$param);
         return $student_records;
     }

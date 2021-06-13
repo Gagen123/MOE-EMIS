@@ -101,7 +101,7 @@ export default {
                     }
                     renameId['org_class_id'] = item.org_class_id;
                     renameId['org_stream_id'] = item.org_stream_id;
-                    renameId["org_section_id"] = item.org_section_id;
+                    renameId['org_section_id'] = item.org_section_id;
                     renameId['org_id'] = item.org_id;
                     renameId['org_class_stream_id'] = item.OrgClassStreamId;
                     renameId['stf_staff_id'] = "";

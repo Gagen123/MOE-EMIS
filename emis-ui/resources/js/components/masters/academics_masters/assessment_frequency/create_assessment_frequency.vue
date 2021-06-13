@@ -55,6 +55,7 @@ export default {
         getAssessmentFrequencyList(uri = 'masters/loadAcademicMasters/all_assessment_frequency'){
             axios.get(uri)
             .then(response =>{
+                // alert(JSON.stringify(response.data.data));
                 this.assesmentFrequencyList = response.data.data;
             })
             .catch(function (error){

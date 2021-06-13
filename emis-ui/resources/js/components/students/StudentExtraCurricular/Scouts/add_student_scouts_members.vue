@@ -3,30 +3,48 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
-                    <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                    </select>
-                    <has-error :form="student_form" field="student"></has-error>
+                    <label>Student <span class="text-danger">*</span></label>
+                    <v-select :options="this.studentList" label="Name" v-model="student_form.StdStudentId">
+                        <template #search="{attributes, events}">
+                        <input
+                            class="vs__search"
+                            :required="!student_form.StdStudentId"
+                            v-bind="attributes"
+                            v-on="events" />
+                        </template>
+                    </v-select>
+                    <has-error :form="student_form" field="student_form.StdStudentId"></has-error>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label> Scout Section</label>
-                        <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
-                        <option v-for="(item, index) in scoutSectionList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                    </select>
-                    <has-error :form="student_form" field="scout"></has-error>
+                            <v-select :options="this.scoutSectionList" label="name" v-model="student_form.CeaSchoolScoutsId">
+                                <template #search="{attributes, events}">
+                                <input
+                                    class="vs__search"
+                                    :required="!student_form.CeaSchoolScoutsId"
+                                    v-bind="attributes"
+                                    v-on="events" />
+                                </template>
+                            </v-select>
+                        <has-error :form="student_form" field="student_form.CeaSchoolScoutsId"></has-error>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label> Scout Level</label>
-                        <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
-                        <option v-for="(item, index) in scoutList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                    </select>
-                    <has-error :form="student_form" field="scout"></has-error>
+                        <label>Scout Level</label>
+                            <v-select :options="this.scoutList" label="name" v-model="student_form.CeaSchoolSectionLevelId">
+                                <template #search="{attributes, events}">
+                                <input
+                                    class="vs__search"
+                                    :required="!student_form.CeaSchoolSectionLevelId"
+                                    v-bind="attributes"
+                                    v-on="events" />
+                                </template>
+                            </v-select>
+                        <has-error :form="student_form" field="student_form.CeaSchoolSectionLevelId"></has-error>
                     </div>
                 </div>
             </div>
@@ -35,7 +53,7 @@
                     <!-- text input -->
                     <div class="form-group">
                         <label>Joining Date:</label>
-                        <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                        <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" type="date">
                         <has-error :form="student_form" field="date"></has-error>
                     </div>
                 </div>
@@ -54,108 +72,87 @@ export default {
             studentList:[],
             scoutList:[],
             scoutSectionList:[],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
-
+            classTecherClass:[],
+            classId:'',
+            streamId:'',
+            sectionId:'',
+            OrgClassStreamId:'',
+            orgId:'',
             student_form: new form({
                 id:'',
-                student: '',
-                scout:'',
+                StdStudentId: '',
+                CeaSchoolScoutsId:'',
+                CeaSchoolSectionLevelId:'',
                 date: '',
                 action_type:'add',
             }),
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.org_id){
+        getClassTeacher(){
+            axios.get('academics/getClassTeacherClasss')
+            .then(response =>{
+                let data = response.data.data
+                data.forEach((item)=>{
+                    this.classId = item.org_class_id
+                    if(item.org_stream_id != null){
+                        this.streamId = item.org_stream_id;
+                    }else if(item.org_section_id != null){
+                        this.sectionId = item.org_section_id;
+                    }else{
+                        this.classId = item.org_class_id
+                    }
+                    this.OrgClassStreamId = item.org_class_stream_id;
+                    this.orgId = item.org_id;
+                    this.getStudentBasedOnTeacherClassSect();
+                })
+            })
+        },
+        getStudentBasedOnTeacherClassSect(){
+            axios.get("common/getStudentList/"+ this.orgId +'/'+ this.OrgClassStreamId)
+            .then(response => {
+                this.studentList = response.data;
+            })
+        },
+        loadActiveScoutSection(uri="masters/getScoutSection"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                console.log(data);
-                this.studentList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveScoutList(uri='students/listStudentScouts/'+this.org_id){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.scoutList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveRoleList(uri="masters/loadActiveStudentMasters/scout_section"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.scoutSectionList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
+                this.scoutSectionList =  response.data;
+            }).catch(function (error) { console.log("Error......"+error)});
         },
         formaction: function(type){
-            if(type=="reset"){
-                this.student_form.student= '';
-                this.student_form.remarks='';
-                this.student_form.status= 1;
-            }
             if(type=="save"){
-                this.student_form.post('/students/saveScoutParticipants',this.student_form)
+                if(this.student_form.StdStudentId == ''){
+                    alert('Please Select Student');
+                }else if(this.CeaSchoolScoutsId == ''){
+                    alert('Please Select Scout Section');
+                }else {
+                    this.student_form.post('/students/saveScoutParticipants',this.student_form)
                     .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/student_scouts_members_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
-                })
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/student_scouts_members_list');
+                    }).catch(() => {console.log("Error......") })
+                }
             }
 		},
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="student"){
-                this.student_form.student=$('#student').val();
-            }
-            if(id=="scout"){
-                this.student_form.scout=$('#scout').val();
-            }
-        },
-    },
-     mounted() {
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
-        });
-        
-        Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
-        });
 
-        this.loadStudentList();
-        this.loadActiveScoutList();
-        this.loadActiveRoleList();
     },
-    
+    mounted() {
+        this.getClassTeacher();
+        this.loadActiveScoutSection();
+    },
+    watch:{
+        'student_form.CeaSchoolScoutsId': function(item){
+            axios.get('/masters/getScoutSectionLevel/' + item.id)
+            .then(response => {
+                this.scoutList = response.data;
+            }).catch(error => console.log(error));
+        },
+    }
+
 }
 </script>
+

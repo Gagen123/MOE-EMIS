@@ -32,9 +32,9 @@ class StudentHealthController extends Controller
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'term_id'          => $request->term_id,
-            'date'             => $request->date,
+            'id'                    => $request->id,
+            'term_id'               => $request->term_id,
+            'date'                  => $request->date,
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
             'std_section'           => $request->std_section,
@@ -65,7 +65,7 @@ class StudentHealthController extends Controller
     */
 
     public function addSupplementationRecords(Request $request){
-
+        // dd($request);
         $rules = [
             'term_id'            => 'required',
             'date'               => 'required'
@@ -89,14 +89,9 @@ class StudentHealthController extends Controller
             'organization_id'       => $this->getWrkingAgencyId(),
             'user_id'               =>  $this->userId() 
         ];
-
-        try{
+       
             $response_data= $this->apiService->createData('emis/students/addSupplementationRecords', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
         
     }
 

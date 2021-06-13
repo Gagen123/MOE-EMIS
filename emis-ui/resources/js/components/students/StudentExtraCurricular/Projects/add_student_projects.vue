@@ -25,7 +25,7 @@
                     <div class="form-group">
                         <label> Type</label>
                         <select v-model="student_form.project_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('project_type_id') }" class="form-control select2" name="project_type_id" id="project_type_id">
-                        <option v-for="(item, index) in projectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in projectList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="project_type_id"></has-error>
                     </div>
@@ -34,7 +34,7 @@
                     <div class="form-group">
                         <label>Program</label>
                         <select v-model="student_form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program_id"></has-error>
                     </div>
@@ -115,6 +115,7 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
+                this.student_form.name= '';
                 this.student_form.student= '';
                 this.student_form.remarks='';
                 this.student_form.status= 1;

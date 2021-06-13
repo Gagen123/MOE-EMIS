@@ -109,7 +109,7 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{  
            
             foodrelease_list:[],
             displayItem:'',

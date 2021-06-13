@@ -45,7 +45,7 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('emp_type_id',$parent_id)->where('status','Created')->get());
         }
     }
-    
+
     public function viewStaffDetails($type="",$id=""){
         if($type=="by_id"){
             return $this->successResponse(PersonalDetails::where('id',$id)->first());

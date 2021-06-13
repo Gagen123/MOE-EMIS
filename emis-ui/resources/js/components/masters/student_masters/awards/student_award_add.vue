@@ -20,7 +20,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0.5">Program:<i class="text-danger">*</i></label>
                             <select v-model="form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
-                                <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
                             <has-error :form="form" field="program_id"></has-error>
                     </div>
@@ -67,11 +67,11 @@ export default {
         }
     },
     methods: {
-        loadActiveAwardList(uri="masters/loadActiveStudentMasters/student_award_type"){
+        loadActiveAwardList(uri='masters/loadStudentMasters/student_award_type'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.awardList =  data.data.data;
+                this.awardList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -81,7 +81,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.programList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
