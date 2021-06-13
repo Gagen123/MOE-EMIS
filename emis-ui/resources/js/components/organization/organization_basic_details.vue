@@ -123,7 +123,6 @@
                     if(response_data.category=="private_eccd"){
                         this.category="Public ECCD";
                     }
-
                     this.form.isAspNetSchool=response_data.isAspNetSchool;
                     this.form.isColocated=response_data.isColocated;
                     this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
