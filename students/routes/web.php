@@ -49,13 +49,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         //get Scouts Section Level By Scouts Section Id
         $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
-<<<<<<< HEAD
         $router->post('/saveValidationcondition', ['uses' => 'Masters\StudentMasterController@saveValidationcondition']);
         $router->get('/loadValidationcondition','Masters\StudentMasterController@loadValidationcondition');
-=======
         //Get Scouts Section
         $router->get('/getScoutSection','Masters\StudentMasterController@getScoutSection');
->>>>>>> 2be229b58bffd86e665bab9fa77357a65309a182
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
