@@ -59,6 +59,23 @@ class OrganizationMasterController extends Controller{
             ];
             $response_data = $model::create($master_data);
         }
+        
+        if($request->action_type=="add"){
+            $master_data =$master_data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = $model::create($master_data);
+        }
+
+        if($request->action_type=="add"){
+            $master_data =$master_data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = $model::create($master_data);
+        }
+
         if($request->action_type=="edit"){
             $master_data =$master_data+[
                 'updated_by'        =>  $request->user_id,

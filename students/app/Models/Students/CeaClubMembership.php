@@ -14,7 +14,7 @@ class CeaClubMembership extends Model
 
     protected $fillable = [
         'id',
-        'CeaSchoolProgrammeId',
+        'CeaProgrammeId',
         'StdStudentId', 
         'Responsibility',
         'JoiningDate',

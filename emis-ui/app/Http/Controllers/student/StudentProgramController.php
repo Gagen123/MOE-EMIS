@@ -21,15 +21,15 @@ class StudentProgramController extends Controller
     public function saveStudentProgram(Request $request){
 
         $rules = [
-            // 'program'            => 'required',
-            'supporter'            => 'required',
-            'year'            => 'required',
+            'program'         => 'required',
+            'supporter'       => 'required',
+            'year'            => 'required|min:4|max:4',
         ];
 
         $customMessages = [
-            // 'program.required'  => 'This field is required',
-            'supporter.required'     => 'This field is required',
-            'year.required'  => 'This field is required',
+            'program.required'      => 'This field is required',
+            'supporter.required'    => 'This field is required',
+            'year.required'         => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
@@ -40,17 +40,33 @@ class StudentProgramController extends Controller
             'supporter'         => $request->supporter,
             'year'              => $request->year,
             'remarks'           => $request->remarks,
+            'data_type'         => 'school_program',
             'assigned_staff'    => $request->assigned_staff,
-            'user_id'        => $this->userId() 
+            'user_id'           => $this->userId() 
         ];
 
-        // try{
-            $response_data= $this->apiService->createData('emis/students/saveStudentProgram', $data);
-            return $response_data;
-        // }
-        // catch(GuzzleHttp\Exception\ClientException $e){
-        //     return $e;
-        // }
+        //Validate to ensure that there is no duplication of entries
+        //Not creating but using the createData service as we are sending the $data
+        $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
+        
+        if(json_decode($validate_data)->data == 'exist'){
+            //this is to offset the data and send it back to the view
+            $request->offsetUnset('program');
+            
+            $rules = [
+                'supporter'     => 'required',
+                'program'       => 'required'
+            ];
+            $customMessages = [
+                'supporter.required'        => 'Field is required',
+                'program.required'          => 'Program/Club has already been created for School'
+            ];
+
+            $this->validate($request, $rules, $customMessages);
+        }
+        
+        $response_data= $this->apiService->createData('emis/students/saveStudentProgram', $data);
+        return $response_data;
     }
 
     /*
@@ -122,20 +138,29 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'organizationId'        => $this->getWrkingAgencyId(), 
             'id'                    => $request->id,
             'status'                => $request->status,
             'student'               => $request->student,
             'program'               => $request->program,
             'date'                  => $request->date,
             'responsibilities'      => $request->responsibilities,
-            'role'                  => $request->role
-
-            //'user_id'        => $this->user_id() 
+            'role'                  => $request->role,
+            'organizationId'        => $this->getWrkingAgencyId(), 
+            'user_id'               => $this->userId()
         ];
             $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
             return $response_data;
        
+    }
+
+    /*
+    * Function is to list Program Members 
+    */
+
+    public function listProgramMembers($param=""){
+        $param = $this->getWrkingAgencyId();
+        $student_records = $this->apiService->listData('emis/students/listProgramMembers/'.$param);
+        return $student_records;
     }
 
     /*
@@ -147,13 +172,13 @@ class StudentProgramController extends Controller
 
         $rules = [
             'student'                 => 'required',
-            'program'                 => 'required',
+            'club'                    => 'required',
             'responsibilities'        => 'required',
         ];
 
         $customMessages = [
             'student.required'          => 'This field is required',
-            'program.required'          => 'This field is required',
+            'club.required'             => 'This field is required',
             'responsibilities.required' => 'This field is required',
         ];
 
@@ -164,7 +189,7 @@ class StudentProgramController extends Controller
             'id'                    => $request->id,
             'status'                => $request->status,
             'student'               => $request->student,
-            'program'               => $request->program,
+            'club'                  => $request->club,
             'date'                  => $request->date,
             'responsibilities'      => $request->responsibilities,
             'role'                  => $request->role,
@@ -192,35 +217,14 @@ class StudentProgramController extends Controller
             $this->validate($request, $rules, $customMessages);
         }
 
-        try{
-            $response_data= $this->apiService->createData('emis/students/saveStudentResponsibility', $data);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-        
-        
-       // dd($data);
-            $response_data= $this->apiService->createData('emis/students/saveClubMembers', $data);
-            return $response_data;
+        $response_data= $this->apiService->createData('emis/students/saveClubMembers', $data);
+        return $response_data;
        
     }
 
-    public function listClubMember($orgId=""){
-        $student_records = $this->apiService->listData('emis/students/listClubMember/'.$orgId);
-        return $student_records;
-    }
-
-
-
-
-    /*
-    * Function is to list Program Members 
-    */
-
-    public function listProgramMembers($param=""){
-        $student_records = $this->apiService->listData('emis/students/listProgramMembers/'.$param);
+    public function listClubMembers($param=""){
+        $orgId = $this->getWrkingAgencyId();
+        $student_records = $this->apiService->listData('emis/students/listClubMembers/'.$orgId);
         return $student_records;
     }
 
@@ -253,15 +257,9 @@ class StudentProgramController extends Controller
 
             //'user_id'        => $this->user_id() 
         ];
-      //  dd( $data);
 
-        // try{
-            $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
-            return $response_data;
-        // }
-        // catch(GuzzleHttp\Exception\ClientException $e){
-        //     return $e;
-        // }
+        $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
+        return $response_data;
     }
 
     /*

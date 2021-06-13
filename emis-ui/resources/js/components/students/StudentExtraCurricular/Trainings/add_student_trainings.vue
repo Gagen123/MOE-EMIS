@@ -75,8 +75,6 @@ export default {
             programList:[],
             trainingList:[],
             countryList:[],
-         
-
             student_form: new form({
                 name:'',
                 training_type:'',
@@ -95,7 +93,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.programList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

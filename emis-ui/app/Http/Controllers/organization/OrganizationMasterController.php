@@ -17,6 +17,7 @@ class OrganizationMasterController extends Controller{
     }
 
     public function saveOrganizationMaster(Request $request){
+        // dd($request);
         $rules = [
             'name'          =>  'required',
             'status'        =>  'required',

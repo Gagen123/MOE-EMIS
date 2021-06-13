@@ -592,11 +592,13 @@ Route::prefix('students')->group(function () {
     Route::get('/loadStudentTrainings/{param}', [App\Http\Controllers\student\StudentTrainingController::class, 'loadStudentTrainings'])->name('loadStudentTrainings');
     Route::get('/listStudentTrainings/{param}', [App\Http\Controllers\student\StudentTrainingController::class, 'listStudentTrainings'])->name('listStudentTrainings');
     Route::post('/saveTrainingParticipants', [App\Http\Controllers\student\StudentTrainingController::class, 'saveTrainingParticipants'])->name('saveTrainingParticipants');
+    Route::get('/listTrainingParticipants/{param}', [App\Http\Controllers\student\StudentTrainingController::class, 'listTrainingParticipants'])->name('listTrainingParticipants');
+
     //Club Routes
     Route::get('/loadStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'loadStudentClubs'])->name('loadStudentClubs');
     Route::get('/listStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listStudentClubs'])->name('listStudentClubs');
     Route::post('/saveClubMembers', [App\Http\Controllers\student\StudentProgramController::class, 'saveClubMembers'])->name('saveClubMembers');
-    Route::get('/listClubMember/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listClubMember'])->name('listClubMember');
+    Route::get('/listClubMembers/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listClubMembers'])->name('listClubMembers');
 
     Route::post('/saveStudentScouts', [App\Http\Controllers\student\StudentScoutController::class, 'saveStudentScouts'])->name('saveStudentScouts');
     Route::get('/loadStudentScouts/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'loadStudentScouts'])->name('loadStudentScouts');

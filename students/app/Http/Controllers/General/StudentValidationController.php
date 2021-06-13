@@ -11,6 +11,7 @@ use App\Traits\ApiResponser;
 use App\Models\Students\Student;
 use App\Models\Students\StudentRole;
 use App\Models\Students\CeaClubMembership;
+use App\Models\Students\CeaSchoolProgramme;
 
 
 class StudentValidationController extends Controller
@@ -27,6 +28,8 @@ class StudentValidationController extends Controller
      * Using switch statement to make it generic
      * 
      * the data_type is defined in the EMIS UI for each type validation
+     * 
+     * the field $data can be deleted. It was used to check what values to use
      */
 
     public function validateStudentData(Request $request){
@@ -46,6 +49,11 @@ class StudentValidationController extends Controller
 
             case "awards" : {
                     $record_exists = $this->validateStudentAward($request);
+                    break;
+                }
+            
+            case "school_program" : {
+                    $record_exists = $this->validateSchoolProgram($request);
                     break;
                 }
             
@@ -102,7 +110,7 @@ class StudentValidationController extends Controller
             'id'                    => $request->id,
             'status'                => $request->status,
             'student'               => $request->student,
-            'program'               => $request->program,
+            'club'                  => $request->club,
             'date'                  => $request->date,
             'responsibilities'      => $request->responsibilities,
             'role'                  => $request->role,
@@ -110,11 +118,11 @@ class StudentValidationController extends Controller
             'user_id'               => $request->user_id,
         ];
 
-        $status =  CeaClubMembership::where ('CeaSchoolProgrammeId', $request->program)
-                                ->where ('StdStudentId', $request->student)
-                                ->whereYear('date', date('Y'))
-                                ->where('status', $status)
-                                ->first();
+        $status =  CeaClubMembership::where('CeaProgrammeId', $request->club)
+                        ->where('StdStudentId', $request->student)
+                        ->whereYear('JoiningDate', date('Y'))
+                        ->where('Status', $request->status)
+                        ->first();
 
         if($status!=null && $status!=""){
             $data_exists = "exist" ;
@@ -126,5 +134,34 @@ class StudentValidationController extends Controller
         
     }
 
+    /**
+     * Function to validate and ensure that programs are not repeated in schools
+     */
+
+    private function validateSchoolProgram($request){
+        $data =[
+            'id'                => $request->id,
+            'organisation_id'   => $request->organisation_id,
+            'program'           => $request->program,
+            'supporter'         => $request->supporter,
+            'year'              => $request->year,
+            'remarks'           => $request->remarks,
+            'data_type'         => $request->data_type,
+            'user_id'           => $request->user_id
+        ];
+        
+        $status =  CeaSchoolProgramme::where('CeaProgrammeId', $request->program)
+                        ->where('OrgOrganizationId', $request->organisation_id)
+                        ->first();
+
+        if($status!=null && $status!=""){
+            $data_exists = "exist" ;
+        } else {
+            $data_exists = "false";
+        }
+                                
+        return $data_exists;
+
+    }
 
 }
