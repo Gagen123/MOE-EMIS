@@ -39,7 +39,6 @@ class EquipmentUsageController extends Controller
      * method to save or update level type
     */
     public function saveEquipmentUsage(Request $request){
-
         $id = $request->id;
         if( $id != null){
             $equ = [
@@ -65,8 +64,12 @@ class EquipmentUsageController extends Controller
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
-
-            $equipment= EquipmentUsage::create($equ);
+            try{
+                $equipment= EquipmentUsage::create($equ);
+            }catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+            }
+           
             return $this->successResponse($equipment, Response::HTTP_CREATED);
         }
     }
