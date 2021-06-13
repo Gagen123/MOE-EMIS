@@ -22,17 +22,20 @@
                         <td>{{ school.name }}</td>
                         <td>{{ item.dateOfapply }}</td>
                         <td><span class="badge badge-success">{{ item.Status}}</span></td>
-                        <td>
+                        <td v-if="item.Student_Decision==null">
                             <div class="btn-group btn-group-sm">
-                                <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Accept')"> Accept</a>
+                                <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Accepted')"> Accept</a>
                             </div>
                             <div class="btn-group btn-group-sm">
-                                <a href="#" class="btn btn-danger" @click="StudentDecission(item.id,'Cancel')">Cancel</a>
+                                <a href="#" class="btn btn-danger" @click="StudentDecission(item.id,'Cancelled')">Cancel</a>
                             </div>
+                        </td>
+                        <td v-else>
+                            {{ item.Student_Decision}}
                         </td>
                         <td>
                             <div class="btn-group btn-group-lg">
-                                <td>{{"comming soon"}}</td>
+                                <td>{{ item.School_Decision=='Accepted'? "Accepted":'Under Process'}}</td>
                             </div>
                         </td>
                     </tr>
@@ -54,13 +57,13 @@
                 }),
                 dzongkhag:new form({
                 name:'',
-                
+
             }),
                school:new form({
                 name:'',
-                
+
             }),
-              
+
             }
         },
         methods:{
@@ -95,7 +98,7 @@
 
 
             },
-           
+
 
             StudentDecission(id, actionType){
               Swal.fire({
@@ -124,7 +127,7 @@
                                 'success'
                                 );
                             }
-                            
+
                         })
                     }
                   })
@@ -133,7 +136,7 @@
         },
         created(){
             this.loadApplication(this.$route.query.cid);
-           
+
         },
         mounted() {
             console.log('Component mounted.')

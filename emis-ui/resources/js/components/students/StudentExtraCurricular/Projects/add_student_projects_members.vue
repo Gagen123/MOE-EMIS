@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label> Project</label>
                         <select v-model="student_form.project" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('project') }" class="form-control select2" name="project" id="project">
-                        <option v-for="(item, index) in projectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in projectList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="project"></has-error>
                     </div>

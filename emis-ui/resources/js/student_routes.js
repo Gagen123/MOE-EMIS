@@ -1,6 +1,7 @@
 const routes = [
     { path: '/StudentServicesMasterIndex', component: require('./components/masters/student_masters/StudentServicesIndex.vue').default,
         children: [
+
             { path: '/award_type_list',
                 component: require('./components/masters/student_masters/awards/award_type_index.vue').default ,
                 children: [
@@ -57,6 +58,15 @@ const routes = [
             },
         ]
     },
+    //Students validation and others
+    { path: '/validation_and_others', component: require('./components/masters/validation_and_others/validation_and_others_index.vue').default,
+    children:
+        [
+            { path: '',ame:'validation_and_others', component: require('./components/masters/validation_and_others/validation_and_others_list.vue').default },
+            { path: '/age_limit_admission',component: require('./components/masters/validation_and_others/age_limit_admission/age_limit_admission_index.vue').default },
+        ],
+    },
+
     //STUDENT MASTER
   { path: '/StudentCeaMasterIndex', component: require('./components/masters/student_masters/StudentCeaIndex.vue').default,
   children:
@@ -443,7 +453,7 @@ const routes = [
         { path: '/student_disciplinary_record', component: require('./components/students/StudentServices/DisciplinaryRecord/student_disciplinary_record.vue').default,
             children: [
                 { path: '/', name:'student_disciplinary_record', component: require('./components/students/StudentServices/DisciplinaryRecord/disciplinary_record_list.vue').default },
-                { path: '/disciplinary_record', name:'disciplinary_record', component: require('./components/students/StudentServices/DisciplinaryRecord/disciplinary_record_list.vue').default },
+                { path: '/disciplinary_record_list', name:'list_disciplinary_record', component: require('./components/students/StudentServices/DisciplinaryRecord/disciplinary_record_list.vue').default },
                 { path: '/add_disciplinary_record', name:'add_disciplinary_record', component: require('./components/students/StudentServices/DisciplinaryRecord/add_disciplinary_record.vue').default },
                 { path: '/edit_disciplinary_record', name:'edit_disciplinary_record', component: require('./components/students/StudentServices/DisciplinaryRecord/edit_disciplinary_record.vue').default },
             ]

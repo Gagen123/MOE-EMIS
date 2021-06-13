@@ -24,7 +24,6 @@ class StudentProjectController extends Controller
             'name'            => 'required',
             'place'            => 'required',
             'project_type_id'            => 'required',
-            'program_id'            => 'required',
             'from_date'            => 'required',
             'to_date'               => 'required'
         ];
@@ -33,7 +32,6 @@ class StudentProjectController extends Controller
             'name.required'  => 'This field is required',
             'place.required'     => 'This field is required',
             'project_type_id.required'  => 'This field is required',
-            'program_id.required'     => 'This field is required',
             'from_date.required'  => 'This field is required',
             'to_date.required'     => 'This field is required',
         ];
@@ -94,12 +92,14 @@ class StudentProjectController extends Controller
         $data =[
             'id'               => $request->id,
             'student'          => $request->student,
-            'project'             => $request->project,
-            'task'             => $request->task
+            'project'          => $request->project,
+            'task'             => $request->task,
+            'user_id'          =>  $this->userId()
+
 
             //'user_id'        => $this->user_id() 
         ];
-
+     //  dd( $data);
 
         try{
             $response_data= $this->apiService->createData('emis/students/saveProjectMembers', $data);
@@ -111,6 +111,7 @@ class StudentProjectController extends Controller
     }
 
     public function listProjectMembers($param=""){
+        //dd('m here');
         $student_records = $this->apiService->listData('emis/students/listProjectMembers/'.$param);
         return $student_records;
     }

@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div> -->
-        
+
         <table id="list-student-table" class="table table-bordered table-striped table-head-fixed">
             <thead>
                 <tr>
@@ -77,8 +77,8 @@
                 <tr v-for="(std, index) in stdList" :key="index">
                     <td>{{ index + 1 }} </td>
                     <td>{{ std.CidNo }}</td>
-                    <td>{{ std.Name }}</td>
-                    <td>{{ std.created_at }}</td>
+                    <td>{{ std.first_name }} {{ std.middle_name }} {{ std.last_name }}</td>
+                    <td>{{ std.dateOfapply }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Edit</a>
                     </td>
@@ -100,6 +100,7 @@ export default {
             streamList:[],
             streamListSelected:[],
             sectionList:[],
+            dt:'',
             class_form: new form({
                 dzongkhag:'',
                 org:'',
@@ -111,17 +112,17 @@ export default {
     },
     methods: {
         loadeditpage(id){
-            this.$router.push({name:'edit_student_admission',params: {data:id}});
+            // this.$router.push({name:'edit_student_admission',params: {data:id}});
         },
         loadStudentList(param){
             this.stdList =[];
             let uri="";
             if(param=="session"){
-                uri='students/admission/loadStudentList/'+param;
+                uri='students/admission/loadStudentList/created';
                 axios.get(uri)
                 .then(response => {
                     let data = response.data;
-                    this.stdList = data.data;
+                    this.stdList = data;
                 });
             }
             else{
@@ -251,16 +252,16 @@ export default {
         this.loadactivedzongkhagList();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         $("#list-student-table").DataTable({
             "responsive": true,
             "autoWidth": false,
-        }); 
+        });
         this.loadclasses('session');
         axios.get('common/getSessionDetail')
         .then(response => {
@@ -271,10 +272,20 @@ export default {
             this.class_form.org=data['Agency_Code'];
             $('#org').val(data['Agency_Code']).trigger('change');
             this.loadclasses(data['Agency_Code']);
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
-        }); 
+        });
+        this.dt =  $("#list-student-table").DataTable();
+    },
+
+    watch: {
+        stdList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#list-student-table").DataTable()
+            });
+        }
     },
 }
 </script>

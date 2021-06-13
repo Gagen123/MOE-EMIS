@@ -81,11 +81,13 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
+        $org_id = $param;
         $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -98,11 +100,12 @@ class StudentProgramController extends Controller
 
     public function listStudentPrograms($param=""){
         $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
-        $id ="1";
+        $org_id = $param;
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -115,11 +118,12 @@ class StudentProgramController extends Controller
 
     public function loadStudentClubs($param=""){
         $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-
+        $org_id = $param;
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -131,12 +135,13 @@ class StudentProgramController extends Controller
     */
 
     public function listStudentClubs($param=""){
+        $org_id = $param;
         $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-        $id ="1";
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -173,6 +178,7 @@ class StudentProgramController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
+          //  'organizationId'            => $request->organizationId,
             'id'                        => $request->id,
             'StdStudentId'              => $request->student,
             'status'                    => $request->status,
@@ -183,7 +189,8 @@ class StudentProgramController extends Controller
 
             //'user_id'        => $this->user_id() 
         ];
-    //    dd($data);
+       // dd($status);
+     //  dd($data);
         $assigned_student_details = $data['role'];
         
         unset($data['role']);
@@ -240,7 +247,7 @@ class StudentProgramController extends Controller
             'id'                    => $request->id,
             'OrgOrganizationId'     => $request->organisation_id,
             'CeaProgrammeId'        => '17b2b454-6f86-49c1-b763-8f02202d3071',
-            // 'CeaProgrammeId'        => $request->program,
+           //  'CeaProgrammeId'        => $request->program,
             'ForMonth'              => $request->month,
             'Remarks'               => $request->remarks,
             'inventoryDetails'      => $request->inventoryDetails,
@@ -292,7 +299,7 @@ class StudentProgramController extends Controller
             
             $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
         }
-
+        //dd( $data);
         return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
     }
 
@@ -318,7 +325,7 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramActionPlan(Request $request){
-
+        
         $rules = [
             'program'            => 'required',
             'from_date'            => 'required',

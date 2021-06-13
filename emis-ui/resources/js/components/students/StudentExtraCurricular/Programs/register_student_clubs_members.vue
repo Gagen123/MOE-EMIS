@@ -52,7 +52,7 @@
                         </span> -->
                         <label  v-for="(item, key, index) in  roleList" :key="index" class="pr-4">
                             <input  type="checkbox" v-model="form.role" :value="item.id" tabindex=""/> 
-                            {{item.name}}
+                            {{item.Name}}
                         </label>
                     </div>
                 </div>
@@ -150,7 +150,7 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveProgramMembers',this.student_form)
+                this.student_form.post('/students/saveClubMembers',this.student_form)
                     .then((response) => {
                         let data=response.data.data;
                         if(data!="" && data=="exist"){
@@ -188,6 +188,7 @@ export default {
         },
     },
      mounted() {
+        this.loadActiveRolesList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -203,7 +204,7 @@ export default {
 
         this.loadStudentList();
         this.loadActiveProgramList();
-        this.loadActiveRolesList();
+       
     },
     
 }

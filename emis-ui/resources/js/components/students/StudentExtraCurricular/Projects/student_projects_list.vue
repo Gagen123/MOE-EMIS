@@ -15,7 +15,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
+                    <td>{{ item.Name}}</td>
                     <td>{{ item.project_type}}</td>
                     <td>{{ item.program_name}}</td>
                     <td>{{ item.FromDate}} - {{ item.ToDate}}</td>

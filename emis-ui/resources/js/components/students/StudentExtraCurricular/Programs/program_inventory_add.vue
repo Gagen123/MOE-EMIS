@@ -59,7 +59,7 @@
                                                 <td>
                                                     <select name="inventory" id="inventory" class="form-control editable_fields" v-model="inventory.item_id">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>                                
@@ -74,7 +74,7 @@
                                                 <td>
                                                     <select name="measurement_unit" id="measurement_unit" class="form-control editable_fields" v-model="inventory.measurement_unit">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -122,7 +122,7 @@
                                                 <td>
                                                     <select name="item_produced" id="item_produced" class="form-control editable_fields" v-model="production.item_produced">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>                                
@@ -131,7 +131,7 @@
                                                 <td>                                
                                                     <select name="quantity_unit" id="quantity_unit" class="form-control editable_fields" v-model="production.quantity_unit">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>                                

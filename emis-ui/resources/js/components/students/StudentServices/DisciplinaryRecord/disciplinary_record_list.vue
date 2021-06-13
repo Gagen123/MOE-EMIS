@@ -5,7 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Student Name</th>
-                    <th >Class</th>
+                    <th >Student Code</th>
                     <th >Offence</th>
                     <th >Severity</th>
                     <th >Action Taken</th>
@@ -18,7 +18,7 @@
                     <td>{{ item.Name}}</td>
                     <td>{{ item.StdStudentId}}</td>
                     <td>{{ item.offence_type}}</td>
-                    <td>{{ item.severiy}}</td>
+                    <td>{{ item.severity}}</td>
                     <td>{{ item.action_type}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -36,6 +36,7 @@ export default {
         return{
             id:'2',
             dataList:[], 
+            severityList:{},
         }
     },
     methods:{
@@ -57,11 +58,26 @@ export default {
                 }); 
             }, 3000);  
         },
+        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.severityList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+                
+            })
+            
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         showedit(data){
             this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
         },
     },
     mounted(){
+        this.loadActiveSeverityList();
         this.loadDataList();
     },
 }

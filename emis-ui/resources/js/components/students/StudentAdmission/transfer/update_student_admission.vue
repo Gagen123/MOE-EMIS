@@ -95,25 +95,42 @@
             </div>
             <div class="row md-12">
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                    <label>Class: <span class="text-danger">*</span></label>
-                    <select v-model="std_admission_details.class_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="std_class_id">
+                    <label>Class: {{std_admission_details.Student_Decision}}<span class="text-danger">*</span></label>
+                    <select v-model="std_admission_details.class_id" :class="{ 'is-invalid select2 select2-hidden-accessible': admission_form.errors.has('class') }" class="form-control select2" name="class" id="std_class_id">
                         <option value="">--- Please Select ---</option>
                         <option v-for="(item, index) in classList  " :key="index" v-bind:value="item.id">{{item.class}}</option>
                     </select>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" v-if="std_admission_details.Student_Decision=='Accepted'">
+                    <label>Streams:</label>
+                    <select v-model="admission_form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': admission_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
+                        <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
+                    </select>
+                    <has-error :form="admission_form" field="std_stream"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" v-if="std_admission_details.Student_Decision=='Accepted'">
+                    <label>Section:</label>
+                    <select v-model="admission_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': admission_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
+                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
+                    </select>
+                    <has-error :form="admission_form" field="std_section"></has-error>
                 </div>
             </div>
             <div class="row md-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Remarks</label>
-                    <textarea v-model="student_form.remarks" id="remarks" type="text" name="remarks"  placeholder=" Enter Remarks"
-                    class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }" />
-                    <has-error :form="student_form" field="remarks"></has-error>
+                    <textarea v-model="admission_form.remarks" id="remarks" type="text" name="remarks"  placeholder=" Enter Remarks"
+                    class="form-control" :class="{ 'is-invalid': admission_form.errors.has('remarks') }" />
+                    <has-error :form="admission_form" field="remarks"></has-error>
                 </div>
             </div>
             <hr>
-            <div class="footer float-right" >
-                <button type="button" @click="submitForm('reject')" class="btn btn-danger"><i class="fas fa-times"></i> Reject</button>
-                <button type="button" @click="submitForm('accept')" class="btn btn-success"> <i class="fas fa-save"></i> Admit</button>
+            <div class="footer float-right" v-if="std_admission_details.Status=='pending'">
+                <button type="button" @click="submitForm('Rejected')" class="btn btn-danger"><i class="fas fa-times"></i> Reject</button>
+                <button type="button" @click="submitForm('Accepted')" class="btn btn-success"> <i class="fas fa-save"></i> Admit</button>
+            </div>
+            <div class="footer float-right" v-if="std_admission_details.Student_Decision=='Accepted'">
+                <button type="button" @click="submitForm('AssignedClassSection')" class="btn btn-success"> <i class="fas fa-save"></i> Allocate Class</button>
             </div>
         </div>
     </div>
@@ -136,14 +153,15 @@ export default {
             gewogArray:{},
             villageArray:{},
             class_id:'',
-            student_form: new form({
+            streamList:[],
+            sectionList:[],
+            admission_form: new form({
                 id:'',
                 student_id:'',
-                dzongkhag:'',
-                school:'',
-                class:'',
-                stream:'',
                 action_type:'',
+                std_stream:'',
+                std_section:'',
+                status:'',
                 remarks:'',
             })
         }
@@ -155,7 +173,8 @@ export default {
                 let data = response.data.data;
                 if(data != ""){
                     this.std_admission_details=data;
-                    this.student_form.id=data.id;
+                    this.admission_form.id=data.id;
+                    this.admission_form.student_id=data.id;
                     this.std_parents=data.parents;
                     this.getGewogList(data.dzongkhag,data.CmnGewogId);
                     this.getvillagelist(data.CmnGewogId,data.village_id);
@@ -191,12 +210,12 @@ export default {
             this.form.reset();
         },
         submitForm(type){
-            this.student_form.action_type=type;
-            this.student_form.post('students/admission/updateAdmissionStd')
+            this.admission_form.status=type;
+            this.admission_form.post('students/admission/studentAdmissionupdate')
             .then((response) => {
                 if(response!=null && response!=""){
                     let message="Application details has been updated.  <br><b>Thank You !</b>";
-                    this.$router.push({name:'acknowledgement',params: {data:message}});
+                    this.$router.push({name:'student_transfers_list',params: {data:message}});
                     Swal.fire(
                         'Success!',
                         'Data  updated successfully',
@@ -289,11 +308,45 @@ export default {
                 this.classList = response.data;
             });
         },
+        getStreamList(id){
+            let classId=$('#std_class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadStreamList/'+classId;
+            this.streamList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.streamList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getSectionList(id){
+            let classId=$('#std_class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadSectionList/'+classId;
+            this.sectionList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.sectionList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
 
     },
     mounted() {
         this.loadgenderList();
         this.getClass();
+        this.getStreamList();
+        this.getSectionList();
         this.loadactivedzongkhagList();
         // this.getschoolList();
         // this.getStudentdetials();
