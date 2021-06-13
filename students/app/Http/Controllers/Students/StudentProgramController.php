@@ -81,11 +81,13 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
+        $org_id = $param;
         $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -98,11 +100,12 @@ class StudentProgramController extends Controller
 
     public function listStudentPrograms($param=""){
         $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
-        $id ="1";
+        $org_id = $param;
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -115,11 +118,12 @@ class StudentProgramController extends Controller
 
     public function loadStudentClubs($param=""){
         $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-
+        $org_id = $param;
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -131,12 +135,13 @@ class StudentProgramController extends Controller
     */
 
     public function listStudentClubs($param=""){
+        $org_id = $param;
         $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-        $id ="1";
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 

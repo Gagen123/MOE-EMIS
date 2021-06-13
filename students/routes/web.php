@@ -86,6 +86,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
         });
 
+        //Validate student data
+        $router->post('/validateStudentData',['uses' => 'General\StudentValidationController@validateStudentData']);
+
         //Get Student List by orgId, Orgclassstreamid
         $router->get('/getStudentList/{orgId}/{orgClassStreamId}',['uses' => 'General\GeneralStudentController@getStudentList']);
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);

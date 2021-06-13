@@ -12,7 +12,6 @@ use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\CeaProgram;
 use App\Models\Masters\CeaRole;
-
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
@@ -76,10 +75,11 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
-     //   dd('m here at microservice');
+        
         if(strpos($param,'_Active')){
             $param=explode('_',$param)[0];
         }
+
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
@@ -89,32 +89,29 @@ class StudentMasterController extends Controller
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
          //   dd($response_data);
 
         } elseif($param == 'club_name'){
-
             $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
 
-        } else if(strpos($param,'_Active')){
+        } elseif(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
 
-        }else if($param= 'student_award_type'){
-            $vacinetype = StudentAwardType::all();
-            return $vacinetype;
+        } elseif($param == 'student_award_type'){
+            return $this->successResponse(StudentAwardType::all());
 
-        }
-        else if($param= 'program_type'){
-            $vacinetype = CeaProgram::all();
-            return $vacinetype;
+        } elseif($param == 'program_type'){
+            return $this->successResponse(CeaProgram::all());
 
+        } else {
+            return $this->successResponse($model::all());
         }
-        return $this->successResponse($model::all());
+        
     }
 
 
@@ -122,7 +119,6 @@ class StudentMasterController extends Controller
      * method to list students masters of active records for dropdown
     */
     public function loadActiveStudentMasters($param=""){
-    //    dd('from services');
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
@@ -136,6 +132,27 @@ class StudentMasterController extends Controller
         } else if($param == 'vaccine_type'){
             $vacinetype = StudentType::all();
             return $vacinetype;
+
+        } else if($param == 'program_name'){
+            $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            $model = new $modelName();
+
+            $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            return $data;
+
+        } else if($param == 'club_name'){
+            $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            $model = new $modelName();
+
+            $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            return $data;
+
+        } else {
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();

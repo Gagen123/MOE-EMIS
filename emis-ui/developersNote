@@ -44,4 +44,8 @@ Setting up the system administration, and user management:
     Also need a page to be able to edit the guardians details
 
 
+    Changes from Saru's code
+    student_club is no longer used. Instead cea_club_membership is used to store the students and clubs
+
+
 

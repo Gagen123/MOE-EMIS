@@ -24,7 +24,6 @@ class StudentProjectController extends Controller
             'name'            => 'required',
             'place'            => 'required',
             'project_type_id'            => 'required',
-            'program_id'            => 'required',
             'from_date'            => 'required',
             'to_date'               => 'required'
         ];
@@ -33,7 +32,6 @@ class StudentProjectController extends Controller
             'name.required'  => 'This field is required',
             'place.required'     => 'This field is required',
             'project_type_id.required'  => 'This field is required',
-            'program_id.required'     => 'This field is required',
             'from_date.required'  => 'This field is required',
             'to_date.required'     => 'This field is required',
         ];

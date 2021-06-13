@@ -19,6 +19,8 @@ class StudentResponsibilityController extends Controller
     }
 
     public function saveStudentResponsibility(Request $request){
+
+        //First - check the basic validation of the forms
         
         $rules = [
             'student'       => 'required',
@@ -28,17 +30,39 @@ class StudentResponsibilityController extends Controller
             'student.required'          => 'This field is required',
             'role_id.required'          => 'This field is required'
         ];
+
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
-            'id'                => $request->id,
+            'id'                =>  $request->id,
             'student'           =>  $request->student,
             'role_id'           =>  $request->role_id,
             'remarks'           =>  $request->remarks,
-            'action_type'       => $request->action_type,
-            'user_id'           => $this->userId(),
-            'working_agency_id' => $this->getWrkingAgencyId()
+            'action_type'       =>  $request->action_type,
+            'data_type'         =>  'roles_responsibilities',
+            'user_id'           =>  $this->userId(),
+            'working_agency_id' =>  $this->getWrkingAgencyId()
         ];
+
+        //Validate to ensure that there is no duplication of entries
+        //Not creating but using the createData service as we are sending the $data
+        $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
+        
+        if(json_decode($validate_data)->data == 'exist'){
+            //this is to offset the data and send it back to the view
+            $request->offsetUnset('role_id');
+            
+            $rules = [
+                'student'       => 'required',
+                'role_id'       => 'required'
+            ];
+            $customMessages = [
+                'student.required'          => 'This field is required',
+                'role_id.required'          => 'Duplication of Roles for Student'
+            ];
+
+            $this->validate($request, $rules, $customMessages);
+        }
 
         try{
             $response_data= $this->apiService->createData('emis/students/saveStudentResponsibility', $data);
