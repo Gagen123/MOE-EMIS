@@ -49,7 +49,7 @@ class StudentAwardController extends Controller
             'user_id'           => $this->userId(),
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
-
+    //  dd(  $data );
         try{
             $response_data= $this->apiService->createData('emis/students/saveStudentAward', $data);
             return $response_data;

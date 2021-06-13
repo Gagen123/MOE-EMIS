@@ -19,7 +19,7 @@
                     <td>{{ item.StdStudentId}}</td>
                     <td>{{ item.award_name}}</td>
                     <td>{{ item.AwardDate}}</td>
-                    <td>{{ item.awarded_by}}</td>
+                    <td>{{ item.AwardedBy}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

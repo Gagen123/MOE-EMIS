@@ -23,60 +23,95 @@ class StudentAwardController extends Controller
     */
 
     public function saveStudentAward(Request $request){
-        
-        $rules = [
-            'student'       => 'required',
-            'award_given_by'=> 'required',
-            'award_type_id' => 'required',
-            'place'         => 'required',
-            'date'          => 'required'
-        ];
-        $customMessages = [
-            'student.required'          => 'This field is required',
-            'award_given_by.required'   => 'This field is required',
-            'award_type_id.required'    => 'This field is required',
-            'place.required'            => 'This field is required',
-            'date.required'             => 'This field is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
-
-        $data =[
-            'id'                => $request->id,
-            'StdStudentId'           =>  $request->student,
-            'AwardedBy'    =>  $request->award_given_by,
-            'CeaAwardId'     =>  $request->award_type_id,
-            'Place'             =>  $request->place,
-            'AwardDate'              =>  $request->date,
-            'Remarks'           =>  $request->remarks,
-            'actiontype'        =>  $request->actiontype,
-            'recordtype'        =>  $request->recordtype, 
-            //'user_id'           => $this->user_id() 
-        ];
-
-        if($request->actiontype=="add"){
-            $response_data = CeaStudentAward::create($data);
-
-        } else if($request->actiontype=="edit"){
-
-            //Audit Trails
-            // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
-
-            $app_data = [
-                'StdStudentId' => $request['student'],
-                'awarded_by'    =>  $request['award_given_by'],
-                'CeaAwardId'     =>  $request['award_type_id'],
-                'Place'             =>  $request['place'],
-                'AwardDate'              =>  $request['date'],
-                'Remarks'           =>  $request['remarks'],
+        $id = $request->id;
+        if( $id != null){
+            $rules = [
+                'student'       => 'required',
+                'award_given_by'=> 'required',
+                'award_type_id' => 'required',
+                'place'         => 'required',
+                'date'          => 'required'
             ];
+            $customMessages = [
+                'student.required'          => 'This field is required',
+                'award_given_by.required'   => 'This field is required',
+                'award_type_id.required'    => 'This field is required',
+                'place.required'            => 'This field is required',
+                'date.required'             => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+    
+            $data =[
+                'id'                => $request->id,
+                'StdStudentId'           =>  $request->student,
+                'AwardedBy'    =>  $request->award_given_by,
+                'CeaAwardId'     =>  $request->award_type_id,
+                'Place'             =>  $request->place,
+                'AwardDate'              =>  $request->date,
+                'Remarks'           =>  $request->remarks,
+                'actiontype'        =>  $request->actiontype,
+                'recordtype'        =>  $request->recordtype, 
+                //'user_id'           => $this->user_id() 
+            ];
+            $response_data = CeaStudentAward::where('id', $id)->update($data);
 
-            CeaStudentAward::where('id', $request['id'])->update($app_data);
-        }
+        }else{
+            $rules = [
+                'student'       => 'required',
+                'award_given_by'=> 'required',
+                'award_type_id' => 'required',
+                'place'         => 'required',
+                'date'          => 'required'
+            ];
+            $customMessages = [
+                'student.required'          => 'This field is required',
+                'award_given_by.required'   => 'This field is required',
+                'award_type_id.required'    => 'This field is required',
+                'place.required'            => 'This field is required',
+                'date.required'             => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
 
+            $data =[
+                'id'                => $request->id,
+                'StdStudentId'           =>  $request->student,
+                'AwardedBy'    =>  $request->award_given_by,
+                'CeaAwardId'     =>  $request->award_type_id,
+                'Place'             =>  $request->place,
+                'AwardDate'              =>  $request->date,
+                'Remarks'           =>  $request->remarks,
+                'actiontype'        =>  $request->actiontype,
+                'recordtype'        =>  $request->recordtype, 
+                //'user_id'           => $this->user_id() 
+            ];
+            $response_data = CeaStudentAward::create($data);
+         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
     }
+    //     if($request->actiontype=="add"){
+    //         $response_data = CeaStudentAward::create($data);
+
+    //     } else if($request->actiontype=="edit"){
+
+    //         //Audit Trails
+    //         // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+    //         // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
+
+    //         $app_data = [
+    //             'StdStudentId' => $request['student'],
+    //             'awarded_by'    =>  $request['award_given_by'],
+    //             'CeaAwardId'     =>  $request['award_type_id'],
+    //             'Place'             =>  $request['place'],
+    //             'AwardDate'              =>  $request['date'],
+    //             'Remarks'           =>  $request['remarks'],
+    //         ];
+
+    //         CeaStudentAward::where('id', $request['id'])->update($app_data);
+    //     }
+
+    //     return $this->successResponse($response_data, Response::HTTP_CREATED);
+        
+    // }
 
     /**
      * method to list students masters

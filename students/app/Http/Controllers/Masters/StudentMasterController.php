@@ -120,7 +120,7 @@ class StudentMasterController extends Controller
             return $this->successResponse($model::where('status',$status)->get());
         }
 
-        dd($program_student_roles);
+      //  dd($program_student_roles);
         
 
     }

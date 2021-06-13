@@ -40,6 +40,7 @@ class StudentProgramClubController extends Controller
         }
         else{
             $data =[
+                'organizationId'            => $request->organizationId,
                 'id'                        => $request->id,
                 'StdStudentId'              => $request->student,
                 'status'                    => $request->status,
@@ -49,7 +50,20 @@ class StudentProgramClubController extends Controller
                 'role'                      => $request->role
             ];
             $persondata = StudentClub::create($data);
+          //  dd( $data);
         }
         return $this->successResponse($persondata, Response::HTTP_CREATED);
+    }
+    public function listProgramMembers($orgId=""){
+        $id ="1";
+
+        $records = DB::table('student_club')
+                ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
+                ->join('cea_programme_membership', 'cea_school_programme.id', '=', 'cea_programme_membership.CeaSchoolProgrammeId')
+                ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
+                ->select('cea_programme_membership.*', 'std_student.Name AS student_name', 'cea_programme.name AS program_name')
+                ->get();
+
+        return $this->successResponse($records);
     }
 }

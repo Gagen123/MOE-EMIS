@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_award_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_award_form" field="student"></has-error>
                 </div> 
@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label class="mb-0.5">Award Type:<i class="text-danger">*</i></label>
                             <select v-model="student_award_form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
-                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
                             <has-error :form="student_award_form" field="award_type_id"></has-error>
                     </div>
@@ -61,7 +61,7 @@ export default {
         return {
             studentList:[],
             awardList:[],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            id:'3',
 
             student_award_form: new form({
                 id:'',
@@ -107,9 +107,13 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
+                this.student_award_form.place= '';
+                this.student_award_form.award_given_by ='';
+                this.student_award_form.award_type_id = '';
                 this.student_award_form.student= '';
                 this.student_award_form.remarks='';
                 this.student_award_form.status= 1;
+                this.student_award_form.date = '';
             }
             if(type=="save"){
                 this.student_award_form.post('/students/saveStudentAward',this.student_award_form)
@@ -153,22 +157,19 @@ export default {
             this.changefunction(id);
         });
 
-        this.student_award_form.student=this.$route.params.data.StdStudentId;
-        $('#student').val(this.$route.params.data.StdStudentId).trigger('change');
-
-        
+        this.loadStudentList();
         this.loadActiveAwardList();
     },
     created() {
         this.loadStudentList();
-        
+        this.student_award_form.student=this.$route,params.data.StdStudentId;
         this.student_award_form.award_type_id=this.$route.params.data.CeaAwardId;
-        this.student_award_form.award_given_by=this.$route.params.data.awarded_by;
+        this.student_award_form.award_given_by=this.$route.params.data.AwardedBy;
         this.student_award_form.place=this.$route.params.data.Place;
         this.student_award_form.date=this.$route.params.data.AwardDate;
         this.student_award_form.remarks=this.$route.params.data.Remarks;
         this.student_award_form.id=this.$route.params.data.id;
     },
-    
+
 }
 </script>

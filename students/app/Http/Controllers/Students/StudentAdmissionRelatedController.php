@@ -254,15 +254,16 @@ class StudentAdmissionRelatedController extends Controller
                 'country'                   =>  $request->country,
                 'city'                      =>  $request->city,
              ];
+             $persondata = StudentAboard::create($data);
         }
+        return $this->successResponse($persondata, Response::HTTP_CREATED);
 
-
-        $persondata = StudentAboard::create($data);
+       
     }
 
-        return $this->successResponse($persondata, Response::HTTP_CREATED);
+      
        // dd($persondata);
-    // }
+    
 
     private function updateStudentStatus($type, $student_id){
         if($type == 'school_leaving'){

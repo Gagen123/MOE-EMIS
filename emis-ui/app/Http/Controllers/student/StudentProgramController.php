@@ -118,6 +118,7 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
         
         $data =[
+            'organizationId'        => $this->getWrkingAgencyId(), 
             'id'                    => $request->id,
             'status'                => $request->status,
             'student'               => $request->student,
@@ -133,9 +134,51 @@ class StudentProgramController extends Controller
             return $response_data;
        
     }
+    /*
+    Function to save Club members 
+    */
+    public function saveClubMembers(Request $request){
+        $rules = [
+            'student'                      => 'required',
+            // 'program'                  => 'required',
+            'responsibilities'            => 'required',
+        ];
+
+        $customMessages = [
+            'student.required'  => 'This field is required',
+            // 'program.required'     => 'This field is required',
+            'responsibilities.required'  => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $data =[
+            'organizationId'        => $this->getWrkingAgencyId(), 
+            'id'                    => $request->id,
+            'status'                => $request->status,
+            'student'               => $request->student,
+            'program'               => $request->program,
+            'date'                  => $request->date,
+            'responsibilities'      => $request->responsibilities,
+            'role'                  => $request->role
+
+            //'user_id'        => $this->user_id() 
+        ];
+       // dd($data);
+            $response_data= $this->apiService->createData('emis/students/saveClubMembers', $data);
+            return $response_data;
+       
+    }
+
+    public function listClubMember($orgId=""){
+        $student_records = $this->apiService->listData('emis/students/listClubMember/'.$orgId);
+        return $student_records;
+    }
+
+
+
 
     /*
-    * Function is to list Program Members
+    * Function is to list Program Members 
     */
 
     public function listProgramMembers($param=""){
@@ -172,7 +215,7 @@ class StudentProgramController extends Controller
 
             //'user_id'        => $this->user_id() 
         ];
-
+      //  dd( $data);
 
         try{
             $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
