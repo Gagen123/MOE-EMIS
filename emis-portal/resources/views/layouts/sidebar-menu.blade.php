@@ -8,65 +8,44 @@
           </p>
         </router-link>
       </li>
-      @can('isAdmin')
-      <!-- <li class="nav-item">
-        <router-link to="/Userprofile" class="nav-link">
-          <i class="nav-icon fas fa-list orange"></i>
-          <p>
-            Profile
-          </p>
-        </router-link>
-      </li> -->
-      <li class="nav-item">
-            <router-link to="/admission" class="nav-link">
-            <i class="fa fa-users nav-icon blue"></i>
-              <p>
-              Admission
-              </p>
-            </router-link>
-          </li>
-
-      @endcan
-      <li class="nav-item">
-            <router-link to="/admissionRequest" class="nav-link">
-            <i class="fa fa-users nav-icon blue"></i>
-              <p>
-              Request for admission
-              </p>
-            </router-link>
-       </li>
-      
-
-      <!-- @can('isAdmin')
         <li class="nav-item">
-          <router-link to="/result" class="nav-link">
-            <i class="fa fa-users nav-icon orange"></i>
-            <p>Result</p>
-          </router-link>
-        </li> -->
-
-      <li class="nav-item">
+            <router-link to="/admission_transfer_index" class="nav-link">
+                <i class="fa fa-users nav-icon blue"></i>
+                <p>Admission</p>
+            </router-link>
+        </li>
+        <li class="nav-item">
+            <router-link to="/admissionRequest" class="nav-link">
+                <i class="fa fa-users nav-icon blue"></i>
+                <p> Request for admission</p>
+            </router-link>
+        </li>
+        <li class="nav-item">
             <router-link to="/track_application" class="nav-link">
             <i class="fa fa-search nav-icon blue"></i>
-              <p>
-              Track application
-              </p>
+              <p> Track application</p>
             </router-link>
-          </li>
-
-      @endcan
-
-      <li class="nav-item">
-        <a href="#" class="nav-link" onclick="event.preventDefault();
-          document.getElementById('logout-form').submit();">
-          <i class="nav-icon fas fa-power-off red"></i>
-          <p>
-            {{ __('Logout') }}
-          </p>
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-          @csrf
-        </form>
-      </li>
+        </li>
+        <li class="nav-item">
+            <a href="#" onclick="logout()" class="dropdown-item">
+                <i class="fa fa-sign-out-alt pr-4"></i>Sign out
+            </a>
+        </li>
     </ul>
   </nav>
+  <script>
+    function logout(){
+      Swal.fire({
+        title: 'Are you sure you wish to signout?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!',
+        }).then((result) => {
+        if (result.isConfirmed) {
+          window.location="user_logout";
+        }
+      });
+    }
+</script>

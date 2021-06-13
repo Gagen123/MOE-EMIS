@@ -18,6 +18,16 @@ export default [
        ]
     },
 
+    { path: '/admission_transfer_index', component: require('./components/new_admission_transfer/new_admission_transfer_index.vue').default ,
+        children:[
+            { path: '/',name:'admission_transfer_index', component: require('./components/new_admission_transfer/list_new_admission_transfer.vue').default },
+            { path: '/create_new_admission_transfer',name:'create_new_admission_transfer', component: require('./components/new_admission_transfer/create_new_admission_transfer.vue').default },
+            { path: '/new_registration_for_admission',name:'new_registration_for_admission', component: require('./components/new_admission_transfer/new_registration_for_admission.vue').default },
+            { path: '/edit_new_admission_transfer',name:'edit_new_admission_transfer', component: require('./components/new_admission_transfer/edit_new_admission_transfer.vue').default },
+            { path: '/list_new_admission_transfer',name:'list_new_admission_transfer', component: require('./components/new_admission_transfer/list_new_admission_transfer.vue').default },
+        ]
+    },
+
     { path: '/track_application',  name:'track_application',  component: require('./components/admissions/track_application.vue').default ,
     children:[
               { path: '/applicationLists',name:'applicationLists', component: require('./components/admissions/applicationLists.vue').default },

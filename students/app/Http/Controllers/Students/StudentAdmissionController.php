@@ -734,7 +734,6 @@ class StudentAdmissionController extends Controller
             if(explode('__',$param)[0] == "admission"){
                 dd(explode('__',$param)[1]);
                 $response_data = DB::table('std_admissions')->where('OrgOrganizationId',explode('__',$param)[1])->get();
-                dd($response_data);
                 return $response_data;
             }
             else  if(explode('__',$param)[0] == "created"){

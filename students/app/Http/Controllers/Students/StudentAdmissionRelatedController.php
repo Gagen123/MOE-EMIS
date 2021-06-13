@@ -22,12 +22,12 @@ class StudentAdmissionRelatedController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
 
-    /** 
+    /**
      * method to save or update student awards
     */
 
     public function reportStudents(Request $request){
-        
+
         $rules = [
             'date'               => 'required'
         ];
@@ -35,9 +35,9 @@ class StudentAdmissionRelatedController extends Controller
         $customMessages = [
             'date.required'     => 'This field is required',
         ];
-        
+
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'date'             => $request->date,
@@ -47,7 +47,7 @@ class StudentAdmissionRelatedController extends Controller
             'std_id'                => $request->std_id,
             'std_reported'          => $request->std_reported,
         ];
-        
+
         $std_unreported = $data['std_reported'];
         $student_id = $data['std_id'];
 
@@ -58,11 +58,11 @@ class StudentAdmissionRelatedController extends Controller
                 $StdStudentId = $student_id[$index];
                 $response_data = $this->updateStudentStatus('reporting', $StdStudentId);
             }
-            
+
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
+
     }
 
     public function loadUnreportedStudents($org_id){
@@ -71,12 +71,12 @@ class StudentAdmissionRelatedController extends Controller
                 ->where('OrgOrganizationId', $org_id)
                 ->where('IsRejoined', '1')
                 ->get();
-        
+
         return $this->successResponse($students);
     }
 
     public function saveStudentTransfer(Request $request){
-        
+
         $rules = [
             'student'               => 'required',
             'last_class_attended'               => 'required',
@@ -91,7 +91,7 @@ class StudentAdmissionRelatedController extends Controller
             'reasons.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'OrgOrganizationId' => $request->working_agency_id,
@@ -99,7 +99,7 @@ class StudentAdmissionRelatedController extends Controller
             'StdStudentId'             => $request->student,
             'Reasons'            => $request->reasons
         ];
-        
+
         if($request->action_type=="add"){
             $response_data = StdSchoolLeaving::create($data);
             $updated_status = $this->updateStudentStatus('school_leaving', $request->student);
@@ -127,17 +127,17 @@ class StudentAdmissionRelatedController extends Controller
 
     public function loadStudentTransfers($param){
         $id =$param;
-        
+
         $students = DB::table('std_student')
                 ->where('std_student.OrgOrganizationId', $id)
                 ->where('IsTransferred', '1')
                 ->get();
-        
+
         return $this->successResponse($students);
     }
 
     public function saveStudentWhereabouts(Request $request){
-        
+
         $rules = [
             'student'               => 'required',
             'last_class_attended'               => 'required',
@@ -156,7 +156,7 @@ class StudentAdmissionRelatedController extends Controller
             'current_address.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'OrgOrganizationId' => $request->working_agency_id,
@@ -200,11 +200,11 @@ class StudentAdmissionRelatedController extends Controller
                 ->join('std_student', 'std_student_separated_whereabout.StdStudentId', '=', 'std_student.id')
                 ->select('std_student_separated_whereabout.*', 'std_student.Name')
                 ->get();
-        
+
         return $this->successResponse($awards);
     }
 
-    /// student Aboard 
+    /// student Aboard
 
     public function loadAboardList($orgId=""){
 
@@ -235,7 +235,7 @@ class StudentAdmissionRelatedController extends Controller
                 'city'                      =>  $request->city,
              ];
             // dd($data);
-             //  dd('m here from services');      
+             //  dd('m here from services');
              $response_data = StudentAboard::where('id', $id)->update($data);
         } else {
 
@@ -258,11 +258,11 @@ class StudentAdmissionRelatedController extends Controller
 
 
         $persondata = StudentAboard::create($data);
-    }
+    // }
 
         return $this->successResponse($persondata, Response::HTTP_CREATED);
        // dd($persondata);
-    // }
+    }
 
     private function updateStudentStatus($type, $student_id){
         if($type == 'school_leaving'){

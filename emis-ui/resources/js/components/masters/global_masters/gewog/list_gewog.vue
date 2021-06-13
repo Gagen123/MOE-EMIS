@@ -1,6 +1,6 @@
 <template>
     <div class="card-body">
-        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
+        <table id="gewog-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -9,7 +9,7 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -28,13 +28,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             gewogList:[],
+            dt:'',
         }
     },
     methods:{
@@ -45,18 +46,25 @@ export default {
                 this.gewogList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error in retrieve: '+error);
             });
         },
         showedit(data){
             this.$router.push({name:'edit_gewog',params: {data:data}});
         },
-        
+
     },
-    mounted(){ 
+    mounted(){
         this.loadgewogList();
+        this.dt =  $("#gewog-table").DataTable()
+    },
+     watch: {
+        gewogList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#gewog-table").DataTable()
+            });
+        }
     },
 }
 </script>

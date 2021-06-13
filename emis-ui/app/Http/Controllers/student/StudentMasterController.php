@@ -81,10 +81,46 @@ class StudentMasterController extends Controller{
             ];
             $data = $data + $additional_data;
         }
-            $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
-            return $response_data;
+        $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
+        return $response_data;
 
 
+    }
+
+    public function saveValidationcondition(Request $request){
+        $rules = [
+            'date'          =>  'required',
+            'date1'         =>  'required',
+            'status'        =>  'required',
+            'no_months'     =>  'required',
+            'no_months1'    =>  'required',
+        ];
+        $customMessages = [
+            'date.required' => 'This field is required',
+            'date1.required' => 'This field is required',
+            'status.required' => 'This field is required',
+            'no_months.required' => 'This field is required',
+            'no_months1.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'id'                =>  $request->id,
+            'date'              =>  $request->date,
+            'date1'             =>  $request->date1,
+            'status'            =>  $request->status,
+            'no_months'         =>  $request->no_months,
+            'no_months1'        =>  $request->no_months1,
+            'user_id'           => $this->userId()
+        ];
+
+        $response_data= $this->apiService->createData('emis/masters/students/saveValidationcondition', $data);
+        return $response_data;
+
+    }
+
+    public function loadValidationcondition(){
+        $student_masters = $this->apiService->listData('emis/masters/students/loadValidationcondition/');
+        return $student_masters;
     }
 
     //get Scouts Section Level By Scouts Section Id

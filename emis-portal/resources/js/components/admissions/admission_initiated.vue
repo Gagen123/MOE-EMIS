@@ -113,16 +113,14 @@
         </div>
     </div>
     <div class="card">
-            <div class="row-12">
-                 <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                    <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
-                    <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
-                    <span class="text-danger" id="snationality_err"></span>
-                  </div> -->
-
-            </div>
-
-
+        <div class="row-12">
+            <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+            <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
+            <input type="radio" name="snationality" v-model="std_admission_details.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
+            <span class="text-danger" id="snationality_err"></span>
+            </div> -->
+        </div>
+    </div>
     </div>
 </div>
 </template>
