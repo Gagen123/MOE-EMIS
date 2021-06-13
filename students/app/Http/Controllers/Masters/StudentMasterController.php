@@ -104,12 +104,12 @@ class StudentMasterController extends Controller
         } else if(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
 
-        }else if($param= 'student_award_type'){
+        }else if($param=='student_award_type'){
             $vacinetype = StudentAwardType::all();
             return $vacinetype;
 
         }
-        else if($param= 'program_type'){
+        else if($param=='program_type'){
             $vacinetype = CeaProgram::all();
             return $vacinetype;
 
