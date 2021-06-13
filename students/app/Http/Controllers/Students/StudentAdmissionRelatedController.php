@@ -216,6 +216,7 @@ class StudentAdmissionRelatedController extends Controller
      * method to save student aboard details
      */
     public function saveStudentAboard(Request $request){
+     //   dd('m here at services');
         $id = $request->id;
         if( $id != null){
             $data =[
@@ -231,11 +232,11 @@ class StudentAdmissionRelatedController extends Controller
                 'status'                    =>  $request->status,
                 'fulladdress'               =>  $request->fulladdress,
                 'country'                   =>  $request->country,
+                'phone'                     =>  $request->phone,
                 'city'                      =>  $request->city,
             ];
-             $response_data = StudentAboard::where('id', $id)->update($data);
+            $response_data = StudentAboard::where('id', $id)->update($data);
         } else {
-
         $data =[
             'id'                        =>  $request->id,
             'organizationId'            =>  $request->organizationId,
@@ -252,8 +253,10 @@ class StudentAdmissionRelatedController extends Controller
             'city'                      =>  $request->city,
             'phone'                     =>  $request->phone,
         ];
-        }
         $persondata = StudentAboard::create($data);
+       // dd($persondata);
+        }
+     
         return $this->successResponse($persondata, Response::HTTP_CREATED);
     }
 
