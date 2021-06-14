@@ -507,6 +507,7 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
+        //dd( $cat);
         $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
 
@@ -535,12 +536,14 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
+       // dd($cat);
         $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
 
     }
 
     public function loadEquipmentUsage(Request $request){
+      //  dd('from UI');
         $strCategory = $this->apiService->listData('emis/masters/equipmentUsage/loadEquipmentUsage');
         return $strCategory;
     }
@@ -1137,5 +1140,109 @@ class AdministrationController extends Controller{
         $dis = $this->apiService->listData('emis/masters/disasterComm/loadDisasterComm');
         return $dis;
     }
+   
+
+
+    // Furniture 
+    public function saveFurnitureType(Request $request){
+        $rules = [
+            'name'  =>  'required',
+            'status'    =>  'required',
+        ];
+        $customMessages = [
+            'name.required' => 'furniture name is required',
+            'status.required'   => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $fur =[
+            'organizationId'    =>  $this->getWrkingAgencyId(),
+            'name'              =>  $request['name'],
+            'description'       =>  $request['description'],
+            'status'            =>  $request['status'],
+         //   'actiontype'        =>  $request['action_type'],
+            'id'                =>  $request['id'],
+            'user_id'           =>$this->userId()
+        ];
+       // dd( $fur);
+        $response_data= $this->apiService->createData('emis/masters/furnitureType/saveFurnitureType', $fur);
+        return $response_data;
+
+    }
+    public function loadFurnitureType(){
+        $global_masters = $this->apiService->listData('emis/masters/furnitureType/loadFurnitureType');
+        return $global_masters;
+    }
+
+    public function saveFurnitureItem(Request $request){
+        $rules = [
+            'name'                  =>  'required',
+            'furnitureType'         =>  'required',
+            'status'                =>  'required',
+        ];
+        $customMessages = [
+            'name.required'             => 'Name item is required',
+            'furnitureType.required'    => 'Furniture type name is required',
+            'status.required'           => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $furitem =[
+            'name'                      =>  $request['name'],
+            'furnitureType'             =>  $request['furnitureType'],
+            'description'               =>  $request['description'],
+            'status'                    =>  $request['status'],
+        //    'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>$this->userId()
+        ];
+      //  dd( $furitem);
+        $response_data= $this->apiService->createData('emis/masters/furnitureItem/saveFurnitureItem', $furitem);
+        return $response_data;
+    }
+
+    public function loadFurnitureItem(){
+        $response_data = $this->apiService->listData('emis/masters/furnitureItem/loadFurnitureItem');
+        return $response_data;
+    }
+    public function getFurnitureTypeDropdown(){
+  //  dd('from UI');
+        $response_data = $this->apiService->listData('emis/masters/furnitureItem/getFurnitureTypeDropdown');
+        return $response_data;
+    }
+
+    public function saveFurnitureUsage(Request $request){
+        $rules = [
+            'name'                          =>  'required',
+            'status'                        =>  'required',
+        ];
+        $customMessages = [
+            'name.required'                 => 'Furniture usage name is required',
+            'status.required'               => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $furuse =[
+            'name'                          =>  $request['name'],
+            'description'                   =>  $request['description'],
+            'status'                        =>  $request['status'],
+         //   'actiontype'                    =>  $request['action_type'],
+            'id'                            =>  $request['id'],
+            'user_id'                       =>$this->userId()
+        ];
+      //  dd($furuse);
+        $response_data= $this->apiService->createData('emis/masters/furnitureUsage/saveFurnitureUsage', $furuse);
+        return $response_data;
+
+    }
+    public function loadFurnitureUsage(Request $request){
+        //  dd('from UI');
+        $strCategory = $this->apiService->listData('emis/masters/furnitureUsage/loadFurnitureUsage');
+        return $strCategory;
+    }
+
+
+
+    
+    
+
+    
 
 }

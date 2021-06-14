@@ -15,8 +15,8 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.student_name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ item.CeaProjectId}}</td>
+                    <td>{{ item.student_code}}</td>
+                    <td>{{ item.project_name}}</td>
                     <td>{{ item.Task}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

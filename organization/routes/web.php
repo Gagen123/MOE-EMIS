@@ -66,6 +66,28 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     });
 
+    $router->group(['prefix' => 'masters/furnitureType'], function () use ($router) {
+        // equipment type route
+        $router->post('/saveFurnitureType', 'Masters\EquipmentTypeController@saveFurnitureType');
+        $router->get('/loadFurnitureType', 'Masters\EquipmentTypeController@loadFurnitureType');
+
+    });
+
+    $router->group(['prefix' => 'masters/furnitureItem'], function () use ($router) {
+        // equipment item route
+        $router->post('/saveFurnitureItem', 'Masters\EquipmentItemController@saveFurnitureItem');
+        $router->get('/getFurnitureTypeDropdown', 'Masters\EquipmentItemController@getFurnitureTypeDropdown');
+        $router->get('/loadFurnitureItem', 'Masters\EquipmentItemController@loadFurnitureItem');
+
+    });
+
+    $router->group(['prefix' => 'masters/furnitureUsage'], function () use ($router) {
+        // equipment usage route
+        $router->post('/saveFurnitureUsage', 'Masters\EquipmentUsageController@saveFurnitureUsage');
+        $router->get('/loadFurnitureUsage', 'Masters\EquipmentUsageController@loadFurnitureUsage');
+
+    });
+
     $router->group(['prefix' => 'masters/equipmentUsage'], function () use ($router) {
         // equipment usage route
         $router->post('/saveEquipmentUsage', 'Masters\EquipmentUsageController@saveEquipmentUsage');

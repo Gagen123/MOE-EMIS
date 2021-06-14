@@ -58,7 +58,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster', this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

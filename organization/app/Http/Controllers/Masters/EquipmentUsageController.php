@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Masters\EquipmentUsage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\Masters\EquipmentUsage;
+use App\Models\Masters\EquipmentUse;
+use App\Models\Masters\FurnitureUsage;
 use Illuminate\Support\Facades\DB;
+
 
 class EquipmentUsageController extends Controller
 {
@@ -29,17 +31,17 @@ class EquipmentUsageController extends Controller
     /**
      * method to list equipment usage
     */
-    
+
     public function loadEquipmentUsage(){
+        //dd('form microservices');
         $strFacility = EquipmentUsage::all();
         return $strFacility;
     }
 
-    /** 
+    /**
      * method to save or update level type
     */
     public function saveEquipmentUsage(Request $request){
-
         $id = $request->id;
         if( $id != null){
             $equ = [
@@ -47,10 +49,10 @@ class EquipmentUsageController extends Controller
                 'description'    =>  $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
-                'created_at'    =>date('Y-m-d h:i:s'),
+                'updated_at'    =>date('Y-m-d h:i:s'),
             ];
 
-            $data = EquipmentUsage::find($request['id']);
+            $data = EquipmentUse::find($request['id']);
 
             $messs_det='equipmentUsageName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
@@ -65,9 +67,48 @@ class EquipmentUsageController extends Controller
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
-
+           // dd( $equ);
             $equipment= EquipmentUsage::create($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);
         }
+    }
+
+    public function saveFurnitureUsage(Request $request){
+
+        $id = $request->id;
+        if( $id != null){
+            $furuseage = [
+                'id'                    => $request['id'],
+                'name'                  => $request['name'],
+                'description'           => $request['description'],
+                'status'                => $request['status'],
+                'updated_by'            =>$request['user_id'],
+                'updated_at'            =>date('Y-m-d h:i:s'),
+            ];
+
+            $data = FurnitureUsage::find($request['id']);
+
+           $messs_det='equipmentUsageName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+          // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
+
+            $furnitureuseage = FurnitureUsage::where('id', $id)->update($furuseage);
+           // return $this->successResponse($furnitureuseage, Response::HTTP_CREATED);
+        }else{
+            $furuseage = [
+                'name'                  => $request['name'],
+                'description'           => $request['description'],
+                'status'                => $request['status'],
+                'created_by'            =>$request['user_id'],
+                'created_at'            =>date('Y-m-d h:i:s'),
+            ];
+           // dd($furuseage);
+            $furnitureusage= FurnitureUsage::create($furuseage);
+            return $this->successResponse($furnitureusage, Response::HTTP_CREATED);
+        }
+    }
+    public function loadFurnitureUsage(){
+        //dd('form microservices');
+        $strFacility = FurnitureUsage::all();
+        return $strFacility;
     }
 }
