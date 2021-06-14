@@ -53,8 +53,20 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveEquipmentType', [App\Http\Controllers\AdministrationController::class, 'saveEquipmentType'])->name('saveEquipmentType');
     Route::get('/loadEquipmentType', [App\Http\Controllers\AdministrationController::class, 'loadEquipmentType'])->name('loadEquipmentType');
 
-    Route::post('/saveEquipmentUsage', [App\Http\Controllers\AdministrationController::class, 'saveEquipmentUsage'])->name('saveEquipmentUsage');
+    //new Routes for furniture
+    Route::post('/saveFurnitureType', [App\Http\Controllers\AdministrationController::class, 'saveFurnitureType'])->name('saveFurnitureType');
+    Route::get('/loadFurnitureType', [App\Http\Controllers\AdministrationController::class, 'loadFurnitureType'])->name('loadFurnitureType');
+    
+    Route::post('/saveFurnitureItem', [App\Http\Controllers\AdministrationController::class, 'saveFurnitureItem'])->name('saveFurnitureItem');
+    Route::get('/loadFurnitureItem', [App\Http\Controllers\AdministrationController::class, 'loadFurnitureItem'])->name('loadFurnitureItem');
+    Route::get('/getFurnitureTypeDropdown', [App\Http\Controllers\AdministrationController::class, 'getFurnitureTypeDropdown'])->name('getFurnitureTypeDropdown');
+    
+    Route::post('/saveFurnitureUsage', [App\Http\Controllers\AdministrationController::class, 'saveFurnitureUsage'])->name('saveFurnitureUsage');
+    Route::get('/loadFurnitureUsage', [App\Http\Controllers\AdministrationController::class, 'loadFurnitureUsage'])->name('loadFurnitureUsage');
+    
     Route::get('/loadEquipmentUsage', [App\Http\Controllers\AdministrationController::class, 'loadEquipmentUsage'])->name('loadEquipmentUsage');
+    Route::post('/saveEquipmentUsage', [App\Http\Controllers\AdministrationController::class, 'saveEquipmentUsage'])->name('saveEquipmentUsage');
+    
 
     Route::post('/saveSportFacility', [App\Http\Controllers\AdministrationController::class, 'saveSportFacility'])->name('saveSportFacility');
     Route::get('/loadSportFacility', [App\Http\Controllers\AdministrationController::class, 'loadSportFacility'])->name('loadSportFacility');
@@ -586,7 +598,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'loadStudentClubs'])->name('loadStudentClubs');
     Route::get('/listStudentClubs/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listStudentClubs'])->name('listStudentClubs');
     Route::post('/saveClubMembers', [App\Http\Controllers\student\StudentProgramController::class, 'saveClubMembers'])->name('saveClubMembers');
-    Route::get('/listClubMember/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listClubMember'])->name('listClubMember');
+    Route::get('/listClubMembers/{param}', [App\Http\Controllers\student\StudentProgramController::class, 'listClubMembers'])->name('listClubMembers');
 
     Route::post('/saveStudentScouts', [App\Http\Controllers\student\StudentScoutController::class, 'saveStudentScouts'])->name('saveStudentScouts');
     Route::get('/loadStudentScouts/{param}', [App\Http\Controllers\student\StudentScoutController::class, 'loadStudentScouts'])->name('loadStudentScouts');

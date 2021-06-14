@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div>
@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label> Program</label>
                         <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.programme_id">{{ item.name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
                     </div>
@@ -39,7 +39,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- Need to fix the roles-->
+            <!-- <div class="row">
                 <div class="col-sm-6">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label >Roles:</label><br>
@@ -48,11 +49,11 @@
                         </span>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div>
+            </div> 
         </form>
     </div>
 </template>
@@ -79,16 +80,16 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        // loadStudentList(uri='students/loadStudentList/' +this.id){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         this.studentList =  data.data.data;
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error......"+error)
-        //     });
-        // },
+        loadStudentList(uri='students/loadStudentList/' +this.id){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.studentList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         getClassTeacher(){
             axios.get('academics/getClassTeacherClasss')
             .then(response =>{
@@ -169,7 +170,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/W');
+                    this.$router.push('/student_programs_members');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -203,6 +204,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadStudentList();
         this.getClassTeacher();
         this.loadActiveProgramList();
         this.loadActiveRolesList();

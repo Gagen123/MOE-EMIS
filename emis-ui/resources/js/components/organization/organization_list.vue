@@ -57,7 +57,8 @@ export default {
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
-                let data = response.data;
+                let data = response.data.data;
+                //  alert(JSON.stringify(response.data[0].name))
                 for(let i=0;i<data.length;i++){
                     this.levelArray[data[i].id] = data[i].name; 
                 }

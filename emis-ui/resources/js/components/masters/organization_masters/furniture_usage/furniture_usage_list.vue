@@ -1,11 +1,10 @@
 <template>
     <div>
-        <table id="equipmentItem-table" class="table table-bordered text-sm table-striped">
+        <table id="equipmentUsage-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Equipment Item</th>
-                    <th>Equipment Type</th>
+                    <th>Furniture Usage</th>
                     <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
@@ -13,16 +12,16 @@
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in equipmentItemList" :key="index">
+                <tr v-for="(item, index) in furnitureUsageList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.equipmentItem}}</td>
-                    <td>{{ item.equipmentType}}</td>
+                    <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewEquipmentItemList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewFurnitureUsageList(item)"><i class="fas fa-edit"></i ></a>
+                            <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
                         </div>
                     </td>
                 </tr>
@@ -35,17 +34,16 @@
 export default {
     data(){
         return{
-            equipmentItemList:[],
+            furnitureUsageList:[],
             dt:'',
         }
     },
-
     methods:{
-        loadEquipmentItemList(uri = 'masters/loadEquipmentItem'){
+        loadFurnitureUsageList(uri = 'masters/loadFurnitureUsage'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.equipmentItemList =  data.data;
+                this.furnitureUsageList =  data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -53,27 +51,26 @@ export default {
                 }
             });
             setTimeout(function(){
-                $("#equipmentItem-table").DataTable({
+                $("#equipmentUsage-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
                 }); 
             }, 300);  
         },
-        viewEquipmentItemList(data){
+        viewFurnitureUsageList(data){
             data.action='edit';
-            this.$router.push({name:'EquipmentItemEdit',params: {data:data}});
+            this.$router.push({name:'furniture_usage_edit',params: {data:data}});
         },
     },
-
     mounted(){
-        this.loadEquipmentItemList();
-        this.dt =  $("#equipmentItem-table").DataTable();
+        this.loadFurnitureUsageList();
+        this.dt =  $("#equipmentUsage-table").DataTable()
     },
     watch: {
-        equipmentItemList(){
+        furnitureUsageList(){
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#equipmentItem-table").DataTable()
+                this.dt =  $("#equipmentUsage-table").DataTable()
             });
         }
     },

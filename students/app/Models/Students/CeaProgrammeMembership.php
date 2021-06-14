@@ -13,12 +13,12 @@ class CeaProgrammeMembership extends Model
 
     protected $fillable = [
         'id',
-        'CeaSchoolProgrammeId',
+        'CeaProgrammeId',
         'StdStudentId',
         'JoiningDate',
         'Responsibility',
         'Achievement',
-        'status',
+        'Status',
         'role',
     ];
 }
