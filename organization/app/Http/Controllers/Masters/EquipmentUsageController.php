@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
-
+use App\Models\Masters\EquipmentUsage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
@@ -31,14 +31,14 @@ class EquipmentUsageController extends Controller
     /**
      * method to list equipment usage
     */
-    
+
     public function loadEquipmentUsage(){
         //dd('form microservices');
         $strFacility = EquipmentUsage::all();
         return $strFacility;
     }
 
-    /** 
+    /**
      * method to save or update level type
     */
     public function saveEquipmentUsage(Request $request){
@@ -67,17 +67,8 @@ class EquipmentUsageController extends Controller
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
-<<<<<<< HEAD
            // dd( $equ);
             $equipment= EquipmentUsage::create($equ);
-=======
-            try{
-                $equipment= EquipmentUsage::create($equ);
-            }catch(\Illuminate\Database\QueryException $ex){
-                dd($ex);
-            }
-           
->>>>>>> 54d7dc322ac3372c5498138fa17b79d57d5fa91c
             return $this->successResponse($equipment, Response::HTTP_CREATED);
         }
     }
