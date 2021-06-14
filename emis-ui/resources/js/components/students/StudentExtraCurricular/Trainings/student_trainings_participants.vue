@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         showadprocess(type){
-            if(type=="add_student_trainings_participants" || type=="edit_student_trainings_participants"){
+            if(type=="add_student_trainings_participants"){
                 this.$router.push("/"+type);
             }
             if(type=="student_trainings_participants_list"){

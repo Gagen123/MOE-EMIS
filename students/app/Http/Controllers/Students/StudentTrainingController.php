@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\CeaTrainingParticipant;
 use Exception;
+use PhpParser\Node\Stmt\Else_;
 
 class StudentTrainingController extends Controller
 {
@@ -124,15 +125,23 @@ class StudentTrainingController extends Controller
         }
         if($request->form_type=="edit"){
             $data = CeaTrainingParticipant::find($request->id);
-            $messs_det='OrgId:'.$data->OrgId.'; CeaStudentTrainingId:'.$data->CeaStudentTrainingId.'; StdStudentId:'.$data->StdStudentId.'; Remarks:'.$data->Remarks.'; created_at:'.$data->created_at;
-            $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','cea_student_training_participant','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
-            $data->OrgId = $request['org_id'];
-            $data->CeaStudentTrainingId = $request['training_id'];
-            $data->StdStudentId = $request['student_id'];
-            $data->Remarks = $request['remarks'];
-            $data->created_at = $request['created_at'];
-            $data->update();
-            $response_data = $data;
+            if($request->participant==false){
+                $messs_det='OrgId:'.$data->OrgId.'; CeaStudentTrainingId:'.$data->CeaStudentTrainingId.'; StdStudentId:'.$data->StdStudentId.'; Remarks:'.$data->Remarks.'; created_at:'.$data->created_at;
+                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','cea_student_training_participant','".$request['id']."','".$messs_det."','".$request['user_id']."','DELETE')");
+                DB::delete('DELETE FROM cea_student_training_participant WHERE id = ? AND StdStudentId = ?  ',[$request['id'],$request['student_id']]);
+                $response_data = "deleted!";
+            }else{
+                $messs_det='OrgId:'.$data->OrgId.'; CeaStudentTrainingId:'.$data->CeaStudentTrainingId.'; StdStudentId:'.$data->StdStudentId.'; Remarks:'.$data->Remarks.'; created_at:'.$data->created_at;
+                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','cea_student_training_participant','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+                $data->OrgId = $request['org_id'];
+                $data->CeaStudentTrainingId = $request['training_id'];
+                $data->StdStudentId = $request['student_id'];
+                $data->Remarks = $request['remarks'];
+                $data->created_at = $request['created_at'];
+                $data->update();
+                $response_data = $data;
+            }
+            
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }

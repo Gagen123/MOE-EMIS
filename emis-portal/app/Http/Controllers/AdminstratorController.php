@@ -78,6 +78,11 @@ class AdminstratorController extends Controller
         $response_data= $this->apiService->listData('emis/masters/load_dzongkhag_details_by_id/'.$id);
          return $response_data;
     }
+    public function loadValidationcondition(){
+        $student_masters = $this->apiService->listData('emis/masters/students/loadValidationcondition/');
+        return $student_masters;
+    }
+
 
     // public function getseatdetailsbyOrgId($orgId){
     //     $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);

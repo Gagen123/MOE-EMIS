@@ -24,8 +24,8 @@ class CreateSportsTable extends Migration
             $table->integer('yearOfEstablishment');
             $table->char('supportedBy',36);
             $table->foreign('supportedBy')->references('id')->on('sport_supporter');
-            // $table->char('size');
-            // $table->integer('courts');
+            $table->char('size')->nullable(true);
+            $table->char('sportstype')->nullable(true);
             $table->tinyInteger('status');
             $table->integer('noOfFacility');
             $table->integer('rampAccess');
