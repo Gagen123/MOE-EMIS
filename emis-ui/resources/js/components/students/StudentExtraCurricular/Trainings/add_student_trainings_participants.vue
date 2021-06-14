@@ -1,73 +1,73 @@
 <template>
     <div> 
-            <form class="bootbox-form">
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Class:<i class="text-danger">*</i></label>
-                        <!-- @change="aboveClass10()" -->
-                        <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }"  class="form-control select2" name="std_class" id="std_class">
-                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
-                        </select>
-                        <has-error :form="student_form" field="std_class"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
-                        <label>Streams:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
-                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
-                        </select>
-                        <has-error :form="student_form" field="std_stream"></has-error>
-                    </div> 
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
-                        <label>Section:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
-                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
-                        </select>
-                        <has-error :form="student_form" field="std_section"></has-error>
-                    </div>
-                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="mb-0.5">Training:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.training_id" :class="{'is-invalid is-invalid select2 select2-hidden-accessible': student_form.errors.has('training_id') }" class="form-control select2" name="training_id" id="training">
-                            <option v-for="(item1, index1) in trainingList" :key="index1" :value="item1.id">{{ item1.Name }}</option>
-                        </select>
-                        <has-error :form="student_form" field="training_id"></has-error>
-                    </div> 
+        <form class="bootbox-form">
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Class:<i class="text-danger">*</i></label>
+                    <!-- @change="aboveClass10()" -->
+                    <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }"  class="form-control select2" name="std_class" id="std_class">
+                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                    </select>
+                    <has-error :form="student_form" field="std_class"></has-error>
                 </div>
-                <div v-show="studentList.length" class="form-group row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <table id="student-list-table" class="table w-100 table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Student ID</th>
-                                    <th>Name</th>
-                                      <th>
-                                        <input type="checkbox" name="participants" class="form-control-input" id="participantsid" @change="checkall('participantsCheck','participantsid')"/>
-                                        Participants
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbody">
-                                <tr v-for="(student, index1) in studentList" :key="index1">  
-                                    <td>{{ index1 + 1 }}</td>
-                                    <td>{{ student.Name}}</td>
-                                    <td>
-                                        <input type="checkbox" name="participants" v-model="student_form.student_id[index1]" :value="student.id" class="ml-2 form-control-input participantsCheck" />
-                                    </td>  
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
+                    <label>Streams:<i class="text-danger">*</i></label>
+                    <select v-model="student_form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
+                        <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
+                    </select>
+                    <has-error :form="student_form" field="std_stream"></has-error>
+                </div> 
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
+                    <label>Section:<i class="text-danger">*</i></label>
+                    <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
+                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
+                    </select>
+                    <has-error :form="student_form" field="std_section"></has-error>
                 </div>
-                <div v-show="studentList.length" class="form-group row">
-                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0.5">Remarks:</label>
-                        <textarea v-model="student_form.remarks" placeholder="remarks" class="form-control" rows="2" id="remarks"></textarea>
-                    </div> 
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Training:<i class="text-danger">*</i></label>
+                    <select v-model="student_form.training_id" :class="{'is-invalid is-invalid select2 select2-hidden-accessible': student_form.errors.has('training_id') }" class="form-control select2" name="training_id" id="training">
+                        <option v-for="(item1, index1) in trainingList" :key="index1" :value="item1.id">{{ item1.Name }}</option>
+                    </select>
+                    <has-error :form="student_form" field="training_id"></has-error>
+                </div> 
+            </div>
+            <div v-show="studentList.length" class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <table id="student-list-table" class="table w-100 table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                    <th>
+                                    <input type="checkbox" name="participants" class="form-control-input" id="participantsid" @change="checkall('participantsCheck','participantsid')"/>
+                                    Participants
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            <tr v-for="(student, index1) in studentList" :key="index1">  
+                                <td>{{ index1 + 1 }}</td>
+                                <td>{{ student.Name}}</td>
+                                <td>
+                                    <input type="checkbox" name="participants" v-model="student_form.student_id[index1]" :value="student.id" class="ml-2 form-control-input participantsCheck" />
+                                </td>  
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <hr>
-                <div class="card-footer text-right">
-                    <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                </div>
+            </div>
+            <div v-show="studentList.length" class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <label class="mb-0.5">Remarks:</label>
+                    <textarea v-model="student_form.remarks" placeholder="remarks" class="form-control" rows="2" id="remarks"></textarea>
+                </div> 
+            </div>
+            <hr>
+            <div class="card-footer text-right">
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+            </div>
         </form>
     </div> 
 </template>

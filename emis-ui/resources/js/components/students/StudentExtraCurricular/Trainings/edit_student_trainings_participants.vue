@@ -37,7 +37,7 @@
                   <input
                     type="checkbox"
                     name="participants"
-                    v-model="student_form.student_id"
+                    v-model="student_form.participant"
                     class="ml-2 form-control-input"
                   />
                 </td>
@@ -91,6 +91,7 @@ export default {
       student_form: new form({
         form_type: "edit",
         id: "",
+        participant:"",
         student_id: "",
         std_class: "",
         std_stream: "",
@@ -113,7 +114,8 @@ export default {
             let students = response.data.student;
             students.forEach((std) => {
                 if (this.student_form.student_id == std.std_student_id) {
-                    this.student = std;
+                  this.student_form.participant = true
+                  this.student = std;
                 }
             });
         })
@@ -175,17 +177,44 @@ export default {
         this.student_form.std_stream = "";
       }
       if (type == "save") {
-        this.student_form.post("/students/saveTrainingParticipants", this.student_form)
-          .then(() => {
-            Toast.fire({
-              icon: "success",
-              title: "Details added successfully",
+        if(this.student_form.participant == false){
+             Swal.fire({
+                title: 'Are you sure you want to remove student from this training?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        axios.post("/students/saveTrainingParticipants",this.student_form)
+                            .then(() => {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Successfully removed student'
+                                })
+                                this.$router.push('/student_trainings_participants_list');
+
+                            })
+                            .catch(function(error){
+                            this.errors = error;
+                        });
+                    }
+            })
+        }else {
+            this.student_form.post("/students/saveTrainingParticipants", this.student_form)
+            .then(() => {
+              Toast.fire({
+                icon: "success",
+                title: "Details added successfully",
+              });
+              this.$router.push("/student_trainings_participants_list");
+            })
+            .catch(() => {
+              console.log("Error......");
             });
-            this.$router.push("/student_trainings_participants_list");
-          })
-          .catch(() => {
-            console.log("Error......");
-          });
+      }
+        
       }
     },
     async changefunction(id) {
