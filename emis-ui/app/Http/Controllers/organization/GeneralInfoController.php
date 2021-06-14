@@ -93,7 +93,7 @@ class GeneralInfoController extends Controller
         return $type;
     }
     public function getFurnitureItem($itemId=""){
-     //   dd('m here');
+     //  dd('m here');
         $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
         return $itemList;
     }

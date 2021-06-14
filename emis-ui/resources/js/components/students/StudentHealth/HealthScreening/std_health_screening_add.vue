@@ -314,13 +314,13 @@ export default {
             }
             
         },
-        checkall(class_to_check,id){
-            if($('#'+id).prop('checked')){
-                $("."+class_to_check).prop("checked",true);
-            }
-            else{
-                $("."+class_to_check).prop("checked",false);
-            }
+            checkall(class_to_check,id){
+                if($('#'+id).prop('checked')){
+                    $("."+class_to_check).prop("checked",true);
+                }
+                else{
+                    $("."+class_to_check).prop("checked",false);
+                }
         }
     },
     mounted() {

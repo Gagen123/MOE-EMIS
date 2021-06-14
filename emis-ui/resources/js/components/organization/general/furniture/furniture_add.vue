@@ -157,7 +157,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                this.itemList = data;
+                this.itemList = data.data;
             });
         },
 
