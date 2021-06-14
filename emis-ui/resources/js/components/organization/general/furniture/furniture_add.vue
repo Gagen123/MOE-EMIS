@@ -121,7 +121,7 @@ export default {
             .then(response => {
                 // alert(JSON.stringify(response));
                 let data = response.data;
-                this.itemList = data;
+                this.itemList = data.data;
             });
         },
 

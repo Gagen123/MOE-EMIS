@@ -18,7 +18,7 @@ class OrganizationMasterController extends Controller{
         $this->audit_database = config('services.constant.auditdb');
         $this->database = config('services.constant.organizaitondb');
     }
-    
+
     public function saveOrganizationMaster(Request $request){
         $modelName = "App\\Models\\Masters\\"."$request->model";
         $model = new $modelName();
@@ -33,6 +33,7 @@ class OrganizationMasterController extends Controller{
             'description.required'  => 'This field is required',
             'status.required'       => 'This field is required',
         ];
+    
         $this->validate($request, $rules, $customMessages);
         //name,description and status should be common to all models. respective model should be passed from ui.
         $master_data = [
@@ -40,9 +41,10 @@ class OrganizationMasterController extends Controller{
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
+      //  dd( $master_data);
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
-                'applicableTo'              =>  implode($request->addfield_1),
+                'applicableTo'              =>  implode(', ', $request->addfield_1),
             ];
         }
         if($request->model=="FinancialInformation"){
@@ -50,8 +52,7 @@ class OrganizationMasterController extends Controller{
                 'applicableTo'              =>  $request->addfield_1,
             ];
         }
-        
-        
+
         if($request->action_type=="add"){
             $master_data =$master_data+[
                 'created_by'        =>  $request->user_id,
@@ -59,7 +60,7 @@ class OrganizationMasterController extends Controller{
             ];
             $response_data = $model::create($master_data);
         }
-        
+
         if($request->action_type=="add"){
             $master_data =$master_data+[
                 'created_by'        =>  $request->user_id,
@@ -91,15 +92,15 @@ class OrganizationMasterController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadOrganizaitonmasters($type="",$model=""){
-        $modelName = "App\\Models\\Masters\\"."$model"; 
+        $modelName = "App\\Models\\Masters\\"."$model";
         $model = new $modelName();
         if($type == 'all'){
             return $this->successResponse($model::get());
         } else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
-        } 
+        }
         else if(strpos($type,'ForTransaction')!==false){
             // return str_replace('_',' ',explode('__',$type)[1]);
             $response_data="";

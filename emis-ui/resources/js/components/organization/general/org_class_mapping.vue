@@ -18,16 +18,16 @@
                                     <thead>
                                         <tr>
                                             <th style="width:5%">Classes</th>
-                                            <th class="streamsec" style="width:15%">Stream</th>  
+                                            <th class="streamsec" style="width:15%">Stream</th>
                                             <th style="width:10%">
                                             <!-- <input type="checkbox" id="chkbtn" @click="checkall('chkbtn')"> Check All -->
-                                            </th> 
+                                            </th>
                                             <th style="width:20%">No. Section</th>
-                                            <th style="width:15%">Section</th> 
+                                            <th style="width:15%">Section</th>
                                             <template v-if="org_type == 'public_ecr'" >
-                                                <th style="width:15%">Multi Grade</th> 
-                                                <th style="width:20%">Group</th>  
-                                            </template>    
+                                                <th style="width:15%">Multi Grade</th>
+                                                <th style="width:20%">Group</th>
+                                            </template>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -35,48 +35,48 @@
                                             <td>
                                                 <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                             </td>
-                                            <td class="streamsec" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                            <td class="streamsec" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                 {{  item.stream  }}<input type="hidden" name="selectedSection" :id="'seelctedsec'+item.id">
                                             </td>
                                             <td class="streamsec" v-else> <input type="hidden" name="selectedSection" :id="'seelctedsec'+item.classId"></td>
 
-                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                <input type="checkbox" :id="'applibable'+item.id" @click="showNoSection(item.id)" class="classname" 
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                <input type="checkbox" :id="'applibable'+item.id" @click="showNoSection(item.id)" class="classname"
                                                 v-model="form.stream" name="classStream" :value="item.id">
                                             </td>
-                                            <td v-else>  
-                                                <input type="checkbox" :id="'applibable'+item.classId" @click="showNoSection(item.classId)" class="streamname" 
-                                                v-model="form.class" name="orgclass" :value="item.classId">                              
+                                            <td v-else>
+                                                <input type="checkbox" :id="'applibable'+item.classId" @click="showNoSection(item.classId)" class="streamname"
+                                                v-model="form.class" name="orgclass" :value="item.classId">
                                             </td>
 
-                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'"> 
-                                                <input type="number" min="1" max="2" @keyup.enter="setsections(item.id)" @blur="setsections(item.id)" 
-                                                :id="'no_section'+item.id" class="form-control" placeholder="No of section" style="display:none"> 
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                <input type="number" min="1" max="2" @keyup.enter="setsections(item.id)" @blur="setsections(item.id)"
+                                                :id="'no_section'+item.id" class="form-control" placeholder="No of section" style="display:none">
                                             </td>
-                                            <td v-else> 
-                                                <input type="number" min="1" max="2" @keyup.enter="setsections(item.classId)" @blur="setsections(item.classId)" 
-                                                :id="'no_section'+item.classId" class="form-control" placeholder="No of section" style="display:none"> 
+                                            <td v-else>
+                                                <input type="number" min="1" max="2" @keyup.enter="setsections(item.classId)" @blur="setsections(item.classId)"
+                                                :id="'no_section'+item.classId" class="form-control" placeholder="No of section" style="display:none">
                                             </td>
-                                            
+
                                             <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                 <span :id="'sectionval'+item.id"></span>
-                                            </td> 
+                                            </td>
                                             <td v-else>
                                                 <span :id="'sectionval'+item.classId"></span>
-                                            </td> 
-                                            
+                                            </td>
+
                                             <template v-if="org_type == 'public_ecr'" >
                                                 <td >
                                                     <input type="checkbox" class="multiageclass" :id="'check'+item.classId" @click="showMF('multigrade',item.classId)">
                                                 </td>
-                                                <td>  
+                                                <td>
                                                     <select name="multiAgeId" disabled :id="'multigrade'+item.classId" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('multiAgeId') }" class="form-control multiageclassval" >
                                                         <option value="">--- Please Select ---</option>
                                                         <option v-for="(multi, index) in multiAgeIdList" :key="index" v-bind:value="item.classId+'__'+multi.id">{{ multi.name }}</option>
                                                     </select>
                                                 </td>
                                             </template>
-                                        </tr> 
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -85,20 +85,20 @@
                                     <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
                                         <input type="checkbox" name="orgclass" v-model="form.class" :value="item.classId" :id="item.classId">
                                         <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                    </span>  
+                                    </span>
                                 </span>
 
                                 <span v-for="(item, key, index) in  classStreamList" :key="index">
                                     <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                        <input type="checkbox" name="classStream" v-model="form.stream"  :id="item.id" :value="item.id"> 
-                                        <label class="pr-3"> 
-                                            {{ item.class }} 
-                                            <span v-if="item.stream"> - 
+                                        <input type="checkbox" name="classStream" v-model="form.stream"  :id="item.id" :value="item.id">
+                                        <label class="pr-3">
+                                            {{ item.class }}
+                                            <span v-if="item.stream"> -
                                                 {{  item.stream  }}
                                             </span>
                                         </label>
-                                    </span>  
-                                </span> 
+                                    </span>
+                                </span>
                             </div> -->
                         </div>
                     </div>
@@ -108,7 +108,7 @@
                 </div>
             </form>
         </div>
-        
+
     </div>
 </template>
 
@@ -232,7 +232,7 @@ export default {
                         icon: 'error'
                     });
                 }else{
-                   
+
                     let multiage=[];
                     $.each(this.classStreamList, function(key, value){
                         if($('#multigrade'+value.classId).val()!=""){
@@ -241,7 +241,7 @@ export default {
                         }
                     })
                     for(let i=0;i<this.classStreamList.length;i++){
-                        
+
                     }
                     this.form.multiAgeId=multiage;
                     this.form.post('/organization/saveClassMapping',this.form)
@@ -261,12 +261,12 @@ export default {
             axios.get('/masters/loadClassStreamMapping/multiGrade')
               .then(response => {
                 this.multiAgeIdList = response.data.data;
-            })              
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
-            });   
+            });
         },
-        
+
         getCurrentClassStream(schoolId){
             axios.get('/organization/getCurrentClassStream/'+schoolId)
               .then(response => {
@@ -329,14 +329,14 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-         
+
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -352,18 +352,18 @@ export default {
             if(data['acess_level']=="Org"){
                 this.getorgdetials(data['Agency_Code']);
                 this.form.school=data['Agency_Code'];
-                
+
             }
             else{
                 $('#screenPermission').show();
                 $('#mainformid').hide();
                 $('#message').html('This page is not accessible to you');
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
-       
+
     }
 }
 </script>

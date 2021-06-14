@@ -7,6 +7,9 @@
                         <label>Guideline For:<span class="text-danger">*</span></label>
                         <select class="form-control select2" id="guideline_for" v-model="form.guideline_for" :class="{ 'is-invalid': form.errors.has('guideline_for') }">
                             <option value="">--Select--</option>
+                            <option value="Organization Establishment">Organization Establishment</option>
+                            <option value="Organization Establishment Change">Organization Establishment Change</option>
+                            <option value="Organization Change Details">Organization Change Details</option>
                             <option value="Student Admission Validation">Student Admission Validation</option>
                             <option value="Student Admission">Student Admission</option>
                         </select>
