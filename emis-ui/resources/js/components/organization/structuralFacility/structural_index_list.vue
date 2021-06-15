@@ -21,7 +21,7 @@ export default {
         }
     },
     methods:{
-        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Organization_Establishment'){
+        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Organization_Establishment_Change'){
             axios.get(uri)
             .then(response => {
                 let data = response;
