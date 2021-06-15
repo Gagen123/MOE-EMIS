@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change SEN Details of Organization</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change SEN Details of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -62,7 +62,7 @@ export default {
             locationList:[],
             dzongkhagList:[],
             gewog_list:[],
-            villageList:[], 
+            villageList:[],
             classList1:[],
             streamList1:[],
             classList:[],
@@ -71,7 +71,7 @@ export default {
                 organizationId:'', application_type:'sen_change', senSchool:'0',
                 application_for:'Change in SEN details', action_type:'edit', status:'Submitted',organization_type:'',
             })
-        } 
+        }
     },
     methods: {
         /**
@@ -82,7 +82,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -94,8 +94,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -109,15 +109,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change in SEN detail has been updated and send for further approval. <br><b>Thank You !</b>";
+                                    let message="applicaiton for Change in SEN detail has been updated and send for further approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'sen_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -130,9 +130,9 @@ export default {
                     }
                 });
             }
-            
+
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -153,10 +153,10 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
+                this.form.organizationId=$('#organizationId').val();
                 this.getorgdetials($('#organizationId').val());
             }
-            
+
         },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
@@ -186,7 +186,7 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-        loadApplicaitonDetials(){ 
+        loadapplicaitonDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -194,7 +194,7 @@ export default {
                 this.form.id=response_data.change_details.id;
                 // this.form.change_id=response_data.change_details.id;
                 this.form.senSchool=response_data.change_details.proposedChange;
-               
+
                 // this.getClassStream(this.levelArray[response_data.change_details.proposedChange]);
                 // let class_data=response_data.change_class_details;
                 // for(let i=0;i<class_data.length;i++){
@@ -208,23 +208,23 @@ export default {
             });
         },
     },
-    
-    mounted() { 
+
+    mounted() {
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
-        this.loadApplicaitonDetials();
+        this.loadapplicaitonDetials();
     }
 }
 </script>
-        
+

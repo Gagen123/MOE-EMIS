@@ -183,7 +183,15 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks</label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="file_form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                         <hr>
+
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('class-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
@@ -228,6 +236,8 @@ export default {
                 record_type:'add',
                 application_number:'',
                 status:'submitted',
+                remarks:'',
+                service_name:'New Establishment of Public ECCD',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -419,12 +429,12 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="Applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    message="applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
                     Swal.fire({
@@ -435,7 +445,7 @@ export default {
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
-                        if (result.isConfirmed && validated) {
+                        if (result.isConfirmed) {
                             let clasArray=[];
                             $("input[name='attachment']:checked").each( function () {
                                 clasArray.push($(this).val());
@@ -454,7 +464,11 @@ export default {
                                     formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
                                 }
                                 formData.append('application_number', this.file_form.application_number);
+                                formData.append('remarks', this.file_form.remarks);
                                 formData.append('status', this.file_form.status);
+                                formData.append('service_name', this.file_form.service_name);
+                                formData.append('proposedName', this.form.proposedName);
+                                formData.append('submit_type', nextclass);
                                 axios.post('organization/saveUploadedFiles', formData, config)
                                 .then((response) => {
                                     if(response.data!=""){
@@ -465,8 +479,8 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                            this.$router.push({name:'acknowledgement_public_eccd',params: {data:message}});
+                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            this.$router.push({name:'acknowledgement_public_eccd',params: {data:message+res}});
                                             Toast.fire({
                                                 icon: 'success',
                                                 title: 'Application for new establishment has been submitted for further action'

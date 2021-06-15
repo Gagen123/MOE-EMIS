@@ -20,7 +20,7 @@
                     <td>{{ item.status}}</td>
                     <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
-                        <a href="#" v-if="item.status=='submitted' || item.status=='Notified For Team Verification'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                        <a href="#" v-if="item.status=='Submitted' || item.status=='Notified For Tentative Date'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
                 </tr>
             </tbody>
@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
             dt:''
         }
     },
@@ -54,8 +54,8 @@ export default {
                 }
             });
             setTimeout(function(){
-                
-            }, 3000);  
+
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_private_eccd',params: {id:data.id}});
@@ -63,7 +63,7 @@ export default {
         showview(data){
             this.$router.push({name:'show_private_eccd',query: {id:data.application_no}});
         },
-        
+
     },
     mounted(){
         this.loadDataList();
