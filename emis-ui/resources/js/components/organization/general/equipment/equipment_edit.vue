@@ -38,28 +38,6 @@
                         <has-error :form="form" field="notusable"></has-error>
                     </div>
                 </div> 
-                <!-- <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Cost:<span class="text-danger">*</span></label> 
-                        <input name="cost" class="form-control" v-model="form.cost" :class="{ 'is-invalid': form.errors.has('cost') }" id="cost" @change="remove_err('cost')" type="cost">
-                        <has-error :form="form" field="cost"></has-error>
-                    </div>
-                </div>  -->
-                <!-- <div class="row form-group">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label class="required">Condition of Equipment:</label>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Usable:<span class="text-danger">*</span></label> 
-                            <input name="usable" class="form-control" v-model="form.usable" :class="{ 'is-invalid': form.errors.has('usable') }" id="usable" @change="remove_err('usable')" type="number">
-                            <has-error :form="form" field="usable"></has-error>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Not Usable:<span class="text-danger">*</span></label> 
-                            <input name="notusable" class="form-control" v-model="form.notusable" :class="{ 'is-invalid': form.errors.has('notusable') }" id="notusable" @change="remove_err('notusable')" type="number">
-                            <has-error :form="form" field="notusable"></has-error>
-                        </div>
-                    </div>
-                </div>          -->
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>

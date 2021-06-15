@@ -12,6 +12,7 @@
                             <option value="Organization Change Details">Organization Change Details</option>
                             <option value="Student Admission Validation">Student Admission Validation</option>
                             <option value="Student Admission">Student Admission</option>
+                             <option value="Equipment And Furniture">Equipment And Furniture</option>
                         </select>
                         <has-error :form="form" field="guideline_for"></has-error>
                     </div>

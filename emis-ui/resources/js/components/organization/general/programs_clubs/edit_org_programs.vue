@@ -31,8 +31,8 @@
                     <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
-            <label>Roles Assigned to Staff </label>
-            <div class="card">
+            <!-- <label>Roles Assigned to Staff </label> -->
+            <!-- <div class="card">
                 <div class="form-group row">
                     <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <table id="dynamic-table" class="table table-sm table-bordered table-striped">
@@ -74,7 +74,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
