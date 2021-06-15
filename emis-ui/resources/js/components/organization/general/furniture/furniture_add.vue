@@ -54,7 +54,7 @@ export default {
         return{
             typeList:[],
             itemList:[],
-            locationUse:[],
+           // locationUse:[],
             form: new form({
                 id: '',
                 organizationId:'',

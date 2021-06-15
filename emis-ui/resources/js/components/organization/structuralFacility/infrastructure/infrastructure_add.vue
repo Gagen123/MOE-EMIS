@@ -31,6 +31,16 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in contructionTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="constructionType"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
@@ -168,12 +178,14 @@ export default {
             subCategortList:[],
             facilityList:[],
             designerList:[],
+            contructionTypeList:[],
             users: [],
             form: new form({
                 id: '',
                 organizationId:'',
                 category: '',
                 subCategory: '',
+                constructionType:'',
                 structureNo: '',
                 yearOfConstruction: '',
                 plintchArea: '',
@@ -199,6 +211,7 @@ export default {
             this.form.category= '';
             this.form.subCategory= '';
             this.form.structureNo= '';
+            this.form.constructionType = '';
             this.form.yearOfConstruction= '';
             this.form.plintchArea= '';
             this.form.noOfFloor='';
@@ -285,6 +298,16 @@ export default {
                 this.designerList = data;
             });
         },
+        loadconstructionTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ConstructionType'){
+            axios.get(uri)
+            .then(response => {
+                 let data = response.data.data;
+                this.contructionTypeList =  data;
+            })
+            .catch(function (error) {
+                    console.log('error: '+error);
+            });
+        },
 
         /**
          * method to add more fields
@@ -305,10 +328,12 @@ export default {
             }
         },
     },
-     mounted() { 
+    mounted() { 
         this.getCategoryDropdown();
         this.getFacilityDropdown();
         this.getDesignerDropdown();
+        this.loadconstructionTypeList();
+        this.getSubCategoryDropdown();
     }
 }
 </script>
