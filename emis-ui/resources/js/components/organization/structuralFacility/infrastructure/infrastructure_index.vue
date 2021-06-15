@@ -1,42 +1,62 @@
 <template>
     <div>
-        <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <tbody>
-                <tr class="bg-cyan">
-                    <td colspan="2"><b>Guidelines</b></td>
-                </tr>
-                <tr v-for="(item, index) in dataList" :key="index">
-                    <td>{{ index+1}})  </td>
-                    <td>{{ item.guideline}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="existmessage"></div>
+        </div>
+        <section class="content ml-n4 mr-n3">
+            <div class="container-fluid" id="mainform">
+                <div class="row"> 
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card">
+                            <div class="card-header bg-white pt-2 pb-1 text-right">
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('InfrastructureList')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('InfrastructureAdd')"><i class="fa fa-plus"></i> Add New</button>
+                            </div>
+                            <router-view></router-view>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </template>
+
 <script>
 export default {
     data(){
         return{
-            dataList:[],
+
         }
     },
+
     methods:{
-        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Organization_Establishment_Change'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dataList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        loadpage:function(type){
+            if(type=="InfrastructureAdd" || type=="InfrastructureList"){
+                this.$router.push({name:type,params: {data:null}});
+            }
         },
-        showedit(data){
-            this.$router.push({name:'student_type_edit',params: {data:data}});
-        },
+
+        // getScreenAccess(){
+        //     axios.get('common/getSessionDetail')
+        //     .then(response => {
+        //         let data = response.data.data.acess_level;
+        //         if(data != "Org"){
+        //             $('#mainform').hide();
+        //             $('#screenPermission').show();
+        //             $('#existmessage').html('You have no access to this page.');
+        //         }
+                
+        //     })    
+        //     .catch(errors => { 
+        //         console.log(errors)
+        //     });
+        // }
+
     },
+
     mounted(){
-        this.loadguidelieList();
-    },
+        // this.getScreenAccess();
+    }
 }
 </script>
