@@ -77,27 +77,30 @@ class SportController extends Controller
                 $organizationId  = $request['organizationId'];
 
                 foreach ($request->items_received as $i=> $item){
-                    $localprocure = array(
-                     'organizationId'             =>  $organizationId,
-                     'type'                       =>  $item['type'],
-                     'yearOfEstablishment'        =>  $item['yoe'],
-                     'accessibleToDisabled'       =>  $item['access'],
-                     'size'                       =>  $request['area'],
-                     'status'                     =>  $item['status'],
-                     'sportstype'                 =>  $item['sportstype'],
-                     'supportedBy'                 =>  $item['support'],
-                     'updated_by'                 =>  $request->user_id,
-                     'created_at'                 =>  date('Y-m-d h:i:s')
+                    $sport = array(
+                     'organizationId'                   =>  $organizationId,
+                     'type'                             =>  $item['type'],
+                     'yearOfEstablishment'              =>  $item['yoe'],
+                     'accessibleToDisabled'             =>  $item['access'],
+                     'size'                             =>  $request['area'],
+                     'status'                           =>  $item['status'],
+                     'sportstype'                       =>  $item['sportstype'],
+                     'supportedBy'                      =>  $item['support'],
+                     'updated_by'                       =>  $request->user_id,
+                     'created_at'                       =>  date('Y-m-d h:i:s')
                     );
-        
-                 $localpro = Sport::create($localprocure);
+                try{
+                 $localpro = Sport::create($sport);
                 }
-                
+                catch(\Illuminate\Database\QueryException $ex){
+                    dd($ex);
+
+                }
+                }
                 return $this->successResponse($localpro, Response::HTTP_CREATED);
             }
         
     }
-
     public function saveEccd(Request $request){
         $id = $request->id;
         if( $id != null){

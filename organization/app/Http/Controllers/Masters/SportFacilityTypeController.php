@@ -38,7 +38,6 @@ class SportFacilityTypeController extends Controller
      * method to save or update level type
     */
     public function saveSportFacility(Request $request){
-
         $id = $request->id;
         if( $id != null){
             $equ = [
@@ -55,6 +54,7 @@ class SportFacilityTypeController extends Controller
 
             $equipment = SportFacilityType::where('id', $id)->update($equ);
             return $this->successResponse($equipment, Response::HTTP_CREATED);
+            
         }else{
             $equ = [
                 'name'          => $request['sportFacilityName'],

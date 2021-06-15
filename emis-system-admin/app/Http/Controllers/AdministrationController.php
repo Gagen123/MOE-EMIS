@@ -165,7 +165,13 @@ class AdministrationController extends Controller{
                         'created_by'        =>  $request['user_id'],
                         'created_at'        =>  date('Y-m-d h:i:s'),
                     ];
-                    $response_data = Guidelines::create($data);
+                    try{
+                        $response_data = Guidelines::create($data);
+                    }catch(\Illuminate\Database\QueryException $ex){
+                        dd($ex);
+
+                    }
+                   
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }

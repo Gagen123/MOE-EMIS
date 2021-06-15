@@ -70,9 +70,7 @@ class FurnitureController extends Controller
      */
 
     public function saveFurniture(Request $request){
-
         $id = $request->id;
-
         if( $id != null){
             $data = [
                 'organizationId'            =>  $request['organizationId'],
@@ -80,12 +78,17 @@ class FurnitureController extends Controller
                 'item'                      =>  $request['item'],
                 'usable'                    =>  $request['usable'],
                 'notusable'                 =>  $request['notusable'],
+<<<<<<< HEAD
+                'updated_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+=======
                 // 'number'                    =>  $request['number'],
                 // 'condition'                 =>  $request['condition'],
                 // 'lifeExpectancy'            =>  $request['life_expectancy'],
                 // 'dateReceived'              =>  $request['date_received'],
                 'updated_by'            =>  $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
+>>>>>>> 7344436da39fef5044033e0c2dae637666f62807
             ];
 
             $response_data = Furniture::where('id', $id)->update($data);
@@ -94,6 +97,20 @@ class FurnitureController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
+<<<<<<< HEAD
+                'usable'                    =>  $request['location'],
+                'notusable'                 =>  $request['cost'],
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            try{
+            $response_data = Furniture::create($data);
+            }
+            catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+                 }
+
+=======
                 'usable'                    =>  $request['usable'],
                 'notusable'                 =>  $request['notusable'],
                 // 'number'                 =>  $request['number'],
@@ -105,6 +122,7 @@ class FurnitureController extends Controller
             ];
            // dd( $data);
             $response_data = Furniture::create($data);
+>>>>>>> 7344436da39fef5044033e0c2dae637666f62807
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
