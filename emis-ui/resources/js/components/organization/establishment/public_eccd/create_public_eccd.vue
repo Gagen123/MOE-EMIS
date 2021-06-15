@@ -458,7 +458,20 @@ export default {
                                 axios.post('organization/saveUploadedFiles', formData, config)
                                 .then((response) => {
                                     if(response.data!=""){
-                                        this.change_tab(nextclass);
+                                        if(response.data=="No Screen"){
+                                            Toast.fire({
+                                                icon: 'error',
+                                                title: 'Technical Errors: please contact system administrator for further details'
+                                            });
+                                        }
+                                        if(response!="" && response!="No Screen"){
+                                            let message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            this.$router.push({name:'acknowledgement_public_eccd',params: {data:message}});
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: 'Application for new establishment has been submitted for further action'
+                                            });
+                                        }
                                     }
                                 })
                                 .catch((error) => {
@@ -498,19 +511,8 @@ export default {
                     else{
                         this.classForm.post('organization/saveClassStream')
                         .then((response) => {
-                            if(response.data=="No Screen"){
-                                Toast.fire({
-                                    icon: 'error',
-                                    title: 'Technical Errors: please contact system administrator for further details'
-                                });
-                            }
-                            if(response!="" && response!="No Screen"){
-                                let message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'acknowledgement_public_eccd',params: {data:message}});
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Application for new establishment has been submitted for further action'
-                                });
+                            if(response!=""){
+                                 this.change_tab(nextclass);
                             }
                         })
                         .catch((err) => {
