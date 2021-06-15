@@ -93,10 +93,7 @@ class GeneralInfoController extends Controller
         return $type;
     }
     public function getFurnitureItem($itemId=""){
-<<<<<<< HEAD
-=======
      //  dd('m here');
->>>>>>> 7344436da39fef5044033e0c2dae637666f62807
         $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
         return $itemList;
     }
@@ -719,12 +716,12 @@ class GeneralInfoController extends Controller
             'org_id'                        =>  $request['org_id'],
             'accessibleToilet'              =>  $request['accessibleToilet'],
             'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
-            
+
             'adjustmentsAccomodatte'        =>  $request['adjustmentsAccomodatte'],
             'outdoorPlayground'             =>  $request['outdoorPlayground'],
             'outdoorRoutes'                 =>  $request['outdoorRoutes'],
             'newConstruction'               =>  $request['newConstruction'],
-            
+
             'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
             'diningHall'                    =>  $request['diningHall'],
             'hostelWash'                    =>  $request['hostelWash'],
@@ -737,7 +734,7 @@ class GeneralInfoController extends Controller
 
             'senProgram'                    =>  $request['senProgram'],
             'studentDisabilities'           =>  $request['studentDisabilities'],
-            
+
             'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
             'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
             'supportDisabilitycommunity'    =>  $request['supportDisabilitycommunity'],
