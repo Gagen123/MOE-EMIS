@@ -1,6 +1,8 @@
-const routes = [  
+const routes = [ 
+    
     { path: '/OrganizationMasterIndex',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterIndex.vue').default,
           children:[
+            { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default}, 
                { path: '/org_service_index', 
                   component: require('./components/masters/organization_masters/service/service_index.vue').default ,
                   children: 
@@ -136,6 +138,15 @@ const routes = [
                     { path: '/furniture_usage_list', name:'furniture_usage_list', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_list.vue').default },
                 ]    
             },
+            { path: '/construction_type_index',  
+                component: require('./components/masters/organization_masters/constructionType/constructionType_index.vue').default ,
+                  children: [
+                    { path: '/',name:'construction_type_index', component: require('./components/masters/organization_masters/constructionType/list_constructionType.vue').default },
+                    { path: '/list_construction_type',name:'list_construction_type', component: require('./components/masters/organization_masters/constructionType/list_constructionType.vue').default },
+                    { path: '/create_construction_type',name:'create_construction_type', component: require('./components/masters/organization_masters/constructionType/create_constructionType.vue').default },
+                    { path: '/edit_construction_type',name:'edit_construction_type', component: require('./components/masters/organization_masters/constructionType/edit_constructionType.vue').default },
+                  ]     
+              },
 
 
 
@@ -210,14 +221,7 @@ const routes = [
                     { path: '/equipment_usage_list', name:'EquipmentUsageList', component: require('./components/masters/organization_masters/equipment_usage/equipment_usage_list.vue').default },
                 ]    
             },
-          
-            
-            
-            
-
-
-
-
+         
             { path: '/financial_information_index',  
               component: require('./components/masters/organization_masters/financial_information/financial_information_index.vue').default ,
               children: [
@@ -404,7 +408,7 @@ const routes = [
     
     { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
       children:[
-        { path: '',name:"establishment_index", component: require('./components/organization/establishment/public_school/list_public_school.vue').default },
+        { path: '/',name:"establishment_index", component: require('./components/organization/establishment/estblishment_guide.vue').default },
         { path: '/public_school_index', 
           component: require('./components/organization/establishment/public_school/public_school_index.vue').default,
           children: [ 
@@ -515,6 +519,8 @@ const routes = [
     //Organization Routes (General Information)
     { path: '/general_index', name:'general_index', component: require('./components/organization/general/general_index.vue').default,
         children:[
+          { path: '/general_index',name:"general_index", component: require('./components/organization/general/general_index_list.vue').default },
+
             { path: '/equipment_index',
                 component: require('./components/organization/general/equipment/equipment_index.vue').default,
                 children: [
@@ -772,7 +778,7 @@ const routes = [
     // Organisational Routes (structural facility route)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
-        
+        { path: '/structural_index',name:"structural_index", component: require('./components/organization/structuralFacility/structural_index_list.vue').default },
           
         { path: '/infrastructure_index', 
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
@@ -829,12 +835,12 @@ const routes = [
           ] 
         },
         { path: '/connectivity_details', name:'connectivity_details', 
-        component: require('./components/organization/general/connectivity/index_connectivity.vue').default, 
+        component: require('./components/organization/general/connectivity/edit_connectivity.vue').default, 
         children: 
         [
-            { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
-        //    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
-            { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+            { path: '',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+          //  { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
+           { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
         //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
         ]    
     },

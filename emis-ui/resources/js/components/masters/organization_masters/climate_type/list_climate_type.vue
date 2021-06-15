@@ -13,7 +13,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
+                    <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>

@@ -84,7 +84,7 @@ export default {
                 this.form.type= '';
                 this.form.item= '';
                 this.form.usable= '';
-                this.form.usable='';
+                this.form.notusable='';
             }
             if(type=="save"){
                 this.form.post('/organization/saveEquipment',this.form)
@@ -141,11 +141,11 @@ export default {
     },
 
     mounted(){
-        this.form.type=this.$route.params.data.typeId;
-        this.getItem();
-        this.form.item=this.$route.params.data.itemId;
-        this.form.location=this.$route.params.data.locationUsageId;
-        this.form.number=this.$route.params.data.number;
+        this.form.type=this.$route.params.data.type;
+      //  this.getItem();
+        this.form.item=this.$route.params.data.item;
+        this.form.usable=this.$route.params.data.usable;
+        this.form.notusable=this.$route.params.data.notusable;
         this.form.id=this.$route.params.data.id;
     }
 }

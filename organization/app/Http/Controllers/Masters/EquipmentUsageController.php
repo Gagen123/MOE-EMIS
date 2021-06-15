@@ -7,7 +7,7 @@ use App\Models\Masters\EquipmentUsage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\Masters\EquipmentUsage;
+//use App\Models\Masters\EquipmentUsage;
 use Illuminate\Support\Facades\DB;
 
 class EquipmentUsageController extends Controller
@@ -64,17 +64,12 @@ class EquipmentUsageController extends Controller
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
-<<<<<<< HEAD
             try{
                 $equipment= EquipmentUsage::create($equ);
             }catch(\Illuminate\Database\QueryException $ex){
                 dd($ex);
             }
            
-=======
-           // dd( $equ);
-            $equipment= EquipmentUsage::create($equ);
->>>>>>> a4430bfe756f497e749902db89583051476c1627
             return $this->successResponse($equipment, Response::HTTP_CREATED);
         }
     }
