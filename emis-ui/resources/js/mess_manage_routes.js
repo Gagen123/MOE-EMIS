@@ -39,8 +39,8 @@ const routes = [
     { path: '/messManage_index', 
         component: require('./components/mess_manage/messManage_Index.vue').default,
         children:[
-            { path: '/stockreceived_index',  
-                component: require('./components/mess_manage/stockReceived/stockreceived_index.vue').default ,
+            { path: '/',component: require('./components/mess_manage/stockreceived_list.vue').default},
+            { path: '/stockreceived_index',component: require('./components/mess_manage/stockReceived/stockreceived_index.vue').default ,
                 children: 
                 [
                     { path: '', component: require('./components/mess_manage/stockReceived/stockreceived_list.vue').default },

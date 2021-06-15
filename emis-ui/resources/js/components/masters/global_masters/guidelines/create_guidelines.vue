@@ -12,7 +12,26 @@
                             <option value="Organization Change Details">Organization Change Details</option>
                             <option value="Student Admission Validation">Student Admission Validation</option>
                             <option value="Student Admission">Student Admission</option>
-                             <option value="Equipment And Furniture">Equipment And Furniture</option>
+                            <option value="Equipment And Furniture">Equipment And Furniture</option>
+                            <option value="Structural Index List">Structural Index List</option>
+                            <option value="Student Admission">Student Admission</option>
+                            <option value="Class Section Allocation">Class Section Allocation</option>
+                            <option value=" Student Service">Student Service</option>
+                            <option value="Student Health">Student Health</option>
+                            <option value="Student Programs Club">Student Programs Club</option>
+                            <option value="Student Scouts">Student Scouts</option>
+                            <option value="Student Training Workshop">Student Training Workshop</option>
+                            <option value="HR Development">HR_Development</option>
+                            <option value="Leave Service">Leave Service</option>
+                            <option value="Staff Service">Staff Service</option>
+                            <option value="Leadership Selection">Leadership Selection</option>
+                            <option value="Organization Master">Organization Master</option>
+                            <option value="Academics Master">Academics Master</option>
+                            <option value="Academics">Academics</option>
+                            <option value="Question & Answer Setup">Question & Answer Setup</option>
+                            <option value="Mess Management">Mess Management</option>
+                            <option value="Management Body">Management Body</option>
+                           
                         </select>
                         <has-error :form="form" field="guideline_for"></has-error>
                     </div>

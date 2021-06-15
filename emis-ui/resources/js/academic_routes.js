@@ -3,7 +3,6 @@ const routes = [
     { path: '/academic-master', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
         children: 
         [
-           
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
             
             // { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
