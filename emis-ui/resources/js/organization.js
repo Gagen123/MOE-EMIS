@@ -138,15 +138,6 @@ const routes = [
                     { path: '/furniture_usage_list', name:'furniture_usage_list', component: require('./components/masters/organization_masters/furniture_usage/furniture_usage_list.vue').default },
                 ]    
             },
-            { path: '/construction_type_index',  
-                component: require('./components/masters/organization_masters/constructionType/constructionType_index.vue').default ,
-                  children: [
-                    { path: '/',name:'construction_type_index', component: require('./components/masters/organization_masters/constructionType/list_constructionType.vue').default },
-                    { path: '/list_construction_type',name:'list_construction_type', component: require('./components/masters/organization_masters/constructionType/list_constructionType.vue').default },
-                    { path: '/create_construction_type',name:'create_construction_type', component: require('./components/masters/organization_masters/constructionType/create_constructionType.vue').default },
-                    { path: '/edit_construction_type',name:'edit_construction_type', component: require('./components/masters/organization_masters/constructionType/edit_constructionType.vue').default },
-                  ]     
-              },
 
 
 
@@ -845,12 +836,12 @@ const routes = [
           ] 
         },
         { path: '/connectivity_details', name:'connectivity_details', 
-        component: require('./components/organization/general/connectivity/edit_connectivity.vue').default, 
+        component: require('./components/organization/general/connectivity/index_connectivity.vue').default, 
         children: 
         [
-            { path: '',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
-          //  { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
-           { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+            { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+        //    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
+            { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
         //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
         ]    
     },

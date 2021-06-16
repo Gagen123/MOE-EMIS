@@ -959,17 +959,15 @@ class EstablishmentController extends Controller{
     }
 
     public function updateOrgBasicDetials(Request $request){
-
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
-
         $org_data =[
             'id'                        =>  $org_det->id,
-            'isAspNetSchool'            =>  $org_det->isAspNetSchool,
-            'isColocated'               =>  $org_det->isColocated,
+            // 'isAspNetSchool'            =>  $org_det->isAspNetSchool,
+            // 'isColocated'               =>  $org_det->isColocated,
             'isGeoPoliticallyLocated'   =>  $org_det->isGeoPoliticallyLocated,
             'hasCounselingRoom'         =>  $org_det->hasCounselingRoom,
             'hasShiftSystem'            =>  $org_det->hasShiftSystem,
-            'hasCE'                     =>  $org_det->hasCE,
+            // 'hasCE'                     =>  $org_det->hasCE,
             'mofCode'                   =>  $org_det->mofCode,
             'zestAgencyCode'            =>  $org_det->zestAgencyCode,
             'recorded_on'               =>  date('Y-m-d h:i:s'),

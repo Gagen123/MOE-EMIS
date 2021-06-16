@@ -19,9 +19,9 @@
                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                             <div class="form-group row">
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is AspNet School:</label><br>
-                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                                    <label>Has Counselling room:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Is GeoPoliticallyLocated:</label><br>
@@ -29,23 +29,25 @@
                                                     <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is Resource Center:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Has Counselling room:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Has shift System:</label><br>
                                                     <label><input  type="radio" v-model="form.hasShiftSystem" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasShiftSystem" value="0" tabindex=""/> No</label>
                                                 </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                               
+                                            </div>
+                                            <div class="form-group row">
+                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='AspNet'>
+                                                    <label>Is AspNet School:</label><br>
+                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Resource'>
+                                                    <label>Is Resource Center:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                                </div>
+                                               
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Has_CE'>
                                                     <label>Has CE:</label><br>
                                                     <label><input  type="radio" v-model="form.hasCE" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasCE" value="0" tabindex=""/> No</label>
@@ -148,14 +150,6 @@
                                                         {{item.name}}
                                                     </label>
                                                 </div>
-                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Distance From Dzongkhag HQ (KM):</label>
-                                                    <input type="number" min="0" v-model="form.distance_from_dzo" class="form-control editable_fields" id="cidOfOwner"/>
-                                                </div> -->
-                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Thram No:</label>
-                                                    <input type="text" name="thramNo" v-model="form.thramNo" class="form-control editable_fields" id="thramNo"/>
-                                                </div> -->
                                             </div>
                                             <div class="form-group row">
                                                 
@@ -226,8 +220,14 @@
             getorgProfile(org_id){
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
+                    alert(JSON.stringify(response.data.data));
                     let response_data=response.data.data;
                     this.orgDetails=response_data;
+                    if(response_data.category=="public_eccd" ||response_data.category=="private_eccd" ){
+                         $('#AspNet').hide();
+                         $('#Resource').hide();
+                         $('#Has_CE').hide();
+                    }
                     if(response_data.category=="public_school"){
                         this.category="Public School";
                     }
@@ -243,7 +243,6 @@
                     if(response_data.category=="private_eccd"){
                         this.category="Public ECCD";
                     }
-
                     this.form.isAspNetSchool=response_data.isAspNetSchool;
                     this.form.isColocated=response_data.isColocated;
                     this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
@@ -371,6 +370,27 @@
                     $('roadtypeno').show();
                 }
             },
+            showfield:function(type){
+            let selecttype = $("#"+type+" option:selected").text();
+                if(selecttype =="standard"){
+                    $('#sizeAndarea').hide();
+                    $('#sizeAndarea1').hide();
+                    
+                
+                }
+
+            else if(selecttype =="non standard"){ 
+                    $('#sizeAndarea').show();
+                    $('#sizeAndarea1').show();
+
+                }
+                else{
+                    $('#sizeAndarea').hide();
+                    $('#sizeAndarea1').hide();
+
+                }
+
+        },
             
         },
         mounted(){
