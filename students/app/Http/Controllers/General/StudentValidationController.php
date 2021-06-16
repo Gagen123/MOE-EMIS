@@ -80,6 +80,7 @@ class StudentValidationController extends Controller
             'remarks'           =>  $request->remarks,
             'action_type'       =>  $request->action_type,
             'data_type'         =>  $request->data_type,
+            'record_type'       => $request->record_type,
             'user_id'           =>  $request->user_id,
             'working_agency_id' =>  $request->working_agency_id
         ];
@@ -114,6 +115,7 @@ class StudentValidationController extends Controller
             'date'                  => $request->date,
             'responsibilities'      => $request->responsibilities,
             'role'                  => $request->role,
+            'record_type'           => $request->record_type,
             'data_type'             =>  'club_members',
             'user_id'               => $request->user_id,
         ];
@@ -147,13 +149,26 @@ class StudentValidationController extends Controller
             'year'              => $request->year,
             'remarks'           => $request->remarks,
             'data_type'         => $request->data_type,
+            'record_type'       => $request->record_type,
             'user_id'           => $request->user_id
         ];
-        
-        $status =  CeaSchoolProgramme::where('CeaProgrammeId', $request->program)
+
+        //If add, validate the main fields
+        //for edit, validate all fields
+
+        if($request->record_type == 'add'){
+            $status =  CeaSchoolProgramme::where('CeaProgrammeId', $request->program)
                         ->where('OrgOrganizationId', $request->organisation_id)
                         ->first();
-
+        } else{
+            $status =  CeaSchoolProgramme::where('CeaProgrammeId', $request->program)
+                        ->where('OrgOrganizationId', $request->organisation_id)
+                        ->where('CeaProgrammeSupporterId', $request->supporter)
+                        ->where('EstablishmentYear', $request->year)
+                        ->where('Remarks', $request->remarks)
+                        ->first();
+        }
+        
         if($status!=null && $status!=""){
             $data_exists = "exist" ;
         } else {

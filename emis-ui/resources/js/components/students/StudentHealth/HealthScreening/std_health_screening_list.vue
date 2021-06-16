@@ -11,7 +11,8 @@
                             <th>Section</th>
                             <th>Stream</th>
                             <th>Month</th>
-                            <th>Screened</th>
+                            <th>Total Students</th>
+                            <th>Not Screened</th>
                             <th>Referred</th>
                             <th>Action</th>
                         </tr>
@@ -25,6 +26,7 @@
                             <td v-if="item.stream">{{ item.stream}}</td>
                             <td v-else>NA</td>
                             <td>{{ item.date}}</td>
+                            <td>{{ item.total_student}}</td>
                             <td>{{ item.not_screened}}</td>
                             <td>{{ item.referred}}</td>
                             <td>

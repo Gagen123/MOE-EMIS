@@ -41,6 +41,7 @@ class StudentProgramController extends Controller
             'year'              => $request->year,
             'remarks'           => $request->remarks,
             'data_type'         => 'school_program',
+            'record_type'       => $request->record_type,
             'assigned_staff'    => $request->assigned_staff,
             'user_id'           => $this->userId() 
         ];
@@ -57,10 +58,18 @@ class StudentProgramController extends Controller
                 'supporter'     => 'required',
                 'program'       => 'required'
             ];
-            $customMessages = [
-                'supporter.required'        => 'Field is required',
-                'program.required'          => 'Program/Club has already been created for School'
-            ];
+            if($request->record_type == 'add'){
+                $customMessages = [
+                    'supporter.required'        => 'Field is required',
+                    'program.required'          => 'Program/Club has already been created for School'
+                ];
+            } else{
+                $customMessages = [
+                    'supporter.required'        => 'Field is required',
+                    'program.required'          => 'You are performing an edit. No fields have been changed.'
+                ];
+            }
+            
 
             $this->validate($request, $rules, $customMessages);
         }

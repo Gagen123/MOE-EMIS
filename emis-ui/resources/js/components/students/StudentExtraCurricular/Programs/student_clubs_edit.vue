@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Program/Club:<i class="text-danger">*</i></label>
                     <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
                 </div> 
@@ -19,7 +19,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Supported By:<span class="text-danger">*</span></label> 
                     <select v-model="student_form.supporter" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('supporter') }" class="form-control select2" name="supporter" id="supporter">
-                        <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="supporter"></has-error>
                 </div>
@@ -31,7 +31,8 @@
                     <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
-            <label>Roles Assigned to Staff </label>
+            <!-- fix this after getting the staff list -->
+            <!-- <label>Roles Assigned to Staff </label>
             <div class="card">
                 <div class="form-group row">
                     <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -54,7 +55,7 @@
                                     <td>                                
                                         <select name="role" id="role" class="form-control" v-model="role.role" :class="{ 'is-invalid': student_form.errors.has('role') }">
                                             <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                         </select>
                                     </td>
                                     <td>                                
@@ -74,7 +75,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -92,7 +93,7 @@ export default {
             supportList:[],
             teacherRoles:[],
             assigned_staff: [],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 id:'',
@@ -107,7 +108,7 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.org_id){
+        loadStudentList(uri='students/loadStudentList/'+this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -118,7 +119,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadTeacherList(uri='students/loadTeacherList/'+this.org_id){
+        loadTeacherList(uri='students/loadStudentList/'+this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -129,11 +130,11 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/club_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.programList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -204,7 +205,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_programs_list');
+                    this.$router.push('/student_clubs');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -224,27 +225,26 @@ export default {
                 this.student_form.supporter=$('#supporter').val();
             }
         },
-        /**
+         /**
          * method to get program details by id
         */
         getStudentProgramDetails(id){
             axios.get('students/getProgramDetails/'+id)
             .then((response) => {  
                 let data=response.data.data;
-                this.student_form.id= data.Id;
-                this.student_form.name= data.StdStudentId;
+                this.student_form.id= data.id;
                 this.student_form.program= data.CeaProgrammeId;
                 this.student_form.year = data.EstablishmentYear;
                 this.student_form.supporter= data.CeaProgrammeSupporterId;
                 this.student_form.remarks= data.Remarks;
 
-                let prop=data.roles;
-                let rolesAssigned=[];
-                for(let i=0;i<prop.length;i++){
-                    rolesAssigned.push({teacher:prop[i].StfStaffId, role:prop[i].CeaRoleId, remarks:prop[i].Remarks});
-                }
-                this.count=data.length;
-                this.student_form.assigned_staff = rolesAssigned;
+                // let prop=data.roles;
+                // let rolesAssigned=[];
+                // for(let i=0;i<prop.length;i++){
+                //     rolesAssigned.push({teacher:prop[i].StfStaffId, role:prop[i].CeaRoleId, remarks:prop[i].Remarks});
+                // }
+                // this.count=data.length;
+                // this.student_form.assigned_staff = rolesAssigned;
             })
             .catch((error) =>{  
                 console.log("Error:"+error);
@@ -271,7 +271,8 @@ export default {
         this.loadActiveRolesList();
     },
     created() {
-        this.getStudentProgramDetails(this.$route.params.data.Id);
+        this.getStudentProgramDetails(this.$route.params.data.id);
     },
+    
 }
 </script>
