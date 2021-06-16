@@ -88,7 +88,7 @@
                                         <span v-for="(item, index) in  data.classes" :key="index">
                                             <br>
                                             <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.classId] }}</label>
-                                        </span> 
+                                        </span>
                                     </div>
                                 </div>
                             </form>
@@ -209,8 +209,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>  
-                                                <th></th>                     
+                                                <th class="strm_clas">Stream</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -218,20 +218,20 @@
                                                 <td>
                                                     <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                                 </td>
-                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     {{  item.stream  }}
                                                 </td>
-                                                <td class="strm_clas" v-else>                                
-                                                
+                                                <td class="strm_clas" v-else>
+
                                                 </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
                                                 </td>
-                                                <td v-else>  
-                                                    <input type="checkbox" v-model="form.class" :value="item.classId">                              
-                                                    
+                                                <td v-else>
+                                                    <input type="checkbox" v-model="form.class" :value="item.classId">
+
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -247,13 +247,13 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             data:'',
             orgList:'',
             levelList:[],
@@ -280,9 +280,9 @@ export default {
                 id: '',parent_id:'',name:'',
                 name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
                 geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[]
-                
-            }), 
-        } 
+
+            }),
+        }
     },
     methods: {
 
@@ -294,7 +294,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -305,9 +305,9 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
-                
+
             });
         },
         /**
@@ -319,7 +319,7 @@ export default {
                 let data = response.data;
                 this.locationList = data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -393,7 +393,7 @@ export default {
                 let data = response.data.data;
                 this.dzongkhagList =  data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -574,8 +574,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -590,12 +590,12 @@ export default {
                             if(response!=""){
                                 let message="Application for Re-Opening has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'reopening_acknowledgement',params: {data:message}});
-                                Toast.fire({  
+                                Toast.fire({
                                     icon: 'success',
                                     title: 'Bifurcation details has been submitted for further action.'
-                                }); 
-                            } 
-                            
+                                });
+                            }
+
                         })
                         .catch((er) => {
                             console.log("Error:"+er)
@@ -622,14 +622,14 @@ export default {
         getOrgDetails(id){
             // axios.get('organization/getFullSchoolDetials/'+id)
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.parent_id=data.id;
                 this.data=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         },
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadInactiveOrgList'){
@@ -642,11 +642,11 @@ export default {
         /**
          * method to check pending status
          */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
 
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {  
+        //     .then((response) => {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
@@ -654,7 +654,7 @@ export default {
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
-        //     .catch((error) => {  
+        //     .catch((error) => {
         //         console.log("Error: "+error);
         //     });
         // },
@@ -665,7 +665,7 @@ export default {
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
-        
+
         this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
@@ -673,8 +673,8 @@ export default {
             if(data['acess_level']=="Org"){
                 this.getOrgDetails(data['Agency_Code']);
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
         this.getOrgList();
@@ -687,9 +687,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

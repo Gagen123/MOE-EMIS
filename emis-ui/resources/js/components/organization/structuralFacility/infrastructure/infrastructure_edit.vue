@@ -2,88 +2,118 @@
     <div>
         <form class="bootbox-form" id="infrastructureId">
             <div class="card-body">
-                <div class="form-group row">
-                    <input type="hidden" class="form-control" v-model="form.id"/>
-                    <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Category:<span class="text-danger">*</span></label> 
-                        <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="category"></has-error>
+                <form class="form-horizontal">
+                <div class="row invoice-info">
+                    <div class="col-sm-2 invoice-col">
+                        <label class="mb-0"><i><u>Structure Type</u></i></label>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Sub Category:<span class="text-danger">*</span></label> 
-                        <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
-                        </select>
-                        <has-error :form="form" field="subCategory"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Structure No:</label> 
-                        <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
-                    </div>
-                </div>
-                                    
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Year of Construction:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text" 
-                        v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
-                        <has-error :form="form" field="yearOfConstruction"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Plinth Area (sq. m):</label>
-                        <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">No. of Floors:</label> 
-                        <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
-                    </div>
-                </div>
-                                    
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Total Capacity</label> 
-                        <input class="form-control editable_fields " id="totalCapacity" type="number" v-model="form.totalCapacity">
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Present Condition of Structure<span class="text-danger">*</span> </label> 
-                        <br>
-                        <label><input v-model="form.presentCondition"  type="radio" value="1"/> Usable</label>
-                        <label><input v-model="form.presentCondition"  type="radio" value="0" /> Not Usable</label>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Designed by</label>
-                        <select name="design" id="design" class="form-control" v-model="form.design">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
+                    <div class="col-sm-9 invoice-col">
+                        <input type="hidden" class="form-control" v-model="form.id" id="id"/>
+                        <p>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Category:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="category"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Sub Category:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
+                                </select>
+                                <has-error :form="form" field="subCategory"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in contructionTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="constructionType"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label class="">Ramp Access in Ground Floor</label>
-                        <br>
-                        <label><input v-model="form.rampAccess"  type="radio" value="1"/> Yes</label>
-                        <label><input v-model="form.rampAccess"  type="radio" value="0" /> No</label>
+                <div class="row invoice-info">
+                    <div class="col-sm-2 invoice-col">
+                        <label class="mb-0"><i><u>General</u></i></label>
+                    </div>
+                    <div class="col-sm-9 invoice-col">
+                        <input type="hidden" class="form-control" v-model="form.id" id="id"/>
+                        <p>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Year of Construction:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text" 
+                                v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
+                                <has-error :form="form" field="yearOfConstruction"></has-error>
+                            </div>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No of Floors:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
+                            </div>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Capacity: </label>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <input class="form-control editable_fields " id="totalCapacity" type="number" v-model="form.totalCapacity">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Present Condition of Structure:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                <label><input v-model="form.presentCondition"  type="radio" value="1"/> Usable</label>
+                                <label><input v-model="form.presentCondition"  type="radio" value="0" /> Not Usable</label>
+                            </div>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Designed By:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <select name="design" id="design" class="form-control" v-model="form.design">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Ramp Access on Ground Floor:<span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                <label><input v-model="form.rampAccess"  type="radio" value="1" /> Yes</label>
+                                <label><input v-model="form.rampAccess"  type="radio" value="0" /> No</label>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                </form>
             </div>
             <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><b>&nbsp;&nbsp; Facility</b><br>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"><label class="mb-0 pl-4"><i><u>Facility</u></i></label><br>
                     <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Facility</th>
-                                    <th>Facility No./Name</th>
-                                    <th>Capacity</th>
-                                    <th>Total number of Facility</th>
-                                    <th>Facility accessible to disabled</th>
-                                    <th>Facility with internet connection</th>                            
+                                    <th style="width: 23%">Facility Type</th>
+                                    <th style="width: 15%">Facility No./Name</th>
+                                    <th style="width: 10%">Capacity</th>
+                                    <th style="width: 10%">Total Number</th>
+                                    <th style="width: 20%">Is Accessible to Disabled</th>
+                                    <th style="width: 22%">With Internet Connection</th>                            
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,20 +124,26 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
+                                    
                                     <td>                                
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
                                     </td>
                                     <td>                                
-                                        <input type="text" name="capacity" class="form-control" v-model="user.capacity"/>
+                                        <input type="number" name="capacity" class="form-control" v-model="user.capacity"/>
                                     </td>
                                     <td>                                
                                         <input type="number" name="noOfFacility" class="form-control" v-model="user.noOfFacility"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="accessibleDisabled" class="form-control" v-model="user.accessibleDisabled"/>
+                                        <!-- <input type="number" name="accessibleDisabled" class="form-control" v-model="user.accessibleDisabled"/> -->
+                                        <label><input v-model="user.accessibleDisabled"  type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="user.accessibleDisabled"  type="radio" value="0" /> No</label>
+
                                     </td>
                                     <td>
-                                        <input type="number" name="internetConnection" class="form-control" v-model="user.internetConnection"/>
+                                        <!-- <input type="number" name="internetConnection" class="form-control" v-model="user.internetConnection"/> -->
+                                        <label><input v-model="user.internetConnection"  type="radio" value="1"/> Yes</label>
+                                        <label><input v-model="user.internetConnection"  type="radio" value="0" /> No</label>
                                     </td>
                                 </tr> 
                                 <tr>
@@ -141,9 +177,10 @@ export default {
             subCategortList:[],
             facilityList:[],
             designerList:[],
+            contructionTypeList:[],
             users: [],
             form: new form({
-                id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '',
+                id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '', constructionType:'',
                 plintchArea: '',noOfFloor: '',totalCapacity: '',rampAccess: '1',presentCondition: '',design: '',
                 users:
                 [{
@@ -162,6 +199,7 @@ export default {
             this.form.category= '';
             this.form.subCategory= '';
             this.form.structureNo= '';
+            this.form.constructionType = '';
             this.form.yearOfConstruction= '';
             this.form.plintchArea= '';
             this.form.noOfFloor='';
@@ -248,7 +286,16 @@ export default {
                 this.facilityList = data;
             });
         },
-
+        loadconstructionTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ConstructionType'){
+            axios.get(uri)
+            .then(response => {
+                 let data = response.data.data;
+                this.contructionTypeList =  data;
+            })
+            .catch(function (error) {
+                    console.log('error: '+error);
+            });
+        },
         /**
          * method to add more fields
          */
@@ -278,6 +325,7 @@ export default {
                 this.getSubCategoryDropdown();
                 this.form.subCategory           =    data.subCategoryId;
                 this.form.structureNo           =    data.structureNo;
+                this.form.constructionType      =    data.constructionType;
                 this.form.organizationId        =    data.organizationId;
                 this.form.yearOfConstruction    =    data.yearOfConstruction;
                 this.form.plintchArea           =    data.plintchArea;
@@ -310,6 +358,7 @@ export default {
         this.getCategoryDropdown();
         this.getFacilityDropdown();
         this.getDesignerDropdown();
+        this.loadconstructionTypeList();
         this.getInfrastructureDetails(this.$route.params.data.id);
     },
 

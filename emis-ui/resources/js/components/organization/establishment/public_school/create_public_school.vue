@@ -470,12 +470,12 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="Applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    message="applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
                     Swal.fire({
@@ -509,6 +509,7 @@ export default {
                                 formData.append('status', this.file_form.status);
                                 formData.append('service_name', this.file_form.service_name);
                                 formData.append('proposedName', this.form.proposedName);
+                                formData.append('submit_type', nextclass);
                                 axios.post('organization/saveUploadedFiles', formData, config)
                                 .then((response) => {
                                     if(response.data!=""){
@@ -570,7 +571,7 @@ export default {
                     })
                 }
                 else if(nextclass=="file-tab"){
-                    this.classStreamForm.submit_type=nextclass;
+
                     // this.classStreamForm.proposedName=this.form.proposedName;
                     this.classStreamForm.post('organization/saveClassStream')
                     .then((response) => {

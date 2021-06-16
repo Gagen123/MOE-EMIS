@@ -414,6 +414,15 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="management_body" onclick="setclass('organizationlink','','management_body')">
+                    <!-- <li class="nav-item" id="track_application"> -->
+                        <router-link to="/management_body" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Management Body
+                            </p>
+                        </router-link>
+                    </li>
 
                     <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
@@ -741,14 +750,7 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="track_application">
-                        <router-link to="/management_body" class="nav-link">
-                            <p>
-                                <i class="nav-icon fas fa-mail-bulk"></i>
-                                Management Body
-                            </p>
-                        </router-link>
-                    </li>
+                    
                 </ul>
             </li>
 

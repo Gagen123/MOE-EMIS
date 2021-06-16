@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Level of Organization</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change Level of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -48,21 +48,21 @@
                                     <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
                                         <input type="checkbox" v-model="form.class" :value="item.classId">
                                         <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                    </span>  
-                                </span> 
+                                    </span>
+                                </span>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                 <span v-for="(item, key, index) in  classStreamList" :key="index">
                                     <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                        <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id"> 
-                                        <label class="pr-3"> 
-                                            {{ item.class }} 
-                                            <span v-if="item.stream"> - 
+                                        <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                        <label class="pr-3">
+                                            {{ item.class }}
+                                            <span v-if="item.stream"> -
                                                 {{  item.stream  }}
                                             </span>
                                         </label>
-                                    </span>  
-                                </span> 
+                                    </span>
+                                </span>
                             </div>
                             </form>
                             <hr>
@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -93,7 +93,7 @@ export default {
                 organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
                 application_for:'Change in Level', action_type:'add', status:'pending',organization_type:''
             })
-        } 
+        }
     },
     methods: {
         /**
@@ -104,7 +104,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -131,7 +131,7 @@ export default {
         async changefunction(id){
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();
-                this.getorgdetials($('#organizationId').val()); 
+                this.getorgdetials($('#organizationId').val());
             }
 
             if(id=="level"){
@@ -149,8 +149,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -164,15 +164,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'restr_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -186,8 +186,8 @@ export default {
                 });
             }
         },
-        
-        change_tab(nextclass){ 
+
+        change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
             $('.'+nextclass+' >a').addClass('active');
@@ -245,25 +245,25 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-         
+
     },
-    
-    mounted() { 
+
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        
+
         this.getClass();
-        this.getStream();  
+        this.getStream();
         this.getClassStream();
         this.getLevel();
         this.getOrgList();

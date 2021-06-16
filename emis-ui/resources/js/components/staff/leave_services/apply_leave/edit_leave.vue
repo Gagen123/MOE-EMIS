@@ -193,7 +193,7 @@ export default {
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
-                                    'Leave Applicaiton has been submitted for approval',
+                                    'Leave applicaiton has been submitted for approval',
                                     'success',
                                 ) 
                             }

@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Upgradation/Downgradation</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Upgradation/Downgradation</label>
                         </a>
                     </li>
                 </ul>
@@ -44,7 +44,7 @@
                                             {{dzongkhagArray[organization_details.dzongkhagId]}}
                                         </span>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Gewog:</label>
                                        <span class="text-blue text-bold" id="gewogid"></span>
                                     </div>
@@ -72,7 +72,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Classes</th>
-                                                    <th class="existstrm_clas">Stream</th>  
+                                                    <th class="existstrm_clas">Stream</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -80,11 +80,11 @@
                                                     <td>
                                                         <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                                     </td>
-                                                    <td class="existstrm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                    <td class="existstrm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
                                                         {{  streamArray[item.streamId]  }}
                                                     </td>
                                                     <td class="existstrm_clas" v-else> </td>
-                                                </tr> 
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -100,36 +100,36 @@
                                         <has-error :form="form" field="level"></has-error>
                                     </div>
                                 </div>
-                                
-                                    <!--                                 
+
+                                    <!--
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <span v-for="(item, key, index) in  classStreamList" :key="index">
                                         <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
                                             <input type="checkbox" v-model="form.class" :value="item.classId">
                                             <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                        </span>  
-                                    </span> 
+                                        </span>
+                                    </span>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <span v-for="(item, key, index) in  classStreamList" :key="index">
                                         <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id"> 
-                                            <label class="pr-3"> 
-                                                {{ item.class }} 
-                                                <span v-if="item.stream"> - 
+                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                            <label class="pr-3">
+                                                {{ item.class }}
+                                                <span v-if="item.stream"> -
                                                     {{  item.stream  }}
                                                 </span>
                                             </label>
-                                        </span>  
-                                    </span> 
+                                        </span>
+                                    </span>
                                 </div> -->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>  
-                                                <th></th>                     
+                                                <th class="strm_clas">Stream</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -137,19 +137,19 @@
                                                 <td>
                                                     <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                                 </td>
-                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     {{  item.stream  }}
                                                 </td>
-                                                <td class="strm_clas" v-else>                                
-                                                
+                                                <td class="strm_clas" v-else>
+
                                                 </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
                                                 </td>
-                                                <td v-else>  
-                                                    <input type="checkbox" v-model="form.class" :value="item.classId">                              
+                                                <td v-else>
+                                                    <input type="checkbox" v-model="form.class" :value="item.classId">
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -165,7 +165,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -191,7 +191,7 @@ export default {
                 organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
                 application_for:'Upgrade Downgrade', action_type:'add', status:'Submitted',organization_type:''
             })
-        } 
+        }
     },
     methods: {
         /**
@@ -202,8 +202,8 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
-        
+        },
+
         /**
          * method to get level in dropdown
          */
@@ -213,7 +213,7 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -243,7 +243,7 @@ export default {
         async changefunction(id,text){
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();
-                this.getorgdetials($('#organizationId').val()); 
+                this.getorgdetials($('#organizationId').val());
             }
              if(id=="level"){
                 this.form.level=$('#level').val();
@@ -271,13 +271,13 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-        
+
 
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -291,15 +291,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'level_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -313,13 +313,13 @@ export default {
                 });
             }
         },
-        
+
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -333,7 +333,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name; 
+                    this.gewogArray[data[i].id] = data[i].name;
                 }
                 $('#gewogid').html(this.gewogArray[gewogId]);
             });
@@ -345,7 +345,7 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name; 
+                    this.villageArray[data[i].id] = data[i].name;
                 }
                 $('#vilageId').html(this.villageArray[vil_id])
             })
@@ -358,7 +358,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -367,7 +367,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -377,7 +377,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].stream; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
@@ -409,14 +409,14 @@ export default {
         //         this.classStreamList = response.data.data;
         //     });
         // },
-         
+
     },
-    
-    mounted() { 
+
+    mounted() {
         this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();
-        this.getStream();  
+        this.getStream();
         // this.getClassStream();
         this.getLevel();
         $('.select2').select2();
@@ -424,13 +424,13 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text()); 
+            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text());
         });
-        
+
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
         });
-       
+
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -439,11 +439,11 @@ export default {
                 this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
-        
+
     }
 }
 </script>

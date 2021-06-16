@@ -6,29 +6,29 @@
         <div id="maindiv">
             <div class="callout callout-success">
                 <span><label><u>Application Detials</u></label></span>
-                <div class="form-group row"> 
+                <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">Application Number:</label><br>
                         <span class="text-blue text-bold">{{form.application_number }}</span>
-                    </div> 
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">Application Date:</label><br>
                         <span class="text-blue text-bold">{{form.date_of_application}}</span>
-                    </div> 
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leave Type:</label><br>
                         <span class="text-blue text-bold">{{leavetypeList[form.leave_type_id]}}</span>
                     </div>
                 </div>
-                <div class="form-group row"> 
+                <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">From Date:</label><br>
                         <span class="text-blue text-bold">{{form.from_date }}</span>
-                    </div> 
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">To Date:</label><br>
                         <span class="text-blue text-bold">{{form.to_date}}</span>
-                    </div> 
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>No. Days:</label><br>
                         <span class="text-blue text-bold">{{form.no_days}}</span>
@@ -60,13 +60,13 @@
                         <label>Email:</label> <br>
                         <span class="text-blue text-bold">{{form.email}}</span>
                     </div>
-                </div>  
+                </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
-                        <label>Details:</label> 
+                        <label>Details:</label>
                         <span class="text-blue text-bold">{{form.reason}}</span>
                     </div>
-                </div> 
+                </div>
                 <Workflow :appNo="form.application_no" />
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -86,7 +86,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 </template>
 <script>
 import Workflow from "../../../common/view_workflow_details";
@@ -122,7 +122,7 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.leavetypeList[data[i].id] = data[i].name; 
+                    this.leavetypeList[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error){
@@ -134,7 +134,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.genderArray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -146,14 +146,14 @@ export default {
             .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
                 console.log('Error: '+error);
             });
         },
-        
+
 		shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
                 let action=true;
@@ -162,7 +162,7 @@ export default {
                     $('#remarks').addClass('is-invalid');
                     action=false;
                 }
-                
+
                 if(action){
                     Swal.fire({
                         text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
@@ -177,19 +177,19 @@ export default {
                             this.form.post('/staff/staffServices/verifyApproveRejectLeaveApplication')
                             .then((response) => {
                                 if(response!=""){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
                                     });
                                     this.$router.push({path:'/tasklist'});
-                                } 
+                                }
                             })
                             .catch((err) => {
                                 Swal.fire(
                                     'error!',
                                     'Not able to update this application details. Please contact system administrator.Error: '+err,
                                     'error',
-                                ); 
+                                );
                                 console.log("Error:"+err)
                             })
                         }
@@ -211,10 +211,10 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         loadLeaveDetails(appNo,type){
             axios.get('/staff/staffServices/loadLeaveDetails/'+appNo+'/'+type)
-            .then((response) =>{  
+            .then((response) =>{
                 let data=response.data.data;
                 this.form.date_of_application         =   data.date_of_application;
                 this.form.application_no         =   data.application_no;
@@ -236,7 +236,7 @@ export default {
                 this.form.status_id=data.app_seq_no;
                 this.form.position_title=data.applicant_details.position_title_id;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error: "+error);
             });
         }

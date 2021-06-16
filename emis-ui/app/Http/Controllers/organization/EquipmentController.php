@@ -56,6 +56,7 @@ class EquipmentController extends Controller
     }
 
     public function loadEquipment(){
+      //  dd('m here at UI');
         $orgId=$this->getWrkingAgencyId();
         $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$orgId);
         return $dis;

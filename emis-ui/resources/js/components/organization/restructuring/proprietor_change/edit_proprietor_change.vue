@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change for Proprietor</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change for Proprietor</label>
                         </a>
                     </li>
                 </ul>
@@ -145,7 +145,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -155,10 +155,10 @@ export default {
         return{
             orgList:'',
             levelList:[],
-            locationList:[], 
+            locationList:[],
             dzongkhagList:[],
             gewog_list:[],
-            villageList:[], 
+            villageList:[],
             classList1:[],
             streamList1:[],
             classList:[],
@@ -179,7 +179,7 @@ export default {
                 organizationId:'',org_name:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
                 application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'edit', status:'Submitted',organization_type:'',
             }),
-        } 
+        }
     },
     methods: {
         /**
@@ -190,7 +190,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -220,8 +220,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -235,15 +235,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change in proprietor details has been updated and submitted for approval. <br><b>Thank You !</b>";
+                                    let message="applicaiton for Change in proprietor details has been updated and submitted for approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'proprietor_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -256,9 +256,9 @@ export default {
                     }
                 });
             }
-            
+
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -279,10 +279,10 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
+                this.form.organizationId=$('#organizationId').val();
                 this.getorgdetials($('#organizationId').val());
             }
-            
+
         },
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
@@ -290,13 +290,13 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
         getorgdetials(org_id){
             $('#organizationId').val(org_id).trigger('change');
-            this.form.organizationId=org_id;   
+            this.form.organizationId=org_id;
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
@@ -313,7 +313,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -327,7 +327,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name; 
+                    this.gewogArray[data[i].id] = data[i].name;
                 }
                 $('#gewogid').val(this.gewogArray[gewogId]);
             });
@@ -339,7 +339,7 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name; 
+                    this.villageArray[data[i].id] = data[i].name;
                 }
                 $('#vilageId').val(this.villageArray[vil_id])
             })
@@ -347,7 +347,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadApplicaitonDetials(){ 
+        loadapplicaitonDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -378,10 +378,10 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-        
+
     },
-    
-    mounted() { 
+
+    mounted() {
         this.loadactivedzongkhagList();
         this.getLevel();
         this.getOrgList();
@@ -391,15 +391,15 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.record_id=this.$route.params.data.application_no;
-        this.loadApplicaitonDetials();
-       
+        this.loadapplicaitonDetials();
+
     }
 }
 </script>

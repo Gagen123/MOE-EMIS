@@ -1,5 +1,12 @@
 <template>
     <div>
+        <div class="card card-primary card-outline">
+            <!-- <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
+            </div> -->
+            <!-- <div class="card-body pb-1 mb-0 pt-1 mt-0">  
+                <router-view></router-view> 
+            </div> -->
+        </div> 
         <form class="bootbox-form" id="connectivity-detial">
             <div class="card-body">
                 <div class="row form-group">
@@ -8,6 +15,15 @@
                          <b>Road Connectivity</b>
                      </span>
                     </div>
+                </div>
+                <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
+                    <label class="mb-1">What is the type of road nearest to your school:<i class="text-danger">*</i></label>
+                    <select v-model="form.road_typeyes" class="form-control" name="road_typeyes" id="road_typeyes">
+                        <option v-for="(item, index) in roadTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <has-error :form="form" field="road_typeyes"></has-error>
+                </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -20,13 +36,13 @@
                         <label><input  type="radio" v-model="form.connectedtoroad" value="0" tabindex="" @click="showtextbox('No')"/> No</label>
                         <has-error :form="form" field="connectedtoroad"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="roadtypeyes">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="roadtypeyes">
                         <label class="mb-1">Type of Road:<i class="text-danger">*</i></label>
                         <select v-model="form.road_typeyes" class="form-control" name="road_typeyes" id="road_typeyes">
                             <option v-for="(item, index) in roadTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="road_typeyes"></has-error>
-                    </div> 
+                    </div>  -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="roadtypeno">
                         <label class="mb-1">If No, what is the distance from the nearest road? (Km)<i class="text-danger">*</i></label>
                         <input type="text" v-model="form.road_typeno" class="form-control editable_fields" id="road_typeno" />
@@ -61,6 +77,7 @@
                      <has-error :form="form" field="connectedtointernet"></has-error>
                    </div>
                 </div>
+                
                 <div class="form-group row" style="display:none" id="internetyes">
                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
                         <label>Types of connections :</label>
@@ -69,6 +86,7 @@
                             {{item.name}}
                         </label>
                     </div>
+                    <br><br>
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" > 
                      <label>Internet Service provider :</label>
                      <label  v-for="(item, key, index) in  serviceProviderList1" :key="index" class="pr-4">
@@ -76,12 +94,58 @@
                          {{item.name}}
                       </label> 
                   </div>
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" > 
+                  <br><br>
+                   <!-- <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                            </div>
+                        </div> -->
+                 <!-- <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" > 
                      <label>Speed/Bandwidth :</label>
                      <input type="text" name="speedbandwidth" v-model="form.speedbandwidth" class="form-control editable_fields" id="speedbandwidth"/>
-                  </div>
+                </div> -->
+                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Speed/Bandwidth:<span class="text-danger">*</span></label>
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                <input class="form-control editable_fields " id="speedbandwidth" type="text" v-model="form.speedbandwidth">
+                </div>
+                  <br> <br><br>
+                  
+                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label >Is your School/ECCD/ECR connected to:<span class="text-danger">*</span> </label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label><input  type="checkbox" v-model="form.DrukREN" value="1" tabindex=""/> DrukREN</label>
+                        <label><input  type="checkbox" v-model="form.GovNET" value="1" tabindex="" /> GovNET</label>
+                        <label><input  type="checkbox" v-model="form.independent" value="1" tabindex="" /> Independent</label>
+                    </div>
+                    <br><br>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label >Does your School/ECCD/ECR use Internet Connection shared from Gewog/Community center/Dzongkhag?<span class="text-danger">*</span> </label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label><input  type="radio" v-model="form.sharedconnection" value="1" tabindex="" @click="showtextboxS('yes')"/> Yes</label>
+                        <label><input  type="radio" v-model="form.sharedconnection" value="0" tabindex="" @click="showtextboxS('no')"/> No</label>
+                        <has-error :form="form" field="sharedconnection"></has-error>
+                    </div>
+                   
+                   
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="sharedconnection">
+                       <label>Specify the Connection Type<span class="text-danger">*</span></label>
+                       <input type="text" class="form-control" @change="removeerror('connectionsharedtype')" :class="{ 'is-invalid': form.errors.has('connectionsharedtype') }" id="connectionsharedtype" v-model="form.connectionsharedtype" >
+                       <has-error :form="form" field="connectionsharedtype"></has-error>
+                    </div>
+                    <br><br>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label>Internet Accessible to:</label><br>
+                        <label  v-for="(item, key, index) in  internetAccessibleList" :key="index" class="pr-4">
+                            <input  type="checkbox" v-model="form.internetAccessible" :value="item.id" tabindex=""/> 
+                            {{item.name}}
+                        </label>
+                    </div>
+                  
                </div>
-               <div class="form-group row">
+               <!-- <div class="form-group row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label >Is your School/ECCD/ECR connected to:<span class="text-danger">*</span> </label>
                     </div>
@@ -90,13 +154,13 @@
                         <label><input  type="checkbox" v-model="form.GovNET" value="1" tabindex="" /> GovNET</label>
                         <label><input  type="checkbox" v-model="form.independent" value="1" tabindex="" /> Independent</label>
                     </div>
-               </div>
-               <div class="form-group row">
+               </div> -->
+               <!-- <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label >Does your School/ECCD/ECR use Internet Connection shared from Gewog/Community center/Dzongkhag?<span class="text-danger">*</span> </label>
                     </div>
-               </div>
-                <div class="form-group row">
+               </div> -->
+                <!-- <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label><input  type="radio" v-model="form.sharedconnection" value="1" tabindex="" @click="showtextboxS('yes')"/> Yes</label>
                         <label><input  type="radio" v-model="form.sharedconnection" value="0" tabindex="" @click="showtextboxS('no')"/> No</label>
@@ -104,18 +168,14 @@
                     </div>
                 </div>
                 <div class="form-group row" style="display:none" id="sharedconnection">
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="sharedconnection">
                        <label>Specify the Connection Type<span class="text-danger">*</span></label>
                        <input type="text" class="form-control" @change="removeerror('connectionsharedtype')" :class="{ 'is-invalid': form.errors.has('connectionsharedtype') }" id="connectionsharedtype" v-model="form.connectionsharedtype" >
                        <has-error :form="form" field="connectionsharedtype"></has-error>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                       <label>Speed/Bandwidth<span class="text-danger">*</span></label>
-                       <input type="text" class="form-control" @change="removeerror('sharedspped')" :class="{ 'is-invalid': form.errors.has('sharedspped') }" id="sharedspped" v-model="form.sharedspped" >
-                       <has-error :form="form" field="sharedspeed"></has-error>
-                    </div>    
-                </div>
-                <div class="form-group row">
+                    
+                </div> -->
+                <!-- <div class="form-group row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Internet Accessible to:</label><br>
                         <label  v-for="(item, key, index) in  internetAccessibleList" :key="index" class="pr-4">
@@ -123,7 +183,7 @@
                             {{item.name}}
                         </label>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group row">
                    <div class="card-header pt-1 pb-sm-0 col-lg-12 col-md-12 col-sm-12 col-xs-12"> 
                      <span class="card-title">
@@ -136,10 +196,17 @@
                         <label >Does your School/ECCD/ECR have electricity?<span class="text-danger">*</span> </label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                      <label><input  type="radio" v-model="form.electricity" value="1" tabindex="" /> Yes</label>
-                      <label><input  type="radio" v-model="form.electricity" value="0" tabindex=""/> No</label>
+                      <label><input  type="radio" v-model="form.electricity" value="1" tabindex=""  @click="showtextboxE('yes')" /> Yes</label>
+                      <label><input  type="radio" v-model="form.electricity" value="0" tabindex="" @click="showtextboxE('no')"/> No</label>
                       <has-error :form="form" field="electricity"></has-error>
                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="electricity">
+                       <label>Source of Electricity<span class="text-danger">*</span></label>
+                       <select v-model="form.electricitysource" class="form-control" name="electricitysource" id="electricitysource">
+                        <option v-for="(item, index) in electricitysourceList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <has-error :form="form" field="electricitysource"></has-error>
+                    </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -152,9 +219,10 @@
                    </div>
                 </div>
             </div>
-            <div class="card-footer text-right">
-                 <!-- <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button> -->
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                           
+            <div class="row form-group fa-pull-right">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <button class="btn btn-flat btn-primary" @click="updateconnectivity()"><i class="fa fa-check"></i> Update</button>
+                </div>
             </div>
         </form>
     </div>
@@ -169,9 +237,12 @@ export default {
              internetAccessibleList:[],
              connection_type_list:[],
              serviceProviderList1:[],
+             display:'',
+             electricitysourceList:[],
            
             form: new form({
                 id: '', 
+                org_id:'',
                 connectedtoroad:'', 
                 road_typeyes: '',
                 road_typeno: '',
@@ -185,16 +256,61 @@ export default {
                 independent:'',
                 sharedconnection:'',
                 connectionsharedtype:'',
-                sharedspeed:'',
                 internetAccessible:[],
                 electricity:'',
                 electricitysubstation:'',
+                electricitysource:'',
                
             })
         }
     },
 
     methods:{
+  
+        updateconnectivity(){
+            this.form.post('organization/saveConnectivityDetails')
+            .then((response) => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Data updated successfully'
+                })
+            this.loadexsitingDetails();
+                   // alert(response);
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+
+        loadexsitingData(org_id){
+        axios.get('organization/loadConnectivityInformation/' +org_id)
+           .then((response) => {  
+                let data=response.data.data;
+                this.form.id = data.id;
+                this.form.connectedtoroad=data.connectedtoroad;
+                this.form.road_typeyes=data.road_typeyes;
+                this.form.road_typeno=data.road_typeno;
+                this.form.hqdistance=data.hqdistance;
+                this.form.connectedtointernet=data.connectedtointernet;
+                this.form.connectiontype=data.connectiontype;
+                this.form.serviceprovider=data.serviceprovider;
+                this.form.speedbandwidth=data.speedbandwidth;
+                this.form.DrukREN=data.DrukREN;
+                this.form.GovNET=data.GovNET;
+                this.form.independent=data.independent;
+                this.form.sharedconnection=data.sharedconnection;
+                this.form.connectionsharedtype=data.connectionsharedtype;
+                this.form.internetAccessible=data.internetAccessible;
+                this.form.electricity=data.electricity;
+                this.form.electricitysource=data.electricitysource;
+                this.form.electricitysubstation=data.electricitysubstation;
+
+            })
+            .catch((error) => {  
+                    console.log("Error: "+error);
+            });
+            
+        },
 
         /**
          * method to remove error
@@ -218,67 +334,59 @@ export default {
                 this.serviceProviderList1 = data;
             });
         },
-
-        /**
-         * method to reset form
-         */
-        restForm(){
-            this.form.id='',
-            this.form.connectedtoroad= '';
-            this.form.road_typeyes = '';
-            this.form.road_typeno = '';
-            this.form.hqdistance= '';
-            this.form.connectedtointernet= '';
-            this.form.connectiontype= '';
-            this.form.serviceprovider= '';
-            this.form.speedbandwidth='';
-            this.form.DrukREN = '';
-            this.form.GovNET = '';
-            this.form.independent = '';
-            this.form.sharedconnection = '';
-            this.form.connectionsharedtype = '';
-            this.form.sharedspeed = '';
-            this.form.internetAccessible =[];
-            this.form.electricity = '';
-            this.form.electricitysubstation = '';
+        getElectricitySourceDropdown(uri = '/organization/getElectricitySourceDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.electricitysourceList = data;
+            });
+        },
+        
+        // updateconnectivity(){
+        //         this.form.post('organization/saveConnectivityDetails')
+        //         .then((response) => {
+        //             this.loadexsitingDetails();
+        //            // alert(response);
+        //         })
+        //         .catch(function (error) {
+        //             console.log('error: '+error);
+        //         });
+        // },
+        loadexsitingDetails(){
+            axios.get('common/getSessionDetail')
+                .then(response =>{
+                let data = response.data.data;
+                this.form.org_id=data['Agency_Code'];
+                this.loadexsitingData(data['Agency_Code']);
+            })    
+            .catch(errors =>{ 
+                console.log(errors)
+            });
         },
 
-        /**
-         * method to save data
-         */
-        formaction: function(type){
-            // if(type=="reset"){
-            //     this.restForm();
-            // }
-            if(type=="save"){
-                    this.form.post('/organization/saveConnectivityDetails',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: ' Detail is added successfully'
-                    })
-                    this.$router.push('/list_connectivity');
-                })
-                .catch(() => {
-                    console.log("Error......");
-                    this.applyselect();
-                })
-            }
-		},
         showtextbox:function(type){
-         if(type=="Yes"){
-             $('#roadtypeyes').show();
-             $('#roadtypeno').hide(); 
-            }
-            else if(type=="No"){
-             $('#roadtypeno').show();
-             $('#roadtypeyes').hide();
-            }
+        if(type=="No"){
+            $('#roadtypeno').show();
+        }
             else{
-             $('#roadtypeyes').hide();
-             $('roadtypeno').show();
+                $('#roadtypeno').hide();
             }
         },
+
+        // showtextbox:function(type){
+        //  if(type=="Yes"){
+        //      $('#roadtypeyes').show();
+        //      $('#roadtypeno').hide(); 
+        //     }
+        //     else if(type=="No"){
+        //      $('#roadtypeno').show();
+        //      $('#roadtypeyes').hide();
+        //     }
+        //     else{
+        //      $('#roadtypeyes').hide();
+        //      $('roadtypeno').show();
+        //     }
+        // },
       
         showtextboxI:function(type){
             if(type=="connected"){
@@ -295,6 +403,14 @@ export default {
             else{
                 $('#sharedconnection').hide();
             }  
+        },
+        showtextboxE:function(type){
+           if(type=="yes"){
+                $('#electricity').show();
+            }
+            else{
+                $('#electricity').hide();
+            }   
         },
         loadAccessibilityList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/InternetAccessible'){
             axios.get(uri)
@@ -318,30 +434,19 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-        // async changefunction(id){
-        //     if($('#'+id).val()!=""){
-        //         $('#'+id).removeClass('is-invalid select2');
-        //         $('#'+id+'_err').html('');
-        //         $('#'+id).addClass('select2');
-        //     }
-        //     if(id=="sex_id"){
-        //         this.form.sex_id=$('#sex_id').val();
-        //     }
-        //     if(id=="mother_tongue"){
-        //         this.form.mother_tongue=$('#mother_tongue').val();
-        //     }
-        //     if(id=="country"){
-        //         this.form.country=$('#country').val();
-        //     }
-             
-        // },
+       
         
     },
-     mounted() { 
+
+    mounted() {
+         this.getElectricitySourceDropdown();
+         this.loadexsitingDetails(); 
+         this.loadDataList();
          this.getRoadTypeDropdown();
          this.loadAccessibilityList();
          this.loadConnectionTypeList();
          this.getServiceProviderDropdown1();
+
       
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){
@@ -351,6 +456,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-    }
+    },
+
 }
 </script>

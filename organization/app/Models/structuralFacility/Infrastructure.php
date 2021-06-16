@@ -21,6 +21,7 @@ class Infrastructure extends Model
         'organizationId',
         'categoryId',
         'subCategoryId',
+        'constructionType',
         'structureNo',
         'yearOfConstruction',
         'plintchArea',

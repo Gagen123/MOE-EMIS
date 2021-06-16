@@ -49,7 +49,7 @@
                                     <label class="mb-0">Proposed Name:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School' ||applicationdetails.establishment_type=='Public ECR'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School'">
                                     <label class="mb-0">Level:</label>
                                     <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
                                 </div>
@@ -121,10 +121,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                   <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Total Area of Land Proposed:</label>
                                         <span class="text-blue text-bold">{{applicationdetails.org_details.totalLand}}</span>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Type of School:</label>
                                         <span class="text-blue text-bold">{{ applicationdetails.org_details.typeOfSchool  == 1 ? "Day" :  "Boarding"}}</span>

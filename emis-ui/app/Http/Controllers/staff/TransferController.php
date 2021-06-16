@@ -22,7 +22,7 @@ class TransferController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/transfer/getcurrentTransferWindowDetails/'.$id);
         return $response_data;
     }
-    
+
     public function submitapplicantDetails(Request $request){
         $rules = [
             'staff_id'              =>  'required  ',
@@ -40,17 +40,17 @@ class TransferController extends Controller{
             'reason_id'                         =>  $request->reason_id,
             'description'                       =>  $request->description,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->userId() 
+            'user_id'                           =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitapplicantDetails', $request_data);
         return $response_data;
     }
-    
+
     public function getDraftDetails(){
         $response_data= $this->apiService->listData('emis/staff/transfer/getDraftDetails/'.$this->userId());
         return $response_data;
     }
-    
+
     public function submitFinalapplicantDetails(Request $request){
         $rules = [
             'preference_dzongkhag1'              =>  'required  ',
@@ -93,7 +93,7 @@ class TransferController extends Controller{
             'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
             'preference_dzongkhag3'             =>  $request->preference_dzongkhag3,
             'attachment_details'                =>  $attachment_details,
-            'user_id'                           =>  $this->userId() 
+            'user_id'                           =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitFinalapplicantDetails', $request_data);
         // dd($response_data);
@@ -122,15 +122,15 @@ class TransferController extends Controller{
             'type'              =>  $type,
             'user_id'           =>  $this->userId(),
         ];
-        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data); 
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data);
         $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
         $work_status=$workflowdet['status'];
         $dat=$this->apiService->getListData('emis/common/getTaskDetials/'.$appNo);
-        
+
         $workflowstatus=$this->getAllCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $loadTransferDetails = json_decode($this->apiService->listData('emis/staff/transfer/loadtrainsferDetails/'.$appNo));
         $loadTransferDetails->app_stage=$workflowstatus;
-        
+
         if(strpos(rtrim($workflowstatus,','),',')!==false){
             if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id!=4){
                 if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id==3){
@@ -142,19 +142,19 @@ class TransferController extends Controller{
                 else{
                     $loadTransferDetails->app_stage=explode(',',rtrim($workflowstatus,','))[0];
                 }
-            } 
+            }
             else{
                 if(json_decode($dat)->status_id==1){
                     $loadTransferDetails->app_stage='Verifier';
-                } 
+                }
                 else{
                     $loadTransferDetails->app_stage=explode(',',rtrim($workflowstatus,','))[1];
-                }  
-            } 
+                }
+            }
         }
         return json_encode($loadTransferDetails);
     }
-    
+
     public function updateTransferApplication(Request $request){
         $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
         $work_status=$workflowdet['status'];
@@ -184,11 +184,11 @@ class TransferController extends Controller{
             'application_number'           =>   $request->application_no,
             'dzongkhagApproved'           =>   $request->dzongkhagApproved,
             'remarks'                      =>   $request->remarks,
-            'user_id'                      =>   $this->userId() 
+            'user_id'                      =>   $this->userId()
         ];
         // dd($update_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        
+
         $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $update_data);
         return $response_data;
     }

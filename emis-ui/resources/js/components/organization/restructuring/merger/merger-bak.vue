@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">School Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">School Details </label>
                         </a>
                     </li>
                     <li class="nav-item merger-tab" @click="shownexttab('merger-tab')">
@@ -22,7 +22,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Year of Merger:</label>
                                 <span class="text-blue text-bold">{{form.year}}</span>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -166,12 +166,12 @@
                         </div>
                     </div>
                     <div class="tab-pane fade tab-content-details" id="merger-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row"> 
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Proposed Name:<span class="text-danger">*</span></label>
                                 <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" />
                                 <has-error :form="form" field="proposedName"></has-error>
-                            </div>  
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Level:<span class="text-danger">*</span></label>
                                 <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="getClassAndStream('level'),remove_error('level')">
@@ -179,10 +179,10 @@
                                     <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="level"></has-error>
-                            </div>  
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Category:<span class="text-danger">*</span></label>
-                                <br> 
+                                <br>
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('public')" value="1" tabindex=""/> Public</label>
                                 <label><input  type="radio" v-model="form.category" @change="showprivatedetails('private')" value="0"  tabindex=""/> Private</label>
                                 <label style="display:none" class="eccd"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
@@ -196,9 +196,9 @@
                                 <select v-model="form.dzongkhag" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select> 
+                                </select>
                                 <has-error :form="form" field="dzongkhag"></has-error>
-                            </div>  
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Gewog:<span class="text-danger">*</span></label>
                                 <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
@@ -214,7 +214,7 @@
                                     <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="chiwog"></has-error>
-                            </div>                 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -230,13 +230,13 @@
                                 <br>
                                 <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" v-model="form.geopolicaticallyLocated" value="0" tabindex=""/> No</label>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Sen School:<span class="text-danger">*</span></label>
                                 <br>
                                 <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.senSchool" value="0" tabindex=""/> No</label>
-                            </div>                  
+                            </div>
                         </div>
                         <div class="form-group row" id="parentDetails" style="display:none">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
@@ -244,14 +244,14 @@
                                 <select name="parentSchool" v-model="form.parentSchool" id="parentSchool" class="form-control  select2">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select> 
+                                </select>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
                                 <label class="mb-0">Co-located with Parent School:</label>
                                 <br>
                                 <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
-                            </div>                   
+                            </div>
                         </div>
 
                         <div id="privatedetails" style="display:none">
@@ -298,7 +298,7 @@
                                         <input type="checkbox" v-model="form.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
                                     </span>
                                 </span>
-                            </span> 
+                            </span>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -316,7 +316,7 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             orgList:[],
             org1_details:'',
             org2_details:'',
@@ -351,7 +351,7 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
-        } 
+        }
     },
     methods: {
         /**
@@ -396,13 +396,13 @@ export default {
                     if(fieldId=="orgId1"){
                         this.org1_details=response.data.data;
                         this.org1_details.village=response.data.data.village.data.name;
-                        this.org1_details.gewog=response.data.data.gewog.data.name; 
+                        this.org1_details.gewog=response.data.data.gewog.data.name;
                         this.org1_details.dzongkhag=response.data.data.dzongkhag.data.name;
                     }
                     if(fieldId=="orgId2"){
                         this.org2_details=response.data.data;
                         this.org2_details.village=response.data.data.village.data.name;
-                        this.org2_details.gewog=response.data.data.gewog.data.name; 
+                        this.org2_details.gewog=response.data.data.gewog.data.name;
                         this.org2_details.dzongkhag=response.data.data.dzongkhag.data.name;
                     }
                 });
@@ -440,7 +440,7 @@ export default {
         } ,
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
-            .then((response) => {  
+            .then((response) => {
 
                 let data=response.data.data[0];
                 this.form.cid           =   data.cid;
@@ -448,7 +448,7 @@ export default {
                 this.form.phoneNo       =   data.phoneNo;
                 this.form.email         =   data.email;
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
@@ -513,7 +513,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get gewog list
@@ -587,14 +587,14 @@ export default {
             if(id=="parentSchool"){
                 this.form.parentSchool=$('#parentSchool').val();
             }
-            
+
         },
 
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to submit this details for approval ?",
                     icon: 'info',
@@ -607,13 +607,13 @@ export default {
                         this.form.post('organization/saveMerger')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="applicaiton for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'restr_acknowledgement',params: {data:message}});
-                                Toast.fire({  
+                                Toast.fire({
                                     icon: 'success',
                                     title: 'Merger details has been submitted for further action.'
-                                }); 
-                            } 
+                                });
+                            }
                         })
                         .catch((err) => {
                             console.log("Error:"+err);
@@ -683,9 +683,9 @@ export default {
         //             $('#applicaitonUnderProcess').show();
         //             $('#existmessage').html('You have no access to this page.');
         //         }
-                
-        //     })    
-        //     .catch(errors => { 
+
+        //     })
+        //     .catch(errors => {
         //         console.log(errors)
         //     });
         // }
@@ -695,7 +695,7 @@ export default {
          */
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/merger')
-        //     .then((response) => {  
+        //     .then((response) => {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
@@ -703,12 +703,12 @@ export default {
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
-        //     .catch((error) => {  
+        //     .catch((error) => {
         //         console.log("Error: "+error);
         //     });
         // },
     },
-    
+
     mounted() {
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
@@ -719,9 +719,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

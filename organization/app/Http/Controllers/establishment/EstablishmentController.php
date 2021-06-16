@@ -231,8 +231,11 @@ class EstablishmentController extends Controller{
                 'proposedLocation'             =>  $request['proposedLocation'],
                 'typeOfSchool'                 =>  $request['typeOfSchool'],
                 'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+                'coLocatedParent'              =>  $request['coLocatedParent'],
+                'parentSchool'                 =>  $request['parentSchool'],
                 'levelId'                      =>  $request['level'],
             ];
+            // dd($data);
             ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->update($data);
             $app_det=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
@@ -281,6 +284,8 @@ class EstablishmentController extends Controller{
             'typeOfSchool'                 =>  $request['typeOfSchool'],
             'levelId'                      =>  $request['level'],
             'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'parentSchool'                 =>  $request['parentSchool'],
             'created_at'           =>  date('Y-m-d h:i:s')
         ];
 
