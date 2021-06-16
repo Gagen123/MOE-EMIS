@@ -1042,22 +1042,6 @@ class EstablishmentController extends Controller{
             Locations::create($location);
         }
 
-        //Contact details is no longer an add more array
-        //also the contact details and table have been changed
-
-        // foreach ($request->input('users') as $i=> $user){
-        //     $contact_details = array(
-        //         'organizationId'    =>  $request->org_id,
-        //         'contactTypeId'     =>  $user['contactName'],
-        //         'phone'             =>  $user['phone'],
-        //         'mobile'            =>  $user['mobile'],
-        //         'email'             =>  $user['email'],
-        //         'type'              =>  2,
-        //         'created_by'        =>  $request->user_id,
-        //         'created_at'        =>  date('Y-m-d h:i:s')
-        // );
-        //     $org_det = ContactDetails::create($contact_details);
-        // }
 
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }

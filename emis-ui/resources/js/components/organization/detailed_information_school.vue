@@ -220,7 +220,7 @@
             getorgProfile(org_id){
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
-                    alert(JSON.stringify(response.data.data));
+                    // alert(JSON.stringify(response));
                     let response_data=response.data.data;
                     this.orgDetails=response_data;
                     if(response_data.category=="public_eccd" ||response_data.category=="private_eccd" ){
@@ -256,7 +256,7 @@
                     if(response_data.locationDetials!=null && response_data.locationDetials!=""){
                         this.form.altitude=response_data.locationDetials.altitude;
                         this.form.climate_type=response_data.locationDetials.climate_type;
-                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
+                        this.form.disasterArea=response_data.locationDetials.disasterArea;
                         this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
                         this.form.entranceGate=response_data.locationDetials.entranceGate;
                         this.form.fencingtypeId=response_data.locationDetials.fencingtypeId;
@@ -370,28 +370,6 @@
                     $('roadtypeno').show();
                 }
             },
-            showfield:function(type){
-            let selecttype = $("#"+type+" option:selected").text();
-                if(selecttype =="standard"){
-                    $('#sizeAndarea').hide();
-                    $('#sizeAndarea1').hide();
-                    
-                
-                }
-
-            else if(selecttype =="non standard"){ 
-                    $('#sizeAndarea').show();
-                    $('#sizeAndarea1').show();
-
-                }
-                else{
-                    $('#sizeAndarea').hide();
-                    $('#sizeAndarea1').hide();
-
-                }
-
-        },
-            
         },
         mounted(){
             this.getContactTypeDropdown();
