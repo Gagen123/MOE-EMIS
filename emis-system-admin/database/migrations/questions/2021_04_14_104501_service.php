@@ -5,11 +5,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class Service extends Migration{
-   
+
     public function up() {
         Schema::create('question_service', function (Blueprint $table) {
             $table->char('id',36);
-            $table->char('parent_id',36)->nullable(false);
+            $table->char('module_id',36)->nullable(false);
             $table->string('name',150)->nullable(false);
             $table->string('code',150)->nullable(false);
             $table->string('type',100)->nullable(true);

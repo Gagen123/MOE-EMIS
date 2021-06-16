@@ -8,8 +8,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead" role="tablist">
                     <li class="nav-item wash-tabs" @click="shownexttab('wash-tabs')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label> Wash </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label> Wash </label>
                         </a>
                     </li>
                     <li class="nav-item sanitation-tab">
@@ -30,8 +30,8 @@
                         <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <thead>
                                 <tr>
-                                    <th width="50px">Description</th>
-                                    <th width="50px">Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,7 +41,7 @@
                                         <textarea class="form-control" :name="'wash_textarea'+index" v-model="item.answered" :id="item.id" @change="remove_err(item.id)"></textarea>
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
-                                    
+
                                     <td v-if="item.answer_type=='Text'">
                                         <input class="form-control" :name="'wash_text'+index" type="text" v-model="item.answered" :id="item.id" @change="remove_err(item.id)">
                                         <label class="text-danger" :id="item.id+'err'"></label>
@@ -75,7 +75,7 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id" @change="remove_err(item.id+'_'+ans.id)">
-                                                <label>{{ans.name}} </label>  
+                                                <label>{{ans.name}} </label>
                                             </span>
                                         </div>
                                         <label class="ml-4 text-danger" :id="item.id+'err'"></label>
@@ -94,8 +94,8 @@
                         <table id="dynamic-table1" class="table w-100  table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th width="60px">Description</th>
-                                    <th width="40px">Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,7 +105,7 @@
                                         <textarea class="form-control" :name="'wash_textarea'+index" v-model="item.answered" :id="item.id" @change="remove_err(item.id)"></textarea>
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
-                                    
+
                                     <td v-if="item.answer_type=='Text'">
                                         <input class="form-control" :name="'wash_text'+index" type="text" v-model="item.answered" :id="item.id" @change="remove_err(item.id)">
                                         <label class="text-danger" :id="item.id+'err'"></label>
@@ -139,13 +139,13 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" @change="remove_err(item.id+'_'+ans.id)" class="ml-4" :value="ans.id">
-                                                <label>{{ans.name}} </label>  
+                                                <label>{{ans.name}} </label>
                                             </span>
                                         </div>
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
                                 </tr>
-                                
+
                             </tbody>
                         </table>
                         <hr>
@@ -160,8 +160,8 @@
                         <table id="dynamic-table2" class="table w-100  table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th >Description</th>
-                                    <th >Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -200,8 +200,8 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" @change="remove_err(item.id+'_'+ans.id)" class="ml-4" :value="ans.id">
-                                                <label>{{ans.name}} </label>  
-                                            </span> 
+                                                <label>{{ans.name}} </label>
+                                            </span>
                                         </div>
                                         <label class="text-danger" :id="item.id+'err'"></label>
                                     </td>
@@ -243,7 +243,7 @@ export default {
     },
 
     methods:{
-        shownexttab(nextclass){ 
+        shownexttab(nextclass){
             if(nextclass=="sanitation-tab"){
                 let validated=true;
                 for(let i=0;i<this.wash_form.questionList.length;i++){
@@ -274,11 +274,11 @@ export default {
                         else{
                             this.wash_form.questionList[i].answered =$('#'+this.wash_form.questionList[i].id).val();
                         }
-                    } 
+                    }
                 }
                 if(validated==true){
                     this.wash_form.post('organization/structural/saveWashFeeding')
-                    .then((response) => { 
+                    .then((response) => {
                         if(response.data!=""){
                             Toast.fire({
                                 icon: 'success',
@@ -288,7 +288,7 @@ export default {
                             this.change_tab(nextclass);
                         }
                     })
-                    .catch((error) => {  
+                    .catch((error) => {
                         console.log("Error: "+error)
                     });
                 }
@@ -324,11 +324,11 @@ export default {
                         else{
                             this.sanitation_form.questionList[i].answered =$('#'+this.sanitation_form.questionList[i].id).val();
                         }
-                    } 
+                    }
                 }
                 if(validated==true){
                     this.sanitation_form.post('organization/structural/saveWashFeeding')
-                    .then((response) => { 
+                    .then((response) => {
                         if(response.data!=""){
                             Toast.fire({
                                 icon: 'success',
@@ -338,11 +338,11 @@ export default {
                             this.change_tab(nextclass);
                         }
                     })
-                    .catch((error) => {  
+                    .catch((error) => {
                         console.log("Error: "+error)
                     });
                 }
-                
+
             }
             if(nextclass=="final-tab"){
                 let validated=true;
@@ -374,7 +374,7 @@ export default {
                         else{
                             this.hygiene_form.questionList[i].answered =$('#'+this.hygiene_form.questionList[i].id).val();
                         }
-                    } 
+                    }
                 }
                 if(validated==true){
                     Swal.fire({
@@ -387,7 +387,7 @@ export default {
                         }).then((result) => {
                         if (result.isConfirmed) {
                             this.hygiene_form.post('organization/structural/saveWashFeeding')
-                            .then((response) => { 
+                            .then((response) => {
                                 if(response.data!=""){
                                     Toast.fire({
                                         icon: 'success',
@@ -396,18 +396,18 @@ export default {
                                     this.$router.push({path:'/structural_index'});
                                 }
                             })
-                            .catch((error) => {  
+                            .catch((error) => {
                                 console.log("Error: "+error)
                             });
                         }
                     });
                 }
-                
+
             }
             if(nextclass=="wash-tabs"){
                this.loadWashDetialsList('wash');
                 this.change_tab(nextclass);
-            } 
+            }
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -428,7 +428,7 @@ export default {
             }
         },
         loadQuestionList(param){
-            axios.get('questionAnswers/loadQuestionaries/withwhere_'+param+'_Question')
+            axios.get('questionAnswerController/loadQuestionaries/washAndOthers_'+param+'_Question')
             .then(response => {
                 let data = response.data.data;
                 if(param=="Wash"){
@@ -437,10 +437,10 @@ export default {
                 if(param=="Sanitation"){
                     this.sanitation_form.questionList =  data;
                 }
-                if(param=="Hygiene"){ 
+                if(param=="Hygiene"){
                     this.hygiene_form.questionList =  data;
                 }
-            }) 
+            })
             .catch(function (error){
                 console.log(error.toString());
             });
@@ -461,7 +461,7 @@ export default {
                         $('#'+data[i].questionId+'_'+data[i].answer).val(data[i].answer);
                     }
                 }
-            })  
+            })
             .catch(function (error){
                 console.log(error.toString());
             });
@@ -476,30 +476,30 @@ export default {
                     $('#screenPermission').show();
                     $('#existmessage').html('You have no access to this page.');
                 }
-                
-            })    
-            .catch(errors => { 
+
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         }
     },
-  
-    mounted(){ 
+
+    mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
-        }); 
+        });
         // this.getScreenAccess();
         this.loadQuestionList('Wash');
         this.loadQuestionList('Sanitation');
         this.loadQuestionList('Hygiene');
-        
+
         this.loadWashDetialsList('wash');
         //this.loadWashDetialsList('sanitation');
-        
 
-        
-        
+
+
+
     },
 }
 </script>

@@ -10,7 +10,7 @@
                         <th >Code</th>
                         <th >Status</th>
                         <th >Created Date</th>
-                        <th >Action</th> 
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
@@ -28,7 +28,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -37,8 +37,8 @@ export default {
             moduleList:[],dt:'',
         }
     },
-    methods:{ 
-        loadModuleList(uri = 'questionAnswers/loadQuestionaries/all_with_module_Service'){
+    methods:{
+        loadModuleList(uri = 'questionAnswerController/loadQuestionaries/all_with_module_Service'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -54,7 +54,7 @@ export default {
             this.$router.push({name:'edit_service',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.loadModuleList();
         this.dt =  $("#working-agency-table").DataTable()
     },

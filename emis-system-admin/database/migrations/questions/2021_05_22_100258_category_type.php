@@ -9,7 +9,7 @@ class CategoryType extends Migration
     public function up() {
         Schema::create('category_type', function (Blueprint $table) {
             $table->char('id',36);
-            $table->char('parent_id',36)->nullable(false);
+            $table->char('module_id',36)->nullable(false);
             $table->string('name',150)->nullable(false);
             $table->boolean('status')->default(1);
             $table->string('type',100)->nullable(true);
@@ -22,6 +22,6 @@ class CategoryType extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('question_category');
+        Schema::dropIfExists('category_type');
     }
 }

@@ -10,7 +10,8 @@ class Category extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'parent_id',
+        'module_id',
+        'service_id',
         'name',
         'code',
         'status',
@@ -19,10 +20,13 @@ class Category extends Model{
         'updated_by',
         'updated_at'
     ];
-    public function service() {
-        return $this->belongsTo(Service::class, 'parent_id');
-    } 
-    public function module(){
-        return $this->hasOneThrough(Module::class,Service::class,'id','id','parent_id','parent_id'); 
+    public function module() {
+        return $this->belongsTo(Module::class, 'module_id');
     }
+    public function service() {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+    // public function module(){
+    //     return $this->hasOneThrough(Module::class,Service::class,'id','id','service_id','service_id');
+    // }
 }
