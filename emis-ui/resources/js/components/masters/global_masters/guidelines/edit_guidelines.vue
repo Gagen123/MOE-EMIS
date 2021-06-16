@@ -15,7 +15,7 @@
                             <option value="Equipment And Furniture">Equipment And Furniture</option>
                             <option value="Structural Index List">Structural Index List</option>
                             <option value="Class Section Allocation">Class Section Allocation</option>
-                            <option value=" Student Service">Student Service</option>
+                            <option value="Student Service">Student Service</option>
                             <option value="Student Health">Student Health</option>
                             <option value="Student Programs Club">Student Programs Club</option>
                             <option value="Student Programs Club">Student_Scouts</option>

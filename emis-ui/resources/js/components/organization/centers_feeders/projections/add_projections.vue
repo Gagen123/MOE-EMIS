@@ -11,7 +11,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
                     <label>Streams:</label>
-                    <select v-model="form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
+                    <select v-model="formedit_projections.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
                         <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
                     </select>
                     <has-error :form="form" field="std_stream"></has-error>
@@ -28,7 +28,7 @@
             </div>
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
+                    <label class="mb-0.5">Remar:</label>
                     <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
                     <has-error :form="form" field="remarks"></has-error>
                 </div>

@@ -27,7 +27,7 @@ export default {
             if(type=="list_projections"){
                 this.$router.push("/list_projections");
             }
-		},
+		},edit_projections
     },
     mounted() {
     },

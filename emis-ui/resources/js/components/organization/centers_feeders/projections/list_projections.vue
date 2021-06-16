@@ -55,7 +55,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+            this.$router.push({name:'edit_projections',params: {data:data}});
         },
     },
     mounted(){

@@ -529,7 +529,17 @@ const routes = [
                     { path: '/furniture_edit', name:'furniture_edit', component: require('./components/organization/general/furniture/furniture_edit.vue').default },
                     { path: '/furniture_list', name:'furniture_list', component: require('./components/organization/general/furniture/furniture_list.vue').default },
                 ]    
-            },  
+            }, 
+            { path: '/projections', 
+                component: require('./components/organization/centers_feeders/projections/projections.vue').default ,
+                
+                children: [
+                  { path: '',name:'projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
+                  { path: '/add_projections', name:'add_projections', component: require('./components/organization/centers_feeders/projections/add_projections.vue').default },
+                  { path: '/edit_projections', name:'edit_projections', component: require('./components/organization/centers_feeders/projections/edit_projections.vue').default },
+                  { path: '/list_projections', name:'list_projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
+                ] 
+              },
             // { path: '/locations', name:'locations', 
             //     component: require('./components/organization/general/locations.vue').default,
             //     children: 
@@ -927,15 +937,7 @@ const routes = [
           ] 
         },
         
-        { path: '/projections', 
-          component: require('./components/organization/general/projections/projections.vue').default ,
-          children: [
-            { path: '',name:'projections', component: require('./components/organization/general/projections/list_projections.vue').default },
-            { path: '/add_projections', name:'add_projections', component: require('./components/organization/general/projections/add_projections.vue').default },
-            { path: '/edit_projections', name:'edit_projections', component: require('./components/organization/general/projections/edit_projections.vue').default },
-            { path: '/list_projections', name:'list_projections', component: require('./components/organization/general/projections/list_projections.vue').default },
-          ] 
-        },
+        
         { path: '/location_details', 
           component: require('./components/organization/general/location_details/location_details.vue').default ,
           children: [
