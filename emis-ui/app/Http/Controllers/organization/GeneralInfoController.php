@@ -51,13 +51,13 @@ class GeneralInfoController extends Controller
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipmentAndFurniture', $loc);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadEquipment($orgId=""){
@@ -93,7 +93,7 @@ class GeneralInfoController extends Controller
         return $type;
     }
     public function getFurnitureItem($itemId=""){
-     //   dd('m here');
+     //  dd('m here');
         $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
         return $itemList;
     }
@@ -170,13 +170,13 @@ class GeneralInfoController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivity', $connectivity);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function getRoadTypeDropdown(){
@@ -716,12 +716,12 @@ class GeneralInfoController extends Controller
             'org_id'                        =>  $request['org_id'],
             'accessibleToilet'              =>  $request['accessibleToilet'],
             'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
-            
+
             'adjustmentsAccomodatte'        =>  $request['adjustmentsAccomodatte'],
             'outdoorPlayground'             =>  $request['outdoorPlayground'],
             'outdoorRoutes'                 =>  $request['outdoorRoutes'],
             'newConstruction'               =>  $request['newConstruction'],
-            
+
             'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
             'diningHall'                    =>  $request['diningHall'],
             'hostelWash'                    =>  $request['hostelWash'],
@@ -734,7 +734,7 @@ class GeneralInfoController extends Controller
 
             'senProgram'                    =>  $request['senProgram'],
             'studentDisabilities'           =>  $request['studentDisabilities'],
-            
+
             'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
             'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
             'supportDisabilitycommunity'    =>  $request['supportDisabilitycommunity'],

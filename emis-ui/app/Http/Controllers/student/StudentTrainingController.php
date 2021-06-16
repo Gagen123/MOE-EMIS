@@ -85,6 +85,7 @@ class StudentTrainingController extends Controller
             'form_type'   =>$request->form_type,
             'training_id' => $request->training_id,
             'student_id'  => $request->student_id,
+            'participant' => $request->participant,
             'remarks'     => $request->remarks,
             'user_id'     => $this->userId(),
             'org_id'      => $this->getWrkingAgencyId() 

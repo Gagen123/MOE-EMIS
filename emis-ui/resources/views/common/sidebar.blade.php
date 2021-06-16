@@ -414,6 +414,15 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="management_body" onclick="setclass('organizationlink','','management_body')">
+                    <!-- <li class="nav-item" id="track_application"> -->
+                        <router-link to="/management_body" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Management Body
+                            </p>
+                        </router-link>
+                    </li>
 
                     <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
                         <router-link to="/general_index" class="nav-link">
@@ -433,6 +442,150 @@
                     </li> -->
                 </ul>
             </li>
+            
+            <!-- ECCD Center -->
+
+            <li class="nav-header"></li>
+            <li class="nav-item has-treeview" id="organization">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fas fa-home"></i>
+                    <p>
+                        ECCD Center
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    @if(session('User_Details')!=null)
+                        @if(session('User_Details')['acess_level']=="Org")
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/view_organization_profile" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    View Org Profile
+                                </router-link>
+                            </li>
+                        @endif
+                        @if(session('User_Details')['acess_level']=="Dzongkhag")
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/view_dzongkhag_profile" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    View Org Profile
+                                </router-link>
+                            </li>
+                        @endif
+                        @if(session('User_Details')['acess_level']=="Ministry")
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/view_department_profile" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    View Org Profile
+                                </router-link>
+                            </li>
+                        @endif
+                    @endif
+
+                    <li class="nav-item" id="organization_list">
+                        <router-link to="/organization_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                View Org List
+                            </p>
+                        </router-link>
+                    </li>
+
+                    <li class="nav-item" id="restructuring">
+                        <router-link to="/mission_vission" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Mission & Vission
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="restructuring">
+                        <router-link to="/basic_details_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Basic Details
+                            </p>
+                        </router-link>
+                    </li>
+                    @if(session('User_Details')!=null)
+                        @if(session('User_Details')['acess_level']=="Org")
+                            @foreach(session('User_Details')['roles'] as $key => $user_role)
+                                @if($user_role->roleName == "ECCD Principal")
+                                    <li class="nav-item has-treeview" >
+                                        <router-link to="/detailed_information_eccd" class="nav-link pt-1 pb-1">
+                                        <i class="fa fa-angle-double-right nav-icon"></i>
+                                            Detailed Information
+                                        </router-link>
+                                    </li>
+                                @else
+                                    <li class="nav-item has-treeview" >
+                                        <router-link to="/detailed_information_school" class="nav-link pt-1 pb-1">
+                                        <i class="fa fa-angle-double-right nav-icon"></i>
+                                            Detailed Information
+                                        </router-link>
+                                    </li>
+                                @endif
+                            @endforeach
+                        @endif
+                    @endif
+
+                    <li class="nav-item" id="restructuring">
+                        <router-link to="/visitors_information" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Organizaiton Visitor
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="restructuring">
+                        <router-link to="/org_class_section" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Class Section
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','org_programs')">
+                        <router-link to="/org_programs" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Programs & Clubs
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/general_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Equipments and Furnitures
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/structural_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Facilities
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="sen_module_index" onclick="setclass('organizationlink','','sen_module_index')">
+                        <router-link to="/sen_module_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                SEN Module
+                            </p>
+                        </router-link>
+                    </li>
+                   
+                   
+                </ul>
+            </li>
+
+
+
+
+
             <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="staff-transaction">
                 <a href="#" class="nav-link pt-1 pb-1">
@@ -597,14 +750,7 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="track_application">
-                        <router-link to="/management_body" class="nav-link">
-                            <p>
-                                <i class="nav-icon fas fa-mail-bulk"></i>
-                                Management Body
-                            </p>
-                        </router-link>
-                    </li>
+                    
                 </ul>
             </li>
 

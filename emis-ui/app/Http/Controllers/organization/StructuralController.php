@@ -122,6 +122,7 @@ class StructuralController extends Controller
             'organizationId'            =>  $this->getWrkingAgencyId(),
             'category'                  =>  $request['category'],
             'subCategory'               =>  $request['subCategory'],
+            'constructionType'          =>  $request['constructionType'],
             'structureNo'               =>  $request['structureNo'],
             'yearOfConstruction'        =>  $request['yearOfConstruction'],
             'plintchArea'               =>  $request['plintchArea'],
@@ -167,7 +168,7 @@ class StructuralController extends Controller
         $dropdown = $this->apiService->listData('emis/organization/infrastructure/getStructureFacilityInDropdown');
         return $dropdown;
     }
-
+ 
     public function getSubFacilityDropdown($facilityId=""){
         $dropdown = $this->apiService->listData('emis/organization/sport/getSubFacilityDropdown/'.$facilityId);
         return $dropdown;

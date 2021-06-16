@@ -7,10 +7,8 @@ use App\Models\Masters\EquipmentUsage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\Masters\EquipmentUse;
-use App\Models\Masters\FurnitureUsage;
+//use App\Models\Masters\EquipmentUsage;
 use Illuminate\Support\Facades\DB;
-
 
 class EquipmentUsageController extends Controller
 {
@@ -33,7 +31,6 @@ class EquipmentUsageController extends Controller
     */
 
     public function loadEquipmentUsage(){
-        //dd('form microservices');
         $strFacility = EquipmentUsage::all();
         return $strFacility;
     }
@@ -46,13 +43,13 @@ class EquipmentUsageController extends Controller
         if( $id != null){
             $equ = [
                 'name'          => $request['equipmentUsageName'],
-                'description'    =>  $request['description'],
+                'description'   =>  $request['description'],
                 'status'        => $request['status'],
                 'updated_by'    =>$request['user_id'],
-                'updated_at'    =>date('Y-m-d h:i:s'),
+                'created_at'    =>date('Y-m-d h:i:s'),
             ];
 
-            $data = EquipmentUse::find($request['id']);
+            $data = EquipmentUsage::find($request['id']);
 
             $messs_det='equipmentUsageName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
@@ -62,53 +59,18 @@ class EquipmentUsageController extends Controller
         }else{
             $equ = [
                 'name'          => $request['equipmentUsageName'],
-                'description'    =>  $request['description'],
+                'description'   =>  $request['description'],
                 'status'        => $request['status'],
                 'created_by'    =>$request['user_id'],
                 'created_at'    =>date('Y-m-d h:i:s'),
             ];
-           // dd( $equ);
-            $equipment= EquipmentUsage::create($equ);
+            try{
+                $equipment= EquipmentUsage::create($equ);
+            }catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+            }
+           
             return $this->successResponse($equipment, Response::HTTP_CREATED);
         }
-    }
-
-    public function saveFurnitureUsage(Request $request){
-
-        $id = $request->id;
-        if( $id != null){
-            $furuseage = [
-                'id'                    => $request['id'],
-                'name'                  => $request['name'],
-                'description'           => $request['description'],
-                'status'                => $request['status'],
-                'updated_by'            =>$request['user_id'],
-                'updated_at'            =>date('Y-m-d h:i:s'),
-            ];
-
-            $data = FurnitureUsage::find($request['id']);
-
-           $messs_det='equipmentUsageName:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-          // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','equipment_usage','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
-
-            $furnitureuseage = FurnitureUsage::where('id', $id)->update($furuseage);
-           // return $this->successResponse($furnitureuseage, Response::HTTP_CREATED);
-        }else{
-            $furuseage = [
-                'name'                  => $request['name'],
-                'description'           => $request['description'],
-                'status'                => $request['status'],
-                'created_by'            =>$request['user_id'],
-                'created_at'            =>date('Y-m-d h:i:s'),
-            ];
-           // dd($furuseage);
-            $furnitureusage= FurnitureUsage::create($furuseage);
-            return $this->successResponse($furnitureusage, Response::HTTP_CREATED);
-        }
-    }
-    public function loadFurnitureUsage(){
-        //dd('form microservices');
-        $strFacility = FurnitureUsage::all();
-        return $strFacility;
     }
 }

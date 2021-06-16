@@ -23,7 +23,6 @@ class Furniture extends Model
         'item', 
         'usable',
         'notusable',
-       
         'created_by',
         'updated_by'
     ];

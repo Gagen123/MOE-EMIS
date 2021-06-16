@@ -190,6 +190,7 @@ export default {
    
     },
     created() {
+        console.log(this.$route.params.data);
         this.student_form.name=this.$route.params.data.Name;
         this.student_form.program=this.$route.params.data.CeaProgrammeId;
         this.student_form.training_type=this.$route.params.data.CeaTrainingId;

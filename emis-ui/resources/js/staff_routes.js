@@ -470,6 +470,7 @@ const routes = [
         component: require('./components/staff/training/inset_index.vue').default,
         children:[
             { path: '/',name:'create_inset', component: require('./components/staff/training/inset_list.vue').default },
+            { path: '/',name:'create_inset', component: require('./components/staff/training/inset_list.vue').default },
             { path: '/programme_index',
                 component: require('./components/staff/training/create_programme/programme_index.vue').default,
                 children:[

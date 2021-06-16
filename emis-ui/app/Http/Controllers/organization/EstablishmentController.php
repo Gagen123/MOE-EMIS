@@ -34,7 +34,6 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
-
         switch($request['establishment_type']){
             case "public_school" : {
                     $this->service_name = "Public School";
@@ -86,6 +85,28 @@ class EstablishmentController extends Controller
         return $response_data;
     }
 
+    public function saveClassStream(Request $request){
+        $rules = [
+            'class'          =>  'required',
+        ];
+        $customMessages = [
+            'class.required'         => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $classStream =[
+            'class'                     =>  $request['class'],
+            'stream'                    =>  $request['stream'],
+            'proposed_establishment'    =>  $request['proposed_establishment'],
+            'application_number'        =>  $request['application_number'],
+
+            'update_type'               =>  $request['update_type'],
+            'action_type'               =>  $request['action_type'],
+            'user_id'                   =>  $this->userId() ,
+        ];
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
+        return $response_data;
+    }
+
     public function saveUploadedFiles(Request $request){
         $application_number = $request->application_number;
         $files = $request->attachments;
@@ -115,51 +136,30 @@ class EstablishmentController extends Controller
             }
         }
 
-        $request_data =[
-            'attachment_details'                =>  $attachment_details,
-            'application_number'                =>  $application_number,
-            'user_id'                           =>  $this->userId()
-        ];
-        // dd( $request_data);
-        $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
-        return $response_data;
-    }
-
-
-    public function saveClassStream(Request $request){
-        // $rules = [
-        //     'class'          =>  'required',
-        // ];
-        // $customMessages = [
-        //     'class.required'         => 'Class is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
         $form_status=$request['status'];
         if($request->submit_type=="reject"){
             $form_status='Rejected';
         }
-        $classStream =[
-            'class'                 =>  $request['class'],
-            'stream'                =>  $request['stream'],
-            'proposed_establishment'    =>  $request['proposed_establishment'],
-            'application_number'    =>  $request['application_number'],
-            'status'                =>  $form_status,
-            'update_type'           =>  $request['update_type'],
-            'action_type'           =>  $request['action_type'],
-            'user_id'               =>  $this->userId() ,
+        $request_data =[
+            'attachment_details'                =>  $attachment_details,
+            'application_number'                =>  $application_number,
+            'status'                            =>  $form_status,
+            'update_type'                       =>  $request['update_type'],
+            'action_type'                       =>  $request['action_type'],
+            'remarks'                           =>  $request->remarks,
+            'user_id'                           =>  $this->userId()
         ];
-        // dd($classStream);
-        $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
-        // dd( $response_data);
-        //get submitter role
+        // dd($request_data);
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
+        // dd($request['action_type']);
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet);
             $screen_id="";
             $status="";
             $app_role="";
-            $service_name=json_decode($response_data)->data->establishment_type;
             foreach($workflowdet as $work){
-                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                if($work->screenName==$request->service_name){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -168,13 +168,12 @@ class EstablishmentController extends Controller
             if($request->submit_type=="reject"){
                 $status='0__submitterRejects';
             }
-
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>$service_name,//service name
+                'service_name'      =>$request->service_name,//service name
                 'name'              =>$request['proposedName'],//service name
-                'application_number'=>json_decode($response_data)->data->application_no,
+                'application_number'=>$application_number,
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
                 'remarks'           =>$request['remarks'],
@@ -187,9 +186,11 @@ class EstablishmentController extends Controller
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
-
         return $response_data;
     }
+
+
+
 
     public function getClass(){
         $classInCheckbox = $this->apiService->listData('emis/organization/establishment/getClass');
@@ -345,13 +346,11 @@ class EstablishmentController extends Controller
 
     public function updateNewEstablishmentApplication(Request $request){
         $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
-        $w_status_screen=[];
         $screen_id="";
-        $service_name=$request->servicename;
+        $service_name='New Establishment of '.$request->servicename;
 
         $files = $request->attachments;
         $filenames = $request->attachmentname;
-        $remarks = $request->remarks;
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'OrganizationVerification';
         if($files!=null && $files!=""){
@@ -376,7 +375,7 @@ class EstablishmentController extends Controller
         }
 
         foreach($work_status as $i=> $work){
-            if($work->Establishment_type==str_replace (' ', '_',strtolower($request->servicename))){
+            if($work->screenName==$service_name){
                 $screen_id=$work->SysSubModuleId;
                 $work_status=$work->Sequence;
             }
@@ -403,6 +402,7 @@ class EstablishmentController extends Controller
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
+            // dd($workflow_data,$request->servicename);
             $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
 
@@ -418,7 +418,7 @@ class EstablishmentController extends Controller
             'attachment_details'           =>  $attachment_details,
             'user_id'                      =>   $this->userId()
         ];
-
+        // dd($estd,$request->actiontype);
         $response_data= $this->apiService->createData('emis/organization/establishment/updateEstablishment', $estd);
         return $response_data;
     }
@@ -787,6 +787,8 @@ class EstablishmentController extends Controller
             'application_number'           =>  $request['application_number'],
             'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'parentSchool'                 =>  $request['parentSchool'],
             'user_id'                      =>  $this->userId()
         ];
 

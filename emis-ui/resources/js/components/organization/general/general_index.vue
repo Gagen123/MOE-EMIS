@@ -11,18 +11,6 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" @click="activatelink('locations')">
-                    <router-link id="locations" to="/locations" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Location
-                    </router-link>
-                </li> -->
-                <!-- <li class="nav-item active pr-1" @click="activatelink('connectivity_details')">
-                    <router-link id="connectivity_details" to="/connectivity_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Connectivity
-                    </router-link>
-                </li> -->
                 <li class="nav-item active pr-1" @click="activatelink('equipment_index')">
                     <router-link id="equipment_index" to="/equipment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
@@ -41,18 +29,6 @@
                         Projections
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" @click="activatelink('section_index')">
-                    <router-link id="section_index" to="/section_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Sections
-                    </router-link>
-                </li>  -->
-                <!-- <li class="nav-item active pr-1" @click="activatelink('org_class_mapping')">
-                    <router-link id="org_class_mapping" to="/org_class_mapping" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class=""></span>
-                        Class Mapping
-                    </router-link>
-                </li> -->
             </ul>
         <router-view></router-view>
         </div>
@@ -69,10 +45,6 @@ export default {
     },
 
     methods:{
-        // activatelink(btnid){
-        //     $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-        //     $('#'+btnid).addClass('btn-primary text-white');
-        // }
         getmenus(sub_mod_id){
             let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
             axios.get(uri)
