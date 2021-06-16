@@ -56,17 +56,17 @@ Route::prefix('masters')->group(function () {
     //new Routes for furniture
     Route::post('/saveFurnitureType', [App\Http\Controllers\AdministrationController::class, 'saveFurnitureType'])->name('saveFurnitureType');
     Route::get('/loadFurnitureType', [App\Http\Controllers\AdministrationController::class, 'loadFurnitureType'])->name('loadFurnitureType');
-    
+
     Route::post('/saveFurnitureItem', [App\Http\Controllers\AdministrationController::class, 'saveFurnitureItem'])->name('saveFurnitureItem');
     Route::get('/loadFurnitureItem', [App\Http\Controllers\AdministrationController::class, 'loadFurnitureItem'])->name('loadFurnitureItem');
     Route::get('/getFurnitureTypeDropdown', [App\Http\Controllers\AdministrationController::class, 'getFurnitureTypeDropdown'])->name('getFurnitureTypeDropdown');
-    
+
     Route::post('/saveFurnitureUsage', [App\Http\Controllers\AdministrationController::class, 'saveFurnitureUsage'])->name('saveFurnitureUsage');
     Route::get('/loadFurnitureUsage', [App\Http\Controllers\AdministrationController::class, 'loadFurnitureUsage'])->name('loadFurnitureUsage');
-    
+
     Route::get('/loadEquipmentUsage', [App\Http\Controllers\AdministrationController::class, 'loadEquipmentUsage'])->name('loadEquipmentUsage');
     Route::post('/saveEquipmentUsage', [App\Http\Controllers\AdministrationController::class, 'saveEquipmentUsage'])->name('saveEquipmentUsage');
-    
+
 
     Route::post('/saveSportFacility', [App\Http\Controllers\AdministrationController::class, 'saveSportFacility'])->name('saveSportFacility');
     Route::get('/loadSportFacility', [App\Http\Controllers\AdministrationController::class, 'loadSportFacility'])->name('loadSportFacility');
@@ -355,7 +355,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
     Route::get('/loadDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'loadDisasterInformation'])->name('loadDisasterInformation');
 });
-Route::prefix('questionAnswers')->group(function () {
+Route::prefix('questionAnswerController')->group(function () {
     Route::post('/saveQuestionaries', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'saveQuestionaries'])->name('saveQuestionaries');
     Route::get('/loadQuestionaries/{type}', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'loadQuestionaries'])->name('loadQuestionaries');
     Route::post('/saveAnswers', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'saveAnswers'])->name('saveAnswers');

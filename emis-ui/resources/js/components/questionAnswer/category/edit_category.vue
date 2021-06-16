@@ -4,18 +4,18 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>Module:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="grant_parent_field" v-model="form.grant_parent_field">
+                        <label>Module:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="module_id" v-model="form.module_id">
                             <option v-for="(item, index) in module_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="grant_parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="module_id"></has-error>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>Serivce:<span class="text-danger">*</span></label> 
-                        <select class="form-control" id="parent_field" v-model="form.parent_field" :class="{ 'is-invalid': form.errors.has('parent_field') }">
+                        <label>Serivce:<span class="text-danger">*</span></label>
+                        <select class="form-control" id="service_id" v-model="form.service_id" :class="{ 'is-invalid': form.errors.has('service_id') }">
                             <option v-for="(item, index) in service_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="service_id"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -25,7 +25,7 @@
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label> 
+                        <label>Code:<span class="text-danger">*</span></label>
                         <input readonly class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
@@ -35,14 +35,14 @@
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -53,8 +53,8 @@ export default {
             form: new form({
                 id: '',
                 name: '',
-                grant_parent_field:'',
-                parent_field:'',
+                module_id:'',
+                service_id:'',
                 code:'',
                 status:'',
                 record_type:'Category',
@@ -68,7 +68,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadmodulelist(uri = 'questionAnswers/loadQuestionaries/all_active_Module'){
+        loadmodulelist(uri = 'questionAnswerController/loadQuestionaries/all_active_Module'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -79,7 +79,7 @@ export default {
             });
         },
         async getservicelist(id){
-            let uri = 'questionAnswers/loadQuestionaries/byparentId_Service_'+id;
+            let uri = 'questionAnswerController/loadQuestionaries/byparentId_Service_'+id;
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -96,7 +96,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/questionAnswers/saveQuestionaries',this.form)
+                this.form.post('/questionAnswerController/saveQuestionaries',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -104,7 +104,7 @@ export default {
                     })
                     this.$router.push('/list_question_category');
                 })
-                .catch((E) => { 
+                .catch((E) => {
                     console.log("Error:"+E)
                 })
             }
@@ -115,14 +115,14 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="grant_parent_field"){
-                this.getservicelist($('#grant_parent_field').val());
-                this.form.grant_parent_field=$('#grant_parent_field').val();
+            if(id=="module_id"){
+                this.getservicelist($('#module_id').val());
+                this.form.module_id=$('#module_id').val();
             }
-            if(id=="parent_field"){
-                this.form.parent_field=$('#parent_field').val();
-            }           
-        } 
+            if(id=="service_id"){
+                this.form.service_id=$('#service_id').val();
+            }
+        }
     },
     created() {
         this.loadmodulelist();
@@ -132,16 +132,16 @@ export default {
         Fire.$on('changeval',(id)=> {
             this.changefunction(id);
         });
-        
+
         this.getservicelist(this.$route.params.data.module.id);
-        this.form.grant_parent_field=this.$route.params.data.module.id;
-        this.form.parent_field=this.$route.params.data.service.id;
+        this.form.module_id=this.$route.params.data.module.id;
+        this.form.service_id=this.$route.params.data.service.id;
         this.form.name=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
         this.form.code=this.$route.params.data.code;
         this.form.id=this.$route.params.data.id;
     },
-    mounted(){ 
+    mounted(){
         this.loadmodulelist();
         $('.select2').select2();
         $('.select2').select2({
@@ -156,6 +156,6 @@ export default {
             this.getgewoglist();
         });
     }
-    
+
 }
 </script>

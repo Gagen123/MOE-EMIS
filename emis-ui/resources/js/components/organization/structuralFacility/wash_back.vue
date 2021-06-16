@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead" role="tablist">
                     <li class="nav-item wash-tabs" @click="shownexttab('wash-tabs')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label> Wash </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label> Wash </label>
                         </a>
                     </li>
                     <li class="nav-item sanitation-tab">
@@ -36,7 +36,7 @@
                                     <td v-if="item.answer_type=='TextArea'">
                                         <textarea class="form-control" v-model="item.answered"></textarea>
                                     </td>
-                                    
+
                                     <td v-if="item.answer_type=='Text'">
                                         <input type="text" v-model="item.answered" class="form-control">
                                     </td>
@@ -93,7 +93,7 @@
                                     <td>No. of USABLE (functional, accessable,private) AQUA PRIVY Toilet pots for Students(Exclusively for Girls)</td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="text" name="name1"  id="name1" class="form-control"> 
+                                            <input type="text" name="name1"  id="name1" class="form-control">
                                         </div>
                                     </td>
                                 </tr>
@@ -101,7 +101,7 @@
                                     <td>No. of USABLE (functional, accessable,private) AQUA PRIVY Toilet pots for Students(Exclusively for Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -109,7 +109,7 @@
                                     <td>No. of USABLE (functional, accessable,private) AQUA PRIVY Toilet pots for Students(Common/for both Girls and Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -117,7 +117,7 @@
                                     <td>No. of USABLE (functional, accessable,private) AQUA PRIVY Toilet pots for Staff(Exclusively for Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -125,16 +125,16 @@
                                     <td>No. of USABLE (functional, accessable,private) AQUA PRIVY Toilet pots for Staff(Exclusively for Male)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
                                 <tr id="record6">
                                     <td>No. of USABLE (functional, accessable,private) AQUA PRIVY Toilet pots for Staff(Common/for both Male and Female)</td>
-                                    
+
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                         </div>
                                     </td>
                                 </tr>
@@ -142,7 +142,7 @@
                                     <td>No. of USABLE (functional, accessable,private) FLUSH/POUR FLUSH Toilet pots for Students(Exclusively for Girls)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -150,7 +150,7 @@
                                     <td>No. of USABLE (functional, accessable,private) FLUSH/POUR FLUSH Toilet pots for Students(Exclusively for Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -158,7 +158,7 @@
                                     <td>No. of USABLE (functional, accessable,private) FLUSH/POUR FLUSH Toilet pots for Students(Common/for both Girls and Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -166,7 +166,7 @@
                                     <td>No. of USABLE (functional, accessable,private) FLUSH/POUR FLUSH Toilet pots for Staff(Exclusively for Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -174,7 +174,7 @@
                                     <td>No. of USABLE (functional, accessable,private) FLUSH/POUR FLUSH Toilet pots for Staff(Exclusively for Male)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -182,7 +182,7 @@
                                     <td>No. of USABLE (functional, accessable,private) FLUSH/POUR FLUSH Toilet pots for Staff(Common/for both Male and Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -190,7 +190,7 @@
                                     <td>No. of USABLE (functional, accessable,private) PIT LATRIname Toilet pots for Students(Exclusively for Girls)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -198,7 +198,7 @@
                                     <td>No. of USABLE (functional, accessable,private) PIT LATRIname Toilet pots for Students(Exclusively for Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -206,7 +206,7 @@
                                     <td>No. of USABLE(functional, accessable,private) PIT LATRIname Toilet pots for Student(Common/for both Boys and Girls)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -214,7 +214,7 @@
                                     <td>No. of USABLE (functional, accessable,private) PIT LATRIname Toilet pots for Staff(Exclusively for Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -222,7 +222,7 @@
                                     <td>No. of USABLE (functional, accessable,private) PIT LATRIname Toilet pots for Staff(Exclusively for Male)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -230,7 +230,7 @@
                                     <td>No. of USABLE(functional, accessable,private) PIT LATRIname Toilet pots for Student(Common/for both Male and Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -238,7 +238,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) AQUA PRIVY Toilet pots for Students(Exclusively for Girls)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -246,7 +246,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) AQUA PRIVY Toilet pots for Students(Exclusively for Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -254,7 +254,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) AQUA PRIVY Toilet pots for Staff(Common/for both Girls and Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -262,7 +262,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) AQUA PRIVY Toilet pots for Staff(Exclusively for Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -270,7 +270,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) AQUA PRIVY Toilet pots for Staff(Exclusively for Male)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -278,7 +278,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private)AQUA PRIVY Toilet pots for Staft(Common/for both Male and Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -286,7 +286,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) FLUSH/POUR FLUSH Toilet pots for Students(Exclusively for Girls)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -294,7 +294,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) FLUSH/POUR FLUSH Toilet pots for Students(Exclusively for Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -302,7 +302,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) FLUSH/POUR FLUSH Toilet pots for Students(Common/for both Girls and Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -310,7 +310,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) FLUSH/POUR FLUSH Toilet pots for Staff(Exclusively for Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -318,7 +318,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) FLUSH/POUR FLUSH Toilet pots for Staff(Exclusively for Male)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -326,7 +326,7 @@
                                     <td>No. of UN-USABLE (non-functional, in-accessable,not-private) FLUSH/POUR FLUSH Toilet pots for Staff(Common/for both Male and Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -334,7 +334,7 @@
                                     <td>No. of UN-USABLE (not-functional, in-accessable,not-private) PIT LATRIname Toilet pots for Students(Exclusively for Girls)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -342,7 +342,7 @@
                                     <td>No. of UN-USABLE (not-functional, in-accessable,not-private) PIT LATRIname Toilet pots for Students (Exclusively for Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -350,7 +350,7 @@
                                     <td>No. of UN-USABLE (not-functional, in-accessable,not-private) PIT LATRIname Toilet pots for Students(Common/for both Girls and Boys)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -358,7 +358,7 @@
                                     <td>No. of UN-USABLE (not-functional, in-accessable,not-private) PIT LATRIname Toilet pots for Staff(Exclusively for Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -366,7 +366,7 @@
                                     <td>No. of UN-USABLE (not-functional, in-accessable,not-private) PIT LATRIname Toilet pots for Staff(Exclusively for Male)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -374,7 +374,7 @@
                                     <td>No. of UN-USABLE (not-functional, in-accessable,not-private) PIT LATRIname Toilet pots for Staff(Common/for both Male and Female)</td>
                                     <td>
                                     <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <input type="text" name="name1"  id="name1" class="form-control"> 
+                                        <input type="text" name="name1"  id="name1" class="form-control">
                                     </div>
                                     </td>
                                 </tr>
@@ -386,7 +386,7 @@
                                             <input type="radio" name="amenities"  value="2"> No
                                         </div>
                                     </td>
-                                    
+
                                 </tr>
                                 <tr id="record38">
                                     <td>Does the School have Washing amenities in toilets that has both water and soap available for Students (Exclusively for Boys)?</td>
@@ -410,7 +410,7 @@
                                     <td>Does the School have Washing amenities in toilets that has both water and soap available for Staff (Exclusively for Female)?</td>
                                     <td>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <input type="radio" name="amenities3"  value="1"> Yes 
+                                            <input type="radio" name="amenities3"  value="1"> Yes
                                             <input type="radio" name="amenities3"  value="2"> No
                                         </div>
                                     </td>
@@ -706,7 +706,7 @@
                                         </div>
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <input type="text" id="" name="" class="form-control">
-                                        </div> 
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr id="record2">
@@ -974,8 +974,8 @@ export default {
                 return this.wash_counter+=1;
             }
         },
-        shownexttab(nextclass){  
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -996,23 +996,23 @@ export default {
             }
             else{
                 this.wash_form.post('organization/structural/saveWashFeeding')
-                .then((response) => { 
+                .then((response) => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved Successfully'
                     });
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     console.log("Error: "+error)
                 });
             }
         },
-        loadQuestionList(uri = 'questionAnswers/loadQuestionaries/withwhere_Wash_Question'){
+        loadQuestionList(uri = 'questionAnswers/loadQuestionaries/washAndOthers_Wash_Question'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 this.wash_form.questionList =  data;
-            }) 
+            })
             .catch(function (error){
                 console.log(error.toString());
             });
@@ -1022,20 +1022,20 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=o;i<data.length;i++){
-                    
+
                 }
-            }) 
+            })
             .catch(function (error){
                 console.log(error.toString());
             });
         },
     },
-  
-    mounted(){ 
+
+    mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
-        }); 
+        });
         this.loadQuestionList();
         this.loadWashDetialsList();
     },

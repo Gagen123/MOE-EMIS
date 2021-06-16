@@ -5,27 +5,27 @@
                 <div class="card-body" style="display:none">
                     <div class="row form-group">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Module:<span class="text-danger">*</span></label> 
-                            <select class="form-control select2" id="grant_parent_field" v-model="form.grant_parent_field">
+                            <label>Module:<span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="module_id" v-model="form.module_id">
                                 <option value=""> --Select--</option>
                                 <option v-for="(item, index) in module_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select> 
-                            <span class="text-danger" id="grant_parent_field_err"></span>
+                            </select>
+                            <span class="text-danger" id="module_id_err"></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Service:<span class="text-danger">*</span></label> 
-                            <select class="form-control select2" id="parent_field" v-model="form.parent_field">
+                            <label>Service:<span class="text-danger">*</span></label>
+                            <select class="form-control select2" id="service_id" v-model="form.service_id">
                                 <option value=""> --Select--</option>
                                 <option v-for="(item, index) in service_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select> 
-                            <span class="text-danger" id="parent_field_err"></span>
+                            </select>
+                            <span class="text-danger" id="service_id_err"></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label>Category:<span class="text-danger">*</span></label>
                             <select class="form-control select2" id="category" v-model="form.category" >
                                 <option value=""> --Select--</option>
                                 <option v-for="(item, index) in category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select> 
+                            </select>
                             <span class="text-danger" id="category_err"></span>
                         </div>
                     </div>
@@ -35,7 +35,7 @@
                             <select class="form-control select2" :id="'question_field'" v-model="form.question" name="question">
                                 <option value=""> --Select--</option>
                                 <option v-for="(item, index) in question_list" :key="index" v-bind:value="item.id+'_'+item.answer_type">{{ item.name }}</option>
-                            </select> 
+                            </select>
                             <span class="text-danger" id="question_err"></span>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-2">
@@ -54,13 +54,13 @@
                 </div>
             </div>
             <table id="working-agency-table" class="table table-bordered text-sm table-striped">
-                <thead> 
+                <thead>
                     <tr>
                         <th >SL#</th>
                         <th >Answer</th>
                         <th >Status</th>
                         <th >Created Date</th>
-                        <th >Action</th> 
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
@@ -77,7 +77,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -91,8 +91,8 @@ export default {
             answerList:[],
             dt:'',
             form: new form({
-                grant_parent_field:'',
-                parent_field:'',
+                module_id:'',
+                service_id:'',
                 category:'',
                 question:'',
                 name: '',
@@ -103,8 +103,8 @@ export default {
             })
         }
     },
-    methods:{ 
-        loadModuleList(uri = 'questionAnswers/loadQuestionaries/all_active_Module'){
+    methods:{
+        loadModuleList(uri = 'questionAnswerController/loadQuestionaries/all_active_Module'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -116,14 +116,14 @@ export default {
         },
         validate(){
             let retval=true;
-            if($('#grant_parent_field').val()==""){
-                $('#grant_parent_field_err').html('Please select this field');
-                 $('#grant_parent_field').removeClass('is-invalid');
+            if($('#module_id').val()==""){
+                $('#module_id_err').html('Please select this field');
+                 $('#module_id').removeClass('is-invalid');
                 retval=false;
             }
-            if($('#parent_field').val()==""){
-                $('#parent_field_err').html('Please select this field');
-                $('#parent_field').removeClass('is-invalid');
+            if($('#service_id').val()==""){
+                $('#service_id_err').html('Please select this field');
+                $('#service_id').removeClass('is-invalid');
                 retval=false;
             }
             if($('#question_field').val()==""){
@@ -138,11 +138,11 @@ export default {
             }
             return retval;
         },
-        getanswers(uri = 'questionAnswers/loadQuestionaries/byparentId_Answer_'+this.form.question.split('_')[0]){
+        getanswers(uri = 'questionAnswerController/loadQuestionaries/byparentId_Answer_'+this.form.question.split('_')[0]){
             if(this.validate()){
                 $('#anstype').html(this.form.question.split('_')[1]);
                 axios.get(uri)
-                .then(response => { 
+                .then(response => {
                     let data = response;
                     this.answerList=data.data.data;
                 })
@@ -150,10 +150,41 @@ export default {
                     console.log('error:' +error);
                 });
             }
-           
+
         },
-        async getdropdowns(id,type){
-            let uri = 'questionAnswers/loadQuestionaries/actlistbyparent_'+type+'_'+id;
+        async getdropdowns(id,type,identification){
+            // let uri = 'questionAnswerController/loadQuestionaries/getquestionList_'+type+'_'+id;
+            // axios.get(uri)
+            // .then(response =>{
+            //     let data = response;
+            //     if(type=="Service"){
+            //         this.service_list = data.data.data;
+            //     }
+            //     if(type=="Category"){
+            //         this.category_list = data.data.data;
+            //     }
+            //     if(type=="Question"){
+            //         this.question_list = data.data.data;
+            //     }
+            // })
+            // .catch(function (error){
+            //     console.log("Error:"+error)
+            // });
+            let uri = 'questionAnswerController/loadQuestionaries/actlistbyparent_'+type+'_'+id;
+            if(type=="Service"){
+                this.service_list=[];
+            }
+            if(type=="Category"){
+                this.category_list=[];
+            }
+            if(type=="CategoryType"){
+                this.category_type_list=[];
+            }
+            if(type=="Question"){
+                this.list_of_question=[];
+                // id=this.form.service_id+"SSS"+id+"SSS"+identification;
+                uri = 'questionAnswerController/loadQuestionaries/getquestionList_'+identification+'_'+id;
+            }
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -162,6 +193,9 @@ export default {
                 }
                 if(type=="Category"){
                     this.category_list = data.data.data;
+                }
+                if(type=="CategoryType"){
+                    this.category_type_list=data.data.data;
                 }
                 if(type=="Question"){
                     this.question_list = data.data.data;
@@ -185,7 +219,7 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                     this.form.delete('/questionAnswers/deleteAns/'+record_id)
+                     this.form.delete('/questionAnswerController/deleteAns/'+record_id)
                     .then(() => {
                         Swal.fire(
                             'Success!',
@@ -206,33 +240,39 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="grant_parent_field"){
-                this.getdropdowns($('#grant_parent_field').val(),'Service');
-                this.form.grant_parent_field=$('#grant_parent_field').val();
+            if(id=="module_id"){
+                this.form.module_id=$('#module_id').val();
+                this.getdropdowns($('#module_id').val(),'Service','');
+                this.getdropdowns($('#module_id').val(),'CategoryType','');
             }
-            if(id=="parent_field"){
-                this.getdropdowns($('#parent_field').val(),'Category');
-                this.form.parent_field=$('#parent_field').val();
-            } 
+            if(id=="service_id"){
+                this.form.service_id=$('#service_id').val();
+                this.getdropdowns($('#service_id').val(),'Category','');
+            }
             if(id=="category"){
-                this.question_list=[];
-                this.getdropdowns($('#category').val(),'Question');
+                this.list_of_question=[];
                 this.form.category=$('#category').val();
-            }  
+                this.getdropdowns($('#category').val(),'Question','category');
+            }
+            if(id=="category_type"){
+                this.list_of_question=[];
+                this.form.category_type=$('#category_type').val();
+                this.getdropdowns($('#category_type').val(),'Question','categoryType');
+            }
             if(id=="question_field"){
                 this.form.question=$('#question_field').val();
-            }  
+            }
         }
     },
     created(){
         this.loadModuleList();
     },
-    mounted(){ 
+    mounted(){
         $('#adv_serach_ection').show();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
-        }); 
+        });
         $('.select2').on('select2:select', function (){
             Fire.$emit('changeval',$(this).attr('id'))
         });

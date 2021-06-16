@@ -43,7 +43,7 @@ export default {
         }
     },
     methods: {
-        getSelectionList(uri = 'questionAnswers/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -56,7 +56,7 @@ export default {
             });
         },
         loadFeedbackQuestion(question_category_type_id,question_service_id){
-            axios.get('questionAnswers/loadQuestionaries/getleadership_'+question_service_id+'_'+question_category_type_id)
+            axios.get('questionAnswerController/loadQuestionaries/getleadership_'+question_service_id+'_'+question_category_type_id)
             .then(response => {
                 let data = response;
             })
@@ -64,7 +64,7 @@ export default {
                 console.log('err: '+error);
             });
         },
-        getFeedbackTypeList(uri = 'questionAnswers/loadQuestionaries/loadcategoryType_Leadership_CategoryType'){
+        getFeedbackTypeList(uri = 'questionAnswerController/loadQuestionaries/loadcategoryType_Leadership_CategoryType'){
             axios.get(uri)
             .then(response => {
                 let data = response;

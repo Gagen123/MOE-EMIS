@@ -4,21 +4,30 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Module:<span class="text-danger">*</span></label> 
-                        <select class="form-control" id="parent_field" v-model="form.parent_field" :class="{ 'is-invalid': form.errors.has('parent_field') }">
+                        <label>Module:<span class="text-danger">*</span></label>
+                        <select class="form-control" id="module_id" v-model="form.module_id" :class="{ 'is-invalid': form.errors.has('module_id') }">
                             <option v-for="(item, index) in module_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="module_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Service:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Type:<span class="text-danger">*</span></label>
+                        <select class="form-control" id="service_type" v-model="form.service_type" :class="{ 'is-invalid': form.errors.has('service_type') }">
+                            <option value="">--Select--</option>
+                            <option value="Leadership">Leadership Selection</option>
+                            <option value="Others">Others</option>
+                        </select>
+                        <has-error :form="form" field="service_type"></has-error>
+                    </div>
                 </div>
                 <div class="row form-group">
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label> 
+                        <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" readonly v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
@@ -28,14 +37,14 @@
                         <label><input v-model="form.status" type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -45,7 +54,8 @@ export default {
             form: new form({
                 id: '',
                 name: '',
-                parent_field:'',
+                module_id:'',
+                service_type:'',
                 code:'',
                 status:'',
                 record_type:'Service',
@@ -59,7 +69,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadModuleList(uri = 'questionAnswers/loadQuestionaries/all_active_Module'){ 
+        loadModuleList(uri = 'questionAnswerController/loadQuestionaries/all_active_Module'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -76,7 +86,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/questionAnswers/saveQuestionaries',this.form)
+                this.form.post('/questionAnswerController/saveQuestionaries',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -84,21 +94,22 @@ export default {
                     })
                     this.$router.push('/list_service');
                 })
-                .catch((er) => { 
+                .catch((er) => {
                     console.log("Error:"+er)
                 })
             }
-		}, 
+		},
     },
     created() {
         this.loadModuleList();
         this.form.name=this.$route.params.data.name;
-        this.form.parent_field=this.$route.params.data.module.id;
+        this.form.module_id=this.$route.params.data.module.id;
         this.form.status=this.$route.params.data.status;
         this.form.code=this.$route.params.data.code;
+        this.form.service_type=this.$route.params.data.type;
         this.form.id=this.$route.params.data.id;
-        $('#parent_field').val('this.$route.params.data.majorgroup.id');
+        $('#module_id').val('this.$route.params.data.majorgroup.id');
     },
-    
+
 }
 </script>

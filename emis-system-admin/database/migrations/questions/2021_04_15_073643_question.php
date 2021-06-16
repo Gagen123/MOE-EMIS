@@ -8,6 +8,7 @@ class Question extends Migration{
     public function up(){
         Schema::create('question_details', function (Blueprint $table) {
             $table->char('id',36);
+            $table->char('module_id',36)->nullable(false);
             $table->char('service_id',36)->nullable(false);
             $table->char('category_id',36)->nullable();
             $table->char('category_type_id',36)->nullable();

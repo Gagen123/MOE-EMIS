@@ -28,35 +28,35 @@
                 </table>
             </div>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             selectionList:{},
             positionarray:{},
             data_list:[],
-            
-        } 
+
+        }
     },
     methods: {
         loadDataList(org_id){
             axios.get('/staff/staffLeadershipSerivcesController/loadAllLeadershipSelection')
-            .then((response) =>{  
+            .then((response) =>{
                 let data=response.data.data;
                 this.data_list=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error: "+error);
             });
         },
-        getSelectionList(uri = 'questionAnswers/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.selectionList[data[i].id] = data[i].name; 
+                    this.selectionList[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error){
@@ -68,14 +68,14 @@ export default {
             .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.positionarray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.positionarray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
                 console.log(error);
             });
         },
-        loadeditpage(itme){ 
+        loadeditpage(itme){
             this.$router.push({name:"edit_leadership_nomination",params:{data:itme.id}});
         },
     },
@@ -88,14 +88,14 @@ export default {
         this.loadPositionTitleList();
         this.loadDataList();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
 
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.dt =  $("#nominaiton-table").DataTable();
-        
+
     },
     watch: {
         data_list(val) {
