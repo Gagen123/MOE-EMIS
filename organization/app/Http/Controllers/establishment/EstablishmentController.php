@@ -962,12 +962,12 @@ class EstablishmentController extends Controller{
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
         $org_data =[
             'id'                        =>  $org_det->id,
-            // 'isAspNetSchool'            =>  $org_det->isAspNetSchool,
-            // 'isColocated'               =>  $org_det->isColocated,
+            'isAspNetSchool'            =>  $org_det->isAspNetSchool,
+            'isColocated'               =>  $org_det->isColocated,
             'isGeoPoliticallyLocated'   =>  $org_det->isGeoPoliticallyLocated,
             'hasCounselingRoom'         =>  $org_det->hasCounselingRoom,
             'hasShiftSystem'            =>  $org_det->hasShiftSystem,
-            // 'hasCE'                     =>  $org_det->hasCE,
+            'hasCE'                     =>  $org_det->hasCE,
             'mofCode'                   =>  $org_det->mofCode,
             'zestAgencyCode'            =>  $org_det->zestAgencyCode,
             'recorded_on'               =>  date('Y-m-d h:i:s'),
@@ -982,6 +982,7 @@ class EstablishmentController extends Controller{
             'isColocated'               =>  $request['isColocated'],
             'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
             'hasCounselingRoom'         =>  $request['hasCounselingRoom'],
+            'isResourceCenter'         =>  $request['isResourceCenter'],
             'hasShiftSystem'            =>  $request['hasShiftSystem'],
             'hasCE'                     =>  $request['hasCE'],
             'mofCode'                   =>  $request['mofCode'],
@@ -1002,7 +1003,7 @@ class EstablishmentController extends Controller{
         $location = [
             'organizationId'        =>  $request->org_id,
             'landOwnership'         =>  $request['landOwnership'],
-            //'compoundFencing'       =>  $request['compoundFencing'],
+            'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
             'longitude'             =>  $request['longitude'],
             'latitude'              =>  $request['latitude'],
@@ -1010,12 +1011,12 @@ class EstablishmentController extends Controller{
             //'thramNo'               =>  $request['thramNo'],
             // 'cid'                   =>  $request['cid'],
             // 'name'                  =>  $request['name'],
-            // 'compoundArea'          =>  $request['compoundArea'],
+            'compoundArea'          =>  $request['compoundArea'],
             'googleMapPath'         =>  $request['map_path'],
-            // 'climate_type'          =>  $request['climate_type'],
-            //'disasterArea'          =>  implode($request['disasterArea'],', '),
-            'distanceFromDzongkhag'     =>  $request['distance_from_dzo'],
-            //'fencingtypeId'           =>  $request['fencingtype'],
+            'climate_type'          =>  $request['climate_type'],
+            'disasterArea'          =>  implode(',',$request['disasterArea']),
+            'distance_from_dzo' =>  $request['distance_from_dzo'],
+            'fencingtypeId'         =>  $request['fencingtype'],
         ];
 
         $loc = Locations::where('organizationId', $request->org_id)->first();

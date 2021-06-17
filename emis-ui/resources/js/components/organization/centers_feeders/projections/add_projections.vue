@@ -23,7 +23,7 @@
                            <tbody>
                               <tr v-for='(item, index) in form.items_received' :key="index">
                                   <td>
-                                        <select name="class" id="class" class="form-control editable_fields"  v-model="item.class " :class="{ 'is-invalid': form.errors.has('class') }" @change="remove_err('class'), showfield('class')">
+                                        <select name="class" class="form-control editable_fields"  v-model="item.class " :class="{ 'is-invalid': form.errors.has('class') }" @change="remove_err('class')">
                                             <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
                                         </select>
                                   </td>
@@ -127,7 +127,7 @@ export default {
             }
         },
 
-          loadClassList(uri="loadCommons/getOrgClassStream"){
+        loadClassList(uri="loadCommons/getOrgClassStream"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -138,27 +138,6 @@ export default {
             });
         },
 
-          showfield:function(type){
-            let selecttype = $("#"+type+" option:selected").text();
-                if(selecttype =="standard"){
-                    $('#sizeAndarea').hide();
-                    $('#sizeAndarea1').hide();
-                    
-                
-                }
-
-            else if(selecttype =="non standard"){ 
-                    $('#sizeAndarea').show();
-                    $('#sizeAndarea1').show();
-
-                }
-                else{
-                    $('#sizeAndarea').hide();
-                    $('#sizeAndarea1').hide();
-
-                }
-
-        },
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');

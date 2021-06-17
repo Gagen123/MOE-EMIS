@@ -46,7 +46,7 @@ class ProjectionsController extends Controller
                         'organizationId'                        =>  $organizationId,
                         'academicYear'                          =>  $request['academicYear'],
                         'ProjectionNo'                          =>  $item['ProjectionNo'],
-                        // 'class'                                 =>  $item['class'],
+                        'class'                                 =>  $item['class'],
                         'remarks'                               =>  $item['remarks'],
                         'updated_by'                            =>  $request->user_id,
                         'created_at'                            =>  date('Y-m-d h:i:s')
