@@ -264,7 +264,7 @@ export default {
             });
         },
 
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -417,7 +417,7 @@ export default {
         //     console.log(errors)
         // });
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     },
 
 }

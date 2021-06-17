@@ -150,7 +150,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change to Boadring details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change to Boadring details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'boarding_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -297,7 +297,7 @@ export default {
                 }
             });
         },
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -329,7 +329,7 @@ export default {
         });
 
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     }
 }
 </script>

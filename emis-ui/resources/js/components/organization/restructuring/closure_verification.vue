@@ -510,7 +510,7 @@ export default {
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',

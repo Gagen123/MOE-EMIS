@@ -470,12 +470,12 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="Application for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
                     Swal.fire({
@@ -558,8 +558,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.application_number=response.data.data.applicaiton_details.application_no;
-                            this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
+                            this.file_form.application_number=response.data.data.Application_details.application_no;
+                            this.classStreamForm.application_number=response.data.data.Application_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }

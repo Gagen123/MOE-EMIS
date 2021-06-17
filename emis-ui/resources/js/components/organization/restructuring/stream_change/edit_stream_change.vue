@@ -187,7 +187,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Your changes in the applicaiton for Change basic details has been updated.  <br><b>Thank You !</b>";
+                                    let message="Your changes in the Application for Change basic details has been updated.  <br><b>Thank You !</b>";
                                     this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -228,7 +228,7 @@ export default {
             }
 
         },
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -380,7 +380,7 @@ export default {
         });
 
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     }
 }
 </script>

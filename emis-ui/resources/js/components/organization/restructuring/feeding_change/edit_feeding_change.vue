@@ -175,7 +175,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Feeding details has been updated and send for approval. <br><b>Thank You !</b>";
+                                    let message="Application for Feeding details has been updated and send for approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'feeding_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -253,7 +253,7 @@ export default {
             }
         },
 
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -286,7 +286,7 @@ export default {
         });
         this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     }
 }
 </script>

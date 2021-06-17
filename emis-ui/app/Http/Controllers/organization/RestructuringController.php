@@ -36,9 +36,8 @@ class RestructuringController extends Controller
         //File Upload
         $files = $request->attachments;
         $filenames = $request->attachmentname;
-        $remarks = $request->remarks;
         $attachment_details=[];
-        $file_store_path=config('services.constant.file_stored_base_path').'Change Application';
+        $file_store_path=config('services.constant.file_stored_base_path').$request['application_type'];
         if($files!=null && $files!=""){
             if(sizeof($files)>0 && !is_dir($file_store_path)){
                 mkdir($file_store_path,0777,TRUE);
@@ -77,6 +76,11 @@ class RestructuringController extends Controller
                     $establishment_data = $this->setChangeInLevel($request);
                     break;
                 }
+            case "upgradation" : {
+                $validation = $this->validateChangeInLevel($request);
+                $establishment_data = $this->setChangeInLevel($request);
+                break;
+            }
             case "proprietor_change" : {
                     $validation = $this->validateChangeInProprietor($request);
                     $establishment_data = $this->setChangeInProprietor($request);
@@ -127,11 +131,13 @@ class RestructuringController extends Controller
                 break;
             }
         }
-        // $rules = $validation['rules'];
-        // $customMessages = $validation['messages'];
+        $rules = $validation['rules'];
+        $customMessages = $validation['messages'];
 
-        // $this->validate($request, $rules, $customMessages);
-
+        $this->validate($request, $rules, $customMessages);
+        $establishment_data=$establishment_data+[
+            'attachment_details'            =>   $attachment_details,
+        ];
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet,$request->application_for);
         $screen_id="";
@@ -149,14 +155,10 @@ class RestructuringController extends Controller
         if($screen_id==null || $screen_id==""){
             return 'No Screen';
         }
-        // $establishment_data['action_type'] = "add";
         // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
-        // return $response_data; 
-        // dd($response_data);
-    //    dd($request->action_type);
+        // dd($response_data,$workflowdet,$request->application_for);
         if($request->action_type!="edit"){
-            $service_name=json_decode($response_data)->data->establishment_type;
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
@@ -177,6 +179,20 @@ class RestructuringController extends Controller
         }
         return $response_data;
         // return $response_data;
+    }
+    public function deleteFile($full_path="",$id=""){
+        $full_path=str_replace('SSS','/',$full_path);
+        $headers = ['Content-Type: application/pdf'];
+        $file_name = explode('/',$full_path);
+        $finel_name = end($file_name);
+        // dd($full_path);
+        // $response_data = $this->apiService->deleteData("emis/organization/changeDetails/deleteFile", $id);
+        $response_data="";
+        if (file_exists($full_path)){
+            unlink($full_path);
+            $response_data = $this->apiService->deleteData("emis/organization/changeDetails/deleteFile", $id);
+        }
+        return $response_data;
     }
 
     public function getChangeBasicDetails($appId=""){
@@ -491,7 +507,7 @@ class RestructuringController extends Controller
 
     public function updateMergerApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -543,9 +559,9 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
@@ -692,7 +708,7 @@ class RestructuringController extends Controller
 
     public function updateClosureApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -744,9 +760,9 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
@@ -758,7 +774,7 @@ class RestructuringController extends Controller
         return $work_response_data;
 
         //Ugyen's old route
-        
+
         // // dd($closure);
         // $response_data= $this->apiService->createData('emis/organization/closure/updateClosure', $closure);
         // return $work_response_data;
@@ -893,7 +909,7 @@ class RestructuringController extends Controller
 
     public function updateBifurcationApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -945,9 +961,9 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
@@ -1096,7 +1112,7 @@ class RestructuringController extends Controller
 
     public function updateReopeningApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -1148,15 +1164,15 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
             'remarks'                      =>   $request->remarks,
             'attachment_details'           =>   $attachment_details,
-            'user_id'                      =>   $this->userId() 
+            'user_id'                      =>   $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/reopening/updateReopeningDetails', $estd);
         // dd($response_data);

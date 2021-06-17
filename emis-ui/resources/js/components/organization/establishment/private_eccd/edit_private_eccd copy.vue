@@ -623,7 +623,7 @@ export default {
                 console.log(errors)
             });
         },
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
                 let data = response.data.data;
@@ -693,7 +693,7 @@ export default {
         this.getLocation();
         this.getOrgList();
         this.record_id=this.$route.params.id;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     },
 }
 </script>

@@ -853,7 +853,7 @@ export default {
                 }
                 else if(data!=null &&  data.name!="" && data.status=="Pending"){
                     Swal.fire({
-                        html: "This person has already initaited the applicaiton process. You may check with other responsible person to complete his/her registration",
+                        html: "This person has already initaited the Application process. You may check with other responsible person to complete his/her registration",
                         icon: 'error'
                     });
                     this.personal_form.name = " ";

@@ -429,12 +429,12 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="Application for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
                     Swal.fire({
@@ -538,8 +538,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.application_number=response.data.data.applicaiton_details.application_no;
-                            this.classForm.application_number=response.data.data.applicaiton_details.application_no;
+                            this.file_form.application_number=response.data.data.Application_details.application_no;
+                            this.classForm.application_number=response.data.data.Application_details.application_no;
                             this.change_tab(nextclass);
                         }
                     })
@@ -692,7 +692,7 @@ export default {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
+        //             $('#ApplicationUnderProcess').show();
         //             $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })

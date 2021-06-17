@@ -144,7 +144,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change in Fee details has been edited and submitted for approval. <br><b>Thank You !</b>";
+                                    let message="Application for Change in Fee details has been edited and submitted for approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'fee_structure_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -292,7 +292,7 @@ export default {
                 }
             });
         },
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -323,7 +323,7 @@ export default {
             this.changefunction(id);
         });
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
 
     }
 }

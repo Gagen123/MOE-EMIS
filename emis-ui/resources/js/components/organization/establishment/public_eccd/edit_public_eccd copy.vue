@@ -543,7 +543,7 @@ export default {
             });
         },
 
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
                 let data = response.data.data;
@@ -626,7 +626,7 @@ export default {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
+        //             $('#ApplicationUnderProcess').show();
         //             $('#existmessage').html('You have already submitted application for new establishment <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
@@ -661,7 +661,7 @@ export default {
         this.getLocation();
         this.getOrgList();
         this.record_id=this.$route.params.id;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     },
 }
 </script>

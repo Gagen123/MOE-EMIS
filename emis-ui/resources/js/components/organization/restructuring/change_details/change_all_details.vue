@@ -374,7 +374,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'restr_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -446,7 +446,7 @@ export default {
                 let data = response.data.data.acess_level;
                 if(data != "Org"){
                     $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
+                    $('#ApplicationUnderProcess').show();
                     $('#existmessage').html('You have no access to this page.');
                 }
 
@@ -462,7 +462,7 @@ export default {
                 let data=response.data;
                 if(data!=""){
                     $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
+                    $('#ApplicationUnderProcess').show();
                     $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
                 }
             })

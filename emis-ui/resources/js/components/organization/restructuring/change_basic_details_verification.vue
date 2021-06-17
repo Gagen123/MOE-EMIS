@@ -71,10 +71,10 @@
                                                 </td>
                                                 <td class="strm_clas" v-else> </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true">
+                                                    <input type="checkbox" checked="true" disabled>
                                                 </td>
                                                 <td v-else>
-                                                    <input type="checkbox" checked="true">
+                                                    <input type="checkbox" checked="true" disabled>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -352,12 +352,13 @@
                                 </div>
                             </div>
                          </div>
-                        <div class="row form-group" v-if="appicationDetails.establishment_type=='Change in Name' || appicationDetails.establishment_type=='Upgrade Downgrade'">
+                        <!-- <div class="row form-group" v-if="appicationDetails.establishment_type=='Change in Name' || appicationDetails.establishment_type=='Upgrade Downgrade'">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Effective Date:</label>
                                 <input type="date" class="form-control" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
                                 <span class="text-danger" id="effective_date_err"></span>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
@@ -617,7 +618,7 @@ export default {
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
