@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Name of Organization</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change Name of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -16,11 +16,11 @@
                         <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <div class="callout callout-success">
                                 <h4><u>Application Details</u></h4>
-                                <div class="form-group row"> 
+                                <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Application Number:</label>
                                         <span class="text-blue text-bold">{{applicationdetails.application_no}}</span>
-                                    </div> 
+                                    </div>
                                     <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Submitted Date:</label>
                                         <span class="text-blue text-bold">{{applicationdetails.created_at}}</span>
@@ -28,7 +28,7 @@
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Service Name:</label>
                                         <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                             <div class="callout callout-success">
@@ -60,7 +60,7 @@
                                             {{dzongkhagArray[organization_details.dzongkhagId]}}
                                         </span>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Gewog:</label>
                                        <span class="text-blue text-bold" id="gewogid"></span>
                                     </div>
@@ -85,8 +85,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Classes</th>
-                                                    <th class="strm_clas">Stream</th>  
-                                                    <th></th>                     
+                                                    <th class="strm_clas">Stream</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -94,17 +94,17 @@
                                                     <td>
                                                         <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                                     </td>
-                                                    <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                    <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
                                                         {{  streamArray[item.streamId]  }}
                                                     </td>
                                                     <td class="strm_clas" v-else> </td>
-                                                    <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                    <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                         <input type="checkbox" checked="true">
                                                     </td>
-                                                    <td v-else>  
-                                                        <input type="checkbox" checked="true">                           
+                                                    <td v-else>
+                                                        <input type="checkbox" checked="true">
                                                     </td>
-                                                </tr> 
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -140,7 +140,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -164,10 +164,10 @@ export default {
             classList:[],
             streamList:[],
             form: new form({
-                id:'',organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change', 
+                id:'',organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change',
                 application_for:'Change in Name', action_type:'eidt', status:'Submitted',organization_type:'',
             }),
-        } 
+        }
     },
     methods: {
         remove_error(field_id){
@@ -175,14 +175,14 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 for(let i=0;i<response.data.data.length;i++){
-                    this.orgList[response.data.data[i].id] = response.data.data[i].name; 
+                    this.orgList[response.data.data[i].id] = response.data.data[i].name;
                 }
             });
         },
@@ -198,11 +198,11 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();  
+                this.form.organizationId=$('#organizationId').val();
             }
-            
+
         },
-        loadApplicaitonDetials(){ 
+        loadapplicaitonDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -225,24 +225,24 @@ export default {
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
             });
         },
-        
+
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
-        
+
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -256,7 +256,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name; 
+                    this.gewogArray[data[i].id] = data[i].name;
                 }
                 $('#gewogid').html(this.gewogArray[gewogId]);
             });
@@ -268,7 +268,7 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name; 
+                    this.villageArray[data[i].id] = data[i].name;
                 }
                 $('#vilageId').html(this.villageArray[vil_id])
             })
@@ -281,7 +281,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -290,7 +290,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -299,7 +299,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].stream; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
@@ -330,10 +330,10 @@ export default {
                 console.log('error: '+error);
             });
         },
-        
+
     },
-    
-    mounted() { 
+
+    mounted() {
         this.loadactivedzongkhagList();
         this.loadproposedBy();
         this.getOrgList();
@@ -347,15 +347,15 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
 
         this.record_id=this.$route.params.data.application_no;
-        this.loadApplicaitonDetials();
+        this.loadapplicaitonDetials();
     }
 }
 </script>

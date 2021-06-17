@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Masters;
 
 use App\Http\Controllers\Controller;
+use App\Models\AdmissionValidationModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,7 @@ use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\CeaProgram;
+use App\Models\Masters\CeaRole;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
@@ -62,6 +64,7 @@ class StudentMasterController extends Controller
 
 
         } else if($request->actiontype=="edit"){
+           
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
 
@@ -69,50 +72,97 @@ class StudentMasterController extends Controller
 
     }
 
+    public function saveValidationcondition(Request $request){
+        $rules = [
+            'date'          =>  'required',
+            'date1'         =>  'required',
+            'status'        =>  'required',
+            'no_months'     =>  'required',
+            'no_months1'    =>  'required',
+        ];
+        $customMessages = [
+            'date.required' => 'This field is required',
+            'date1.required' => 'This field is required',
+            'status.required' => 'This field is required',
+            'no_months.required' => 'This field is required',
+            'no_months1.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'date'                      =>  $request->date,
+            'date1'                     =>  $request->date1,
+            'status'                    =>  $request->status,
+            'no_months'                 =>  $request->no_months,
+            'no_months1'                =>  $request->no_months1,
+        ];
+        // dd($data);
+        $existing_data=AdmissionValidationModel::first();
+        if($existing_data!=null && $existing_data!=""){
+            $response_data = AdmissionValidationModel::first();
+            $data =$data+[
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>   date('Y-m-d h:i:s'),
+            ];
+            AdmissionValidationModel::where('id',$response_data->id)->update($data);
+            $response_data = AdmissionValidationModel::first();
+        }
+        else{
+            $data =$data+[
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>   date('Y-m-d h:i:s'),
+            ];
+            $response_data = AdmissionValidationModel::create($data);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+    }
+
+    public function loadValidationcondition(){
+        $response_data = AdmissionValidationModel::first();
+        return $this->successResponse($response_data);
+    }
+
     /**
      * method to list students masters
     */
 
     public function loadStudentMasters($param=""){
-     //   dd('m here at microservice');
+        
         if(strpos($param,'_Active')){
             $param=explode('_',$param)[0];
         }
+
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
 
         $model = new $modelName();
-
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
          //   dd($response_data);
 
         } elseif($param == 'club_name'){
-
             $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
 
-        } else if(strpos($param,'_Active')){
+        } elseif(strpos($param,'_Active')){
             return $this->successResponse($model::where('status',1)->get());
 
-        }else if($param= 'student_award_type'){
-            $vacinetype = StudentAwardType::all();
-            return $vacinetype;
+        } elseif($param == 'student_award_type'){
+            return $this->successResponse(StudentAwardType::all());
 
-        }
-        else if($param= 'program_type'){
-            $vacinetype = CeaProgram::all();
-            return $vacinetype;
+        } elseif($param == 'program_type'){
+            return $this->successResponse(CeaProgram::all());
 
+        } else {
+            return $this->successResponse($model::all());
         }
-        return $this->successResponse($model::all());
+        
     }
 
 
@@ -123,11 +173,9 @@ class StudentMasterController extends Controller
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
-
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
 
         } else if($param == 'program_student_roles'){
-
             $status = '1';
             $assigned_to = '2';
             return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
@@ -136,6 +184,27 @@ class StudentMasterController extends Controller
             $vacinetype = StudentType::all();
             return $vacinetype;
 
+        } else if($param == 'program_name'){
+            $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            $model = new $modelName();
+
+            $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            return $data;
+
+        } else if($param == 'club_name'){
+            $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            $model = new $modelName();
+
+            $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            return $data;
+
+        } else {
+            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';
@@ -143,7 +212,8 @@ class StudentMasterController extends Controller
             return $this->successResponse($model::where('status',$status)->get());
         }
 
-
+      //  dd($program_student_roles);
+        
 
     }
 
@@ -157,7 +227,7 @@ class StudentMasterController extends Controller
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
-
+      
         return $this->successResponse($model::where('id',$id)->first());
 
     }
@@ -184,11 +254,11 @@ class StudentMasterController extends Controller
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
         $data = $model::find($request->id);
-      //   dd($data);
+       //  dd($data);
         //Audit Trails
-        $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+        $msg_det='Name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
-    //    dd('m here',$dataRequest);
+      // dd('m here',$dataRequest);
 
         //data to be updated
         $data->name = $dataRequest['Name'];

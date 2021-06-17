@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Expension</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Expension</label>
                         </a>
                     </li>
                 </ul>
@@ -43,7 +43,7 @@
                                     <has-error :form="form" field="proposedCapacity"></has-error>
                                 </div>
                             </div>
-                            
+
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -56,7 +56,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -70,10 +70,10 @@ export default {
             locationList:[],
             streamList:[],
             form: new form({
-                organizationId:'',currentCapacity:'',proposedCapacity:' ', application_type:'expension_change', 
+                organizationId:'',currentCapacity:'',proposedCapacity:' ', application_type:'expension_change',
                 application_for:'Expansion', action_type:'add', status:'Submitted',organization_type:'',
             }),
-        } 
+        }
     },
     methods: {
         /**
@@ -84,7 +84,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -97,8 +97,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -112,15 +112,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'No dont have privileged to submit this application. Please contact system administrator'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'expension_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -134,7 +134,7 @@ export default {
                 });
             }
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -155,10 +155,10 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();  
-                this.getorgdetials($('#organizationId').val()); 
+                this.form.organizationId=$('#organizationId').val();
+                this.getorgdetials($('#organizationId').val());
             }
-            
+
         },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
@@ -166,7 +166,7 @@ export default {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.existing_details=response.data.data;
                 this.category=this.existing_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.existing_details.category.replace('_', " ").slice(1);
-                
+
             });
         },
 
@@ -204,10 +204,10 @@ export default {
                 this.locationList = data;
             });
         },
-        
+
     },
-    
-    mounted() { 
+
+    mounted() {
         this.getLocation();
         this.loadproposedBy();
         $('[data-toggle="tooltip"]').tooltip();
@@ -216,9 +216,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -231,8 +231,8 @@ export default {
                 this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
     }

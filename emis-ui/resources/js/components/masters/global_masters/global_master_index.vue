@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">Global Masters</h6></li>
         </ol>
@@ -12,13 +12,13 @@
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/nationality_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Nationality/Country 
+                        Nationality/Country
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/dzongkhag_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Dzongkhag/Thromde
-                    </router-link> 
+                    </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/gewog_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
@@ -38,6 +38,11 @@
                 <li class="nav-item active pr-1">
                     <router-link to="/mother_tongue_master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Mother Tongue
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/guidelines" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Guidelines
                     </router-link>
                 </li>
             </ul>
@@ -60,9 +65,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
@@ -77,7 +82,7 @@ export default {
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
     },
-    
+
 }
 </script>
 

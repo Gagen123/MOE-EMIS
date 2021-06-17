@@ -1,16 +1,23 @@
 <template>
     <div>
-        <div class="card card-primary card-outline">
-            <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
-                <span class="fa-pull-right pr-2">
-                    <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('student_trainings_list')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('add_student_trainings')"><i class="fa fa-plus"></i> Student Trainings</button>
-                </span>
+        <section class="content ml-n4 mr-n3">
+            <div class="container-fluid">
+                <div class="row"> 
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="card">
+                            <div class="card-header bg-white pt-2 pb-1 text-right">
+                                <label class="fa-pull-left">Training & Workshops</label>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="showadprocess('student_trainings_list')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="showadprocess('add_student_trainings')"><i class="fa fa-plus"></i> Add New</button>
+                            </div>
+                            <div class="card-body pb-1 mb-0 pt-1 mt-0">  
+                                <router-view></router-view> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body pb-1 mb-0 pt-1 mt-0">  
-                <router-view></router-view> 
-            </div>
-        </div>
+        </section>
     </div>
 </template>
 <script>
@@ -21,7 +28,7 @@ export default {
     },
     methods: {
         showadprocess(type){
-            if(type=="add_student_trainings" || type=="edit_student_trainings"){
+            if(type=="add_student_trainings"){
                 this.$router.push("/"+type);
             }
             if(type=="student_trainings_list"){

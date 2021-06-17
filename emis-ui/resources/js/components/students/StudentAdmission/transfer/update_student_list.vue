@@ -33,7 +33,7 @@
                     <td>{{ std.CidNo }}</td>
                     <td>{{ sex_idList[std.CmnSexId] }} </td>
                     <td>New Admission</td>
-                    <td>{{ std.Status ==  'pending' ? "Applied" : "Pending From Std Decision"}} </td>
+                    <td>{{ std.Status ==  'pending' ? "Applied" : std.Status}} </td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
                     </td>

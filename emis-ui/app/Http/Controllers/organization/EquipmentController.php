@@ -46,16 +46,17 @@ class EquipmentController extends Controller
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipment', $loc);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadEquipment(){
+      //  dd('m here at UI');
         $orgId=$this->getWrkingAgencyId();
         $dis = $this->apiService->listData('emis/organization/equipment/loadEquipment/'.$orgId);
         return $dis;

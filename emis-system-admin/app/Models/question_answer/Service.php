@@ -10,7 +10,7 @@ class Service extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'parent_id',
+        'module_id',
         'name',
         'code',
         'status',
@@ -21,6 +21,6 @@ class Service extends Model{
         'updated_at'
     ];
     public function module() {
-        return $this->belongsTo(Module::class, 'parent_id');
+        return $this->belongsTo(Module::class, 'module_id');
     }
 }

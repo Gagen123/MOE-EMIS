@@ -4,8 +4,8 @@
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Equipment Item</th>
-                    <th>Equipment Type</th>
+                    <th>Furniture Item</th>
+                    <th>Furniture Type</th>
                     <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
@@ -13,16 +13,16 @@
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in equipmentItemList" :key="index">
+                <tr v-for="(item, index) in furnitureItemList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.equipmentItem}}</td>
-                    <td>{{ item.equipmentType}}</td>
+                    <td>{{ item.name}}</td>
+                    <td>{{ item.furnitureType}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewEquipmentItemList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewFurnitureItemList(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -35,17 +35,19 @@
 export default {
     data(){
         return{
-            equipmentItemList:[],
+            furnitureItemList:[],
             dt:'',
+            furnitureTypeList:{},
         }
     },
 
     methods:{
-        loadEquipmentItemList(uri = 'masters/loadEquipmentItem'){
+        loadFurnitureItemList(uri = 'masters/loadFurnitureItem'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.equipmentItemList =  data.data;
+                this.furnitureItemList =  data.data;
+
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -59,18 +61,26 @@ export default {
                 }); 
             }, 300);  
         },
-        viewEquipmentItemList(data){
+        viewFurnitureItemList(data){
             data.action='edit';
-            this.$router.push({name:'EquipmentItemEdit',params: {data:data}});
+            this.$router.push({name:'furniture_item_edit',params: {data:data}});
+        },
+
+        getFurnitureType(uri = 'masters/getFurnitureTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.furnitureTypeList = data;
+            });
         },
     },
 
     mounted(){
-        this.loadEquipmentItemList();
+        this.loadFurnitureItemList();
         this.dt =  $("#equipmentItem-table").DataTable();
     },
     watch: {
-        equipmentItemList(){
+        furnitureItemList(){
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#equipmentItem-table").DataTable()

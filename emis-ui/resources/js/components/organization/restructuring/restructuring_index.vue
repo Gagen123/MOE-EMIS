@@ -42,11 +42,6 @@
                         Autonomy
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1">
-                    <router-link id="location_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Location Type Change
-                    </router-link>
-                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link id="fee_structure_change_index" to="/fee_structure_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change in Fee Structure

@@ -49,6 +49,8 @@ class StudentAwardController extends Controller
             'user_id'           => $this->userId(),
             'working_agency_id' => $this->getWrkingAgencyId()
         ];
+    //  dd(  $data );
+      //  try{
 
         // try{
             $response_data= $this->apiService->createData('emis/students/saveStudentAward', $data);
@@ -59,7 +61,7 @@ class StudentAwardController extends Controller
         // }
         
     }
-
+    
     public function loadStudentAwards($param=""){
         $param = $this->getWrkingAgencyId();
         $student_awards = $this->apiService->listData('emis/students/loadStudentAwards/'.$param);

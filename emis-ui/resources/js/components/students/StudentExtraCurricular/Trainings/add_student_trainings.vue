@@ -1,47 +1,40 @@
 <template>
     <div>
-        <form>
-            <div class="row">
-                <div class="col-sm-8">
-                    <!-- text input -->
-                    <div class="form-group">
-                        <label>Training/Workshop/Seminar Title:</label>
-                        <input class="form-control" v-model="student_form.name" :class="{ 'is-invalid': student_form.errors.has('name') }" id="name" @change="remove_error('name')" type="text">
-                        <has-error :form="student_form" field="name"></has-error>
-                    </div>
+         <form class="p-4 bootbox-form">
+            <div class="row form-group">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label>Training/Workshop/Seminar Title:<span class="text-danger">*</span></label>
+                    <input class="form-control" v-model="student_form.name" :class="{ 'is-invalid': student_form.errors.has('name') }" id="name" @change="remove_error('name')" type="text">
+                    <has-error :form="student_form" field="name"></has-error>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label> Training Type</label>
-                        <select v-model="student_form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
+             <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label> Training Type:<span class="text-danger">*</span></label>
+                    <select v-model="student_form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
                         <option v-for="(item, index) in trainingList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="training_type"></has-error>
-                    </div>
                 </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label>Program</label>
-                        <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Program:<span class="text-danger">*</span></label>
+                    <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
                         <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
-                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label> Place</label>
+                        <label> Place:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="student_form.place" :class="{ 'is-invalid': student_form.errors.has('place') }" id="place" @change="remove_error('place')" type="text">
                         <has-error :form="student_form" field="place"></has-error>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
-                        <label>Country</label>
+                        <label>Country<span class="text-danger">*</span></label>
                         <select v-model="student_form.country" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('country') }" class="form-control select2" name="country" id="country">
                         <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                     </select>
@@ -62,7 +55,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="mb-0.5">Details:</label>
                     <textarea @change="remove_error('details')" class="form-control" v-model="student_form.details" :class="{ 'is-invalid': student_form.errors.has('details') }" name="details" id="details"></textarea>
                     <has-error :form="student_form" field="details"></has-error>
@@ -82,8 +75,6 @@ export default {
             programList:[],
             trainingList:[],
             countryList:[],
-            id:'',
-
             student_form: new form({
                 name:'',
                 training_type:'',
@@ -93,6 +84,7 @@ export default {
                 from_date: '',
                 to_date: '',
                 details:'',
+                form_type:'add',
             }),
         }
     },
@@ -101,7 +93,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.programList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

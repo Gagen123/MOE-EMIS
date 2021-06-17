@@ -29,17 +29,17 @@ class FurnitureController extends Controller
      * method to list Furniture and furniture
     */
     
-    public function loadFurniture($orgId=""){
-
+    public function loadFurniture($orgId=""){ 
+ 
         $equip = DB::table('organization_furniture as a')
             ->join('master_furniture_type as b', 'a.type', '=', 'b.id')
             ->join('master_furniture_item as c', 'a.item', '=', 'c.id')
-            ->join('master_furniture_usage as d', 'a.locationUse', '=', 'd.id')
-            ->select('a.id as id','a.lifeExpectancy as lifeExpectancy','a.dateReceived as dateReceived', 'a.number as number', 'b.name as type', 
-            'c.name as item','a.cost as cost', 'a.condition as condition','d.name as locationUse', 'b.id AS typeId', 'c.id AS itemId')->where('organizationId',$orgId)->get();
+            ->select('a.id as id','b.name as type','c.name as item','a.usable as usable', 'a.notusable as notusable')
+            ->where('organizationId',$orgId)->get();
 
         return $equip;
     }
+   
 
     /**
      * method to get type in dropdown
@@ -51,9 +51,10 @@ class FurnitureController extends Controller
 
     /**
      * method to get item in dropdown by type
-     */
-    public function getFurnitureItem($typeId){
-        return $this->successResponse(FurnitureItem::where ('furnitureTypeId',$typeId)->get());
+     */ 
+    public function getFurnitureItem($typeId){ 
+       // dd('form services');
+        return $this->successResponse(FurnitureItem::where ('furnitureType',$typeId)->get());
 
     }
 
@@ -69,22 +70,16 @@ class FurnitureController extends Controller
      */
 
     public function saveFurniture(Request $request){
-
         $id = $request->id;
-
         if( $id != null){
             $data = [
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'usable'               =>  $request['usable'],
-                'notusable'                      =>  $request['notusable'],
-                // 'number'                    =>  $request['number'],
-                // 'condition'                 =>  $request['condition'],
-                // 'lifeExpectancy'            =>  $request['life_expectancy'],
-                // 'dateReceived'              =>  $request['date_received'],
-                'updated_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s')
+                'usable'                    =>  $request['usable'],
+                'notusable'                 =>  $request['notusable'],
+                'updated_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
             ];
 
             $response_data = Furniture::where('id', $id)->update($data);
@@ -95,18 +90,17 @@ class FurnitureController extends Controller
                 'item'                      =>  $request['item'],
                 'usable'                    =>  $request['location'],
                 'notusable'                 =>  $request['cost'],
-                // 'number'                 =>  $request['number'],
-                // 'condition'              =>  $request['condition'],
-                // 'lifeExpectancy'         =>  $request['life_expectancy'],
-                // 'dateReceived'           =>  $request['date_received'],
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
-
+            try{
             $response_data = Furniture::create($data);
+            }
+            catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+                 }
 
         }
-
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 

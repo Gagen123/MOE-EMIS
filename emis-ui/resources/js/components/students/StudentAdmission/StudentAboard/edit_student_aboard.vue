@@ -78,11 +78,12 @@
                         <input type="text" v-model="form.city" class="form-control editable_fields" id="city" />
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Phone:</label>
-                        <input type="text" v-model="form.phone" class="form-control editable_fields" id="phone" />
-                    </div>
+               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Contact No:</label>
+                    <input class="form-control editable_fields" name="phone" id="phone" type="number" 
+                    v-model="form.phone" :class="{ 'is-invalid': form.errors.has('phone') }" @change="remove_err('phone')">
+                    <has-error :form="form" field="phone"></has-error>
+                        <!-- <input type="text" v-model="form.phone" class="form-control editable_fields" id="phone" /> -->
                 </div>
             </div>
 
@@ -316,7 +317,8 @@ export default {
         this.form.first_name=this.$route.params.data.first_name;
         this.form.middle_name=this.$route.params.data.middle_name;
         this.form.last_name=this.$route.params.data.last_name;
-        this.form.sex_id=this.$route.params.data.sex_id;
+        this.form.sex_id=this.$route.params.data.sex_id;  dob
+        this.form.dob=this.$route.params.data.dob;
         this.form.mother_tongue=this.$route.params.data.mother_tongue;
         this.form.status=this.$route.params.data.status;
         this.form.fulladdress=this.$route.params.data.fulladdress;

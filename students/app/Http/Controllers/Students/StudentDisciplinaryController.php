@@ -23,68 +23,103 @@ class StudentDisciplinaryController extends Controller
     */
 
     public function addStudentRecord(Request $request){
-        
-        $rules = [
-            'student'               => 'required',
-            'offence_type'          => 'required',
-            'date'                  => 'required',
-            'severity'              => 'required',
-            'action_taken'          => 'required',
-            'offence_description'   => 'required',
-            'remarks'               => 'required',
-        ];
-
-        $customMessages = [
-            'student.required'                      => 'This field is required',
-            'offence_type.required'                 => 'This field is required',
-            'date.required'                         => 'This field is required',
-            'severity.required'                     => 'This field is required',
-            'action_taken.required'                 => 'This field is required',
-            'offence_description.required'          => 'This field is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
-        
-        $data =[
-            'id'                            => $request->id,
-            'OrgOrganizationId'             => $request->working_agency_id,
-            'StdStudentId'                  => $request->student,
-            'StdDisciplinaryOffenceTypeId'  => $request->offence_type,
-            'StdDisciplinarySeverityId'     => $request->severity,
-            'OffenceDate'                   => $request->date,
-            'OffenceDescription'            => $request->offence_description,
-            'StdDisciplinaryActionTypeId'   => $request->action_taken,
-            'ActionDescription'             => $request->remarks
-
-            //'user_id'           => $this->user_id() 
-        ];
-
-        if($request->action_type=="add"){
+        $id = $request->id;
+        $student = $request->StdStudentId;
+        if( $id != null && $StdStudentId != null){
+            $rules = [
+                'student'               => 'required',
+                'offence_type'          => 'required',
+                'date'                  => 'required',
+                'severity'              => 'required',
+                'action_taken'          => 'required',
+                'offence_description'   => 'required',
+                'remarks'               => 'required',
+            ];
+    
+            $customMessages = [
+                'student.required'                      => 'This field is required',
+                'offence_type.required'                 => 'This field is required',
+                'date.required'                         => 'This field is required',
+                'severity.required'                     => 'This field is required',
+                'action_taken.required'                 => 'This field is required',
+                'offence_description.required'          => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+            
+            $data =[
+             //   'id'                            => $request->id,
+                'OrgOrganizationId'             => $request->working_agency_id,
+                'StdStudentId'                  => $request->student,
+                'StdDisciplinaryOffenceTypeId'  => $request->offence_type,
+                'StdDisciplinarySeverityId'     => $request->severity,
+                'OffenceDate'                   => $request->date,
+                'OffenceDescription'            => $request->offence_description,
+                'StdDisciplinaryActionTypeId'   => $request->action_taken,
+                'ActionDescription'             => $request->remarks
+    
+                //'user_id'           => $this->user_id() 
+            ];
+            $response_data = DisciplinaryRecord::where('id', $id)->update($data);
+        }else{
+            $rules = [
+                'student'               => 'required',
+                'offence_type'          => 'required',
+                'date'                  => 'required',
+                'severity'              => 'required',
+                'action_taken'          => 'required',
+                'offence_description'   => 'required',
+                'remarks'               => 'required',
+            ];
+    
+            $customMessages = [
+                'student.required'                      => 'This field is required',
+                'offence_type.required'                 => 'This field is required',
+                'date.required'                         => 'This field is required',
+                'severity.required'                     => 'This field is required',
+                'action_taken.required'                 => 'This field is required',
+                'offence_description.required'          => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+            
+            $data =[
+                'id'                            => $request->id,
+                'OrgOrganizationId'             => $request->working_agency_id,
+                'StdStudentId'                  => $request->student,
+                'StdDisciplinaryOffenceTypeId'  => $request->offence_type,
+                'StdDisciplinarySeverityId'     => $request->severity,
+                'OffenceDate'                   => $request->date,
+                'OffenceDescription'            => $request->offence_description,
+                'StdDisciplinaryActionTypeId'   => $request->action_taken,
+                'ActionDescription'             => $request->remarks
+    
+                //'user_id'           => $this->user_id() 
+            ];
             $response_data = DisciplinaryRecord::create($data);
 
-        } else if($request->action_type=="edit"){
-
-            //Audit Trails
-            // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-            // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
-
-            $app_data = [
-                'OrgOrganizationId'             => $request['working_agency_id'],
-                'StdStudentId'                  => $request['student'],
-                'StdDisciplinaryOffenceTypeId'  => $request['offence_type'],
-                'StdDisciplinarySeverityId'     => $request['severity'],
-                'OffenceDate'                   => $request['date'],
-                'OffenceDescription'            => $request['offence_description'],
-                'StdDisciplinaryActionTypeId'   => $request['action_taken'],
-                'ActionDescription'             => $request['remarks']
-            ];
-
-            DisciplinaryRecord::where('id', $request['id'])->update($app_data);
         }
-        
-        
-
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
+
+        // if($request->action_type=="add"){
+        //     $response_data = DisciplinaryRecord::create($data);
+
+        // } else if($request->action_type=="edit"){
+
+        //     //Audit Trails
+        //     // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+        //     // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
+
+        //     $data = [
+        //         'OrgOrganizationId'             => $request['working_agency_id'],
+        //         'StdStudentId'                  => $request['student'],
+        //         'StdDisciplinaryOffenceTypeId'  => $request['offence_type'],
+        //         'StdDisciplinarySeverityId'     => $request['severity'],
+        //         'OffenceDate'                   => $request['date'],
+        //         'OffenceDescription'            => $request['offence_description'],
+        //         'StdDisciplinaryActionTypeId'   => $request['action_taken'],
+        //         'ActionDescription'             => $request['remarks']
+        //     ];
+
+        //     $response_data = DisciplinaryRecord::where('id', $request['id'])->update($data);
     }
 
     /**

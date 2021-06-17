@@ -27,7 +27,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Program:</label>
                                 <select v-model="form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                                    <option v-for="(item, index) in programList" :key="index" v-bind:value="item.program">{{ item.program }}</option>
+                                    <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                 </select>
                                 <has-error :form="form" field="program"></has-error>
                             </div> 
@@ -59,7 +59,7 @@
                                                 <td>
                                                     <select name="inventory" id="inventory" class="form-control editable_fields" v-model="inventory.item_id">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>                                
@@ -74,7 +74,7 @@
                                                 <td>
                                                     <select name="measurement_unit" id="measurement_unit" class="form-control editable_fields" v-model="inventory.measurement_unit">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>
@@ -122,7 +122,7 @@
                                                 <td>
                                                     <select name="item_produced" id="item_produced" class="form-control editable_fields" v-model="production.item_produced">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>                                
@@ -131,7 +131,7 @@
                                                 <td>                                
                                                     <select name="quantity_unit" id="quantity_unit" class="form-control editable_fields" v-model="production.quantity_unit">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                                     </select>
                                                 </td>
                                                 <td>                                
@@ -227,8 +227,8 @@ export default {
             picker: new Date().toISOString().substr(0, 10),
             landscape: false,
             reactive: false,
-            //this is just for testing
-            programList:[{program:"Program 1"}, {program:"Program 2"}],
+            
+            programList:[],
             itemList:[],
             unitList:[],
             inventoryDetails: [],
@@ -291,6 +291,16 @@ export default {
                 this.expenditureCount--;
                 this.form.expenditureDetails.splice(index,1); 
             }
+        },
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.programList =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
         loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
             axios.get(uri)
@@ -410,7 +420,7 @@ export default {
         });
         // this.loadStudentList();
         // this.loadTeacherList();
-        //this.loadActiveProgramList();
+        this.loadActiveProgramList();
         this.loadActiveItemList();
         this.loadActiveUnitList();
         

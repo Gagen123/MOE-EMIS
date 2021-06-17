@@ -60,6 +60,7 @@
                         <has-error :form="student_form" field="std_section"></has-error>
                     </div>
                 </div>
+                <label>Student List:</label>
                 <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="student-list-table" class="table w-100 table-bordered table-striped">
@@ -87,10 +88,10 @@
                                         <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/>
+                                        <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]" :value="student.id" />
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="weight" class="form-control-input refferedcheck" v-model="student_form.std_referred[index]"/>
+                                        <input type="checkbox" name="weight" class="form-control-input refferedcheck" v-model="student_form.std_referred[index]" :value="student.id" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -244,7 +245,7 @@ export default {
             if(type=="save"){
                 this.student_form.std_screened=[];
                 let screenedArray=[];
-                $("input[name='height']:checked").each( function () {
+                $("input[name='height']:not(:checked)").each( function () {
                     screenedArray.push($(this).val());
                 });
                 this.student_form.std_screened=screenedArray;
@@ -314,13 +315,13 @@ export default {
             }
             
         },
-        checkall(class_to_check,id){
-            if($('#'+id).prop('checked')){
-                $("."+class_to_check).prop("checked",true);
-            }
-            else{
-                $("."+class_to_check).prop("checked",false);
-            }
+            checkall(class_to_check,id){
+                if($('#'+id).prop('checked')){
+                    $("."+class_to_check).prop("checked",true);
+                }
+                else{
+                    $("."+class_to_check).prop("checked",false);
+                }
         }
     },
     mounted() {
@@ -347,18 +348,18 @@ export default {
         this.loadActiveScreeningEndorserList();
         
         this.loadClassList();
-        // this.loadSectionList();
-        // this.loadStreamList();
-        this.dt =  $("#student-list-table").DataTable()
+        
+        //this.dt =  $("#student-list-table").DataTable()
     },
-    watch: {
-        studentList(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#student-list-table").DataTable()
-            });
-        }
-    },
+    // Need to fix the datatables
+    // watch: {
+    //     studentList(){
+    //         this.dt.destroy();
+    //         this.$nextTick(() => {
+    //             this.dt =  $("#student-list-table").DataTable()
+    //         });
+    //     }
+    // },
     
 }
 </script>

@@ -11,6 +11,7 @@ use App\Models\global_masters\Gewog;
 use App\Models\global_masters\Village;
 use App\Models\global_masters\Gender;
 use App\Models\global_masters\MotherTongue;
+use App\Models\Guidelines;
 
 class AdministrationController extends Controller{
     use ApiResponser;
@@ -148,7 +149,46 @@ class AdministrationController extends Controller{
                 return $this->successResponse($data);
             }
         }
+        if($request->record_type=="guidelines"){
+            if($request->actiontype=="add"){
+                $rule =[
+                    'guideline_for'      => 'required',
+                ];
+                $this->validate($request, $rule);
+                $guidefor=$request['guideline_for'];
+                $response_data="";
+                foreach($request['guidelines'] as $guide){
+                    $data =[
+                        'guideline_for'     =>  $guidefor,
+                        'guideline'         =>  $guide['guideline'],
+                        'status'            =>  $guide['status'],
+                        'created_by'        =>  $request['user_id'],
+                        'created_at'        =>  date('Y-m-d h:i:s'),
+                    ];
+                    try{
+                        $response_data = Guidelines::create($data);
+                    }catch(\Illuminate\Database\QueryException $ex){
+                        dd($ex);
 
+                    }
+                   
+                }
+                return $this->successResponse($response_data, Response::HTTP_CREATED);
+            }
+            if($request->actiontype=="edit"){
+                // dd( $request['guideline_for'], $request['name'],$request['id']);
+                $data = Guidelines::find($request['id']);
+                $messs_det='guideline_for:'.$data->guideline_for.'; guideline:'.$data->guideline.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+                DB::select("CALL emis_audit_proc('".$this->database."','master_guidelines','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
+                $data->guideline_for = $request['guideline_for'];
+                $data->guideline = $request['name'];
+                $data->status = $request['status'];
+                $data->updated_by = $request['user_id'];
+                $data->updated_at = date('Y-m-d h:i:s');
+                $data->update();
+                return $this->successResponse($data);
+            }
+        }
     }
     public function loadGlobalMasters($param=""){
         // dd("inside system admin serices");
@@ -161,7 +201,7 @@ class AdministrationController extends Controller{
         if($param=="all_dzongkhag"){
             return $this->successResponse(Dzongkhag::all());
         }
-        if($param=="all_active_dzongkhag"){ 
+        if($param=="all_active_dzongkhag"){
             return $this->successResponse(Dzongkhag::where('status','1')->get());
         }
         if($param=="all_gewog_List"){
@@ -182,6 +222,13 @@ class AdministrationController extends Controller{
         if($param=="active_mother_tongue"){
             return $this->successResponse(MotherTongue::where('status','1')->get());
         }
+        if($param=="all_guidelines"){
+            return $this->successResponse(Guidelines::all());
+        }
+        if($param=="active_guidelines"){
+            return $this->successResponse(Guidelines::where('status','1')->get());
+        }
+
 
     }
     public function load_dropdown($model="",$parent_id=""){
@@ -191,6 +238,10 @@ class AdministrationController extends Controller{
         if($model=="gewog"){
             return $this->successResponse(Village::where('gewog_id',$parent_id)->get());
         }
+        if($model=="guidelines"){
+            return $this->successResponse(Guidelines::where('guideline_for',str_replace('_',' ',$parent_id))->where('status',1)->get());
+        }
+
     }
     public function loadDzoGeoVilByVilId($id=""){
         $response_data = DB::table('dzongkhag_master as d')

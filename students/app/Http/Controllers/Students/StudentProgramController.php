@@ -16,6 +16,7 @@ use App\Models\Students\CeaProgramActionPlan;
 use App\Models\Students\CeaProgramActionPlanDetail;
 use App\Models\Students\CeaSchoolProgramme;
 use App\Models\Students\CeaProgrammeMembership;
+use App\Models\Students\CeaClubMembership;
 use App\Models\Students\CeaRoleStaff;
 use App\Models\Students\CeaRoleStudent;
 use App\Models\Masters\CeaProgramType;
@@ -46,7 +47,6 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'                        => $request->id,
             'OrgOrganizationId'         => $request->organisation_id,
             'CeaProgrammeId'            => $request->program,
             'CeaProgrammeSupporterId'   => $request->supporter,
@@ -55,23 +55,37 @@ class StudentProgramController extends Controller
             // 'assigned_staff'            => $request->assigned_staff
         ];
 
-        // $assigned_staff_details = $data['assigned_staff'];
+        if($request->record_type == 'add'){
+    
+            // $assigned_staff_details = $data['assigned_staff'];
+    
+            // unset($data['assigned_staff']);
+    
+            $response_data = CeaSchoolProgramme::create($data);
+            // $lastInsertId = $response->id;
+    
+            
+    
+            // foreach($assigned_staff_details as $key => $value){
+            //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
+            //     $assigned_staff_data['CeaRoleId'] = $value['role'];
+            //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
+            //     $assigned_staff_data['Remarks'] = $value['remarks'];
+    
+            //     $response_data = CeaRoleStaff::create($assigned_staff_data);
+            // }
+        } else {
 
-        // unset($data['assigned_staff']);
+            $school_data = CeaSchoolProgramme::where('id',$request->id)->first();
 
-        $response_data = CeaSchoolProgramme::create($data);
-        // $lastInsertId = $response->id;
+            $data =$data+[
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>   date('Y-m-d h:i:s'),
+            ];
 
-        
-
-        // foreach($assigned_staff_details as $key => $value){
-        //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
-        //     $assigned_staff_data['CeaRoleId'] = $value['role'];
-        //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
-        //     $assigned_staff_data['Remarks'] = $value['remarks'];
-
-        //     $response_data = CeaRoleStaff::create($assigned_staff_data);
-        // }
+            CeaSchoolProgramme::where('id',$school_data->id)->update($data);
+            $response_data = CeaSchoolProgramme::first();
+        }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -81,11 +95,13 @@ class StudentProgramController extends Controller
     */
 
     public function loadStudentPrograms($param=""){
+        $org_id = $param;
         $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -98,11 +114,12 @@ class StudentProgramController extends Controller
 
     public function listStudentPrograms($param=""){
         $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
-        $id ="1";
+        $org_id = $param;
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
-                ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->select('cea_school_programme.id', 'cea_programme.name AS name', 'cea_programme.id AS programme_id')
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -115,11 +132,12 @@ class StudentProgramController extends Controller
 
     public function loadStudentClubs($param=""){
         $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-
+        $org_id = $param;
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
                 ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -131,12 +149,13 @@ class StudentProgramController extends Controller
     */
 
     public function listStudentClubs($param=""){
+        $org_id = $param;
         $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-        $id ="1";
 
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
-                ->select('cea_school_programme.id', 'cea_programme.name AS name')
+                ->select('cea_school_programme.id', 'cea_programme.name AS name', 'cea_programme.id AS programme_id')
+                ->where('cea_school_programme.OrgOrganizationId', $org_id)
                 ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
@@ -151,57 +170,56 @@ class StudentProgramController extends Controller
         $id = $param;
 
         $response_data=CeaSchoolProgramme::where('id',$id)->first();
-        $response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
+        //$response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
         return $this->successResponse($response_data); 
     }
 
     /*
     * Save Program Members
     */
+
     public function saveProgramMembers(Request $request){
-        $status = $request->$status;
-       
+    
       $rules = [
             'student'                    => 'required',
-            // 'program'                    => 'required',
+            'program'                    => 'required',
             'responsibilities'           => 'required',
         ];
 
         $customMessages = [
             'student.required'           => 'This field is required',
-            // 'program.required'           => 'This field is required',
+            'program.required'           => 'This field is required',
             'responsibilities.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
         $data =[
-            'id'                        => $request->id,
-            'StdStudentId'              => $request->student,
-            'status'                    => $request->status,
-            'CeaSchoolProgrammeId'      => $request->program,
-            'Responsibility'            => $request->responsibilities,
-            'JoiningDate'               => $request->date,
-            'role'                      => $request->role
-
-            //'user_id'        => $this->user_id() 
+            'id'                    => $request->id,
+            'CeaProgrammeId'        => $request->program,
+            'StdStudentId'          => $request->student,
+            'JoiningDate'           => $request->date,
+            'Responsibility'        => $request->responsibilities,
+            'Status'                => $request->status
         ];
-       // dd($status);
-       dd($data);
-        $assigned_student_details = $data['role'];
-
-        unset($data['role']);
 
         $response = CeaProgrammeMembership::create($data);
-        $lastInsertId = $response->id;
-
-        foreach($assigned_student_details as $key => $value){
-            $assigned_std_data['CeaSchoolProgrammeId'] = $data['CeaSchoolProgrammeId'];
-            $assigned_std_data['CeaRoleId'] = $value;
-            $assigned_std_data['StdStudentId'] = $data['StdStudentId'];
-
-            $response_data = CeaRoleStudent::create($assigned_std_data);
-        }
-
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+        //Fix once the roles have been decided
+        
+        // $assigned_student_details = $data['role'];
+        
+        // unset($data['role']);
+        // $response = CeaProgrammeMembership::create($data);
+        // $lastInsertId = $response->id;
+
+        // foreach($assigned_student_details as $key => $value){
+        //     $assigned_std_data['CeaSchoolProgrammeId'] = $data['CeaSchoolProgrammeId'];
+        //     $assigned_std_data['CeaRoleId'] = $value;
+        //     $assigned_std_data['StdStudentId'] = $data['StdStudentId'];
+
+        //     $response_data = CeaRoleStudent::create($assigned_std_data);
+        // }
         
     }
 
@@ -210,16 +228,87 @@ class StudentProgramController extends Controller
     */
 
     public function listProgramMembers($param=""){
-        $id ="1";
+        $org_id = $param;
 
-        $records = DB::table('cea_school_programme')
-                ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
-                ->join('cea_programme_membership', 'cea_school_programme.id', '=', 'cea_programme_membership.CeaSchoolProgrammeId')
-                ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
-                ->select('cea_programme_membership.*', 'std_student.Name AS student_name', 'cea_programme.name AS program_name')
-                ->get();
+        $response_data = DB::table('cea_programme_membership')
+                            ->join('cea_programme', 'cea_programme_membership.CeaProgrammeId', '=', 'cea_programme.id')
+                            ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
+                            ->select('cea_programme_membership.*', 'cea_programme.name AS program_name',
+                                'std_student.Name AS student_name', 'std_student.student_code AS student_code')
+                            ->where('std_student.OrgOrganizationId', $org_id)
+                            ->get();
 
-        return $this->successResponse($records);
+        return $this->successResponse($response_data);
+
+    }
+
+    /*
+    * Save Program Members
+    */
+
+    public function saveClubMembers(Request $request){
+    
+        $rules = [
+              'student'                    => 'required',
+              'club'                       => 'required',
+              'responsibilities'           => 'required',
+          ];
+  
+          $customMessages = [
+              'student.required'           => 'This field is required',
+              'club.required'               => 'This field is required',
+              'responsibilities.required'  => 'This field is required',
+          ];
+          $this->validate($request, $rules, $customMessages);
+  
+          $data =[
+              'id'                    => $request->id,
+              'CeaProgrammeId'        => $request->club,
+              'StdStudentId'          => $request->student,
+              'JoiningDate'           => $request->date,
+              'Responsibility'        => $request->responsibilities,
+              'Status'                => $request->status
+          ];
+  
+          $response_data = CeaClubMembership::create($data);
+          return $this->successResponse($response_data, Response::HTTP_CREATED);
+  
+          //Fix once the roles have been decided
+          
+          // $assigned_student_details = $data['role'];
+          
+          // unset($data['role']);
+          // $response = CeaProgrammeMembership::create($data);
+          // $lastInsertId = $response->id;
+  
+          // foreach($assigned_student_details as $key => $value){
+          //     $assigned_std_data['CeaSchoolProgrammeId'] = $data['CeaSchoolProgrammeId'];
+          //     $assigned_std_data['CeaRoleId'] = $value;
+          //     $assigned_std_data['StdStudentId'] = $data['StdStudentId'];
+  
+          //     $response_data = CeaRoleStudent::create($assigned_std_data);
+          // }
+          
+      }
+
+
+
+    /*
+    * Function is to list Club Members
+    */
+
+    public function listClubMembers($param=""){
+        $org_id = $param;
+        $response_data = DB::table('cea_club_membership')
+                            ->leftjoin('cea_programme', 'cea_club_membership.CeaProgrammeId', '=', 'cea_programme.id')
+                            ->leftjoin('std_student', 'cea_club_membership.StdStudentId', '=', 'std_student.id')
+                            ->select('cea_club_membership.*', 'cea_programme.name AS program_name',
+                                'std_student.Name AS student_name', 'std_student.student_code AS student_code')
+                            ->where('std_student.OrgOrganizationId', $org_id)
+                            ->get();
+
+        return $this->successResponse($response_data);
+
     }
 
     /*
@@ -243,7 +332,7 @@ class StudentProgramController extends Controller
             'id'                    => $request->id,
             'OrgOrganizationId'     => $request->organisation_id,
             'CeaProgrammeId'        => '17b2b454-6f86-49c1-b763-8f02202d3071',
-            // 'CeaProgrammeId'        => $request->program,
+           //  'CeaProgrammeId'        => $request->program,
             'ForMonth'              => $request->month,
             'Remarks'               => $request->remarks,
             'inventoryDetails'      => $request->inventoryDetails,
@@ -295,7 +384,7 @@ class StudentProgramController extends Controller
             
             $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
         }
-
+        //dd( $data);
         return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
     }
 
@@ -321,7 +410,7 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramActionPlan(Request $request){
-
+        
         $rules = [
             'program'            => 'required',
             'from_date'            => 'required',

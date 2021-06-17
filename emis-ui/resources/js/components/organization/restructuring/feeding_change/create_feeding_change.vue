@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Feeding Details of Organization</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change Feeding Details of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -65,7 +65,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -82,7 +82,7 @@ export default {
                 organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
                 application_for:'Change in Feeding Details', action_type:'add', status:'Submitted',organization_type:'',
             }),
-        } 
+        }
     },
     methods: {
         /**
@@ -93,7 +93,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get location in dropdown
@@ -124,10 +124,10 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
-                this.getorgdetials($('#organizationId').val()); 
+                this.form.organizationId=$('#organizationId').val();
+                this.getorgdetials($('#organizationId').val());
             }
-            
+
         },
 
         getorgdetials(org_id){
@@ -135,7 +135,7 @@ export default {
             .then(response => {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.existing_details=response.data.data;
-               
+
                 if(this.existing_details.isFeedingSchool==1){
                     for(let i=0;i<this.existing_details.meals.length;i++){
                         // $('#exisfed'+this.existing_details.meals[i].noOfMeals).prop('checked',true);
@@ -148,8 +148,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -163,15 +163,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Feeding details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="applicaiton for Feeding details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'feeding_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -185,7 +185,7 @@ export default {
                 });
             }
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -246,19 +246,19 @@ export default {
                 $('#feedingDetails').hide();
             }
         },
-        
+
     },
-    
-    mounted() { 
+
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -271,8 +271,8 @@ export default {
                 this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
         this.getOrgList();

@@ -231,8 +231,11 @@ class EstablishmentController extends Controller{
                 'proposedLocation'             =>  $request['proposedLocation'],
                 'typeOfSchool'                 =>  $request['typeOfSchool'],
                 'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+                'coLocatedParent'              =>  $request['coLocatedParent'],
+                'parentSchool'                 =>  $request['parentSchool'],
                 'levelId'                      =>  $request['level'],
             ];
+            // dd($data);
             ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->update($data);
             $app_det=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
@@ -281,6 +284,8 @@ class EstablishmentController extends Controller{
             'typeOfSchool'                 =>  $request['typeOfSchool'],
             'levelId'                      =>  $request['level'],
             'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'parentSchool'                 =>  $request['parentSchool'],
             'created_at'           =>  date('Y-m-d h:i:s')
         ];
 
@@ -360,54 +365,64 @@ class EstablishmentController extends Controller{
      * method to save class and stream
      */
     public function saveClassStream(Request $request){
-        $classes=$request->class;
-
         $classStream='';
-        $inserted_class="";
         $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
-        if($request['update_type']!="Document Update"){
-            if($request['action_type']=="edit"){
-                ApplicationClassStream::where('ApplicationDetailsId', $application_details->id)->delete();
+        ApplicationClassStream::where('ApplicationDetailsId', $application_details->id)->delete();
+        // return $request->class;
+        if($request->class){
+            foreach($request->class as $key => $classId){
+                // $stream_exists = $this->checkStreamExists($classId);
+                // if(empty($stream_exists)){
+                $classStream = [
+                    'ApplicationDetailsId'  => $application_details->id,
+                    'classId'               => $classId,
+                    'streamId'              => '',
+                    'created_by'            => $request->user_id,
+                    'created_at'            => date('Y-m-d h:i:s'),
+                ];
+                $class = ApplicationClassStream::create($classStream);
+                // }
             }
-            // return $request->class;
-            if($request->class){
-                foreach($request->class as $key => $classId){
-                    // $stream_exists = $this->checkStreamExists($classId);
-                    // if(empty($stream_exists)){
+        }
+
+        if($request->stream!=null && $request->stream!=""){
+            foreach($request->stream as $key2 => $classStreamId){
+                $class_stream_data = $this->getClassStreamId($classStreamId);
+            //    return $class_stream_data;
+                foreach($class_stream_data as $v){
                     $classStream = [
                         'ApplicationDetailsId'  => $application_details->id,
-                        'classId'               => $classId,
-                        'streamId'              => '',
+                        'classId'               => $v->classId,
+                        'streamId'              => $v->streamId,
                         'created_by'            => $request->user_id,
                         'created_at'            => date('Y-m-d h:i:s'),
                     ];
+                    // return $classStream;
                     $class = ApplicationClassStream::create($classStream);
-                    // }
                 }
             }
-
-            if($request->stream!=null && $request->stream!=""){
-                foreach($request->stream as $key2 => $classStreamId){
-                    $class_stream_data = $this->getClassStreamId($classStreamId);
-                //    return $class_stream_data;
-                    foreach($class_stream_data as $v){
-                        $classStream = [
-                            'ApplicationDetailsId'  => $application_details->id,
-                            'classId'               => $v->classId,
-                            'streamId'              => $v->streamId,
-                            'created_by'            => $request->user_id,
-                            'created_at'            => date('Y-m-d h:i:s'),
-                        ];
-                        // return $classStream;
-                        $class = ApplicationClassStream::create($classStream);
-                    }
-                }
-            }
-
-            $array = ['status' => $request->status];
-            DB::table('application_details')->where('application_no',$request->application_number)->update($array);
         }
-        else{
+        $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
+
+        return $this->successResponse($application_details, Response::HTTP_CREATED);
+    }
+
+    public function saveUploadedFiles(Request $request){
+        $doc="";
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
+            foreach($request->attachment_details as $att){
+                $attach =[
+                    'ApplicationDetailsId'      =>  $application_details->id,
+                    'path'                      =>  $att['path'],
+                    'user_defined_file_name'    =>  $att['user_defined_name'],
+                    'name'                      =>  $att['original_name'],
+                    'updoad_type'               =>  'Applicant',
+                ];
+                $doc = ApplicationAttachments::create($attach);
+            }
+        }
+        if($request['update_type']=="Document Update"){
             $array =[
                 'status'                       =>   "Document Updated",
                 'remarks'                      =>   $request->remarks,
@@ -415,9 +430,15 @@ class EstablishmentController extends Controller{
                 'updated_at'                   =>   date('Y-m-d h:i:s'),
             ];
             ApplicationDetails::where('application_no', $request->application_number)->update($array);
-            $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
         }
-        return $this->successResponse($application_details, Response::HTTP_CREATED);
+        else{
+            $array =[
+                'status'                       =>   $request->status,
+                'applicant_remarks'            =>   $request->remarks,
+            ];
+            DB::table('application_details')->where('application_no',$request->application_number)->update($array);
+        }
+        return $doc;
     }
 
     /**
@@ -596,7 +617,7 @@ class EstablishmentController extends Controller{
             $establishment=ApplicationVerification::create($verification);
             $status="Notified For Tentative Date";
         }
-        else if($request->update_type=="team_verification"){
+        else if($request->update_type=="team_verification" || $request->update_type=="final_verification"){
             if(sizeof($request->nomi_staffList)>0 ){
                 foreach($request->nomi_staffList as $nomi){
                     $verification =[
@@ -611,7 +632,9 @@ class EstablishmentController extends Controller{
                     $establishment=ApplicationVerificationTeam::create($verification);
                 }
             }
-            $status="Notified For Team Verification";
+            if($request->status!="Rejected" && $request->status!="Approved"){
+                $status="Notified For Team Verification";
+            }
         }
         $estd =[
             'status'                       =>   $status,
@@ -904,23 +927,7 @@ class EstablishmentController extends Controller{
         return $this->successResponse($response_data);
     }
 
-    public function saveUploadedFiles(Request $request){
-        $doc="";
-        if($request->attachment_details!=null && $request->attachment_details!=""){
-            $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
-            foreach($request->attachment_details as $att){
-                $attach =[
-                    'ApplicationDetailsId'      =>  $application_details->id,
-                    'path'                      =>  $att['path'],
-                    'user_defined_file_name'    =>  $att['user_defined_name'],
-                    'name'                      =>  $att['original_name'],
-                    'updoad_type'               =>  'Applicant',
-                ];
-                $doc = ApplicationAttachments::create($attach);
-            }
-        }
-        return $doc;
-    }
+
 
     public function udpateOrgProfile(Request $request){
         $org_det=OrgProfile::where('org_id',$request->org_id)->first();
@@ -952,17 +959,15 @@ class EstablishmentController extends Controller{
     }
 
     public function updateOrgBasicDetials(Request $request){
-
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
-
         $org_data =[
             'id'                        =>  $org_det->id,
-            'isAspNetSchool'            =>  $org_det->isAspNetSchool,
-            'isColocated'               =>  $org_det->isColocated,
+            // 'isAspNetSchool'            =>  $org_det->isAspNetSchool,
+            // 'isColocated'               =>  $org_det->isColocated,
             'isGeoPoliticallyLocated'   =>  $org_det->isGeoPoliticallyLocated,
             'hasCounselingRoom'         =>  $org_det->hasCounselingRoom,
             'hasShiftSystem'            =>  $org_det->hasShiftSystem,
-            'hasCE'                     =>  $org_det->hasCE,
+            // 'hasCE'                     =>  $org_det->hasCE,
             'mofCode'                   =>  $org_det->mofCode,
             'zestAgencyCode'            =>  $org_det->zestAgencyCode,
             'recorded_on'               =>  date('Y-m-d h:i:s'),
@@ -1037,22 +1042,6 @@ class EstablishmentController extends Controller{
             Locations::create($location);
         }
 
-        //Contact details is no longer an add more array
-        //also the contact details and table have been changed
-
-        // foreach ($request->input('users') as $i=> $user){
-        //     $contact_details = array(
-        //         'organizationId'    =>  $request->org_id,
-        //         'contactTypeId'     =>  $user['contactName'],
-        //         'phone'             =>  $user['phone'],
-        //         'mobile'            =>  $user['mobile'],
-        //         'email'             =>  $user['email'],
-        //         'type'              =>  2,
-        //         'created_by'        =>  $request->user_id,
-        //         'created_at'        =>  date('Y-m-d h:i:s')
-        // );
-        //     $org_det = ContactDetails::create($contact_details);
-        // }
 
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }
@@ -1118,11 +1107,10 @@ class EstablishmentController extends Controller{
             else{
                 $appData=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
                 $app_details->estb_details=$appData;
+                if($appData->isFeedingSchool!=null && $appData->isFeedingSchool==1){
+                    $app_details->meal_details=ApplicationNoMeals::where('foreignKeyId',$appData->id)->get();
+                }
             }
-            // if($appData->isFeedingSchool==1){
-            //     $app_details->meal_details=ApplicationNoMeals::where('foreignKeyId',$appData->id)->get();
-            // }
-            //commented as not required those fields on establisment
         }
         return $this->successResponse($app_details);
     }

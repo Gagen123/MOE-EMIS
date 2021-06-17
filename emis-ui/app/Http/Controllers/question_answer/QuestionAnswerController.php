@@ -26,8 +26,8 @@ class QuestionAnswerController extends Controller{
             'name.required'  => 'this field is required',
             'status.required'  => 'this field is required'
         ];
-        
-        if($request->action_type=="add" && $request->record_type!="CategoryType"){
+
+        if($request->action_type=="add" && $request->record_type!="CategoryType" && $request->record_type!="Question"){
             $rules=array_merge($rules,
                 array('code'      =>  'required|numeric|digits:4',)
             );
@@ -38,21 +38,21 @@ class QuestionAnswerController extends Controller{
                 )
             );
         }
-        if($request->record_type=="Service" || $request->record_type=="Category" || $request->record_type=="CategoryType" 
+        if($request->record_type=="Service" || $request->record_type=="Category" || $request->record_type=="CategoryType"
         || $request->record_type=="Question"){
             $rules=array_merge($rules,
-                array('parent_field'      =>  'required',)
+                array('module_id'      =>  'required',)
             );
             $customMessages =array_merge($customMessages,
-                array( 'parent_field.required'  => 'this field is required',)
+                array( 'module_id.required'  => 'this field is required',)
             );
         }
         if($request->record_type=="Category" || $request->record_type=="Question"){
             $rules=array_merge($rules,
-                array('grant_parent_field'      =>  'required',)
+                array('service_id'      =>  'required',)
             );
             $customMessages =array_merge($customMessages,
-                array( 'grant_parent_field.required'  => 'this field is required',)
+                array( 'service_id.required'  => 'this field is required',)
             );
         }
         if($request->record_type=="Question"){
@@ -65,64 +65,64 @@ class QuestionAnswerController extends Controller{
                 'answer_type.required'      => 'this field is required',)
             );
         }
-        
-        $this->validate($request, $rules,$customMessages);
-        $data =[ 
+
+        //$this->validate($request, $rules,$customMessages);
+        $data =[
+            'module_id'                 =>  $request->module_id,
+            'service_id'                =>  $request->service_id,
+            'category_id'               =>  $request->category_id,
+            'category_type_id'          =>  $request->category_type_id,
+            'answer_type'               =>  $request->answer_type,
             'name'                      =>  $request['name'],
-            'grant_parent_field'        =>  $request['grant_parent_field'],
-            'parent_field'              =>  $request['parent_field'],
-            'category'                  =>  $request['category'],
-            'category_type'             =>  $request['category_type'],
             'answer_type'               =>  $request['answer_type'],
             'code'                      =>  $request['code'],
             'status'                    =>  $request['status'],
             'actiontype'                =>  $request['action_type'],
             'record_type'               =>  $request['record_type'],
+            'service_type'              =>  $request['service_type'],
             'id'                        =>  $request['id'],
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/questionAnswers/saveQuestionaries', $data);
+        // dd($data);
+        $response_data= $this->apiService->createData('emis/questionAnswerController/saveQuestionaries', $data);
         return $response_data;
     }
 
     public function loadQuestionaries($type=""){
-        // if($type="loadQuestion"){
-
-        // }
-        $response_data = $this->apiService->listData('emis/questionAnswers/loadQuestionaries/'.$type);
+        $response_data = $this->apiService->listData('emis/questionAnswerController/loadQuestionaries/'.$type);
         return $response_data;
     }
-    
+
     public function saveAnswers(Request $request){
         $rules = [
-            'grant_parent_field'        =>  'required',
-            'parent_field'              =>  'required',
+            'module_id'        =>  'required',
+            'service_id'              =>  'required',
             'question_field'            =>  'required',
         ];
         $customMessages = [
-            'grant_parent_field.required'   => 'this field is required',
-            'parent_field.required'         => 'this field is required',
+            'module_id.required'   => 'this field is required',
+            'service_id.required'         => 'this field is required',
             'question_field.required'       => 'this field is required',
         ];
-        
+
         $this->validate($request, $rules,$customMessages);
-        $data =[ 
-            'grant_parent_field'        =>  $request['grant_parent_field'],
-            'parent_field'              =>  $request['parent_field'],
+        $data =[
+            'module_id'                 =>  $request['module_id'],
+            'service_id'                =>  $request['service_id'],
             'category'                  =>  $request['category'],
             'question_field'            =>  $request['question_field'],
             'answer'                    =>  $request['answer'],
             'id'                        =>  $request['id'],
             'actiontype'                =>  $request['action_type'],
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/questionAnswers/saveAnswers', $data);
+        $response_data= $this->apiService->createData('emis/questionAnswerController/saveAnswers', $data);
         return $response_data;
     }
-    
+
     public function deleteAns($id=""){
-        $response_data = $this->apiService->deleteData('emis/questionAnswers/deleteAns/'.$id,$this->userId());
+        $response_data = $this->apiService->deleteData('emis/questionAnswerController/deleteAns/'.$id,$this->userId());
         return $response_data;
     }
-    
+
 }

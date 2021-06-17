@@ -4,17 +4,17 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="form-group">
-                        <label> Program</label>
-                        <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <label> Club</label>
+                        <select v-model="student_form.club" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('club') }" class="form-control select2" name="club" id="club">
+                        <option v-for="(item, index) in clubList" :key="index" v-bind:value="item.programme_id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="student_form" field="program"></has-error>
+                    <has-error :form="student_form" field="club"></has-error>
                     </div>
                 </div>
             </div>
@@ -43,20 +43,21 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- Need to fix this later -->
+            <!-- <div class="row">
                 <div class="col-sm-6">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label >Roles:</label><br>
-                        <!-- <span v-for="(item, index) in  roleList" :key="index">
+                        <span v-for="(item, index) in  roleList" :key="index">
                             <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
-                        </span> -->
+                        </span>
                         <label  v-for="(item, key, index) in  roleList" :key="index" class="pr-4">
                             <input  type="checkbox" v-model="form.role" :value="item.id" tabindex=""/> 
-                            {{item.name}}
+                            {{item.Name}}
                         </label>
                     </div>
                 </div>
-            </div>
+            </div> -->
           
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -70,7 +71,7 @@ export default {
         return {
             studentList:[],
             roleList:[],
-            programList:[],
+            clubList:[],
             roles: [],
             // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
             type:'clubmem',
@@ -78,7 +79,7 @@ export default {
 
             student_form: new form({
                 student: '',
-                program: '',
+                club: '',
                 role: [],
                 date: '',
                 status:'1',
@@ -100,12 +101,12 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri='students/listStudentClubs/'+this.id){
+        loadActiveClubList(uri='students/listStudentClubs/'+this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 // alert(JSON.stringify(response.data));
-                this.programList =  data.data.data;
+                this.clubList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -150,7 +151,7 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveProgramMembers',this.student_form)
+                this.student_form.post('/students/saveClubMembers',this.student_form)
                     .then((response) => {
                         let data=response.data.data;
                         if(data!="" && data=="exist"){
@@ -166,7 +167,7 @@ export default {
                             });
                         }
                    
-                    this.$router.push('/student_programs_members_list');
+                    this.$router.push('/student_clubs_members_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -182,12 +183,13 @@ export default {
             if(id=="student"){
                 this.student_form.student=$('#student').val();
             }
-            if(id=="program"){
-                this.student_form.program=$('#program').val();
+            if(id=="club"){
+                this.student_form.club=$('#club').val();
             }
         },
     },
      mounted() {
+        this.loadActiveRolesList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -202,8 +204,8 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveProgramList();
-        this.loadActiveRolesList();
+        this.loadActiveClubList();
+       
     },
     
 }

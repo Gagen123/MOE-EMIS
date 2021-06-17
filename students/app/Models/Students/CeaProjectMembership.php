@@ -15,6 +15,6 @@ class CeaProjectMembership extends Model
         'id',
         'StdStudentId',
         'CeaProjectId',
-        'Task'
+        'Task',
     ];
 }

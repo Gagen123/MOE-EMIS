@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form>
+        <form class="p-4">
             <div class="row">
                 <div class="col-sm-8">
                     <!-- text input -->
@@ -16,7 +16,7 @@
                     <div class="form-group">
                         <label> Training Type</label>
                         <select v-model="student_form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
-                        <option v-for="(item, index) in trainingList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in trainingList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="training_type"></has-error>
                     </div>
@@ -24,10 +24,10 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label>Program</label>
-                        <select v-model="student_form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
-                    <has-error :form="student_form" field="program_id"></has-error>
+                    <has-error :form="student_form" field="program"></has-error>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <div class="form-group">
                         <label>Country</label>
                         <select v-model="student_form.country" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('country') }" class="form-control select2" name="country" id="country">
-                        <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.country">{{ item.country }}</option>
+                        <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                     </select>
                     <has-error :form="student_form" field="country"></has-error>
                     </div>
@@ -52,12 +52,12 @@
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>From Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_err('from_date')" type="date">
+                    <input class="form-control" v-model="student_form.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_error('from_date')" type="date">
                     <has-error :form="student_form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>To Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_err('to_date')" type="date">
+                    <input class="form-control" v-model="student_form.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_error('to_date')" type="date">
                     <has-error :form="student_form" field="to_date"></has-error>
                 </div>
             </div>
@@ -81,25 +81,28 @@ export default {
         return {
             programList:[],
             trainingList:[],
-            countryList:[{country:"Bhutan"}],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            countryList:[],
 
             student_form: new form({
                 name:'',
+                training_type:'',
+                program:'',
                 country: '',
                 place: '',
                 from_date: '',
                 to_date: '',
                 details:'',
+                id:'',
+                form_type:'edit',
             }),
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+         loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.programList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -114,6 +117,16 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+        loadcountryList(uri = 'masters/loadGlobalMasters/all_country'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.countryList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            })
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
@@ -173,16 +186,21 @@ export default {
 
         this.loadActiveProgramList();
         this.loadActiveTrainingList();
-        //load country list
-        //this.loadActiveTrainingList();
+        this.loadcountryList();
+   
     },
     created() {
-        this.student_form.name=this.$route.params.data.name;
-        this.student_form.training_type=this.$route.params.data.CeaTrainingTypeId;
-        this.student_form.program_id=this.$route.params.data.CeaProgrammeId;
-        this.student_form.country=this.$route.params.data.country_id;
-        this.student_form.place=this.$route.params.data.place;
-        this.student_form.details=this.$route.params.data.description;
+        console.log(this.$route.params.data);
+        this.student_form.name=this.$route.params.data.Name;
+        this.student_form.program=this.$route.params.data.CeaProgrammeId;
+        this.student_form.training_type=this.$route.params.data.CeaTrainingId;
+        this.student_form.country=this.$route.params.data.CmnCountryId;
+        this.student_form.from_date=this.$route.params.data.FromDate;
+        this.student_form.to_date=this.$route.params.data.ToDate;
+        this.student_form.TrainingTypeName=this.$route.params.data.TrainingTypeName;
+        this.student_form.Program=this.$route.params.data.Program;
+        this.student_form.place=this.$route.params.data.Place;
+        this.student_form.details=this.$route.params.data.DetailsOfTraining;
         this.student_form.id=this.$route.params.data.id;
     },
 }

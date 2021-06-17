@@ -4,36 +4,36 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Module:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="grant_parent_field" v-model="form.grant_parent_field" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('grant_parent_field') }">
+                        <label>Module:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="module_id" v-model="form.module_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('module_id') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in module_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="grant_parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="module_id"></has-error>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Service:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="parent_field" v-model="form.parent_field" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parent_field') }">
+                        <label>Service:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="service_id" v-model="form.service_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('service_id') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in service_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="service_id"></has-error>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Category:<span class="text-danger">*</span></label>
-                        <select class="form-control select2" id="category" v-model="form.category" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category') }">
+                        <select class="form-control select2" id="category_id" v-model="form.category_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_id') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="category"></has-error>
+                        </select>
+                        <has-error :form="form" field="category_id"></has-error>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Category Type:</label>
-                        <select class="form-control select2" id="category_type" v-model="form.category_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type') }">
+                        <select class="form-control select2" id="category_type_id" v-model="form.category_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type_id') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in category_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="category_type"></has-error>
+                        </select>
+                        <has-error :form="form" field="category_type_id"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -45,7 +45,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Answer Type:<span class="text-danger">*</span></label> 
+                        <label>Answer Type:<span class="text-danger">*</span></label>
                         <select class="form-control select2" id="answer_type" v-model="form.answer_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('answer_type') }">
                             <option value="">--Select--</option>
                             <option value="Dropdown">Dropdown</option>
@@ -54,28 +54,28 @@
                             <option value="Text">Text</option>
                             <option value="Number">Number</option>
                             <option value="TextArea">TextArea</option>
-                        </select> 
+                        </select>
                         <has-error :form="form" field="answer_type"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label> 
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" readonly v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>           
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -84,13 +84,14 @@ export default {
             module_list:[],
             service_list:[],
             category_list:[],
+            category_type_id:'',
             category_type_list:[],
             form: new form({
                 id: '',
-                grant_parent_field:'',
-                parent_field:'',
-                category:'',
-                category_type:'',
+                module_id:'',
+                service_id:'',
+                category_id:'',
+                category_type_id:'',
                 name: '',
                 answer_type:'',
                 code:'',
@@ -106,7 +107,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadmodulelist(uri = 'questionAnswers/loadQuestionaries/all_active_Module'){
+        loadmodulelist(uri = 'questionAnswerController/loadQuestionaries/all_active_Module'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -117,7 +118,7 @@ export default {
             });
         },
         async getservicelist(id){
-            let uri = 'questionAnswers/loadQuestionaries/byparentId_Service_'+id;
+            let uri = 'questionAnswerController/loadQuestionaries/byparentId_Service_'+id;
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -128,7 +129,7 @@ export default {
             });
         },
         async getCategoryList(id){
-            let uri = 'questionAnswers/loadQuestionaries/byparentId_Category_'+id;
+            let uri = 'questionAnswerController/loadQuestionaries/byparentId_Category_'+id;
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -148,7 +149,7 @@ export default {
             if(type=="CategoryType"){
                 this.category_type_list=[];
             }
-            let uri = 'questionAnswers/loadQuestionaries/actlistbyparent_'+type+'_'+id;
+            let uri = 'questionAnswerController/loadQuestionaries/actlistbyparent_'+type+'_'+id;
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -160,6 +161,7 @@ export default {
                 }
                 if(type=="CategoryType"){
                     this.category_type_list=data.data.data;
+                    $('#category_type_id').val(this.category_type_id).trigger('change');
                 }
             })
             .catch(function (error){
@@ -172,7 +174,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/questionAnswers/saveQuestionaries',this.form)
+                this.form.post('/questionAnswerController/saveQuestionaries',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -183,54 +185,63 @@ export default {
                 .catch((error) => {
                     console.log("Error:"+error)
                 })
-            } 
-		}, 
+            }
+		},
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="grant_parent_field"){
-                this.getdropdowns($('#grant_parent_field').val(),'Service');
-                this.getdropdowns($('#grant_parent_field').val(),'CategoryType');
-                this.form.grant_parent_field=$('#grant_parent_field').val();
+            if(id=="module_id"){
+                this.getdropdowns($('#module_id').val(),'Service');
+                this.getdropdowns($('#module_id').val(),'CategoryType');
+                this.form.module_id=$('#module_id').val();
             }
-            if(id=="parent_field"){
-                this.getdropdowns($('#parent_field').val(),'Category');
-                this.form.parent_field=$('#parent_field').val();
-            } 
-            if(id=="category"){
-                this.form.category=$('#category').val();
+            if(id=="service_id"){
+                this.getdropdowns($('#service_id').val(),'Category');
+                this.form.service_id=$('#service_id').val();
             }
-            if(id=="category_type"){
-                this.form.category_type=$('#category_type').val();
+            if(id=="category_id"){
+                this.form.category_id=$('#category_id').val();
+            }
+            if(id=="category_type_id"){
+                this.form.category_type_id=$('#category_type_id').val();
             }
             if(id=="answer_type"){
                 this.form.answer_type=$('#answer_type').val();
-            }           
+            }
         }
     },
-    mounted(){ 
+    mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         this.loadmodulelist();
-
-        this.getservicelist(this.$route.params.data.service.parent_id);
-        
-        this.form.grant_parent_field=this.$route.params.data.service.parent_id;
-        this.getCategoryList(this.$route.params.data.service.id);
-        this.getdropdowns(this.$route.params.data.service.parent_id,'CategoryType');
-        this.form.category_type=this.$route.params.data.category_type_id;
-        this.form.parent_field=this.$route.params.data.service.id;
-        this.form.name=this.$route.params.data.name;
-        this.form.answer_type=this.$route.params.data.answer_type;
-        $('#answer_type').val(this.$route.params.data.answer_type).trigger('change');
-        this.form.status=this.$route.params.data.status;
-        this.form.code=this.$route.params.data.code;
-        this.form.id=this.$route.params.data.id;
+        axios.get('questionAnswerController/loadQuestionaries/loadQuestionDetails_'+this.$route.params.data.id)
+        .then(response =>{
+            let data = response.data.data;
+            this.getservicelist(data.module_id);
+            $('#module_id').val(data.module_id).trigger('change');
+            this.form.module_id=data.module_id;
+            this.category_type_id=data.category_type_id;
+            this.getCategoryList(data.module_id);
+            this.getdropdowns(data.module_id,'CategoryType');
+            this.form.category_id=data.category_id;
+            $('#category_type_id').val(data.category_type_id).trigger('change');
+            $('#category_type_id').val(data.category_type_id).trigger('change');
+            this.form.service_id=data.service_id;
+            this.form.name=data.name;
+            this.form.answer_type=data.answer_type;
+            $('#answer_type').val(data.answer_type).trigger('change');
+            this.form.status=data.status;
+            this.form.code=data.code;
+            this.form.id=data.id;
+        })
+        .catch(function (error){
+            console.log("Error:"+error)
+        });
 
         $('.select2').on('select2:select', function (){
             Fire.$emit('changeval',$(this).attr('id'))
@@ -239,6 +250,6 @@ export default {
             this.changefunction(id);
         });
     },
-    
+
 }
 </script>

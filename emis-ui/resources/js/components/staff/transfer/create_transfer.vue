@@ -1,13 +1,13 @@
 <template>
     <div>
-        
+
         <div class="card card-danger card-outline" id="invalidsection" style="display:none">
             <div class="card-body pb-0 mb-0">
                 <div class="callout callout-danger">
-                    <div class="form-group row"> 
+                    <div class="form-group row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0" id="err_message"></label><br>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -16,8 +16,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item application-tab" @click="shownexttab('application-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Application Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Application Details </label>
                         </a>
                     </li>
                     <li class="nav-item service-tab" @click="shownexttab('service-tab')">
@@ -38,25 +38,25 @@
                         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
                             <div class="card-body pb-0 mb-0" style="display:none">
                                 <div class="callout callout-success">
-                                    <div class="form-group row"> 
+                                    <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label class="mb-0">Year:</label>
                                             <span class="text-blue text-bold">{{form.t_year}}</span>
-                                        </div> 
+                                        </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label class="mb-0">From Date:</label>
                                             <span class="text-blue text-bold">{{ form.t_from_data}}</span>
-                                        </div> 
+                                        </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label class="mb-0">End Date:</label>
                                             <span class="text-blue text-bold">{{form.t_to_date}}</span>
-                                        </div> 
+                                        </div>
                                     </div>
-                                    <div class="form-group row"> 
+                                    <div class="form-group row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <label class="mb-0">Remarks:</label>
                                             <span class="text-blue text-bold">{{ form.t_remarks}}</span>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Applicant:<i class="text-danger">*</i></label>
@@ -110,20 +110,20 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th> 
-                                            <th>Working Agency</th> 
-                                            <th>Dzongkhag</th> 
-                                            <th>year</th> 
+                                            <th>SlNo</th>
+                                            <th>Working Agency</th>
+                                            <th>Dzongkhag</th>
+                                            <th>year</th>
                                             <th>Position Title</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         <tr v-for="(item, index) in working_history_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td> 
+                                            <td>{{ item.staff_details.name}}</td>
                                             <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td> 
+                                            <td>{{ item.email }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -135,22 +135,22 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th> 
-                                            <th>Training Name</th> 
-                                            <th>Vanue</th> 
-                                            <th>year</th> 
-                                            <th>Start Date</th> 
-                                            <th>End Date</th> 
+                                            <th>SlNo</th>
+                                            <th>Training Name</th>
+                                            <th>Vanue</th>
+                                            <th>year</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Status</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                          <tr v-for="(item, index) in training_details_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td> 
+                                            <td>{{ item.staff_details.name}}</td>
                                             <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td> 
+                                            <td>{{ item.email }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -163,7 +163,7 @@
                                 <button class="btn btn-primary" @click="shownexttab('undertaking-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="tab-pane fade tab-content-details" id="undertaking-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -171,43 +171,43 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th> 
-                                            <th>Preferences</th> 
-                                            <th>Dzongkhag/Thromde</th> 
+                                            <th>SlNo</th>
+                                            <th>Preferences</th>
+                                            <th>Dzongkhag/Thromde</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         <tr>
-                                            <td>1</td> 
-                                            <td>Preferences 1</td> 
+                                            <td>1</td>
+                                            <td>Preferences 1</td>
                                             <td>
                                                 <select v-model="form.preference_dzongkhag1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag1') }" class="form-control select2" name="preference_dzongkhag1" id="preference_dzongkhag1">
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag1"></has-error>
-                                                <span class="text-danger" id="preference_dzongkhag1_err"></span> 
-                                            </td> 
-                                        </tr> 
+                                                <span class="text-danger" id="preference_dzongkhag1_err"></span>
+                                            </td>
+                                        </tr>
                                         <tr>
-                                            <td>2</td> 
-                                            <td>Preferences 2</td> 
+                                            <td>2</td>
+                                            <td>Preferences 2</td>
                                             <td>
                                                 <select v-model="form.preference_dzongkhag2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag2') }" class="form-control select2" name="preference_dzongkhag2" id="preference_dzongkhag2">
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag2"></has-error>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
-                                            <td>3</td> 
-                                            <td>Preferences 3</td> 
+                                            <td>3</td>
+                                            <td>Preferences 3</td>
                                             <td>
                                                 <select v-model="form.preference_dzongkhag3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag3') }" class="form-control select2" name="preference_dzongkhag3" id="preference_dzongkhag3">
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag3"></has-error>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -218,16 +218,16 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Attachment Name</th> 
-                                            <th>File</th> 
+                                            <th>Attachment Name</th>
+                                            <th>File</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" readonly :value="attach.user_defined_name">
                                             </td>
-                                            <td>    
+                                            <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
@@ -238,19 +238,19 @@
                                                 <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                 <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                             </td>
-                                            <td>                                
+                                            <td>
                                                 <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                 <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
-                                            <td colspan="3"> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                            <td colspan="3">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                 @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore"
                                                 @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -265,13 +265,13 @@
                             <div class="form-group row">
                                 <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
                                     <input type="checkbox" name="undertaking" class="icheck-success d-inline" :id="'undertaking'+index" :value="item.id">
-                                </div> 
+                                </div>
                                 <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
                                     <label class="pr-4"> &nbsp;{{ item.name }}</label><br />
-                                </div> 
-                            </div> 
+                                </div>
+                            </div>
                         </span>
-                        <span class="text-danger" id="undertaking_err"></span> 
+                        <span class="text-danger" id="undertaking_err"></span>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -283,7 +283,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -333,10 +333,10 @@ export default {
             this.filecount++;
             this.form.attachments.push({file_name:'',attachment:''})
         },
-        removeattachments(index){    
+        removeattachments(index){
             if(this.form.attachments.length>1){
                 this.filecount--;
-                this.form.attachments.pop(); 
+                this.form.attachments.pop();
                 this.form.ref_docs.pop();
             }
         },
@@ -349,7 +349,7 @@ export default {
             else{
                 $('#file_name'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
 		formaction: function(type){
             if(type=="reset"){
@@ -370,7 +370,7 @@ export default {
                     console.log("Error.")
                 })
             }
-		}, 
+		},
         loadstaff(){
             let uri = 'loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
@@ -412,7 +412,7 @@ export default {
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-            }); 
+            });
         },
         validated_final_form(){
             let returntue=true;
@@ -432,8 +432,8 @@ export default {
             }
             return returntue;
         },
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 if(this.validated_final_form()){
                     Swal.fire({
                         text: "Are you sure you wish to submit for further approval ?",
@@ -459,26 +459,26 @@ export default {
                                 formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
                             }
                             axios.post('/staff/transfer/submitFinalapplicantDetails', formData, config)
-                            .then((response) =>{  
+                            .then((response) =>{
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="applicaiton for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application for Transfer has been submitted for further action'
                                     });
-                                } 
+                                }
                             })
-                            .catch((error) => { 
+                            .catch((error) => {
                                 console.log("Errors:"+error)
                             });
                         }
                     });
                 }
             }
-            else if(nextclass=="service-tab"){ 
+            else if(nextclass=="service-tab"){
                 this.form.post('/staff/transfer/submitapplicantDetails')
-                .then((response) => {  
+                .then((response) => {
                     if(response!=null && response!=""){
                         Toast.fire({
                             icon: 'success',
@@ -488,11 +488,11 @@ export default {
                         this.getDraftDetails();
                     }
                 })
-                .catch((error) =>{  
+                .catch((error) =>{
                     console.log("Error:"+error)
                 });
             }
-            else if(nextclass=="service-tab"){ 
+            else if(nextclass=="service-tab"){
                 this.getDraftDetails();
                 this.change_tab(nextclass);
             }
@@ -515,8 +515,8 @@ export default {
                 let data = response.data.data;
                 this.form.staff_id=data['staff_id'];
                 $('#staff_id').val(data['staff_id']).trigger('change');
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
         },
@@ -533,7 +533,7 @@ export default {
                     let to_date = new Date(data.to_date);
                     let today = new Date();
                     let diffTime = Math.abs(to_date - today);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                     if(diffDays<=5){
                         this.t_warning_message="Only "+diffDays+" day(s) left";
                         this.t_warning=true;
@@ -544,8 +544,8 @@ export default {
                     $('#invalidsection').show();
                     $('#t_form_details').hide();
                 }
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
         },
@@ -555,19 +555,19 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="staff_id"){ 
+            if(id=="staff_id"){
                 this.form.staff_id=$('#staff_id').val();
             }
-            if(id=="preference_dzongkhag1"){ 
+            if(id=="preference_dzongkhag1"){
                 this.form.preference_dzongkhag1=$('#preference_dzongkhag1').val();
             }
-            if(id=="preference_dzongkhag2"){ 
+            if(id=="preference_dzongkhag2"){
                 this.form.preference_dzongkhag2=$('#preference_dzongkhag2').val();
             }
-            if(id=="preference_dzongkhag3"){ 
+            if(id=="preference_dzongkhag3"){
                 this.form.preference_dzongkhag3=$('#preference_dzongkhag3').val();
             }
-            
+
         },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
@@ -579,8 +579,8 @@ export default {
                     this.form.reason_id=data.transfer_reason_id;
                     this.form.description=data.description;
                 }
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
         }
@@ -592,9 +592,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

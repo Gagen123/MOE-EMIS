@@ -21,36 +21,34 @@ class StudentProjectController extends Controller
     public function saveStudentProject(Request $request){
 
         $rules = [
-            'name'            => 'required',
-            'place'            => 'required',
-            'project_type_id'            => 'required',
-            'program_id'            => 'required',
-            'from_date'            => 'required',
-            'to_date'               => 'required'
+            'name'              => 'required',
+            'place'             => 'required',
+            'project_type_id'   => 'required',
+            'from_date'         => 'required',
+            'to_date'           => 'required'
         ];
 
         $customMessages = [
-            'name.required'  => 'This field is required',
-            'place.required'     => 'This field is required',
+            'name.required'             => 'This field is required',
+            'place.required'            => 'This field is required',
             'project_type_id.required'  => 'This field is required',
-            'program_id.required'     => 'This field is required',
-            'from_date.required'  => 'This field is required',
-            'to_date.required'     => 'This field is required',
+            'from_date.required'        => 'This field is required',
+            'to_date.required'          => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'name'          => $request->name,
-            'date'             => $request->date,
+            'id'                => $request->id,
+            'name'              => $request->name,
+            'date'              => $request->date,
             'place'             => $request->place,
-            'project_type_id'            => $request->project_type_id,
-            'program_id'           => $request->program_id,
-            'from_date'                => $request->from_date,
-            'to_date'          => $request->to_date,
-            'description'          => $request->description,
-
-            //'user_id'        => $this->user_id() 
+            'project_type_id'   => $request->project_type_id,
+            'program_id'        => $request->program_id,
+            'from_date'         => $request->from_date,
+            'to_date'           => $request->to_date,
+            'description'       => $request->description,
+            'organizationId'    => $this->getWrkingAgencyId(), 
+            'user_id'           => $this->userId()
         ];
 
 
@@ -68,6 +66,7 @@ class StudentProjectController extends Controller
     */
 
     public function listStudentProjects($param=""){
+        $param = $this->getWrkingAgencyId();
         $student_records = $this->apiService->listData('emis/students/listStudentProjects/'.$param);
         return $student_records;
     }
@@ -81,7 +80,7 @@ class StudentProjectController extends Controller
         $rules = [
             'student'            => 'required',
             'project'            => 'required',
-            'task'            => 'required',
+            'task'              => 'required',
         ];
 
         $customMessages = [
@@ -94,12 +93,11 @@ class StudentProjectController extends Controller
         $data =[
             'id'               => $request->id,
             'student'          => $request->student,
-            'project'             => $request->project,
-            'task'             => $request->task
-
-            //'user_id'        => $this->user_id() 
+            'project'          => $request->project,
+            'task'             => $request->task,
+            'organizationId'    => $this->getWrkingAgencyId(), 
+            'user_id'           => $this->userId()
         ];
-
 
         try{
             $response_data= $this->apiService->createData('emis/students/saveProjectMembers', $data);
@@ -111,6 +109,9 @@ class StudentProjectController extends Controller
     }
 
     public function listProjectMembers($param=""){
+
+        $param = $this->getWrkingAgencyId();
+        
         $student_records = $this->apiService->listData('emis/students/listProjectMembers/'.$param);
         return $student_records;
     }

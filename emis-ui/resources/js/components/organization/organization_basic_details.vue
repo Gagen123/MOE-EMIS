@@ -49,7 +49,7 @@
                                                     <has-error :form="form" field="officialEmail"></has-error>
                                                 </div>  
                                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                                    <label>Official Website:</label>
+                                                    <label>Official Website Link:</label>
                                                     <input type="text" class="form-control" v-model="form.officialWebsite" :class="{ 'is-invalid': form.errors.has('officialWebsite') }" >
                                                     <has-error :form="form" field="officialWebsite"></has-error>
                                                 </div>
@@ -123,7 +123,6 @@
                     if(response_data.category=="private_eccd"){
                         this.category="Public ECCD";
                     }
-
                     this.form.isAspNetSchool=response_data.isAspNetSchool;
                     this.form.isColocated=response_data.isColocated;
                     this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;

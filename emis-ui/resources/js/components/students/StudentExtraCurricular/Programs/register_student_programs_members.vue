@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
-                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
                 </div>
@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label> Program</label>
                         <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.programme_id">{{ item.name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
                     </div>
@@ -39,20 +39,21 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- Need to fix the roles-->
+            <!-- <div class="row">
                 <div class="col-sm-6">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label >Roles:</label><br>
                         <span v-for="(item, index) in  roleList" :key="index">
-                            <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                            <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.Name }}</label>
                         </span>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div>
+            </div> 
         </form>
     </div>
 </template>
@@ -65,8 +66,7 @@ export default {
             programList:[],
             roles: [],
             // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
-            type:programmem,
-
+            // type:programmem,
 
             student_form: new form({
                 student: '',
@@ -80,16 +80,40 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+        loadStudentList(uri='students/loadStudentList/' +this.id){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                console.log(data);
                 this.studentList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+        getClassTeacher(){
+            axios.get('academics/getClassTeacherClasss')
+            .then(response =>{
+                let data = response.data.data
+                data.forEach((item)=>{
+                    this.classId = item.org_class_id
+                    if(item.org_stream_id != null){
+                        this.streamId = item.org_stream_id;
+                    }else if(item.org_section_id != null){
+                        this.sectionId = item.org_section_id;
+                    }else{
+                        this.classId = item.org_class_id
+                    }
+                    this.OrgClassStreamId = item.org_class_stream_id;
+                    this.orgId = item.org_id;
+                    this.getStudentBasedOnTeacherClassSect();
+                })
+            })
+        },
+        getStudentBasedOnTeacherClassSect(){
+            axios.get("common/getStudentList/"+ this.orgId +'/'+ this.OrgClassStreamId)
+            .then(response => {
+                this.studentList = response.data;
+            })
         },
         loadActiveProgramList(uri='students/listStudentPrograms/'+this.id){
             axios.get(uri)
@@ -146,7 +170,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_programs_members_list');
+                    this.$router.push('/student_programs_members');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -180,10 +204,11 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
         this.loadStudentList();
+        this.getClassTeacher();
         this.loadActiveProgramList();
         this.loadActiveRolesList();
+
     },
     
 }
