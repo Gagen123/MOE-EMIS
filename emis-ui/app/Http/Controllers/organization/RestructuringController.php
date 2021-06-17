@@ -71,7 +71,7 @@ class RestructuringController extends Controller
                     $establishment_data = $this->setFeedingChange($request);
                     break;
                 }
-            case "level_change" : {
+            case "downgradation" : {
                     $validation = $this->validateChangeInLevel($request);
                     $establishment_data = $this->setChangeInLevel($request);
                     break;
@@ -111,9 +111,9 @@ class RestructuringController extends Controller
                 $establishment_data = $this->setFeeStructure($request);
                 break;
             }
-            case "boadring_change" : {
+            case "Boarding_change" : {
                 $validation = $this->validateGeneralChange($request);
-                $establishment_data = $this->setBoadring($request);
+                $establishment_data = $this->setBoarding($request);
                 break;
             }
             case "stream_change" : {
@@ -138,6 +138,7 @@ class RestructuringController extends Controller
         $establishment_data=$establishment_data+[
             'attachment_details'            =>   $attachment_details,
         ];
+        // dd($establishment_data);
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet,$request->application_for);
         $screen_id="";
@@ -1486,7 +1487,7 @@ class RestructuringController extends Controller
         return $change;
     }
 
-    private function setBoadring($request){
+    private function setBoarding($request){
         $change =[
             'organizationId'            =>  $request['organizationId'],
             'isFeedingSchool'           =>  $request['isFeedingSchool'],

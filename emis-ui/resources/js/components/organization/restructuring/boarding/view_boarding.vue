@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change to Boadring</label>
+                            <label class="mb-0.5">Change to Boarding</label>
                         </a>
                     </li>
                 </ul>
@@ -56,12 +56,12 @@
 
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
-                                        <label>Is Boadring:</label>
+                                        <label>Is Boarding:</label>
                                         <label><input  type="radio" disabled v-model="organization_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
                                         <label><input  type="radio" disabled v-model="organization_details.isFeedingSchool" value="0" tabindex=""/> No</label>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
-                                        <label>Propose for Boadring:<span class="text-danger">*</span></label>
+                                        <label>Propose for Boarding:<span class="text-danger">*</span></label>
                                         <label><input  type="radio" disabled v-model="form.isFeedingSchool" value="1" tabindex=""/> Yes</label>
                                         <label><input  type="radio" disabled v-model="form.isFeedingSchool" value="0" tabindex=""/> No</label>
                                     </div>
@@ -97,8 +97,8 @@ export default {
             calssArray:{},
             streamArray:{},
             form: new form({
-                organizationId:'',isFeedingSchool:'', application_type:'boadring_change',
-                application_for:'Change to Boadring', action_type:'edit', status:'Submitted',organization_type:'',
+                organizationId:'',isFeedingSchool:'', application_type:'Boarding_change',
+                application_for:'Change to Boarding', action_type:'edit', status:'Submitted',organization_type:'',
             }),
         }
     },
@@ -145,7 +145,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change to Boadring details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change to Boarding details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'boarding_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',

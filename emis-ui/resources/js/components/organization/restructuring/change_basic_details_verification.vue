@@ -224,14 +224,14 @@
                                     <span class="text-blue text-bold">{{appicationDetails.change_details.proposedChange}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='boadring_change'">
+                            <div class="form-group row" v-if="appicationDetails.application_type=='Boarding_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Boadring (Current):</label>
+                                    <label>Boarding (Current):</label>
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Propose for Boadring Change:</label>
+                                    <label>Propose for Boarding Change:</label>
                                     <label><input  type="radio" disabled v-model="appicationDetails.change_details.proposedChange" value="1" tabindex=""/> Yes</label>
                                     <label><input  type="radio" disabled v-model="appicationDetails.change_details.proposedChange" value="0" tabindex=""/> No</label>
                                 </div>
@@ -269,8 +269,7 @@
                                 </div>
                             </div>
 
-
-                            <div v-if="appicationDetails.application_type=='level_change' || appicationDetails.application_type=='stream_change'">
+                            <div v-if="appicationDetails.application_type=='downgradation' || appicationDetails.application_type=='upgradation' || appicationDetails.application_type=='stream_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Proposed Level:</label>

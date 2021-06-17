@@ -636,9 +636,9 @@ export default {
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
             }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
+            // if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+            //     $('#dzongkhag').addClass('select2-hidden-accessible');
+            // }
             if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
                 $('#gewog').addClass('select2-hidden-accessible');
             }

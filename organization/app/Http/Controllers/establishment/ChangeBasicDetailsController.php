@@ -72,7 +72,7 @@ class ChangeBasicDetailsController extends Controller
                         $change_details_data = $this->extractFeedingChangeData($request, $applicationDetailsId);
                         break;
                     }
-                case "level_change" : {
+                case "downgradation" : {
                         $change_details_data = $this->extractChangeInLevelData($request, $applicationDetailsId);
                         break;
                     }
@@ -150,7 +150,7 @@ class ChangeBasicDetailsController extends Controller
                 $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
 
-            if($request['application_type']=="level_change"){
+            if($request['application_type']=="downgradation" || $request['application_type']=="upgradation"){
                 $data =[
                     'proposedChange'           =>  $request['level'],
                 ];
@@ -189,6 +189,7 @@ class ChangeBasicDetailsController extends Controller
                     }
                 }
                 $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->app_level_change_id)->first();
+                $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
             if($request['application_type']=="sen_change"){
                 $data =[
@@ -224,6 +225,7 @@ class ChangeBasicDetailsController extends Controller
                     }
                 }
                 $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+                $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
 
             if($request['application_type']=="proprietor_change"){
@@ -805,7 +807,7 @@ class ChangeBasicDetailsController extends Controller
             if($response_data->application_type=="proprietor_change"){
                 $response_data->change_prop=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_det->id)->first();
             }
-            if($response_data->application_type=="level_change" || $response_data->application_type=="stream_change"){
+            if($response_data->application_type=="downgradation" || $response_data->application_type=="upgradation" || $response_data->application_type=="stream_change"){
                 $response_data->change_classes = DB::table('classes as c')
                 ->join('application_class_stream as cl', 'c.id', '=', 'cl.classId')
                 ->select('cl.*', 'c.class', 'c.id AS classId')
@@ -956,10 +958,15 @@ class ChangeBasicDetailsController extends Controller
                     $change_details_data = $this->updateProprietor($change_details,  $org_details, $request);
                     break;
                 }
-                case "level_change" : {
-                    $change_details_data = $this->updateLevel($change_details,  $org_details, $request,'level_change');
+                case "downgradation" : {
+                    $change_details_data = $this->updateLevel($change_details,  $org_details, $request,'downgradation');
                     break;
                 }
+                case "upgradation" : {
+                    $change_details_data = $this->updateLevel($change_details,  $org_details, $request,'upgradation');
+                    break;
+                }
+
                 case "stream_change" : {
                     $change_details_data = $this->updateLevel($change_details,  $org_details, $request,'stream_change');
                     break;

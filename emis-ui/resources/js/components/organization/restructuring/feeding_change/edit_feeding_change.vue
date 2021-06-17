@@ -36,9 +36,9 @@
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4" v-if="existing_details.isFeedingSchool==1">
-                                    <label><input  type="checkbox" id="exisfed1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" id="exisfed2"  value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" id="exisfed3"  value="3" tabindex=""/> Three Meals</label>
+                                    <label><input  type="checkbox" id="exisfed1" disabled value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" id="exisfed2" disabled value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" id="exisfed3" disabled value="3" tabindex=""/> Three Meals</label>
                                 </div>
                             </div>
 
@@ -53,6 +53,47 @@
                                     <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
                                     <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
                                     <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Upload File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    <span>
+                                                        <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                            <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                <td>
+                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <br>
@@ -82,13 +123,82 @@ export default {
             existing_details:'',
             category:'',
             record_id:'',
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
                 application_for:'Change in Feeding Details', action_type:'edit', status:'Submitted',organization_type:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
         /**
          * method to remove error
          */
@@ -165,7 +275,29 @@ export default {
                             clasArray.push($(this).val());
                         });
                         this.form.feeding=clasArray;
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('isfeedingschool', this.form.isfeedingschool);
+                        for(let i=0;i<this.form.feeding.length;i++){
+                            formData.append('feeding[]', this.form.feeding[i]);
+                        }
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('status', this.form.status);
+                        formData.append('organization_type', this.form.organization_type);
+                        axios.post('organization/saveChangeBasicDetails', formData, config)
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -260,12 +392,26 @@ export default {
                 this.getorgdetials(response_data.change_details.organizationId);
                 this.form.id=response_data.change_details.id;
                 this.form.isfeedingschool=response_data.change_details.proposedChange;
+                this.applicationdetailsatt=response_data.attachments;
                 if(response_data.change_details.proposedChange==1){
                     $('#feedingDetails').show();
                     for(let i=0;i<response_data.feed_det.length;i++){
                         $('#feeding'+response_data.feed_det[i].noOfMeals).prop('checked',true);
                     }
                 }
+            });
+        },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
             });
         },
 
@@ -277,10 +423,11 @@ export default {
         $('.select2').select2({
             theme: 'bootstrap4'
         });
+        $('#organizationId').prop('disabled',true);
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
-
+        this.getAttachmentType('ForTransaction__Application_for_Change_in_Feeding_Details');
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

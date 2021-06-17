@@ -86,10 +86,10 @@
                                                     </td>
                                                     <td class="existstrm_clas" v-else> </td>
                                                     <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                        <input type="checkbox"  :id="item.id" :value="item.id">
+                                                        <input type="checkbox"  :id="item.id" :value="item.id" disabled>
                                                     </td>
                                                     <td v-else>
-                                                        <input type="checkbox" checked="true">
+                                                        <input type="checkbox" checked="true" disabled>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -138,6 +138,47 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                    <td>
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        <span>
+                                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                    <td>
+                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -172,13 +213,82 @@ export default {
             calssArray:{},
             streamArray:{},
             organization_details:'',
+            applicationdetailsatt:'',
             form: new form({
-                organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
-                application_for:'Upgrade Downgrade', action_type:'edit', status:'Submitted',organization_type:''
+                id:'',app_level_change_id:'',organizationId:'', level:'', application_type:'upgradation', class:[], stream:[],
+                application_for:'Upgradation', action_type:'edit', status:'Submitted',organization_type:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             })
         }
     },
     methods: {
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
         /**
          * method to remove error
          */
@@ -271,6 +381,7 @@ export default {
                 $('#level').val(response_data.change_details.proposedChange).trigger('change');
                 this.getClassStream(this.levelArray[response_data.change_details.proposedChange]);
                 let class_data=response_data.change_class_details;
+                this.applicationdetailsatt=response_data.attachments;
                 for(let i=0;i<class_data.length;i++){
                     if(class_data[i].streamId!=""){
                         $('#applibable'+class_data[i].classStreamId).prop('checked',true);
@@ -296,7 +407,34 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('app_level_change_id', this.form.app_level_change_id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        formData.append('organizationId', this.form.organizationId);
+                       formData.append('level', this.form.level);
+                        for(let i=0;i<this.form.class.length;i++){
+                            formData.append('class[]', this.form.class[i]);
+                        }
+                        for(let i=0;i<this.form.stream.length;i++){
+                            formData.append('stream[]', this.form.stream[i]);
+                        }
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('status', this.form.status);
+                        formData.append('organization_type', this.form.organization_type);
+                        axios.post('organization/saveChangeBasicDetails', formData, config)
+                        //this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -306,7 +444,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been updated and submitted for further approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'upgrade_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -407,6 +545,19 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
 
         // /**
@@ -435,6 +586,7 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text());
         });
+        this.getAttachmentType('ForTransaction__Application_for_Upgradation');
 
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
@@ -452,6 +604,7 @@ export default {
         // .catch(errors => {
         //     console.log(errors)
         // });
+        $('#organizationId').prop('disabled',true);
         this.record_id=this.$route.params.data.application_no;
         this.loadApplicationDetials();
 

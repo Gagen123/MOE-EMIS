@@ -570,9 +570,9 @@ class GeneralInfoController extends Controller
 
         $rules = [
             'isGeoPoliticallyLocated'   =>  'required',
-            'isAspNetSchool'            =>  'required',
-            'isColocated'               =>  'required',
-            'isResourceCenter'          =>  'required',
+            // 'isAspNetSchool'            =>  'required',
+            // 'isColocated'               =>  'required',
+            // 'isResourceCenter'          =>  'required',
             'isSenSchool'               =>  'required',
             'hasCounselingRoom'         =>  'required',
             'hasShiftSystem'            =>  'required',
@@ -590,10 +590,10 @@ class GeneralInfoController extends Controller
         $customMessages = [
             'isGeoPoliticallyLocated.required'   =>  'This field is required',
             'category.required'                  =>  'This field is required',
-            'isAspNetSchool.required'            =>  'This field is required',
-            'isColocated.required'               =>  'This field is required',
+            // 'isAspNetSchool.required'            =>  'This field is required',
+            // 'isColocated.required'               =>  'This field is required',
             'isFeedingSchool.required'           =>  'This field is required',
-            'isResourceCenter.required'          =>  'This field is required',
+            // 'isResourceCenter.required'          =>  'This field is required',
             'isSenSchool.required'               =>  'This field is required',
             'hasCounselingRoom.required'         =>  'This field is required',
             'hasShiftSystem.required'            =>  'This field is required',

@@ -137,6 +137,26 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                    <td>
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
 
@@ -167,6 +187,7 @@ export default {
             calssArray:{},
             streamArray:{},
             organization_details:'',
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
                 application_for:'Upgrade Downgrade', action_type:'view', status:'Submitted',organization_type:''
@@ -174,6 +195,12 @@ export default {
         }
     },
     methods: {
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
         /**
          * method to remove error
          */
@@ -275,6 +302,7 @@ export default {
                 this.form.level=response_data.change_details.proposedChange;
                 $('#level').val(response_data.change_details.proposedChange).trigger('change');
                 this.classStreamList=response_data.change_class_details;
+                this.applicationdetailsatt=response_data.attachments;
                 // for(let i=0;i<class_data.length;i++){
                 //     if(class_data[i].streamId!=""){
                 //         $('#selectedapp'+class_data[i].classStreamId).prop('checked',true);
@@ -416,6 +444,7 @@ export default {
         // .catch(errors => {
         //     console.log(errors)
         // });
+        $('#organizationId').prop('disabled',true);
         this.record_id=this.$route.params.data.application_no;
         this.loadApplicationDetials();
     },

@@ -36,23 +36,46 @@
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="0" tabindex=""/> No</label>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4" v-if="existing_details.isFeedingSchool==1">
-                                    <label><input  type="checkbox" id="exisfed1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" id="exisfed2"  value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" id="exisfed3"  value="3" tabindex=""/> Three Meals</label>
+                                    <label><input  type="checkbox" id="exisfed1" value="1" disabled tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" id="exisfed2"  value="2" disabled tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" id="exisfed3"  value="3" disabled tabindex=""/> Three Meals</label>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
                                 <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                    <label><input  type="radio" @change="show_feeding_details(true)" v-model="form.isfeedingschool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" @change="show_feeding_details(false)" v-model="form.isfeedingschool" value="0" tabindex=""/> No</label>
+                                    <label><input  type="radio" disabled @change="show_feeding_details(true)" v-model="form.isfeedingschool" value="1" tabindex=""/> Yes</label>
+                                    <label><input  type="radio" disabled @change="show_feeding_details(false)" v-model="form.isfeedingschool" value="0" tabindex=""/> No</label>
                                 </div>
                                 <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"  id="feedingDetails" style="display:none">
                                     <label class="mb-0">Feeding Modality:</label><br>
-                                    <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" name="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                    <label><input  type="checkbox" v-model="form.feeding" disabled name="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
+                                    <label><input  type="checkbox" v-model="form.feeding" disabled name="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
+                                    <label><input  type="checkbox" v-model="form.feeding" disabled name="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Upload File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    <span>
+                                                        <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <br>
@@ -76,13 +99,25 @@ export default {
             existing_details:'',
             category:'',
             record_id:'',
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
                 application_for:'Change in Feeding Details', action_type:'edit', status:'Submitted',organization_type:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
         /**
          * method to remove error
          */
@@ -254,6 +289,7 @@ export default {
                 this.form.id=response_data.id;
                 this.form.change_id=response_data.change_details.id;
                 this.form.isfeedingschool=response_data.change_details.proposedChange;
+                this.applicationdetailsatt=response_data.attachments;
                 if(response_data.change_details.proposedChange==1){
                     $('#feedingDetails').show();
                     for(let i=0;i<response_data.feed_det.length;i++){
@@ -281,6 +317,7 @@ export default {
         this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
         this.loadApplicationDetials();
+        $('#organizationId').prop('disabled',true);
     }
 }
 </script>
