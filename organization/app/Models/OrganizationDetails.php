@@ -22,6 +22,7 @@ class OrganizationDetails extends Model
         'gewogId',
         'chiwogId',
         'locationId',
+        'isResourceCenter',
         'isGeopoliticallyLocated',
         'isSenSchool',
         'parentSchoolId',
