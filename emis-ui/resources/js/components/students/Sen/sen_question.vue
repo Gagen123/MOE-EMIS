@@ -24,28 +24,62 @@
                                             <td>
                                                 {{ q.question}} <br />
                                                 <div class="col-md-12">
-                                                    <textarea v-if="q.data_type == 1" class="form-control required" rows="3" required aria-required="true">
-                                                    </textarea>
-                                                    <select v-if="q.data_type == 2" class="form-control" required aria-required="true">
-                                                        <option value="">-- Select One -- </option>
-                                                        <option v-for="(ao, ind) in q.answer_options" :key="index + '.' + indx + '.' + ind" :value="ao.ao_id">{{ ao.text }}</option>
-                                                    </select>
-                                                    <div class="col-xs-12" v-if="q.data_type == 3">
+
+                                                    <textarea 
+                                                        v-if="q.data_type == 0"  
+                                                        v-model="frmQA['q_' + q.q_id].default.display_text"  
+                                                        class="form-control required" 
+                                                        rows="3" 
+                                                        required 
+                                                        aria-required="true" 
+                                                    ></textarea>
+
+                                                    <input type="number" 
+                                                        v-if="q.data_type == 1" 
+                                                        v-model="frmQA['q_' + q.q_id].default.display_text"
+                                                        class="form-control required" 
+                                                        rows="3" 
+                                                        required 
+                                                        aria-required="true" 
+                                                    /> 
+                                                    
+                                                    <div class="form-group" v-if="q.data_type == 2">
+                                                        <select class="form-control" 
+                                                            v-model="frmQA['q_' + q.q_id].default.answer_id" 
+                                                            required 
+                                                            aria-required="true">
+                                                            <option v-for="(ao, indd) in q.answer_options" 
+                                                                :key="index + '.' + indx + '.' + indd" 
+                                                                v-bind:value="ao.ao_id + '__' + ao.display_text"
+                                                                :selected="ao.selected"
+                                                            >
+                                                                {{ ao.display_text }}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="form-group" v-if="q.data_type == 3">
                                                         <div v-for="(ao, indd) in q.answer_options" :key="index + '.' + indx + '.' + indd">
-                                                            <input type="radio" class="radio-option" :name="'answer['+ q.q_id+'][answer]'" :value="ao.ao_id+'_'+ao.text" required aria-required="true"/>
-                                                            <label class="lable-for-control" :for="'answer['+ q.q_id+'][answer]'">{{ ao.text }}</label>
+                                                            <input type="radio" class ="radio-option" autocomplete="off" 
+                                                                v-model="frmQA['q_' + q.q_id].default.answer_id"
+                                                                v-bind:value="ao.ao_id + '__' + ao.display_text " 
+                                                                required 
+                                                                aria-required="true"
+                                                            /> {{ ao.display_text }}
                                                         </div>
                                                     </div>
-                                                    <div class="col-xs-12" v-if="q.data_type == 4">
-                                                        <div v-for="(ao, indd) in q.answer_options" :key="index + '1.' + indx + '.' + indd">
-                                                            <input type="checkbox" class="form-check-input" :name="'answer['+q.q_id + '_' + indd +'][answer]'" :value="ao.ao_id+'_'+ao.text" required aria-required="true"/>
-                                                            <label class="lable-for-control" :for="'answer['+q.q_id + '_' + indd +'][answer]'">{{ ao.text }}</label>
+
+                                                    <div class="form-check" v-if="q.data_type == 4">
+                                                        <div v-for="(ao, indd) in q.answer_options" :key="q.q_id + 'chk' + indx + '.' + indd">
+                                                            <input type="checkbox" class="form-check-input" 
+                                                                v-model="frmQA['q_' + q.q_id].chk_val" 
+                                                                required 
+                                                                aria-required="true"
+                                                                :checked="ao.checked"
+                                                                v-bind:value="ao.ao_id + '__' + ao.display_text" 
+                                                            /> {{ ao.display_text }}
                                                         </div>
                                                     </div>
-                                                    <select v-if="q.data_type == 5" class="form-control" required aria-required="true" multiple>
-                                                        <option value="">-- Select One -- </option>
-                                                        <option v-for="(ao, ind) in q.answer_options" :key="index + '.' + indx + '.' + ind" :value="ao.ao_id">{{ ao.text }}</option>
-                                                    </select>
                                                 </div>
                                             </td>
                                         </tr>
@@ -72,7 +106,8 @@
 export default {
     data(){
         return{
-            QuestionAnswers:[]
+            QuestionAnswers:[],
+            frmQA: new form({}),
         }
     },
     methods:{
@@ -81,17 +116,20 @@ export default {
             axios.get('students/sen/getquestionnaire/' + this.$route.params.id)
             .then(response =>{
                 // alert(JSON.stringify(response));
+                let std_id = this.$route.params.id;
                 let resData = response.data;
                 let questionnaire = [];
+                let frmData = [];
 
                 // let ab = this.abcdefgh();
                 // alert(ab);
-                $.each(resData, function(k, qt) {
+                resData.forEach((q_Type) => {
                     let qType = {
-                        category: qt.name,
+                        category: q_Type.name,
                         question: []
                     };
-                    $.each(qt.questions, function(kk, q) {
+                    
+                    q_Type.questions.forEach((q) => {
                         let ad = q.answer_data_type;
                         let _q = {
                             q_id:q.id,
@@ -99,80 +137,106 @@ export default {
                             data_type: ad,
                             answer_options: [],
                         };
+
                         let questionAns = q.question_answers; 
-                        $.each(q.answer_options, function(kkk, a_o) {
+                        let a_frm = {
+                            qu_id: q.id,
+                            default: {
+                                id: '',
+                                answer_id: '',
+                                display_text: '',
+                            },
+                            chk_val:[],
+                            remarks:'',
+                            org_id : '',
+                            staff_id: '',
+                            student_id: std_id,
+                        };
+
+                        q.answer_options.forEach((a_o) => {
+                            let ao_id = a_o.id;
                             //String = 0
                             //Numbers = 1
                             //Dropdown = 2
-                            //Radio/Checkbox = 3
+                            //Radio = 3
                             //MultiCheckbox = 4 
                             //MultiSelectList = 5
                             
                             let ao = {
-                                ao_id:a_o.id,
-                                text:a_o.answer,
+                                id: questionAns.length > 0 ? 
+                                                this.hasAnswer(qans, ao_id) ? 
+                                                    this.filterAnswer(qans, ao_id).id : '' : '',
+                                ao_id:ao_id,
+                                display_text:a_o.answer,
                                 has_remarks:a_o.can_hav_remarks,
-                                checked:(ad == 0 || ad == 1 || ad == 5) ? 'false' : 
+                                checked:(ad == 3 || ad == 4) ? 'false' : 
                                             questionAns.length > 0 ? 
-                                                this.hasAnswer('abc') ?  'true' : 'false' : 'false',
-                                ans_text:(ad == 0 || ad == 1) ? 
-                                            questionAns.length > 0 ? 
-                                                hasAnswer('abc') ? 'answer text here' : '' : '' : '',
+                                                this.hasAnswer(qans, ao_id) ?  'true' : 'false' : 'false',
                                 selected:(ad == 3 || ad == 4 || ad == 5) ? 
-                                            questionAns.length > 0 ? 'true' : 'false' : 'false',
+                                            questionAns.length > 0 ? 
+                                                this.hasAnswer(qans, ao_id) ? 'true' : 'false' : 'false' : 'false',
                                 remarks: a_o.can_hav_remarks ? 
-                                            questionAns.length > 0 ? 'this is a remarks' : '' : '',
-                                // test: ,
+                                            questionAns.length > 0 ?  
+                                                this.hasAnswer(qans, ao_id) ? 
+                                                    this.filterAnswer(qans, ao_id).remarks : '' : '' : '',
                             };
-                            // let ab = this.hasAnswer('abc');
-                            _q.answer_options.push(ao);
-                            ao = "";
 
-                            function name(qans) {
-                                let valObj = qans.filter(function(elem){
-                                    return elem.answer_id == 1;
-                                }); 
-                                if(valObj.length > 0)
-                                    alert('true');
-                                
+                            _q.answer_options.push(ao);
+                            
+                            a_frm.remarks = a_o.can_hav_remarks ? 
+                                                        questionAns.length > 0 ?  
+                                                            this.hasAnswer(qans, ao_id) ? 
+                                                                this.filterAnswer(qans, ao_id).remarks : '' : '' : '';
+
+                            if ((ad == 0 || ad == 1 || ad == 2   || ad == 3)  &&  (questionAns.length > 0)) {
+                                if (this.hasAnswer(qans, ao_id)) {
+                                    a_frm.default.id = this.filterAnswer(qans, ao_id).id;
+                                    a_frm.default.answer_id =  (ad == 0   || ad == 1) ? ao_id : ao_id + '__' + this.filterAnswer(qans, ao_id).answer;
+                                    a_frm.default.display_text = (ad == 2   || ad == 3) ? '' : this.filterAnswer(qans, ao_id).answer;
+                                }
+                            }else if (ad == 4  &&  (questionAns.length > 0)){
+                                if (this.hasAnswer(qans, ao_id)) {
+                                    a_frm.chk_val.push(ao_id + '__' + this.filterAnswer(qans, ao_id).answer);
+                                }
                             }
-                        });   
+                        }); 
+                        
+                        let dy_id = 'q_' + q.id;
+                        this.$set(this.frmQA, dy_id, a_frm);
                         qType.question.push(_q);
                         _q="";
+
                     });
+
                     questionnaire.push(qType);
                     qType = "";
+
                 });
 
                 this.QuestionAnswers = questionnaire;
+
+                
 
             }).catch(function (error){
                 //
             });
         },
+        hasAnswer: function(qans, ao_id) {
+            let valObj = qans.filter(function(elem){
+                return elem.answer_id == ao_id;
+            }); 
+            if(valObj.length > 0)
+                return true;
 
-        hasAnswer(qans) {
-            alert('hi');
-            // let valObj = qans.filter(function(elem){
-            //     return elem.answer_id == 1;
-            // });
-            // return tempDzo['0'];
-
-            // if(valObj.length > 0)
-            //     alert('true');
-            
-            // let tmpAns = qa.filter(
-            //     qa => qa.answer_id === aoid
-            // );
-            // // alert(tmpAns.length > 0);
-            // return tmpAns;
-            return true;
+            return false;
         },
 
-        abcdefgh : function(){
-            alert('asas');
-            return 'abc123';
-        },
+        filterAnswer: function(qans, ao_id) {
+            let valObj = qans.filter(function(elem){
+                return elem.answer_id == ao_id;
+            }); 
+            return valObj[0];
+        }
     },
     mounted(){
         this.getQuestions();
