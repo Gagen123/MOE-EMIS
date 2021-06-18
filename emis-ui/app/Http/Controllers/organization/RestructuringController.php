@@ -1363,19 +1363,17 @@ class RestructuringController extends Controller
     private function setchangeofstream($request){
         $change =[
             'organizationId'            =>  $request['organizationId'],
-            'level_change'              =>  $request['level_change'],
-            'level'                     =>  $request['level'],
-            'class'                     =>  $request['class'],
-            'stream'                    =>  $request['stream'],
+            // 'level_change'              =>  $request['level_change'],
+            // 'level'                     =>  $request['level'],
+            // 'class'                     =>  $request['class'],
+            'stream'                    =>  $request['streams'],
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
             'action_type'               =>  $request['action_type'],
             'status'                    =>  $request['status'],
             'id'                        =>  $request['id'],
             'app_level_change_id'       =>  $request['app_level_change_id'],
-            'stream'                    =>   $request->stream,
             'changetype'                =>   $request->changetype,
-            'attachment_details'            =>  $request['attachment_details'],
             'user_id'                   =>  $this->userId()
         ];
 

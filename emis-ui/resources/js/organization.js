@@ -718,6 +718,8 @@ const routes = [
             { path: '/',name:'autonomus_index', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
             { path: '/list_autonomous',name:'list_autonomous', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
             { path: '/create_autonomous',name:'create_autonomous', component: require('./components/organization/restructuring/autonomous/create_autonomous.vue').default },
+            { path: '/edit_autonomous',name:'edit_autonomous', component: require('./components/organization/restructuring/autonomous/edit_autonomous.vue').default },
+            { path: '/view_autonomous',name:'view_autonomous', component: require('./components/organization/restructuring/autonomous/show_autonomous.vue').default },
             { path: '/autonomous_acknowledgement', name:'autonomous_acknowledgement', component: require('./components/organization/restructuring/autonomous/acknowledgement.vue').default },
           ]
       },
@@ -728,6 +730,8 @@ const routes = [
             { path: '/',name:'stream_change_index', component: require('./components/organization/restructuring/stream_change/list_stream_change.vue').default },
             { path: '/list_stream_change',name:'list_stream_change', component: require('./components/organization/restructuring/stream_change/list_stream_change.vue').default },
             { path: '/create_stream_change',name:'create_stream_change', component: require('./components/organization/restructuring/stream_change/create_stream_change.vue').default },
+            { path: '/edit_stream_change',name:'edit_stream_change', component: require('./components/organization/restructuring/stream_change/edit_stream_change.vue').default },
+            { path: '/view_stream_change',name:'view_stream_change', component: require('./components/organization/restructuring/stream_change/view_stream_change.vue').default },
             { path: '/stream_change_acknowledgement', name:'stream_change_acknowledgement', component: require('./components/organization/restructuring/stream_change/acknowledgement.vue').default },
           ]
       },

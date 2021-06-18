@@ -14,7 +14,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                            <form class="form-horizontal">
+                            <div class="form-horizontal">
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -96,8 +96,8 @@
                                             <label>Change Type:<span class="text-danger">*</span></label>
                                             <select name="changetype" v-model="form.changetype" :class="{ 'is-invalid': form.errors.has('changetype') }" id="changetype" class="form-control select2" @change="remove_error('changetype')">
                                                 <option value="">--- Please Select ---</option>
-                                                <option value="1">Addition of Stream</option>
-                                                <option value="2">Deletion of Stream</option>
+                                                <option value="Addition of Stream">Addition of Stream</option>
+                                                <option value="Deletion of Stream">Deletion of Stream</option>
                                             </select>
                                             <has-error :form="form" field="changetype"></has-error>
                                         </div>
@@ -114,7 +114,7 @@
                                                         <tr v-for="(item, key, index) in  streamList" :key="index">
                                                             <td> {{item.stream}}</td>
                                                             <td>
-                                                                <input type="checkbox" v-model="item.streams" :value="item.id">
+                                                                <input type="checkbox" v-model="form.streams" :value="item.id">
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -122,9 +122,8 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="form-group row">
-                                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                                 <thead>
                                                     <tr>
@@ -133,13 +132,13 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
+                                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                                         <td>
                                                             <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                            <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                         </td>
                                                         <td>
-                                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                            <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                             <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                         </td>
                                                     </tr>
@@ -170,7 +169,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -201,15 +200,13 @@ export default {
             organization_details:'',
             fileUpload: [],
             form: new form({
-                fileUpload: [
-                ],
+                organizationId:'', streams:[], application_type:'stream_change', class:[],changetype:'',
+                application_for:'Change of Stream', action_type:'add', status:'Submitted',organization_type:'',
                 attachments:
                 [{
-                    file_name:'Proposal Letter',attachment:''
+                    file_name:'',attachment:''
                 }],
                 ref_docs:[],
-                organizationId:'', streams:[], application_type:'stream_change', class:[],changetype:'',
-                application_for:'Change of Stream', action_type:'add', status:'Submitted',organization_type:''
             })
         }
     },
@@ -223,17 +220,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        remove(index){
-             if(this.form.fileUpload.length>1){
-                this.count--;
-                this.form.fileUpload.pop();
-            }
-        },
-        addMore: function(){
-            this.count++;
-            this.form.fileUpload.push({file_name:'', file_upload:''})
-        },
-
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
@@ -243,6 +229,14 @@ export default {
             else{
                 $('#fileName'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
             }
         },
 
@@ -292,25 +286,6 @@ export default {
                 this.getClassStream(text);
             }
         },
-        // getClassStream(text){
-        //     $('.strm_clas').hide();
-        //     let level = text;
-        //     if(level.toLowerCase().includes('middle')){
-        //         level="10";
-        //     }
-        //     else if(level.toLowerCase().includes('lower')){
-        //         level="8";
-        //     }
-        //     else if(level.toLowerCase().includes('primary')){
-        //         level="6";
-        //     }
-        //     else{
-        //         level="12";
-        //         $('.strm_clas').show();
-        //     }
-
-        // },
-
 
         /**
          * method to show next and previous tab
@@ -341,17 +316,18 @@ export default {
                         formData.append('application_number', this.form.application_number);
                         formData.append('application_for', this.form.application_for);
                         formData.append('organizationId', this.form.organizationId);
-                        formData.append('streams', this.form.streams);
+                        for(let i=0;i<this.form.streams.length;i++){
+                            formData.append('streams[]', this.form.streams[i]);
+                        }
                         formData.append('application_type', this.form.application_type);
-                        formData.append('class', this.form.class);
                         formData.append('action_type', this.form.action_type);
                         formData.append('organization_type', this.form.organization_type);
                         formData.append('status', this.form.status);
                         formData.append('changetype', this.form.changetype);
-                        formData.append('action_type', 'add');
                         axios.post('organization/saveChangeBasicDetails', formData, config)
+                        //this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
-                            if(response.data!=""){
+                            if(response!=""){
                                 if(response.data=="No Screen"){
                                     Toast.fire({
                                         icon: 'error',
@@ -368,10 +344,8 @@ export default {
                                 }
                             }
                         })
-                        .catch((error) => {
-                            this.applyselect2();
-                            this.change_tab('organization-tab');
-                            console.log("Error:"+error)
+                        .catch((err) => {
+                            console.log("Error:"+err)
                         })
                     }
                 });
@@ -446,34 +420,19 @@ export default {
                 }
             });
         },
-        applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
         },
-
-
-        // /**
-        //  * method to get class stream in checkbox
-        //  */
-        // getClassStream:function(){
-        //     axios.get('/masters/loadClassStreamMapping/school')
-        //       .then(response => {
-        //         this.classStreamList = response.data.data;
-        //     });
-        // },
 
     },
 
@@ -482,14 +441,12 @@ export default {
         .then(response => {
             this.classStreamList = response.data.data;
         });
-        this.count++;
-        this.form.fileUpload.push({file_name:'Proposal Letter', file_upload:''});
-
         this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();
         this.getStream();
         // this.getClassStream();
+        this.getAttachmentType('ForTransaction__Application_for_Change_of_Stream');
         this.getLevel();
         $('.select2').select2();
         $('.select2').select2({
@@ -510,6 +467,7 @@ export default {
                 this.form.organizationId=data['Agency_Code'];
                 this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
+                $('#organizationId').prop('disabled',true);
             }
         })
         .catch(errors => {

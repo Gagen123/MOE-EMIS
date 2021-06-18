@@ -128,7 +128,7 @@ export default {
         }
     },
     methods: {
-         onChangeFileUpload(e){
+        onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
                 this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
