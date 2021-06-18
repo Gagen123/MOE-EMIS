@@ -253,7 +253,7 @@ export default {
         }
     },
     methods: {
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
                 let data = response.data.data;
@@ -524,7 +524,7 @@ export default {
                                 });
                             }
                             if(response!="" && response!="No Screen"){
-                                let message="applicaiton for new Establishment has been updated and send for further action. <br><b>Thank You !</b>";
+                                let message="Application for new Establishment has been updated and send for further action. <br><b>Thank You !</b>";
                                 this.$router.push({name:'acknowledgement_ecr',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -717,7 +717,7 @@ export default {
         this.getLocation();
         this.getOrgList();
         this.record_id=this.$route.params.id;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     },
 }
 </script>

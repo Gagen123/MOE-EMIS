@@ -73,7 +73,7 @@ export default {
                 if (result.isConfirmed) {
                     Swal.fire(
                         'Submitted!',
-                        'Your applicaiton details has been submitted. System generated application number for this transaction is: #02234. You may use this application nunber to track application status.',
+                        'Your Application details has been submitted. System generated application number for this transaction is: #02234. You may use this application nunber to track application status.',
                         'success',
                         this.$router.push('/regstdmanagement')
                     )

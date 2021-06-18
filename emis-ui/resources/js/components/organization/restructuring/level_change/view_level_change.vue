@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Upgradation/Downgradation</label>
+                            <label class="mb-0.5">Downgradation</label>
                         </a>
                     </li>
                 </ul>
@@ -86,10 +86,10 @@
                                                     </td>
                                                     <td class="existstrm_clas" v-else> </td>
                                                     <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                        <input type="checkbox"  :id="item.id" :value="item.id">
+                                                        <input type="checkbox"  :id="item.id" :value="item.id" checked disabled>
                                                     </td>
                                                     <td v-else>
-                                                        <input type="checkbox" checked="true">
+                                                        <input type="checkbox" checked disabled>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -128,18 +128,37 @@
                                                 <td class="strm_clas" v-else>
                                                 </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked>
+                                                    <input type="checkbox" checked disabled>
                                                 </td>
                                                 <td v-else>
-                                                    <input type="checkbox" checked>
+                                                    <input type="checkbox" checked disabled>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                    <td>
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
-
                         </div>
                     </div>
                 </div>
@@ -167,6 +186,7 @@ export default {
             calssArray:{},
             streamArray:{},
             organization_details:'',
+             applicationdetailsatt:'',
             form: new form({
                 organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
                 application_for:'Upgrade Downgrade', action_type:'view', status:'Submitted',organization_type:''
@@ -264,7 +284,7 @@ export default {
             });
         },
 
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -275,6 +295,7 @@ export default {
                 this.form.level=response_data.change_details.proposedChange;
                 $('#level').val(response_data.change_details.proposedChange).trigger('change');
                 this.classStreamList=response_data.change_class_details;
+                this.applicationdetailsatt=response_data.attachments;
                 // for(let i=0;i<class_data.length;i++){
                 //     if(class_data[i].streamId!=""){
                 //         $('#selectedapp'+class_data[i].classStreamId).prop('checked',true);
@@ -417,7 +438,8 @@ export default {
         //     console.log(errors)
         // });
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
+         $('#organizationId').prop('disabled',true);
     },
 
 }

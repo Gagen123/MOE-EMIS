@@ -43,8 +43,8 @@
                                                 </div>
                                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Resource'>
                                                     <label>Is Resource Center:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
+                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="0" tabindex=""/> No</label>
                                                 </div>
                                                
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Has_CE'>
@@ -156,8 +156,8 @@
                                                 
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Disaster Area:</label><br>
-                                                    <label  v-for="(item, key, index) in  disasterList" :key="index" class="pr-4">
-                                                        <input  type="checkbox" v-model="form.disasterArea" :value="item.id" tabindex=""/> 
+                                                    <label  v-for="(item, index) in  disasterList" :key="index" class="pr-4">
+                                                        <input  type="checkbox" name="disasterArea" v-model="form.disasterArea" :value="item.id"/> 
                                                         {{item.name}}
                                                     </label>
                                                 </div>
@@ -220,7 +220,6 @@
             getorgProfile(org_id){
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
-                    // alert(JSON.stringify(response));
                     let response_data=response.data.data;
                     this.orgDetails=response_data;
                     if(response_data.category=="public_eccd" ||response_data.category=="private_eccd" ){
@@ -245,7 +244,7 @@
                     }
                     this.form.isAspNetSchool=response_data.isAspNetSchool;
                     this.form.isColocated=response_data.isColocated;
-                    this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
+                    this.form.isGeoPoliticallyLocated=response_data.isGeopoliticallyLocated;
                     this.form.isResourceCenter=response_data.isResourceCenter;
                     this.form.isSenSchool=response_data.isSenSchool;
                     this.form.hasCounselingRoom=response_data.hasCounselingRoom;
@@ -259,18 +258,18 @@
                         this.form.disasterArea=response_data.locationDetials.disasterArea;
                         this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
                         this.form.entranceGate=response_data.locationDetials.entranceGate;
-                        this.form.fencingtypeId=response_data.locationDetials.fencingtypeId;
+                        this.form.fencingtype=response_data.locationDetials.fencingtypeId;
                         this.form.map_path=response_data.locationDetials.googleMapPath;
                         this.form.latitude=response_data.locationDetials.latitude;
                         this.form.longitude=response_data.locationDetials.longitude;
                         this.form.thramNo=response_data.locationDetials.thramNo;
                     }
-                    let prop=data.contact;
+                    let prop=response_data.contactDetails;
                     let contactDetails=[];
                     for(let i=0;i<prop.length;i++){
                      contactDetails.push({contactName:prop[i].contactTypeId,phone:prop[i].phone,mobile:prop[i].mobile,email:prop[i].email,});
                     }
-                    this.count=data.length;
+                    this.count=prop.length;
                     this.form.users=contactDetails;
                     
                 })
@@ -278,6 +277,7 @@
                     console.log("Error: "+error);
                 });
             },
+
             updateorg(){
                 this.form.post('organization/updateOrgBasicDetials')
                 .then((response) => {
@@ -315,9 +315,12 @@
                 } 
             },
             showPosition(position){
-                $('#latitude').val(position.coords.latitude);
-                $('#longitude').val(position.coords.longitude);
-                $('#altitude').val(position.coords.altitude);
+                this.form.latitude  = position.coords.latitude;
+                this.form.longitude = position.coords.longitude
+                this.form.altitude  = position.coords.altitude
+                // $('#latitude').val(position.coords.latitude);
+                // $('#longitude').val(position.coords.longitude);
+                // $('#altitude').val(position.coords.altitude);
             },
             loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Disaster'){
                 axios.get(uri)

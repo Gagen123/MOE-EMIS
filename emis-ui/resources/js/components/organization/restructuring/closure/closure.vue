@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
@@ -473,7 +473,7 @@ export default {
                         axios.post('organization/saveClosure',formData, config)
                         .then((response) => {
                             if(response.data!=""){
-                                let message="applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'closure_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -491,7 +491,7 @@ export default {
                         // this.form.post('organization/saveClosure')
                     //     .then((response) => {
                     //         if(response!=""){
-                    //             let message="applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                    //             let message="Application for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                     //             this.$router.push({name:'closure_acknowledgement',params: {data:message}});
                     //             Toast.fire({
                     //                 icon: 'success',
@@ -553,7 +553,7 @@ export default {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
+        //             $('#ApplicationUnderProcess').show();
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })

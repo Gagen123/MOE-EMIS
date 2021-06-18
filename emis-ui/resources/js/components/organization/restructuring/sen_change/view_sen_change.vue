@@ -68,6 +68,22 @@
                                         <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
                                     </div>
                                 </div>
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Upload File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                            <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </form>
                         </div>
                     </div>
@@ -101,6 +117,7 @@ export default {
             villageArray:{},
             calssArray:{},
             streamArray:{},
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'', application_type:'sen_change', senSchool:'0',
                 application_for:'Change in SEN details', action_type:'edit', status:'Submitted',organization_type:'',
@@ -159,7 +176,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change in SEN detail has been updated and send for further approval. <br><b>Thank You !</b>";
+                                    let message="Application for Change in SEN detail has been updated and send for further approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'sen_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -176,7 +193,12 @@ export default {
             }
 
         },
-
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -229,7 +251,7 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -237,6 +259,7 @@ export default {
                 this.form.id=response_data.id;
                 this.form.change_id=response_data.change_details.id;
                 this.form.senSchool=response_data.change_details.proposedChange;
+                this.applicationdetailsatt=response_data.attachments;
             });
         },
         getLevel(uri = '/organization/getLevelInDropdown'){
@@ -335,7 +358,7 @@ export default {
         });
         this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
-        this.loadapplicaitonDetials();
+        this.loadApplicationDetials();
     }
 }
 </script>

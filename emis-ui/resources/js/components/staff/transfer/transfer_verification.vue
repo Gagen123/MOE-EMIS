@@ -373,14 +373,14 @@ export default {
                 if(nextclass=="approve" && $("input[name='dzongkhagApproved']:checked").val()==undefined){
                     Swal.fire(
                         'error!',
-                        'Please select prefernece dzongkhag to approve this applicaiton',
+                        'Please select prefernece dzongkhag to approve this Application',
                         'error',
                     );
                     action=false;
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',

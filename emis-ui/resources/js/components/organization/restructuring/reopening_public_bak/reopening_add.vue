@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
@@ -59,7 +59,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="coLocatedDiv">
                     <label>Co-located with Parent School:</label>
                     <span class="text-blue text-bold" id="coLocatedParent">{{form.coLocatedParent == 1 ? "Yes" : "No"}}</span>
-                </div> 
+                </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
                     <label>Parent School:</label>
                     <span class="text-blue text-bold" id="parentSchool">{{form.parentSchool}}</span>
@@ -74,17 +74,17 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">CID:<span class="text-danger">*</span></label>
-                        <span class="text-blue text-bold" id="cid">{{form.cid}}</span>                        
+                        <span class="text-blue text-bold" id="cid">{{form.cid}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">Full Name:<span class="text-danger">*</span></label>
-                        <span class="text-blue text-bold" id="fullName">{{form.fullName}}</span>                        
+                        <span class="text-blue text-bold" id="fullName">{{form.fullName}}</span>
                     </div>
                 </div>
                 <div class="form-group row" >
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">Phone No:<span class="text-danger">*</span></label>
-                        <span class="text-blue text-bold" id="phoneNo">{{form.phoneNo}}</span>                        
+                        <span class="text-blue text-bold" id="phoneNo">{{form.phoneNo}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">Email:<span class="text-danger">*</span></label>
@@ -169,15 +169,15 @@ export default {
                     .then((response) => {
                     if(response!=""){
                         if(response.data=="No Screen"){
-                            Toast.fire({  
+                            Toast.fire({
                                 icon: 'error',
                                 title: 'Technical Errors: please contact system admimnistrator for further details'
                             });
                         }
                         if(response!="" && response!="No Screen"){
-                            let message="applicaiton for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            let message="Application for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                             this.$router.push({name:'restr_acknowledgement',params: {data:message}});
-                            Toast.fire({  
+                            Toast.fire({
                                 icon: 'success',
                                 title: 'Closure details is saved successfully'
                             });
@@ -195,15 +195,15 @@ export default {
          */
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/closure')
-        //     .then((response) => {  
+        //     .then((response) => {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
+        //             $('#ApplicationUnderProcess').show();
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
-        //     .catch((error) => {  
+        //     .catch((error) => {
         //         console.log("Error: "+error);
         //     });
         // },
@@ -214,7 +214,7 @@ export default {
          */
         getOrgDetails(id){
             axios.get('organization/getFullSchoolDetials/'+id)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.code = data.code;
                 this.form.name = data.name;
@@ -250,9 +250,9 @@ export default {
                 this.form.parent_id=data.id;
                 this.data=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         },
 
     },

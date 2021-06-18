@@ -157,7 +157,7 @@ export default {
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
-                                    'Leave applicaiton has been submitted for approval',
+                                    'Leave Application has been submitted for approval',
                                     'success',
                                 )
                             }
@@ -270,7 +270,7 @@ export default {
                 if(data!=""){
                     Swal.fire({
                         title: 'Already Applied ! ',
-                        text: "Sorry! You have submitted leave application with applicaiton number: "+data.application_number+' which is under process.',
+                        text: "Sorry! You have submitted leave application with Application number: "+data.application_number+' which is under process.',
                         icon: 'error',
                     });
                     $('#applyId').hide();

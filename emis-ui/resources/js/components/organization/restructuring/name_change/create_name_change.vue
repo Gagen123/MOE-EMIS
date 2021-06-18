@@ -79,10 +79,10 @@
                                                     </td>
                                                     <td class="strm_clas" v-else> </td>
                                                     <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                        <input type="checkbox" checked="true">
+                                                        <input type="checkbox" checked="true" disabled>
                                                     </td>
                                                     <td v-else>
-                                                        <input type="checkbox" checked="true">
+                                                        <input type="checkbox" checked="true" disabled>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -104,6 +104,43 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
                                         <has-error :form="form" field="proposedName"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="mb-0">Upload the Required Documents</label>
+                                    </div>
+                                </div><br>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                    <td>
+                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </form>
@@ -141,10 +178,37 @@ export default {
             form: new form({
                 organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change',
                 application_for:'Change in Name', action_type:'add', status:'Submitted',organization_type:'',
+                // service_name:'Change in Name',
+                // remarks:'',
+                status:'Submitted',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
         /**
          * method to remove error
          */
@@ -178,7 +242,29 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('proposedName', this.form.proposedName);
+                        formData.append('initiatedBy', this.form.initiatedBy);
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('status', this.form.status);
+                        formData.append('organization_type', this.form.organization_type);
+
+                        axios.post('organization/saveChangeBasicDetails', formData, config)
+                        //this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -188,7 +274,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -346,6 +432,19 @@ export default {
                 console.log('error: '+error);
             });
         },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
     },
 
@@ -357,6 +456,7 @@ export default {
         this.getLocation();
         this.getClass();
         this.getstream();
+        this.getAttachmentType('ForTransaction__Application_for_Name_Change');
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -376,6 +476,7 @@ export default {
                 this.form.organizationId=data['Agency_Code'];
                 this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
+                $('#organizationId').prop('disabled',true);
             }
         })
         .catch(errors => {

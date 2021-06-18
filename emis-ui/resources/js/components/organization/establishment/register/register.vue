@@ -9,7 +9,7 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Category:<span class="text-danger">*</span></label>
-                        <select name="category" id="category" v-model="applicaitondetailsform.category" class="form-control select2" >
+                        <select name="category" id="category" v-model="Applicationdetailsform.category" class="form-control select2" >
                             <option value="Public">Public</option>
                             <option value="Private">Private</option>
                             <option value="ECCD">ECCD</option>
@@ -17,12 +17,12 @@
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Year of Establishment:</label>
-                        <input type="text" class="form-control" id="yearOfEst" v-model="applicaitondetailsform.yearestb" name="yearOfEst"/>
+                        <input type="text" class="form-control" id="yearOfEst" v-model="Applicationdetailsform.yearestb" name="yearOfEst"/>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="zest_code_section">
                         <!-- <label>ZEST Working Agency Code:<span class="text-danger">*</span></label>
                         <div class="input-group">
-                            <input type="text" id="workingAgencyCode" class="form-control" v-model="applicaitondetailsform.zestcode" @change="remove_error('workingAgencyCode')"/>
+                            <input type="text" id="workingAgencyCode" class="form-control" v-model="Applicationdetailsform.zestcode" @change="remove_error('workingAgencyCode')"/>
                             <div class="input-group-append">
                                 <span type="button" class="col-md-12 btn  btn-primary" @click="getApprovedOrgDetails('1')"><i class="fa fa-search">&nbsp;Search</i></span>
                             </div>
@@ -31,7 +31,7 @@
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
                                 <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
-                                <select name="organizationid" id="organizationid" v-model="applicaitondetailsform.organizationid" :class="{ 'is-invalid': applicaitondetailsform.errors.has('organizationid') }" class="form-control select2">
+                                <select name="organizationid" id="organizationid" v-model="Applicationdetailsform.organizationid" :class="{ 'is-invalid': Applicationdetailsform.errors.has('organizationid') }" class="form-control select2">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in publicorgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
                                 </select>
@@ -46,7 +46,7 @@
                         <div class="row">
                             <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" >
                                 <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
-                                <select name="organizationid" id="pri_organizationid" v-model="applicaitondetailsform.organizationid" :class="{ 'is-invalid': applicaitondetailsform.errors.has('organizationid') }" class="form-control select2">
+                                <select name="organizationid" id="pri_organizationid" v-model="Applicationdetailsform.organizationid" :class="{ 'is-invalid': Applicationdetailsform.errors.has('organizationid') }" class="form-control select2">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
                                 </select>
@@ -67,53 +67,53 @@
                                 <label class="mb-0">Proposed Name:</label>
                                 <span class="text-blue text-bold">{{applicant_rog_details.proposedName}}</span>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicaitondetails.establishment_type!='Private ECCD' && applicaitondetails.establishment_type=='Public ECCD'">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="Applicationdetails.establishment_type!='Private ECCD' && Applicationdetails.establishment_type=='Public ECCD'">
                                 <label class="mb-0">Level:</label>
                                 <span class="text-blue text-bold">{{levelArray[orgLevel]}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Category:</label>
-                                <span class="text-blue text-bold"> {{ applicaitondetails.establishment_type }}</span>
+                                <span class="text-blue text-bold"> {{ Applicationdetails.establishment_type }}</span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Dzongkhag:</label>
-                                <span class="text-blue text-bold">{{applicaitondetails.dzongkhag}}</span>
+                                <span class="text-blue text-bold">{{Applicationdetails.dzongkhag}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Gewog:</label>
-                                <span class="text-blue text-bold">{{applicaitondetails.gewog}}</span>
+                                <span class="text-blue text-bold">{{Applicationdetails.gewog}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Chiwog:</label>
-                                <span class="text-blue text-bold">{{applicaitondetails.village}}</span>
+                                <span class="text-blue text-bold">{{Applicationdetails.village}}</span>
                             </div>
                         </div>
 
-                        <div v-if="applicaitondetails.establishment_type=='Private School'">
+                        <div v-if="Applicationdetails.establishment_type=='Private School'">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Propose Location:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proposedLocation}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.proposedLocation}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Total Proposed Land:</label>
-                                    <span class="text-blue text-bold"> {{ applicaitondetails.org_details.totalLand }}</span>
+                                    <span class="text-blue text-bold"> {{ Applicationdetails.org_details.totalLand }}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Type of School:</label>
-                                    <span class="text-blue text-bold"> {{ applicaitondetails.org_details.typeOfSchool == 1 ? "Day" :  "Boarding" }}</span>
+                                    <span class="text-blue text-bold"> {{ Applicationdetails.org_details.typeOfSchool == 1 ? "Day" :  "Boarding" }}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Expected Enrollment (Boys):</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.enrollmentBoys}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.enrollmentBoys}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Expected Enrollment (Girls):</label>
-                                    <span class="text-blue text-bold"> {{ applicaitondetails.org_details.enrollmentGirls }}</span>
+                                    <span class="text-blue text-bold"> {{ Applicationdetails.org_details.enrollmentGirls }}</span>
                                 </div>
                             </div>
                             <div class="row pb-2">
@@ -124,25 +124,25 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">CID:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorCid}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.proprietorCid}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Full Name:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proposedName}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.proposedName}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Mobile No:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorMobile}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.proprietorMobile}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Phone No:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorPhone}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.proprietorPhone}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Email:</label>
-                                    <span class="text-blue text-bold">{{applicaitondetails.org_details.proprietorEmail}}</span>
+                                    <span class="text-blue text-bold">{{Applicationdetails.org_details.proprietorEmail}}</span>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
-                                <textarea class="form-control" @change="remove_error('remarks')" v-model="applicaitondetailsform.remarks" id="remarks"></textarea>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="Applicationdetailsform.remarks" id="remarks"></textarea>
                                 <span class="text-danger" id="remarks_err"></span>
                             </div>
                         </div>
@@ -189,9 +189,9 @@ export default {
             orgLevel:'',
             proposedName:'',
             applicant_rog_details:[],
-            applicaitondetails:[],
+            Applicationdetails:[],
             org_class_details:[],
-            applicaitondetailsform: new form({
+            Applicationdetailsform: new form({
                 // organizationid:'',applicationNo:'',application_date:'',
                 // service:'',proposedName:'',dzongkhagId:'',dzongkhag:'',gewogId:'',gewog:'',isColocated:'',
                 // levelId:'',level:'',chiwogId:'',village:'',locationId:'',locationType:'',parentSchoolId:'',
@@ -201,7 +201,7 @@ export default {
                 // class_section:[],
                 // sectionList:[],
                 yearestb:'',category:'1',zestcode:'',remarks:'',
-                applicaitondetails:[]
+                Applicationdetails:[]
             }),
         }
     },
@@ -209,9 +209,9 @@ export default {
         display_respective_section: function(school_type){
             $("#zest_code_section").hide();
             $("#approved_schol_list").hide();
-             this.loadApproveSchoolname(this.applicaitondetailsform.category);
+             this.loadApproveSchoolname(this.Applicationdetailsform.category);
              $("#approved_schol_list").show();
-            // if(this.applicaitondetailsform.category == 1){
+            // if(this.Applicationdetailsform.category == 1){
             //    $("#zest_code_section").show();
             //     this.loadApproveSchoolname('Public');
             //     //integration with Zest
@@ -270,18 +270,18 @@ export default {
         },
         async changefunction(id){
             if(id=="category"){
-                this.applicaitondetailsform.category=$('#category').val();
+                this.Applicationdetailsform.category=$('#category').val();
                 this.display_respective_section($('#category').val());
             }
             if(id=="organizationid"){
-                this.applicaitondetailsform.organizationid=$('#organizationid').val();
+                this.Applicationdetailsform.organizationid=$('#organizationid').val();
             }
         },
 
         getApprovedOrgDetails(type){
             let key="";
             // if(type==1){
-            //     key=this.applicaitondetailsform.zestcode;
+            //     key=this.Applicationdetailsform.zestcode;
             // }
             // if(type=="private"){
             //     key=$('#pri_organizationid').val();
@@ -294,7 +294,7 @@ export default {
             axios.get('organization/getApprovedOrgDetails/'+type+'/'+key)
             .then((response) => {
                 let data=response.data.data;
-                this.applicaitondetails=data;
+                this.Applicationdetails=data;
                 if(data.establishment_type!="Private ECCD" && data.establishment_type!="Public ECCD"){
                     this.orgLevel=data.org_details.levelId;
                 }
@@ -302,24 +302,24 @@ export default {
                 this.applicant_rog_details=data.org_details;
                 this.org_class_details=data.org_class_stream;
                 if(type==0){
-                    // this.applicaitondetailsform.applicationNo           =data.application_no;
-                    // this.applicaitondetailsform.dzongkhagId             =data.dzongkhagId;
-                    // // this.applicaitondetailsform.dzongkhag               =data.dzongkhag;
-                    // this.applicaitondetailsform.gewogId                 =data.gewogId;
-                    // this.applicaitondetailsform.gewog                   =data.gewog;
-                    // this.applicaitondetailsform.village                 =data.village;
-                    // // this.applicaitondetailsform.locationId              =data.locationId;
-                    // // this.applicaitondetailsform.locationType            =data.locationType;
-                    // this.applicaitondetailsform.levelId                 =data.levelId;
-                    // this.applicaitondetailsform.level                   =data.level;
-                    // this.applicaitondetailsform.proposedName            =data.proposedName;
-                    // this.applicaitondetailsform.parentSchoolId          =data.parentSchoolId;
-                    // this.applicaitondetailsform.isGeopoliticallyLocated =data.isGeopoliticallyLocated;
-                    // this.applicaitondetailsform.isColocated             =data.isColocated;
-                    // this.applicaitondetailsform.isSenSchool             =data.isSenSchool;
-                    // this.applicaitondetailsform.proprietorList          =data.proprietor;
-                    // this.applicaitondetailsform.class_section           =data.class_section;
-                    // this.applicaitondetailsform.sectionList             =data.sections;
+                    // this.Applicationdetailsform.applicationNo           =data.application_no;
+                    // this.Applicationdetailsform.dzongkhagId             =data.dzongkhagId;
+                    // // this.Applicationdetailsform.dzongkhag               =data.dzongkhag;
+                    // this.Applicationdetailsform.gewogId                 =data.gewogId;
+                    // this.Applicationdetailsform.gewog                   =data.gewog;
+                    // this.Applicationdetailsform.village                 =data.village;
+                    // // this.Applicationdetailsform.locationId              =data.locationId;
+                    // // this.Applicationdetailsform.locationType            =data.locationType;
+                    // this.Applicationdetailsform.levelId                 =data.levelId;
+                    // this.Applicationdetailsform.level                   =data.level;
+                    // this.Applicationdetailsform.proposedName            =data.proposedName;
+                    // this.Applicationdetailsform.parentSchoolId          =data.parentSchoolId;
+                    // this.Applicationdetailsform.isGeopoliticallyLocated =data.isGeopoliticallyLocated;
+                    // this.Applicationdetailsform.isColocated             =data.isColocated;
+                    // this.Applicationdetailsform.isSenSchool             =data.isSenSchool;
+                    // this.Applicationdetailsform.proprietorList          =data.proprietor;
+                    // this.Applicationdetailsform.class_section           =data.class_section;
+                    // this.Applicationdetailsform.sectionList             =data.sections;
                 }
                 $("#org_details").show();
                 $("#register_footer").show();
@@ -340,8 +340,8 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    this.applicaitondetailsform.applicaitondetails=this.applicaitondetails;
-                    this.applicaitondetailsform.post('organization/registerOrganizationDetails')
+                    this.Applicationdetailsform.Applicationdetails=this.Applicationdetails;
+                    this.Applicationdetailsform.post('organization/registerOrganizationDetails')
                     .then((response) => {
                         if(response!=""){
                             Toast.fire({
@@ -407,7 +407,7 @@ export default {
         let current_year =(currentdate.getFullYear());
         // let month =(currentdate.getMonth() + 1);
         // let day = currentdate.getDate();
-        this.applicaitondetailsform.yearestb=current_year;
+        this.Applicationdetailsform.yearestb=current_year;
     }
 }
 </script>

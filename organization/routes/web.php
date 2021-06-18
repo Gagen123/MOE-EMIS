@@ -400,6 +400,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadChangeDetailForVerification/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@loadChangeDetailForVerification']);
             $router->get('/loadPriviousOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadPriviousOrgDetails']);
             $router->post('/updateChangeBasicDetails', 'establishment\ChangeBasicDetailsController@updateChangeBasicDetails');
+            $router->delete('/deleteFile/{id}', ['uses' => 'establishment\ChangeBasicDetailsController@deleteFile']);
         });
 
         $router->group(['prefix' => 'bifurcation'], function () use ($router) {
