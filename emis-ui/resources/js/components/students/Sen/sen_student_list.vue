@@ -28,7 +28,7 @@
                                         <td>{{ }}</td>
                                         <td>
                                             <div class="btn-group btn-group-sm">
-                                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="edit(item)"><i class="fas fa-edit"></i ></a>
+                                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showQuestionnaire(item)"><i class="fas fa-edit"></i ></a>
                                             </div>
                                         </td>
                                     </tr>
@@ -56,11 +56,11 @@ export default {
                 this.studentList = response.data;
             }).catch(function (error){console.log('Error: '+error);});
         },
-        edit(data){
+        showQuestionnaire(data){
             this.$router.push(
                 {
                     name:'sen_questions',
-                    params: {data:data}
+                    params: data
                 }
             );
 

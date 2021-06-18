@@ -4,6 +4,13 @@
         <h4 class="card-header">Questionnaire</h4>
         <div class="card-body">
             <div class="row-12">
+                <div class="col-md-12">
+                    <div class="jumbotron p-3">
+                        <h4>Selected Student</h4>
+                        <div class="col-md-4"><b>Name: </b> <span>{{ student.studentName }}</span></div>
+                        <div class="col-md-4"><b>Student Code:</b> {{ student.studentName }}</div>
+                    </div>
+                </div>
                 <div class="card">
                     <form @submit.prevent="saveAnswerData()">
                         <div  v-for="(qtype, index) in QuestionAnswers" :key="index">
@@ -24,7 +31,6 @@
                                             <td>
                                                 {{ q.question}} <br />
                                                 <div class="col-md-12">
-
                                                     <textarea 
                                                         v-if="q.data_type == 0"  
                                                         v-model="frmQA['q_' + q.q_id].default.display_text"  
@@ -60,7 +66,8 @@
 
                                                     <div class="form-group" v-if="q.data_type == 3">
                                                         <div v-for="(ao, indd) in q.answer_options" :key="index + '.' + indx + '.' + indd">
-                                                            <input type="radio" class ="radio-option" autocomplete="off" 
+                                                            <input type="radio" class ="radio-option {rolesRadioBox: true}" autocomplete="off" 
+                                                                :id="'required_'+ao.ao_id" 
                                                                 v-model="frmQA['q_' + q.q_id].default.answer_id"
                                                                 v-bind:value="ao.ao_id + '__' + ao.display_text " 
                                                                 required 
@@ -106,6 +113,10 @@
 export default {
     data(){
         return{
+            student: {
+                studentName: this.$route.params.Name,
+                studentCode: this.$route.params.student_code,
+            },
             QuestionAnswers:[],
             frmQA: new form({}),
         }
@@ -236,7 +247,11 @@ export default {
                 return elem.answer_id == ao_id;
             }); 
             return valObj[0];
-        }
+        },
+
+        saveAnswerData: function(){
+
+        },
     },
     mounted(){
         this.getQuestions();
