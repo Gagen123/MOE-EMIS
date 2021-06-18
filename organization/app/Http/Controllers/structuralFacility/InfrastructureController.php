@@ -10,10 +10,15 @@ use App\Models\structuralFacility\Infrastructure;
 use App\Models\Masters\StructureCategory;
 use App\Models\Masters\StructureSubCategory;
 use App\Models\Masters\StructureFacility;
-use App\Models\Masters\StructureDesigner;
+use App\Models\Masters\StructureDesigner; 
+use App\Models\Masters\ECCDStructureType;
+use App\Models\Masters\ECCDFacilities;
 use App\Models\structuralFacility\FacilityInStructure;
+use App\Models\structuralFacility\eccdInfrastructure;
+use App\Models\structuralFacility\eccdInfrastructurefacility;
 use App\Models\structuralFacility\WashFeeding;
 use Illuminate\Support\Facades\DB;
+
 
 
 class InfrastructureController extends Controller
@@ -64,6 +69,7 @@ class InfrastructureController extends Controller
      * method to save sport details
      */
     public function saveInfrastructure(Request $request){
+       
         $id = $request->id;
         if($id != null){
             $infrastructure = [
@@ -201,4 +207,101 @@ class InfrastructureController extends Controller
         $wash_feeding_detials=WashFeeding::where('type',explode('SSS',$type)[0])->where('orgId',explode('SSS',$type)[1])->get();
         return $this->successResponse($wash_feeding_detials);
     }
+
+    //ECCD Instructure 
+
+    public function getStructureTypeInDropdown(){
+        return ECCDStructureType::where('status',1)->get();
+    }
+
+    public function geteccdStructureFacilityInDropdown($structuretype){
+        //dd('herea at microservices');
+        $equi = DB::table('master_eccdFacilities_type as a')
+            ->select('a.id as id', 'a.faciltytype as facilty')
+            ->where('structuretype','=', $structuretype)
+            ->get();
+        return $equi;
+    }
+
+    // public function geteccdStructureFacilityInDropdown($structuretype){
+    //     return $this->successResponse(ECCDFacilities::where ('structuretype',$structuretype)->get());
+
+    // }
+    public function saveEccdInfrastructure(Request $request){
+      //  dd($request);
+        $id = $request->id;
+        if($id != null){
+            $eccdinfrastructure = [
+                'organizationId'            =>  $request['organizationId'],
+                'structuretype'             =>  $request['structuretype'],
+            //    'subCategoryId'             =>  $request['subCategory'],
+                'constructionType'          =>  $request['constructionType'],
+            //    'structureNo'               =>  $request['structureNo'],
+                'yearOfConstruction'        =>  $request['yearOfConstruction'],
+                'plintchArea'               =>  $request['plintchArea'],
+                'noOfFloor'                 =>  $request['noOfFloor'],
+                'totalCapacity'             =>  $request['totalCapacity'],
+            //    'rampAccess'                =>  $request['rampAccess'],
+                'presentCondition'          =>  $request['presentCondition'],
+                'design'                    =>  $request['design'],
+                'updated_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                $infra = eccdInfrastructure::where('id', $id)->update($eccdinfrastructure);
+                DB::table('eccd_infrastructure_facilities')->where('eccdinfrastructureId', $request->id)->delete();
+                foreach ($request->input('users') as $i=> $user){
+                    $facilityInStructure = array(
+                        'eccdinfrastructureId'          =>  $request->id,
+                        'facilityTypeId'                =>  $user['facility'],
+                        'facilityName'                  =>  $user['facilityNo'],
+                        'capacity'                      =>  $user['capacity'],
+                        'noOfFacility'                  =>  $user['noOfFacility'],
+                        'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
+                        'noWithInternetConnection'      =>  $user['internetConnection'],
+                        'updated_by'                    =>  $request->user_id,
+                        'created_at'                    =>  date('Y-m-d h:i:s')
+                    );
+                    $infra = eccdInfrastructurefacility::create($facilityInStructure);
+                }
+            return $this->successResponse($infra, Response::HTTP_CREATED);
+
+        }else{
+            $eccdinfrastructure = [
+                'organizationId'            =>  $request['organizationId'],
+                'structuretype'             =>  $request['category'],
+             //   'subCategoryId'             =>  $request['subCategory'],
+                'constructionType'          =>  $request['constructionType'],
+            //    'structureNo'               =>  $request['structureNo'],
+                'yearOfConstruction'        =>  $request['yearOfConstruction'],
+                'plintchArea'               =>  $request['plintchArea'],
+                'noOfFloor'                 =>  $request['noOfFloor'],
+                'totalCapacity'             =>  $request['totalCapacity'],
+            //    'rampAccess'                =>  $request['rampAccess'],
+                'presentCondition'          =>  $request['presentCondition'],
+                'design'                    =>  $request['design'],
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            // dd($infrastructure);
+            $infra = eccdInfrastructure::create($eccdinfrastructure);
+            $eccdinfrastructureId = $infra->id;
+            foreach ($request->input('users') as $i=> $user){
+                $facilityInStructure = array(
+                    'eccdinfrastructureId'          =>  $eccdinfrastructureId,
+                    'facilityTypeId'                =>  $user['facility'],
+                    'facilityName'                  =>  $user['facilityNo'],
+                    'capacity'                      =>  $user['capacity'],
+                    'noOfFacility'                  =>  $user['noOfFacility'],
+                    'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
+                    'noWithInternetConnection'      =>  $user['internetConnection'],
+                    'created_by'                    =>  $request->user_id,
+                    'created_at'                    =>  date('Y-m-d h:i:s')
+                );
+                dd( $infra);
+                $infra = eccdInfrastructurefacility::create($facilityInStructure);
+            }
+            return $this->successResponse($infra, Response::HTTP_CREATED);
+        }
+    }
+
 }

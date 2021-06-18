@@ -119,6 +119,11 @@ Route::prefix('masters')->group(function () {
 
     Route::post('/saveDisasterCommittee', [App\Http\Controllers\AdministrationController::class, 'saveDisasterCommittee'])->name('saveDisasterCommittee');
     Route::get('/loadDisasterComm', [App\Http\Controllers\AdministrationController::class, 'loadDisasterComm'])->name('loadDisasterComm');
+
+    Route::post('/saveEccdFacility', [App\Http\Controllers\AdministrationController::class, 'saveEccdFacility'])->name('saveEccdFacility');
+    Route::get('/getEccdStructureType', [App\Http\Controllers\AdministrationController::class, 'getEccdStructureType'])->name('getEccdStructureType');
+    Route::get('/loadEccdFacilityList', [App\Http\Controllers\AdministrationController::class, 'loadEccdFacilityList'])->name('loadEccdFacilityList');
+    
     //Student Masters
     Route::post('/saveStudentMasters', [App\Http\Controllers\student\StudentMasterController::class, 'saveStudentMasters'])->name('saveStudentMasters');
 
@@ -261,6 +266,12 @@ Route::prefix('organization')->group(function () {
         Route::get('/getWashFeeding/{type}', [App\Http\Controllers\organization\StructuralController::class, 'getWashFeeding'])->name('getWashFeeding');
 
     });
+    //eccd Infrastructure    
+    Route::post('/saveEccdInfrastructure', [App\Http\Controllers\organization\StructuralController::class, 'saveEccdInfrastructure'])->name('saveEccdInfrastructure');
+    Route::get('/loadEccdInfrastructureList/{orgId}', [App\Http\Controllers\organization\StructuralController::class, 'loadEccdInfrastructureList'])->name('loadEccdInfrastructureList');
+    Route::get('/getStructureTypeInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getStructureTypeInDropdown'])->name('getStructureTypeInDropdown');
+    Route::get('/geteccdStructureFacilityInDropdown/{structuretype}', [App\Http\Controllers\organization\StructuralController::class, 'geteccdStructureFacilityInDropdown'])->name('geteccdStructureFacilityInDropdown');
+    
     // establishment route
     Route::get('/getLevelInDropdown', [App\Http\Controllers\organization\EstablishmentController::class, 'getLevelInDropdown'])->name('getLeveInDropdown');
     Route::get('/getLocationInDropdown', [App\Http\Controllers\organization\EstablishmentController::class, 'getLocationInDropdown'])->name('getLocationInDropdown');

@@ -92,7 +92,7 @@ class HrDevelopmentController extends Controller{
                     move_uploaded_file($file,$file_store_path.'/'.$file_name);
                     array_push($attachment_details,
                         array(
-                            'path'        =>  $file_store_path,
+                            'path'                    =>  $file_store_path,
                             'original_name'           =>  $file_name,
                             'user_defined_name'       =>  $filenames[$index],
                         )

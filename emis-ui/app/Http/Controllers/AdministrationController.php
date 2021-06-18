@@ -1238,6 +1238,40 @@ class AdministrationController extends Controller{
         return $strCategory;
     }
 
+    public function saveEccdFacility(Request $request){
+        $rules = [
+            'faciltytype'           =>  'required',
+            'structuretype'         =>  'required',
+            'status'                =>  'required',
+        ];
+        $customMessages = [
+            'faciltytype.required'          => 'faciltytype category is required',
+            'structuretype.required'        => 'Sub category name is required',
+            'status.required'               => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $cat =[
+            'faciltytype'               =>  $request['faciltytype'],
+            'structuretype'             =>  $request['structuretype'],
+            'description'               =>  $request['description'],
+            'status'                    =>  $request['status'],
+            'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>$this->userId()
+        ];
+        //dd($cat);
+        $response_data= $this->apiService->createData('emis/masters/eccdfacility/saveEccdFacility', $cat);
+        return $response_data;
+
+    }
+    public function loadEccdFacilityList(Request $request){
+        $eccdfacity = $this->apiService->listData('emis/masters/eccdfacility/loadEccdFacilityList');
+        return $eccdfacity;
+    }
+    public function getEccdStructureType(Request $request){
+        $strCategory = $this->apiService->listData('emis/masters/eccdfacility/getEccdStructureType');
+        return $strCategory;
+    }
 
 
     

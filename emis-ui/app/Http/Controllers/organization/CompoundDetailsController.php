@@ -23,24 +23,25 @@ class CompoundDetailsController extends Controller
     } 
 
     public function saveSchoolCompundDetails(Request $request){
-       //dd('from UI');
+     //   $file = $request->attachments;
+    //    dd($file);
         $rules = [
             'thramno'               =>  'required',
             'plotno'                =>  'required',
-            'peginfo'               =>  'required',
+            'attachments'           =>  'required',
             'sizecompound'          =>  'required',
             'sizeplayground'        =>  'required',
             'playgroundused'        =>  'required',
             'status'                =>  'required',
-           // 'agriculturalarea'      =>  'required',
-          //  'areaused'              =>  'required',
+           // 'agriculturalarea'    =>  'required',
+          //  'areaused'            =>  'required',
            
 
         ];
         $customMessages = [
             'thramno.required'                  => 'thramno is required',
             'plotno.required'                   => 'plotno is required',
-            'peginfo.required'                  => 'peginfo is required',
+            'attachments.required'              => 'attachments is required',
             'sizecompound.required'             => 'sizecompound is required',
             'sizeplayground.required'           => 'sizeplayground is required',
             'playgroundused.required'           => 'playgroundused is required',
@@ -49,11 +50,23 @@ class CompoundDetailsController extends Controller
          //   'areaused'                          => 'areaused is required',
         ];
         $this->validate($request, $rules, $customMessages);
+       
+        $file = $request->attachments;
+        $path="";
+        $file_store_path=config('services.constant.file_stored_base_path').'pegdetails';
+        if($file!=null && $file!="" && $file!="undefined"){
+            if(!is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            $file_name = time().'_' .$file->getClientOriginalName();
+            move_uploaded_file($file,$file_store_path.'/'.$file_name);
+            $path=$file_store_path.'/'.$file_name;
+        }
         $comp =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
             'thramno'                       =>  $request['thramno'],
             'plotno'                        =>  $request['plotno'],
-            'peginfo'                       =>  $request['peginfo'],
+            'attachments'                   =>  $path,
             'sizecompound'                  =>  $request['sizecompound'],
             'sizeplayground'                =>  $request['sizeplayground'],
             'playgroundused'                =>  $request['playgroundused'],
@@ -63,14 +76,14 @@ class CompoundDetailsController extends Controller
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-       //  dd($comp);
-        try{
+      //  dd( $comp);
+        // try{
             $response_data= $this->apiService->createData('emis/organization/compoundDetails/saveSchoolCompundDetails', $comp);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
     // public function loadcompoundareadetials($org_id=""){
     //     //  dd('m here');

@@ -15,8 +15,8 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label >Peg Information: </label>
-                         <textarea class="form-control" rows="3" @change="removeerror('peginfo')" :class="{ 'is-invalid': form.errors.has('peginfo') }" id="peginfo" v-model="form.peginfo" ></textarea>
-                        <has-error :form="form" field="peginfo"></has-error>
+                        <input type="file" class="form-control" v-on:change="onChangeFileUpload" >
+                        <has-error :form="form" field="attachments"></has-error>
                     </div>
                 </div>
 
@@ -42,8 +42,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Does the School have agricultural area?<span class="text-danger">*</span></label> 
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1" @click="showtextbox('No')" checked/>No</label>
-                        <label><input v-model="form.status"  type="radio" value="0" @click="showtextbox('Yes')"/>Yes</label>
+                        <label><input v-model="form.status"  type="radio" value="0" @click="showtextbox('No')" />No</label>
+                        <label><input v-model="form.status"  type="radio" value="1" @click="showtextbox('Yes')"/>Yes</label>
                     </div>
                 </div>
                 <div class="form-group row" style="display:none" id="agriculturalarea">
@@ -78,11 +78,11 @@ export default {
                 id: '', 
                 thramno:'', 
                 plotno: '',
-                peginfo: '',
+                attachments: '',
                 sizecompound:'',
                 sizeplayground:'',
                 playgroundused: '',
-                status: '1',
+                status: '0',
                 agriculturalarea: '',
                 areaused:'',
                
@@ -109,13 +109,16 @@ export default {
                 }
             },
 
+        onChangeFileUpload(e){
+            this.form.attachments = e.target.files[0];
+        },
         /**
          * method to reset form
          */
         restForm(){
             this.form.thramno= '';
             this.form.plotno = '';
-            this.form.peginfo = '';
+            this.form.attachments = '';
             this.form.sizecompound= '';
             this.form.sizeplayground= '';
             this.form.playgroundused= '';
@@ -132,7 +135,23 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.post('/organization/saveSchoolCompundDetails',this.form)
+                 const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('thramno', this.form.thramno);
+                formData.append('plotno', this.form.plotno);
+                // alert(this.form.attachments);
+                formData.append('attachments', this.form.attachments);
+                formData.append('sizecompound', this.form.sizecompound);
+                formData.append('sizeplayground', this.form.sizeplayground);
+                formData.append('playgroundused', this.form.playgroundused);
+                formData.append('status', this.form.status);
+                formData.append('agriculturalarea', this.form.agriculturalarea);
+                formData.append('areaused', this.form.areaused);
+                    axios.post('/organization/saveSchoolCompundDetails',formData,config)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -147,43 +166,16 @@ export default {
             }
 		},
         
-        // applyselect(type){
-        //     if(type=="std"){
-        //         if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
-        //             $('#sex_id').addClass('select2-hidden-accessible');
-        //         }
-        //         if(!$('#mother_tongue').attr('class').includes('select2-hidden-accessible')){
-        //             $('#mother_tongue').addClass('select2-hidden-accessible');
-        //         }
-        //     }
-            
-        // },
+      
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
                 $('#'+errid).html(''); 
             }
         },
-        // async changefunction(id){
-        //     if($('#'+id).val()!=""){
-        //         $('#'+id).removeClass('is-invalid select2');
-        //         $('#'+id+'_err').html('');
-        //         $('#'+id).addClass('select2');
-        //     }
-        //     if(id=="sex_id"){
-        //         this.form.sex_id=$('#sex_id').val();
-        //     }
-        //     if(id=="mother_tongue"){
-        //         this.form.mother_tongue=$('#mother_tongue').val();
-        //     }
-        //     if(id=="country"){
-        //         this.form.country=$('#country').val();
-        //     }
-             
-        // },
         
     },
-    mounted() { 
+     mounted() { 
       
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){
@@ -194,10 +186,10 @@ export default {
             this.changefunction(id);
         });
     },
-     created() {
+    created() {
         this.form.thramno=this.$route.params.data.thramNo;
         this.form.plotno=this.$route.params.data.plotNo;
-        this.form.peginfo=this.$route.params.data.pegInformation;
+        this.form.attachments=this.$route.params.data.attachments;
         this.form.sizecompound=this.$route.params.data.compoundArea;
         this.form.sizeplayground=this.$route.params.data.playgroundArea;
         this.form.playgroundused=this.$route.params.data.playgroundAreaUsable;

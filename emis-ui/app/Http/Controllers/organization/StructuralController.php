@@ -286,6 +286,59 @@ class StructuralController extends Controller
         $utensil = $this->apiService->listData('emis/organization/schoolFeeding/loadUtensilKitchenStatus/'.$this->userId() );
         return $utensil;
     }
+    //eccd infrastructure
+    public function getStructureTypeInDropdown(){
+        $categoryDropdown = $this->apiService->listData('emis/organization/eccdinfrastructure/getStructureTypeInDropdown');
+        return $categoryDropdown;
+    }
     
-    
+    public function geteccdStructureFacilityInDropdown($structuretype=""){
+    // dd($$structuretype);
+        $subCategoryDropdown = $this->apiService->listData('emis/organization/eccdinfrastructure/geteccdStructureFacilityInDropdown/'.$structuretype);
+        return $subCategoryDropdown;
+    }
+
+    public function saveEccdInfrastructure(Request $request){
+        $rules = [
+            'structuretype'                   =>  'required',
+            'constructionType'                =>  'required',
+            'yearOfConstruction'              =>  'required',
+            // 'presentCondition'           =>  'required',
+        ];
+        $customMessages = [
+            'structuretype.required'                 => 'Structure Type is required',
+            'constructionType.required'              => 'Construction Type is required',
+            'yearOfConstruction.required'            => 'Year of Construction is required',
+            // 'presentCondition.required'         => 'Present Condition of Structure is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $eccdinfrastructure =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'structuretype'             =>  $request['structuretype'],
+            'constructionType'          =>  $request['constructionType'],
+            'yearOfConstruction'        =>  $request['yearOfConstruction'],
+            'plintchArea'               =>  $request['plintchArea'],
+            'noOfFloor'                 =>  $request['noOfFloor'], 
+            'totalCapacity'             =>  $request['totalCapacity'],
+           // 'rampAccess'                =>  $request['rampAccess'],
+            'presentCondition'          =>  $request['presentCondition'],
+            'design'                    =>  $request['design'],
+            'id'                        =>  $request['id'],
+            'users'                     =>  $request['users'],
+            'user_id'                   =>  $this->userId()
+        ];
+      //  dd($eccdinfrastructure);
+        $response_data= $this->apiService->createData('emis/organization/eccdinfrastructure/saveEccdInfrastructure', $eccdinfrastructure);
+        return $response_data;
+    }
+
+    public function loadEccdInfrastructureList($orgId=""){
+        if($orgId=="null" || $orgId==""){
+            $orgId=$this->getWrkingAgencyId();
+        }
+        $list = $this->apiService->listData('emis/organization/eccdinfrastructure/loadEccdInfrastructureList/'.$orgId);
+        return $list;
+    }
+
 }
