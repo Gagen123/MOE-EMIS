@@ -382,7 +382,25 @@ const routes = [
                     { path: '/attachment_list', name:'AttachmentList', component: require('./components/masters/organization_masters/attachment/attachment_list.vue').default },
                 ]
             },
-            { path: '/disastercommittee_index',
+            { path: '/eccdStructure_type_index',  
+                component: require('./components/masters/organization_masters/eccdStructure_type/eccdStructure_type_index.vue').default ,
+                  children: [
+                    { path: '/',name:'eccdStructure_type_index', component: require('./components/masters/organization_masters/eccdStructure_type/list_eccdStructure_type.vue').default },
+                    { path: '/list_eccdStructure_type',name:'list_eccdStructure_type', component: require('./components/masters/organization_masters/eccdStructure_type/list_eccdStructure_type.vue').default },
+                    { path: '/create_eccdStructure_type',name:'create_eccdStructure_type', component: require('./components/masters/organization_masters/eccdStructure_type/create_eccdStructure_type.vue').default },
+                    { path: '/edit_eccdStructure_type',name:'edit_eccdStructure_type', component: require('./components/masters/organization_masters/eccdStructure_type/edit_eccdStructure_type.vue').default },
+                  ]     
+              },
+              { path: '/eccdfacility_type_index',  
+              component: require('./components/masters/organization_masters/eccdFacility_type/eccdfacility_type_index.vue').default ,
+                children: [
+                  { path: '/',name:'eccdfacility_type_index', component: require('./components/masters/organization_masters/eccdFacility_type/list_eccdfacility_type.vue').default },
+                  { path: '/list_eccdfacility_type',name:'list_eccdfacility_type', component: require('./components/masters/organization_masters/eccdFacility_type/list_eccdfacility_type.vue').default },
+                  { path: '/create_eccdfacility_type',name:'create_eccdfacility_type', component: require('./components/masters/organization_masters/eccdFacility_type/create_eccdfacility_type.vue').default },
+                  { path: '/edit_eccdfacility_type',name:'edit_eccdfacility_type', component: require('./components/masters/organization_masters/eccdFacility_type/edit_eccdfacility_type.vue').default },
+                ]     
+            },
+            { path: '/disastercommittee_index', 
             component: require('./components/masters/organization_masters/disastercommittee/disastercomm_index.vue').default ,
             children:
             [
@@ -816,6 +834,15 @@ const routes = [
             { path: '/infrastructure_list', name:'InfrastructureList', component: require('./components/organization/structuralFacility/infrastructure/infrastructure_list.vue').default },
           ]
         },
+        { path: '/eccdinfrastructure_index', 
+          component: require('./components/organization/structuralFacility/eccdinfrastructure/eccdinfrastructure_index.vue').default ,
+          children: [
+            { path: '',name:'eccdinfrastructure_index', component: require('./components/organization/structuralFacility/eccdinfrastructure/eccdinfrastructure_list.vue').default },
+            { path: '/eccdinfrastructure_add', name:'EccdInfrastructureAdd', component: require('./components/organization/structuralFacility/eccdinfrastructure/eccdinfrastructure_add.vue').default },
+            { path: '/eccdinfrastructure_edit', name:'EccdInfrastructureEdit', component: require('./components/organization/structuralFacility/eccdinfrastructure/eccdinfrastructure_edit.vue').default },
+            { path: '/eccdinfrastructure_list', name:'EccdInfrastructureList', component: require('./components/organization/structuralFacility/eccdinfrastructure/eccdinfrastructure_list.vue').default },
+          ]    
+        },
         { path: '/sport_index', name:'structural_index',
           component: require('./components/organization/structuralFacility/sport/sport_index.vue').default ,
           children: [
@@ -871,6 +898,16 @@ const routes = [
             //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
             ]
         },
+        { path: '/connectivity_details', name:'connectivity_details', 
+        component: require('./components/organization/general/connectivity/edit_connectivity.vue').default, 
+        children: 
+        [
+            { path: '',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+          //  { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
+           { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+        //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
+        ]    
+      },
         { path: '/wash',name:'wash', component: require('./components/organization/structuralFacility/wash.vue').default },
         { path: '/school_feeding',name:'school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
       ]
