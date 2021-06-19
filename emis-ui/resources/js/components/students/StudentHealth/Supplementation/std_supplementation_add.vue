@@ -49,7 +49,7 @@
                                     <th>Sex</th>
                                     <th>Age</th>
                                     <th>Given
-                                        <input type="checkbox" name="height" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
+                                        <input type="checkbox" name="screened" class="form-control-input" id="screenid" @change="checkall('screencheck','screenid')"/>
                                     </th>
                                 </tr>
                             </thead>
@@ -58,10 +58,10 @@
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
                                     <td> {{student.CmnSexId}} </td>
-                                        <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="checkbox" name="screened" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/>
+                                        <input type="checkbox" name="screened" class="form-control-input screencheck" v-model="student_form.std_screened[index]" :value="student.id"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -81,6 +81,7 @@
 export default {
    data(){
         return{
+            dt:'',
             termList:[],
             classList:[],
             sectionList:[],
@@ -189,7 +190,11 @@ export default {
             if(type=="save"){
                 this.student_form.std_screened=[];
                 let screenedArray=[];
-                $("input[name='screened']:checked").each( function () {
+                let oTable = $('#student-list-table').dataTable({
+                    stateSave: true,
+                    destroy: true,
+                });
+                $("input[name='screened']:not(:checked)",oTable.fnGetNodes()).each( function () {
                     screenedArray.push($(this).val());
                 });
                 this.student_form.std_screened=screenedArray;
@@ -247,12 +252,21 @@ export default {
             
         },
         checkall(class_to_check,id){
+            let oTable = $('#student-list-table').dataTable({
+                stateSave: true,
+                destroy: true,
+            });
+
+            let allPages = oTable.fnGetNodes();
+
             if($('#'+id).prop('checked')){
-                $("."+class_to_check).prop("checked",true);
+                $("."+class_to_check, allPages).prop("checked",true);
             }
             else{
-                $("."+class_to_check).prop("checked",false);
+                $("."+class_to_check, allPages).prop("checked",false);
             }
+            $("."+class_to_check).toggleClass('allChecked');
+            
         }
     },
     mounted() {
@@ -273,11 +287,20 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadActiveTermList();
-        
         this.loadClassList();
-        this.loadSectionList();
-        this.loadStreamList();
+        this.loadActiveTermList();
+        // this.loadSectionList();
+        // this.loadStreamList();
+        
+        this.dt =  $("#student-list-table").DataTable()
+    },
+    watch: {
+        studentList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#student-list-table").DataTable()
+            });
+        }
     },
     
 }

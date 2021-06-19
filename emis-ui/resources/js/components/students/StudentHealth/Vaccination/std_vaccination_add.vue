@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div> 
        <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-body">
                 <div class="form-group row">
@@ -39,94 +39,55 @@
                         <has-error :form="student_form" field="std_section"></has-error>
                     </div>
                 </div>
-                <div class="hidden" id="TDvaccine" style="display:none">
-                    <div class="form-group row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <table id="transferoption-table" class="table w-100 table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Student vaccinated with TD</th>
-                                        <th>Boys</th> 
-                                        <th>Girls</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                          Number of Student who received TD at 6 years
-                                        </td>
-                                        <td>
-                                            <input class="form-control" v-model="student_form.td_at6_boys" :class="{ 'is-invalid': student_form.errors.has('td_at6_boys') }" id="td_at6_boys" @change="remove_err('td_at6_boys')" type="number">
-                                            <has-error :form="student_form" field="td_at6_boys"></has-error>
-                                        </td>
-                                         <td>
-                                            <input class="form-control" v-model="student_form.td_at6_girls" :class="{ 'is-invalid': student_form.errors.has('td_at6_girls') }" id="td_at6_girls" @change="remove_err('td_at6_girls')" type="number">
-                                            <has-error :form="student_form" field="td_at6_girls"></has-error>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                          Number of Student who received TD at 12 years
-                                        </td>
-                                        <td>
-                                            <input class="form-control" v-model="student_form.td_at12_boys" :class="{ 'is-invalid': student_form.errors.has('td_at12_boys') }" id="td_at12_boys" @change="remove_err('td_at12_boys')" type="number">
-                                            <has-error :form="student_form" field="date"></has-error>
-                                        </td>
-                                         <td>
-                                            <input class="form-control" v-model="student_form.td_at12_girls" :class="{ 'is-invalid': student_form.errors.has('td_at12_girls') }" id="td_at12_girls" @change="remove_err('td_at12_girls')" type="number">
-                                            <has-error :form="student_form" field="td_at12_girls"></has-error>
-                                        </td>
-                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="hidden" id="HPVvaccine" style="display:none">
-                    <div class="form-group row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <table id="transferoption-table" class="table w-100 table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Number of Girls who received 1st Dose</th>
-                                        <th>Number of Girls who received 2nd Dose</th> 
-                                        <th>Number of Girls who received 3rd Dose</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <input class="form-control" v-model="student_form.dose_1" :class="{ 'is-invalid': student_form.errors.has('dose_1') }" id="dose_1" @change="remove_err('dose_1')" type="number">
-                                            <has-error :form="student_form" field="dose_1"></has-error>
-                                        </td>
-                                        <td>
-                                            <input class="form-control" v-model="student_form.dose_2" :class="{ 'is-invalid': student_form.errors.has('dose_2') }" id="dose_2" @change="remove_err('dose_2')" type="number">
-                                            <has-error :form="student_form" field="dose_2"></has-error>
-                                        </td>
-                                        <td>
-                                            <input class="form-control" v-model="student_form.dose_3" :class="{ 'is-invalid': student_form.errors.has('dose_3') }" id="dose_3" @change="remove_err('dose_3')" type="number">
-                                            <has-error :form="student_form" field="dose_3"></has-error>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="student-list-table" class="table w-100 table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th> 
+                                    <th>Sex</th>
+                                    <th>Age</th>
+                                    <th>Vaccinated
+                                        <input type="checkbox" name="vaccinated" class="form-control-input" id="vaccinatedid" @change="checkall('vaccinatedcheck','vaccinatedid')"/>
+                                    </th>
+                                    <th>Dose</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr v-for="(student, index) in studentList" :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ student.Name}}</td>
+                                    <td> {{student.CmnSexId}} </td>
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
+                                    <td>{{getAge(student.DateOfBirth)}}</td>
+                                    <td>
+                                        <input type="checkbox" name="vaccinated" class="form-control-input vaccinatedcheck" v-model="student_form.std_vaccinated[index]" :value="student.id"/>
+                                    </td>
+                                    <td>
+                                        <label><input  type="radio" v-model="student_form.dose[index]" value="1" tabindex=""/> 1</label>
+                                        <label><input  type="radio" v-model="student_form.dose[index]" value="2" tabindex=""/> 2</label>
+                                        <label><input  type="radio" v-model="student_form.dose[index]" value="3" tabindex=""/> 3</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <hr>
                 <div class="card-footer text-right">
                     <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                     <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div>
+                </div>
             </div>
         </div>
     </div> 
-    
 </template>
 <script>
 export default {
-    data() {
-        return {
+   data(){
+        return{
+            dt:'',
             vaccineList:[],
             classList:[],
             sectionList:[],
@@ -136,16 +97,15 @@ export default {
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
-                screening: '',
-                screening_position: '',
-                screening_endorsed_by: '',
+                vaccination: '',
+                std_class: '',
+                std_stream: '',
+                std_section: '',
                 date: '',
+                std_id: [],
+                std_vaccinated:[],
+                dose:[]
             }),
-
-            users:
-            [{
-                class:'',number:'',number1:''
-            }] 
         }
     },
 
@@ -212,35 +172,43 @@ export default {
             });
         },
 
+        
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
             var age_dt = new Date(diff_ms);
             return Math.abs(age_dt.getUTCFullYear()-1970);
         },
+        
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
         formaction: function(type){
             if(type=="reset"){
-                this.student_form.screening= '';
-                this.student_form.prepared_by='';
-                this.student_form.screening_position='';
-                this.student_form.screening_endorsed_by= '';
                 this.student_form.date='';
             }
             if(type=="save"){
-                this.student_form.std_screened=[];
-                let screenedArray=[];
-                $("input[name='screened']:checked").each( function () {
-                    screenedArray.push($(this).val());
+                this.student_form.std_vaccinated=[];
+                let vaccinatedArray=[];
+                let oTable = $('#student-list-table').dataTable({
+                    stateSave: true,
+                    destroy: true,
                 });
-                this.student_form.std_screened=screenedArray;
+                $("input[name='vaccinated']:checked",oTable.fnGetNodes()).each( function () {
+                    vaccinatedArray.push($(this).val());
+                });
+                this.student_form.std_vaccinated=vaccinatedArray;
                 
-                this.student_form.post('/students/addSupplementationRecords',this.student_form)
+                this.student_form.post('/students/addVaccinationRecords',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/std_supplementation_list');
+                    this.$router.push('/std_vaccination_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -255,15 +223,6 @@ export default {
             }
             if(id=="vaccination"){
                 this.student_form.vaccination=$('#vaccination').val();
-                let vaccination_selected = $("#vaccination").val();
-                
-                if(vaccination_selected == '32abba18-889d-4018-ba66-c9b8d7ef7385'){
-                    $("#HPVvaccine").show();
-                    $("#TDvaccine").hide();
-                }else{
-                    $("#HPVvaccine").hide();
-                    $("#TDvaccine").show();
-                }
             }
             if(id=="std_class"){
                 this.student_form.std_class=$('#std_class').val();
@@ -296,12 +255,21 @@ export default {
             
         },
         checkall(class_to_check,id){
+            let oTable = $('#student-list-table').dataTable({
+                stateSave: true,
+                destroy: true,
+            });
+
+            let allPages = oTable.fnGetNodes();
+
             if($('#'+id).prop('checked')){
-                $("."+class_to_check).prop("checked",true);
+                $("."+class_to_check, allPages).prop("checked",true);
             }
             else{
-                $("."+class_to_check).prop("checked",false);
+                $("."+class_to_check, allPages).prop("checked",false);
             }
+            $("."+class_to_check).toggleClass('allChecked');
+            
         }
     },
     mounted() {
@@ -322,11 +290,20 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadActiveVaccineList();
-        
         this.loadClassList();
+        this.loadActiveVaccineList();
         // this.loadSectionList();
         // this.loadStreamList();
+        
+        this.dt =  $("#student-list-table").DataTable()
+    },
+    watch: {
+        studentList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#student-list-table").DataTable()
+            });
+        }
     },
     
 }
