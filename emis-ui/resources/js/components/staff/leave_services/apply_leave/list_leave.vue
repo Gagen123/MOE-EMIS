@@ -9,7 +9,7 @@
                             <th>Applicant</th>
                             <th>Leave Type</th>
                             <th>Days/Months</th>
-                            <th>Date of applicaiton</th>
+                            <th>Date of Application</th>
                             <th>Status</th>
                             <th class="pl-4 pr-5">Action</th>
                         </tr>

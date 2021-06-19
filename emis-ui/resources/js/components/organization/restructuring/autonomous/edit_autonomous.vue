@@ -112,7 +112,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change basic details has been udpated for approval. <br><b>Thank You !</b>";
+                                    let message="Application for Change basic details has been udpated for approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',

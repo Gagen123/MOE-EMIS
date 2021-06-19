@@ -134,7 +134,7 @@ class TransferController extends Controller{
         if(strpos(rtrim($workflowstatus,','),',')!==false){
             if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id!=4){
                 if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id==3){
-                    $loadTransferDetails->app_stage='Approver'; //cannot assign other then approver of transfer applicaiton
+                    $loadTransferDetails->app_stage='Approver'; //cannot assign other then approver of transfer Application
                 }
                 else if($loadTransferDetails->data->status=="Under Process" && json_decode($dat)->status_id==2){
                     $loadTransferDetails->app_stage='Verifier';

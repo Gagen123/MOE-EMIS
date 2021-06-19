@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Upgrade_Downgrade'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Downgradation'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -57,7 +57,7 @@ export default {
         showview(data){
             this.$router.push({name:'view_level_change',params: {data:data}});
         },
-        
+
     },
     mounted(){
         this.loadDataList();

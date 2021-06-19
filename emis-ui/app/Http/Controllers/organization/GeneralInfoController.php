@@ -453,10 +453,8 @@ class GeneralInfoController extends Controller
                 break;
             }
         }
-
         $rules = $validation['rules'];
         $customMessages = $validation['messages'];
-
         $this->validate($request, $rules, $customMessages);
 
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
@@ -570,9 +568,9 @@ class GeneralInfoController extends Controller
 
         $rules = [
             'isGeoPoliticallyLocated'   =>  'required',
-            'isAspNetSchool'            =>  'required',
-            'isColocated'               =>  'required',
-            'isResourceCenter'          =>  'required',
+            // 'isAspNetSchool'            =>  'required',
+            // 'isColocated'               =>  'required',
+            // 'isResourceCenter'          =>  'required',
             'isSenSchool'               =>  'required',
             'hasCounselingRoom'         =>  'required',
             'hasShiftSystem'            =>  'required',
@@ -581,19 +579,21 @@ class GeneralInfoController extends Controller
             'latitude'                  =>  'required',
             'altitude'                  =>  'required',
             'map_path'                  =>  'required',
-            //'climate_type'              =>  'required',
+            'climate_type'              =>  'required',
             'distance_from_dzo'         =>  'required',
-            //'fencingtype'               =>  'required',
+            'fencingtype'               =>  'required',
             'entranceGate'              =>  'required',
+            'disasterArea'              =>  'required',
+            
         ];
 
         $customMessages = [
             'isGeoPoliticallyLocated.required'   =>  'This field is required',
             'category.required'                  =>  'This field is required',
-            'isAspNetSchool.required'            =>  'This field is required',
-            'isColocated.required'               =>  'This field is required',
+            // 'isAspNetSchool.required'            =>  'This field is required',
+            // 'isColocated.required'               =>  'This field is required',
             'isFeedingSchool.required'           =>  'This field is required',
-            'isResourceCenter.required'          =>  'This field is required',
+            // 'isResourceCenter.required'          =>  'This field is required',
             'isSenSchool.required'               =>  'This field is required',
             'hasCounselingRoom.required'         =>  'This field is required',
             'hasShiftSystem.required'            =>  'This field is required',
@@ -601,10 +601,11 @@ class GeneralInfoController extends Controller
             'latitude.required'                  =>  'This field is required',
             'altitude.required'                  =>  'This field is required',
             'map_path.required'                  =>  'This field is required',
-            //'climate_type.required'              =>  'This field is required',
+            'climate_type.required'              =>  'This field is required',
             'distance_from_dzo.required'         =>  'This field is required',
-            //'fencingtype.required'               =>  'This field is required',
+            'fencingtype.required'               =>  'This field is required',
             'entranceGate.required'              =>  'This field is required',
+            'disasterArea.required'              =>  'This field is required',
 
         ];
         $validation = array();
@@ -631,7 +632,8 @@ class GeneralInfoController extends Controller
             'distance_from_dzo'         =>  $request['initiatedby'],
             'fencingtype'               =>  $request['initiatedby'],
             'entranceGate'              =>  $request['initiatedby'],
-            'user_id'                    =>  $this->userId(),
+            'disasterArea'              =>  $request['initiatedby'],
+            'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];
 
@@ -641,6 +643,7 @@ class GeneralInfoController extends Controller
     private function setSchoolFields($request){
         $estd =[
             'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
+            'hasCE'                     =>  $request['hasCE'],
             'isAspNetSchool'            =>  $request['isAspNetSchool'],
             'isColocated'               =>  $request['isColocated'],
             'isFeedingSchool'           =>  $request['isFeedingSchool'],
@@ -657,7 +660,8 @@ class GeneralInfoController extends Controller
             'distance_from_dzo'         =>  $request['distance_from_dzo'],
             'fencingtype'               =>  $request['fencingtype'],
             'entranceGate'              =>  $request['entranceGate'],
-            'user_id'                    =>  $this->userId(),
+            'disasterArea'              =>  $request['disasterArea'],
+            'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];
 

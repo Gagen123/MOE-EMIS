@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change Name of Organization</label>
+                            <label class="mb-0.5">Change Level of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -27,37 +27,42 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">New Level of Organization:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
-                                    <has-error :form="form" field="proprietorCid"></has-error>
+                                    <select name="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" id="level" class="form-control select2" @change="remove_error('level')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="level"></has-error>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
-                                    <has-error :form="form" field="proprietorName"></has-error>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
                                 </div>
                             </div>
-
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
-                                <div class="col-lg-3 col-md-3 col-sm-3">
-                                    <input type="number" v-model="form.proprietorPhone" :class="{ 'is-invalid': form.errors.has('proprietorPhone') }" @change="remove_error('proprietorPhone')" class="form-control" id="proprietorPhone" placeholder="Phone No" />
-                                    <has-error :form="form" field="proprietorPhone"></has-error>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-3">
-                                    <input type="number" v-model="form.proprietorMobile" :class="{ 'is-invalid': form.errors.has('proprietorMobile') }" @change="remove_error('proprietorMobile')" class="form-control" id="proprietorMobile" placeholder="Mobile No"/>
-                                    <has-error :form="form" field="proprietorMobile"></has-error>
-                                </div>
+                            <br>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                    <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
+                                        <input type="checkbox" v-model="form.class" :value="item.classId">
+                                        <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                    </span>
+                                </span>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Email:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.proprietorEmail" :class="{ 'is-invalid': form.errors.has('proprietorEmail') }" @change="remove_error('proprietorEmail')" class="form-control" id="proprietorEmail" placeholder="Email"/>
-                                    <has-error :form="form" field="proprietorEmail"></has-error>
-                                </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                    <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                        <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                        <label class="pr-3">
+                                            {{ item.class }}
+                                            <span v-if="item.stream"> -
+                                                {{  item.stream  }}
+                                            </span>
+                                        </label>
+                                    </span>
+                                </span>
                             </div>
                             </form>
                             <hr>
@@ -80,19 +85,14 @@ export default {
     data(){
         return{
             orgList:'',
-            levelList:[],
-            locationList:[],
-            dzongkhagList:[],
-            gewog_list:[],
-            villageList:[],
-            classList1:[],
-            streamList1:[],
             classList:[],
             streamList:[],
+            classStreamList:[],
+            levelList:[],
             form: new form({
-                organizationId:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
-                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'pending',organization_type:'',
-            }),
+                organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
+                application_for:'Change in Level', action_type:'add', status:'pending',organization_type:''
+            })
         }
     },
     methods: {
@@ -106,6 +106,17 @@ export default {
             }
         },
 
+        /**
+         * method to get level in dropdown
+         */
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+            });
+        },
+
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -113,21 +124,25 @@ export default {
                 this.orgList = response.data.data;
             });
         },
-        getDetailsbyCID(fieldId){
-            axios.get('getpersonbycid/'+ $('#'+fieldId).val())
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();
+                this.getorgdetials($('#organizationId').val());
+            }
+
+            if(id=="level"){
+                this.form.level=$('#level').val();
+            }
+        },
+
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                if (JSON.stringify(response.data)!='{}'){
-                    let personal_detail = response.data.citizenDetail[0];
-                    this.form.proprietorName = personal_detail.firstName + " " + personal_detail.lastName;
-                }else{
-                    Swal.fire({
-                        html: "No data found for this CID",
-                        icon: 'error'
-                    });
-                }
-            })
-            .catch((exception) => {
-                console.log(exception);
+                this.form.organization_type=response.data.data.organizationType;
             });
         },
 
@@ -155,7 +170,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'restr_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -170,7 +185,6 @@ export default {
                     }
                 });
             }
-
         },
 
         change_tab(nextclass){
@@ -182,29 +196,6 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-
-        /**
-         * method to populate dropdown
-         */
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();
-                 this.getorgdetials($('#organizationId').val());
-            }
-
-        },
-        getorgdetials(org_id){
-            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
-            .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
-            });
-        },
-
 
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
@@ -224,6 +215,37 @@ export default {
             }
         },
 
+
+        /**
+         * method to get class in checkbox
+         */
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                this.classList = response.data;
+            });
+        },
+
+        /**
+         * method to get stream in checkbox
+         */
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                this.streamList = response.data;
+            });
+        },
+
+        /**
+         * method to get class stream in checkbox
+         */
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping/school')
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
+
     },
 
     mounted() {
@@ -240,6 +262,10 @@ export default {
             this.changefunction(id);
         });
 
+        this.getClass();
+        this.getStream();
+        this.getClassStream();
+        this.getLevel();
         this.getOrgList();
     }
 }

@@ -10,6 +10,7 @@ class Question extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
+        'module_id',
         'service_id',
         'category_id',
         'category_type_id',
@@ -23,10 +24,10 @@ class Question extends Model{
     ];
     public function category() {
         return $this->belongsTo(Category::class, 'category_id')->select('id','name');
-    } 
+    }
     public function service() {
-        return $this->belongsTo(Service::class,'service_id')->select('id','parent_id','name');
-    } 
+        return $this->belongsTo(Service::class,'service_id')->select('id','module_id','name');
+    }
     public function categorytype() {
         return $this->belongsTo(CategoryType::class,'category_type_id')->select('id','name');
     }

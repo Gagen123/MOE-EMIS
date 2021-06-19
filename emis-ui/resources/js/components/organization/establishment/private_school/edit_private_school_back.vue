@@ -8,8 +8,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Organization Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Organization Details </label>
                         </a>
                     </li>
                     <li class="nav-item file-tab" @click="shownexttab('file-tab')">
@@ -37,7 +37,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
                                 <has-error :form="form" field="proprietorCid"></has-error>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
@@ -46,7 +46,7 @@
                                 <has-error :form="form" field="proprietorName"></has-error>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -75,7 +75,7 @@
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -158,7 +158,7 @@
                                         <thead>
                                             <tr>
                                                 <th>File Name</th>
-                                                <th>Upload File</th>                     
+                                                <th>Upload File</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -167,19 +167,19 @@
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
-                                                <td>                                
+                                                <td>
                                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                             <tr>
-                                                <td colspan="5"> 
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                     @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                                     @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                                 </td>
-                                            </tr>                                          
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -193,7 +193,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -205,8 +205,8 @@
                                 <thead>
                                     <tr>
                                         <th>Classes</th>
-                                        <th class="strm_clas">Stream</th>  
-                                        <th></th>                     
+                                        <th class="strm_clas">Stream</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody id="afer_verification" style="display:none">
@@ -214,39 +214,39 @@
                                         <td>
                                             <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                         </td>
-                                        <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                        <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
                                             {{  streamArray[item.streamId]  }}
                                         </td>
-                                        <td class="strm_clas" v-else>                                
-                                        
+                                        <td class="strm_clas" v-else>
+
                                         </td>
-                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                             <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
                                         </td>
-                                        <td v-else>  
-                                            <input type="checkbox" checked="true">                           
+                                        <td v-else>
+                                            <input type="checkbox" checked="true">
                                         </td>
-                                    </tr> 
+                                    </tr>
                                 </tbody>
                                 <tbody id="class_edit" style="display:none">
                                     <tr v-for="(item, key, index) in  classStreamList" :key="index">
                                         <td>
                                             <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                         </td>
-                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                             {{  item.stream  }}
                                         </td>
-                                        <td class="strm_clas" v-else>                                
-                                          
+                                        <td class="strm_clas" v-else>
+
                                         </td>
-                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                             <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
                                         </td>
-                                        <td v-else>  
-                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
-                                            
+                                        <td v-else>
+                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">
+
                                         </td>
-                                    </tr> 
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -309,13 +309,13 @@ export default {
                 proprietorCid:'', proprietorName:'', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'', totalLand:'',
                 enrollmentBoys:'', enrollmentGirls:'', typeOfSchool:'', establishment_type:'private_school', status:'pending',
                 action_type:'edit',application_number:'',
-                
+
             }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',application_number:'',
                 action_type:'edit',submit_type:'',remarks:'',proposedName:'',update_type:'',
-            }) 
-        } 
+            })
+        }
     },
     methods: {
         /**
@@ -326,7 +326,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -337,7 +337,7 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -372,7 +372,7 @@ export default {
             });
         },
 
-        
+
         async getvillagelist(id){
             let gewogId=$('#gewog').val();
             if(id!="" && (gewogId==null || gewogId=="")){
@@ -398,21 +398,21 @@ export default {
         },
         addMoreStudents: function(){
             this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})
+        },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.file_form.roles.length>1){
                 this.count--;
-                this.file_form.roles.splice(index,1); 
+                this.file_form.roles.splice(index,1);
             }
         },
-        removeStudents(index){    
+        removeStudents(index){
              if(this.file_form.assigned_student.length>1){
                 this.count--;
-                this.file_form.assigned_student.splice(index,1); 
+                this.file_form.assigned_student.splice(index,1);
             }
         },
 
@@ -425,7 +425,7 @@ export default {
             else{
                 $('#fileName'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
 
 
@@ -489,7 +489,7 @@ export default {
                 let data = response.data;
                 this.classList = data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -503,7 +503,7 @@ export default {
                   let data=response.data;
                 this.streamList = data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].class; 
+                    this.streamArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -511,8 +511,8 @@ export default {
         /**
          * method to show next tab
          */
-        shownexttab(nextclass){ 
-            // if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            // if(nextclass=="final-tab"){
             //     Swal.fire({
             //         text: "Are you sure you wish to save this details ?",
             //         icon: 'info',
@@ -525,19 +525,19 @@ export default {
             //             this.classStreamForm.post('organization/saveClassStream')
             //             .then((response) => {
             //                 if(response.data=="No Screen"){
-            //                     Toast.fire({  
+            //                     Toast.fire({
             //                         icon: 'error',
             //                         title: 'Technical Errors: please contact system administrator for further details'
             //                     });
             //                 }
             //                 if(response!="" && response!="No Screen"){
-            //                     let message="applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+            //                     let message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
             //                     this.$router.push({name:'acknowledgement_private_school',params: {data:message}});
-            //                     Toast.fire({  
+            //                     Toast.fire({
             //                         icon: 'success',
             //                         title: 'Application for new establishment has been submitted for further action'
             //                     });
-            //                 } 
+            //                 }
             //             })
             //             .catch((err) => {
             //                 console.log("Error:"+err)
@@ -545,7 +545,7 @@ export default {
             //         }
             //     });
             // }
-            if(nextclass=="final-tab" || nextclass=="reject"){ 
+            if(nextclass=="final-tab" || nextclass=="reject"){
                 let subform=true;
                 let status="";
                 let message="";
@@ -556,12 +556,12 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="Application for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="applicaiton details for new Establishment has been updated and send for further approval. ";
+                    message="Application details for new Establishment has been updated and send for further approval. ";
                 }
                 if(subform){
                     Swal.fire({
@@ -578,7 +578,7 @@ export default {
                             this.classStreamForm.post('organization/saveClassStream')
                             .then((response) => {
                                 if(response=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system administrator for further details'
                                     });
@@ -586,11 +586,11 @@ export default {
                                 if(response!="" && response!="No Screen"){
                                     let res=' <br><b>Thank You !</b>';
                                     this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application for new establishment has been udpated for further action'
                                     });
-                                } 
+                                }
                             })
                             .catch((err) => {
                                 console.log("Error:"+err)
@@ -644,7 +644,7 @@ export default {
                 }
             }
         },
-        loadapplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
                 let data = response.data.data;
@@ -663,7 +663,7 @@ export default {
                 this.form.proposedName  =data.estb_details.proposedName;
                 this.form.level=data.estb_details.levelId;
                 $('#level').val(data.estb_details.levelId).trigger('change');
-                
+
                 this.getClassStream(this.levelArray[data.estb_details.levelId]);
 
                 this.form.gewog  =data.gewogId;
@@ -688,9 +688,9 @@ export default {
                 this.attachment_details=data.estb_attachments;
                 this.form.dzongkhag=data.dzongkhagId;
                 this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
-                
-            })    
-            .catch(errors => { 
+
+            })
+            .catch(errors => {
                 console.log('error in retrieving: '+errors)
             });
         },
@@ -699,7 +699,7 @@ export default {
               .then(response => {
                 let draft = response.data.data;
                 if(draft!=null){
-                    
+
                 }
             });
         },
@@ -734,7 +734,7 @@ export default {
 
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
-            .then((response) => {  
+            .then((response) => {
 
                 let data=response.data.data[0];
                 this.form.cid           =   data.cid;
@@ -742,7 +742,7 @@ export default {
                 this.form.phoneNo       =   data.phoneNo;
                 this.form.email         =   data.email;
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
@@ -763,7 +763,7 @@ export default {
                 console.log(exception);
             });
         },
-        
+
         getScreenAccess(){
             axios.get('common/getScreenAccess/workflow__establishment__private_school')
             .then(response => {
@@ -773,8 +773,8 @@ export default {
                     $('#mainform').hide();
                     $('#message').html('This page is not accessible to you. Please contact system administrator for further assistant<br> Thank you');
                 }
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         },
@@ -786,10 +786,10 @@ export default {
                     this.count++;
                     this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
                 }));
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
-            });   
+            });
         }
     },
     mounted() {
@@ -799,33 +799,33 @@ export default {
         this.getLevel();
         this.getLocation();
         this.getOrgList();
-        
+
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             this.dzongkhag=data['Dzo_Id'];
             this.form.dzongkhag=data['Dzo_Id'];
             this.getGewogList(data['Dzo_Id']);
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
-        
+
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text()); 
+            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text());
         });
-        
+
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
         });
        this.loadpendingdetails('Private_School');
 
         this.record_id=this.$route.params.id;
-        this.loadapplicaitonDetials();
-    }, 
+        this.loadApplicationDetials();
+    },
 }
 </script>

@@ -444,7 +444,7 @@ class EstablishmentController extends Controller
             'category'                  =>$request->category,
             'yearestb'                  =>$request->yearestb,
             'zestcode'                  =>$request->zestcode,
-            'applicaitondetails'        =>$request->applicaitondetails,
+            'Applicationdetails'        =>$request->Applicationdetails,
 
             'organizationid'            =>$request->organizationid,
             'applicationNo'             =>$request->applicationNo,

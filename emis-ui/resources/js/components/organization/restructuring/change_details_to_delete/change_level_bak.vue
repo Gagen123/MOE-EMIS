@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change SEN Details of Organization</label>
+                            <label class="mb-0.5">Change Level of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -17,9 +17,9 @@
                             <form class="form-horizontal">
                             <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Select Organization:<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" id="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('organizationId')">
+                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
@@ -27,17 +27,38 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is SEN School:<span class="text-danger">*</span></label>
-                                <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                    <label><input  type="radio" v-model="form.senSchool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">New Level of Organization:<span class="text-danger">*</span></label>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <select name="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" id="level" class="form-control select2" @change="remove_error('level')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="level"></has-error>
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <span v-for="(item, key, index) in  classStreamList" :key="index">
+                                    <br>
+                                    <input type="checkbox" v-model="form.class" :value="item.classId"><label class="pr-4"> &nbsp;{{ item.class }}</label>
+                                        <span v-if="item.class=='Class 11' || item.class=='Class 12'">
+                                            <br>
+                                            <!-- Here we are taking the class stream mapping id. Do not need to use padding-->
+                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id"> <label class="pr-3"> {{ item.stream  }}</label>
+                                        </span>
+                                </span>
                             </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save</button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Save </button>
                                 </div>
                             </div>
                         </div>
@@ -54,18 +75,12 @@ export default {
     data(){
         return{
             orgList:'',
-            levelList:[],
-            locationList:[],
-            dzongkhagList:[],
-            gewog_list:[],
-            villageList:[],
-            classList1:[],
-            streamList1:[],
             classList:[],
             streamList:[],
+            classStreamList:[],
             form: new form({
-                organizationId:'', application_type:'sen_change', senSchool:'0',
-                application_for:'Change in SEN details', action_type:'add', status:'pending',organization_type:'',
+                organizationId:'', level:'', application_type:'level_change', class:[], stream:[],
+                application_for:'Change in Level', action_type:'add', status:'pending'
             })
         }
     },
@@ -80,12 +95,36 @@ export default {
             }
         },
 
+        /**
+         * method to get level in dropdown
+         */
+        getLevel(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList = data;
+            });
+        },
+
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
             });
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();
+            }
+
+            if(id=="level"){
+                this.form.level=$('#level').val();
+            }
         },
 
         /**
@@ -112,7 +151,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'restr_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -127,7 +166,6 @@ export default {
                     }
                 });
             }
-
         },
 
         change_tab(nextclass){
@@ -138,28 +176,6 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
-        },
-
-        /**
-         * method to populate dropdown
-         */
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();
-                this.getorgdetials($('#organizationId').val());
-            }
-
-        },
-        getorgdetials(org_id){
-            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
-            .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
-            });
         },
 
         applyselect2(){
@@ -180,6 +196,37 @@ export default {
             }
         },
 
+
+        /**
+         * method to get class in checkbox
+         */
+        getClass:function(){
+            axios.get('/organization/getClass')
+              .then(response => {
+                this.classList = response.data;
+            });
+        },
+
+        /**
+         * method to get stream in checkbox
+         */
+        getStream:function(){
+            axios.get('/organization/getStream')
+              .then(response => {
+                this.streamList = response.data;
+            });
+        },
+
+        /**
+         * method to get class stream in checkbox
+         */
+        getClassStream:function(){
+            axios.get('/masters/loadClassStreamMapping')
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
+
     },
 
     mounted() {
@@ -196,6 +243,10 @@ export default {
             this.changefunction(id);
         });
 
+        this.getClass();
+        this.getStream();
+        this.getClassStream();
+        this.getLevel();
         this.getOrgList();
     }
 }

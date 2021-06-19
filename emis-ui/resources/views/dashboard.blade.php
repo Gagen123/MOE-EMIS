@@ -4,10 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="img/new_logo.png" type="image/x-icon" />
-  <title>EMIS</title>
+  <title>EMIS::Education Management Information System</title>
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="hold-transition sidebar-mini text-sm">
+<body class="hold-transition sidebar-mini text-sm request_loading">
+    <div class="modal_loadming">
+      <div class="lds-grid">
+        <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+      </div>
+    </div>
     <div class="wrapper" id="app">
     @include('common.header')
         <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color:#E5E5E5">

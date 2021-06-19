@@ -372,7 +372,7 @@ export default {
             .then((response) => {
                 let data=response.data.data;
                 if(data.app_no!=undefined && data.app_no!=""){
-                    let message="Your organization has already submitted Nominations for approval with applicaiton number: <b>"+data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                    let message="Your organization has already submitted Nominations for approval with Application number: <b>"+data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                     this.$router.push({name:'acknowledgement_for_errors',params: {data:message}});
                 }
                 else{
@@ -536,7 +536,7 @@ export default {
                     this.form.post('/staff/hrdevelopment/submitParticipants')
                     .then((response) => {
                         if(response!=null && response!=""){
-                            let message="applicaiton for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            let message="Application for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                             this.$router.push({name:'acknowledgement',params: {data:message}});
                             Swal.fire(
                                 'Success!',
