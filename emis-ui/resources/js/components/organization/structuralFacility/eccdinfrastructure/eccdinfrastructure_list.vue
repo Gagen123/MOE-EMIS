@@ -13,9 +13,9 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in infrastructureList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.categorgName}}</td>
                     <td>{{ item.structuretype}}</td>
-                    <td>{{ item.yearOfconstruction}}</td>
+                    <td>{{ item.constructionType}}</td>
+                    <td>{{ item.yearOfConstruction}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewInfrastructureList(item)"><i class="fas fa-edit"></i ></a>
@@ -31,16 +31,18 @@
 export default {
     data(){
         return{
-            infrastructureList:[]
-        }
+            infrastructureList:[],
+            // structureType:{},
+            // eccdfacilityList:{}
+        } 
     },
 
     methods:{
-        loadInfrastructureList(uri = 'organization/loadEccdInfrastructureList/null'){
+        loadEccdInfrastructureList(uri = 'organization/loadEccdInfrastructureList/null'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.infrastructureList =  data.data;
+                this.infrastructureList = data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -59,8 +61,30 @@ export default {
             this.$router.push({name:'EccdInfrastructureEdit',params: {data:data}});
         },
     },
+    getStructureTypeInDropdown(uri = '/organization/getStructureTypeInDropdown'){
+        axios.get(uri)
+        .then(response => {
+            // let data = response.data;
+            // this.structureType = data;
+            for(let i=0;i<data.data.data.length;i++){
+                this.structureType[data.data.data[i].id] = data.data.data[i].name;
+            }
+        });
+    },
+    geteccdFacilityDropdown(uri = '/organization/geteccdStructureFacilityInDropdown/'+this.form.structuretype){
+            axios.get(uri)
+            .then(response => {
+              //  alert(JSON.stringify(response));
+              for(let i=0;i<data.data.data.length;i++){
+                this.eccdfacilityList[data.data.data[i].id] = data.data.data[i].name;
+            }
+               
+            });
+        },
     mounted(){
-        this.loadInfrastructureList();
+        this.loadEccdInfrastructureList();
+        this.getStructureTypeInDropdown();
+        this.geteccdFacilityDropdown();
     },
 }
 </script>

@@ -51,7 +51,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     });
 
-    $router->group(['prefix' => 'questionAnswers'], function () use ($router){
+    $router->group(['prefix' => 'questionAnswerController'], function () use ($router){
         $router->post('/saveQuestionaries', ['uses' => 'QuestionAnswerController@saveQuestionaries']);
         $router->get('/loadQuestionaries/{type}', ['uses' => 'QuestionAnswerController@loadQuestionaries']);
         $router->post('/saveAnswers', ['uses' => 'QuestionAnswerController@saveAnswers']);

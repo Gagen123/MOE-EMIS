@@ -62,11 +62,11 @@ class FurnitureController extends Controller
             return $e;
         }
     }
-
+ 
     public function loadFurniture(){
         $orgId=$this->getWrkingAgencyId();
         $dis = $this->apiService->listData('emis/organization/furniture/loadFurniture/'.$orgId);
         return $dis;
     }
-
+ 
 }

@@ -3,13 +3,13 @@
         <div class="card-body pb-1 mb-0 pt-1 mt-0 overflow-auto">
             <table id="working-agency-table" class="table table-bordered text-sm table-striped">
                 <thead>
-                    <tr> 
+                    <tr>
                         <th >SL#</th>
                         <th >Moduless</th>
                         <th >Code</th>
                         <th >Status</th>
                         <th >Created Date</th>
-                        <th >Action</th> 
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
@@ -26,7 +26,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -37,7 +37,7 @@ export default {
         }
     },
     methods:{
-        loadModuleList(uri = 'questionAnswers/loadQuestionaries/allData_Module'){
+        loadModuleList(uri = 'questionAnswerController/loadQuestionaries/allData_Module'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -49,12 +49,12 @@ export default {
                 }
             });
         },
-        
+
         showedit(data){
             this.$router.push({name:'edit_module',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.loadModuleList();
         this.dt =  $("#working-agency-table").DataTable()
     },

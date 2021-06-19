@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change Feeding Details of Organization</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change Name of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -27,19 +27,19 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School:<span class="text-danger">*</span></label>
-                                <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                    <label><input  type="radio" @change="show_feeding_details(true)" v-model="form.isfeedingschool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" @change="show_feeding_details(false)" v-model="form.isfeedingschool" value="0" tabindex=""/> No</label>
-                                </div>
-                                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12"  id="feedingDetails" style="display:none">
-                                    <label class="mb-0">Feeding Modality:</label><br>
-                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="form.feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" @change="remove_error('initiatedBy')" class="form-control" id="initiatedBy" placeholder="Proposal Initiated By (e.g. Community)"/>
+                                    <has-error :form="form" field="initiatedBy"></has-error>
                                 </div>
                             </div>
-                            <br>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
+                                    <has-error :form="form" field="proposedName"></has-error>
+                                </div>
+                            </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -52,7 +52,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -64,10 +64,10 @@ export default {
             classList:[],
             streamList:[],
             form: new form({
-                organizationId:'',feeding:[],  application_type:'feeding_change', isfeedingschool:'0',
-                application_for:'Change in Feeding Details', action_type:'add', status:'pending',organization_type:'',
+                organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change',
+                application_for:'Change in Name', action_type:'add', status:'pending',organization_type:'',
             }),
-        } 
+        }
     },
     methods: {
         /**
@@ -78,17 +78,6 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
-
-        /**
-         * method to get location in dropdown
-         */
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-            });
         },
 
         //getOrgList(uri = '/organization/getOrgList'){
@@ -100,33 +89,10 @@ export default {
         },
 
         /**
-         * method to populate dropdown
-         */
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
-                this.getorgdetials($('#organizationId').val()); 
-            }
-            
-        },
-
-        getorgdetials(org_id){
-            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
-            .then(response => {
-                this.form.organization_type=response.data.data.organizationType;
-            });
-        },
-
-        /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -140,15 +106,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
-                                        title: 'Technical Errors: please contact system admimnistrator for further details'
+                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'restr_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -161,8 +127,9 @@ export default {
                     }
                 });
             }
+
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -171,6 +138,28 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
+        },
+
+        /**
+         * method to populate dropdown
+         */
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="organizationId"){
+                this.form.organizationId=$('#organizationId').val();
+                this.getorgdetials($('#organizationId').val());
+            }
+
+        },
+        getorgdetials(org_id){
+            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
+            .then(response => {
+                this.form.organization_type=response.data.data.organizationType;
+            });
         },
 
         applyselect2(){
@@ -191,55 +180,22 @@ export default {
             }
         },
 
-
-        /**
-         * method to get class in checkbox
-         */
-        getClass:function(){
-            axios.get('/organization/getClass')
-              .then(response => {
-                this.classList = response.data;
-            });
-        },
-
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
-
-        /**
-         * Show feeding details options
-         */
-        show_feeding_details(param){
-            if(param){
-                $('#feedingDetails').show();
-            }
-            else{
-                $('#feedingDetails').hide();
-            }
-        },
-        
     },
-    
-    mounted() { 
+
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        
+
         this.getOrgList();
     }
 }

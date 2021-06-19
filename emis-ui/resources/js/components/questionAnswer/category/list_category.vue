@@ -11,7 +11,7 @@
                         <th >Code</th>
                         <th >Status</th>
                         <th >Created Date</th>
-                        <th >Action</th> 
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
@@ -30,7 +30,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -40,7 +40,7 @@ export default {
         }
     },
     methods:{
-        loadcategoryList(uri = 'questionAnswers/loadQuestionaries/all_2with_module_service_Category'){
+        loadcategoryList(uri = 'questionAnswerController/loadQuestionaries/all_2with_module_service_Category'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -56,7 +56,7 @@ export default {
             this.$router.push({name:'edit_question_category',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.loadcategoryList();
         this.dt =  $("#working-agency-table").DataTable()
     },

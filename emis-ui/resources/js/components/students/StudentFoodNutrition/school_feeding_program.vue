@@ -1,7 +1,7 @@
 <template>
-    <div> 
+    <div>
         <div class="row">
-            
+
             to be Done
         </div>
     </div>
@@ -14,7 +14,7 @@ export default {
         return {
             firstname:"", middlename:"", lastname:"",
             organizationtype:"", fathername:"", mothername:"", fathercontact:"", mothercontact:"",
-            schoollevel:"", guardaincontact:"", 
+            schoollevel:"", guardaincontact:"",
             schoolname:"", studentclass:"", studentsection:"", studentstream:"",
             nationality:"", dzongkhag:"", gewog:"",
             schoolLocation:"",schoolstatus:"",
@@ -73,7 +73,7 @@ export default {
                 if (result.isConfirmed) {
                     Swal.fire(
                         'Submitted!',
-                        'Your Applicaiton details has been submitted. System generated application number for this transaction is: #02234. You may use this application nunber to track application status.',
+                        'Your Application details has been submitted. System generated application number for this transaction is: #02234. You may use this application nunber to track application status.',
                         'success',
                         this.$router.push('/regstdmanagement')
                     )
@@ -85,19 +85,19 @@ export default {
             if(presentclass=="basic-tabs"){
                 if($('#organizationtype').val()==""){
                     $('#organizationtype').addClass('is-invalid');
-                    $('#organizatioid_err').html('Please select organization type'); 
+                    $('#organizatioid_err').html('Please select organization type');
                     returntype=false;
                 }
-                
+
                 if($('#schoolname').val()==""){
                     $('#schoolname').addClass('is-invalid');
-                    $('#schoolname_err').html('Please mention the name of the school'); 
+                    $('#schoolname_err').html('Please mention the name of the school');
                     returntype=false;
                 }
 
                 if($('#agencycode').val()==""){
                     $('#agencycode').addClass('is-invalid');
-                    $('#agencycode_err').html('Please mention agency code'); 
+                    $('#agencycode_err').html('Please mention agency code');
                     returntype=false;
                 }
             }
@@ -106,7 +106,7 @@ export default {
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
         showidentity:function(type){
@@ -146,7 +146,6 @@ export default {
             }
         });
     },
-    
+
 }
 </script>
- 

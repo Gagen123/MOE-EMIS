@@ -9,7 +9,7 @@
                             <th>Applicant</th>
                             <th>Leave Type</th>
                             <th>Days/Months</th>
-                            <th>Date of Applicaiton</th>
+                            <th>Date of Application</th>
                             <th>Status</th>
                             <th class="pl-4 pr-5">Action</th>
                         </tr>
@@ -30,15 +30,15 @@
                 </table>
             </div>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             leave_list:[],
             leavetypeList:{},
-        } 
+        }
     },
     methods: {
         getallLeaves(){
@@ -46,7 +46,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                this.leave_list = data; 
+                this.leave_list = data;
             })
             .catch(function (error){
                console.log('Error: '+error);
@@ -57,7 +57,7 @@ export default {
             .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.leavetypeList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.leavetypeList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){

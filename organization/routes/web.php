@@ -349,8 +349,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'eccdinfrastructure'], function () use ($router) {
             $router->get('/getStructureTypeInDropdown', 'structuralFacility\InfrastructureController@getStructureTypeInDropdown'); 
             $router->get('/geteccdStructureFacilityInDropdown/{structuretype}', 'structuralFacility\InfrastructureController@geteccdStructureFacilityInDropdown');
-            $router->post('/saveEccdInfrastructure', 'structuralFacility\InfrastructureController@saveEccdInfrastructure');
-            $router->get('/loadEccdInfrastructureList/{orgId}', 'structuralFacility\InfrastructureController@loadEccdInfrastructureList');
+            $router->post('/saveEccdInfrastructure', 'structuralFacility\EccdInfrastructureController@saveEccdInfrastructure');
+            $router->get('/loadEccdInfrastructureList/{orgId}', 'structuralFacility\EccdInfrastructureController@loadEccdInfrastructureList');
+            $router->get('/getEccdInfrastructureDetails/{eccdinfraId}', 'structuralFacility\EccdInfrastructureController@getEccdInfrastructureDetails');
 
         });  
 
@@ -416,6 +417,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadChangeDetailForVerification/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@loadChangeDetailForVerification']);
             $router->get('/loadPriviousOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadPriviousOrgDetails']);
             $router->post('/updateChangeBasicDetails', 'establishment\ChangeBasicDetailsController@updateChangeBasicDetails');
+            $router->delete('/deleteFile/{id}', ['uses' => 'establishment\ChangeBasicDetailsController@deleteFile']);
         });
 
         $router->group(['prefix' => 'bifurcation'], function () use ($router) {

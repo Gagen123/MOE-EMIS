@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -57,7 +57,7 @@ export default {
         showview(data){
             this.$router.push({name:'view_name_change',params: {data:data}});
         },
-        
+
     },
     mounted(){
         this.loadDataList();

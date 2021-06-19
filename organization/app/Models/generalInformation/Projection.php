@@ -19,9 +19,9 @@ class Projection extends Model
     protected $fillable = [
         'id',
         'organizationId',
-        'projections',
         'class',
-        'stream',
-        'remarks'
+        'academicYear',
+        'ProjectionNo',
+        'remarks',
     ];
 }

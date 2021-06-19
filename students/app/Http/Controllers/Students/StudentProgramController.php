@@ -47,7 +47,6 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'                        => $request->id,
             'OrgOrganizationId'         => $request->organisation_id,
             'CeaProgrammeId'            => $request->program,
             'CeaProgrammeSupporterId'   => $request->supporter,
@@ -56,23 +55,37 @@ class StudentProgramController extends Controller
             // 'assigned_staff'            => $request->assigned_staff
         ];
 
-        // $assigned_staff_details = $data['assigned_staff'];
+        if($request->record_type == 'add'){
+    
+            // $assigned_staff_details = $data['assigned_staff'];
+    
+            // unset($data['assigned_staff']);
+    
+            $response_data = CeaSchoolProgramme::create($data);
+            // $lastInsertId = $response->id;
+    
+            
+    
+            // foreach($assigned_staff_details as $key => $value){
+            //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
+            //     $assigned_staff_data['CeaRoleId'] = $value['role'];
+            //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
+            //     $assigned_staff_data['Remarks'] = $value['remarks'];
+    
+            //     $response_data = CeaRoleStaff::create($assigned_staff_data);
+            // }
+        } else {
 
-        // unset($data['assigned_staff']);
+            $school_data = CeaSchoolProgramme::where('id',$request->id)->first();
 
-        $response_data = CeaSchoolProgramme::create($data);
-        // $lastInsertId = $response->id;
+            $data =$data+[
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>   date('Y-m-d h:i:s'),
+            ];
 
-        
-
-        // foreach($assigned_staff_details as $key => $value){
-        //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
-        //     $assigned_staff_data['CeaRoleId'] = $value['role'];
-        //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
-        //     $assigned_staff_data['Remarks'] = $value['remarks'];
-
-        //     $response_data = CeaRoleStaff::create($assigned_staff_data);
-        // }
+            CeaSchoolProgramme::where('id',$school_data->id)->update($data);
+            $response_data = CeaSchoolProgramme::first();
+        }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -157,7 +170,7 @@ class StudentProgramController extends Controller
         $id = $param;
 
         $response_data=CeaSchoolProgramme::where('id',$id)->first();
-        $response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
+        //$response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
         return $this->successResponse($response_data); 
     }
 

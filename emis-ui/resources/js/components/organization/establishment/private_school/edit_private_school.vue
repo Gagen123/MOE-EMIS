@@ -538,12 +538,12 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="Applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="Application for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
 
@@ -669,7 +669,7 @@ export default {
                 }
             });
         },
-        loadApplicaitonDetials(){
+        loadApplicationDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
                 let data = response.data.data;
@@ -837,7 +837,7 @@ export default {
             this.changefunction(id,text);
         });
         this.record_id=this.$route.params.id;
-        this.loadApplicaitonDetials();
+        this.loadApplicationDetials();
     },
 }
 </script>

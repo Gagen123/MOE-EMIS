@@ -148,9 +148,9 @@ class EstablishmentController extends Controller
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId()
         ];
-
+        // dd($request_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
-
+        // dd($request['action_type']);
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
             // dd($workflowdet);
@@ -443,7 +443,7 @@ class EstablishmentController extends Controller
             'category'                  =>$request->category,
             'yearestb'                  =>$request->yearestb,
             'zestcode'                  =>$request->zestcode,
-            'applicaitondetails'        =>$request->applicaitondetails,
+            'Applicationdetails'        =>$request->Applicationdetails,
 
             'organizationid'            =>$request->organizationid,
             'applicationNo'             =>$request->applicationNo,
@@ -786,6 +786,8 @@ class EstablishmentController extends Controller
             'application_number'           =>  $request['application_number'],
             'proposed_establishment'       =>  $this->service_name,
             'id'                           =>  $request['id'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'parentSchool'                 =>  $request['parentSchool'],
             'user_id'                      =>  $this->userId()
         ];
 

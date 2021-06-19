@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
@@ -8,8 +8,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Basic Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Basic Details </label>
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
@@ -94,7 +94,7 @@
                                     <br>
                                     <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                                     <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="parentSchoolDiv">
                                     <label>Parent School:</label>
                                     <select name="locationCategory" v-model="form.parentSchool" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationCategory" class="form-control editable_fields" @change="remove_error('locationCategory')">
@@ -102,7 +102,7 @@
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                 </div>
-                                                  
+
                             </div>
                             <div id="privatedetails" style="display:none">
                             <div class="row pb-2">
@@ -154,7 +154,7 @@
                                         <input type="checkbox" checked class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
                                     </span>
                                 </span>
-                            </span> 
+                            </span>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -171,7 +171,7 @@
                                         <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id+stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream }}</label>
                                     </span>
                                 </span>
-                            </span> 
+                            </span>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -184,7 +184,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -197,7 +197,7 @@ export default {
             locationList:[],
             dzongkhagList:[],
             gewog_list:[],
-            villageList:[], 
+            villageList:[],
             classList1:[],
             streamList1:[],
             classList:[],
@@ -210,7 +210,7 @@ export default {
             classStreamForm: new form({
                 id: '',class:[], stream:[],application_number:'',status:'submitted'
             })
-        } 
+        }
     },
     methods: {
         /**
@@ -221,7 +221,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -233,7 +233,7 @@ export default {
                 this.levelList = data;
             });
         },
-        
+
 
         /**
          * method to get active dzongkhag list
@@ -286,7 +286,7 @@ export default {
             });
         },
 
-       
+
         /**
          * method to get location in dropdown
          */
@@ -357,8 +357,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -372,15 +372,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'restr_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -415,7 +415,7 @@ export default {
                 }
             }
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -450,27 +450,27 @@ export default {
                 let data = response.data.data.acess_level;
                 if(data != "Org"){
                     $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
+                    $('#ApplicationUnderProcess').show();
                     $('#existmessage').html('You have no access to this page.');
                 }
-                
-            })    
-            .catch(errors => { 
+
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         },
 
         checkPendingApplication(){
             axios.get('organization/checkPendingApplication/change')
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data;
                 if(data!=""){
                     $('#mainform').hide();
-                    $('#applicaitonUnderProcess').show();
+                    $('#ApplicationUnderProcess').show();
                     $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
                 }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error: "+error);
             });
         },
@@ -498,10 +498,10 @@ export default {
 
         /**
          * method to current details
-        */        
+        */
         loadCurrentOrgDetails(){
             axios.get('organization/getFullSchoolDetials/sessionDet')
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.id        =   data.id;
                 this.form.name      =   data.name;
@@ -537,35 +537,35 @@ export default {
                 // for(let i=0;i<data.class_section.length;i++){
                 //     $('#'+data.class_section[i].classId).prop('checked',true);
                 //     this.form.class.push(data.class_section[i].classId)
-                //     for(let j=0;j<data.sections.length;j++){  
+                //     for(let j=0;j<data.sections.length;j++){
                 //         $('#'+data.class_section[i].classId+data.sections[j].streamId).prop('checked',true);
                 //         //this.form.stream.push(data.class_section[i].classId+'##'+data.sections[j].streamId);
-                //     } 
+                //     }
                 // }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error: "+error);
             });
         },
-        
+
     },
-    
-    mounted() { 
+
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.getScreenAccess();
         this.getClass();
-        this.getStream();  
+        this.getStream();
         this.checkPendingApplication();
         this.getLevel();
         this.getLocation();

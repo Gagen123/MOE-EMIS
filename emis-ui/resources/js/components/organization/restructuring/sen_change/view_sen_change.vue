@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change SEN Details of Organization</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change SEN Details of Organization</label>
                         </a>
                     </li>
                 </ul>
@@ -44,7 +44,7 @@
                                             {{dzongkhagArray[organization_details.dzongkhagId]}}
                                         </span>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Gewog:</label>
                                         <span class="text-blue text-bold" id="gewogid"></span>
                                     </div>
@@ -68,6 +68,22 @@
                                         <label><input  type="radio" v-model="form.senSchool" value="0" tabindex=""/> No</label>
                                     </div>
                                 </div>
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Upload File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                            <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </form>
                         </div>
                     </div>
@@ -89,7 +105,7 @@ export default {
             locationList:[],
             dzongkhagList:[],
             gewog_list:[],
-            villageList:[], 
+            villageList:[],
             classList1:[],
             streamList1:[],
             classList:[],
@@ -101,11 +117,12 @@ export default {
             villageArray:{},
             calssArray:{},
             streamArray:{},
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'', application_type:'sen_change', senSchool:'0',
                 application_for:'Change in SEN details', action_type:'edit', status:'Submitted',organization_type:'',
             })
-        } 
+        }
     },
     methods: {
         /**
@@ -116,7 +133,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -130,7 +147,7 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -138,8 +155,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -153,15 +170,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'Technical Errors: please contact system admimnistrator for further details'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change in SEN detail has been updated and send for further approval. <br><b>Thank You !</b>";
+                                    let message="Application for Change in SEN detail has been updated and send for further approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'sen_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -174,9 +191,14 @@ export default {
                     }
                 });
             }
-            
+
         },
-        
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -194,10 +216,10 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();   
+                this.form.organizationId=$('#organizationId').val();
                 this.getorgdetials($('#organizationId').val());
             }
-            
+
         },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
@@ -229,7 +251,7 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-        loadApplicaitonDetials(){ 
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
@@ -237,6 +259,7 @@ export default {
                 this.form.id=response_data.id;
                 this.form.change_id=response_data.change_details.id;
                 this.form.senSchool=response_data.change_details.proposedChange;
+                this.applicationdetailsatt=response_data.attachments;
             });
         },
         getLevel(uri = '/organization/getLevelInDropdown'){
@@ -245,17 +268,17 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
-        
+
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -269,7 +292,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name; 
+                    this.gewogArray[data[i].id] = data[i].name;
                 }
                 $('#gewogid').html(this.gewogArray[gewogId]);
             });
@@ -281,7 +304,7 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name; 
+                    this.villageArray[data[i].id] = data[i].name;
                 }
                 $('#vilageId').html(this.villageArray[vil_id])
             })
@@ -294,7 +317,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -303,7 +326,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -312,13 +335,13 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].stream; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
     },
-    
-    mounted() { 
+
+    mounted() {
         this.loadactivedzongkhagList();
         this.getLevel();
         this.getLocation();
@@ -327,16 +350,16 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
-        this.loadApplicaitonDetials();
+        this.loadApplicationDetials();
     }
 }
 </script>
-        
+

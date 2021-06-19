@@ -231,8 +231,11 @@ class EstablishmentController extends Controller{
                 'proposedLocation'             =>  $request['proposedLocation'],
                 'typeOfSchool'                 =>  $request['typeOfSchool'],
                 'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+                'coLocatedParent'              =>  $request['coLocatedParent'],
+                'parentSchool'                 =>  $request['parentSchool'],
                 'levelId'                      =>  $request['level'],
             ];
+            // dd($data);
             ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->update($data);
             $app_det=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
@@ -281,6 +284,8 @@ class EstablishmentController extends Controller{
             'typeOfSchool'                 =>  $request['typeOfSchool'],
             'levelId'                      =>  $request['level'],
             'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
+            'coLocatedParent'              =>  $request['coLocatedParent'],
+            'parentSchool'                 =>  $request['parentSchool'],
             'created_at'           =>  date('Y-m-d h:i:s')
         ];
 
@@ -954,9 +959,7 @@ class EstablishmentController extends Controller{
     }
 
     public function updateOrgBasicDetials(Request $request){
-
         $org_det=OrganizationDetails::where('id',$request->org_id)->first();
-
         $org_data =[
             'id'                        =>  $org_det->id,
             'isAspNetSchool'            =>  $org_det->isAspNetSchool,
@@ -979,6 +982,7 @@ class EstablishmentController extends Controller{
             'isColocated'               =>  $request['isColocated'],
             'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
             'hasCounselingRoom'         =>  $request['hasCounselingRoom'],
+            'isResourceCenter'         =>  $request['isResourceCenter'],
             'hasShiftSystem'            =>  $request['hasShiftSystem'],
             'hasCE'                     =>  $request['hasCE'],
             'mofCode'                   =>  $request['mofCode'],
@@ -999,7 +1003,7 @@ class EstablishmentController extends Controller{
         $location = [
             'organizationId'        =>  $request->org_id,
             'landOwnership'         =>  $request['landOwnership'],
-            //'compoundFencing'       =>  $request['compoundFencing'],
+            'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
             'longitude'             =>  $request['longitude'],
             'latitude'              =>  $request['latitude'],
@@ -1007,12 +1011,12 @@ class EstablishmentController extends Controller{
             //'thramNo'               =>  $request['thramNo'],
             // 'cid'                   =>  $request['cid'],
             // 'name'                  =>  $request['name'],
-            // 'compoundArea'          =>  $request['compoundArea'],
+            'compoundArea'          =>  $request['compoundArea'],
             'googleMapPath'         =>  $request['map_path'],
-            // 'climate_type'          =>  $request['climate_type'],
-            //'disasterArea'          =>  implode($request['disasterArea'],', '),
-            'distanceFromDzongkhag'     =>  $request['distance_from_dzo'],
-            //'fencingtypeId'           =>  $request['fencingtype'],
+            'climate_type'          =>  $request['climate_type'],
+            'disasterArea'          =>  implode(',',$request['disasterArea']),
+            'distance_from_dzo' =>  $request['distance_from_dzo'],
+            'fencingtypeId'         =>  $request['fencingtype'],
         ];
 
         $loc = Locations::where('organizationId', $request->org_id)->first();
@@ -1039,22 +1043,6 @@ class EstablishmentController extends Controller{
             Locations::create($location);
         }
 
-        //Contact details is no longer an add more array
-        //also the contact details and table have been changed
-
-        // foreach ($request->input('users') as $i=> $user){
-        //     $contact_details = array(
-        //         'organizationId'    =>  $request->org_id,
-        //         'contactTypeId'     =>  $user['contactName'],
-        //         'phone'             =>  $user['phone'],
-        //         'mobile'            =>  $user['mobile'],
-        //         'email'             =>  $user['email'],
-        //         'type'              =>  2,
-        //         'created_by'        =>  $request->user_id,
-        //         'created_at'        =>  date('Y-m-d h:i:s')
-        // );
-        //     $org_det = ContactDetails::create($contact_details);
-        // }
 
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }

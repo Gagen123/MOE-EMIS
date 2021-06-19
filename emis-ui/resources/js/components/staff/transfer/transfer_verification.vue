@@ -7,8 +7,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item application-tab" @click="shownexttab('application-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Application Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Application Details </label>
                         </a>
                     </li>
                     <li class="nav-item service-tab" @click="shownexttab('service-tab')">
@@ -28,43 +28,43 @@
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <span><label><u>Transfer Config Detials</u></label></span>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Year:</label>
                                     <span class="text-blue text-bold">{{t_year}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">From Date:</label>
                                     <span class="text-blue text-bold">{{t_from_data}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">End Date:</label>
                                     <span class="text-blue text-bold">{{t_to_date}}</span>
-                                </div> 
+                                </div>
                             </div>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="mb-0">Remarks:</label>
                                     <span class="text-blue text-bold">{{t_remarks}}</span>
-                                </div> 
+                                </div>
                             </div>
                         </div>
 
                         <div class="callout callout-success">
                             <span><label><u>Applicant Detials</u></label></span>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Applicant Name:</label><br>
                                     <span class="text-blue text-bold">{{app_details.name}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Gender:</label><br>
                                     <span class="text-blue text-bold">{{genderArray[app_details.sex_id]}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Position Title:</label><br>
                                     <span class="text-blue text-bold">{{positiontitleList[app_details.position_title_id]}}</span>
-                                </div> 
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -93,20 +93,20 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th> 
-                                            <th>Working Agency</th> 
-                                            <th>Dzongkhag</th> 
-                                            <th>year</th> 
+                                            <th>SlNo</th>
+                                            <th>Working Agency</th>
+                                            <th>Dzongkhag</th>
+                                            <th>year</th>
                                             <th>Position Title</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         <tr v-for="(item, index) in working_history_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td> 
+                                            <td>{{ item.staff_details.name}}</td>
                                             <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td> 
+                                            <td>{{ item.email }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -118,22 +118,22 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th> 
-                                            <th>Training Name</th> 
-                                            <th>Vanue</th> 
-                                            <th>year</th> 
-                                            <th>Start Date</th> 
-                                            <th>End Date</th> 
+                                            <th>SlNo</th>
+                                            <th>Training Name</th>
+                                            <th>Vanue</th>
+                                            <th>year</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
                                             <th>Status</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                          <tr v-for="(item, index) in training_details_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td> 
+                                            <td>{{ item.staff_details.name}}</td>
                                             <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td> 
+                                            <td>{{ item.email }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -146,7 +146,7 @@
                                 <button class="btn btn-primary" @click="shownexttab('undertaking-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="tab-pane fade tab-content-details" id="undertaking-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -154,43 +154,43 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th> 
-                                            <th>Preferences</th> 
-                                            <th>Dzongkhag/Thromde</th> 
-                                            <th id="approveDzohead" style="display:none">Select Dzongkhag</th> 
+                                            <th>SlNo</th>
+                                            <th>Preferences</th>
+                                            <th>Dzongkhag/Thromde</th>
+                                            <th id="approveDzohead" style="display:none">Select Dzongkhag</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         <tr>
-                                            <td>1</td> 
-                                            <td>Preferences 1</td> 
+                                            <td>1</td>
+                                            <td>Preferences 1</td>
                                             <td>
                                                 <span class="text-blue text-bold">{{dzongkhagList[form.preference_dzongkhag1]}}</span>
-                                            </td> 
+                                            </td>
                                             <td id="approveDzo1" style="display:none">
                                                 <input type="radio" name="dzongkhagApproved" :value="form.preference_dzongkhag1" v-model="form.dzongkhagApproved" id="approvedDzongkhag1">
-                                            </td> 
-                                        </tr> 
+                                            </td>
+                                        </tr>
                                         <tr>
-                                            <td>2</td> 
-                                            <td>Preferences 2</td> 
+                                            <td>2</td>
+                                            <td>Preferences 2</td>
                                             <td>
                                                 <span class="text-blue text-bold" v-if="form.preference_dzongkhag2!=''">{{dzongkhagList[form.preference_dzongkhag2]}}</span>
                                             </td>
                                             <td id="approveDzo2" style="display:none">
                                                 <input type="radio" v-model="form.dzongkhagApproved" name="dzongkhagApproved" :value="form.preference_dzongkhag2" id="approvedDzongkhag2">
                                             </td>
-                                        </tr> 
+                                        </tr>
                                         <tr>
-                                            <td>3</td> 
-                                            <td>Preferences 3</td> 
+                                            <td>3</td>
+                                            <td>Preferences 3</td>
                                             <td>
                                                 <span class="text-blue text-bold" v-if="form.preference_dzongkhag3!=''">{{dzongkhagList[form.preference_dzongkhag3]}}</span>
                                             </td>
                                             <td id="approveDzo3" style="display:none">
                                                 <input type="radio" v-model="form.dzongkhagApproved" :value="form.preference_dzongkhag3" name="dzongkhagApproved" id="approvedDzongkhag3">
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -201,16 +201,16 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Attachment Name</th> 
-                                            <th>File</th> 
+                                            <th>Attachment Name</th>
+                                            <th>File</th>
                                         </tr>
-                                    </thead> 
+                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td> 
+                                            <td>
                                                 {{attach.user_defined_name}}
                                             </td>
-                                            <td>    
+                                            <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                             </td>
                                         </tr>
@@ -252,7 +252,7 @@ export default {
         Workflow,
     },
     data(){
-        return{ 
+        return{
             t_from_data:'',
             t_to_date:'',
             t_year:'',
@@ -284,12 +284,12 @@ export default {
                 dzongkhagApproved:'',
                 actiontype:'',
             }),
-        } 
+        }
     },
     methods:{
         loadtransferdetails(appId,type){
             axios.get('staff/transfer/loadtrainsferDetails/'+appId+'/'+type)
-            .then((response) =>{  
+            .then((response) =>{
                 let data=response.data.data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
@@ -308,7 +308,7 @@ export default {
                         this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
                         $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
                     }
-                } 
+                }
                 this.draft_attachments=data.documents;
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
@@ -324,7 +324,7 @@ export default {
                     $('#confirm').show();
                 }
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error: "+error);
             });
         },
@@ -339,8 +339,8 @@ export default {
                     this.t_remarks=data.remarks;
                     this.t_id=data.id;
                 }
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
         },
@@ -351,8 +351,8 @@ export default {
                 if(data!=null){
                     this.app_details=data;
                 }
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
         },
@@ -361,7 +361,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
                 let action=true;
@@ -373,14 +373,14 @@ export default {
                 if(nextclass=="approve" && $("input[name='dzongkhagApproved']:checked").val()==undefined){
                     Swal.fire(
                         'error!',
-                        'Please select prefernece dzongkhag to approve this applicaiton',
+                        'Please select prefernece dzongkhag to approve this Application',
                         'error',
-                    ); 
+                    );
                     action=false;
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -393,19 +393,19 @@ export default {
                             this.form.post('staff/transfer/updateTransferApplication')
                             .then((response) => {
                                 if(response!=""){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
                                     });
                                     this.$router.push({path:'/tasklist'});
-                                } 
+                                }
                             })
                             .catch((err) => {
                                 Swal.fire(
                                     'error!',
                                     'Not able to update this application details. Please contact system administrator.Error: '+err,
                                     'error',
-                                ); 
+                                );
                                 console.log("Error:"+err)
                             })
                         }
@@ -427,7 +427,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.genderArray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -439,7 +439,7 @@ export default {
             .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -451,7 +451,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.reasonList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.reasonList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -463,14 +463,14 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
                 console.log("Error:"+error)
             });
         },
-        openfile(file){ 
+        openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;

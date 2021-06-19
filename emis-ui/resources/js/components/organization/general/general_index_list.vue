@@ -21,7 +21,7 @@ export default {
         }
     },
     methods:{
-        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Equipment And Furniture'){
+        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Equipment_And_Furniture'){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -4,21 +4,21 @@ this asdf<template>
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Leave Type:</label> 
+                        <label>Leave Type:</label>
                         <select disabled class="form-control select2" id="leave_type_id" v-model="form.leave_type_id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }">
                             <option v-for="(item, index) in leavetypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
+                        </select>
                         <has-error :form="form" field="leave_type_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Date of Application:</label>
-                        <input disabled type="date" format="dd/mm/yyyy"  class="form-control" v-model="form.date_of_application"> 
+                        <input disabled type="date" format="dd/mm/yyyy"  class="form-control" v-model="form.date_of_application">
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Current Status:</label>
-                        <input disabled type="text" format="dd/mm/yyyy"  class="form-control" v-model="form.status"> 
+                        <input disabled type="text" format="dd/mm/yyyy"  class="form-control" v-model="form.status">
                     </div>
-                </div>  
+                </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4 pb-4">
                         <label class="mb-0.5">Applicant:</label>
@@ -28,35 +28,35 @@ this asdf<template>
                         </select>
                         <has-error :form="form" field="staff_id"></has-error>
                     </div>
-                    
+
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>From Date:</label> 
+                        <label>From Date:</label>
                         <input type="date" class="form-control" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
                         <has-error :form="form" field="from_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>To Date:</label> 
+                        <label>To Date:</label>
                         <input type="date" @change="calculateNoDays()" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
                         <has-error :form="form" field="to_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>No. of Days:</label> 
+                        <label>No. of Days:</label>
                         <input type="number" readonly class="form-control" :class="{ 'is-invalid': form.errors.has('no_days') }"  name="no_days" id="no_days" v-model="form.no_days">
                         <has-error :form="form" field="no_days"></has-error>
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
-                        <label>Details:</label> 
+                        <label>Details:</label>
                         <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.reason" id="reason"></textarea>
                         <has-error :form="form" field="reason"></has-error>
                     </div>
-                </div> 
+                </div>
                 <div class="card-footer text-right">
                     <button type="button" id="updatebtn" style="display:none" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Update</button>
-                </div>  
+                </div>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -101,7 +101,7 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
-        }, 
+        },
         calculateNoDays(){
             if($('#from_date').val()==""){
                 Swal.fire({
@@ -111,7 +111,7 @@ export default {
                 });
                 $('#to_date').val('');
             }
-            
+
             if($('#from_date').val()!="" && $('#from_date').val() > $('#to_date').val()){
                 Swal.fire({
                     icon: 'error',
@@ -138,7 +138,7 @@ export default {
                     title: 'Sorry! ',
                     text: 'You can avail maximum of '+this.leave_balance +' Days',
                 });
-                returntype=false; 
+                returntype=false;
             }
             return returntype;
         },
@@ -173,8 +173,8 @@ export default {
                     console.log(error);
                 });
             }
-            
-        }, 
+
+        },
         formaction: function(type){
             if(type=="save" && this.validated()){
                 Swal.fire({
@@ -185,7 +185,7 @@ export default {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
                 }).then((result) => {
-                    if (result.isConfirmed) { 
+                    if (result.isConfirmed) {
                         this.form.post('/staff/staffServices/editLeaveApplication',this.form)
                         .then((response) => {
                             if(response.data.data!=undefined){
@@ -193,9 +193,9 @@ export default {
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
-                                    'Leave Applicaiton has been submitted for approval',
+                                    'Leave Application has been submitted for approval',
                                     'success',
-                                ) 
+                                )
                             }
                             else{
                                 if(response.data.includes('No role mapping found for this selected use')){
@@ -204,20 +204,20 @@ export default {
                                         text: "Sorry! "+response.data,
                                         icon: 'error',
                                     });
-                                } 
+                                }
                             }
-                            // 
+                            //
                         })
                         .catch((err) =>{
                             console.log("Error: "+err);
                             this.applyselect2();
-                            
+
                         })
                     }
                 })
-            
+
             }
-		}, 
+		},
         applyselect2(){
             if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
                 $('#leave_type_id').addClass('select2-hidden-accessible');

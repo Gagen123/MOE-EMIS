@@ -9,13 +9,13 @@
                         <th >Category Type</th>
                         <th >Status</th>
                         <th >Created Date</th>
-                        <th >Action</th> 
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
                     <tr v-for="(item, index) in dataList" :key="index">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ moduleArray[item.parent_id]}}</td>
+                        <td>{{ moduleArray[item.module_id]}}</td>
                         <td>{{ item.name}}</td>
                         <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                         <td>{{ item.created_at }}</td>
@@ -26,7 +26,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -37,21 +37,21 @@ export default {
         }
     },
     methods:{
-        loadModuleList(uri = 'questionAnswers/loadQuestionaries/allData_Module'){
+        loadModuleList(uri = 'questionAnswerController/loadQuestionaries/allData_Module'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.moduleList =  data.data.data;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.moduleArray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.moduleArray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
                 console.log(error);
             });
         },
-        
-        loadcategoryTypeList(uri = 'questionAnswers/loadQuestionaries/allData_CategoryType'){
+
+        loadcategoryTypeList(uri = 'questionAnswerController/loadQuestionaries/allData_CategoryType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -65,7 +65,7 @@ export default {
             this.$router.push({name:'edit_category_type',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.loadModuleList();
         this.loadcategoryTypeList();
         this.dt =  $("#data-table").DataTable()

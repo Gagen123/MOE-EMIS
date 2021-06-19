@@ -4,30 +4,20 @@
             <div class="card-body">
                 <form class="form-horizontal">
                 <div class="row invoice-info">
-                    <div class="col-sm-2 invoice-col">
-                        <label class="mb-0"><i><u>Structure Type</u></i></label>
+                    <div class="col-sm-2 invoice-col">  1130
+                        <label class="mb-0"><i><u>ECCD Strcuture Type</u></i></label>
                     </div>
                     <div class="col-sm-9 invoice-col">
                         <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                         <p>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Category:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">ECCD Standard Desing Category:<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
+                                <select name="structuretype" id="structuretype" class="form-control editable_fields" v-model="form.structuretype" :class="{ 'is-invalid': form.errors.has('structuretype') }" @change="geteccdFacilityDropdown(),remove_err('structuretype')">
                                     <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    <option v-for="(item, index) in structureType" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="category"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Sub Category:<span class="text-danger">*</span></label>
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
-                                </select>
-                                <has-error :form="form" field="subCategory"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -40,12 +30,7 @@
                                 <has-error :form="form" field="constructionType"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
-                            </div>
-                        </div>
+                       
                     </div>
                 </div>
                 <div class="row invoice-info">
@@ -91,13 +76,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Ramp Access on Ground Floor:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
                                 <label><input v-model="form.rampAccess"  type="radio" value="1" /> Yes</label>
                                 <label><input v-model="form.rampAccess"  type="radio" value="0" /> No</label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 </form>
@@ -121,7 +106,7 @@
                                     <td>
                                         <select name="facility" id="facility" class="form-control editable_fields" v-model="user.facility">
                                             <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            <option v-for="(item, index) in eccdfacilityList" :key="index" v-bind:value="item.id">{{ item.facilty }}</option>
                                         </select>
                                     </td>
                                     
@@ -166,6 +151,7 @@
             </div> 
         </form>
     </div>
+    
 </template>
 
 <script>
@@ -173,15 +159,28 @@ export default {
     data(){
         return{
             count:1,
+            structureType:[],
+            eccdfacilityList:[],
             categoryList:[],
-            subCategortList:[],
-            facilityList:[],
+           // subCategortList:[],
+          
             designerList:[],
             contructionTypeList:[],
             users: [],
             form: new form({
-                id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '', constructionType:'',
-                plintchArea: '',noOfFloor: '',totalCapacity: '',rampAccess: '1',presentCondition: '',design: '',
+                id: '',
+                organizationId:'',
+                structuretype: '',
+            //    subCategory: '',
+                constructionType:'',
+             //   structureNo: '',
+                yearOfConstruction: '',
+                plintchArea: '',
+                noOfFloor: '',
+                totalCapacity: '',
+            //    rampAccess: '1',
+                presentCondition: '1',
+                design: '',
                 users:
                 [{
                     facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''
@@ -196,15 +195,15 @@ export default {
          * method to reset form
          */
         restForm(){
-            this.form.category= '';
-            this.form.subCategory= '';
-            this.form.structureNo= '';
+            this.form.structuretype= '';
+       //   this.form.subCategory= '';
+        //  this.form.structureNo= '';
             this.form.constructionType = '';
             this.form.yearOfConstruction= '';
             this.form.plintchArea= '';
             this.form.noOfFloor='';
             this.form.totalCapacity='';
-            this.form.rampAccess='1';
+        //    this.form.rampAccess='1';
             this.form.presentCondition='1';
             this.form.design='';
             let formReset =this.form.users;
@@ -220,13 +219,13 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                this.form.post('/organization/saveInfrastructure',this.form)
+                    this.form.post('/organization/saveEccdInfrastructure',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Infrastructure details is updated successfully'
+                        title: 'Infrastructure is added successfully'
                     })
-                    this.$router.push('/infrastructure_list');
+                    this.$router.push('/eccdinfrastructure_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -246,22 +245,34 @@ export default {
         /**
          * method to get category in dropdown
          */
-        getCategoryDropdown(uri = '/organization/getCategoryInDropdown'){
+        getStructureTypeInDropdown(uri = '/organization/getStructureTypeInDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                this.categoryList = data;
+                this.structureType = data;
             });
         },
 
         /**
          * method to get sub category in dropdown
          */
-        getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
+        // getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response.data;
+        //         this.subCategortList = data;
+        //     });
+        // },
+
+        /**
+         * method to get facility by structure type in dropdown
+         */
+        geteccdFacilityDropdown(uri = '/organization/geteccdStructureFacilityInDropdown/'+this.form.structuretype){
             axios.get(uri)
             .then(response => {
+              //  alert(JSON.stringify(response));
                 let data = response.data;
-                this.subCategortList = data;
+                this.eccdfacilityList = data;
             });
         },
 
@@ -275,17 +286,6 @@ export default {
                 this.designerList = data;
             });
         },
-
-        /**
-         * method to get facility in dropdown
-         */
-        getFacilityDropdown(uri = '/organization/getStructureFacilityInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.facilityList = data;
-            });
-        },
         loadconstructionTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ConstructionType'){
             axios.get(uri)
             .then(response => {
@@ -296,12 +296,15 @@ export default {
                     console.log('error: '+error);
             });
         },
+
         /**
          * method to add more fields
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({facility:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})    
+            this.form.users.push({
+                facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',
+                accessibleDisabled:'',internetConnection:''})    
         }, 
         /**
          * method to remove fields
@@ -312,30 +315,20 @@ export default {
                 this.form.users.splice(index,1); 
             }
         },
-
-        /**
-         * method to get infrasture details
-         */
-        getInfrastructureDetails(infraId){
-            axios.get('organization/getInfrastructureDetails/'+infraId)
+        getEccdInfrastructureDetails(eccdinfraId){
+            axios.get('organization/getEccdInfrastructureDetails/' +eccdinfraId)
             .then((response) => {  
                 let data=response.data.data;
-
-                this.form.category              =    data.categoryId;
-                this.getSubCategoryDropdown();
-                this.form.subCategory           =    data.subCategoryId;
-                this.form.structureNo           =    data.structureNo;
+                this.form.structuretype         =    data.structuretype;
                 this.form.constructionType      =    data.constructionType;
                 this.form.organizationId        =    data.organizationId;
                 this.form.yearOfConstruction    =    data.yearOfConstruction;
                 this.form.plintchArea           =    data.plintchArea;
                 this.form.noOfFloor             =    data.noOfFloor;
                 this.form.totalCapacity         =    data.totalCapacity;
-                this.form.rampAccess            =    data.rampAccess;
                 this.form.presentCondition      =    data.presentCondition;
                 this.form.design                =    data.design;
-                this.form.id                    =    data.id;
-
+                this.form.id                    =    eccdinfraId;
                 let prop=data.facility;
                 let facilityDetails=[];
                 for(let i=0;i<prop.length;i++){
@@ -343,6 +336,7 @@ export default {
                     capacity:prop[i].capacity,noOfFacility:prop[i].noOfFacility,
                     accessibleDisabled:prop[i].noAccessibleToDisabled,
                     internetConnection:prop[i].noWithInternetConnection});
+                    this.geteccdFacilityDropdown();
                 }
                 this.count=data.length;
                 this.form.users=facilityDetails;
@@ -353,17 +347,15 @@ export default {
             }); 
         },
     },
-
     created(){
-        this.getCategoryDropdown();
-        this.getFacilityDropdown();
+        this.getStructureTypeInDropdown();
         this.getDesignerDropdown();
         this.loadconstructionTypeList();
-        this.getInfrastructureDetails(this.$route.params.data.id);
+        this.geteccdFacilityDropdown();
+        this.getEccdInfrastructureDetails(this.$route.params.data.id);
     },
-
-     mounted() { 
-
+    mounted() { 
+        
     }
 }
 </script>

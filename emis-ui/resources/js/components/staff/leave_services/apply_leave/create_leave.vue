@@ -4,20 +4,20 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Leave Type:<span class="text-danger">*</span></label> 
+                        <label>Leave Type:<span class="text-danger">*</span></label>
                         <select class="form-control select2" id="leave_type_id" v-model="form.leave_type_id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }">
                             <option v-for="(item, index) in leavetypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
+                        </select>
                         <has-error :form="form" field="leave_type_id"></has-error>
                     </div>
-                </div>  
+                </div>
                 <div class="row form-group" id="form_details" style="display:none">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Date of Application:</label> 
+                        <label>Date of Application:</label>
                         <span class="text-blue">{{current_date}}</span>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>No of days/months you can avail:</label> 
+                        <label>No of days/months you can avail:</label>
                         <span class="text-blue">{{leave_balance}}{{total_leave_apply}}</span>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4 pb-4">
@@ -30,33 +30,33 @@
                     </div>
 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>From Date:<span class="text-danger">*</span></label> 
+                        <label>From Date:<span class="text-danger">*</span></label>
                         <input type="date" class="form-control" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
                         <has-error :form="form" field="from_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>To Date:<span class="text-danger">*</span></label> 
+                        <label>To Date:<span class="text-danger">*</span></label>
                         <input type="date" @change="calculateNoDays()" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
                         <has-error :form="form" field="to_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>No. of Days:</label> 
+                        <label>No. of Days:</label>
                         <input type="number" readonly class="form-control" :class="{ 'is-invalid': form.errors.has('no_days') }"  name="no_days" id="no_days" v-model="form.no_days">
                         <has-error :form="form" field="no_days"></has-error>
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
-                        <label>Details:<span class="text-danger">*</span></label> 
+                        <label>Details:<span class="text-danger">*</span></label>
                         <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.reason" id="reason"></textarea>
                         <has-error :form="form" field="reason"></has-error>
                     </div>
-                </div>   
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" style="display:none" id="applyId"><i class="fa fa-save"></i> Submit</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -108,7 +108,7 @@ export default {
                 });
                 $('#to_date').val('');
             }
-            
+
             if($('#from_date').val()!="" && $('#from_date').val() > $('#to_date').val()){
                 Swal.fire({
                     icon: 'error',
@@ -135,7 +135,7 @@ export default {
                     title: 'Sorry! ',
                     text: 'You can avail maximum of '+this.leave_balance +' Days',
                 });
-                returntype=false; 
+                returntype=false;
             }
             return returntype;
         },
@@ -149,7 +149,7 @@ export default {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
                 }).then((result) => {
-                    if (result.isConfirmed) { 
+                    if (result.isConfirmed) {
                         this.form.post('/staff/staffServices/submitLeaveApplication',this.form)
                         .then((response) => {
                             if(response.data.data!=undefined){
@@ -157,9 +157,9 @@ export default {
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
-                                    'Leave Applicaiton has been submitted for approval',
+                                    'Leave Application has been submitted for approval',
                                     'success',
-                                ) 
+                                )
                             }
                             else{
                                 if(response.data.includes('No role mapping found for this selected use')){
@@ -168,20 +168,20 @@ export default {
                                         text: "Sorry! "+response.data,
                                         icon: 'error',
                                     });
-                                } 
+                                }
                             }
-                            // 
+                            //
                         })
                         .catch((err) =>{
                             console.log("Error: "+err);
                             this.applyselect2();
-                            
+
                         })
                     }
                 })
-            
+
             }
-		}, 
+		},
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -207,7 +207,7 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
-        }, 
+        },
         getLeave_details(){
             axios.get('staff/staffServices/checkEligibility/'+$('#leave_type_id').val())
             .then(response =>{
@@ -234,8 +234,8 @@ export default {
             .catch(function (error){
                 console.log(error);
             });
-            
-        },  
+
+        },
         getApprovedLeaveCount(){
             if(this.total_leave_apply.toLowerCase().includes('day')){
                 axios.get('staff/staffServices/getApprovedLeaveCount/'+this.form.staff_id+'/'+$('#leave_type_id').val())
@@ -270,7 +270,7 @@ export default {
                 if(data!=""){
                     Swal.fire({
                         title: 'Already Applied ! ',
-                        text: "Sorry! You have submitted leave application with applicaiton number: "+data.application_number+' which is under process.',
+                        text: "Sorry! You have submitted leave application with Application number: "+data.application_number+' which is under process.',
                         icon: 'error',
                     });
                     $('#applyId').hide();
@@ -282,8 +282,8 @@ export default {
             .catch(function (error){
                 console.log(error);
             });
-            
-        },     
+
+        },
         applyselect2(){
             if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
                 $('#leave_type_id').addClass('select2-hidden-accessible');
@@ -291,7 +291,7 @@ export default {
             if(!$('#role_id').attr('class').includes('select2-hidden-accessible')){
                 $('#role_id').addClass('select2-hidden-accessible');
             }
-        }, 
+        },
 
     },
     mounted(){
@@ -317,8 +317,8 @@ export default {
             let data = response.data.data;
             this.form.staff_id=data['staff_id'];
             $('#staff_id').val(data['staff_id']).trigger('change');
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
     },

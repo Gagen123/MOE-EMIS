@@ -4,7 +4,7 @@
             <li class="pl-2 form-inline "><h6 class="pt-1">Application Verification/Approval(School Reopening)</h6></li>
         </ol>
         <div class="card card-primary card-outline card-outline-tabs">
-            
+
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
@@ -58,8 +58,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>  
-                                                <th></th>                     
+                                                <th class="strm_clas">Stream</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -67,22 +67,22 @@
                                                 <td>
                                                     <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                                 </td>
-                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
                                                     {{  streamArray[item.streamId]  }}
                                                 </td>
                                                 <td class="strm_clas" v-else> </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     <input type="checkbox" checked="true">
                                                 </td>
-                                                <td v-else>  
-                                                    <input type="checkbox" checked="true">                           
+                                                <td v-else>
+                                                    <input type="checkbox" checked="true">
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div> -->
-                            
+
                             <!-- <div v-if="appicationDetails.application_type=='level_change'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -93,7 +93,7 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <span v-for="(item, index) in  existing_details.classes" :key="index">
                                             <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span> 
+                                        </span>
                                     </div>
                                 </div>
                             </div> -->
@@ -147,7 +147,7 @@
                                     <label><input  type="radio" v-model="isfeedingschool" value="0" tabindex=""/> No</label>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                    <label class="mb-0">Feeding Modality:</label> 
+                                    <label class="mb-0">Feeding Modality:</label>
                                     <label><input  type="checkbox" v-model="feeding1" id="feeding1" value="1" /> One Meal</label>
                                     <label><input  type="checkbox" v-model="feeding2" value="2"/> Two Meals</label>
                                     <label><input  type="checkbox" v-model="feeding3" value="3" /> Three Meals</label>
@@ -200,7 +200,7 @@
                                         <span class="text-blue text-bold">{{levelArray[appicationDetails.reopening.proposedChange]}}</span>
                                     </div>
                                 </div>
-                               
+
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label><u>Change In Classes Details</u></label>
@@ -210,7 +210,7 @@
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <span v-for="(item, index) in  appicationDetails.change_classes" :key="index">
                                             <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span> 
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -222,17 +222,17 @@
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in appicationDetails.attachments' :key="count+1">
                                                 <template>
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -248,28 +248,28 @@
                                         <thead>
                                             <tr>
                                                 <th>File Name</th>
-                                                <th>Upload File</th>                     
+                                                <th>Upload File</th>
                                             </tr>
                                         </thead>
-                                        <tbody>  
+                                        <tbody>
                                             <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
                                                 <td>
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
-                                                <td>                                
+                                                <td>
                                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                             <tr>
-                                                <td colspan="5"> 
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                     @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                                     @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                                 </td>
-                                            </tr>                                          
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -298,7 +298,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <div class="form-group row">
@@ -376,12 +376,12 @@ export default {
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',
                 ref_docs:[],fileUpload: [],sequence:'',screen_id:'',effective_date:'',
-            }), 
+            }),
         }
     },
 
     methods:{
-        openfile(file){ 
+        openfile(file){
             let file_path=file.path+'/'+file.name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
@@ -391,10 +391,10 @@ export default {
             this.count++;
             this.form.fileUpload.push({file_name:'', file_upload:''})
         },
-        remove(index){    
+        remove(index){
              if(this.form.fileUpload.length>1){
                 this.count--;
-                this.form.fileUpload.splice(index,1); 
+                this.form.fileUpload.splice(index,1);
             }
         },
         onChangeFileUpload(e){
@@ -406,7 +406,7 @@ export default {
             else{
                 $('#fileName'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
@@ -422,7 +422,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -437,7 +437,7 @@ export default {
                 this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error: "+error);
             });
         },
@@ -452,7 +452,7 @@ export default {
                 this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error: "+error);
             });
         },
@@ -461,7 +461,7 @@ export default {
          */
         loadReopeningApplicationDetails(appId,type){
             axios.get('organization/loadReopeningForVerification/'+appId+'/'+type)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.loadPriviousOrgDetails(data.reopening.OldOrganizationId);
                 this.loadPriviousOrgDetails2(data.reopening.OldOrganizationId2);
@@ -491,12 +491,12 @@ export default {
                     $('#approveId').show();
                 }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
 
-        
+
 
         /**
          * method to show next tab and update application accordingly
@@ -511,7 +511,7 @@ export default {
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -541,19 +541,19 @@ export default {
                             axios.post('organization/updateReopeningApplication', formData, config)
                             .then((response) => {
                                 if(response!=""){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
                                     });
                                     this.$router.push({path:'/tasklist'});
-                                } 
+                                }
                             })
                             .catch((err) => {
                                 Swal.fire(
                                     'error!',
                                     'Not able to update this application details. Please contact system administrator.Error: '+err,
                                     'error',
-                                ); 
+                                );
                                 console.log("Error:"+err)
                             })
                         }
@@ -575,7 +575,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzoArray[data[i].id] = data[i].name; 
+                    this.dzoArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -587,7 +587,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name; 
+                    this.gewogArray[data[i].id] = data[i].name;
                 }
                 alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
@@ -601,7 +601,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name; 
+                    this.villageArray[data[i].id] = data[i].name;
                 }
                 this.selected_village=this.villageArray[villageId];
             })
@@ -614,7 +614,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -624,7 +624,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].stream; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
@@ -633,7 +633,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.proposed_by_list[data[i].id] = data[i].name; 
+                    this.proposed_by_list[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -645,7 +645,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -660,7 +660,7 @@ export default {
         this.loaddzongkhagList();
         this.form.applicationNo=this.$route.params.data.application_number;
         this.loadReopeningApplicationDetails(this.$route.params.data.application_number,this.$route.params.type);
-        
+
     }
 }
 </script>

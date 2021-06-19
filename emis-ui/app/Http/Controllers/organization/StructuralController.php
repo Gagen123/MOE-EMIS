@@ -328,17 +328,22 @@ class StructuralController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
-      //  dd($eccdinfrastructure);
+        //  dd($eccdinfrastructure);
         $response_data= $this->apiService->createData('emis/organization/eccdinfrastructure/saveEccdInfrastructure', $eccdinfrastructure);
         return $response_data;
     }
 
     public function loadEccdInfrastructureList($orgId=""){
-        if($orgId=="null" || $orgId==""){
+       if($orgId=="null" || $orgId==""){
             $orgId=$this->getWrkingAgencyId();
         }
+    // dd($orgId);
         $list = $this->apiService->listData('emis/organization/eccdinfrastructure/loadEccdInfrastructureList/'.$orgId);
         return $list;
     }
 
+    public function getEccdInfrastructureDetails($eccdinfraId=""){
+        $infraDetails = $this->apiService->listData('emis/organization/eccdinfrastructure/getEccdInfrastructureDetails/'.$eccdinfraId);
+        return $infraDetails;
+    }
 }

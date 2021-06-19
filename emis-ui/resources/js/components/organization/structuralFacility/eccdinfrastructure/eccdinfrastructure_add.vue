@@ -225,7 +225,7 @@ export default {
                         icon: 'success',
                         title: 'Infrastructure is added successfully'
                     })
-                    this.$router.push('/infrastructure_list');
+                    this.$router.push('/eccdinfrastructure_list');
                 })
                 .catch(() => {
                     console.log("Error......")

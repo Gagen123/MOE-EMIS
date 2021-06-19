@@ -234,16 +234,14 @@ class InfrastructureController extends Controller
             $eccdinfrastructure = [
                 'organizationId'            =>  $request['organizationId'],
                 'structuretype'             =>  $request['structuretype'],
-            //    'subCategoryId'             =>  $request['subCategory'],
                 'constructionType'          =>  $request['constructionType'],
-            //    'structureNo'               =>  $request['structureNo'],
                 'yearOfConstruction'        =>  $request['yearOfConstruction'],
                 'plintchArea'               =>  $request['plintchArea'],
                 'noOfFloor'                 =>  $request['noOfFloor'],
                 'totalCapacity'             =>  $request['totalCapacity'],
-            //    'rampAccess'                =>  $request['rampAccess'],
                 'presentCondition'          =>  $request['presentCondition'],
                 'design'                    =>  $request['design'],
+                'id'                        =>  $request['id'],
                 'updated_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
                 ];
@@ -251,7 +249,7 @@ class InfrastructureController extends Controller
                 DB::table('eccd_infrastructure_facilities')->where('eccdinfrastructureId', $request->id)->delete();
                 foreach ($request->input('users') as $i=> $user){
                     $facilityInStructure = array(
-                        'eccdinfrastructureId'          =>  $request->id,
+                        'eccdinfrastructureId'          =>  $infra->id,
                         'facilityTypeId'                =>  $user['facility'],
                         'facilityName'                  =>  $user['facilityNo'],
                         'capacity'                      =>  $user['capacity'],
@@ -268,40 +266,66 @@ class InfrastructureController extends Controller
         }else{
             $eccdinfrastructure = [
                 'organizationId'            =>  $request['organizationId'],
-                'structuretype'             =>  $request['category'],
-             //   'subCategoryId'             =>  $request['subCategory'],
+                'structuretype'             =>  $request['structuretype'],
                 'constructionType'          =>  $request['constructionType'],
-            //    'structureNo'               =>  $request['structureNo'],
                 'yearOfConstruction'        =>  $request['yearOfConstruction'],
                 'plintchArea'               =>  $request['plintchArea'],
                 'noOfFloor'                 =>  $request['noOfFloor'],
                 'totalCapacity'             =>  $request['totalCapacity'],
-            //    'rampAccess'                =>  $request['rampAccess'],
                 'presentCondition'          =>  $request['presentCondition'],
                 'design'                    =>  $request['design'],
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
+
             ];
-            // dd($infrastructure);
+            // dd($eccdinfrastructure);
             $infra = eccdInfrastructure::create($eccdinfrastructure);
-            $eccdinfrastructureId = $infra->id;
-            foreach ($request->input('users') as $i=> $user){
-                $facilityInStructure = array(
-                    'eccdinfrastructureId'          =>  $eccdinfrastructureId,
-                    'facilityTypeId'                =>  $user['facility'],
-                    'facilityName'                  =>  $user['facilityNo'],
-                    'capacity'                      =>  $user['capacity'],
-                    'noOfFacility'                  =>  $user['noOfFacility'],
-                    'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
-                    'noWithInternetConnection'      =>  $user['internetConnection'],
+            // dd($infra);
+        //    dd($request->input('users'), $infra->id );
+            foreach($request->input('users') as $facility){
+               //  dd($facility);
+                $facilityInStructure = [
+                    'eccdinfrastructureId'          =>  $infra->id,
+                    'facilityTypeId'                =>  $facility['facility'],
+                    'facilityName'                  =>  $facility['facilityNo'],
+                    'capacity'                      =>  $facility['capacity'],
+                    'noOfFacility'                  =>  $facility['noOfFacility'],
+                    'noAccessibleToDisabled'        =>  $facility['accessibleDisabled'],
+                    'noWithInternetConnection'      =>  $facility['internetConnection'],
                     'created_by'                    =>  $request->user_id,
                     'created_at'                    =>  date('Y-m-d h:i:s')
-                );
-                dd( $infra);
+                ];
+                // dd( $facilityInStructure);
                 $infra = eccdInfrastructurefacility::create($facilityInStructure);
             }
             return $this->successResponse($infra, Response::HTTP_CREATED);
         }
+    }
+    public function loadEccdInfrastructureList($orgId=""){
+        $list = DB::table('eccd_infrastructures as a')
+            ->join('master_eccdStructure_type as b', 'b.id', '=', 'a.structuretype')
+            ->join('master_construction_type as c', 'c.id', '=', 'a.constructionType')
+            ->select('a.id AS id','b.name AS structuretype', 'c.name AS constructionType',
+            'a.organizationId AS organizationId',
+            'a.yearOfConstruction AS yearOfConstruction')
+            ->where('organizationId',$orgId)->get();
+        return $list;
+    }
+    // public function loadEccdInfrastructureList($orgId=""){
+    //     $info = eccdInfrastructure::where('organizationId',$orgId)->get();
+    //     return $info;
+    // }
+
+    // public function loadEccdInfrastructureList($orgId=""){
+    //     $info = DB::table('eccd_infrastructures')
+    //     ->select('id', 'organizationId','structuretype','constructionType','yearOfConstruction')
+    //     ->where('organizationId',$orgId)->get();
+    //     return $info;
+    // }
+    public function getEccdInfrastructureDetails($eccdinfraId=""){
+        $response_data=eccdInfrastructure::where('id',$eccdinfraId)->first();
+        $response_data->facility=eccdInfrastructurefacility::where('eccdinfrastructureId',$response_data->id)->get();
+        return $this->successResponse($response_data);
     }
 
 }

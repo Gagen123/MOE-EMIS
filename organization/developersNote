@@ -36,3 +36,5 @@ in application_proprietor: change proprietorName from proposedName
 
 //2021-06-14:
 added applicant_remarks in the application_details
+//2021-06-15:
+added 'coLocatedParent','parentSchool', in application_est_private

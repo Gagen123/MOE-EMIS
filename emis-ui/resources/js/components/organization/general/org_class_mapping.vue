@@ -24,7 +24,7 @@
                                             </th>
                                             <th style="width:20%">No. Section</th>
                                             <th style="width:15%">Section</th>
-                                            <template v-if="org_type == 'public_ecr'" >
+                                            <template v-if="org_type == 'multigrade'" >
                                                 <th style="width:15%">Multi Grade</th>
                                                 <th style="width:20%">Group</th>
                                             </template>
@@ -65,7 +65,7 @@
                                                 <span :id="'sectionval'+item.classId"></span>
                                             </td>
 
-                                            <template v-if="org_type == 'public_ecr'" >
+                                            <template v-if="org_type == 'multigrade'" >
                                                 <td >
                                                     <input type="checkbox" class="multiageclass" :id="'check'+item.classId" @click="showMF('multigrade',item.classId)">
                                                 </td>
@@ -319,6 +319,7 @@ export default {
             }
             else if(level.toLowerCase().includes('primary')){
                 level="6";
+                 this.org_type = 'multigrade';
             }
             else{
                 level="12";
