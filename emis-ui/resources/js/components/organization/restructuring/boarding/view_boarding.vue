@@ -66,6 +66,27 @@
                                         <label><input  type="radio" disabled v-model="form.isFeedingSchool" value="0" tabindex=""/> No</label>
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                    <td>
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </form>
 
                         </div>
@@ -96,6 +117,7 @@ export default {
             locationArray:{},
             calssArray:{},
             streamArray:{},
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'',isFeedingSchool:'', application_type:'Boarding_change',
                 application_for:'Change to Boarding', action_type:'edit', status:'Submitted',organization_type:'',
@@ -194,6 +216,7 @@ export default {
         getorgdetials(org_id){
              this.form.organizationId=org_id;
             $('#organizationId').val(org_id).trigger('change');
+            $('#organizationId').prop('disabled',true);
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
@@ -298,7 +321,8 @@ export default {
                 let response_data=response.data.data;
                 this.getorgdetials(response_data.change_details.organizationId);
                 this.form.id=response_data.change_details.id;
-                this.form.fees=response_data.change_details.proposedChange;
+                this.form.isFeedingSchool=response_data.change_details.proposedChange;
+                this.applicationdetailsatt=response_data.attachments;
             });
         },
 

@@ -71,7 +71,7 @@
                                                 </td>
                                                 <td class="strm_clas" v-else> </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true" disabled>
+                                                    <input type="checkbox" checked="true" disabled name="calssXIXII" :value="item.classId">
                                                 </td>
                                                 <td v-else>
                                                     <input type="checkbox" checked="true" disabled>
@@ -224,7 +224,7 @@
                                     <span class="text-blue text-bold">{{appicationDetails.change_details.proposedChange}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='Boarding_change'">
+                            <div class="form-group row" v-if="appicationDetails.application_type=='boarding_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Boarding (Current):</label>
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
@@ -687,6 +687,15 @@ export default {
                                 formData.append('attachments[]', this.form.ref_docs[i].attach);
                                 formData.append('attachmentname[]', this.form.ref_docs[i].name);
                             }
+
+                            let calss_ids=[];
+                            $("input[name='calssXIXII']").each( function () {
+                                if(!calss_ids.includes($(this).val())){
+                                    calss_ids.push($(this).val());
+                                    formData.append('calssXIXII[]', $(this).val());
+                                }
+                            });
+
                             axios.post('organization/updateChangeBasicDetailApplication', formData, config)
                             .then((response) => {
                                 if(response!=""){

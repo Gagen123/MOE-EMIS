@@ -60,6 +60,7 @@ class RestructuringController extends Controller
         $request['attachment_details'] = $attachment_details;
         $establishment_data="";
         $validation ="";
+        // dd($request['application_type']);
         switch($request['application_type']){
             case "name_change" : {
                     $validation = $this->validateNameChangeFields($request);
@@ -111,7 +112,7 @@ class RestructuringController extends Controller
                 $establishment_data = $this->setFeeStructure($request);
                 break;
             }
-            case "Boarding_change" : {
+            case "boarding_change" : {
                 $validation = $this->validateGeneralChange($request);
                 $establishment_data = $this->setBoarding($request);
                 break;
@@ -344,12 +345,14 @@ class RestructuringController extends Controller
         }
 
         $estd =[
-            'status'                       =>   $org_status,
-            'application_number'           =>   $request->applicationNo,
-            'remarks'                      =>   $request->remarks,
-            'attachment_details'           =>   $attachment_details,
-            'user_id'                      =>   $this->userId()
+            'status'                        =>   $org_status,
+            'calssXIXII'                    =>   $request->calssXIXII,
+            'application_number'            =>   $request->applicationNo,
+            'remarks'                       =>   $request->remarks,
+            'attachment_details'            =>   $attachment_details,
+            'user_id'                       =>   $this->userId()
         ];
+        // dd($estd);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
         // dd($response_data);
         return $work_response_data;

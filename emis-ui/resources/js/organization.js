@@ -708,6 +708,8 @@ const routes = [
             { path: '/',name:'expension_index', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
             { path: '/list_expension',name:'list_expension', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
             { path: '/create_expension',name:'create_expension', component: require('./components/organization/restructuring/expension/create_expension.vue').default },
+            { path: '/edit_expension',name:'edit_expension', component: require('./components/organization/restructuring/expension/edit_expension.vue').default },
+            { path: '/view_expension',name:'view_expension', component: require('./components/organization/restructuring/expension/view_expension.vue').default },
             { path: '/expension_acknowledgement', name:'expension_acknowledgement', component: require('./components/organization/restructuring/expension/acknowledgement.vue').default },
           ]
       },

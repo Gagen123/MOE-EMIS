@@ -109,7 +109,7 @@ class ChangeBasicDetailsController extends Controller
                     $change_details_data = $this->extractFeeStructureData($request, $applicationDetailsId);
                     break;
                 }
-                case "boadring_change" : {
+                case "boarding_change" : {
                     $change_details_data = $this->extractBoadringData($request, $applicationDetailsId);
                     break;
                 }
@@ -238,6 +238,7 @@ class ChangeBasicDetailsController extends Controller
                     'proprietorEmail'               => $request['proprietorEmail']
                 ];
                 ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$request->id)->update($prop_data);
+                $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
 
             if($request['application_type']=="fee_structure_change"){
@@ -246,6 +247,7 @@ class ChangeBasicDetailsController extends Controller
                 ];
                 ApplicationEstDetailsChange::where('id',$request->id)->update($data);
                 $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+                $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
             if($request['application_type']=="autonomus_change"){
                 $data =[
@@ -255,6 +257,25 @@ class ChangeBasicDetailsController extends Controller
                 $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
                 $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
+            if($request['application_type']=="boarding_change"){
+                $data =[
+                    'proposedChange'           =>  $request['isFeedingSchool'],
+                ];
+                ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+                $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
+            }
+            if($request['application_type']=="expension_change"){
+                $data =[
+                    'proposedChange'                =>  $request['currentCapacity'],
+                    'changeInDetails'               =>  $request['proposedCapacity'],
+                ];
+                ApplicationEstDetailsChange::where('id',$request->id)->update($data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
+                $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
+            }
+
+
             if($request['application_type']=="stream_change"){
                 $stream=implode($request['stream'],', ');
                 if($request['stream']!=""){
@@ -1005,7 +1026,7 @@ class ChangeBasicDetailsController extends Controller
                     break;
                 }
 
-                case "boadring_change" : {
+                case "boarding_change" : {
                     $change_details_data = $this->updateBoadring($change_details,  $org_details, $request);
                     break;
                 }
@@ -1177,8 +1198,53 @@ class ChangeBasicDetailsController extends Controller
             }
         }
         if($change_details->change_type=="Addition of Stream"){
-            if(strpos()){
-
+            if(strpos($change_details->proposedChange,', ')){
+                $strems=explode(', ',$change_details->proposedChange);
+                foreach($request->calssXIXII as $clasId){
+                    foreach($strems as $stream){
+                        //delete existing class if exist
+                        OrganizationClassStream::where('organizationId',$change_details->organizationId)->where('classId',$clasId)->where('streamId',$stream)->delete();
+                        $cls_data=[
+                            'organizationId'    =>  $change_details->organizationId,
+                            'classId'           =>  $clasId,
+                            'streamId'          =>  $stream,
+                            'updated_by'        =>  $request->user_id,
+                        ];
+                        OrganizationClassStream::create($cls_data);
+                    }
+                }
+            }
+            else{
+                $strems=$change_details->proposedChange;
+                foreach($request->calssXIXII as $clasId){
+                    //delete existing class if exist
+                    OrganizationClassStream::where('organizationId',$change_details->organizationId)->where('classId',$clasId)->where('streamId',$strems)->delete();
+                    $cls_data=[
+                        'organizationId'    =>  $change_details->organizationId,
+                        'classId'           =>  $clasId,
+                        'streamId'          =>  $strems,
+                        'updated_by'        =>  $request->user_id,
+                    ];
+                    OrganizationClassStream::create($cls_data);
+                }
+                return $strems;
+            }
+        }
+        if($change_details->change_type=="Deletion of Stream"){
+            if(strpos($change_details->proposedChange,', ')){
+                $strems=explode(', ',$change_details->proposedChange);
+                foreach($request->calssXIXII as $clasId){
+                    foreach($strems as $stream){
+                        OrganizationClassStream::where('organizationId',$change_details->organizationId)->where('classId',$clasId)->where('streamId',$stream)->delete();
+                    }
+                }
+            }
+            else{
+                $strems=$change_details->proposedChange;
+                foreach($request->calssXIXII as $clasId){
+                    OrganizationClassStream::where('organizationId',$change_details->organizationId)->where('classId',$clasId)->where('streamId',$strems)->delete();
+                }
+                return $strems;
             }
         }
         $class_strm=ApplicationClassStream::where('ApplicationDetailsId',$change_details->id)->get();
