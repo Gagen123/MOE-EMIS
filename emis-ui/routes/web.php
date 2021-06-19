@@ -585,6 +585,10 @@ Route::prefix('students')->group(function () {
     //Get the summary for all views
     Route::get('/loadViewScreeningDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewScreeningDetails'])->name('loadViewScreeningDetails');
     Route::get('/getScreeningDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getScreeningDetails'])->name('getScreeningDetails');
+    //Vaccinations
+    Route::post('/addVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addVaccinationRecords'])->name('addVaccinationRecords');
+    Route::post('/updateVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'updateVaccinationRecords'])->name('updateVaccinationRecords');
+    Route::post('/loadVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationRecords'])->name('loadVaccinationRecords');
 
 
     Route::post('/addBmiRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addBmiRecords'])->name('addBmiRecords');

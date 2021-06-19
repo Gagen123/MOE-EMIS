@@ -513,6 +513,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="studentlist">
+                        <router-link to="/student_list" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Update Student Details
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="admission">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
@@ -533,6 +541,14 @@
                         <router-link to="/student_services" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
+                                Update Student Details
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="studentservices">
+                        <router-link to="/student_services" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
                                 Student Services
                             </p>
                         </router-link>
@@ -545,8 +561,31 @@
                             </p>
                         </router-link>
                     </li>
-
+                    <li class="nav-item" id="studenthealth">
+                        <router-link to="/student_health" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Counseling Services
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="studenthealth">
+                        <router-link to="/student_health" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Remedial Actions
+                            </p>
+                        </router-link>
+                    </li>
                     <!-- Non-Academic Activities -->
+                    <li class="nav-item" id="studenthealth">
+                        <router-link to="/student_health" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Hobbies & Interest
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="programs">
                         <router-link to="/student_programs_clubs" class="nav-link">
                             <p>

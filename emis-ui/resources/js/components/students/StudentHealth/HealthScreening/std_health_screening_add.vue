@@ -85,7 +85,7 @@
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
                                     <td> {{student.CmnSexId}} </td>
-                                        <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
                                         <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]" :value="student.id" />
@@ -245,17 +245,22 @@ export default {
             if(type=="save"){
                 this.student_form.std_screened=[];
                 let screenedArray=[];
-                $("input[name='height']:not(:checked)").each( function () {
+                let oTable = $('#student-list-table').dataTable({
+                    stateSave: true,
+                    destroy: true,
+                });
+                $("input[name='height']:not(:checked)",oTable.fnGetNodes()).each( function () {
                     screenedArray.push($(this).val());
                 });
                 this.student_form.std_screened=screenedArray;
                 
                 this.student_form.std_referred=[];
                 let referredArray=[];
-                $("input[name='weight']:checked").each( function () {
+                $("input[name='weight']:checked",oTable.fnGetNodes()).each( function () {
                     referredArray.push($(this).val());
                 });
                 this.student_form.std_referred=referredArray;
+                console.log(this.student_form)
 
                 this.student_form.post('/students/addHealthScreeningRecords',this.student_form)
                     .then(() => {
@@ -315,13 +320,23 @@ export default {
             }
             
         },
-            checkall(class_to_check,id){
-                if($('#'+id).prop('checked')){
-                    $("."+class_to_check).prop("checked",true);
-                }
-                else{
-                    $("."+class_to_check).prop("checked",false);
-                }
+
+        checkall(class_to_check,id){
+            let oTable = $('#student-list-table').dataTable({
+                stateSave: true,
+                destroy: true,
+            });
+
+            let allPages = oTable.fnGetNodes();
+
+            if($('#'+id).prop('checked')){
+                $("."+class_to_check, allPages).prop("checked",true);
+            }
+            else{
+                $("."+class_to_check, allPages).prop("checked",false);
+            }
+            $("."+class_to_check).toggleClass('allChecked');
+            
         }
     },
     mounted() {
@@ -349,17 +364,16 @@ export default {
         
         this.loadClassList();
         
-        //this.dt =  $("#student-list-table").DataTable()
+        this.dt =  $("#student-list-table").DataTable()
     },
-    // Need to fix the datatables
-    // watch: {
-    //     studentList(){
-    //         this.dt.destroy();
-    //         this.$nextTick(() => {
-    //             this.dt =  $("#student-list-table").DataTable()
-    //         });
-    //     }
-    // },
+    watch: {
+        studentList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#student-list-table").DataTable()
+            });
+        }
+    },
     
 }
 </script>
