@@ -97,8 +97,7 @@ export default {
                 std_section: '',
                 date: '',
                 std_id: [],
-                std_screened:[],
-                std_referred:[]
+                std_screened:[]
             }),
         }
     },
@@ -244,7 +243,7 @@ export default {
                         this.studentList = response.data;  
                 })
                 .catch(() => {
-                    consoele.log("Error:"+e)
+                    console.log("Error:"+e)
                 });
 
                 this.student_form.std_section=$('#std_section').val();

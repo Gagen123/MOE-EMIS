@@ -142,7 +142,7 @@ export default {
 
     mounted(){
         this.form.type=this.$route.params.data.type;
-      //  this.getItem();
+        this.getItem();
         this.form.item=this.$route.params.data.item;
         this.form.usable=this.$route.params.data.usable;
         this.form.notusable=this.$route.params.data.notusable;

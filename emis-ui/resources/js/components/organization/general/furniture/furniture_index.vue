@@ -32,7 +32,7 @@ export default {
 
     methods:{
         loadpage:function(type){
-            if(type=="furniture_add"|| type=="furniture_edit"){
+            if(type=="furniture_add"|| type=="furniture_list"){
                 this.$router.push({name:type,params: {data:null}});
             }
         },

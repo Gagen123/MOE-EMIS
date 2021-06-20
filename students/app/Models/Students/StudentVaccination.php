@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class StudentHealthVaccination extends Model
+class StudentVaccination extends Model
 {
     use HasFactory, Uuid;
-    protected $table="std_health_vaccination";
+    protected $table="std_student_vaccination";
 
     protected $fillable = [
         'id',
-        'StdVaccineTypeId',
-        'date',
-        'class',
-        'section',
-        'stream'
+        'StdHealthVaccinationId',
+        'StdStudentId',
+        'dose',
+        'status',
     ];
 }

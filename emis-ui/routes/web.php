@@ -535,6 +535,7 @@ Route::prefix('students')->group(function () {
         //GET SEN STUDNETS
         Route::get('/getSenStudentList', [App\Http\Controllers\student\SenStudentController::class, 'getSenStudentList']);
         Route::get('/getquestionnaire/{StudentId}', [App\Http\Controllers\student\SenQuestionnaireController::class, 'getQuestionnaire']);
+        Route::post('/savequestionnaire', [App\Http\Controllers\student\SenQuestionnaireController::class, 'saveQuestionnaire']);
     });
     Route::post('/reportStudents', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'reportStudents'])->name('reportStudents');
     Route::get('/loadUnreportedStudents/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadUnreportedStudents'])->name('loadUnreportedStudents');
@@ -550,6 +551,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadBasicStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadBasicStudentList'])->name('loadBasicStudentList');
     Route::get('/loadStudentByClass/{class}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByClass'])->name('loadStudentByClass');
     Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
+    Route::get('/studentListByGender/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'studentListByGender'])->name('studentListByGender');
 
     Route::post('/saveStudentAward', [App\Http\Controllers\student\StudentAwardController::class, 'saveStudentAward'])->name('saveStudentAward');
     Route::get('/loadStudentAwards/{param}', [App\Http\Controllers\student\StudentAwardController::class, 'loadStudentAwards'])->name('loadStudentAwards');
