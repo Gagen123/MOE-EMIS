@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change Name of Organization</label>
+                            <label class="mb-0.5">Application for principal Recuritment</label>
                         </a>
                     </li>
                 </ul>
@@ -21,10 +21,7 @@
                                         <label class="mb-0">Application Number:</label>
                                         <span class="text-blue text-bold">{{applicationdetails.application_no}}</span>
                                     </div>
-                                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Submitted Date:</label>
-                                        <span class="text-blue text-bold">{{applicationdetails.created_at}}</span>
-                                    </div>  -->
+                                   
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Service Name:</label>
                                         <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
@@ -145,12 +142,6 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <!-- <hr>
-                            <div class="row form-group fa-pull-right">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
-                                </div>
-                            </div> -->
                         </div>
                     </div>
                 </div>
