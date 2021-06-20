@@ -33,7 +33,7 @@
         </li>
     </ul>
   </nav>
-  <script>
+  {{-- <script>
     function logout(){
       Swal.fire({
         title: 'Are you sure you wish to signout?',
@@ -48,4 +48,4 @@
         }
       });
     }
-</script>
+</script> --}}

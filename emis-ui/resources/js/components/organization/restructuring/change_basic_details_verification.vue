@@ -28,10 +28,10 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
                                     <label>Zest Code:</label>
                                     <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
-                                </div>
+                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
                                     <span class="text-blue text-bold">{{existing_details.category}}</span>
@@ -71,7 +71,7 @@
                                                 </td>
                                                 <td class="strm_clas" v-else> </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true" disabled>
+                                                    <input type="checkbox" checked="true" disabled name="calssXIXII" :value="item.classId">
                                                 </td>
                                                 <td v-else>
                                                     <input type="checkbox" checked="true" disabled>
@@ -224,7 +224,7 @@
                                     <span class="text-blue text-bold">{{appicationDetails.change_details.proposedChange}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='Boarding_change'">
+                            <div class="form-group row" v-if="appicationDetails.application_type=='boarding_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Boarding (Current):</label>
                                     <label><input  type="radio" disabled v-model="existing_details.isFeedingSchool" value="1" tabindex=""/> Yes</label>
@@ -269,7 +269,7 @@
                                 </div>
                             </div>
 
-                            <div v-if="appicationDetails.application_type=='downgradation' || appicationDetails.application_type=='upgradation' || appicationDetails.application_type=='stream_change'">
+                            <div v-if="appicationDetails.application_type=='downgradation' || appicationDetails.application_type=='upgradation'">
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Proposed Level:</label>
@@ -287,6 +287,36 @@
                                         <span v-for="(item, index) in  appicationDetails.change_classes" :key="index">
                                             <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
                                         </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="appicationDetails.application_type=='stream_change'">
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Type of change in Stream:</label><br>
+                                        <span class="text-blue text-bold">{{appicationDetails.change_details.change_type}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <label>Requested Stream:</label><br>
+                                        <span class="text-blue text-bold">{{strm}}</span>
+                                        <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="strm_clas">Stream</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item, key, index) in  streamList" :key="index">
+                                                        <td> {{item.stream}}</td>
+                                                        <td>
+                                                            <input type="checkbox" disabled :id="'strm'+item.id" name="streams" :value="item.id">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -445,11 +475,13 @@ export default {
             streamArray:{},
             proposed_by_list:{},
             locationArray:{},
+            villageArray:{},
             selected_gewog:'',
             selected_village:'',
             appicationDetails:[],
             isfeedingschool:'',
             senSchool:'',
+            strm:'',
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',
                 ref_docs:[],fileUpload: [],sequence:'',screen_id:'',effective_date:'',
@@ -510,9 +542,10 @@ export default {
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
             .then(response => {
                 this.existing_details=response.data.data;
-                this.form.category=existing_details.category;
+                // alert(response.data.data.dzongkhagId+':'+response.data.data.gewogId+':'+response.data.data.chiwogId);
                 this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
+                this.form.category=existing_details.category;
             })
             .catch((error) => {
                 console.log("Error: "+error);
@@ -524,7 +557,16 @@ export default {
         loadChangeBasicApplicationDetails(appId,type){
             axios.get('organization/loadChangeDetailForVerification/'+appId+'/'+type)
             .then((response) => {
+                let app_stream="";
                 let data=response.data.data;
+                if(data.establishment_type.toLowerCase().includes('change of stream')){
+                    let curr_strem=data.change_details.proposedChange.split(', ');
+                    for(let i=0;i<curr_strem.length;i++){
+                        app_stream+=this.streamArray[curr_strem[i]]+', ';
+                        // $('#strm'+curr_strem[i]).prop('checked',true);
+                    }
+                    this.strm=app_stream;
+                }
                 this.loadPriviousOrgDetails(data.change_details.organizationId);
                 this.appicationDetails=data;
                 this.form.sequence=response.data.sequence;
@@ -548,6 +590,7 @@ export default {
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
+
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
@@ -644,6 +687,15 @@ export default {
                                 formData.append('attachments[]', this.form.ref_docs[i].attach);
                                 formData.append('attachmentname[]', this.form.ref_docs[i].name);
                             }
+
+                            let calss_ids=[];
+                            $("input[name='calssXIXII']").each( function () {
+                                if(!calss_ids.includes($(this).val())){
+                                    calss_ids.push($(this).val());
+                                    formData.append('calssXIXII[]', $(this).val());
+                                }
+                            });
+
                             axios.post('organization/updateChangeBasicDetailApplication', formData, config)
                             .then((response) => {
                                 if(response!=""){
@@ -695,7 +747,6 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
             })
             .catch(function (error) {
@@ -729,6 +780,7 @@ export default {
             axios.get('/organization/getStream')
               .then(response => {
                 let data = response.data;
+                this.streamList = response.data;
                 for(let i=0;i<data.length;i++){
                     this.streamArray[data[i].id] = data[i].stream;
                 }

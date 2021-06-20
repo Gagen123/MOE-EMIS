@@ -79,27 +79,6 @@
                                                     <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
                                                     <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                        <span>
-                                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                                    <td>
-                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
-                                                    </td>
-                                                    <td>
-                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td colspan="5">
-                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -154,79 +133,12 @@ export default {
         }
     },
     methods: {
-        onChangeFileUpload(e){
-            let currentcount=e.target.id.match(/\d+/g)[0];
-            if($('#fileName'+currentcount).val()!=""){
-                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
-                $('#fileName'+currentcount).prop('readonly',true);
-            }
-            else{
-                $('#fileName'+currentcount+'_err').html('Please mention file name');
-                $('#'+e.target.id).val('');
-            }
-        },
-        addMore: function(){
-            this.form.attachments.push({file_name:'', file_upload:''})
-        },
-        remove(index){
-            if(this.form.attachments.length>1){
-                this.form.attachments.pop();
-            }
-        },
         openfile(file){
             let file_path=file.path+'/'+file.name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
-            Swal.fire({
-                text: "Are you sure you wish to DELETE this selected file ?",
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes!',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    let file_path=file.path+'/'+file.name;
-                    file_path=file_path.replaceAll('/', 'SSS');
-                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
-                    axios.get(uri)
-                    .then(response => {
-                        let data = response;
-                        if(data.data){
-                            Swal.fire(
-                                'Success!',
-                                'File has been deleted successfully.',
-                                'success',
-                            );
-                        }
-                        else{
-                        Swal.fire(
-                                'error!',
-                                'Not able to delete this file. Please contact system adminstrator.',
-                                'error',
-                            );
-                        }
-
-                    })
-                    .catch(function (error) {
-                        console.log("Error:"+error);
-                    });
-                }
-            });
-        },
-        /**
-         * method to remove error
-         */
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
-
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)

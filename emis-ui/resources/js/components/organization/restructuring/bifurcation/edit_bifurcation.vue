@@ -5,18 +5,6 @@
             <div id="existmessage"></div>
         </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <div class="card-header p-0 border-bottom-0">
-                <div class="form-group row">
-                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                    <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="parent_id"></has-error>
-                    </div>
-                </div>
-            </div>
             <div class="form-group row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="card card-primary card-outline">
@@ -154,31 +142,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </div>
-                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
@@ -262,6 +225,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                    <td>
+                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                        <span>
+                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                        </span>
+                                    </td>
+                                </tr>
                                 <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                     <td>
                                         <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -291,9 +263,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </template>
 <script>
@@ -323,8 +293,10 @@ export default {
             classStreamList:[],
             gewogArray:{},
             villageArray:{},
+            record_id:'',
+            applicationdetailsatt:'',
             form: new form({
-                id: '',parent_id:'',name:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'add', status:'Submitted',
+                id: '',appId:'', parent_id:'',name:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'edit', status:'Submitted',
                 name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
                 geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
                 attachments:
@@ -336,7 +308,7 @@ export default {
         }
     },
     methods: {
-        onChangeFileUpload(e){
+         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
                 this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
@@ -354,6 +326,50 @@ export default {
             if(this.form.attachments.length>1){
                 this.form.attachments.pop();
             }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
         },
         /**
          * method to remove error
@@ -510,7 +526,7 @@ export default {
         /**
          * method to get gewog1 list in dropdown
          */
-        async getgewoglist1(id){
+        async getGewogList1(id,gewogId){
             let dzoId=$('#dzongkhag1').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -520,6 +536,9 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list1 = data.data.data;
+                this.form.gewog1=gewogId;
+                $('#gewog1').val(gewogId).trigger('change');
+
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -551,7 +570,7 @@ export default {
         /**
          * method to get village1 list
          */
-        async getvillagelist1(id){
+        async getvillagelist1(id,village){
             let gewogId=$('#gewog1').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -561,6 +580,8 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList1 = data.data.data;
+                this.form.chiwog1=village;
+                $('#chiwog1').val(village).trigger('change');
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -630,7 +651,7 @@ export default {
             }
             if(id=="dzongkhag1"){
                 this.form.dzongkhag1=$('#dzongkhag1').val();
-                this.getgewoglist1();
+                this.getGewogList1($('#dzongkhag1').val(),'');
             }
             if(id=="gewog"){
                 this.form.gewog=$('#gewog').val();
@@ -638,7 +659,7 @@ export default {
             }
             if(id=="gewog1"){
                 this.form.gewog1=$('#gewog1').val();
-                this.getvillagelist1();
+                this.getvillagelist1($('#gewog1').val(),'');
             }
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
@@ -669,6 +690,7 @@ export default {
                         }
                         let formData = new FormData();
                         formData.append('id', this.form.id);
+                        formData.append('appId', this.form.appId);
                         formData.append('parent_id', this.form.parent_id);
                         formData.append('name', this.form.name);
                         formData.append('name1', this.form.name1);
@@ -703,7 +725,7 @@ export default {
                         //this.form.post('organization/saveBifurcation')
                         .then((response) => {
                             if(response!=""){
-                                let message="Application for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Bifurcation has been updated and submitted for approval. <br><b>Thank You !</b>";
                                 this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -714,8 +736,8 @@ export default {
                         })
                         .catch((er) => {
                             console.log("Error:"+er);
-                            this.form.errors.errors = err.response.data.errors;
-                     })
+                            this.form.errors.errors = er.response.data.errors;
+                        });
                     }
                 });
             }
@@ -747,6 +769,30 @@ export default {
             })
             .catch((error) =>{
                 console.log("Error:"+error);
+            });
+        },
+        loadApplicationDetials(){
+            axios.get('organization/getChangeBasicDetails/'+this.record_id)
+            .then(response => {
+                let response_data=response.data.data;
+                this.getOrgDetails(response_data.bifurcation_details.organizationId);
+                this.form.id=response_data.bifurcation_details.id;
+                this.form.appId=response_data.id;
+                this.form.name1=response_data.bifurcation_details.proposedName;
+                this.form.location1=response_data.bifurcation_details.locationId;
+                this.form.geoLocated1=response_data.bifurcation_details.isGeoPoliticallyLocated;
+                this.form.level1=response_data.bifurcation_details.levelId;
+                this.getCategory1();
+                this.form.dzongkhag1=response_data.dzongkhagId;
+                $('#dzongkhag1').val(response_data.dzongkhagId).trigger('change');
+                this.getGewogList1(response_data.dzongkhagId,response_data.gewogId);
+                this.getvillagelist1(response_data.gewogId,response_data.chiwogId);
+
+                //  id: '',parent_id:'',:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'edit',
+                //   status:'Submitted',
+                // :'',:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',:'',
+                // :'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
+                this.applicationdetailsatt=response_data.attachments;
             });
         },
         //getOrgList(uri = '/organization/getOrgList'){
@@ -828,7 +874,8 @@ export default {
         this.getStream();
         this.loadactivedzongkhagList();
         this.loadactivedzongkhagList1();
-        // this.checkPendingApplication();
+        this.record_id=this.$route.params.data.application_no;
+        this.loadApplicationDetials();
     }
 }
 </script>

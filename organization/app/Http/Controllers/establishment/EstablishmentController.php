@@ -39,6 +39,7 @@ use App\Models\establishment\ApplicationVerification;
 use App\Models\establishment\ApplicationNoMeals;
 use App\Models\establishment\ApplicationVerificationTeam;
 use App\Models\establishment\ApplicationAttachments;
+use App\Models\restructuring\Bifurcation;
 
 class EstablishmentController extends Controller{
     use ApiResponser;
@@ -509,7 +510,13 @@ class EstablishmentController extends Controller{
     }
 
     public function loadOrgChangeApplications($user_id="",$type=""){
-        return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        if($type=="Bifurcation"){
+            return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Bif-%')->get());
+        }
+        else{
+            return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
+        }
+
         // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
     }
 
@@ -653,6 +660,9 @@ class EstablishmentController extends Controller{
                 if($data->establishment_type=="Private School" || $data->establishment_type=="Private ECCD"){
                     $data->proposedName=ApplicationEstPrivate::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
+                else if($data->establishment_type=="Bifurcation"){
+                    $data->proposedName=Bifurcation::where('ApplicationDetailsId',$data->id)->first()->proposedName;
+                }
                 else{
                     //dd('ddd');proposedName
                     $data->proposedName=ApplicationEstPublic::where('ApplicationDetailsId',$data->id)->first()->proposedName;
@@ -667,6 +677,9 @@ class EstablishmentController extends Controller{
         $response_data= ApplicationDetails::where('status','Approved')->where('id',$key)->first();
         if($response_data->establishment_type=="Private School" ||$response_data->establishment_type=="Private ECCD"){
             $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
+        }
+        else if($response_data->establishment_type=="Bifurcation"){
+            $response_data->org_details=Bifurcation::where('ApplicationDetailsId',$response_data->id)->first();
         }
         else{
             $response_data->org_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
@@ -722,7 +735,7 @@ class EstablishmentController extends Controller{
         $caegory=str_replace(' ','_', strtolower($request->applicaitondetails['establishment_type']));
 
         $org_details=$request->applicaitondetails['org_details'];
-
+        dd($org_details);
         //
 
         $org_data = [
@@ -758,7 +771,19 @@ class EstablishmentController extends Controller{
                 'typeOfSchool'              =>$org_details['typeOfSchool'],
             ];
         }
-        // dd($org_data);
+        if($caegory=="Bifurcation"){
+            $application_data= Bifurcation::where('ApplicationDetailsId',$request->applicaitondetails['id'])->first();
+            $org_data = $org_data+[
+                'levelId'                   =>$application_data->levelId,
+                'locationId'                =>$application_data->locationId,
+                'isGeopoliticallyLocated'   =>$application_data->isGeoPoliticallyLocated,
+                'bifOrgId'                  =>$application_data->organizationId,
+                'isSenSchool'               =>$application_data->isSenSchool,
+                'isFeedingSchool'           =>$application_data->isFeedingSchool,
+
+            ];
+        }
+        dd($org_data,$request->applicaitondetails);
         $establishment = OrganizationDetails::create($org_data);
 
         if($caegory=="public_school" && $application_data->isFeedingSchool==1){

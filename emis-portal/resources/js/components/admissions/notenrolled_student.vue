@@ -731,7 +731,7 @@ export default {
             axios.get('adminstratorController/getpersonbycid/'+ cid)
             .then(res => {
                 if(JSON.stringify(res.data)!='{}'){
-                    alert(res);
+                    (res);
                     if(type=="std" && res!=""){
                         $('#snationality').prop('checked',true);
                         this.form.snationality='Bhutanese';
@@ -1375,7 +1375,6 @@ export default {
 
     created() {
          let cid=this.$route.query.cid;
-         this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
         //  this.getschoolList();
          this.getclassList();

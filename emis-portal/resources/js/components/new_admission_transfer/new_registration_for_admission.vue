@@ -714,7 +714,7 @@ export default {
         getChildDetailsbyCID(cid,type){
             this.student_form.cid_passport = cid;
             $('#cid_passport').prop('readonly',true);
-            if(type=="std"){
+            if(type=="std" && $('#cid').val()!="" && $('#cid').val()!=undefined){
                 cid=  $('#cid').val();
             }
             this.getPersonalDetailsbyCID(cid,type);
@@ -734,10 +734,7 @@ export default {
             axios.get('adminstratorController/getpersonbycid/'+ cid)
             .then(res => {
                 if(JSON.stringify(res.data)!='{}'){
-                    alert(res);
                     if(type=="std" && res!=""){
-                        $('#snationality').prop('checked',true);
-                        this.form.snationality='Bhutanese';
                         let student_detail = res.data.citizenDetail[0];
                         this.student_form.first_name = student_detail.firstName;
                         $('#first_name').prop('readonly',true);
@@ -866,7 +863,6 @@ export default {
             let numberOfMonths;
             let isvalid=true;
             let messages="";
-            alert(type+this.ppmonth);
             if(type=="ECCD"){
                 let date1=new Date(this.eccddob);
                 let year1=date1.getFullYear();

@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_in_Name'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Change_of_Stream'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -52,12 +52,12 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_name_change',params: {data:data}});
+            this.$router.push({name:'edit_stream_change',params: {data:data}});
         },
         showview(data){
-            this.$router.push({name:'view_name_change',params: {data:data}});
+            this.$router.push({name:'view_stream_change',params: {data:data}});
         },
-        
+
     },
     mounted(){
         this.loadDataList();

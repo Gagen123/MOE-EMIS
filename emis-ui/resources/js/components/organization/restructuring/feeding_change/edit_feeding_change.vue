@@ -317,7 +317,8 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            console.log("Error:"+err);
+                            this.form.errors.errors = err.response.data.errors;
                         })
                     }
                 });
