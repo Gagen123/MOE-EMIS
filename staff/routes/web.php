@@ -93,6 +93,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
         });
 
+        //staff Approval controller by gagen
+        $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
+            $router->post('/savePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@savePrincipalApproval']);
+        });
+
         $router->group(['prefix' => 'managementBody'], function () use ($router) {
             $router->post('/saveManagementBody', ['uses' => 'staff\ManagementBodyController@saveManagementBody']);
             $router->post('/saveManagementBodyComposition', ['uses' => 'staff\ManagementBodyController@saveManagementBodyComposition']);
