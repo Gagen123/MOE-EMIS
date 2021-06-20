@@ -66,7 +66,6 @@ class RestructuringController extends Controller
                     $establishment_data = $this->setNameChangeFields($request);
                     break;
                 }
-                
             case "feeding_change" : {
                     $validation = $this->validateGeneralChange($request);
                     $establishment_data = $this->setFeedingChange($request);

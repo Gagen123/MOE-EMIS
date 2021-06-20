@@ -12,6 +12,16 @@ class StaffApprovalController extends Controller
     public $apiService;
     use AuthUser;
     use ServiceHelper;
+
+    public $database_name="staff_db";
+    public $table_name="application_details";
+    // public $bif_table_name="bifurcations";
+
+    public $service_name="Principal Recuritment";
+    // public $service_name_closure="Closure";
+    // public $merge_service_name="Merger";
+    // public $bif_service_name="Bifurcation";
+
     public function __construct(EmisService $apiService)
     {
         $this->apiService = $apiService;
@@ -28,7 +38,9 @@ class StaffApprovalController extends Controller
     }
 
     public function savePrincipalApproval(Request $request){
+        // dd($request['application_for']);
         $this->service_name = $request['application_for'];
+
         
         //File Upload
         $files = $request->attachments;
@@ -75,6 +87,7 @@ class StaffApprovalController extends Controller
                 'attachment_details'            =>   $attachment_details,
             ];
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
+            //  dd($workflowdet,$request->application_for);
             $screen_id="";
             $status="";
             $app_role="";
@@ -87,11 +100,32 @@ class StaffApprovalController extends Controller
                     $screen_name=$work->screenName;
                 }
             }
+
             if($screen_id==null || $screen_id==""){
                 return 'No Screen';
             }
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/savePrincipalApproval', $principalApproval_data);
-            dd($response_data,$workflowdet,$request->application_for);
+            // dd($response_data);
+            if($request->action_type!="edit"){
+                $workflow_data=[
+                    'db_name'           =>$this->database_name,
+                    'table_name'        =>$this->table_name,
+                    'service_name'      =>$screen_name,//screen name
+                    'application_number'=>json_decode($response_data)->application_no,
+                    'name'              =>$request['application_for'],
+                    'screen_id'         =>$screen_id,
+                    'status_id'         =>$status,
+                    'remarks'           =>null,
+                    'app_role_id'       => $app_role,
+                    'user_dzo_id'       =>$this->getUserDzoId(),
+                    'access_level'      =>$this->getAccessLevel(),
+                    'working_agency_id' =>$this->getWrkingAgencyId(),
+                    'action_by'         =>$this->userId(),
+                ];
+                // dd($workflow_data);
+                 $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            }
+                 return $response_data;
     }
     
     private function validatePrincipalRecuritmentApprovalFields($request){

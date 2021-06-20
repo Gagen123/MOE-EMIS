@@ -36,6 +36,7 @@ class WorkflowController extends Controller{
             'action_date'           =>date('Y-m-d h:i:s'),
         ];
         $workflowdetails = Workflow::create($data);
+
         if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
             $status=$request->status_id;
             if(strpos($request->status_id,'__submitterRejects')!==false){
@@ -44,7 +45,7 @@ class WorkflowController extends Controller{
             $task_data=[
                 'table_name'            =>$request->table_name,
                 'service_name'          =>$request->service_name,
-                'name'                  =>$request->name,
+                // 'name'                  =>$request->name,
                 'screen_id'             =>$request->screen_id,
                 'application_number'    =>$request->application_number,
                 'status_id'             =>$status,
@@ -56,10 +57,17 @@ class WorkflowController extends Controller{
                 'applied_on'            =>date('Y-m-d h:i:s'),
                 'last_action_by'        =>$request->action_by,
                 'last_action_date'      =>date('Y-m-d h:i:s'),
-                'app_role_id'           => $request->app_role_id,
-                'record_type_id'        => $request->record_type_id,
+                // 'app_role_id'           => $request->app_role_id,
+                // 'record_type_id'        => $request->record_type_id,
             ];
-            return $workflowdetails = TaskDetails::create($task_data);
+            // dd($task_data);
+            try{
+                return $workflowdetails = TaskDetails::create($task_data);
+            }catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+
+            }
+            
         } 
         else{
             $task_data=[

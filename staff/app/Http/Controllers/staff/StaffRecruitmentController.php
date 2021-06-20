@@ -6,7 +6,6 @@ use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\staff\ApplicationDetails;
-use App\Models\staff\ApplicantDetails;
 use App\Models\staff\ApplicationSequence;
 use App\Models\staff\ApplicationAttachments;
 
@@ -39,6 +38,7 @@ class StaffRecruitmentController extends Controller
         ];
         $inserted_application_data = ApplicationDetails::create($application_details_data);
         $applicationDetailsId = $inserted_application_data->id;
+        return $application_details_data;
 
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
