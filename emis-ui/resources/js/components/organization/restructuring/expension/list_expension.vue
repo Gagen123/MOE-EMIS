@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -52,7 +52,10 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_autonomous',params: {data:data}});
+            this.$router.push({name:'edit_expension',params: {data:data}});
+        },
+        showview(data){
+            this.$router.push({name:'view_expension',params: {data:data}});
         },
     },
     mounted(){

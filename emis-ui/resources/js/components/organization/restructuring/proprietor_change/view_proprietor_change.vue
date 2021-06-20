@@ -49,42 +49,39 @@
                                     <span class="text-blue text-bold" id="vilageId"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Location:</label>
-                                    <span class="text-blue text-bold">{{organization_details.locationId}}</span>
-                                </div>
-                            </div>
                             <hr>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Current Proprietor</u></label>
+                            <div v-if="proprietor_details!=''">
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label><u>Current Proprietor</u></label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>CID:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.cid}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Name:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.fullName}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Mobile No:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.mobileNo}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Phone No:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.phoneNo}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Email:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.email}}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>CID:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.cid}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Name:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.fullName}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Mobile No:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.mobileNo}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Phone No:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.phoneNo}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Email:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.email}}</span>
-                                </div>
-                            </div>
+
                             <hr>
                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -114,6 +111,26 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Email:</label>
                                     <span class="text-blue text-bold">{{app_proprietor_details.proprietorEmail}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Upload File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             </form>
@@ -154,6 +171,7 @@ export default {
             locationArray:{},
             calssArray:{},
             streamArray:{},
+            applicationdetailsatt:'',
             form: new form({
                 organizationId:'',org_name:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
                 application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'edit', status:'Submitted',organization_type:'',
@@ -161,6 +179,12 @@ export default {
         }
     },
     methods: {
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
         /**
          * method to remove error
          */
@@ -281,7 +305,12 @@ export default {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.organization_details=response.data.data;
                 this.form.org_name=response.data.data.name;
-                this.proprietor_details=response.data.data.proprietor;
+                if(response.data.data.proprietor==null){
+                    this.proprietor_details="";
+                }
+                else{
+                    this.proprietor_details=response.data.data.proprietor;
+                }
                 this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
@@ -308,7 +337,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                $('#gewogid').val(this.gewogArray[gewogId]);
+                $('#gewogid').html(this.gewogArray[gewogId]);
             });
         },
 
@@ -320,7 +349,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.villageArray[data[i].id] = data[i].name;
                 }
-                $('#vilageId').val(this.villageArray[vil_id])
+                $('#vilageId').html(this.villageArray[vil_id])
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -333,6 +362,8 @@ export default {
                 this.getorgdetials(response_data.change_details.organizationId);
                 this.form.id=response_data.change_details.id;
                 this.app_proprietor_details=response_data.proprietor;
+
+                this.applicationdetailsatt=response_data.attachments;
                 // this.form.proprietorCid=response_data.proprietor.proprietorCid;
                 // this.form.proprietorName=response_data.proprietor.proprietorName;
                 // this.form.proprietorPhone=response_data.proprietor.proprietorPhone;

@@ -215,7 +215,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                         const config = {
+                        const config = {
                             headers: {
                                 'content-type': 'multipart/form-data'
                             }
@@ -258,7 +258,8 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            console.log("Error:"+err);
+                            this.form.errors.errors = err.response.data.errors;
                         })
                     }
                 });

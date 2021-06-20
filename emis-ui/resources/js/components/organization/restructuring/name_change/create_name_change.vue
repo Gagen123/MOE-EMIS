@@ -270,7 +270,7 @@ export default {
                                 if(response.data=="No Screen"){
                                     Toast.fire({
                                         icon: 'error',
-                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
+                                        title: 'You dont have privileged to submit this application. Please contact system administrator'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
@@ -284,7 +284,7 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            this.form.errors.errors = err.response.data.errors;
                         })
                     }
                 });

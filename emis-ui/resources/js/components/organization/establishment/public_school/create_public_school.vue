@@ -532,7 +532,8 @@ export default {
                                 .catch((error) => {
                                     this.applyselect2();
                                     this.change_tab('file-tab');
-                                    console.log("Error:"+error)
+                                    console.log("Error:"+error);
+
                                 })
                             }
                             else{

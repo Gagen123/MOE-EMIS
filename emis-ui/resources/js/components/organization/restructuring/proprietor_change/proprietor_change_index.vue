@@ -10,8 +10,8 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_proprietor_change')"><i class="fa fa-plus"></i> Apply for Change of Proprietor</button>
                 </span>
             </div>
-            <div class="card-body pt-1 pb-0" v-if="isvalid">  
-                <router-view></router-view> 
+            <div class="card-body pt-1 pb-0" v-if="isvalid">
+                <router-view></router-view>
             </div>
             <div class="callout callout-danger" v-else>
                 <div class="form-group">
@@ -32,8 +32,8 @@ export default {
         }
     },
     methods: {
-        showadprocess(type){
-            this.$router.push({name:type});
+        showadprocess(route){
+            this.$router.push({name:route});
 		},
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
@@ -45,16 +45,16 @@ export default {
             });
         },
     },
-    mounted(){ 
+    mounted(){
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
                 this.getorgdetials(data['Agency_Code']);
             }
-        }) 
+        })
     }
-      
+
 }
 </script>
 

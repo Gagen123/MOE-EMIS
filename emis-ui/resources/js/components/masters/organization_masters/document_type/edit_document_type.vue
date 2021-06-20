@@ -22,7 +22,7 @@
 
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Document For:<span class="text-danger">*</span></label>
                         <span v-for='(doc, index) in doc_for' :key="index">
                             <select name="addfield_1" id="addfield_1" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('addfield_1') }" v-model="doc.addfield_1">

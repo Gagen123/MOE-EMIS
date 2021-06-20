@@ -31,6 +31,7 @@
                             <option value="Question & Answer Setup">Question & Answer Setup</option>
                             <option value="Mess Management">Mess Management</option>
                             <option value="Management Body">Management Body</option>
+                            <option value="Staff Recuritment"> Staff Recuritment</option>
                            
                         </select>
                         <has-error :form="form" field="guideline_for"></has-error>

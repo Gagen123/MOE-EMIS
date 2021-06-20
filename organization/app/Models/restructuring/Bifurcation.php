@@ -15,7 +15,7 @@ class Bifurcation extends Model
      * The attributes that are mass assignable.
      *
      * @var array
-     */ 
+     */
     protected $fillable = [
         'id',
         'ApplicationDetailsId',
@@ -24,11 +24,12 @@ class Bifurcation extends Model
         'initiated_by',
         'dateOfBifurcation',
         'proposedName',
+        'proposedName1',
         'locationId',
         'isGeoPoliticallyLocated',
         'isSenSchool',
         'isFeedingSchool',
         'locationTypeId',
         'proposedLocation'
-    ]; 
+    ];
 }

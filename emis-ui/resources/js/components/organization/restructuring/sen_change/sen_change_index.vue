@@ -10,19 +10,41 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_sen_change')"><i class="fa fa-plus"></i> Apply for Change in SEN</button>
                 </span>
             </div>
-            <div class="card-body pt-1 pb-0">  
-                <router-view></router-view> 
+            <div class="card-body pt-1 pb-0" v-if="isvalid">
+                <router-view></router-view>
+            </div>
+            <div class="callout callout-danger" v-else>
+                <div class="form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                         <h5 class="bg-gradient-danger">Sorry!</h5>
+                        <div>You are not accessible to this page! Only DEO/TEO can access here</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
 export default {
+    data(){
+        return{
+            isvalid:false,
+        }
+    },
     methods: {
         showadprocess(type){
             this.$router.push({name:type});
 		},
     },
+    mounted(){
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Dzongkhag"){
+                this.isvalid=true;
+            }
+        })
+    }
 }
 </script>
 

@@ -73,13 +73,13 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.gewog}}</span>
+                                        <span class="text-blue text-bold" id="gewogName"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name"> </span>
+                                        <span class="text-blue text-bold" id="chewogName"> </span>
                                     </div>
                                 </div>
                                 <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
@@ -153,8 +153,8 @@ export default {
             dzongkhagList1:[],
             gewog_list:[],
             villageList:[],
-            gewog_list1:[],
-            villageList1:[],
+            gewogArray:{},
+            villageArray:{},
             classList:[],
             streamList:[],
             classArray:[],
@@ -313,7 +313,7 @@ export default {
         /**
          * method to get gewog list
          */
-        async getgewoglist(id){
+        async getgewoglist(id,gewogId){
             let dzoId=$('#dzongkhag').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -323,6 +323,10 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list = data.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name;
+                }
+                $('#gewogName').html(this.gewogArray[gewogId]);
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -330,27 +334,9 @@ export default {
         },
 
         /**
-         * method to get gewog1 list in dropdown
-         */
-        async getgewoglist1(id){
-            let dzoId=$('#dzongkhag1').val();
-            if(id!="" && dzoId==null){
-                dzoId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.gewog_list1 = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        /**
          * method to get village list
          */
-        async getvillagelist(id){
+        async getvillagelist(id,villageId){
             let gewogId=$('#gewog').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -360,30 +346,16 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList = data.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name;
+                }
+                $('#chewogName').html(this.villageArray[villageId]);
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
 
-        /**
-         * method to get village1 list
-         */
-        async getvillagelist1(id){
-            let gewogId=$('#gewog1').val();
-            if(id!="" && gewogId==null){
-                gewogId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.villageList1 = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
 
         /**
          * method to get class in checkbox
@@ -528,6 +500,9 @@ export default {
             .then((response) => {
                 let data=response.data.data;
                 this.form.organizationId=data.id;
+                this.getgewoglist(data.dzongkhagId,data.gewogId);
+                alert(data.chiwogId);
+                this.getvillagelist(data.gewogId,data.chiwogId);
                 this.data=data;
             })
             .catch((error) =>{
