@@ -196,8 +196,6 @@ export default {
          */
         restForm(){
             this.form.structuretype= '';
-       //   this.form.subCategory= '';
-        //  this.form.structureNo= '';
             this.form.constructionType = '';
             this.form.yearOfConstruction= '';
             this.form.plintchArea= '';
@@ -223,7 +221,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Infrastructure is added successfully'
+                        title: 'Infrastructure is updated successfully'
                     })
                     this.$router.push('/eccdinfrastructure_list');
                 })

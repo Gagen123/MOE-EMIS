@@ -203,7 +203,7 @@
                                         </li>
                                     @endif
                                 @endif
-                            @endforeach -->
+                            @endforeach 
 
 
                             <!-- @foreach(session('User_Details')['screens'] as $i=> $scr)
