@@ -1374,7 +1374,7 @@ export default {
     },
 
     created() {
-         let cid=this.$route.query.cid;
+         let cid=this.$route.query.data.cid;
          this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
         //  this.getschoolList();

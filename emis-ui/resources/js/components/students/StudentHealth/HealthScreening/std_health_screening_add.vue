@@ -84,7 +84,7 @@
                                 <tr v-for="(student, index) in studentList" :key="index">    
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> {{student.CmnSexId}} </td>
+                                    <td> {{genderArray[student.CmnSexId]}}  </td>
                                         <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
@@ -118,6 +118,7 @@ export default {
             classStreamSections:[],
             classList:[],
             sectionList:[],
+            genderArray:{},
             streamList:[],
             byClass:[],
             studentList:[],
@@ -169,6 +170,19 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.genderArray[data[i].id] = data[i].name;
+                }
+            })
         },
 
         /**
@@ -361,7 +375,7 @@ export default {
        
         this.loadActiveScreeningTitleList();
         this.loadActiveScreeningEndorserList();
-        
+        this.loadGenderArrayList();
         this.loadClassList();
         
         this.dt =  $("#student-list-table").DataTable()

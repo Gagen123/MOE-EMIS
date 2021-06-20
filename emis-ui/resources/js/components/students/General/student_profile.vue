@@ -23,12 +23,6 @@
                         <p class="text-muted">
                             Class: 10  Sec: B
                         </p>
-                        <hr>
-                        <strong><i class="fas fa-building mr-1"></i> House</strong>
-
-                        <p class="text-muted">
-                            Yellow House
-                        </p>
                     </div>
                 </div>
             </div>

@@ -47,7 +47,7 @@ export default {
                 if(data!=""){
                     this.$Progress.start();
                     if(data.IsNewAdmission==1){
-                        this.$router.push({name:'admission_initiated',query: {data:data.id}});
+                        this.$router.push({name:'admission_initiated',query: {data:data}});
                         this.$Progress.finish()
                     }
                     else{
