@@ -5,18 +5,6 @@
             <div id="existmessage"></div>
         </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <div class="card-header p-0 border-bottom-0">
-                <div class="form-group row">
-                    <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                    <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
-                        <option value="">--- Please Select ---</option>
-                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="parent_id"></has-error>
-                    </div>
-                </div>
-            </div>
             <div class="form-group row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="card card-primary card-outline">
@@ -25,13 +13,6 @@
                         </div>
                         <div class="card-body">
                             <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Proposed Name:<small><i>(Blank to keep same name)</i></small></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <input type="text" class="form-control currentDetails" id="name" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" @change="remove_error('name')"/>
-                                        <has-error :form="form" field="name"></has-error>
-                                    </div>
-                                </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
@@ -111,19 +92,16 @@
                             <form class="form-horizontal">
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <input type="text" class="form-control currentDetails" id="name1" v-model="form.name1" :class="{ 'is-invalid': form.errors.has('name1') }" @change="remove_error('name1')"/>
-                                        <has-error :form="form" field="name1"></has-error>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                        <span class="text-blue text-bold" id="name">{{form.name1}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="level1"></has-error>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                            <span class="text-blue text-bold" id="name">{{levelArray[form.level1]}}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- <div class="form-group row">
@@ -138,108 +116,42 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="location1"></has-error>
+                                        <span class="text-blue text-bold" id="name">{{locationArray[form.location1]}}</span>
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.geoLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.geoLocated1" value="0"  tabindex=""/> No</label>
+                                         <span class="text-blue text-bold"> {{ form.geoLocated1  == 1 ? "Yes" :  "No"}}</span>
                                     </div>
                                 </div>
 
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </div>
-                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select v-model="form.dzongkhag1" :class="{ 'is-invalid': form.errors.has('dzongkhag1') }" class="form-control select2" name="dzongkhag1" id="dzongkhag1">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in dzongkhagList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="dzongkhag1"></has-error>
+                                        <span class="text-blue text-bold">{{dzongkhagArray[form.dzongkhag1]}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select v-model="form.gewog1" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog1') }" class="form-control select2" name="gewog1" id="gewog1">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in gewog_list1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="gewog1"></has-error>
+                                        <span class="text-blue text-bold" id="appgeowgName" > </span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select v-model="form.chiwog1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog1') }" class="form-control select2" name="chiwog1" id="chiwog1">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in villageList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="chiwog1"></has-error>
+                                        <span class="text-blue text-bold" id="appchewogName" > </span>
                                     </div>
                                 </div>
                                 <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, key, index) in  classStreamList" :key="index">
-                                                <td>
-                                                    <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                                </td>
-                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    {{  item.stream  }}
-                                                </td>
-                                                <td class="strm_clas" v-else>
-
-                                                </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
-                                                </td>
-                                                <td v-else>
-                                                    <input type="checkbox" v-model="form.class" :value="item.classId">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <span v-for="(item, index) in  appclassStreamList" :key="index">
+                                        <br>
+                                        <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.classId] }}</label>
+                                    </span>
                                 </div>
                             </form>
                         </div>
@@ -262,22 +174,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
                                     <td>
-                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
-                                    </td>
-                                    <td>
-                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5">
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                     </td>
                                 </tr>
                             </tbody>
@@ -291,9 +191,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 </template>
 <script>
@@ -323,8 +221,11 @@ export default {
             classStreamList:[],
             gewogArray:{},
             villageArray:{},
+            record_id:'',
+            appclassStreamList:[],
+            applicationdetailsatt:'',
             form: new form({
-                id: '',parent_id:'',name:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'add', status:'Submitted',
+                id: '',appId:'', parent_id:'',name:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'edit', status:'Submitted',
                 name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
                 geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
                 attachments:
@@ -336,25 +237,13 @@ export default {
         }
     },
     methods: {
-        onChangeFileUpload(e){
-            let currentcount=e.target.id.match(/\d+/g)[0];
-            if($('#fileName'+currentcount).val()!=""){
-                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
-                $('#fileName'+currentcount).prop('readonly',true);
-            }
-            else{
-                $('#fileName'+currentcount+'_err').html('Please mention file name');
-                $('#'+e.target.id).val('');
-            }
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
         },
-        addMore: function(){
-            this.form.attachments.push({file_name:'', file_upload:''})
-        },
-        remove(index){
-            if(this.form.attachments.length>1){
-                this.form.attachments.pop();
-            }
-        },
+
         /**
          * method to remove error
          */
@@ -510,7 +399,7 @@ export default {
         /**
          * method to get gewog1 list in dropdown
          */
-        async getgewoglist1(id){
+        async getGewogList1(id,gewogId){
             let dzoId=$('#dzongkhag1').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -520,6 +409,9 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list1 = data.data.data;
+                this.form.gewog1=gewogId;
+                $('#gewog1').val(gewogId).trigger('change');
+                $('#appgewogName').html(this.gewogArray[gewogId]);
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -551,7 +443,7 @@ export default {
         /**
          * method to get village1 list
          */
-        async getvillagelist1(id){
+        async getvillagelist1(id,village){
             let gewogId=$('#gewog1').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -561,6 +453,8 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList1 = data.data.data;
+                this.form.chiwog1=village;
+                $('#appgeowgName').html(this.villageArray[village])
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -630,7 +524,7 @@ export default {
             }
             if(id=="dzongkhag1"){
                 this.form.dzongkhag1=$('#dzongkhag1').val();
-                this.getgewoglist1();
+                this.getGewogList1($('#dzongkhag1').val(),'');
             }
             if(id=="gewog"){
                 this.form.gewog=$('#gewog').val();
@@ -638,7 +532,7 @@ export default {
             }
             if(id=="gewog1"){
                 this.form.gewog1=$('#gewog1').val();
-                this.getvillagelist1();
+                this.getvillagelist1($('#gewog1').val(),'');
             }
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
@@ -669,6 +563,7 @@ export default {
                         }
                         let formData = new FormData();
                         formData.append('id', this.form.id);
+                        formData.append('appId', this.form.appId);
                         formData.append('parent_id', this.form.parent_id);
                         formData.append('name', this.form.name);
                         formData.append('name1', this.form.name1);
@@ -703,7 +598,7 @@ export default {
                         //this.form.post('organization/saveBifurcation')
                         .then((response) => {
                             if(response!=""){
-                                let message="Application for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Bifurcation has been updated and submitted for approval. <br><b>Thank You !</b>";
                                 this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -714,8 +609,8 @@ export default {
                         })
                         .catch((er) => {
                             console.log("Error:"+er);
-                            this.form.errors.errors = err.response.data.errors;
-                     })
+                            this.form.errors.errors = er.response.data.errors;
+                        });
                     }
                 });
             }
@@ -747,6 +642,31 @@ export default {
             })
             .catch((error) =>{
                 console.log("Error:"+error);
+            });
+        },
+        loadApplicationDetials(){
+            axios.get('organization/getChangeBasicDetails/'+this.record_id)
+            .then(response => {
+                let response_data=response.data.data;
+                this.getOrgDetails(response_data.bifurcation_details.organizationId);
+                this.form.id=response_data.bifurcation_details.id;
+                this.form.appId=response_data.id;
+                this.form.name1=response_data.bifurcation_details.proposedName;
+                this.form.location1=response_data.bifurcation_details.locationId;
+                this.form.geoLocated1=response_data.bifurcation_details.isGeoPoliticallyLocated;
+                this.form.level1=response_data.bifurcation_details.levelId;
+                this.getCategory1();
+                this.form.dzongkhag1=response_data.dzongkhagId;
+                $('#dzongkhag1').val(response_data.dzongkhagId).trigger('change');
+                this.getGewogList1(response_data.dzongkhagId,response_data.gewogId);
+                this.getvillagelist1(response_data.gewogId,response_data.chiwogId);
+                this.appclassStreamList=response_data.change_class_details;
+
+                //  id: '',parent_id:'',:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'edit',
+                //   status:'Submitted',
+                // :'',:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',:'',
+                // :'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
+                this.applicationdetailsatt=response_data.attachments;
             });
         },
         //getOrgList(uri = '/organization/getOrgList'){
@@ -828,7 +748,8 @@ export default {
         this.getStream();
         this.loadactivedzongkhagList();
         this.loadactivedzongkhagList1();
-        // this.checkPendingApplication();
+        this.record_id=this.$route.params.data.application_no;
+        this.loadApplicationDetials();
     }
 }
 </script>

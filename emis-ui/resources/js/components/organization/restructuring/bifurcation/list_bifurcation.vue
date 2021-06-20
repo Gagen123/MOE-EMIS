@@ -1,21 +1,27 @@
 <template>
     <div>
-        <table id="disciplinary-list-table" class="table table-bordered text-sm table-striped">
+        <table id="change-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th >SL#</th>
-                    <th >Application No.</th>
-                    <th >Application For</th>
-                    <th >Status</th>
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Application No.</th>
+                    <th style="width:20%">Application For</th>
+                    <th style="width:20%">Date of Application</th>
+                    <th style="width:15%">Status</th>
+                    <th style="width:20%">Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
-                    <!-- <td>{{ item.establishment_type}}</td> -->
-                    <td>Bifurcation of Public School</td>
+                    <td>{{ item.establishment_type}}</td>
+                     <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
                     <td>{{ item.status}}</td>
+                    <td>
+                        <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
+                        <a href="#" v-if="item.status=='submitted' || item.status=='Submitted'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -26,30 +32,27 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
-        loadDataList(uri='organization/loadBifurcationApplications'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Bifurcation'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.dataList =  data.data.data;
             })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-                $("#disciplinary-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
+        },
+        reverseDate(dateData){
+            const reverse =
+            dateData.split("-").reverse().join("-");
+            return reverse;
         },
         showedit(data){
-            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
+            this.$router.push({name:'edit_bifurcation',params: {data:data}});
+        },
+        showview(data){
+            this.$router.push({name:'show_bifurcation',params: {data:data}});
         },
     },
     mounted(){

@@ -26,8 +26,7 @@ use App\Models\OrganizationProprietorDetailsHistory;
 use App\Models\OrganizationClassStreamHistory;
 use App\Models\OrganizationSectionHistory;
 use App\Models\generalInformation\SectionDetails;
-
-
+use App\Models\restructuring\Bifurcation;
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller
@@ -816,6 +815,16 @@ class ChangeBasicDetailsController extends Controller
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         // dd($response_data);
         if($response_data!="" && $response_data!=null){
+            if($response_data->application_type=='bifurcation'){
+                $response_data->bifurcation_details= Bifurcation::where('ApplicationDetailsId',$response_data->id)->first();
+                $calss_data = DB::table('classes as c')
+                ->join('application_class_stream as cl', 'c.id', '=', 'cl.classId')
+                ->select('cl.*', 'c.class', 'c.id AS classId')
+                ->where('cl.ApplicationDetailsId',$response_data->id)
+                ->orderBy('c.displayOrder', 'asc')
+                ->get();
+                $response_data->change_class_details=  $calss_data;
+            }
             $change_det=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
             $response_data->change_details= $change_det;
             if($change_det!=""){

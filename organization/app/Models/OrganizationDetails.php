@@ -15,6 +15,7 @@ class OrganizationDetails extends Model
         'name',
         'code',
         'organizationType',
+        'bifOrgId',
         'zestAgencyCode',
         'category',
         'levelId',
