@@ -67,7 +67,7 @@ class RestructuringController extends Controller
                     $establishment_data = $this->setNameChangeFields($request);
                     break;
                 }
-                
+
             case "feeding_change" : {
                     $validation = $this->validateGeneralChange($request);
                     $establishment_data = $this->setFeedingChange($request);
@@ -579,18 +579,32 @@ class RestructuringController extends Controller
 
     public function saveClosure(Request $request){
         // dd($request);
-        $file = $request->attachments;
-        $path="";
-        $file_store_path='Closure';
-        if($file!=null && $file!="" && $file!="undefined"){
-            $fle="public/".$request->profile_path;
-            if (Storage::exists($fle)){
-                Storage::delete($fle);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'closure';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
             }
-            $file_name = time().'_' .$file->getClientOriginalName();
-            $file_path = $request->file('attachments')->storeAs($file_store_path, $file_name, 'public');
-            $path=$file_store_path.'/'.$file_name;
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
         }
+
         $rules = [
             'reason'          =>  'required',
             'organizationId'  =>   'required'
@@ -605,9 +619,10 @@ class RestructuringController extends Controller
             'reason'            =>$request['reason'],
             'remark'            =>$request['remark'],
             'id'                =>$request['id'],
-            'attachments'       =>$path,
+            'attachments'       =>$attachment_details,
             'user_id'           =>$this->userId()
         ];
+        // dd($closure);
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
         // dd($response_data);
         //Work Flow Process (based on Public School Establishment)
@@ -633,7 +648,7 @@ class RestructuringController extends Controller
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>'Closure',//service name
+                'service_name'      =>$screen_name,//service name
                 'name'              =>'Closure',//service name
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
