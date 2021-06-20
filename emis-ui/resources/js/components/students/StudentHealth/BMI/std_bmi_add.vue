@@ -48,8 +48,8 @@
                                     <th>Name</th> 
                                     <th>Sex</th>
                                     <th>Age</th>
-                                    <th>Height</th>
-                                    <th>Weight</th>
+                                    <th>Height (in meters)</th>
+                                    <th>Weight (in Kg)</th>
                                     <th>Remarks</th>
                                 </tr>
                             </thead>

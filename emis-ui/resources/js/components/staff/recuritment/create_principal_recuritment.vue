@@ -48,15 +48,19 @@
                                     <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Present Address:</label>
-                                            <input type="text"  :value="form.paddress"  class="form-control" id="paddress"/>
+                                             <input type="text" class="form-control" @change="removeerror('paddress')" :class="{ 'is-invalid': form.errors.has('paddress') }" id="paddress" v-model="form.paddress">
+                                            <has-error :form="form" field="paddress"></has-error>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Email Adress:</label>
-                                            <input type="text"  :value="form.email"  class="form-control" id="email"/>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Email Address:</label>
+                                            <input type="text" class="form-control" @change="removeerror('email')" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
+                                            <has-error :form="form" field="email"></has-error>
                                         </div>
+                                        
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Contact Number:</label>
-                                            <input type="text"  :value="form.contact_number"  class="form-control" id="contact_number"/>
+                                            <input type="number" class="form-control" @change="removeerror('contact_number')" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
+                                            <has-error :form="form" field="contact_number"></has-error>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -176,15 +180,12 @@ export default {
         else {
             axios.get('/getpersonbycid/' +$('#'+cid).val())
             .then(response => {
-                // alert(JSON.stringify(response.data))
                 let data = response.data;
                 this.form.name = data.citizenDetail[0].firstName +' '+ data.citizenDetail[0].lastName;
                 this.form.dob = data.citizenDetail[0].dob;
                 this.form.dzongkhag = data.citizenDetail[0].dzongkhagName;
                 this.form.gewog = data.citizenDetail[0].gewogName;
                 this.form.village = data.citizenDetail[0].villageName;
-
-
                 }).catch(function (error){
                     console.log("Retrieving error: "+error)
                 });
@@ -199,7 +200,6 @@ export default {
             }
             
             let formData = new FormData();
-            
             formData.append('id', this.form.id);
             formData.append('ref_docs[]', this.form.ref_docs);
             for(let i=0;i<this.form.ref_docs.length;i++){
@@ -215,11 +215,12 @@ export default {
             formData.append('paddress', this.form.paddress);
             formData.append('email', this.form.email);
             formData.append('contact_number', this.form.contact_number);
+            formData.append('application_type', this.form.application_type);
+            formData.append('application_for', this.form.application_for);
             formData.append('action_type', this.form.action_type);
             formData.append('status', this.form.status);
             formData.append('organization_type', this.form.organization_type);
-                alert("inside");
-            axios.post('staff/savePrincipalApproval', formData, config)
+            axios.post('staff/StaffApprovalController/savePrincipalApproval', formData, config)
             .then((response) => {
                 if(response!=""){
                     if(response.data=="No Screen"){
@@ -230,7 +231,7 @@ export default {
                     }
                     if(response!="" && response!="No Screen"){
                         let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                        this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
+                        this.$router.push({name:'princiapl_recuritment_acknowledgement',params: {data:message}});
                         Toast.fire({
                             icon: 'success',
                             title: 'Change details is saved successfully'
@@ -241,7 +242,6 @@ export default {
             .catch((err) => {
                 console.log("Error:"+err)
             })
-              
             
         },
 

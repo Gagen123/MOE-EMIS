@@ -1,0 +1,51 @@
+/*
+SQLyog Ultimate v8.82 
+MySQL - 5.5.5-10.4.18-MariaDB : Database - organization_db
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`organization_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+
+USE `organization_db`;
+
+/*Table structure for table `organization_locations` */
+
+DROP TABLE IF EXISTS `organization_locations`;
+
+CREATE TABLE `organization_locations` (
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organizationId` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `entranceGate` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `compoundArea` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fencingtypeId` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `compoundFencing` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `altitude` varchar(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `latitude` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `longitude` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `climate_type` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `googleMapPath` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `disasterArea` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `distance_from_dzo` int(100) DEFAULT NULL,
+  `created_by` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `updated_by` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp(6) NULL DEFAULT NULL,
+  `updated_at` timestamp(6) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+/*Data for the table `organization_locations` */
+
+insert  into `organization_locations`(`id`,`organizationId`,`entranceGate`,`compoundArea`,`fencingtypeId`,`compoundFencing`,`altitude`,`latitude`,`longitude`,`climate_type`,`googleMapPath`,`disasterArea`,`distance_from_dzo`,`created_by`,`updated_by`,`created_at`,`updated_at`) values ('56f14d0c-4576-4846-93d0-54f9d5e29e0f','4184f12c-a7fc-40c3-b038-013e242d8ef6','1',NULL,'95c129ad-a477-41e4-9e79-094ccbd54401',NULL,'6565','27.514162','90.433601','6e70f604-eb4f-48a9-abb0-4ec959ae3f1e','uyg','a4de6bf4-edc4-41ef-8555-6d6039195b73,aa973b7c-7b7b-45e0-aeea-486a66a83d9b',9,'4120',NULL,'2021-06-17 15:16:23.000000','2021-06-17 15:16:23.000000'),('b59ecec4-4f19-4f61-8c80-c0a57926bca0','4184f12c-a7fc-40c3-b038-013e242d8ef6','1',NULL,'95c129ad-a477-41e4-9e79-094ccbd54401',NULL,'6565','27.514162','90.433601','6e70f604-eb4f-48a9-abb0-4ec959ae3f1e','uyg','a4de6bf4-edc4-41ef-8555-6d6039195b73,aa973b7c-7b7b-45e0-aeea-486a66a83d9b',9,'4120',NULL,'2021-06-17 15:16:23.000000','2021-06-17 15:16:23.000000');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;

@@ -133,7 +133,6 @@ export default {
             classList:[],
             classArray:{},
             streamList:{},
-            
             //to check for modal
             qualificationDescription:[],
             staffqualificationlist:[],
@@ -247,12 +246,18 @@ export default {
             $('#screening-modal').modal('show');
             axios.get('/students/getScreeningDetails/'+id)
                     .then((response) => {
-                        this.screeningDetails = response.data;  
-                        if(response.data.screened!=null){
+                        this.screeningDetails = response.data;
+                        if(response.data.data.screened==null){
                             this.student_form.isScreened=1;
                         }
                         else{
                             this.student_form.isScreened=0;
+                        }
+                        if(response.data.data.referred==null){
+                            this.student_form.isReferred=0;
+                        }
+                        else{
+                            this.student_form.isReferred=1;
                         }
                             
                 })

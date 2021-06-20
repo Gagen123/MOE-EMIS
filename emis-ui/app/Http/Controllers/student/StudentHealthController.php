@@ -19,6 +19,7 @@ class StudentHealthController extends Controller
     }
 
     public function addDewormingRecords(Request $request){
+        dd($request);
 
         $rules = [
             'term_id'            => 'required',
@@ -65,7 +66,7 @@ class StudentHealthController extends Controller
     */
 
     public function addSupplementationRecords(Request $request){
-        // dd($request);
+        dd($request);
         $rules = [
             'term_id'            => 'required',
             'date'               => 'required'
@@ -342,5 +343,58 @@ class StudentHealthController extends Controller
     public function getSupplementationDetails($id=''){
         $student_records = $this->apiService->listData('emis/students/getSupplementationDetails/'.$id);
         return $student_records;
+    }
+
+    /**
+     * Add Vaccination Records
+     */
+
+    public function addVaccinationRecords(Request $request){
+        dd($request);
+        $rules = [
+            'screening'             => 'required',
+            'date'                  => 'required',
+            'screening_endorsed_by' => 'required',
+            'prepared_by'           => 'required',
+            'screening_position'    => 'required',
+            'std_class'             => 'required',
+            'std_section'           => 'required',
+        ];
+
+        $customMessages = [
+            'screening.required'                => 'This field is required',
+            'date.required'                     => 'This field is required',
+            'screening_endorsed_by.required'    => 'This field is required',
+            'prepared_by.required'              => 'This field is required',
+            'screening_position.required'       => 'This field is required',
+            'std_class.required'                => 'This field is required',
+            'std_section.required'              => 'This field is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $data =[
+            'id'                    => $request->id,
+            'screening'             => $request->screening,
+            'prepared_by'           => $request->prepared_by,
+            'screening_position'    => $request->screening_position,
+            'date'                  => $request->date,
+            'screening_endorsed_by' => $request->screening_endorsed_by,
+            'std_class'             => $request->std_class,
+            'std_stream'            => $request->std_stream,
+            'std_section'           => $request->std_section,
+            'std_id'                => $request->std_id,
+            'std_screened'          => $request->std_screened,
+            'std_referred'          => $request->std_referred,
+            'organization_id'       => $this->getWrkingAgencyId(),
+            'user_id'               =>  $this->userId() 
+        ];
+
+        try{
+            $response_data= $this->apiService->createData('emis/students/addHealthScreeningRecords', $data);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
     }
 }
