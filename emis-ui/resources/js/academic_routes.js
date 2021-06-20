@@ -24,7 +24,7 @@ const routes = [
             { path: '/subject-master', component: require('./components/masters/academics_masters/subject/subject_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
-                    { path: '/list-subject', name: 'aca_list_subject', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
+                    { path: '/list-subject', name: 'list_subject', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
                     { path: '/create-subject', name: 'aca_create_subject', component: require('./components/masters/academics_masters/subject/create_subject.vue').default },
                     { path: '/edit-subject', name: 'aca_edit_subject', component: require('./components/masters/academics_masters/subject/edit_subject.vue').default },
                 ]
@@ -74,7 +74,7 @@ const routes = [
         },
         { path:'/subject-teacher', component:require('./components/academics/subject_teacher/subject_teacher_index.vue').default,
             children: [
-                { path: '', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
+                { path: '',name:'subject-teacher', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
                 { path: '/create-subject-teacher',name:'create_subject_teacher', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
             ]
         },

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Answer extends Model
 {
-    use HasFactory,Uuid;
+    use HasFactory;
     public $timestamps = false;
     protected $table="sen_answers";
     protected $fillable = [

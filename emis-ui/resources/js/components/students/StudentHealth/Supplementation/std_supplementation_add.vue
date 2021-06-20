@@ -97,8 +97,7 @@ export default {
                 std_section: '',
                 date: '',
                 std_id: [],
-                std_screened:[],
-                std_referred:[]
+                std_screened:[]
             }),
         }
     },

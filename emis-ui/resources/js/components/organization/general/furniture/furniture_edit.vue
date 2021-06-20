@@ -182,6 +182,7 @@ export default {
     },
 
     mounted(){
+         this.getType();
         this.form.type=this.$route.params.data.type;
         this.getItem();
         this.form.item=this.$route.params.data.item;

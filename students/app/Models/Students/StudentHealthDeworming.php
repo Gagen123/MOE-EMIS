@@ -15,7 +15,8 @@ class StudentHealthDeworming extends Model
         'id',
         'StdHealthTermId',
         'date',
-        'StdStudentId',
-        'status',
+        'class',
+        'section',
+        'stream'
     ];
 }

@@ -219,6 +219,16 @@
                        Construction Type
                     </router-link>
                 </li>
+                 <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/eccdStructure_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                      ECCD Structure Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/eccdfacility_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                      ECCD Facility Type
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view> 
         </div>

@@ -13,7 +13,7 @@
                             <th>Remarks</th>
                             <th>Action</th>                     
                         </tr>
-                    </thead>
+                    </thead>  
                     <tbody>
                         <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
