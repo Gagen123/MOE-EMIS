@@ -60,4 +60,24 @@ class GeneralStudentController extends Controller{
         return $student_list;
     }
 
+    /**
+     * Load student list by gender
+     * 
+     * Takes class, stream, section and vaccine type as parameter separated by __ (double underscore)
+     * We get the gender from master and pass it as an argument in an array
+     */
+
+    public function studentListByGender($param=""){
+
+        $gender_list = json_decode($this->apiService->listData('emis/masters/loadGlobalMasters/all_gender'));
+        $data_parameters['class_params'] = $param;
+        $data_parameters['gender_params'] = $gender_list;
+        $data_parameters['organization_id'] = $this->getWrkingAgencyId();
+
+        $data = http_build_query($data_parameters);
+
+        $student_list = $this->apiService->listData('emis/students/studentListByGender/'.$data);
+        return $student_list;
+    }
+
 }

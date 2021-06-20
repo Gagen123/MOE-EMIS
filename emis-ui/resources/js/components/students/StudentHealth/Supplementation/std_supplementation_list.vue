@@ -11,7 +11,8 @@
                             <th>Class</th>
                             <th>Section</th>
                             <th>Stream</th>
-                            <th>Total Given</th>
+                            <th>Total Students</th>
+                            <th>Not Given</th>
                             <th>Action</th>                     
                         </tr>
                     </thead>
@@ -24,11 +25,11 @@
                             <td>{{ sectionList[item.SectionDetailsId]}} </td>
                             <td v-if="item.stream">{{ item.stream}}</td>
                             <td v-else>NA</td>
-                            <td>{{ item.given}}</td>
-                            <td></td>
+                            <td>{{ item.total_student}}</td>
+                            <td>{{ item.not_given}}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                                    <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
                                 </div>
                             </td>
                         </tr>
@@ -101,8 +102,8 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        showedit(data){
-            this.$router.push({name:'student_projects_edit',params: {data:data}});
+        showview(data){
+            this.$router.push({name:'std_supplementation_view',params: {data:data}});
         },
     },
     mounted(){

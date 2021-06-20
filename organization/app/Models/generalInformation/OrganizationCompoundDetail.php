@@ -18,9 +18,21 @@ class OrganizationCompoundDetail extends Model
      * @var array
      */
     protected $fillable = [
-        'id','organizationId','thramNo','plotNo','pegInformation','compoundArea','playgroundArea',
-        'playgroundAreaUsable','status','agricultureArea','agricultureAreaUsed',
-        'created_by', 'updated_by', 'created_at', 'updated_at'
+        'id',
+        'organizationId',
+        'thramNo',
+        'plotNo',
+        'attachments',
+        'compoundArea',
+        'playgroundArea',
+        'playgroundAreaUsable',
+        'status',
+        'agricultureArea',
+        'agricultureAreaUsed',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 
 }

@@ -122,6 +122,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadStrSubCategory', 'Masters\StructureSubCategoryController@loadStrSubCategory');
 
     });
+    $router->group(['prefix' => 'masters/eccdfacility'], function () use ($router) {
+        // structure sub category route
+        $router->post('/saveEccdFacility', 'Masters\StructureSubCategoryController@saveEccdFacility');
+        $router->get('/getEccdStructureType', 'Masters\StructureSubCategoryController@getEccdStructureType');
+        $router->get('/loadEccdFacilityList', 'Masters\StructureSubCategoryController@loadEccdFacilityList');
+
+    });
 
     $router->group(['prefix' => 'masters/equipmentItem'], function () use ($router) {
         // equipment item route
@@ -337,6 +344,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getWashFeeding/{type}', ['uses' => 'structuralFacility\InfrastructureController@getWashFeeding']);
 
         });
+
+        //ECCD Infracture
+        $router->group(['prefix' => 'eccdinfrastructure'], function () use ($router) {
+            $router->get('/getStructureTypeInDropdown', 'structuralFacility\InfrastructureController@getStructureTypeInDropdown'); 
+            $router->get('/geteccdStructureFacilityInDropdown/{structuretype}', 'structuralFacility\InfrastructureController@geteccdStructureFacilityInDropdown');
+            $router->post('/saveEccdInfrastructure', 'structuralFacility\EccdInfrastructureController@saveEccdInfrastructure');
+            $router->get('/loadEccdInfrastructureList/{orgId}', 'structuralFacility\EccdInfrastructureController@loadEccdInfrastructureList');
+            $router->get('/getEccdInfrastructureDetails/{eccdinfraId}', 'structuralFacility\EccdInfrastructureController@getEccdInfrastructureDetails');
+
+        });  
 
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
