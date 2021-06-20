@@ -97,6 +97,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
         $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
+        $router->get('/studentListByGender/{data}', ['uses' => 'General\GeneralStudentController@studentListByGender']);
+
 		//route by chimi to get temporary
         $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
 
@@ -140,6 +142,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getStudentReferredDetails/{param}', ['uses' => 'Students\StudentHealthController@getStudentReferredDetails']);
         $router->get('/loadViewScreeningDetails/{param}', ['uses' => 'Students\StudentHealthController@loadViewScreeningDetails']);
         $router->get('/getScreeningDetails/{id}', ['uses' => 'Students\StudentHealthController@getScreeningDetails']);
+
+        $router->post('/addVaccinationRecords', ['uses' => 'Students\StudentHealthController@addVaccinationRecords']);
+        $router->get('/updateVaccinationRecords/{param}', ['uses' => 'Students\StudentHealthController@updateVaccinationRecords']);
+        $router->get('/loadVaccinationRecords/{param}', ['uses' => 'Students\StudentHealthController@loadVaccinationRecords']);
 
         $router->post('/addBmiRecords', ['uses' => 'Students\StudentHealthController@addBmiRecords']);
         $router->get('/loadBmiSummary/{param}', ['uses' => 'Students\StudentHealthController@loadBmiSummary']);

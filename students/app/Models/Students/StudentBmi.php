@@ -9,13 +9,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StudentBmi extends Model
 {
     use HasFactory, Uuid;
-    protected $table="std_health_bmi";
+    protected $table="std_student_bmi";
 
     protected $fillable = [
         'id',
-        'StdHealthTermId',
+        'StdHealthBmiId',
         'StdStudentId',
-        'date',
         'height',
         'weight',
         'bmi',
