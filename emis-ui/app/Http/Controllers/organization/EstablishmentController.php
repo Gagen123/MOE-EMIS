@@ -98,7 +98,6 @@ class EstablishmentController extends Controller
             'stream'                    =>  $request['stream'],
             'proposed_establishment'    =>  $request['proposed_establishment'],
             'application_number'        =>  $request['application_number'],
-
             'update_type'               =>  $request['update_type'],
             'action_type'               =>  $request['action_type'],
             'user_id'                   =>  $this->userId() ,

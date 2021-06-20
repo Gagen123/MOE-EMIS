@@ -37,7 +37,7 @@ export default {
     },
 
     methods:{
-        loadContactList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/InternetAccessible'){
+        loadAccessibleList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/InternetAccessible'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -52,7 +52,7 @@ export default {
         },
     },
     mounted(){
-        this.loadContactList();
+        this.loadAccessibleList();
         this.dt =  $("#org-masters-table").DataTable();
     },
     watch: {

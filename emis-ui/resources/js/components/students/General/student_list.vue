@@ -113,7 +113,7 @@ export default {
         getStreamList(id){
             let classId=$('#std_class').val();
             if(id!="" && classId==null){
-                classId=id;
+            classId=id;
             }
             let uri = 'loadCommons/loadStreamList/'+classId;
             this.streamList =[];
