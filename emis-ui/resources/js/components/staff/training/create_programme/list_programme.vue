@@ -37,6 +37,7 @@ export default {
     data() {
         return {
             staffList:[],
+            dt:'',
         }
     },
     methods: {
@@ -62,7 +63,15 @@ export default {
             "responsive": true,
             "autoWidth": false,
         });
-
+        this.dt =  $("#staff-table").DataTable()
+    },
+    watch: {
+        staffList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#staff-table").DataTable()
+            });
+        }
     },
 }
 </script>

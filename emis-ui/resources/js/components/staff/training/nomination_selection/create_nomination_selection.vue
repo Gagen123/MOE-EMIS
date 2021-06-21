@@ -245,6 +245,7 @@ export default {
         onChangeFileUpload(e){
             this.form.ref_docs.push({attachment:e.target.files[0]});
         },
+
         openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
