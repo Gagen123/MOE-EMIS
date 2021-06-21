@@ -251,7 +251,6 @@ class RestructuringController extends Controller
         $workflowstatus="";
         $screen_id="";
         $sequence="";
-        $workflowstatus="";
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
