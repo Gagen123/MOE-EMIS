@@ -57,8 +57,8 @@
                                 <tr v-for="(student, index) in studentList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> {{student.CmnSexId}} </td>
-                                        <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
+                                    <td> {{genderArray[student.CmnSexId]}}  </td>
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
                                         <input type="number" name="height" class="form-control" v-model="student_form.height[index]"/>
@@ -93,6 +93,7 @@ export default {
             streamList:[],
             byClass:[],
             studentList:[],
+            genderArray:{},
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
@@ -119,6 +120,19 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.genderArray[data[i].id] = data[i].name;
+                }
+            })
         },
 
         /**
@@ -274,6 +288,7 @@ export default {
         });
 
         this.loadActiveTermList();
+        this.loadGenderArrayList();
         
         this.loadClassList();
         this.loadSectionList();

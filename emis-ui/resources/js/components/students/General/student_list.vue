@@ -78,17 +78,9 @@ export default {
             classSectionStreamList:{},
 
             student_form: new form({
-                screening: '',
-                screening_position: '',
-                prepared_by: '',
-                screening_endorsed_by: '',
                 std_class: '',
                 std_stream: '',
                 std_section: '',
-                date: '',
-                std_id: [],
-                std_screened:[],
-                std_referred:[]
             }),
         }
     },
@@ -142,42 +134,6 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        /**
-         * to load the array definitions of class, stream and section
-         */
-        loadClassArrayList(uri="loadCommons/getClassArray"){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.classArray[data[i].id] = data[i].class;
-                }
-            })
-        },
-        loadSectionArrayList(uri="loadCommons/getSectionArray"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.sectionList[data[i].id] = data[i].section;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadStreamArrayList(uri="loadCommons/getStreamArray"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.streamList[data[i].id] = data[i].stream;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
         loadClassStreamSectionList(uri="loadCommons/loadClassStreamSection/userworkingagency/org"){
             axios.get(uri)
             .then(response => {
@@ -199,15 +155,6 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
-            if(id=="screening"){
-                this.student_form.screening=$('#screening').val();
-            }
-            if(id=="screening_position"){
-                this.student_form.screening_position=$('#screening_position').val();
-            }
-            if(id=="screening_endorsed_by"){
-                this.student_form.screening_endorsed_by=$('#screening_endorsed_by').val();
             }
             if(id=="std_class"){
                 this.student_form.std_class=$('#std_class').val();
@@ -262,9 +209,6 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadClassArrayList();
-        this.loadSectionArrayList();
-        this.loadStreamArrayList();
         this.loadClassStreamSectionList();
         this.loadClassList();
 

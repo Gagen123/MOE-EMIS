@@ -99,6 +99,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
         $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
         $router->get('/studentListByGender/{data}', ['uses' => 'General\GeneralStudentController@studentListByGender']);
+        //for profile
+        $router->get('/getStudentDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentDetails']);
+        $router->get('/getStudentParentsDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentParentsDetails']);
+        $router->get('/getStudentRoleDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentRoleDetails']);
+        $router->get('/getStudentProgrammeDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentProgrammeDetails']);
 
 		//route by chimi to get temporary
         $router->get('/getStudents/{org_id}', ['uses' => 'General\GeneralStudentController@getStudents']);
