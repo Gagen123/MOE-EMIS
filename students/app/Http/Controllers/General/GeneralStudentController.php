@@ -172,6 +172,49 @@ class GeneralStudentController extends Controller
     }
 
     /**
+     * For Profile
+     * Get Student, Parents, Roles and Responsibilities and Programme/Club Membership of the Student
+     * 
+     * id is the student id
+     */
+
+    public function getStudentDetails($id){
+        $records = DB::table('std_student')
+                    ->where('std_student.id',$id)
+                    ->get();
+        return $records;
+    }
+
+    public function getStudentParentsDetails($id){
+        $records = DB::table('std_student')
+                    ->join('std_student_guardian', 'std_student.id', '=', 'std_student_guardian.StdStudentId')
+                    ->where('std_student.id',$id)
+                    ->get();
+        return $records;
+    }
+
+    public function getStudentRoleDetails($id){
+        $records = DB::table('std_role_student')
+                    ->join('std_student', 'std_role_student.StdStudentId', '=', 'std_student.id')
+                    ->join('std_role', 'std_role_student.StdRoleId', '=', 'std_role.id')
+                    ->select('std_role_student.*', 'std_student.Name','std_student.OrgOrganizationId','std_role.name AS role_name')
+                    ->where('std_student.id', $id)
+                    ->get();
+        return $records;
+    }
+
+    public function getStudentProgrammeDetails($id){
+        $records = DB::table('cea_programme_membership')
+                        ->join('cea_programme', 'cea_programme_membership.CeaProgrammeId', '=', 'cea_programme.id')
+                        ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
+                        ->select('cea_programme_membership.*', 'cea_programme.name AS program_name',
+                            'std_student.Name AS student_name', 'std_student.student_code AS student_code')
+                            ->where('std_student.id', $id)
+                        ->get();
+        return $records;
+    }
+
+    /**
      * To get the whether the vaccination is for both, boys or girls
      */
 

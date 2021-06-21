@@ -80,4 +80,31 @@ class GeneralStudentController extends Controller{
         return $student_list;
     }
 
+    /**
+     * For Profile
+     * Get Student, Parents, Roles and Responsibilities and Programme/Club Membership of the Student
+     * 
+     * id is the student id
+     */
+
+    public function getStudentDetails($id){
+        $student_record = $this->apiService->listData('emis/students/getStudentDetails/'.$id);
+        return $student_record;
+    }
+
+    public function getStudentParentsDetails($id){
+        $student_record = $this->apiService->listData('emis/students/getStudentParentsDetails/'.$id);
+        return $student_record;
+    }
+
+    public function getStudentRoleDetails($id){
+        $student_record = $this->apiService->listData('emis/students/getStudentRoleDetails/'.$id);
+        return $student_record;
+    }
+
+    public function getStudentProgrammeDetails($id){
+        $student_record = $this->apiService->listData('emis/students/getStudentProgrammeDetails/'.$id);
+        return $student_record;
+    }
+
 }
