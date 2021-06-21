@@ -16,11 +16,12 @@ class ApplicationEstClosure extends Model
      *
      * @var array
      */
-    protected $fillable = [   
+    protected $fillable = [
         'id',
         'ApplicationDetailsId',
         'organizationId',
         'remarksForClosure',
+        'remark',
         'dateOfClosure'
     ];
 }

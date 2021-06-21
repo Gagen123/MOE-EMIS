@@ -142,26 +142,8 @@ class ClosureController extends Controller
         $closure = ApplicationEstClosure::where('ApplicationDetailsId',$response_data->id)->first();
 
         $response_data->closure=$closure;
+        $response_data->attachments= ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
 
-        // if($merger->isfeedingschool==1){
-        //     $response_data->feeding=ApplicationNoMeals::where('ApplicationDetailsId',$merger->id)->get();
-        // }
-
-        // $response_data->level=Level::where('id',$merger->levelId)->first()->name;
-        // $response_data->locationType=Location::where('id',$merger->locationId)->first()->name;
-        // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        // $classSection=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->groupBy('classId')->get();
-        // $sections=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->where('streamId','<>',null)->get();
-        // foreach($classSection as $cls){
-        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        // }
-        // $response_data->class_section=$classSection;
-        // if($sections!="" && sizeof($sections)>0){
-        //     foreach($sections as $sec){
-        //         $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        //     }
-        //     $response_data->stream=$sections;
-        // }
         return $this->successResponse($response_data);
     }
 
@@ -203,27 +185,27 @@ class ClosureController extends Controller
 
         $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
 
-        // $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
-        // $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
-        // $change_details_data="";
+        $change_details=ApplicationEstClosure::where('ApplicationDetailsId',$app_details->id)->first();
+        $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();
+        $change_details_data="";
 
-        // $org_data =[
-        //     'id'                        =>  $org_details->id,
-        //     'name'                      =>  $org_details->name,
-        //     'updated_by'                =>  $org_details->updated_by,
-        //     'updated_at'                =>  $org_details->updated_at,
-        //     'recorded_on'               =>  date('Y-m-d h:i:s'),
-        //     'recorded_for'              =>  'Name Change',
-        //     'recorded_by'               =>  $request->user_id,
-        // ];
-        // HistoryForOrganizaitonDetail::create($org_data);
-        // $org_update_data =[
-        //     'name'                      =>  $change_details->proposedChange,
-        //     'updated_by'                =>  date('Y-m-d h:i:s'),
-        //     'updated_at'                =>  $request->user_id,
-        // ];
-        // $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
+        $org_data =[
+            'id'                        =>  $org_details->id,
+            'status'                    =>  $org_details->status,
+            'updated_by'                =>  $org_details->updated_by,
+            'updated_at'                =>  $org_details->updated_at,
+            'recorded_on'               =>  date('Y-m-d h:i:s'),
+            'recorded_for'              =>  'Closure',
+            'recorded_by'               =>  $request->user_id,
+        ];
+        HistoryForOrganizaitonDetail::create($org_data);
+        $org_update_data =[
+            'status'                    =>  'Closed',
+            'updated_by'                =>  date('Y-m-d h:i:s'),
+            'updated_at'                =>  $request->user_id,
+        ];
+        $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
 
-        // return $this->successResponse($change_details_data, Response::HTTP_CREATED);
+        return $this->successResponse($change_details_data, Response::HTTP_CREATED);
     }
 }

@@ -29,10 +29,6 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
-                                    <label>Zest Code:</label>
-                                    <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
-                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
                                     <span class="text-blue text-bold">{{existing_details.category}}</span>
@@ -72,30 +68,16 @@
                                                 </td>
                                                 <td class="strm_clas" v-else> </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true">
+                                                    <input type="checkbox" checked="true" disabled>
                                                 </td>
                                                 <td v-else>
-                                                    <input type="checkbox" checked="true">
+                                                    <input type="checkbox" checked="true" disabled>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <!-- <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Classes Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  existing_details.classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="callout callout-info">
                             <div class="form-group row">
@@ -108,114 +90,21 @@
                                     <label>Application Number:</label>
                                     <span class="text-blue text-bold">{{appicationDetails.application_no}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Type of Change:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.establishment_type}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='name_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Propose New Name:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.closure.proposedChange}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposal Initiated Bye:</label>
-                                    <span class="text-blue text-bold">{{proposed_by_list[appicationDetails.closure.initiatedBy]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='location_type_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed Location:</label>
-                                    <span class="text-blue text-bold">{{locationArray[appicationDetails.closure.proposedChange]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='expension_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Current Capacity:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.closure.proposedChange}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed Capacity:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.closure.changeInDetails}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='feeding_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Is Feeding School:</label>
-                                    <label><input  type="radio" v-model="isfeedingschool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="isfeedingschool" value="0" tabindex=""/> No</label>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                    <label class="mb-0">Feeding Modality:</label>
-                                    <label><input  type="checkbox" v-model="feeding1" id="feeding1" value="1" /> One Meal</label>
-                                    <label><input  type="checkbox" v-model="feeding2" value="2"/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="feeding3" value="3" /> Three Meals</label>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Is SEN School:</label>
-                                    <label><input  type="radio" v-model="senSchool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="senSchool" value="0" tabindex=""/> No</label>
-                                </div>
-                            </div>
-                            <div v-if="appicationDetails.application_type=='proprietor_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Proprietor Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">CID:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorCid}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorName}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Phone No:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorPhone}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Mobile No:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorMobile}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Email:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorEmail}}</span>
-                                    </div>
-                                </div>
-                            </div>
 
-
-                            <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Proposed Level:</label>
-                                        <span class="text-blue text-bold">{{levelArray[appicationDetails.closure.proposedChange]}}</span>
-                                    </div>
+                            </div>
+                            <div class="form-group row" v-if="closuredetails!=''">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Reason for Closure:</label>
+                                    <span class="text-blue text-bold">{{closuredetails.remarksForClosure}}</span>
                                 </div>
-
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Change In Classes Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  appicationDetails.change_classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label>Remarks for Closure:</label>
+                                    <span class="text-blue text-bold">{{closuredetails.remark}}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="callout callout-info">
-                            <!-- <div class="row pb-2" id="team_verificationAttachment">
+                            <div class="row pb-2" id="team_verificationAttachment">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -239,7 +128,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <h5><u>Any Supporting Documents and Attachments (if applicable)</u></h5>
@@ -290,56 +179,12 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <!-- <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button> -->
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-dark" @click="shownexttab('approve')" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Previous Class Stream Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section1" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList1" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-info">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -365,13 +210,14 @@ export default {
             gewogArray:{},
             calssArray:{},
             streamArray:{},
-            proposed_by_list:{},
+            villageArray:{},
             locationArray:{},
             selected_gewog:'',
             selected_village:'',
             appicationDetails:[],
             isfeedingschool:'',
             senSchool:'',
+            closuredetails:'',
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',
                 ref_docs:[],fileUpload: [],sequence:'',screen_id:'',effective_date:'',
@@ -432,7 +278,7 @@ export default {
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
             .then(response => {
                 this.existing_details=response.data.data;
-                this.form.category=existing_details.category;
+                this.form.category=this.existing_details.category;
                 this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
             })
@@ -440,21 +286,7 @@ export default {
                 console.log("Error: "+error);
             });
         },
-        /**
-         * method to load previous org details
-         */
-        loadPriviousOrgDetails2(org_id){
-            axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
-            .then(response => {
-                this.oldOrg2=response.data.data;
-                this.form.category=oldOrg2.category;
-                this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
-                this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
-            })
-            .catch((error) => {
-                console.log("Error: "+error);
-            });
-        },
+
         /**
          * method to load previous org details
          */
@@ -463,25 +295,12 @@ export default {
             .then((response) => {
                 let data=response.data.data;
                 this.loadPriviousOrgDetails(data.closure.organizationId);
-                this.loadPriviousOrgDetails2(data.closure.OldOrganizationId2);
                 this.appicationDetails=data;
                 this.form.sequence=response.data.sequence;
                 this.form.screen_id=response.data.screen_id;
                 this.form.establishment_type=data.establishment_type;
-                this.isfeedingschool=data.closure.proposedChange;
-                this.senSchool=data.closure.proposedChange;
-                if(data.change_feeding!="" && data.change_feeding!=undefined && data.change_feeding.length>0){
-                    for(let i=0; i< data.change_feeding.length; i++){
-                        if(i==0){
-                            this.feeding1=data.change_feeding[i].noOfMeals;
-                        }
-                        if(i==1){
-                            this.feeding2=data.change_feeding[i].noOfMeals;
-                        }
-                        if(i==2){
-                            this.feeding3=data.change_feeding[i].noOfMeals;
-                        }
-                    }
+                if(data.closure!=null && data.closure!=""){
+                    this.closuredetails=data.closure;
                 }
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
@@ -491,11 +310,9 @@ export default {
                 }
             })
             .catch((error) => {
-                console.log("Error......"+error);
+                console.log("Error: "+error);
             });
         },
-
-
 
         /**
          * method to show next tab and update application accordingly
@@ -588,7 +405,6 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
             })
             .catch(function (error) {
@@ -627,18 +443,7 @@ export default {
                 }
             });
         },
-        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.proposed_by_list[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
-        },
+
         getLocation(uri = '/organization/getLocationInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -652,7 +457,6 @@ export default {
 
     mounted(){
         this.getLocation();
-        this.loadproposedBy();
         this.getLevel();
         this.getClass();
         this.getStream();
