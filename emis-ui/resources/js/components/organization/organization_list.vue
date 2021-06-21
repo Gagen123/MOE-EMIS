@@ -6,7 +6,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="card card-primary card-outline">
-                <div class="card-header pt-0 mt-0 pb-0"> 
+                <div class="card-header pt-0 mt-0 pb-0">
                     <div>
                         <table id="register-table" class="table table-bordered text-sm table-striped">
                             <thead>
@@ -29,7 +29,7 @@
                                     <td>{{ item.category }}</td>
                                     <td>{{ item.code }}</td>
                                     <td>{{ dzoArray[item.dzongkhagId] }}</td>
-                                    <td>{{ item.status==  1 ? "Active" : "Inactive"}}</td>
+                                    <td>{{ item.status==  1 || item.status==  'Active' ? "Active" : "Inactive"}}</td>
                                     <td>
                                         <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View</a>
                                     </td>
@@ -40,18 +40,18 @@
                 </div>
             </div>
         </div>
-    </section>  
-</div>     
+    </section>
+</div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             dt:'',
             data_list:[],
             levelArray:{},
             dzoArray:{},
-        } 
+        }
     },
     methods: {
         getLevel(uri = '/organization/getLevelInDropdown'){
@@ -60,7 +60,7 @@ export default {
                 let data = response.data.data;
                 //  alert(JSON.stringify(response.data[0].name))
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -69,7 +69,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzoArray[data[i].id] = data[i].name; 
+                    this.dzoArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -85,10 +85,10 @@ export default {
         this.loaddzongkhagList();
         this.dt =  $("#register-table").DataTable();
         axios.get('loadCommons/loadOrgList/userdzongkhagwise/allData')
-        .then((response) => {  
+        .then((response) => {
             this.data_list=response.data.data;
         })
-        .catch((error) =>{  
+        .catch((error) =>{
             console.log("Error:"+error);
         });
     },

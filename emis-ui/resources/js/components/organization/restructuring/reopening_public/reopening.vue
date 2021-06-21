@@ -11,8 +11,8 @@
                     <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('reopening')"><i class="fa fa-list"></i> Re-Open Organization</button>
                 </span>
             </div>
-            <div class="card-body">  
-                <router-view></router-view> 
+            <div class="card-body">
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -39,16 +39,16 @@ export default {
         //             $('#screenPermission').show();
         //             $('#existmessage').html('You have no access to this page.');
         //         }
-                
-        //     })    
-        //     .catch(errors => { 
+
+        //     })
+        //     .catch(errors => {
         //         console.log(errors)
         //     });
         // }
     },
 
     mounted(){
-        this.getScreenAccess();
+        // this.getScreenAccess();
     }
 }
 </script>

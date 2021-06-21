@@ -30,6 +30,7 @@ class ApplicationDetails extends Model
         'application_for',
         'application_type',
         'action_type',
+        'remarks',
         'status',
         'created_by',
         'created_at',

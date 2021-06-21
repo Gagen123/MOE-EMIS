@@ -96,6 +96,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         //staff Approval controller by gagen
         $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
             $router->post('/savePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@savePrincipalApproval']);
+            $router->post('/updatePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@updatePrincipalApproval']);
             $router->get('/loadPrincipalRecuritmentApplication/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalRecuritmentApplication']);
         });
 

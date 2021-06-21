@@ -18,93 +18,123 @@
                                 <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                                     <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Cid Number:</label>
-                                            <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid')"   :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid_passport" placeholder="Ref/cid No">
-                                            <has-error :form="form" field="cid"></has-error>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Name:</label>
-                                            <input type="text" readonly :value="form.name"  class="form-control" id="name"/>
+                                             <span class="text-blue text-bold">{{form.name}}</span>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Date of Birth:</label>
-                                            <input type="text" readonly :value="form.dob"  class="form-control" id="dob"/>
+                                            <span class="text-blue text-bold">{{form.dob}}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4">
+                                            <label>Dzongkhag:</label>
+                                             <span class="text-blue text-bold">{{form.dzongkhag}}</span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Dzongkhag:</label>
-                                            <input type="text" readonly :value="form.dzongkhag"  class="form-control" id="dzongkhag"/>
-                                        </div>
+                                        
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Gewog:</label>
-                                            <input type="text" readonly :value="form.gewog"  class="form-control" id="gewog"/>
+                                            <span class="text-blue text-bold">{{form.gewog}}</span>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Village:</label>
-                                            <input type="text" readonly :value="form.village"  class="form-control" id="village"/>
+                                            <span class="text-blue text-bold">{{form.village}}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4">
+                                            <label>Present Address:</label>
+                                             <span class="text-blue text-bold">{{form.paddress}}</span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Present Address:</label>
-                                             <input type="text" class="form-control" @change="removeerror('paddress')" :class="{ 'is-invalid': form.errors.has('paddress') }" id="paddress" v-model="form.paddress">
-                                            <has-error :form="form" field="paddress"></has-error>
-                                        </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Email Address:</label>
-                                            <input type="text" class="form-control" @change="removeerror('email')" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
-                                            <has-error :form="form" field="email"></has-error>
+                                            <span class="text-blue text-bold">{{form.email}}</span>
                                         </div>
                                         
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Contact Number:</label>
-                                            <input type="number" class="form-control" @change="removeerror('contact_number')" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
-                                            <has-error :form="form" field="contact_number"></has-error>
+                                            <span class="text-blue text-bold">{{form.contact_number}}</span>
                                         </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4">
+                                            <label>Applcation For:</label>
+                                            <span class="text-blue text-bold">{{form.application_for}}</span>
+                                        </div>
+                                         
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="mb-0">Upload the Required Documents</label>
-                                        </div>
-                                    </div><br>
-                                    <div class="form-group row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th>File Name</th>
-                                                        <th>Upload File</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                   
+                                    <div class="row pb-2" id="team_verificationAttachment">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <h5><u>Attachments</u></h5>
+                                        <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in attachments' :key="count+1">
+                                                    <template>
+                                                        <td>{{attach.user_defined_file_name}} </td>
+                                                        <td class="text-blue text-bold">  {{attach.name}}</td>
                                                         <td>
-                                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                            <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                         </td>
-                                                        <td>
-                                                            <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="5">
-                                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <h5><u>Any Supporting Documents and Attachments (if applicable)</u></h5>
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                    <td>
+                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Remarks</label>
+                                        <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                                        <span class="text-danger" id="remarks_err"></span>
+                                    </div>
+                                </div>
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="applyforrecuritment()">Submit </button>
+                                    <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i><span id="update_btn_level"></span> </button>
+                                    <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
+                                    <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
+                                    <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                                 </div>
                             </div>
                         </div>
@@ -119,6 +149,7 @@
 export default {
     data(){
         return{
+            attachments:'',
             form: new form({
                 name:'', 
                 dob:'',
@@ -128,6 +159,7 @@ export default {
                 paddress:'',
                 email:'',
                 contact_number:'',
+                remarks:'',
                 application_for:'Principal Recruitment',
                 application_type:'principal_recruitment',
                 action_type:'add', 
@@ -135,7 +167,9 @@ export default {
                 organization_type:'',
                 status:'Submitted',
                 applicationNo:'',
-
+                screen_id:'',
+                sequence:'',
+                application_no:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -145,6 +179,12 @@ export default {
         }
     },
     methods: {
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
@@ -171,23 +211,29 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-
         loadPrincipalRecuritmentApplication(appId,type){
             axios.get('staff/StaffApprovalController/loadPrincipalRecuritmentApplication/'+appId+'/'+type)
             .then((response) => {
-                // alert(JSON.stringify(response.data))
-                let data=response.data.data;
-                this.appicationDetails=data;
-                this.form.sequence=response.data.sequence;
-                this.form.screen_id=response.data.screen_id;
-                this.form.establishment_type=data.establishment_type;
-                this.isfeedingschool=data.change_details.proposedChange;
-                this.senSchool=data.change_details.proposedChange;
-               
+                // alert(JSON.stringify(response.data));
+                let data=response.data
+                this.form.name=data.data.name;
+                this.form.dob=data.data.DateOfBirth;
+                this.form.dzongkhag=data.data.dzongkhag;
+                this.form.gewog=data.data.gewog;
+                this.form.village=data.data.village;
+                this.form.paddress=data.data.presentAddress;
+                this.form.email=data.data.EmailAddress;
+                this.form.contact_number=data.data.contact_number;
+                this.form.application_for=data.data.application_for;
+                this.form.screen_id=data.screen_id;
+                this.form.application_type=data.application_type;
+                this.form.sequence=data.sequence; 
+                this.form.app_stage=data.sequence;
+                this.form.application_no=data.data.application_no;
+                this.attachments=data.data.attachments;
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
-
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
@@ -197,6 +243,76 @@ export default {
                 console.log("Error......"+error);
             });
 
+        },
+        shownexttab(nextclass){
+            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
+                let action=true;
+                if(nextclass=="reject" && this.form.remarks==""){
+                    $('#remarks_err').html('Please mention remarks');
+                    $('#remarks').addClass('is-invalid');
+                    action=false;
+                }
+                if(action){
+                    Swal.fire({
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            const config = {
+                                headers: {
+                                    'content-type': 'multipart/form-data'
+                                }
+                            }
+                            let formData = new FormData();
+                            formData.append('id', this.form.id);
+                            formData.append('actiontype', nextclass);
+                            formData.append('screen_id', this.form.screen_id);
+                            formData.append('sequence', this.form.sequence);
+                            formData.append('application_for', this.form.application_for);
+                            formData.append('application_type', this.form.application_type);
+                            formData.append('application_no',  this.form.application_no);
+                            formData.append('remarks', this.form.remarks);
+                            formData.append('ref_docs[]', this.form.ref_docs);
+                            for(let i=0;i<this.form.ref_docs.length;i++){
+                                formData.append('attachments[]', this.form.ref_docs[i].attach);
+                                formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                            }
+
+                            axios.post('staff/StaffApprovalController/updatePrincipalApproval', formData, config)
+                            .then((response) => {
+                                if(response!=""){
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Application details has been updated.'
+                                    });
+                                    this.$router.push({path:'/tasklist'});
+                                }
+                            })
+                            .catch((err) => {
+                                Swal.fire(
+                                    'error!',
+                                    'Not able to update this application details. Please contact system administrator.Error: '+err,
+                                    'error',
+                                );
+                                console.log("Error:"+err)
+                            })
+                        }
+                    });
+                }
+            }
+            else{
+                $('#tabhead >li >a').removeClass('active');
+                $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').addClass('active');
+                $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').removeClass('disabled');
+                $('.tab-content-details').hide();
+                $('#'+nextclass).show().removeClass('fade');
+            }
         },
 
         applyforrecuritment(){
