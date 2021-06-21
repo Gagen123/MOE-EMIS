@@ -129,7 +129,7 @@ class CommonController extends Controller{
 
     //Get Student List by orgId and OrgClassStream
     public function getStudentList($orgId,$orgClassStreamId){
-        // dd($orgClassStreamId);
+        dd($orgClassStreamId);
         $data=$this->apiService->listData('emis/students/getStudentList/'.$orgId.'/'.$orgClassStreamId);
         return $data;
     }

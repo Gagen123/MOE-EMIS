@@ -175,7 +175,7 @@
                 if(data.service_name.includes('Reopen')){ 
                     this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Recu')){ 
+                if(data.application_number.includes('Recu')){ 
                     this.$router.push({name:"view_principal_recuritment",params:{data:data,type:actiontype}});
                 }
             }   

@@ -469,20 +469,20 @@ const routes = [
     //principal recuritment
     { path: '/recuritment_index', component: require('./components/staff/recuritment_index.vue').default,
       children:[
-      { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/recuritment_list.vue').default },
-      { path: '/pricipal_recuritment_index',
-        component: require('./components/staff/recuritment/recuritment_index.vue').default ,
-          children: [
-            { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
-            { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
-            { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/create_principal_recuritment.vue').default },
-            { path: '/edit_principal_recuritment',name:'edit_principal_recuritment', component: require('./components/staff/recuritment/edit_principal_recuritment.vue').default },
-            { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
-            { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/princiapl_recuritment_acknowledgement.vue').default },
-          ]
-      },
-
+        { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/recuritment_list.vue').default },
+        { path: '/pricipal_recuritment_index',
+            component: require('./components/staff/recuritment/recuritment_index.vue').default ,
+            children: [
+                { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
+                { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
+                { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/create_principal_recuritment.vue').default },
+                { path: '/edit_principal_recuritment',name:'edit_principal_recuritment', component: require('./components/staff/recuritment/edit_principal_recuritment.vue').default },
+                { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/princiapl_recuritment_acknowledgement.vue').default },
+            ]
+        },
+        { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
       ]
+      
     },
     //Staff Training
     { path:'/create_inset',

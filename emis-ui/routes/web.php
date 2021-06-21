@@ -383,9 +383,8 @@ Route::prefix('staff')->group(function () {
 
     //staff approval by gagen
     Route::prefix('StaffApprovalController')->group(function (){
-    Route::post('/savePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'savePrincipalApproval'])->name('savePrincipalApproval');
-    Route::get('/loadQualification/{staff_id}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadQualification'])->name('loadQualification');
-    Route::get('/loadStaffQualification/{staff_id}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadStaffQualification'])->name('loadStaffQualification');
+        Route::post('/savePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'savePrincipalApproval'])->name('savePrincipalApproval');
+        Route::get('/loadPrincipalRecuritmentApplication/{appId}{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalRecuritmentApplication'])->name('loadPrincipalRecuritmentApplication');
     });
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');

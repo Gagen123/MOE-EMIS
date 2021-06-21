@@ -53,6 +53,14 @@ class StaffRecruitmentController extends Controller
             }
         }
     }
+    public function loadPrincipalRecuritmentApplication($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+           
+        }
+        return $this->successResponse($response_data);
+    }
 
     private function generateApplicationNo(){
         $last_seq=ApplicationSequence::where('service_name','Principal Recuritment')->first();
