@@ -148,12 +148,14 @@ class LoadOrganizationController extends Controller{
     }
 
     public function getOrgProfile($id=""){
+        //dd($id);
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=""){
             $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
             $response_data->orgName=$org_det->name;
             $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
         }
+        //dd($response_data);
         return $this->successResponse($response_data);
     }
 

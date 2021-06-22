@@ -139,11 +139,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Principal Contact No</td>
-                                                        <td>{{existing_details.code}}</td>
+                                                        <td>{{}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Vice/Assistant Principal Contact No</td>
-                                                        <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                                        <td>{{}}</td>
                                                     </tr>
                                                     <tr>
                                                     <td>Mail ID</td>
