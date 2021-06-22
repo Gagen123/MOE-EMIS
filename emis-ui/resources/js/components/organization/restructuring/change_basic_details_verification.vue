@@ -594,51 +594,7 @@ export default {
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
-                // if(data.app_verification==null){
-                //     $('#update_btn_level').html('Notify For Tentative Date');
-                //     this.form.update_type='tentative';
-                //     $('#updateBtn').show();
-                //     $('#verifyId').hide();
-                //     $('#approveId').hide();
-                // }
-                // else{
-                //     $('#tentativeAttachment').show();
-                //     this.form.verifying_agency=data.app_verification.verifyingAgency;
-                //     this.form.id=data.app_verification.id;
-                //     $('#verifying_agency').prop('readonly',true);
-                //     this.form.tentative_date=data.app_verification.tentativeDate;
-                //     $('#tentative_date').prop('readonly',true);
-                //     $('#verifier_team').show();
-                //     if(data.app_verification_team.length==0){
-                //         this.form.update_type='team_verification';
-                //         this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
-                //         $('#update_btn_level').html('Notify For team Verification');
-                //         this.showsearch=true;
-                //         $('#updateBtn').show();
-                //         $('#verifier_team').show();
-                //         $('#verifyId').hide();
-                //         $('#approveId').hide();
-                //     }
-                //     else{
-                //         if((data.establishment_type=="Private School" || data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
-                //             $('#verifyId').hide();
-                //             $('#approveId').hide();
-                //             $('#rejectbtn').hide();
-                //         }
-                //         this.showsearch=false;
-                //         this.form.update_type='final_verification';
-                //         this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
-                //         $('#removeBtn').hide();
-                //         $('#team_verificationAttachment').show();
-                //         for(let i=0;i<data.app_verification_team.length;i++){
-                //             this.form.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
-                //                 name:data.app_verification_team[i].name,
-                //                 cid:data.app_verification_team[i].cid,
-                //                 po_title:data.app_verification_team[i].po_title,
-                //             })
-                //         }
-                //     }
-                // }
+                
             })
             .catch((error) => {
                 console.log("Error......"+error);

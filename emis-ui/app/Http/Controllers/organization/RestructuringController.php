@@ -770,7 +770,7 @@ class RestructuringController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
-                            'saveapplication_number'     =>  $request->applicationNo,
+                            'saveapplication_number' =>  $request->applicationNo,
                             // 'remark'                 =>  $remarks[$index]
                         )
                     );

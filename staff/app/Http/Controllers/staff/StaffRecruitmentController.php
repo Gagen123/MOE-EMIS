@@ -38,8 +38,6 @@ class StaffRecruitmentController extends Controller
         ];
         $inserted_application_data = ApplicationDetails::create($application_details_data);
         $applicationDetailsId = $inserted_application_data->id;
-        return $application_details_data;
-
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $attach =[
@@ -49,9 +47,53 @@ class StaffRecruitmentController extends Controller
                     'name'                      =>  $att['original_name'],
                     'updoad_type'               =>  'Applicant',
                 ];
-                $doc = ApplicationAttachments::create($attach);
+                ApplicationAttachments::create($attach);
+            }
+        } 
+        return $application_details_data;
+
+        
+
+    }
+    public function loadPrincipalRecuritmentApplication($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        }
+        return $this->successResponse($response_data);
+    }
+
+    public function updatePrincipalApproval(Request $request){
+        $data =[
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id,
+        ];
+        ApplicationDetails::where('application_no', $request->application_number)->update($data);
+
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+           
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id,
+                    ];
+                    ApplicationAttachments::create($attach);
+                }
             }
         }
+        $application_details=ApplicationDetails::where('application_no',$request->application_number)->first();
+        return $application_details;
     }
 
     private function generateApplicationNo(){

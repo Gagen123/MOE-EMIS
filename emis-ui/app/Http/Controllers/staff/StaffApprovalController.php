@@ -38,9 +38,7 @@ class StaffApprovalController extends Controller
     }
 
     public function savePrincipalApproval(Request $request){
-        // dd($request['application_for']);
         $this->service_name = $request['application_for'];
-
         
         //File Upload
         $files = $request->attachments;
@@ -60,7 +58,7 @@ class StaffApprovalController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
-                            'saveapplication_number'     =>  $request->applicationNo,
+                            'saveapplication_number' =>  $request->applicationNo,
                         )
                     );
                 }
@@ -105,7 +103,6 @@ class StaffApprovalController extends Controller
                 return 'No Screen';
             }
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/savePrincipalApproval', $principalApproval_data);
-            // dd($response_data);
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
@@ -126,6 +123,108 @@ class StaffApprovalController extends Controller
                  $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             }
                  return $response_data;
+    }
+
+    public function loadPrincipalRecuritmentApplication($appNo="",$type=""){
+        
+        $update_data=[
+            'applicationNo'     =>  $appNo,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data);
+
+        // $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        $workflowstatus="";
+        $screen_id="";
+        $sequence="";
+        $workflowstatus="";
+        // dd(json_decode($updated_data)->data->screen_id);
+        $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
+        $PrincipalApprovalDetails = json_decode($this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalRecuritmentApplication/'.$appNo));
+        // dd($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
+        $service_name=$PrincipalApprovalDetails->data->application_for;//pulled category from existing organization details to match the data for verification
+        // dd($service_name,$workflowdet);
+        foreach($workflowdet as $work){
+            //check with screen name and then type of organization
+            // dd(strtolower($work->screenName),$work->Establishment_type,$service_name);
+            if($work->Sequence!=1 && $work->screenName==$service_name){
+                $workflowstatus=$work->Status_Name;
+                $screen_id=$work->SysSubModuleId;
+                $sequence=$work->Sequence;
+            }
+        }
+        if($PrincipalApprovalDetails!=null){
+            $PrincipalApprovalDetails->app_stage=$workflowstatus;
+            $PrincipalApprovalDetails->screen_id=$screen_id;
+            $PrincipalApprovalDetails->sequence=$sequence;
+        }
+        // dd($PrincipalApprovalDetails);
+        // $PrincipalApprovalDetails->app_stage=$workflowstatus;
+        return json_encode($PrincipalApprovalDetails);
+    }
+
+    public function updatePrincipalApproval(Request $request){
+        $org_status='Verified';
+        $work_status=$request->sequence;
+        if($request->actiontype=="reject"){
+            $work_status=0;
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
+        }
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$request->application_for,
+            'application_number'=>$request->application_no,
+            'screen_id'         =>$request->screen_id,//pulled while loading details for verification
+            'status_id'         =>$work_status,//pulled while loading details for verification
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'ChangeVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number' =>  $request->application_no,
+                        )
+                    );
+                }
+            }
+        }
+
+        $data =[
+            'status'                        =>   $org_status,
+            'application_number'            =>   $request->application_no,
+            'remarks'                       =>   $request->remarks,
+            'attachment_details'            =>   $attachment_details,
+            'user_id'                       =>   $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/updatePrincipalApproval', $data);
+        return ($response_data);
     }
     
     private function validatePrincipalRecuritmentApprovalFields($request){
