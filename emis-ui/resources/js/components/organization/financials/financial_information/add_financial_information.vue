@@ -120,15 +120,11 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        
     },
     created() {
     this.loadtypeList();
-   
-    
        
-  },
+    },
     
 }
 </script>
