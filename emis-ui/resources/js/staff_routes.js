@@ -466,26 +466,38 @@ const routes = [
         ]
     },
 
-    //Staff Recuritment by gagen
+    // Recuritment by gagen
     //principal recuritment
     { path: '/recuritment_index', component: require('./components/staff/recuritment_index.vue').default,
       children:[
-        { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/recuritment_list.vue').default },
+        { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/principal_recuritment/recuritment_list.vue').default },
+        //principal recuritment
         { path: '/pricipal_recuritment_index',
-            component: require('./components/staff/recuritment/recuritment_index.vue').default ,
+            component: require('./components/staff/recuritment/principal_recuritment/recuritment_index.vue').default ,
             children: [
-                { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
-                { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
-                { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/create_principal_recuritment.vue').default },
-                { path: '/edit_principal_recuritment',name:'edit_principal_recuritment', component: require('./components/staff/recuritment/edit_principal_recuritment.vue').default },
-                { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/princiapl_recuritment_acknowledgement.vue').default },
+                { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/principal_recuritment/list_principal_recuritment.vue').default },
+                { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/principal_recuritment/list_principal_recuritment.vue').default },
+                { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/principal_recuritment/create_principal_recuritment.vue').default },
+                { path: '/edit_principal_recuritment',name:'edit_principal_recuritment', component: require('./components/staff/recuritment/principal_recuritment/edit_principal_recuritment.vue').default },
+                { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/principal_recuritment/princiapl_recuritment_acknowledgement.vue').default },
             ]
         },
-       
+        //Expert teacher recuritment
+        { path: '/expert_recuritment_index',
+            component: require('./components/staff/recuritment/expert_recuritment/recuritment_index.vue').default ,
+            children: [
+                { path: '/',name:'expert_recuritment_index', component: require('./components/staff/recuritment/expert_recuritment/list_expert_recuritment.vue').default },
+                { path: '/list_expert_recuritment',name:'list_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/list_expert_recuritment.vue').default },
+                { path: '/create_expert_recuritment',name:'create_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/create_expert_recuritment.vue').default },
+                { path: '/edit_expert_recuritment',name:'edit_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/edit_expert_recuritment.vue').default },
+                { path: '/expert_recuritment_acknowledgement', name:'expert_recuritment_acknowledgement', component: require('./components/staff/recuritment/expert_recuritment/expert_recuritment_acknowledgement.vue').default },
+            ]
+        },
       ]
-      
     },
+    { path: '/open_expatriate_verification',name:'open_expatriate_verification', component: require('./components/staff/recuritment/expatriate_verification.vue').default },
     { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
+    
     //Staff Training
     { path:'/create_inset',
         component: require('./components/staff/training/inset_index.vue').default,
@@ -532,6 +544,7 @@ const routes = [
                     { path: '/edit_management_body',name:'edit_management_body',  component: require('./components/staff/management/create_body/edit_management_body.vue').default },
                 ],
             },
+            
 
             { path:'/management_meeting',
                 component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,

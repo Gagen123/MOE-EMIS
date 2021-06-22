@@ -93,10 +93,17 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
         });
 
-        //staff Approval controller by gagen
+        //principal recuritment Approval controller by gagen
         $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
             $router->post('/savePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@savePrincipalApproval']);
             $router->post('/updatePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@updatePrincipalApproval']);
+            $router->get('/loadPrincipalRecuritmentApplication/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalRecuritmentApplication']);
+        });
+
+         //Expatriate recuritment Approval controller by gagen
+        $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
+            $router->post('/saveExpatriateRecuritment', ['uses' => 'staff\StaffRecruitmentController@saveExpatriateRecuritment']);
+            $router->post('/UpdateExpatriateRecuritment', ['uses' => 'staff\StaffRecruitmentController@UpdateExpatriateRecuritment']);
             $router->get('/loadPrincipalRecuritmentApplication/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalRecuritmentApplication']);
         });
 
