@@ -59,42 +59,39 @@
                                     <span class="text-blue text-bold" id="vilageId"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Location:</label>
-                                    <span class="text-blue text-bold">{{organization_details.locationId}}</span>
-                                </div>
-                            </div>
                             <hr>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Current Proprietor</u></label>
+                            <div v-if="proprietor_details!=''">
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label><u>Current Proprietor</u></label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>CID:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.cid}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Name:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.fullName}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Mobile No:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.mobileNo}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Phone No:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.phoneNo}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Email:</label>
+                                        <span class="text-blue text-bold">{{proprietor_details.email}}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>CID:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.cid}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Name:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.fullName}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Mobile No:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.mobileNo}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Phone No:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.phoneNo}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Email:</label>
-                                    <span class="text-blue text-bold">{{proprietor_details.email}}</span>
-                                </div>
-                            </div>
+
                             <hr>
                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -133,6 +130,39 @@
                                     <has-error :form="form" field="proprietorEmail"></has-error>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>File Name</th>
+                                                <th>Upload File</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                <td>
+                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                </td>
+                                                <td>
+                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                             </form>
                             <hr>
                             <div class="row form-group fa-pull-right">
@@ -177,11 +207,36 @@ export default {
             streamArray:{},
             form: new form({
                 organizationId:'',org_name:'',proprietorName:'',proprietorCid:' ', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'',
-                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', status:'Submitted',organization_type:'',
+                application_type:'proprietor_change', application_for:'Change in Proprietor', action_type:'add', organization_type:'',
+                status:'Submitted',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
         /**
          * method to remove error
          */
@@ -231,7 +286,34 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('proprietorName', this.form.proprietorName);
+                        formData.append('proprietorCid', this.form.proprietorCid);
+                        formData.append('proprietorPhone', this.form.proprietorPhone);
+                        formData.append('proprietorMobile', this.form.proprietorMobile);
+                        formData.append('proprietorEmail', this.form.proprietorEmail);
+                        formData.append('proposedName', this.form.proposedName);
+                        formData.append('initiatedBy', this.form.initiatedBy);
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('status', this.form.status);
+                        formData.append('organization_type', this.form.organization_type);
+
+                        axios.post('organization/saveChangeBasicDetails', formData, config)
+                        //this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -251,8 +333,9 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            this.form.errors.errors = err.response.data.errors;
                         })
+
                     }
                 });
             }
@@ -300,7 +383,13 @@ export default {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.organization_details=response.data.data;
                 this.form.org_name=response.data.data.name;
-                this.proprietor_details=response.data.data.proprietor;
+                if(response.data.data.proprietor==null){
+                    this.proprietor_details="";
+                }
+                else{
+                    this.proprietor_details=response.data.data.proprietor;
+                }
+
                 this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
@@ -327,7 +416,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                $('#gewogid').val(this.gewogArray[gewogId]);
+                $('#gewogid').html(this.gewogArray[gewogId]);
             });
         },
 
@@ -339,7 +428,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.villageArray[data[i].id] = data[i].name;
                 }
-                $('#vilageId').val(this.villageArray[vil_id])
+                $('#vilageId').html(this.villageArray[vil_id])
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -364,6 +453,19 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
     },
 
@@ -383,7 +485,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
+        this.getAttachmentType('ForTransaction__Application_for_Proprietor_Change');
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -391,6 +493,7 @@ export default {
                 this.form.organizationId=data['Agency_Code'];
                 this.getorgdetials(data['Agency_Code']);
                 $('#organizationId').val(data['Agency_Code']).trigger('change');
+                $('#organizationId').prop('disabled',true);
             }
         })
         .catch(errors => {

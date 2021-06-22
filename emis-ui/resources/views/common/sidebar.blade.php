@@ -280,6 +280,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="recuritment">
+                        <router-link to="/recuritment_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Staff Approval
+                            </p>
+                        </router-link>
+                    </li>
                 </ul>
             </li>
 

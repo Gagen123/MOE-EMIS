@@ -1,10 +1,10 @@
 const routes = [
     //Academics Masters Route
     { path: '/academic-master', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
-        children: 
+        children:
         [
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
-            
+
             // { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
             //     children: [
             //         { path: '', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
@@ -57,8 +57,8 @@ const routes = [
                     { path: '/create-subject-assessment-area', name: 'aca_subject_assessment_area', component: require('./components/masters/academics_masters/class_subject_assessment_area/create_class_subject_assessment_area.vue').default },
                 ]
             },
-         
-            
+
+
         ]
     },
     //Academics Transaction Route
@@ -112,13 +112,13 @@ const routes = [
 
             ]
         },
-        
+
 
     ]
 }
 
 
 
-   
+
 ];
 export default routes

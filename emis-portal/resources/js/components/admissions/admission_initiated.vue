@@ -398,7 +398,8 @@
         },
         created() {
             // let cid=this.$route.query.cid;
-            this.getstudentPersonalDetails(this.$route.query.cid);
+            alert(this.$route.query.data);
+            this.getstudentPersonalDetails(this.$route.query.data);
             this.getdzongkhagList();
             this.getclassList();
             this.getstreamList();

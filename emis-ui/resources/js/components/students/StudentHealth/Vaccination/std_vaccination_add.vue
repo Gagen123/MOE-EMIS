@@ -18,6 +18,14 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Dose:</label><br>
+                        <label><input  type="radio" v-model="student_form.dose" value="1" tabindex=""/> 1st</label>
+                        <label class="pl-2"><input  type="radio" v-model="student_form.dose" value="2" tabindex=""/> 2nd</label>
+                        <label class="pl-2"><input  type="radio" v-model="student_form.dose" value="3" tabindex=""/> 3rd</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Class:</label>
                         <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
                             <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
@@ -51,23 +59,17 @@
                                     <th>Vaccinated
                                         <input type="checkbox" name="vaccinated" class="form-control-input" id="vaccinatedid" @change="checkall('vaccinatedcheck','vaccinatedid')"/>
                                     </th>
-                                    <th>Dose</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
                                 <tr v-for="(student, index) in studentList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> {{student.CmnSexId}} </td>
+                                    <td> {{genderArray[student.CmnSexId]}} </td>
                                         <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="checkbox" name="vaccinated" class="form-control-input vaccinatedcheck" v-model="student_form.std_vaccinated[index]" :value="student.id"/>
-                                    </td>
-                                    <td>
-                                        <label><input  type="radio" v-model="student_form.dose[index]" value="1" tabindex=""/> 1</label>
-                                        <label><input  type="radio" v-model="student_form.dose[index]" value="2" tabindex=""/> 2</label>
-                                        <label><input  type="radio" v-model="student_form.dose[index]" value="3" tabindex=""/> 3</label>
+                                        <input type="checkbox" name="vaccinated" class="form-control-input vaccinatedcheck" v-model="student_form.std_vaccinated[index]" :value="student.std_student_id"/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -88,12 +90,14 @@ export default {
    data(){
         return{
             dt:'',
+            genderList:[],
             vaccineList:[],
             classList:[],
             sectionList:[],
             streamList:[],
             byClass:[],
             studentList:[],
+            genderArray:{},
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
@@ -104,7 +108,7 @@ export default {
                 date: '',
                 std_id: [],
                 std_vaccinated:[],
-                dose:[]
+                dose:'1'
             }),
         }
     },
@@ -120,6 +124,18 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.genderArray[data[i].id] = data[i].name;
+                }
+            })
         },
 
         /**
@@ -242,9 +258,9 @@ export default {
                 this.student_form.std_stream=$('#std_stream').val();
             }
             if(id=="std_section"){
-                axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
+                axios.get('/students/studentListByGender/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val()+'__'+$('#vaccination').val())
                     .then((response) => {
-                        this.studentList = response.data;  
+                        this.studentList = response.data.data;  
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
@@ -291,6 +307,7 @@ export default {
         });
 
         this.loadClassList();
+        this.loadGenderArrayList();
         this.loadActiveVaccineList();
         // this.loadSectionList();
         // this.loadStreamList();

@@ -36,7 +36,7 @@
                                 <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
                                 <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                     <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.agencyName }}</option>
                                 </select>
                                 <has-error :form="form" field="organizer"></has-error>
                             </div>

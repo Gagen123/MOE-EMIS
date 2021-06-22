@@ -1,5 +1,5 @@
 const routes = [
-    //STAFF Masters 
+    //STAFF Masters
     { path: '/staff_link',
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
         children:[
@@ -22,15 +22,16 @@ const routes = [
                     { path: '/edit_subject_area', name:'edit_subject_area', component: require('./components/masters/staff_masters/subject_area/edit_subject_area.vue').default },
                 ],
             },
-            { path: '/teaching_subjects',
-                component: require('./components/masters/staff_masters/subject/marital_status_index.vue').default,
-                children:[
-                    { path: '/',name:'teaching_subjects', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
-                    { path: '/list_subject',name:'list_subject', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
-                    { path: '/create_subject',name:'create_subject', component: require('./components/masters/staff_masters/subject/create_subject.vue').default },
-                    { path: '/edit_subject', name:'edit_subject', component: require('./components/masters/staff_masters/subject/edit_subject.vue').default },
-                ],
-            },
+            //the routes are copied to academics need to change
+            // { path: '/teaching_subjects',
+            //     component: require('./components/masters/staff_masters/subject/marital_status_index.vue').default,
+            //     children:[
+            //         { path: '/',name:'teaching_subjects', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
+            //         { path: '/list_subject',name:'list_subject', component: require('./components/masters/staff_masters/subject/list_subject.vue').default },
+            //         { path: '/create_subject',name:'create_subject', component: require('./components/masters/staff_masters/subject/create_subject.vue').default },
+            //         { path: '/edit_subject', name:'edit_subject', component: require('./components/masters/staff_masters/subject/edit_subject.vue').default },
+            //     ],
+            // },
             { path: '/currier_stage',
                 component: require('./components/masters/staff_masters/currier_stage/currier_stage_index.vue').default,
                 children:[
@@ -208,7 +209,7 @@ const routes = [
         component: require('./components/masters/staff_leave_masters/staff_leave_index.vue').default,
         children:[
             {path: '/',name:'leave_index', component: require('./components/masters/staff_leave_masters/list_staff_leave_list.vue').default },
-            
+
             { path: '/leave_type_index',
                 component: require('./components/masters/staff_leave_masters/leave_type/staff_leave_type_index.vue').default,
                 children:[
@@ -228,7 +229,7 @@ const routes = [
                     { path: '/edit_leave_config', name:'edit_leave_config', component: require('./components/masters/staff_leave_masters/leave_config/edit_leave_config.vue').default },
                 ],
             },
-            
+
         ]
     },
 
@@ -465,11 +466,30 @@ const routes = [
         ]
     },
 
+    //Staff Recuritment by gagen
+    //principal recuritment
+    { path: '/recuritment_index', component: require('./components/staff/recuritment_index.vue').default,
+      children:[
+        { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/recuritment_list.vue').default },
+        { path: '/pricipal_recuritment_index',
+            component: require('./components/staff/recuritment/recuritment_index.vue').default ,
+            children: [
+                { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
+                { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
+                { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/create_principal_recuritment.vue').default },
+                { path: '/edit_principal_recuritment',name:'edit_principal_recuritment', component: require('./components/staff/recuritment/edit_principal_recuritment.vue').default },
+                { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/princiapl_recuritment_acknowledgement.vue').default },
+            ]
+        },
+       
+      ]
+      
+    },
+    { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
     //Staff Training
     { path:'/create_inset',
         component: require('./components/staff/training/inset_index.vue').default,
         children:[
-            { path: '/',name:'create_inset', component: require('./components/staff/training/inset_list.vue').default },
             { path: '/',name:'create_inset', component: require('./components/staff/training/inset_list.vue').default },
             { path: '/programme_index',
                 component: require('./components/staff/training/create_programme/programme_index.vue').default,
@@ -489,6 +509,8 @@ const routes = [
                     { path: '/create_nomination_selection',name:'create_nomination_selection',  component: require('./components/staff/training/nomination_selection/create_nomination_selection.vue').default },
                     { path: '/edit_nomination_selection',name:'edit_nomination_selection',  component: require('./components/staff/training/nomination_selection/edit_nomination_selection.vue').default },
                     { path: '/verify_nomination_selection',name:'verify_nomination_selection',  component: require('./components/staff/training/nomination_selection/verify_nomination_selection.vue').default },
+                    { path: '/acknowledgement_for_nomination', name:'acknowledgement_for_nomination', component: require('./components/staff/acknowledgement_for_errors.vue').default },
+                    { path: '/acknowledgement_for_nomination_success', name:'acknowledgement_for_nomination_success', component: require('./components/staff/acknowledgement.vue').default },
                 ],
             },
 
@@ -532,7 +554,7 @@ const routes = [
         children:[
             { path: '/', name:'leave_service_index', component: require('./components/staff/leave_services/leave_list.vue').default },
 
-            { path: '/apply_leave', 
+            { path: '/apply_leave',
                 component: require('./components/staff/leave_services/apply_leave/leave_index.vue').default,
                 children:[
                     { path: '/', name:'apply_leave',  component: require('./components/staff/leave_services/apply_leave/list_leave.vue').default },
@@ -552,7 +574,7 @@ const routes = [
         children:[
             { path: '/', name:'staff_leadership_selection_index', component: require('./components/staff/leadership/leadership_list.vue').default },
 
-            { path: '/nomination_index', 
+            { path: '/nomination_index',
                 component: require('./components/staff/leadership/leadership_nomination/leadership_nomination_index.vue').default,
                 children:[
                     { path: '/', name:'nomination_index',  component: require('./components/staff/leadership/leadership_nomination/list_leadership_nomination.vue').default },
@@ -561,7 +583,7 @@ const routes = [
                     { path: '/edit_leadership_nomination', name:'edit_leadership_nomination', component: require('./components/staff/leadership/leadership_nomination/edit_leadership_nomination.vue').default },
                 ],
             },
-            { path: '/leadership_feedback', 
+            { path: '/leadership_feedback',
                 component: require('./components/staff/leadership/feedback/feedback_index.vue').default,
                 children:[
                     { path: '/', name:'leadership_feedback',  component: require('./components/staff/leadership/feedback/feedback_list.vue').default },
@@ -569,7 +591,7 @@ const routes = [
                     { path: '/open_feedback', name:'open_feedback',  component: require('./components/staff/leadership/feedback/open_feedback.vue').default },
                 ],
             },
-            
+
         ]
     },
     //Staff Services
@@ -614,11 +636,11 @@ const routes = [
                     { path: '/edit_attendance', name:'edit_attendance', component: require('./components/staff/staff_services/attendance/edit_attendance.vue').default },
                 ],
             },
-            
-            
+
+
         ]
-    },    
-    
+    },
+
 
 ];
 export default routes

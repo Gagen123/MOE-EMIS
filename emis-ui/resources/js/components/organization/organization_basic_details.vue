@@ -10,7 +10,7 @@
                     <div class="card card-success card-outline">
                         <div class="card-body">
                             <div class="tab-pane">
-                                <form class="form-horizontal">
+                                <div class="form-horizontal">
                                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
                                         <label class="mb-0"><i><u>Basic Details</u></i></label>
                                     </div>
@@ -24,7 +24,7 @@
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>RCSC/Zest Code:</label>
                                             <input type="text" class="form-control" v-model="form.zestAgencyCode" :class="{ 'is-invalid': form.errors.has('zestAgencyCode') }" >
-                                        </div>  
+                                        </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Organization code:</label>
                                             <input type="text" readonly class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" >
@@ -47,7 +47,7 @@
                                                     <label>Official Email:</label>
                                                     <input type="text" class="form-control" v-model="form.officialEmail" :class="{ 'is-invalid': form.errors.has('officialEmail') }" >
                                                     <has-error :form="form" field="officialEmail"></has-error>
-                                                </div>  
+                                                </div>
                                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                                                     <label>Official Website Link:</label>
                                                     <input type="text" class="form-control" v-model="form.officialWebsite" :class="{ 'is-invalid': form.errors.has('officialWebsite') }" >
@@ -66,14 +66,14 @@
                                             <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
 </div>
 </template>
 <script>
@@ -94,12 +94,12 @@
                     code:'',
                     mofCode:'',
                     zestAgencyCode:'',
-                    contactNo:'', 
+                    contactNo:'',
                     officialWebsite:'',
                     officialEmail:'',
                     facebookLink:'',
                     fields_for:'organization'
-                }) 
+                })
             }
         },
         methods:{
@@ -160,9 +160,9 @@
                     }
                     this.count=data.length;
                     this.form.users=contactDetails;
-                    
+
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     console.log("Error: "+error);
                 });
             },
@@ -175,7 +175,6 @@
                 this.form.post('organization/updateBasicDetails')
                 .then((response) => {
                     this.loadexsitingDetails();
-                    alert(response);
                 })
                 .catch(function (error) {
                     console.log('error: '+error);
@@ -193,14 +192,14 @@
                 .then(response => {
                     let data = response.data;
                     for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
+                        this.levelArray[data[i].id] = data[i].name;
                     }
                 });
             },
             getLat: function(){
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(this.showPosition);
-                } 
+                }
             },
             showPosition(position){
                 $('#latitude').val(position.coords.latitude);
@@ -236,12 +235,12 @@
             },
             addMore: function(){
                 this.count++;
-                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})    
-            }, 
-            remove(index){    
+                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})
+            },
+            remove(index){
                 if(this.form.users.length>1){
                   this.count--;
-                  this.form.users.splice(index,1); 
+                  this.form.users.splice(index,1);
                 }
             },
             loadexsitingDetails(){
@@ -250,12 +249,12 @@
                     let data = response.data.data;
                     this.form.org_id=data['Agency_Code'];
                     this.getorgProfile(data['Agency_Code']);
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
                 });
             }
-            
+
         },
         mounted(){
             this.getContactTypeDropdown();

@@ -8,10 +8,10 @@
                             <th>Sl#</th>
                             <th>Year</th>
                             <th>From Date</th>
-                            <th>To Date</th> 
-                            <th>Action</th>                     
+                            <th>To Date</th>
+                            <th>Action</th>
                         </tr>
-                    </thead> 
+                    </thead>
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
@@ -32,11 +32,12 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             totle:0,
+            transfer_list:[],
             transfer_window_list:[],
             dt:''
-        } 
+        }
     },
     methods: {
         showedit(staff){
@@ -44,11 +45,11 @@ export default {
 		},
         loadtransferwindow(){
             axios.get('staff/loadTransferList')
-            .then((response) => {  
+            .then((response) => {
                 this.transfer_window_list =  response.data.data;
              })
-            .catch((error) => {  
-                console.log("Error."+error);
+            .catch((error) => {
+                console.log("Error in retrieving ."+error);
             });
         },
     },
@@ -64,7 +65,7 @@ export default {
             });
         }
     },
-    
+
 }
 </script>
 

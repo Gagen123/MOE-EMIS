@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                          <h5 class="bg-gradient-danger">Sorry!</h5>
-                        <div>You are not accessible to this page! Only private school and private eccd can access here</div>
+                        <div>You are not accessible to this page! Only DEO/TEO can access here</div>
                     </div>
                 </div>
             </div>

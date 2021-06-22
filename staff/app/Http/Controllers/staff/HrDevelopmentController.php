@@ -20,7 +20,7 @@ class HrDevelopmentController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    
+
     public function saveprogramDetails(Request $request){
         $response_data=[];
         if($request->id==""){
@@ -119,7 +119,7 @@ class HrDevelopmentController extends Controller{
             );
         }
         if($request->status=="Created"){
-            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','program_details')"); 
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','program_details')");
             $request_data=array_merge($request_data,
                 array('updated_by'            =>  $request->user_id,
                       'updated_at'            =>  date('Y-m-d h:i:s')
@@ -140,7 +140,7 @@ class HrDevelopmentController extends Controller{
                     $doc = DocumentDetails::create($doc_data);
                 }
             }
-           
+
         }
         else{
             $act_det = HrDevelopment::where ('id', $request->id)->first();
@@ -162,20 +162,20 @@ class HrDevelopmentController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadDraftDetails($user_id=""){
         return $this->successResponse(HrDevelopment::where('created_by',$user_id)->where('status','Pending')->first());
     }
     public function loadDocuments($id=""){
         return $this->successResponse(DocumentDetails::where('parent_id',$id)->get());
     }
-    
+
     public function deleteFile($id=""){
         $attachment = DocumentDetails::findOrFail($id);
         $attachment->delete();
         return $this->successResponse($attachment);
     }
-    
+
     public function saveprogramFinalDetails(Request $request){
         $rules = [
             'nomination_start_date'             =>  'required | date',
@@ -183,7 +183,7 @@ class HrDevelopmentController extends Controller{
             'nature_of_participant'             =>  'required',
             // 'target_group'                      =>  'required',
             'role_action_mapp'                  =>  'required',
-            
+
         ];
         $customMessages = [
             'nomination_start_date.required'              => 'Please select nomination start date',
@@ -221,7 +221,7 @@ class HrDevelopmentController extends Controller{
         $response_data=$act_det->save();
         $workflow=HrWorkflow::where('program_id',$request->id)->get();
         if(sizeof($workflow)>0){
-            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')"); 
+            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')");
             HrWorkflow::where('program_id',$request->id)->delete();
         }
         foreach ($request->role_action_mapp as $i=> $rol){
@@ -235,7 +235,7 @@ class HrDevelopmentController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadprogramDetails($param=""){
         // $response_data="";
         // if(strpos($param,'SSS')){
@@ -253,14 +253,14 @@ class HrDevelopmentController extends Controller{
         $response_data=HrDevelopment::all();
         return $this->successResponse($response_data);
     }
-    
+
     public function loadDetails($id=""){
         parse_str($id,$param_array);
         $app_det=ProgramApplication::where('program_id',$param_array['id'])->where('org_id',$param_array['org'])->where('dzo_id',$param_array['dzongkhag'])->first();
         if($app_det!=null && $app_det!=""){
             $hrdev= $app_det;
         }
-        else{ 
+        else{
             $hrdev=HrDevelopment::where('id',$param_array['id'])->where('status','Created')->first();
             if($hrdev!="" && $hrdev!=null){
                 $hrdev->workflow=HrWorkflow::where('program_id',$param_array['id'])->orderBy('sequence')->get();
@@ -268,7 +268,7 @@ class HrDevelopmentController extends Controller{
         }
         return $this->successResponse($hrdev);
     }
-    
+
     public function loadProgramDetailsForNomination($param=""){
         $param = rtrim($param, ", ");
         $param=explode(',',$param);
@@ -291,7 +291,7 @@ class HrDevelopmentController extends Controller{
         // }
         return $this->successResponse($work_details);
     }
-    
+
     public function saveParticipant(Request $request){
         $rules = [
             'programId'             =>  'required',
@@ -353,7 +353,7 @@ class HrDevelopmentController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function getParticipantDetails($param=""){
         parse_str($param,$param_array);
         if($param_array['action_type']=="nomination"){
@@ -366,7 +366,7 @@ class HrDevelopmentController extends Controller{
             $response_details=Participant::where('program_id',explode('SSS',$param_array['program_id'])[0])->where('org_id',explode('SSS',$param_array['program_id'])[1])->get();
             foreach($response_details as $part){
                 $part->document=DocumentDetails::where('parent_id',$part->id)->get();
-            } 
+            }
         }
         else if($param_array['action_type']=="orgdetails"){
             if($param_array['accessLevel']=="Ministry"){
@@ -378,19 +378,19 @@ class HrDevelopmentController extends Controller{
         }
         return $this->successResponse($response_details);
     }
-    
+
     public function getParticipantDetailsById($id=""){
         $response_details=Participant::where('id',$id)->first();
         $response_details->document=DocumentDetails::where('parent_id',$response_details->id)->get();
         return $this->successResponse($response_details);
     }
-    
+
     public function deleteParticipant($id=""){
         $response_data = Participant::findOrFail($id);
         $response_data->delete();
         return $this->successResponse($response_data);
     }
-    
+
     public function submitParticipants(Request $request){
         $app_det=ProgramApplication::where('program_id',$request->programId)->where('org_id',$request->org_id)->where('dzo_id',$request->dzo_id)->first();
         if($app_det==""){
@@ -400,14 +400,14 @@ class HrDevelopmentController extends Controller{
                 $app_details = [
                     'service_name'                  =>  'Hr Development',
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::create($app_details);
             }
             else{
                 $last_seq=$last_seq->last_sequence+1;
                 $app_details = [
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::where('service_name', 'Hr Development')->update($app_details);
             }
             $appNo='';
@@ -436,11 +436,11 @@ class HrDevelopmentController extends Controller{
             $response_data= ProgramApplication::create($request_data);
         }
         else{
-            $response_data="Already Submitted"; 
+            $response_data="Already Submitted";
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function updateParticipant(Request $request){
         $response_data="";
         if(!$request->updatedata==null){
@@ -460,7 +460,7 @@ class HrDevelopmentController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function updateapplication(Request $request){
         $response_data="";
         $status="";

@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="form-group row">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Closed School Details</h3>
@@ -43,12 +43,6 @@
                                         <span class="text-blue text-bold">{{levelArray[data.levelId]}}</span>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{ data.category == 'public_school' ? "Public School" :  "Private & Other"}}</span>
-                                    </div>
-                                </div>
 
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:</label>
@@ -57,12 +51,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
-                                    </div>
-                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:</label>
@@ -73,13 +61,13 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.gewog}}</span>
+                                        <span class="text-blue text-bold" id="gewogName">{{data.gewog}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name"> </span>
+                                        <span class="text-blue text-bold" id="chewogName"> </span>
                                     </div>
                                 </div>
                                 <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
@@ -94,14 +82,14 @@
                             </form>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                </div> -->
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Proposed Details</h3>
                         </div>
                         <div class="card-body">
-                            <form class="form-horizontal">
+                            <div class="form-horizontal">
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
@@ -112,20 +100,11 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
+                                        <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(''),remove_error('level1')">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                         <has-error :form="form" field="level1"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
-                                        <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -147,31 +126,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </div>
-                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
@@ -225,25 +179,62 @@
 
                                                 </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                                    <input type="checkbox" v-model="form.stream" name="streams" :id="item.classId+'_'+item.streamId" :value="item.classId+'##'+item.streamId">
                                                 </td>
                                                 <td v-else>
-                                                    <input type="checkbox" v-model="form.class" :value="item.classId">
-
+                                                    <input type="checkbox" v-model="form.class" name="classes" :id="item.classId" :value="item.classId">
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </form>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="mb-0">Upload the Required Documents</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                    <td>
+                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row form-group fa-pull-right">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row form-group fa-pull-right">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -263,11 +254,13 @@ export default {
             locationList1:[],
             levelList1:[],
             dzongkhagList:[],
-            dzongkhagArray:{},
             dzongkhagList1:[],
+            dzongkhagArray:{},
             gewog_list:[],
+            gewogArray:{},
             villageList:[],
             gewog_list1:[],
+            villageArray:{},
             villageList1:[],
             classList:[],
             streamList:[],
@@ -279,13 +272,36 @@ export default {
             form: new form({
                 id: '',parent_id:'',name:'',
                 name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
-                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[]
-
+                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
+                application_for:'Re-Opening',action_type:'add',status:'Submitted',application_type:'re_opening',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
-
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
         /**
          * method to remove error
          */
@@ -340,7 +356,7 @@ export default {
         /**
          * method to get other category if the category is 'ECCD'
          */
-        getCategory1(){
+        getCategory1(clas_strm){
             let level = $('#level1 option:selected').text();
             $('.strm_clas').hide();
             // let level = text;
@@ -360,6 +376,16 @@ export default {
             axios.get('/masters/loadClassStreamMapping/school_'+level)
               .then(response => {
                 this.classStreamList = response.data.data;
+                if(clas_strm!=""){
+                    for(let i=0;i<clas_strm.length;i++){
+                        if(clas_strm[i].streamId!=null && clas_strm[i].streamId!=""){
+                            $('#'+clas_strm[i].classId+'_'+clas_strm[i].streamId).prop('checked',true);
+                        }
+                        else{
+                            $('#'+clas_strm[i].classId).prop('checked',true);
+                        }
+                    }
+                }
             });
         },
 
@@ -418,7 +444,7 @@ export default {
         /**
          * method to get gewog list
          */
-        async getgewoglist(id){
+        async getgewoglist(id,gewogId){
             let dzoId=$('#dzongkhag').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -426,8 +452,13 @@ export default {
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.gewog_list = data.data.data;
+                let data = response.data.data;
+                this.gewog_list = data;
+                 for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name;
+                }
+                // $('#gewogName').html(this.gewogArray[gewogId]);
+
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -437,7 +468,7 @@ export default {
         /**
          * method to get gewog1 list in dropdown
          */
-        async getgewoglist1(id){
+        async getgewoglist1(id,gewogId){
             let dzoId=$('#dzongkhag1').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -447,6 +478,8 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list1 = data.data.data;
+                this.form.gewog1=gewogId;
+                $('#gewog1').val(gewogId).trigger('change');
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -455,7 +488,7 @@ export default {
         /**
          * method to get village list
          */
-        async getvillagelist(id){
+        async getvillagelist(id,villageId){
             let gewogId=$('#gewog').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -463,8 +496,12 @@ export default {
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
+                let data = response.data.data;
+                this.villageList = data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name;
+                }
+                $('#chewogName').html(this.villageArray[villageId]);
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -474,19 +511,19 @@ export default {
         /**
          * method to get village1 list
          */
-        async getvillagelist1(id){
+        async getvillagelist1(id,chiwaog){
             let gewogId=$('#gewog1').val();
-            if(id!="" && gewogId==null){
-                gewogId=id;
-            }
+            gewogId=id;
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
             axios.get(uri)
             .then(response =>{
                 let data = response;
                 this.villageList1 = data.data.data;
+                this.form.chiwog1=chiwaog;
+                $('#chiwog1').val(chiwaog).trigger('change');
             })
             .catch(function (error){
-                console.log("Error:"+error)
+                console.log("Error while retrieving village list:"+error)
             });
         },
 
@@ -585,7 +622,46 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveReopening')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('parent_id', this.form.parent_id);
+                        formData.append('name1', this.form.name1);
+                        formData.append('level1', this.form.level1);
+                        formData.append('dzongkhag1', this.form.dzongkhag1);
+                        formData.append('gewog1', this.form.gewog1);
+                        formData.append('chiwog1', this.form.chiwog1);
+                        formData.append('location1', this.form.location1);
+                        formData.append('geoLocated1', this.form.geoLocated1);
+                        formData.append('parentSchool1', this.form.parentSchool1);
+                        formData.append('coLocated1', this.form.coLocated1);
+                        formData.append('category1', this.form.category1);
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('status', this.form.status);
+                        formData.append('application_type', this.form.application_type);
+                        // for(let i=0;i<this.form.class.length;i++){
+                        //     formData.append('class[]', this.form.class[i]);
+                        // }
+                        $("input[name='classes']:checked").each( function () {
+                            formData.append('class[]', $(this).val());
+                        });
+                        // for(let i=0;i<this.form.stream.length;i++){
+                        //     formData.append('stream[]', this.form.stream[i]);
+                        // }
+                        $("input[name='streams']:checked").each( function () {
+                            formData.append('stream[]', $(this).val());
+                        });
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        axios.post('organization/saveReopening',formData, config)
+                        // this.form.post('organization/saveReopening')
                         .then((response) => {
                             if(response!=""){
                                 let message="Application for Re-Opening has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
@@ -624,8 +700,18 @@ export default {
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
             .then((response) => {
                 let data=response.data.data;
-                this.form.parent_id=data.id;
                 this.data=data;
+                this.form.parent_id=data.id;
+                this.getCategory1(data.classes);
+                this.form.name1=data.name;
+                this.form.level1=data.levelId;
+                this.form.location1=data.locationId;
+                this.form.geoLocated1=data.isGeoPoliticallyLocated;
+                this.form.dzongkhag1=data.dzongkhagId;
+                $('#dzongkhag1').val(data.dzongkhagId).trigger('change');
+                this.getgewoglist1(data.dzongkhagId,data.gewogId);
+                this.getvillagelist1(data.gewogId,data.chiwogId);
+
             })
             .catch((error) =>{
                 console.log("Error:"+error);
@@ -638,27 +724,19 @@ export default {
                 this.orgList = response.data;
             });
         },
-
-        /**
-         * method to check pending status
-         */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
-
-        // checkPendingApplication(){
-        //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {
-        //         let data=response.data;
-        //         if(data!=""){
-        //             $('#mainform').hide();
-        //             $('#ApplicationUnderProcess').show();
-        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log("Error: "+error);
-        //     });
-        // },
-
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
     },
     created(){
         this.getLevel();
@@ -693,12 +771,11 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
+        this.getAttachmentType('ForTransaction__Application_for_Re-Opening');
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();
         this.loadactivedzongkhagList1();
-        // this.checkPendingApplication();
     }
 }
 </script>

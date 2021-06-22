@@ -58,7 +58,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ item.Name}}</td>
                         <td>{{ item.student_code}}</td>
-                        <td>{{ item.screened ==  null ? "Screened" : "Not Screened" }}</td>
+                        <td>{{ (item.screened ==  null || item.screened == 'Screened') ? "Screened" : "Not Screened" }}</td>
                         <td>{{ item.referred ==  null ? "Not Referred" : "Referred" }}</td>
                         <td>
                             <div class="btn-group btn-group-sm">

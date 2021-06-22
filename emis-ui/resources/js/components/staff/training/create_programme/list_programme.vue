@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                
+
                 <tr v-for="(training, index) in staffList" :key="index">
                    <td>{{ index + 1 }} </td>
                     <td>{{ training.course_title }}</td>
@@ -30,13 +30,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data() {
         return {
             staffList:[],
+            dt:'',
         }
     },
     methods: {
@@ -56,12 +57,21 @@ export default {
         this.loadStaffList();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
         $("#staff-table").DataTable({
             "responsive": true,
             "autoWidth": false,
-        }); 
+        });
+        this.dt =  $("#staff-table").DataTable()
+    },
+    watch: {
+        staffList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#staff-table").DataTable()
+            });
+        }
     },
 }
 </script>

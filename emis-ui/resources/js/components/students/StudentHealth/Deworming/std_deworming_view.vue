@@ -288,7 +288,7 @@ export default {
         this.loadSectionArrayList();
         this.loadStreamArrayList();
         this.getHealthScreeningDetails(this.$route.params.data.id);
-        let student_params = this.$route.params.data.OrgClassStreamId+'__'+this.$route.params.data.SectionDetailsId+'__'+this.$route.params.data.stream+'__'+this.$route.params.data.StdHealthTermId;
+        let student_params = this.$route.params.data.OrgClassStreamId+'__'+this.$route.params.data.SectionDetailsId+'__'+this.$route.params.data.stream+'__'+this.$route.params.data.id;
         this.getStudentList(student_params);
     }
 }

@@ -73,13 +73,13 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.gewog}}</span>
+                                        <span class="text-blue text-bold" id="gewogName"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name"> </span>
+                                        <span class="text-blue text-bold" id="chewogName"> </span>
                                     </div>
                                 </div>
                                 <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
@@ -101,7 +101,7 @@
                             <h3 class="card-title">Reasons/Remarks for Closure</h3>
                         </div>
                         <div class="card-body">
-                            <form class="form-horizontal">
+                            <div class="form-horizontal">
                                 <div class="form-group row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <label class="mb-0">Reason:<span class="text-danger">*</span></label>
@@ -116,24 +116,54 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label>Proposal Letter</label>
-                                        <input type="file" class="form-control" v-on:change="onChangeFileUpload">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="mb-0">Upload the Required Documents</label>
+                                    </div>
+                                </div><br>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                                    <td>
+                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                    <td>
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row form-group fa-pull-right">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
+                                <hr>
+                                <div class="row form-group fa-pull-right">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -146,15 +176,12 @@ export default {
             levelArray:{},
             locationList:[],
             locationArray:{},
-            locationList1:[],
-            levelList1:[],
             dzongkhagList:[],
             dzongkhagArray:{},
-            dzongkhagList1:[],
             gewog_list:[],
             villageList:[],
-            gewog_list1:[],
-            villageList1:[],
+            gewogArray:{},
+            villageArray:{},
             classList:[],
             streamList:[],
             classArray:[],
@@ -166,19 +193,37 @@ export default {
                 organizationId:'',
                 reason:'',
                 remark:'',
-                attachments:'',
                 application_type:'Closure',
                 application_for:'Closure',
                 screen_id:'',
-                status:'Submitted'
-
+                status:'Submitted',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
-        //File Upload
         onChangeFileUpload(e){
-            this.form.attachments = e.target.files[0];
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
         },
 
         /**
@@ -258,26 +303,6 @@ export default {
             });
         },
 
-        /**
-         * method to get level in dropdown
-         */
-        getLevel1(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList1 = data;
-            });
-        },
-        /**
-         * method to get location in dropdown
-         */
-        getLocation1(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList1 = data;
-            });
-        },
 
         /**
          * method to get active dzongkhag list
@@ -297,23 +322,9 @@ export default {
         },
 
         /**
-         * method to get active dzongkhag list
-         */
-        loadactivedzongkhagList1(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.dzongkhagList1 =  data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
-        /**
          * method to get gewog list
          */
-        async getgewoglist(id){
+        async getgewoglist(id,gewogId){
             let dzoId=$('#dzongkhag').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -321,36 +332,22 @@ export default {
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.gewog_list = data.data.data;
+                let data = response.data.data;
+                this.gewog_list = data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name;
+                }
+                $('#gewogName').html(this.gewogArray[gewogId]);
             })
             .catch(function (error){
-                console.log("Error:"+error)
+                console.log("Error in getting gewog:"+error)
             });
         },
 
         /**
-         * method to get gewog1 list in dropdown
-         */
-        async getgewoglist1(id){
-            let dzoId=$('#dzongkhag1').val();
-            if(id!="" && dzoId==null){
-                dzoId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.gewog_list1 = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        /**
          * method to get village list
          */
-        async getvillagelist(id){
+        async getvillagelist(id,villageId){
             let gewogId=$('#gewog').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -358,32 +355,18 @@ export default {
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
+                let data = response.data.data;
+                this.villageList = data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name;
+                }
+                $('#chewogName').html(this.villageArray[villageId]);
             })
             .catch(function (error){
-                console.log("Error:"+error)
+                console.log("Error in getting villages:"+error)
             });
         },
 
-        /**
-         * method to get village1 list
-         */
-        async getvillagelist1(id){
-            let gewogId=$('#gewog1').val();
-            if(id!="" && gewogId==null){
-                gewogId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.villageList1 = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
 
         /**
          * method to get class in checkbox
@@ -469,7 +452,11 @@ export default {
                         formData.append('remark', this.form.remark);
                         formData.append('application_for', this.form.application_for);
                         formData.append('screen_id', this.form.screen_id);
-                        formData.append('attachments', this.form.attachments);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
                         axios.post('organization/saveClosure',formData, config)
                         .then((response) => {
                             if(response.data!=""){
@@ -486,23 +473,8 @@ export default {
                                 icon: 'error',
                                 title: 'Unexpected error occured:'+error
                             });
+                            this.form.errors.errors = error.response.data.errors;
                         })
-
-                        // this.form.post('organization/saveClosure')
-                    //     .then((response) => {
-                    //         if(response!=""){
-                    //             let message="Application for Closure has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                    //             this.$router.push({name:'closure_acknowledgement',params: {data:message}});
-                    //             Toast.fire({
-                    //                 icon: 'success',
-                    //                 title: 'Closure details has been submitted for further action.'
-                    //             });
-                    //         }
-
-                    //     })
-                    //     .catch((er) => {
-                    //         console.log("Error:"+er)
-                    //  })
                     }
                 });
             }
@@ -528,10 +500,12 @@ export default {
             .then((response) => {
                 let data=response.data.data;
                 this.form.organizationId=data.id;
+                this.getgewoglist(data.dzongkhagId,data.gewogId);
+                this.getvillagelist(data.gewogId,data.chiwogId);
                 this.data=data;
             })
             .catch((error) =>{
-                console.log("Error:"+error);
+                console.log("Error in getting organization:"+error);
             });
         },
         //getOrgList(uri = '/organization/getOrgList'){
@@ -541,48 +515,21 @@ export default {
                 this.orgList = response.data.data;
             });
         },
-
-        /**
-         * method to check pending status
-         */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
-
-        // checkPendingApplication(){
-        //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {
-        //         let data=response.data;
-        //         if(data!=""){
-        //             $('#mainform').hide();
-        //             $('#ApplicationUnderProcess').show();
-        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log("Error: "+error);
-        //     });
-        // },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
     },
-    created(){
-        this.getLevel();
-        this.getLocation();
-        this.getLevel1();
-        this.getLocation1();
-
-        this.getOrgList();
-        axios.get('common/getSessionDetail')
-        .then(response => {
-            let data = response.data.data;
-            if(data['acess_level']=="Org"){
-                this.getOrgDetails(data['Agency_Code']);
-            }
-        })
-        .catch(errors => {
-            console.log(errors)
-        });
-        this.getOrgList();
-    },
-
     mounted(){
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -596,12 +543,26 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
+        this.getLevel();
+        this.getLocation();
+        this.getOrgList();
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();
-        this.loadactivedzongkhagList1();
-        // this.checkPendingApplication();
+        this.getAttachmentType('ForTransaction__Application_for_Closure');
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.getOrgDetails(data['Agency_Code']);
+                this.form.organizationId=data['Agency_Code'];
+                $('#organizationId').val(data['Agency_Code']).trigger('update');
+                $('#organizationId').prop('disabled', true);
+            }
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     }
 }
 </script>

@@ -60,7 +60,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadInactiveOrgList($dzo_id){
-        $response_data=OrganizationDetails::where('status','0')
+        $response_data=OrganizationDetails::where('status','0')->orwhere('status','Closed')
                             ->where('dzongkhagId',$dzo_id)
                             ->select( 'id','name','levelId','dzongkhagId')->get();
         return $response_data;
@@ -104,10 +104,10 @@ class LoadOrganizationController extends Controller{
             if($loc!=null && $loc!=""){
                 $response_data->locationDetials=$loc;
             }
-            // $contact = ContactDetails::where('organizationId',$response_data->id)->first();
-            // if($contact!=null && $contact!=""){
-            //     $response_data->contactDetails=$contact;
-            // } 
+            $contact = ContactDetails::where('organizationId',$response_data->id)->first();
+            if($contact!=null && $contact!=""){
+                $response_data->contactDetails=$contact;
+            }
         }
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->first();

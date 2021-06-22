@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_Autonomous'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Change_in_Autonomy'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -54,6 +54,10 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_autonomous',params: {data:data}});
         },
+        showview(data){
+            this.$router.push({name:'view_autonomous',params: {data:data}});
+        },
+
     },
     mounted(){
         this.loadDataList();

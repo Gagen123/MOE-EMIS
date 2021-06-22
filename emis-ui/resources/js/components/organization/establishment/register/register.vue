@@ -13,6 +13,7 @@
                             <option value="Public">Public</option>
                             <option value="Private">Private</option>
                             <option value="ECCD">ECCD</option>
+                            <option value="Bifurcation">Bifurcated</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">

@@ -434,7 +434,7 @@ export default {
         },
         loadestablishmentapplicationdetails(appId,type){
             $('.strm_clas').hide();
-            axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
+            axios.get('organization/loadEstbDetailsFroVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
                 this.form.applicationNo=data.application_no;
