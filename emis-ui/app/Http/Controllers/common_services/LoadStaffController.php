@@ -48,6 +48,7 @@ class LoadStaffController extends Controller{
         if($type=="orgwise"){
             $param=$parent_id;
         }
+        // dd($type.'/'.$param);
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;
     }

@@ -246,7 +246,7 @@ class StaffController extends Controller{
             'status'                            =>  $request->status,
             'user_id'                           =>  $this->userId()
         ];
-        // dd($personal_details);
+        // dd($transfer_window_details);
         $response_data= $this->apiService->createData('emis/staff/transfer/saveTransferWindow', $transfer_window_details);
         return $response_data;
     }

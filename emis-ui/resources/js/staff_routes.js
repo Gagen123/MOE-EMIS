@@ -521,6 +521,8 @@ const routes = [
                     { path: '/create_nomination_selection',name:'create_nomination_selection',  component: require('./components/staff/training/nomination_selection/create_nomination_selection.vue').default },
                     { path: '/edit_nomination_selection',name:'edit_nomination_selection',  component: require('./components/staff/training/nomination_selection/edit_nomination_selection.vue').default },
                     { path: '/verify_nomination_selection',name:'verify_nomination_selection',  component: require('./components/staff/training/nomination_selection/verify_nomination_selection.vue').default },
+                    { path: '/acknowledgement_for_nomination', name:'acknowledgement_for_nomination', component: require('./components/staff/acknowledgement_for_errors.vue').default },
+                    { path: '/acknowledgement_for_nomination_success', name:'acknowledgement_for_nomination_success', component: require('./components/staff/acknowledgement.vue').default },
                 ],
             },
 

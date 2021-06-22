@@ -10,7 +10,7 @@
                     <div class="card card-success card-outline">
                         <div class="card-body">
                             <div class="tab-pane">
-                                <form class="form-horizontal">
+                                <div class="form-horizontal">
                                     <hr>
                                     <div class="row invoice-info">
                                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
@@ -60,19 +60,19 @@
                                                 <label class="mb-1"> Name:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorName" class="form-control editable_fields" id="proprietorName" />
                                                 <has-error :form="form" field="proprietorName"></has-error>
-                                                
+
                                                 <label class="mb-1"> CID:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorCid" class="form-control editable_fields" id="proprietorCid" />
                                                 <has-error :form="form" field="proprietorCid"></has-error>
-                                                
+
                                                 <label class="mb-1"> Phone:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorPhone" class="form-control editable_fields" id="proprietorPhone" />
                                                 <has-error :form="form" field="proprietorPhone"></has-error>
-                                                
+
                                                 <label class="mb-1"> Email:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorEmail" class="form-control editable_fields" id="proprietorEmail" />
                                                 <has-error :form="form" field="proprietorEmail"></has-error>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -127,7 +127,7 @@
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Compound Fencing:</label><br>
                                                     <label  v-for="(item, key, index) in  fence_list" :key="index" class="pr-4">
-                                                        <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/> 
+                                                        <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/>
                                                         {{item.name}}
                                                     </label>
                                                 </div>
@@ -144,7 +144,7 @@
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Disaster Area:</label><br>
                                                     <label  v-for="(item, key, index) in  disasterList" :key="index" class="pr-4">
-                                                        <input  type="checkbox" v-model="form.disasterArea" :value="item.id" tabindex=""/> 
+                                                        <input  type="checkbox" v-model="form.disasterArea" :value="item.id" tabindex=""/>
                                                         {{item.name}}
                                                     </label>
                                                 </div>
@@ -157,14 +157,14 @@
                                             <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
 </div>
 </template>
 <script>
@@ -192,7 +192,7 @@
                     climate_type:'',distance_from_dzo:'',thramNo:'',
                     fencingtype:'',entranceGate:'',disasterArea:[],
                     fields_for:'eccd',
-                }) 
+                })
             }
         },
         methods:{
@@ -246,9 +246,9 @@
                     }
                     this.count=data.length;
                     this.form.users=contactDetails;
-                    
+
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     console.log("Error: "+error);
                 });
             },
@@ -279,14 +279,14 @@
                 .then(response => {
                     let data = response.data;
                     for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
+                        this.levelArray[data[i].id] = data[i].name;
                     }
                 });
             },
             getLat: function(){
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(this.showPosition);
-                } 
+                }
             },
             showPosition(position){
                 $('#latitude').val(position.coords.latitude);
@@ -322,18 +322,18 @@
             },
             addMore: function(){
                 this.count++;
-                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})    
-            }, 
-            remove(index){    
+                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})
+            },
+            remove(index){
                 if(this.form.users.length>1){
                   this.count--;
-                  this.form.users.splice(index,1); 
+                  this.form.users.splice(index,1);
                 }
             },
             showtextbox:function(type){
                 if(type=="Yes"){
                     $('#roadtypeyes').show();
-                    $('#roadtypeno').hide(); 
+                    $('#roadtypeno').hide();
                 }
                 else if(type=="No"){
                     $('#roadtypeno').show();
@@ -344,7 +344,7 @@
                     $('roadtypeno').show();
                 }
             },
-            
+
         },
         mounted(){
             this.getContactTypeDropdown();
@@ -358,11 +358,11 @@
                 let data = response.data.data;
                 this.form.org_id=data['Agency_Code'];
                 this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
-            
+
         }
     }
 </script>

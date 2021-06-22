@@ -28,7 +28,7 @@ class EquipmentController extends Controller
     /**
      * method to list equipment and furniture
     */
-    
+
     public function loadEquipment($orgId=""){
       //  dd('from services');
         $equip = DB::table('organization_equipment as a')
@@ -92,19 +92,13 @@ class EquipmentController extends Controller
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
             // dd($data);
-        try{
             $response_data = Equipment::create($data);
-        }catch(\Illuminate\Database\QueryException $ex){
-           dd($ex);
-            }
-            
-
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    /** 
+    /**
      * method to save equipments
      * old function created by Ugyen
     */
@@ -134,7 +128,7 @@ class EquipmentController extends Controller
             $section = EquipmentAndFurniture::create($sec);
 
         }
-        
+
         return $this->successResponse($section, Response::HTTP_CREATED);
     }
 
