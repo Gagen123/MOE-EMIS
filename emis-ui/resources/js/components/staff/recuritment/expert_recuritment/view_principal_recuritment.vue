@@ -214,7 +214,6 @@ export default {
         loadPrincipalRecuritmentApplication(appId,type){
             axios.get('staff/StaffApprovalController/loadPrincipalRecuritmentApplication/'+appId+'/'+type)
             .then((response) => {
-                // alert(JSON.stringify(response.data));
                 let data=response.data
                 this.form.name=data.data.name;
                 this.form.dob=data.data.DateOfBirth;
@@ -237,13 +236,10 @@ export default {
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
-                
             })
             .catch((error) => {
                 console.log("Error......"+error);
-                
             });
-
         },
         shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
@@ -397,7 +393,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.form.applicationNo=this.$route.params.data.application_number;
         this.loadPrincipalRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
     }
 }

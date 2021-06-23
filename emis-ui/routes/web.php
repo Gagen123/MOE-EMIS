@@ -170,11 +170,13 @@ Route::prefix('organization')->group(function () {
     //routes for furniture
     Route::post('/saveFurniture', [App\Http\Controllers\organization\FurnitureController::class, 'saveFurniture'])->name('saveFurniture');
     Route::get('/loadFurniture', [App\Http\Controllers\organization\FurnitureController::class, 'loadFurniture'])->name('loadFurniture');
-
-    //routes for visitor information
+    Route::get('/getFurnitureDetails/{furId}', [App\Http\Controllers\organization\FurnitureController::class, 'getFurnitureDetails'])->name('getFurnitureDetails');
+ 
+    //routes for visitor information   
     Route::post('/saveVisitorInformation', [App\Http\Controllers\organization\VisitorController::class, 'saveVisitorInformation'])->name('saveVisitorInformation');
     Route::get('/loadVisitorInformation', [App\Http\Controllers\organization\VisitorController::class, 'loadVisitorInformation'])->name('loadVisitorInformation');
     Route::get('/getVisitorTypeDropdown', [App\Http\Controllers\organization\VisitorController::class, 'getVisitorTypeDropdown'])->name('getVisitorTypeDropdown');
+    Route::get('/getVisitorDetails/{visId}', [App\Http\Controllers\organization\VisitorController::class, 'getVisitorDetails'])->name('getVisitorDetails');
 
     //routes for projections
     Route::post('/saveProjections', [App\Http\Controllers\organization\ProjectionsController::class, 'saveProjections'])->name('saveProjections');
@@ -218,7 +220,7 @@ Route::prefix('organization')->group(function () {
 
     // equipment route
     // Route::post('/saveEquipment', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveEquipment'])->name('saveEquipment');
-    // Route::get('/loadEquipment/{orgId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadEquipment'])->name('loadEquipment');
+    Route::get('/getEquipmentDetails/{equId}', [App\Http\Controllers\organization\EquipmentController::class, 'getEquipmentDetails'])->name('getEquipmentDetails');
     Route::post('/saveEquipment', [App\Http\Controllers\organization\EquipmentController::class, 'saveEquipment'])->name('saveEquipment');
     Route::get('/loadEquipment', [App\Http\Controllers\organization\EquipmentController::class, 'loadEquipment'])->name('loadEquipment');
     Route::get('/getType', [App\Http\Controllers\organization\GeneralInfoController::class, 'getType'])->name('getType');
@@ -386,11 +388,16 @@ Route::prefix('staff')->group(function () {
         Route::post('/savePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'savePrincipalApproval'])->name('savePrincipalApproval');
         Route::get('/loadPrincipalRecuritmentApplication/{appId}/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalRecuritmentApplication'])->name('loadPrincipalRecuritmentApplication');
         Route::post('/updatePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'updatePrincipalApproval'])->name('savePrincipalApproval');
+        Route::get('/loadPrincipalApprovalApplication/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalApprovalApplication'])->name('loadPrincipalRecuritmentApplication');
+        Route::get('/loadPrincipalApplicationDetials/{appNo}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalApplicationDetials'])->name('loadPrincipalApplicationDetials');
+        Route::get('/loadPrincipalAttachmentDetials/{id}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalAttachmentDetials'])->name('loadPrincipalAttachmentDetials');
     });
     Route::prefix('StaffApprovalController')->group(function (){
         Route::post('/saveExpatriateRecuritment', [App\Http\Controllers\staff\StaffApprovalController::class, 'saveExpatriateRecuritment'])->name('saveExpatriateRecuritment');
         Route::get('/loadPrincipalRecuritmentApplication/{appId}/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalRecuritmentApplication'])->name('loadPrincipalRecuritmentApplication');
         Route::post('/UpdateExpatriateRecuritment', [App\Http\Controllers\staff\StaffApprovalController::class, 'UpdateExpatriateRecuritment'])->name('UpdateExpatriateRecuritment');
+        Route::get('/loadExpatriateApprovalApplication/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadExpatriateApprovalApplication'])->name('loadExpatriateApprovalApplication');
+       
     });
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');

@@ -6,7 +6,7 @@
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Type:<span class="text-danger">*</span></label> 
-                            <select name="type" class="form-control" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" id="type" @change="remove_err('type'),getItem()">
+                            <select name="type" class="form-control" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }" id="type" @change="remove_err('type')">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
@@ -91,7 +91,44 @@ export default {
                 })
             }
 		},
+        getEquipmentDetails(equId){
+            axios.get('organization/getEquipmentDetails/'+equId)
+            .then((response) => {  
+                let data=response.data.data;
 
+                this.form.type                  =    data.type;
+                this.getType();
+                this.form.item                  =    data.item;
+                this.getItem();
+                
+                this.form.structureNo           =    data.structureNo;
+                this.form.constructionType      =    data.constructionType;
+                this.form.organizationId        =    data.organizationId;
+                this.form.yearOfConstruction    =    data.yearOfConstruction;
+                this.form.plintchArea           =    data.plintchArea;
+                this.form.noOfFloor             =    data.noOfFloor;
+                this.form.totalCapacity         =    data.totalCapacity;
+                this.form.rampAccess            =    data.rampAccess;
+                this.form.presentCondition      =    data.presentCondition;
+                this.form.design                =    data.design;
+                this.form.id                    =    data.id;
+
+                let prop=data.facility;
+                let facilityDetails=[];
+                for(let i=0;i<prop.length;i++){
+                    facilityDetails.push({facility:prop[i].facilityTypeId,facilityNo:prop[i].facilityName,
+                    capacity:prop[i].capacity,noOfFacility:prop[i].noOfFacility,
+                    accessibleDisabled:prop[i].noAccessibleToDisabled,
+                    internetConnection:prop[i].noWithInternetConnection});
+                }
+                this.count=data.length;
+                this.form.users=facilityDetails;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
         getType(uri = '/organization/getType'){
             axios.get(uri)
             .then(response => {
@@ -124,6 +161,7 @@ export default {
 
     mounted(){
         this.form.type=this.$route.params.data.typeId;
+        $('#type').val(data.type);
         this.getItem();
         this.form.item=this.$route.params.data.itemId;
         this.form.location=this.$route.params.data.locationUsageId;

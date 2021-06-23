@@ -80,6 +80,7 @@ class SportController extends Controller
                     $sport = array(
                      'organizationId'                   =>  $organizationId,
                      'type'                             =>  $item['type'],
+                     'number'                           =>  $item['number'],
                      'yearOfEstablishment'              =>  $item['yoe'],
                      'accessibleToDisabled'             =>  $item['access'],
                      'size'                             =>  $request['area'],

@@ -203,7 +203,6 @@ export default {
                 this.form.attachments.pop();
             }
         },
-       
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -330,7 +329,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.form.applicationNo=this.$route.params.data.application_number;
         this.loadExpatriateRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
     }
 }

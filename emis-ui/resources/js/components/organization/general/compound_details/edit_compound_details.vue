@@ -155,7 +155,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: ' Detail is added successfully'
+                        title: ' Detail is updated successfully'
                     })
                     this.$router.push('/list_compound_details');
                 })

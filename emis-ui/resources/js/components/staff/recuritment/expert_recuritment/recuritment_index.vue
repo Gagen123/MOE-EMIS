@@ -3,7 +3,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header pt-0 mt-0 pb-0">
                 <span class="card-title pt-2 mb-0">
-                    <b>Applications For Expatriate Recuritment Approval</b>
+                    <b>Applications For Expatriate Recuritment</b>
                 </span>
                 <span class="fa-pull-right pr-2 py-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_expert_recuritment')"><i class="fa fa-list"></i> List</button>

@@ -8,7 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
 use App\Models\generalInformation\Projection;
 use Illuminate\Support\Facades\DB;
-use App\Models\OrganizationClassStream;
+use App\Models\OrganizationClassStream;  
+use App\Models\Masters\Classes;
 
 class ProjectionsController extends Controller
 {
@@ -59,6 +60,14 @@ class ProjectionsController extends Controller
     }
 
     public function loadProjections($orgId=""){
+        //dd($orgId);
+    //     $equip = DB::table('organization_projections as a')
+    //     ->join('classes as b', 'a.class', '=', 'b.id')
+    //     ->select('a.id as id','a.organizationId as organizationId','b.class as class', 'a.academicYear as academicYear','a.ProjectionNo as ProjectionNo', 'a.remarks as remarks'
+    //    )->where('organizationId',$orgId)->get();
+
+    //     return $equip;
+      
         $info = Projection::where('organizationId',$orgId)->get();
         return $info;
     }

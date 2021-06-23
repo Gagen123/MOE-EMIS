@@ -32,6 +32,7 @@ export default {
     data(){
         return{
             dataList:[],
+            classList:{},
         }
     },
 
@@ -55,8 +56,23 @@ export default {
             data.action='edit';
             this.$router.push({name:'edit_projections',params: {data:data}});
         },
+
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                 for(let i=0;i<data.data.data.length;i++){
+                    this.classList[data.data.data[i].id] = data.data.data[i].name; 
+                }
+               // this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
     },
     mounted(){
+        this.loadClassList();
         this.loadDataList();
     },
 }

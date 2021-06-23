@@ -93,7 +93,7 @@ class StaffApprovalController extends Controller
             $app_role="";
             $screen_name="";
             foreach($workflowdet as $work){
-                if($work->screenName==$request->application_for){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -333,8 +333,7 @@ class StaffApprovalController extends Controller
 
         return $data;
     }
-
-
+    
     public function saveExpatriateRecuritment(Request $request){
         $this->service_name = $request['application_for'];
         //File Upload
@@ -388,7 +387,7 @@ class StaffApprovalController extends Controller
             $app_role="";
             $screen_name="";
             foreach($workflowdet as $work){
-                if($work->screenName==$request->application_for){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -467,5 +466,23 @@ class StaffApprovalController extends Controller
 
         return ($validation);
 
+    }
+    public function loadPrincipalApprovalApplication($type=""){
+        $loadPrincipalApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApprovalApplication/'.$this->userId().'/'.$type );
+        return $loadPrincipalApprovalApplication;
+    }
+
+    public function loadExpatriateApprovalApplication($type=""){
+        $loadExpatriateApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadExpatriateApprovalApplication/'.$this->userId().'/'.$type );
+        return $loadExpatriateApprovalApplication;
+    }
+
+    public function loadPrincipalApplicationDetials($appNo=""){
+        $loadPrincipalApplicationDetials = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApplicationDetials/'.$appNo );
+        return $loadPrincipalApplicationDetials;
+    }
+    public function loadPrincipalAttachmentDetials($id=""){
+        $loadPrincipalAttachmentDetials = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalAttachmentDetials/'.$id );
+        return $loadPrincipalAttachmentDetials;
     }
 }

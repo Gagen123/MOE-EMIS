@@ -509,16 +509,6 @@ class EstablishmentController extends Controller{
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','<>','pending')->where('establishment_type',str_replace('_',' ',$type))->get());
     }
 
-    public function loadOrgChangeApplications($user_id="",$type=""){
-        if($type=="Bifurcation"){
-            return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Bif-%')->get());
-        }
-        else{
-            return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
-        }
-
-        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
-    }
 
     /**
      * loading bifurcation, merger, closure and reopening

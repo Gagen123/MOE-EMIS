@@ -30,7 +30,7 @@ class FurnitureController extends Controller
     */
     
     public function loadFurniture($orgId=""){ 
- 
+        
         $equip = DB::table('organization_furniture as a')
             ->join('master_furniture_type as b', 'a.type', '=', 'b.id')
             ->join('master_furniture_item as c', 'a.item', '=', 'c.id')
@@ -70,6 +70,7 @@ class FurnitureController extends Controller
      */
 
     public function saveFurniture(Request $request){
+       // dd($id);
         $id = $request->id;
         if( $id != null){
             $data = [
@@ -78,6 +79,7 @@ class FurnitureController extends Controller
                 'item'                      =>  $request['item'],
                 'usable'                    =>  $request['usable'],
                 'notusable'                 =>  $request['notusable'],
+                'id'                        =>   $request->id,
                 'updated_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
@@ -88,54 +90,64 @@ class FurnitureController extends Controller
                 'organizationId'            =>  $request['organizationId'],
                 'type'                      =>  $request['type'],
                 'item'                      =>  $request['item'],
-                'usable'                    =>  $request['location'],
-                'notusable'                 =>  $request['cost'],
+                'usable'                    =>  $request['usable'],
+                'notusable'                 =>  $request['notusable'],
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
-            try{
+           // dd($data);
+            // try{
             $response_data = Furniture::create($data);
-            }
-            catch(\Illuminate\Database\QueryException $ex){
-                dd($ex);
-                 }
+            // }
+            // catch(\Illuminate\Database\QueryException $ex){
+            //     dd($ex);
+            //      }
 
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
+    public function getFurnitureDetails($furId=""){
+       // dd($furId);
+        $response_data=Furniture::where('id', $furId)->first();
+        return $this->successResponse($response_data);
+    }
+
+   
+
     /** 
      * method to save Furnitures
      * old function created by Ugyen
     */
-    public function saveEquipmentAndFurniture(Request $request){
-        $id = $request->id;
-        if( $id != null){
-            $sec = [
-                'organizationId'        => $request['organizationId'],
-                'type'                  => $request['type'],
-                'item'                  => $request['item'],
-                'location'              => $request['location'],
-                'number'                => $request['number'],
-                'updated_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s')
-            ];
-            $section = EquipmentAndFurniture::where('id', $id)->update($sec);
-        }else{
-            $sec = [
-                'organizationId'        => $request['organizationId'],
-                'type'                  => $request['type'],
-                'item'                  => $request['item'],
-                'location'              => $request['location'],
-                'number'                => $request['number'],
-                'created_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s')
-            ];
-            $section = EquipmentAndFurniture::create($sec);
+    // public function saveEquipmentAndFurniture(Request $request){
+    //     $id = $request->id;
+    //     if( $id != null){
+    //         $sec = [
+    //             'organizationId'        => $request['organizationId'],
+    //             'type'                  => $request['type'],
+    //             'item'                  => $request['item'],
+    //             'location'              => $request['location'],
+    //             'number'                => $request['number'],
+    //             'updated_by'            =>  $request->user_id,
+    //             'created_at'            =>  date('Y-m-d h:i:s')
+    //         ];
+    //         $section = EquipmentAndFurniture::where('id', $id)->update($sec);
+    //     }else{
+    //         $sec = [
+    //             'organizationId'        => $request['organizationId'],
+    //             'type'                  => $request['type'],
+    //             'item'                  => $request['item'],
+    //             'location'              => $request['location'],
+    //             'number'                => $request['number'],
+    //             'created_by'            =>  $request->user_id,
+    //             'created_at'            =>  date('Y-m-d h:i:s')
+    //         ];
+    //         $section = EquipmentAndFurniture::create($sec);
 
-        }
+    //     }
         
-        return $this->successResponse($section, Response::HTTP_CREATED);
-    }
+    //     return $this->successResponse($section, Response::HTTP_CREATED);
+    // }
 
+    
 }

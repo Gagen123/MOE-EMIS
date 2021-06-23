@@ -24,9 +24,14 @@ class VisitorController extends Controller
         //
     }
     public function loadVisitorInformation($orgId=""){
-      //  dd('from microservice');
-        $info = Visitor::where('organizationId',$orgId)->get();
-        return $info;
+      // dd('from microservice');
+        // $info = Visitor::where('organizationId',$orgId)->get();
+        // return $info;
+        $list= DB::table('organization_visitor as a')
+        ->join('master_visitor_type as b', 'a.visitor', '=', 'b.id')
+        ->select('a.id as id', 'b.name as visitor', 'a.dateOfVisit as dateOfVisit', 'a.remarks as remarks')
+        ->where('organizationId', $orgId)->get();
+        return $list;
     }
 
     public function saveVisitorInformation(Request $request){
@@ -50,7 +55,7 @@ class VisitorController extends Controller
             'dateOfVisit'              =>  $request['date'],
             'remarks'                  =>  $request['remarks'],
         ];
-
+        //dd($data);
         $response_data = Visitor::create($data);
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -72,12 +77,17 @@ class VisitorController extends Controller
     //     return $this->successResponse($response_data, Response::HTTP_CREATED);
 
 
-       
+    
     // }
     public function getVisitorTypeDropdown(){
        // dd('from microserve ');
         return VisitorType::where('status',1)->get();
     }
-   
+
+    public function getVisitorDetails($visId=""){
+        $response_data=Visitor::where('id',$visId)->first();
+     // $response_data->facility=FacilityInStructure::where('infrastructureId',$response_data->id)->get();
+        return $this->successResponse($response_data);
+    }
 
 }

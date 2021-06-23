@@ -42,8 +42,8 @@ class ProjectionsController extends Controller
     }
 
     public function loadProjections(){
-
         $orgId=$this->getWrkingAgencyId();
+        //dd( $orgId);
         $dis = $this->apiService->listData('emis/organization/projections/loadProjections/'.$orgId);
         return $dis;
     }
