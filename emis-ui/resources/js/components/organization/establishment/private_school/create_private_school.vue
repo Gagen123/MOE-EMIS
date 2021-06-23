@@ -547,7 +547,7 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            let res=response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                             this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
                                             Toast.fire({
                                                 icon: 'success',
@@ -585,8 +585,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.application_number=response.data.data.Application_details.application_no;
-                            this.classStreamForm.application_number=response.data.data.Application_details.application_no;
+                            this.file_form.application_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }

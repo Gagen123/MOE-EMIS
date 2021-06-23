@@ -91,7 +91,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Equipment is added successfully'
+                        title: 'Equipment is updated successfully'
                     })
                     this.$router.push('/equipment_list');
                 })
@@ -133,20 +133,39 @@ export default {
                 this.locationUse = data;
             });
         },
+
+        getEquipmentDetails(equId){
+            axios.get('organization/getEquipmentDetails/'+equId)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.type                  =    data.type;
+                this.getType();
+                this.form.item                  =    data.item;
+                this.getItem();
+                this.form.usable                =    data.usable;
+                this.form.notusable             =    data.notusable;
+                this.form.id                    =    data.id;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
     },
 
     created() {
         this.getType();
         this.getLocationUse();
+        this.getEquipmentDetails(this.$route.params.data.id);
     },
 
-    mounted(){
-        this.form.type=this.$route.params.data.type;
-        this.getItem();
-        this.form.item=this.$route.params.data.item;
-        this.form.usable=this.$route.params.data.usable;
-        this.form.notusable=this.$route.params.data.notusable;
-        this.form.id=this.$route.params.data.id;
-    }
+    // mounted(){
+    //     this.form.type=this.$route.params.data.type;
+    //     this.getItem();
+    //     this.form.item=this.$route.params.data.item;
+    //     this.form.usable=this.$route.params.data.usable;
+    //     this.form.notusable=this.$route.params.data.notusable;
+    //     this.form.id=this.$route.params.data.id;
+    // }
 }
 </script>

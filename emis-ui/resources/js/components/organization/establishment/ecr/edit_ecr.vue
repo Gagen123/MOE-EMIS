@@ -585,9 +585,9 @@ export default {
             if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
                 $('#chiwog').addClass('select2-hidden-accessible');
             }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+            // if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+            //     $('#locationType').addClass('select2-hidden-accessible');
+            // }
         },
 
         /**

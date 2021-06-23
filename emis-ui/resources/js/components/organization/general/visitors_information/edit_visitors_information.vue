@@ -4,7 +4,9 @@
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-1">Visitor Information:<i class="text-danger">*</i></label>
-                    <input type="text" @change="remove_error('visitor_information')" v-model="form.visitor_information" :class="{ 'is-invalid': form.errors.has('visitor_information') }" class="form-control" name="visitor_information" id="visitor_information" >
+                    <select v-model="form.visitor_information" class="form-control" name="visitor_information" id="visitor_information">
+                        <option v-for="(item, index) in visitorTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
                     <has-error :form="form" field="visitor_information"></has-error>
                 </div>
             </div>
@@ -34,6 +36,8 @@ export default {
     data(){
         return {
             dataList:[],
+            visitorTypeList:[],
+
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             form: new form({
@@ -59,6 +63,13 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        getVisitorTypeDropdown(uri = '/organization/getVisitorTypeDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.visitorTypeList = data;
+            });
+        },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -67,16 +78,17 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.student= '';
+                this.form.visitor_information= '';
                 this.form.remarks='';
-                this.form.status= 1;
+                this.form.id= '';
+                this.form.date='';
             }
             if(type=="save"){
                 this.form.post('/organization/saveVisitorInformation',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details added successfully'
+                        title: 'Details updated successfully'
                     })
                     this.$router.push('/list_visitors_information');
                 })
@@ -92,8 +104,28 @@ export default {
                 $('#'+id).addClass('select2');
             }
         },
+
+        getVisitorDetails(visId){
+            axios.get('organization/getVisitorDetails/'+visId)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.visitor_information       =    data.visitor;
+                this.getVisitorTypeDropdown();
+                this.form.remarks                   =    data.remarks;
+                this.form.date                      =    data.dateOfVisit;
+                this.form.id                        =    data.id;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
+
+
+
     },
      mounted() {
+        this.getVisitorTypeDropdown();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -107,13 +139,11 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadMasterList();
+        // this.loadMasterList();
     },
-     created() {
-        this.form.visitor_information=this.$route.params.data.visitor;
-        this.form.date=this.$route.params.data.dateOfVisit;
-        this.form.remarks=this.$route.params.data.remarks;
-        this.form.id=this.$route.params.data.id;
+    created() {
+        this.getVisitorTypeDropdown();
+        this.getVisitorDetails(this.$route.params.data.id)
     },
     
 }

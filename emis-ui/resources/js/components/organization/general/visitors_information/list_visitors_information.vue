@@ -13,7 +13,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ visitorArray[item.visitor]}}</td>
+                    <td>{{ item.visitor}}</td>
                     <td>{{ item.dateOfVisit}}</td>
                     <td>{{ item.remarks}}</td>
                     <td>
@@ -57,12 +57,13 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_visitors_information',params: {data:data}});
         },
+
         getVisitorTypeDropdown(uri = '/organization/getVisitorTypeDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.visitorArray[data[i].id] = data[i].name; 
+                for(let i=0;i<data.data.data.length;i++){
+                    this.visitorArray[data.data.data[i].id] = data.data.data[i].name; 
                 }
             });
         },

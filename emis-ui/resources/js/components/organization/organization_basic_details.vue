@@ -123,16 +123,17 @@
                     if(response_data.category=="private_eccd"){
                         this.category="Public ECCD";
                     }
-                    this.form.isAspNetSchool=response_data.isAspNetSchool;
-                    this.form.isColocated=response_data.isColocated;
-                    this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
-                    this.form.isResourceCenter=response_data.isResourceCenter;
-                    this.form.isSenSchool=response_data.isSenSchool;
-                    this.form.hasCounselingRoom=response_data.hasCounselingRoom;
-                    this.form.hasShiftSystem=response_data.hasShiftSystem;
-                    this.form.hasCE=response_data.hasCE;
+                   this.form.isAspNetSchool=response_data.isAspNetSchool;
+                   this.form.isColocated=response_data.isColocated;
+                   this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
+                  this.form.isResourceCenter=response_data.isResourceCenter;
+                   this.form.isSenSchool=response_data.isSenSchool;
+                   this.form.hasCounselingRoom=response_data.hasCounselingRoom;
+                   this.form.hasShiftSystem=response_data.hasShiftSystem;
+                   this.form.hasCE=response_data.hasCE;
                     this.form.mofCode=response_data.mofCode;
                     this.form.zestAgencyCode=response_data.zestAgencyCode;
+
                     if(response_data.locationDetials!=null && response_data.locationDetials!=""){
                         this.form.altitude=response_data.locationDetials.altitude;
                         this.form.climate_type=response_data.locationDetials.climate_type;

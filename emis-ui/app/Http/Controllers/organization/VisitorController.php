@@ -24,15 +24,15 @@ class VisitorController extends Controller
 
     public function saveVisitorInformation(Request $request){
         $rules = [
-            'visitor_information'          =>  'required',
-            'date'          =>  'required',
-            'remarks'      =>  'required',
+            'visitor_information'           =>  'required',
+            'date'                          =>  'required',
+            'remarks'                       =>  'required',
         ];
 
         $customMessages = [
-            'visitor_information.required'         => 'This is required',
-            'date.required'         => 'Date is required',
-            'remarks.required'     => 'Remarks is required',
+            'visitor_information.required'          => 'This is required',
+            'date.required'                         => 'Date is required',
+            'remarks.required'                      => 'Remarks is required',
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -41,7 +41,7 @@ class VisitorController extends Controller
             'organizationId'            =>  $this->getWrkingAgencyId(),
             'visitor_information'       =>  $request['visitor_information'],
             'date'                      =>  $request['date'],
-            'remarks'                  =>  $request['remarks'],
+            'remarks'                   =>  $request['remarks'],
             'user_id'                   =>  $this->userId(),
             'id'                        =>  $request['id'],
         ];
@@ -63,6 +63,9 @@ class VisitorController extends Controller
         return $data;
     }
 
-    
+    public function getVisitorDetails($visId=""){
+        $data = $this->apiService->listData('emis/organization/visitor/getVisitorDetails/'.$visId);
+        return $data;
+    }
 
 }
