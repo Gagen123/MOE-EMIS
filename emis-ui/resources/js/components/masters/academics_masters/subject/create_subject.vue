@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject Group:</label> 
-                         <select v-model="form.aca_sub_group_id" class="form-control select2" id="aca_sub_group_id">
+                         <select v-model="form.aca_sub_id" class="form-control select2" id="aca_sub_group_id">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in subject_group_list" :key="index" :value="item.id">{{ item.name }}
                                  <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
@@ -71,7 +71,7 @@ export default {
             selected:'',
             form: new form({
                 aca_sub_category_id:'',
-                aca_sub_group_id:'',
+                aca_sub_id:'',
                 name: '',
                 dzo_name:'',
                 display_order:'',

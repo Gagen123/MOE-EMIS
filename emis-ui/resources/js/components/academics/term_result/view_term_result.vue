@@ -25,9 +25,13 @@
                                 </th>
                                 <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
 
-                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} 
-                                     <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
-                                     <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                 <th v-for="(item, index) in assessmentAreaList" :key="index">
+                                       <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item.name">
+                                            {{item.assessment_area}} 
+                                            <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
+                                            <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                        </span>
+                                  
                                 </th>
                                 <th v-if="totalWeightage>-1">
                                     Total 
@@ -52,6 +56,14 @@
                     </table>
                 </div>
             </div>
+            <footer>
+                <ul class="list-inline">
+                    <strong v-if="assessmentAreaList[0].code">Abbreviations:</strong>
+                    <li v-for ="(item,index) in assessmentAreaList" :key="index" class="list-inline-item text-justify">
+                        <small v-if="item.code"> <b>{{item.code}} </b> - {{ item.name }} </small>
+                    </li>
+                </ul>
+            </footer>
         </form>
     </div>  
 
@@ -103,7 +115,7 @@
                         
                     }); 
             }, 300);  
-       }                  
+       }
     },
     computed:{
         totalWeightage(){

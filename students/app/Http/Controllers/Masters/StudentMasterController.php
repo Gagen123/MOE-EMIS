@@ -140,13 +140,13 @@ class StudentMasterController extends Controller
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-            $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
-            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
+            $response_data = $model::where('id', $program_type->id)->get();
             return $this->successResponse($response_data);
          //   dd($response_data);
 
         } elseif($param == 'club_name'){
-            $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+            $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
 
@@ -157,7 +157,7 @@ class StudentMasterController extends Controller
             return $this->successResponse(StudentAwardType::all());
 
         } elseif($param == 'program_type'){
-            return $this->successResponse(CeaProgram::all());
+            return $this->successResponse(CeaProgramType::all());
 
         } else {
             return $this->successResponse($model::all());

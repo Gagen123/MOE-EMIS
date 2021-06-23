@@ -6,7 +6,8 @@
                     <thead>
                         <tr>
                             <th>Display Order</th>
-                            <th>Subject Group Name</th>
+                            <th>Subject Group</th>
+                            <th>Subject Category</th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
@@ -15,6 +16,7 @@
                         <tr v-for="(item, index) in subjectgroupList" :key="index">
                             <td class="text-right">{{ item.display_order }}</td>
                             <td>{{ item.name }}<span v-if="item.dzo_name"> ( {{ item.dzo_name }} )</span></td>
+                            <td>{{ item.sub_category_name }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">

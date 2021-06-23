@@ -16,7 +16,6 @@ use App\Models\masters\ClassAssessmentFrequency;
 use App\Models\masters\ClassSubjectAssessment;
 use App\Models\masters\RatingType;
 use App\Models\masters\SubjectAssessmentType;
-use App\Models\masters\SubjectGroup;
 use App\Models\masters\SubjectCategory;
 use Exception;
 
@@ -33,29 +32,39 @@ class AcademicMastersController extends Controller
         if($request['record_type']=="subject_group"){
             if($request['action_type'] =="add"){
                 $rules = [
-                    'name'    =>  'required|unique:aca_subject_group',
+                    'name'    =>  'required',
+                    'aca_sub_category_id' => 'required',
                     'display_order' => 'required',
                     'status'    =>  'required',
                 ];
                 $customMessages = [
                     'display_order.required' => 'This field is required',
                     'name.required' => 'This field is required',
+                    'aca_sub_category_id.required' => 'This field is required',
                     'status.required' => 'This field is required',
                 ];
                 $this->validate($request, $rules,  $customMessages);
                     $data = [
                         'name'  =>  $request['name'],
+                        'aca_sub_category_id' => $request['aca_sub_category_id'],
+                        'is_sub_group' => $request['is_sub_group'],
                         'dzo_name' => $request['dzo_name'],
                         'display_order'=> $request['display_order'],
                         'status'    =>  $request['status'],
                         'created_by' =>  $request['user_id'],
                         'created_at'=>   date('Y-m-d h:i:s'),
                     ];
-                    $responsedata = SubjectGroup::create($data);
+                try{
+
+                    $responsedata = Subject::create($data);
+                }catch(Exception $e){
+                    dd($e);
+                }
             } 
             if($request['action_type']=="edit"){
                 $rules = [
                     'name'    =>  'required',
+                    'aca_sub_category_id' => 'required',
                     'display_order' => 'required',
                     'status'    =>  'required',
                 ];
@@ -65,10 +74,11 @@ class AcademicMastersController extends Controller
                     'status.required' => 'This field is required',
                 ];
                 $this->validate($request, $rules,  $customMessages);
-                $data = SubjectGroup::find($request['id']);
-                $messs_det='name:'.$data->name.'; dzo_name:'.$data->dzo_name.'; display_order:'.$data->display_order.'; status:'.$data->status;
-                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject_group','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+                $data = Subject::find($request['id']);
+                $messs_det='name:'.$data->name.'; aca_sub_category_id:'.$data->aca_sub_category_id.'; dzo_name:'.$data->dzo_name.'; display_order:'.$data->display_order.'; status:'.$data->status;
+                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->name = $request['name'];
+                $data->aca_sub_category_id = $request['aca_sub_category_id'];
                 $data->dzo_name = $request['dzo_name'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
@@ -81,7 +91,7 @@ class AcademicMastersController extends Controller
             if($request['action_type'] =="add"){
                 $rules = [
                     'aca_sub_category_id' => 'required',
-                    'name'    =>  'required|unique:aca_subject',
+                    'name'    =>  'required',
                     'display_order' => 'required',
                     'status'    =>  'required',
                     'assessed_by_class_teacher' => 'required'
@@ -97,7 +107,7 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
                 $data = [
                     'aca_sub_category_id' => $request['aca_sub_category_id'],
-                    'aca_sub_group_id' => $request['aca_sub_group_id'],
+                    'aca_sub_id' => $request['aca_sub_id'],
                     'name'  =>  $request['name'],
                     'dzo_name' => $request['dzo_name'],
                     'display_order'=> $request['display_order'],
@@ -123,20 +133,41 @@ class AcademicMastersController extends Controller
                     'assessed_by_class_teacher.required' => 'This field is required',
 
                 ];
-                
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = Subject::find($request['id']);
-                $messs_det='aca_sub_category_id:'.$data->aca_sub_category_id.'; aca_sub_group_id:'.$data->aca_sub_group_id.'; name:'.$data->name.'; dzo_name:'.$data->dzo_name.'; assessed_by_class_teacher:'.$data->assessed_by_class_teacher.'; display_order:'.$data->display_order.'; status:'.$data->status;
+                $messs_det='aca_sub_category_id:'.$data->aca_sub_category_id.'; aca_sub_id:'.$data->aca_sub_id.'; name:'.$data->name.'; dzo_name:'.$data->dzo_name.'; assessed_by_class_teacher:'.$data->assessed_by_class_teacher.'; display_order:'.$data->display_order.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->aca_sub_category_id = $request['aca_sub_category_id'];
-                $data->aca_sub_group_id = $request['aca_sub_group_id'];
+                $data->aca_sub_id = $request['aca_sub_group_id'];
                 $data->name = $request['name'];
                 $data->dzo_name = $request['dzo_name'];
                 $data->assessed_by_class_teacher = $request['assessed_by_class_teacher'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
-                $data->update();
+                try{
+                   $data->update();
+                } 
+                catch(Exception $e){
+                    $message = explode(' ', $e->getMessage());
+                    $dbCode = rtrim($message[4], ']');
+                    $dbCode = trim($dbCode, '[');
+                    switch ($dbCode) {
+                        case 1062:
+                            $userMessage = 'The '.$request['name'].' already exist';
+                            break;
+                        case 1049:
+                            $userMessage = 'Unknown database - probably config error:';
+                            break;
+                        case 2002:
+                            $userMessage = 'DATABASE IS DOWN:';
+                            break;
+                        default:
+                            $userMessage = 'Untrapped Error:';
+                            break;
+                    }
+                    $responsedata = ['error' =>$userMessage];
+               }
                 $responsedata = $data;
             }
         }
@@ -206,23 +237,24 @@ class AcademicMastersController extends Controller
     }
     public function loadAcademicMasters($param=""){
         if($param == "all_subject_group"){
-            $subject = DB::select('SELECT * FROM aca_subject_group ORDER BY display_order');
+            $subject = DB::select('SELECT t1.id,t1.name,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE is_sub_group = 1 ORDER BY display_order');
             return $this->successResponse($subject);
         }
         if($param == "all_active_subject_group"){
-            $active_subject = DB::select('SELECT * FROM aca_subject_group WHERE status = 1 ORDER BY display_order');
+            $active_subject = DB::select('SELECT id,name,dzo_name,status,display_order FROM aca_subject WHERE is_sub_group = 1 AND status = 1 ORDER BY display_order');
             return $this->successResponse($active_subject);
         }
         if($param == "all_active_subject_category"){
-            $active_subject_category = DB::select('SELECT * FROM aca_subject_category WHERE status = 1 ORDER BY display_order');
+            $active_subject_category = DB::select('SELECT id,name,status,display_order FROM aca_subject_category WHERE status = 1 ORDER BY display_order');
             return $this->successResponse($active_subject_category);
         }
         if($param == "all_subject"){
-            $subject = DB::select("SELECT t1.id, t1.display_order, t2.name AS sub_category_name, t1.aca_sub_category_id,t1.aca_sub_group_id, t3.name AS sub_group_name, t1.name AS sub_name, t1.dzo_name,t1.status, t1.assessed_by_class_teacher FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id LEFT JOIN aca_subject_group t3 ON t1.aca_sub_group_id = t3.id ORDER BY display_order");
+            $subject = DB::select("SELECT t1.id, t1.aca_sub_id AS aca_sub_group_id, t2.id AS aca_sub_category_id,t1.status,t1.name AS sub_name,t1.dzo_name,t3.dzo_name AS dzo_sub_group_name,t1.assessed_by_class_teacher,t1.display_order, t3.name AS sub_group_name, t2.name AS sub_category_name
+                  FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id LEFT JOIN aca_subject t3 ON t1.aca_sub_id= t3.id WHERE t1.is_sub_group = 0 ORDER BY display_order");
             return $this->successResponse($subject);
         }
         if($param == "all_active_subject"){
-            $Activesubject = DB::select('SELECT * FROM aca_subject  WHERE status = 1 ORDER BY display_order');
+            $Activesubject = DB::select('SELECT id, name FROM aca_subject  WHERE status = 1 AND is_sub_group = 0 ORDER BY display_order');
             return $this->successResponse($Activesubject);
         }
         if($param == "all_active_rating_type"){
@@ -237,10 +269,11 @@ class AcademicMastersController extends Controller
             return $this->successResponse($frequency);
         }
         if($param == "assessed_classes") {
-            $class_assessment_frequency = DB::select('SELECT t1.org_class_id,t1.org_stream_id 
-                                                    FROM aca_class_assessment_frequency t1 
-                                                        JOIN aca_assessment_frequency t2 ON t1.aca_assmt_frequency_id = t2.id
-                                                    WHERE IFNULL(t2.not_assessed,0) = 0');
+            $class_assessment_frequency = 
+            DB::select('SELECT t1.org_class_id,t1.org_stream_id 
+                    FROM aca_class_assessment_frequency t1 
+                        JOIN aca_assessment_frequency t2 ON t1.aca_assmt_frequency_id = t2.id
+                    WHERE IFNULL(t2.not_assessed,0) = 0');
             return $this->successResponse($class_assessment_frequency);
         }
     }
@@ -251,7 +284,7 @@ class AcademicMastersController extends Controller
           $query .= ' AND t2.org_stream_id = ?';
           array_push($params,$stream_id);
         }  
-        return $this->successResponse (DB::select($query, $params)); 
+        return $this->successResponse (DB::select("$query WHERE t1.is_sub_group = 0", $params)); 
     }
     public function saveClassSubject(Request $request){
         $rules = [

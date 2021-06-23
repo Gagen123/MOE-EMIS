@@ -51,6 +51,7 @@
     </div>     
 </template>
 <script>
+import attachment_indexVue from '../../masters/organization_masters/attachment/attachment_index.vue'
 export default {
     data() {
         return {

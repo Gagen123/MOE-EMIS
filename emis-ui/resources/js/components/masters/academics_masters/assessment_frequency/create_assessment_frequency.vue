@@ -55,7 +55,6 @@ export default {
         getAssessmentFrequencyList(uri = 'masters/loadAcademicMasters/all_assessment_frequency'){
             axios.get(uri)
             .then(response =>{
-                // alert(JSON.stringify(response.data.data));
                 this.assesmentFrequencyList = response.data.data;
             })
             .catch(function (error){
@@ -77,6 +76,7 @@ export default {
                     }
                     renameId['org_class_id'] = item.classId;
                     renameId['org_stream_id'] = item.streamId;
+                    renameId['aca_assmt_frequency_id'] =''
                     const obj = {...renameId};
                     finalClassStreams.push(obj);
                 }))

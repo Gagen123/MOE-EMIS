@@ -71,7 +71,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.awardList =  data.data;
+                this.awardList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)

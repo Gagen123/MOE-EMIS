@@ -37,9 +37,9 @@
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
                                         <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
                                         <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
-                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.01" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
-                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['descriptive_score']" class="form-control" id="assmt_area" type="text">
-                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control ditable_fields" :id="item1.assessment_area"> 
+                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control form-control-sm text-right" id="assmt_area" type="number" step="0.01" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
+                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['descriptive_score']" class="form-control form-control-sm" id="assmt_area" type="text">
+                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control form-control-sm ditable_fields" :id="item1.assessment_area"> 
                                             <option selected value="">--SELECT--</option>
                                             <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
                                         </select>
