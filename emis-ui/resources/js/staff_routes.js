@@ -490,7 +490,7 @@ const routes = [
                 { path: '/list_expert_recuritment',name:'list_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/list_expert_recuritment.vue').default },
                 { path: '/create_expert_recuritment',name:'create_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/create_expert_recuritment.vue').default },
                 { path: '/expert_recuritment_acknowledgement', name:'expert_recuritment_acknowledgement', component: require('./components/staff/recuritment/expert_recuritment/expert_recuritment_acknowledgement.vue').default },
-                { path: '/expert_recuritment_details',name:'Expert_recuritment_details', component: require('./components/staff/recuritment/expert_recuritment/view_application_details.vue').default },
+                { path: '/expert_recuritment_details',name:'expert_recuritment_details', component: require('./components/staff/recuritment/expert_recuritment/view_application_details.vue').default },
             ]
         },
       ]

@@ -471,9 +471,18 @@ class StaffApprovalController extends Controller
         $loadPrincipalApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApprovalApplication/'.$this->userId().'/'.$type );
         return $loadPrincipalApprovalApplication;
     }
-    
+
     public function loadExpatriateApprovalApplication($type=""){
         $loadExpatriateApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadExpatriateApprovalApplication/'.$this->userId().'/'.$type );
         return $loadExpatriateApprovalApplication;
+    }
+
+    public function loadPrincipalApplicationDetials($appNo=""){
+        $loadPrincipalApplicationDetials = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApplicationDetials/'.$appNo );
+        return $loadPrincipalApplicationDetials;
+    }
+    public function loadPrincipalAttachmentDetials($id=""){
+        $loadPrincipalAttachmentDetials = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalAttachmentDetials/'.$id );
+        return $loadPrincipalAttachmentDetials;
     }
 }

@@ -240,7 +240,17 @@ class StaffRecruitmentController extends Controller
         if($type=="Expatriate_Recuritment"){
             return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Expat-%')->get());
         }
-       
-
     }
+    public function loadPrincipalApplicationDetials($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        }
+        return $this->successResponse($response_data);
+    }
+       
+    // public function loadPrincipalAttachmentDetials($id=""){
+    //     $attachement =ApplicationAttachments::where('ApplicationDetailsId',$id)->get();
+    //     return $attachement;
+    // }
 }

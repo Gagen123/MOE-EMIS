@@ -389,6 +389,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadPrincipalRecuritmentApplication/{appId}/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalRecuritmentApplication'])->name('loadPrincipalRecuritmentApplication');
         Route::post('/updatePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'updatePrincipalApproval'])->name('savePrincipalApproval');
         Route::get('/loadPrincipalApprovalApplication/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalApprovalApplication'])->name('loadPrincipalRecuritmentApplication');
+        Route::get('/loadPrincipalApplicationDetials/{appNo}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalApplicationDetials'])->name('loadPrincipalApplicationDetials');
+        Route::get('/loadPrincipalAttachmentDetials/{id}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadPrincipalAttachmentDetials'])->name('loadPrincipalAttachmentDetials');
     });
     Route::prefix('StaffApprovalController')->group(function (){
         Route::post('/saveExpatriateRecuritment', [App\Http\Controllers\staff\StaffApprovalController::class, 'saveExpatriateRecuritment'])->name('saveExpatriateRecuritment');
