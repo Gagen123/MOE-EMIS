@@ -15,12 +15,12 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
-                    <td>{{ item.establishment_type}}</td>
+                    <td>{{ item.application_for}}</td>
                      <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
                     <td>{{ item.status}}</td>
                     <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
-                        <a href="#" v-if="item.status=='submitted' || item.status=='Submitted'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                       
                     </td>
                 </tr>
             </tbody>
@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_in_Name'){
+        loadDataList(uri='staff/StaffApprovalController/loadExpatriateApprovalApplication/Expatriate_Recuritment'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -51,11 +51,9 @@ export default {
                 console.log('error: '+error);
             });
         },
-        showedit(data){
-            this.$router.push({name:'edit_name_change',params: {data:data}});
-        },
+      
         showview(data){
-            this.$router.push({name:'view_name_change',params: {data:data}});
+            this.$router.push({name:'expert_recuritment_details',params: {data:data}});
         },
 
     },

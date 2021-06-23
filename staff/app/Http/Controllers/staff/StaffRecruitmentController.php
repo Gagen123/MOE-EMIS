@@ -159,7 +159,7 @@ class StaffRecruitmentController extends Controller
                 }
             }
         }
-        
+
         $application_details=ApplicationDetails::where('application_no',$request->application_number)->first();
         return $application_details;
     }
@@ -232,5 +232,15 @@ class StaffRecruitmentController extends Controller
         }
 
         return $application_no;
+    }
+    public function loadApprovalApplication($id="",$type=""){
+        if($type=="principal_recruitment"){
+            return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Recu-%')->get());
+        }
+        if($type=="Expatriate_Recuritment"){
+            return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Expat-%')->get());
+        }
+       
+
     }
 }

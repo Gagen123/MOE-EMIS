@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs">
                     <li class="nav-item organization-tab">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Application for principal Recuritment</label>
+                            <label class="mb-0.5">Application Details</label>
                         </a>
                     </li>
                 </ul>
@@ -392,7 +392,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.form.applicationNo=this.$route.params.data.application_number;
         this.loadPrincipalRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
     }
 }
