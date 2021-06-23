@@ -497,7 +497,7 @@ const routes = [
     },
     { path: '/open_expatriate_verification',name:'open_expatriate_verification', component: require('./components/staff/recuritment/expatriate_verification.vue').default },
     { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
-    
+
     //Staff Training
     { path:'/create_inset',
         component: require('./components/staff/training/inset_index.vue').default,
@@ -526,6 +526,17 @@ const routes = [
                 ],
             },
 
+            { path: '/participant',
+                component: require('./components/staff/training/participant/participant_index.vue').default,
+                children:[
+                    { path: '/',name:'participant',  component: require('./components/staff/training/participant/list_participant.vue').default },
+                    { path: '/list_participant',name:'list_participant',  component: require('./components/staff/training/participant/list_participant.vue').default },
+                    { path: '/create_participant',name:'create_participant',  component: require('./components/staff/training/participant/create_participant.vue').default },
+                    { path: '/view_participant',name:'view_participant',  component: require('./components/staff/training/participant/view_participant.vue').default },
+                    { path: '/acknowledgement_for_nomination', name:'acknowledgement_for_nomination', component: require('./components/staff/acknowledgement_for_errors.vue').default },
+                ],
+            },
+
         ]
     },
 
@@ -546,7 +557,7 @@ const routes = [
                     { path: '/edit_management_body',name:'edit_management_body',  component: require('./components/staff/management/create_body/edit_management_body.vue').default },
                 ],
             },
-            
+
 
             { path:'/management_meeting',
                 component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,

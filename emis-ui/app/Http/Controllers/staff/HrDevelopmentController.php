@@ -97,6 +97,7 @@ class HrDevelopmentController extends Controller{
                             'user_defined_name'       =>  $filenames[$index],
                         )
                     );
+                    // dd($attachment_details);
                 }
             }
         }
@@ -147,7 +148,7 @@ class HrDevelopmentController extends Controller{
             'nomination_end_date'               =>  'required | date',
             'nature_of_participant'             =>  'required',
             // 'target_group'                      =>  'required',
-            'role_action_mapp'                  =>  'required',
+            // 'role_action_mapp'                  =>  'required',
 
         ];
         $customMessages = [
@@ -155,7 +156,7 @@ class HrDevelopmentController extends Controller{
             'nomination_end_date.required'                => 'Please select nomination end date',
             'nature_of_participant.required'              => 'Please select this field',
             // 'target_group.required'                       => 'Please select this field',
-            'role_action_mapp.required'                   => 'This field is required',
+            // 'role_action_mapp.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
         $request_data =[
@@ -221,6 +222,7 @@ class HrDevelopmentController extends Controller{
         $this->validate($request, $rules,$customMessages);
 
         $files = $request->attachments;
+        // dd($files);
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopmentParticipant';
         if($files!=null && $files!=""){
@@ -297,23 +299,23 @@ class HrDevelopmentController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/submitParticipants', $request_data);
         // dd( $response_data);
-        $workflow_data=[
-            'db_name'           =>'staff_db',
-            'table_name'        =>'program_application',
-            'service_name'      => 'Hr Development',
-            'application_number'=>json_decode($response_data)->data->app_no,
-            'screen_id'         =>$request->programId,
-            'status_id'         =>$request->statusId,
-            'remarks'           =>$request->remarks,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
+        // $workflow_data=[
+        //     'db_name'           =>'staff_db',
+        //     'table_name'        =>'program_application',
+        //     'service_name'      => 'Hr Development',
+        //     'application_number'=>json_decode($response_data)->data->app_no,
+        //     'screen_id'         =>$request->programId,
+        //     'status_id'         =>$request->statusId,
+        //     'remarks'           =>$request->remarks,
+        //     'user_dzo_id'       =>$this->getUserDzoId(),
+        //     'access_level'      =>$this->getAccessLevel(),
+        //     'working_agency_id' =>$this->getWrkingAgencyId(),
+        //     'action_by'         =>$this->userId(),
+        // ];
         // dd($workflow_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        //$work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         // dd($work_response_data);
-        return $work_response_data;
+        return $response_data;
     }
 
     public function updateParticipant(Request $request){

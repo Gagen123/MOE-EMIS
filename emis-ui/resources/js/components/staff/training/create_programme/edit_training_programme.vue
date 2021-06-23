@@ -278,18 +278,18 @@
                                 </select> -->
                                 <has-error :form="form" field="nature_of_participant"></has-error>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Target Group:</label><br/>
                                 <span v-for="(tar, index) in target_groupList" :key="index" >
                                     <input type="checkbox" v-model="form.target_group" :class="{ 'is-invalid' :form.errors.has('target_group') }" name="target_group" id="target_group" :value="tar.id">
                                     <label class="pr-3"> {{ tar.name  }}</label>
                                 </span>
-                                <!-- <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
+                                 <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
                                     <option value=""> --Select--</option>
                                     <option v-for="(item, index) in target_groupList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select> -->
+                                </select>
                                 <has-error :form="form" field="target_group"></has-error>
-                            </div>
+                            </div> -->
                             <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
                                 <span v-for="(level, index) in org_levelList" :key="index" >
@@ -299,7 +299,7 @@
                                 <has-error :form="form" field="org_level"></has-error>
                             </div> -->
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <table id="dynamic-table" class="table table-bordered table-striped">
                                     <thead>
@@ -342,7 +342,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Remarks:</label>

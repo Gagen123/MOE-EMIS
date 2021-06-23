@@ -22,10 +22,10 @@
                     <td>{{ training.end_date }}</td>
                     <td>{{ training.nomination_start_date }}</td>
                     <td>{{ training.nomination_end_date }}</td>
-                    <td>{{ training.status==  'Created' ? "Nominating" : training.status }}</td>
+                    <td>{{ training.status }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'view')">Veiw</a>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'edit')">Edit</a>
+                        <a href="#" v-if="training.status=='Created'" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'edit')">Edit</a>
                     </td>
                 </tr>
             </tbody>

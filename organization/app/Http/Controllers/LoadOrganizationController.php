@@ -110,7 +110,7 @@ class LoadOrganizationController extends Controller{
             }
         }
         if($type=="Headquarterbyid"){
-            $response_data=HeadQuaterDetails::where('id',$id)->first();
+            $response_data=HeadQuaterDetails::where('id',$id)->select('id','agencyName AS name','dzongkhagId')->first();
         }
         return $this->successResponse($response_data);
     }
