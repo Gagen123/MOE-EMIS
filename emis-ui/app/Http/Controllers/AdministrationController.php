@@ -35,10 +35,24 @@ class AdministrationController extends Controller{
                 'status'    =>  'required',
             ];
         }
+        if($request['record_type']=="calender"){
+            $rules = [
+                'from_date'         =>  'required | date',
+                'to_date'           =>  'required | date | after:from_date',
+                'type'              =>  'required',
+            ];
+            $customMessages = [
+                'from_date.required' => 'This field is required',
+                'to_date.required' => 'This field is required',
+                'to_date.after'             => 'This field cannot be before start date',
+                'type.required' => 'This field is required',
+
+            ];
+        }
         if($request['record_type']=="gewog" || $request['record_type']=="village"){
             $rules = [
                 'name'          =>  'required',
-                'parent_field'  => 'required',
+                'parent_field'  =>  'required',
                 'code'          =>  'required',
                 'status'        =>  'required',
             ];
@@ -57,7 +71,12 @@ class AdministrationController extends Controller{
             'status'                =>  $request['status'],
             'actiontype'            =>  $request['action_type'],
             'id'                    =>  $request['id'],
-            'record_type'           =>$request['record_type'],
+            'record_type'           =>  $request['record_type'],
+            'year'                  =>  $request['year'],
+            'from_date'             =>  $request['from_date'],
+            'to_date'               =>  $request['to_date'],
+            'type'                  =>  $request['type'],
+            'remarks'               =>  $request['remarks'],
             'user_id'               =>$this->userId()
         ];
         // dd($data);
@@ -1140,10 +1159,10 @@ class AdministrationController extends Controller{
         $dis = $this->apiService->listData('emis/masters/disasterComm/loadDisasterComm');
         return $dis;
     }
-   
 
 
-    // Furniture 
+
+    // Furniture
     public function saveFurnitureType(Request $request){
         $rules = [
             'name'  =>  'required',
@@ -1274,9 +1293,9 @@ class AdministrationController extends Controller{
     }
 
 
-    
-    
 
-    
+
+
+
 
 }

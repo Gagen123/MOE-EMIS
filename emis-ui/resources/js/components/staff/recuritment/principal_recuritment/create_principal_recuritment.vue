@@ -16,13 +16,21 @@
                         <div class="tab-pane fade active show tab-content-details">
                             <form class="form-horizontal">
                                 <input type="hidden" class="form-control" v-model="form.id" id="id"/>
-                                    <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Cid Number:</label>
-                                            <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid')"   :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid_passport" placeholder="Ref/cid No">
-                                            <has-error :form="form" field="cid"></has-error>
+                                   <div class="form-group">
+                                        <div class="row form-group">
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                <label id="level_name"></label>
+                                                <input type="text" class="form-control" @change="removeerror('cid')" :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid" placeholder="Enter CID Number">
+                                                <has-error :form="form" field="cid"></has-error>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pt-4">
+                                                <button class="btn btn-primary" @click="getDetailsbyCID('cid')"><i class="fa fa-search"></i> Search</button>
+                                            </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
+                                    </div>
+                                    <br>
+                                    <div class="form-group row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
                                             <label>Name:</label>
                                             <input type="text" readonly :value="form.name"  class="form-control" id="name"/>
                                         </div>
@@ -46,21 +54,23 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Present Address:</label>
-                                             <input type="text" class="form-control" @change="removeerror('paddress')" :class="{ 'is-invalid': form.errors.has('paddress') }" id="paddress" v-model="form.paddress">
-                                            <has-error :form="form" field="paddress"></has-error>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
                                             <label>Email Address:</label>
                                             <input type="text" class="form-control" @change="removeerror('email')" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
                                             <has-error :form="form" field="email"></has-error>
                                         </div>
                                         
-                                        <div class="col-lg-4 col-md-4 col-sm-4">
+                                        <div class="col-lg-6 col-md-6 col-sm-6">
                                             <label>Contact Number:</label>
                                             <input type="number" class="form-control" @change="removeerror('contact_number')" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
                                             <has-error :form="form" field="contact_number"></has-error>
+                                        </div>
+                                    </div>
+                                     <div class="form-group row">
+                                        <div class="col-lg-10 col-md-10 col-sm-10">
+                                            <label>Present Address:</label>
+                                             <input type="text" class="form-control" @change="removeerror('paddress')" :class="{ 'is-invalid': form.errors.has('paddress') }" id="paddress" v-model="form.paddress">
+                                            <has-error :form="form" field="paddress"></has-error>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -120,6 +130,7 @@ export default {
     data(){
         return{
             form: new form({
+                cid:'',
                 name:'', 
                 dob:'',
                 dzongkhag:'',
@@ -208,6 +219,7 @@ export default {
             }
             formData.append('organizationId', this.form.organizationId);
             formData.append('name', this.form.name);
+            formData.append('cid', this.form.cid);
             formData.append('dob', this.form.dob);
             formData.append('dzongkhag', this.form.dzongkhag);
             formData.append('gewog', this.form.gewog);
@@ -240,28 +252,17 @@ export default {
                 }
             })
             .catch((err) => {
-                console.log("Error:"+err)
+                console.log("Error:"+err);
+                this.form.errors.errors = err.response.data.errors;
             })
-            
         },
-
-
-        /**
-         * method to populate dropdown
-         */
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-        
-
         },
-        applyselect2(){
-           
-        },
-        
         getAttachmentType(type){
             this.form.attachments=[];
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
@@ -275,9 +276,7 @@ export default {
                 console.log(errors)
             });
         },
-
     },
-
     mounted() {
         this.getAttachmentType('ForTransaction__Application_for_Principal_Recruitment');
         $('[data-toggle="tooltip"]').tooltip();
