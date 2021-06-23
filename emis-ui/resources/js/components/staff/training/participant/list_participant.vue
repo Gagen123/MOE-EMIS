@@ -1,0 +1,93 @@
+<template>
+    <div>
+        <table id="staff-table" class="table table-bordered text-sm table-striped">
+            <thead>
+                <tr>
+                    <th>SL#</th>
+                    <th>Training Name</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Nomination Start Date</th>
+                    <th>Nomination End Date</th>
+                    <th class="pl-5 pr-5">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr v-for="(training, index) in staffList" :key="index" >
+                    <td>{{ index + 1 }} </td>
+                    <!-- <td>{{ training.with_program.course_title }}</td>
+                    <td>{{ training.with_program.start_date }}</td>
+                    <td>{{ training.with_program.end_date }}</td>
+                    <td>{{ training.with_program.nomination_start_date }}</td>
+                    <td>{{ training.with_program.nomination_end_date }}</td> -->
+                    <td>{{ training.course_title }}</td>
+                    <td>{{ training.start_date }}</td>
+                    <td>{{ training.end_date }}</td>
+                    <td>{{ training.nomination_start_date }}</td>
+                    <td>{{ training.nomination_end_date }}</td>
+                    <td>
+                        <!-- <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'view')">Veiw</a>
+                        <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,training.sequence)">Open</a> -->
+                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'view')">Veiw</a>
+                        <a href="#" class="btn btn-success btn-sm btn-flat text-white" v-if="training.status=='Created'" @click="loadeditpage(training.id,training.sequence)">Open</a>
+                        <!-- <span v-if="training.actiontype== 'Shortlisting & Selection'">
+                            <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'verify')">Open</a>
+                        </span> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</template>
+<script>
+export default {
+    data() {
+        return {
+            staffList:[],
+            dt:'',
+        }
+    },
+    methods: {
+        loadeditpage(id,type){
+            if(type=="view"){
+                this.$router.push({name:'view_participant',params: {data:id,type:type}});
+            }
+            // else if(type!=1){
+            //     this.$router.push({name:'verify_participant',params: {data:id,statusId:type}});
+            // }
+            else{
+                this.$router.push({name:'create_participant',params: {data:id,statusId:type}});
+            }
+        },
+        loadStaffList(){
+            let uri='/staff/hrdevelopment/loadprogramDetails';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.staffList = data.data;
+            });
+        },
+    },
+    mounted(){
+        this.loadStaffList();
+        $('.select2').select2();
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
+        $("#staff-table").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        this.dt =  $("#staff-table").DataTable()
+    },
+    watch: {
+        staffList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#staff-table").DataTable()
+            });
+        }
+    },
+}
+</script>
