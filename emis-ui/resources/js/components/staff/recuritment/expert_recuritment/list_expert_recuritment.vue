@@ -14,13 +14,12 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.application_no}}</td>
+                    <td><span class="badge badge-success">{{ item.application_no}}</span></td>
                     <td>{{ item.application_for}}</td>
-                     <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
-                    <td>{{ item.status}}</td>
+                    <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
+                    <td><span class="badge badge-success">{{ item.status}}</span></td>
                     <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
-                       
                     </td>
                 </tr>
             </tbody>
