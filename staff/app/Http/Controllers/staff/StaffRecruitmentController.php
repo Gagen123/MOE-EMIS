@@ -237,7 +237,7 @@ class StaffRecruitmentController extends Controller
         if($type=="principal_recruitment"){
             return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Recu-%')->get());
         }
-        if($type=="Expatriate_Recuritment"){
+        if($type=="Expatriate_Recruitment"){
             return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Expat-%')->get());
         }
     }

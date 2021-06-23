@@ -364,7 +364,7 @@ class StaffApprovalController extends Controller
         $principalApproval_data="";
         $validation ="";
         switch($request['application_type']){
-            case "Expatriate_Recuritment" : {
+            case "Expatriate_Recruitment" : {
                 $validation = $this->validateExpatriateRecuritmentFields($request);
                 $principalApproval_data = $this->setExpatriateRecuritmentFields($request);
                 break;
