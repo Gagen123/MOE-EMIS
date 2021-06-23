@@ -394,7 +394,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.form.applicationNo=this.$route.params.data.application_number;
         this.loadPrincipalRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
     }
 }

@@ -1,15 +1,6 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" >
-            <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item organization-tab">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Application for principal Recuritment</label>
-                        </a>
-                    </li>
-                </ul>
-            </div>
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details"  >
@@ -214,7 +205,6 @@ export default {
         loadPrincipalRecuritmentApplication(appId,type){
             axios.get('staff/StaffApprovalController/loadPrincipalRecuritmentApplication/'+appId+'/'+type)
             .then((response) => {
-                // alert(JSON.stringify(response.data));
                 let data=response.data
                 this.form.name=data.data.name;
                 this.form.dob=data.data.DateOfBirth;
@@ -237,13 +227,10 @@ export default {
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
-                
             })
             .catch((error) => {
                 console.log("Error......"+error);
-                
             });
-
         },
         shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
@@ -397,7 +384,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.form.applicationNo=this.$route.params.data.application_number;
         this.loadPrincipalRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
     }
 }

@@ -158,7 +158,7 @@ class EstablishmentController extends Controller
             $status="";
             $app_role="";
             foreach($workflowdet as $work){
-                if($work->screenName==$request->service_name){
+                if(strtolower($work->screenName)==strtolower($request->service_name)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;

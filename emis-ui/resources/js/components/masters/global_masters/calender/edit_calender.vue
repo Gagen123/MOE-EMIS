@@ -109,15 +109,14 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
         this.form.id=this.$route.params.data.id;
         this.form.year=this.$route.params.data.year;
         this.form.from_date=this.$route.params.data.from_date;
         this.form.to_date=this.$route.params.data.to_date;
         this.form.remarks=this.$route.params.data.remarks;
-        alert(this.$router.params.data.type);
-        this.form.type=this.$router.params.data.type;
-        $('#type').val(this.$router.params.data.type).trigger('change');
+
+        this.form.type=this.$route.params.data.type;
+        $('#type').val(this.$route.params.data.type).trigger('change');
         this.form.status=this.$route.params.data.status;
     },
 }

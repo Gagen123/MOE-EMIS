@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">Training (HR Development) Programme</h6></li>
         </ol>
@@ -10,16 +10,21 @@
                        <span :class="item.screen_icon"></span>
                        {{ item.screen_name}}
                     </router-link>
-                </li> 
+                </li>
 
                 <li class="nav-item active pr-1">
                     <router-link id="service" to="/programme_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Programme
                     </router-link>
                 </li>
-                 <li class="nav-item active pr-1">
+                <!-- <li class="nav-item active pr-1">
                     <router-link id="service" to="/nomination_selection" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Selection & Nomination
+                    </router-link>
+                </li> -->
+                <li class="nav-item active pr-1">
+                    <router-link id="service" to="/participant" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Update Participant
                     </router-link>
                 </li>
             </ul>
@@ -42,9 +47,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }

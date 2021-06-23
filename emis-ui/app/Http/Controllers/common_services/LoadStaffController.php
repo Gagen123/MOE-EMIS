@@ -41,13 +41,10 @@ class LoadStaffController extends Controller{
         }
 
         //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise"){
+        if($type=="orgwise" || $type=="dzo_hq_departmentwise"){
             $param=$parent_id;
         }
-        //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise"){
-            $param=$parent_id;
-        }
+
         // dd($type.'/'.$param);
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;

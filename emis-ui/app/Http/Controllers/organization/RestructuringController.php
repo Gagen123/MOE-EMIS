@@ -147,7 +147,7 @@ class RestructuringController extends Controller
         $app_role="";
         $screen_name="";
         foreach($workflowdet as $work){
-            if($work->screenName==$request->application_for){
+            if(strtolower($work->screenName)==strtolower($request->application_for)){
                 $screen_id=$work->SysSubModuleId;
                 $status=$work->Sequence;
                 $app_role=$work->SysRoleId;
@@ -260,7 +260,7 @@ class RestructuringController extends Controller
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
             // dd(strtolower($work->screenName),$work->Establishment_type,$service_name);
-            if($work->Sequence!=1 && $work->screenName==$service_name){
+            if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -410,7 +410,7 @@ class RestructuringController extends Controller
             $app_role="";
             $service_name=json_decode($response_data)->data->establishment_type;
             foreach($workflowdet as $work){
-                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                if(strtolower($work->Establishment_type)==strtolower(str_replace (' ', '_',strtolower($service_name)))){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -633,7 +633,7 @@ class RestructuringController extends Controller
             $screen_name="";
             $app_role="";
             foreach($workflowdet as $work){
-                if($work->screenName==$request->application_for){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -885,7 +885,7 @@ class RestructuringController extends Controller
             $service_name=json_decode($response_data)->data->establishment_type;
 
             foreach($workflowdet as $work){
-                if($work->screenName==$request->application_for){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -1121,7 +1121,7 @@ class RestructuringController extends Controller
             $app_role="";
 
             foreach($workflowdet as $work){
-                if($work->screenName==$request->application_for){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -1179,7 +1179,7 @@ class RestructuringController extends Controller
             //     $screen_id=$work->SysSubModuleId;
             //     $sequence=$work->Sequence;
             // }
-            if($work->Sequence!=1 && $work->screenName==$service_name){
+            if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;

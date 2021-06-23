@@ -17,10 +17,6 @@
                             <form class="form-horizontal">
                                 <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                                     <div class="form-group row">
-                                      <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>Passport/Emigration:</label>
-                                             <span class="text-blue text-bold">{{form.passport}}</span>
-                                        </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Name:</label>
                                              <span class="text-blue text-bold">{{form.name}}</span>
@@ -29,14 +25,13 @@
                                             <label>Date of Birth:</label>
                                             <span class="text-blue text-bold">{{form.dob}}</span>
                                         </div>
-                                       
-                                    </div>
-                                    <div class="form-group row">
-                                        
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Country:</label>
                                             <span class="text-blue text-bold">{{form.country}}</span>
                                         </div>
+                                       
+                                    </div>
+                                    <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Address:</label>
                                             <span class="text-blue text-bold">{{form.address}}</span>
@@ -45,13 +40,12 @@
                                             <label>Email Address:</label>
                                             <span class="text-blue text-bold">{{form.email}}</span>
                                         </div>
-                                        
-                                    </div>
-                                    <div class="form-group row">
-                                       <div class="col-lg-4 col-md-4 col-sm-4">
+                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Application Number:</label>
                                              <span class="text-blue text-bold">{{form.application_no}}</span>
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Applcation For:</label>
                                             <span class="text-blue text-bold">{{form.application_for}}</span>
@@ -151,9 +145,9 @@ export default {
         return{
             attachments:'',
             form: new form({
+                passport:'',
                 name:'', 
                 dob:'',
-                passport:'',
                 country:'India',
                 address:'',
                 email:'',
@@ -203,7 +197,6 @@ export default {
                 this.form.attachments.pop();
             }
         },
-       
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -214,9 +207,9 @@ export default {
             axios.get('staff/StaffApprovalController/loadPrincipalRecuritmentApplication/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data
+                this.form.passport=data.data.passport;
                 this.form.name=data.data.name;
                 this.form.dob=data.data.DateOfBirth;
-                this.form.passport=data.data.passport;
                 this.form.country=data.data.CountryOfExpatriate;
                 this.form.address=data.data.AddressOfExpatriate;
                 this.form.email=data.data.EmailAddress;
@@ -330,7 +323,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.form.applicationNo=this.$route.params.data.application_number;
         this.loadExpatriateRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
     }
 }
