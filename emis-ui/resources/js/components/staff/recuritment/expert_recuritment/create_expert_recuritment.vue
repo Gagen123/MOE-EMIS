@@ -50,13 +50,13 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        
+
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
                                             <label>Email Address:</label>
                                             <input type="text" class="form-control" @change="removeerror('email')" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
                                             <has-error :form="form" field="email"></has-error>
                                         </div>
-                                        
+
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <label>Contact Number:</label>
                                             <input type="number" class="form-control" @change="removeerror('contact_number')" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
@@ -122,15 +122,15 @@ export default {
             countryList:[],
             form: new form({
                 passport:'',
-                name:'', 
+                name:'',
                 dob:'',
                 country:'',
                 address:'',
                 email:'',
                 contact_number:'',
-                application_for:'Expatriate Recuritment',
+                application_for:'Expatriate Recruitment',
                 application_type:'Expatriate_Recuritment',
-                action_type:'add', 
+                action_type:'add',
                 status:'Submitted',
                 organization_type:'',
                 status:'Submitted',
@@ -162,7 +162,7 @@ export default {
                 this.form.attachments.pop();
             }
         },
-       
+
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -187,7 +187,7 @@ export default {
                     'content-type': 'multipart/form-data'
                 }
             }
-            
+
             let formData = new FormData();
             formData.append('id', this.form.id);
             formData.append('ref_docs[]', this.form.ref_docs);
@@ -234,12 +234,12 @@ export default {
                 this.form.errors.errors = err.response.data.errors;
             })
         },
-         
+
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
-                
+
                 $('#'+id).addClass('select2');
             }
             if(id=="country"){
@@ -276,7 +276,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        
+
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -293,7 +293,7 @@ export default {
     },
      created() {
          this.loadcountryList();
-       
+
     },
 }
 </script>
