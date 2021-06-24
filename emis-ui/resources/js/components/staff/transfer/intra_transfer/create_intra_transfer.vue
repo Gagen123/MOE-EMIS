@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="card card-danger card-outline" id="invalidsection" style="display:none">
             <div class="card-body pb-0 mb-0">
                 <div class="callout callout-danger">

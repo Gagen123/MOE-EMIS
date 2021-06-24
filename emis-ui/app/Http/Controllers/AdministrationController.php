@@ -169,6 +169,30 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
+    
+    public function saveTransferConfigMasters(Request $request){
+        $rules=[];
+        $customMessages =[];
+        $rules = [
+            'transfer_type_id'          =>  'required',
+            'role_id'                   =>  'required',
+        ];
+        $customMessages = [
+            'transfer_type_id.required' => 'This field is required',
+            'role_id.required'          => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $data =[
+            'id'                        =>  $request['id'],
+            'transfer_type_id'          =>  $request['transfer_type_id'],
+            'role_id'                   =>  $request['role_id'],
+            'action_type'               =>  $request['action_type'],
+            'role_action_mapp'          =>  $request['role_action_mapp'],
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
+        return $response_data;
+    }
     public function saveLeaveConfigMasters(Request $request){
         $rules=[];
         $customMessages =[];
