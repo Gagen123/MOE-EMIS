@@ -924,6 +924,7 @@ const routes = [
       },
         { path: '/wash',name:'wash', component: require('./components/organization/structuralFacility/wash.vue').default },
         { path: '/school_feeding',name:'school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
+        { path: '/eccdfacilities',name:'eccdfacilities', component: require('./components/organization/structuralFacility/eccdFacilities.vue').default },
       ]
     },
 

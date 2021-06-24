@@ -26,7 +26,7 @@
                                             <span class="text-blue text-bold">{{form.dob}}</span>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
-                                            <label>country:</label>
+                                            <label>Country:</label>
                                              <span class="text-blue text-bold">{{form.country}}</span>
                                         </div>
                                     </div>
@@ -128,7 +128,6 @@ export default {
         loadApplicationDetials(){
             axios.get('staff/StaffApprovalController/loadPrincipalApplicationDetials/'+this.applicationNo)
             .then((response) => {
-                alert(JSON.stringify(response.data.data));
                 let data=response.data.data
                 this.form.name=data.name;
                 this.form.dob=data.DateOfBirth;

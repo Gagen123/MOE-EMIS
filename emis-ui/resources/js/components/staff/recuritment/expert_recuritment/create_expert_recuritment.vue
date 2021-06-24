@@ -1,15 +1,6 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" >
-            <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs">
-                    <li class="nav-item organization-tab">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Application for principal Recuritment</label>
-                        </a>
-                    </li>
-                </ul>
-            </div>
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details"  >
@@ -129,6 +120,8 @@ export default {
                 email:'',
                 contact_number:'',
                 application_for:'Expatriate Recruitment',
+                application_type:'Expatriate_Recruitment',
+                action_type:'add', 
                 application_type:'Expatriate_Recuritment',
                 action_type:'add',
                 status:'Submitted',

@@ -14,12 +14,12 @@
 
                 <li class="nav-item active pr-1">
                     <router-link to="/pricipal_recuritment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Principal Recuritment
+                        Principal Recruitment
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/expert_recuritment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Expatriate Recuritment
+                        Expatriate Recruitment
                     </router-link>
                 </li>
                 
