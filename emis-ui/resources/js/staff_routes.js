@@ -601,7 +601,16 @@ const routes = [
         component: require('./components/staff/leadership/leadership_index.vue').default,
         children:[
             { path: '/', name:'staff_leadership_selection_index', component: require('./components/staff/leadership/leadership_list.vue').default },
-
+            { path: '/announcement',
+                component: require('./components/staff/leadership/announcement/announcement_index.vue').default,
+                children:[
+                    { path: '/', name:'announcement',  component: require('./components/staff/leadership/announcement/list_announcement.vue').default },
+                    { path: '/list_announcement',name:'list_announcement',  component: require('./components/staff/leadership/announcement/list_announcement.vue').default },
+                    { path: '/create_announcement',name:'create_announcement', component: require('./components/staff/leadership/announcement/create_announcement.vue').default },
+                    { path: '/edit_announcement', name:'edit_announcement', component: require('./components/staff/leadership/announcement/edit_announcement.vue').default },
+                    { path: '/view_announcement', name:'view_announcement', component: require('./components/staff/leadership/announcement/view_announcement.vue').default },
+                ],
+            },
             { path: '/nomination_index',
                 component: require('./components/staff/leadership/leadership_nomination/leadership_nomination_index.vue').default,
                 children:[

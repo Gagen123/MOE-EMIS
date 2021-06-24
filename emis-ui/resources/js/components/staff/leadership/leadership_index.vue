@@ -13,10 +13,21 @@
                 </li>
 
                 <li class="nav-item active pr-1">
+                    <router-link id="service" to="/announcement" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Create Position
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1">
+                    <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Apply
+                    </router-link>
+                </li>
+                <!-- Previous nomination Link
+                <li class="nav-item active pr-1">
                     <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Nomination
                     </router-link>
-                </li>
+                </li> -->
 
                 <!-- This menu should be static as its checked through the user id -->
                 <li class="nav-item active pr-1" id="feedback_link">

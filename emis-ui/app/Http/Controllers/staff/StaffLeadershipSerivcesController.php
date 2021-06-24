@@ -15,6 +15,49 @@ class StaffLeadershipSerivcesController extends Controller{
         $this->apiService = $apiService;
     }
 
+    public function createPost(Request $request){
+        $rules = [
+            'selection_type'    =>  'required',
+            'position_title'    =>  'required',
+            'details'           =>  'required',
+            'from_date'         =>  'required | date',
+            'to_date'           =>  'required | date | after:from_date',
+        ];
+        $customMessages = [
+            'selection_type.required'   => 'This field is required',
+            'position_title.required'   => 'This field is required',
+            'details.required'          => 'This field is required',
+            'from_date.required'        => 'This field is required',
+            'to_date.required'          => 'This field is required',
+            'to_date.after'             => 'This field cannot be before start date',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $staff_data =[
+            'id'                            =>  $request->id,
+            'selection_type'                =>  $request->selection_type,
+            'position_title'                =>  $request->position_title,
+            'details'                       =>  $request->details,
+            'from_date'                     =>  $request->from_date,
+            'to_date'                       =>  $request->to_date,
+            'document_List'                 =>  $request->document_List,
+            'applicant_List'                =>  $request->applicant_List,
+            'action_type'                   =>  $request->action_type,
+            'user_id'                       =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/createPost', $staff_data);
+        return $response_data;
+    }
+
+    public function loadAllPosts(){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllPosts/'.$this->userId());
+        return $response_data;
+    }
+    public function loadDetials($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadDetials/'.$id);
+        return $response_data;
+    }
+
+
     public function createLeadershipSelection(Request $request){
         $rules = [
             'selection_type'    =>  'required',
@@ -38,12 +81,12 @@ class StaffLeadershipSerivcesController extends Controller{
             'to_date'                       =>  $request->to_date,
             'details'                       =>  $request->details,
             'nomi_staffList'                =>  $request->nomi_staffList,
-            'user_id'                       =>  $this->userId() 
+            'user_id'                       =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/createLeadershipSelection', $staff_data);
         return $response_data;
     }
-    
+
     public function loadLeadershipSelection($type="",$id=""){
         if($type=="draft"){
             $id=$this->userId();
@@ -51,7 +94,7 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadLeadershipSelection/'.$type.'/'.$id);
         return $response_data;
     }
-    
+
     public function createNominationForLeadershipSelection(Request $request){
         $rules = [
             'staff_type'            =>  'required',
@@ -76,26 +119,26 @@ class StaffLeadershipSerivcesController extends Controller{
             'email'                         =>  $request->email,
             'feedback_id'                   =>  $request->feedback_id,
             'nominees_id'                   =>  $request->nominees_id,
-            'user_id'                       =>  $this->userId() 
+            'user_id'                       =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/createNominationForLeadershipSelection', $nomi_data);
         return $response_data;
     }
-    
+
     public function loadNominationForLeadershipSelection($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadNominationForLeadershipSelection/'.$id);
         return $response_data;
     }
-    
+
     public function publishleadership(Request $request){
         $staff_data =[
             'id'                            =>  $request->id,
-            'user_id'                       =>  $this->userId() 
+            'user_id'                       =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/publishleadership', $staff_data);
         return $response_data;
     }
-    
+
     public function loadAllLeadershipSelection(){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllLeadershipSelection');
         return $response_data;

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\staff;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
+use App\Models\staff_leadership\ApplicableApplicant;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff_leadership\LeadershipDetails;
 use App\Models\staff_leadership\NominationDetails;
 use App\Models\staff_leadership\FeedbackProviderDetails;
+use App\Models\staff_leadership\RequiredAttachment;
 use Illuminate\Support\Facades\DB;
 class StaffLeadershipSerivcesController extends Controller{
     use ApiResponser;
@@ -15,6 +17,107 @@ class StaffLeadershipSerivcesController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
+    public function createPost(Request $request){
+        $response_data=[];
+        $data =[
+            'selection_type'                =>  $request->selection_type,
+            'position_title'                =>  $request->position_title,
+            'from_date'                     =>  $request->from_date,
+            'to_date'                       =>  $request->to_date,
+            'details'                       =>  $request->details,
+        ];
+        if($request->id==""){
+            $rules = [
+                'selection_type'    =>  'required',
+                'position_title'    =>  'required',
+                'details'           =>  'required',
+                'from_date'         =>  'required | date',
+                'to_date'           =>  'required | date | after:from_date',
+            ];
+            $customMessages = [
+                'selection_type.required'   => 'This field is required',
+                'position_title.required'   => 'This field is required',
+                'details.required'          => 'This field is required',
+                'from_date.required'        => 'This field is required',
+                'to_date.required'          => 'This field is required',
+                'to_date.after'             => 'This field cannot be before start date',
+            ];
+            $this->validate($request, $rules,$customMessages);
+            $data=array_merge($data,
+                array('status'              =>  $request->action_type,
+                    'created_by'            =>  $request->user_id,
+                    'created_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+            $response_data = LeadershipDetails::create($data);
+            if($request->document_List!=null && $request->document_List!="null" && $request->document_List!="" && sizeof($request->document_List)>0){
+                foreach($request->document_List as $doc){
+                    $doc_data =[
+                        'leadership_id'            =>  $response_data->id,
+                        'attachment'               =>  $doc['document']
+                    ];
+                    RequiredAttachment::create($doc_data);
+                }
+            }
+
+            foreach($request->applicant_List as $app){
+                $app_data =[
+                    'leadership_id'             =>  $response_data->id,
+                    'role_id'                   =>  $app['applicant']
+                ];
+                ApplicableApplicant::create($app_data);
+            }
+        }
+        else{
+            $data=array_merge($data,
+                array('updated_by'            =>  $request->user_id,
+                      'updated_at'            =>  date('Y-m-d h:i:s')
+                )
+            );
+            $act_det = LeadershipDetails::where ('id', $request->id)->firstOrFail();
+            $act_det->fill($data);
+            $response_data=$act_det->save();
+            if($request->document_List!=null && $request->document_List!="null" && $request->document_List!="" && sizeof($request->document_List)>0){
+                RequiredAttachment::where('leadership_id',$request->id)->delete();
+                foreach($request->document_List as $doc){
+                    $doc_data =[
+                        'leadership_id'            =>  $request->id,
+                        'attachment'               =>  $doc['document']
+                    ];
+                    RequiredAttachment::create($doc_data);
+                }
+            }
+            if($request->applicant_List!=null && $request->applicant_List!="null" && $request->applicant_List!="" && sizeof($request->applicant_List)>0){
+                ApplicableApplicant::where('leadership_id',$request->id)->delete();
+                foreach($request->applicant_List as $app){
+                    $app_data =[
+                        'leadership_id'             =>  $request->id,
+                        'role_id'                   =>  $app['applicant']
+                    ];
+                    ApplicableApplicant::create($app_data);
+                }
+            }
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
+    public function loadAllPosts($user_id=""){
+        $respomse_data=LeadershipDetails::where('created_by',$user_id)->get();
+        return $this->successResponse($respomse_data);
+    }
+
+    public function loadDetials($id=""){
+        $respomse_data=LeadershipDetails::where('id',$id)->first();
+        if($respomse_data!=""){
+            $attachments=RequiredAttachment::where('leadership_id',$id)->get();
+            if($attachments!=null && $attachments!=""){
+                $respomse_data->attachments=$attachments;
+            }
+            $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
+        }
+        return $this->successResponse($respomse_data);
+    }
+
 
     public function createLeadershipSelection(Request $request){
         $response_data=[];
@@ -91,7 +194,7 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadLeadershipSelection($type="",$id=""){
         if($type=="draft"){
             $respomse_data=LeadershipDetails::where('created_by',$id)->where('status','pending')->first();
@@ -103,7 +206,7 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         return $this->successResponse($respomse_data);
     }
-    
+
     public function createNominationForLeadershipSelection(Request $request){
         $rules = [
             'staff_type'            =>  'required',
@@ -132,12 +235,12 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data = FeedbackProviderDetails::create($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadNominationForLeadershipSelection($id=""){
         $respomse_data=FeedbackProviderDetails::where('leadership_id',$id)->get();
         return $this->successResponse($respomse_data);
     }
-    
+
     public function publishleadership(Request $request){
         $final_details =[
             'status'        =>  'Created',
@@ -145,12 +248,12 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data=LeadershipDetails::where ('id', $request->id)->update($final_details);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadAllLeadershipSelection(){
         $respomse_data=LeadershipDetails::where('status','created')->get();
         return $this->successResponse($respomse_data);
     }
-    
+
     public function checkforfeedbackLink($id=""){
         // return FeedbackProviderDetails::where('staff_id',$id)->get();
         // dd($id);
