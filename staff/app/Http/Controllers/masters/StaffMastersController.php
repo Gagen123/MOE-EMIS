@@ -13,6 +13,7 @@ use App\Models\staff_masters\StaffMajorGrop;
 use App\Models\staff_masters\StaffSubMajorGrop;
 use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\TransferType;
 use App\Models\staff_masters\QualificationType;
 use App\Models\staff_masters\QualificationLevel;
 use App\Models\staff_masters\Qualification;
@@ -93,6 +94,7 @@ class StaffMastersController extends Controller{
                     $response_data = Subjects::create($data);
                 }
             }
+           
             if($request->actiontype=="edit"){
                 $data ="";
                 $table="";
@@ -132,6 +134,15 @@ class StaffMastersController extends Controller{
                 $data->update();
                 $response_data = $data;
             }
+        }
+        if($request['record_type']=="transfer_type"){
+
+            try{
+            $response_data = TransferType::create();
+            }catch(\Illuminate\Database\QueryException $ex){
+            dd($ex);
+            }
+            return $response_data;
         }
 
         if($request['record_type']=="staff_qualification"){
