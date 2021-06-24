@@ -229,7 +229,6 @@ const routes = [
                     { path: '/edit_leave_config', name:'edit_leave_config', component: require('./components/masters/staff_leave_masters/leave_config/edit_leave_config.vue').default },
                 ],
             },
-
         ]
     },
 
@@ -539,9 +538,7 @@ const routes = [
 
         ]
     },
-
     { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
-
     //Management Body Transactions
     { path:'/management_body',
         component: require('./components/staff/management/management_body_index.vue').default,
