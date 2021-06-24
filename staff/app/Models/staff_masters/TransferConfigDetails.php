@@ -4,7 +4,7 @@ namespace App\Models\staff_masters;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
-class TransferConfigurationDetials extends Model
+class TransferConfigDetails extends Model
 {
     use HasFactory, Uuid;
     protected $table="master_staff_transfer_config_details";

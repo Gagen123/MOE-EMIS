@@ -22,8 +22,6 @@ use App\Models\staff_masters\MaritalStatus;
 use App\Models\staff_masters\StaffSubjectArea;
 use App\Models\staff_masters\Subjects;
 use App\Models\staff_masters\CureerStage;
-use App\Models\staff_masters\TransferConfiguration;
-use App\Models\staff_masters\TransferConfigurationDetials;
 use App\Models\staff_masters\QualificationDescription;
 use App\Models\staff_masters\CourseMode;
 use App\Models\staff_masters\TransferUndertaking;
@@ -37,9 +35,8 @@ use App\Models\staff_service_masters\StaffOffenceAction;
 use App\Models\staff_masters\LeaveType;
 use App\Models\staff_masters\LeaveConfiguration;
 use App\Models\staff_masters\LeaveConfigurationDetials;
- 
-
-
+use App\Models\staff_masters\TransferConfig;
+use App\Models\staff_masters\TransferConfigDetails;
 
 class StaffMastersController extends Controller{
     use ApiResponser;
@@ -47,7 +44,7 @@ class StaffMastersController extends Controller{
     public $audit_database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
-        
+
         $this->audit_database = config('services.constant.auditdb');
     }
     public function saveStaffMasters(Request $request){
@@ -85,7 +82,7 @@ class StaffMastersController extends Controller{
                     'created_by'    =>  $request['user_id'],
                     'created_at'    =>  date('Y-m-d h:i:s'),
                 ];
-                
+
                 if($request['record_type']=="sub_major_group"){
                     $response_data = StaffSubMajorGrop::create($data);
                 }
@@ -97,7 +94,7 @@ class StaffMastersController extends Controller{
                     $response_data = Subjects::create($data);
                 }
             }
-           
+
             if($request->actiontype=="edit"){
                 $data ="";
                 $table="";
@@ -710,9 +707,9 @@ class StaffMastersController extends Controller{
         $data = array(
             'leave_type_id'             =>  $request['leave_type_id'],
             'submitter_role_id'         =>  $request['role_id'],
-            
+
         );
-        
+
         $this->validate($request, $rules,$customMessages);
         if($request['action_type']=="add"){
             $data =$data +[
@@ -747,7 +744,7 @@ class StaffMastersController extends Controller{
                 $action_Id= LeaveConfigurationDetials::create($data);
             }
         }
-        
+
         return $this->successResponse($config_det, Response::HTTP_CREATED);
     }
 //transfer service by gagen
@@ -763,7 +760,7 @@ class StaffMastersController extends Controller{
         $data = array(
             'transfer_type_id'          =>  $request['transfer_type_id'],
             'submitter_role_id'         =>  $request['role_id'],
-            
+
         );
         $this->validate($request, $rules,$customMessages);
         if($request['action_type']=="add"){
@@ -772,7 +769,7 @@ class StaffMastersController extends Controller{
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
             // dd($data);
-            $config_det= TransferConfiguration::create($data);
+            $config_det= TransferConfig::create($data);
             // dd($config_det);
             foreach ($request->role_action_mapp as $rol){
                 $data = array(
@@ -781,7 +778,7 @@ class StaffMastersController extends Controller{
                     'authority_type_id'     =>  $rol['authority'],
                     'role_id'               =>  $rol['role'],
                 );
-                $action_Id= TransferConfigurationDetials::create($data);
+                $action_Id= TransferConfigDetails::create($data);
             }
         }
         if($request['action_type']=="edit"){
@@ -789,8 +786,8 @@ class StaffMastersController extends Controller{
                 'updated_by'                =>  $request['user_id'],
                 'updated_at'                =>  date('Y-m-d h:i:s')
             ];
-            TransferConfiguration ::where('id',$request['id'])->update($data);
-            TransferConfigurationDetials ::where('transfer_config_id',$request['id'])->delete();
+            TransferConfig ::where('id',$request['id'])->update($data);
+            TransferConfigDetails ::where('transfer_config_id',$request['id'])->delete();
             foreach ($request->role_action_mapp as $rol){
                 $data = array(
                     'transfer_config_id'      =>  $request['id'],
@@ -798,21 +795,21 @@ class StaffMastersController extends Controller{
                     'authority_type_id'     =>  $rol['authority'],
                     'role_id'               =>  $rol['role'],
                 );
-                $action_Id= TransferConfigurationDetials ::create($data);
+                $action_Id= TransferConfigDetails ::create($data);
             }
         }
         return $this->successResponse($config_det, Response::HTTP_CREATED);
     }
 
-    
+
     public function loadLeaveConfigMasters($type="",$submitter=""){
-        return $this->successResponse(TransferConfiguration ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
+        return $this->successResponse(TransferConfig ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
     }
-    
+
     public function loadAllLeaveConfigMasters($type="",$submitter=""){
-        return $this->successResponse(TransferConfiguration ::all());
+        return $this->successResponse(TransferConfig ::all());
     }
-    
+
     public function loadLeaveConfigDetails($id=""){
         $data=LeaveConfiguration::where('id',$id)->first();
         $data->conDetails= LeaveConfigurationDetials::where('leave_config_id',$id)->get();
