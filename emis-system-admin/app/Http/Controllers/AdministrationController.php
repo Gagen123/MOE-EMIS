@@ -32,11 +32,11 @@ class AdministrationController extends Controller{
                 $validate=$this->validate($request, $rule);
                 $data =[
                     'country_name'  =>  $request['name'],
-                    'nationality'  =>  $request['nationality'],
-                    'code'  =>  $request['code'],
-                    'status'    =>  $request['status'],
-                    'created_by'=>  $request['user_id'],
-                    'created_at'=>  date('Y-m-d h:i:s'),
+                    'nationality'   =>  $request['nationality'],
+                    'code'          =>  $request['code'],
+                    'status'        =>  $request['status'],
+                    'created_by'    =>  $request['user_id'],
+                    'created_at'    =>  date('Y-m-d h:i:s'),
                 ];
                 $country = Country::create($data);
                 return $this->successResponse($country, Response::HTTP_CREATED);
@@ -115,6 +115,7 @@ class AdministrationController extends Controller{
                         'type'          =>  $request['type'],
                         'remarks'       =>  $request['remarks'],
                         'status'        =>  $request['status'],
+                        'user_type'     =>  $request['user_type'],
                         'created_by'    =>  $request['user_id'],
                         'created_at'    =>  date('Y-m-d h:i:s'),
                     ];
@@ -263,6 +264,7 @@ class AdministrationController extends Controller{
             return $this->successResponse(Guidelines::where('status','1')->get());
         }
         if($param=="all_calender"){
+
             return $this->successResponse(Calender::all());
         }
         if($param=="active_calender"){

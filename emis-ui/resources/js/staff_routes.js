@@ -451,18 +451,22 @@ const routes = [
                     { path: '/edit_transfer_window', name:'edit_transfer_window', component: require('./components/staff/transfer_window/edit_transfer_window.vue').default },
                 ],
             },
-            { path: '/transfer_index',
-                component: require('./components/staff/transfer/transfer_index.vue').default,
+        ]
+    },
+    //Transfer Applicaiton
+    { path:'/transfer_service_index', component: require('./components/staff/transfer/transfer_index.vue').default,
+        children:[
+            { path: '/',name:'transfer_service_index', component: require('./components/staff/transfer/transfer_list.vue').default },
+            { path: '/intra_transfer',
+                component: require('./components/staff/transfer/intra_transfer/intra_transfer_index.vue').default,
                 children:[
-                    { path: '/', name:'transfer_index',  component: require('./components/staff/transfer/transfer_list.vue').default },
-                    { path: '/list_transfer',name:'list_transfer',  component: require('./components/staff/transfer/transfer_list.vue').default },
-                    { path: '/create_transfer',name:'create_transfer', component: require('./components/staff/transfer/create_transfer.vue').default },
-                    { path: '/edit_transfer', name:'edit_transfer', component: require('./components/staff/transfer/edit_transfer.vue').default },
+                    { path: '/', name:'intra_transfer',  component: require('./components/staff/transfer/intra_transfer/intra_transfer_list.vue').default },
+                    { path: '/list_intra_transfer',name:'list_intra_transfer',  component: require('./components/staff/transfer/intra_transfer/intra_transfer_list.vue').default },
+                    { path: '/create_intra_transfer',name:'create_intra_transfer', component: require('./components/staff/transfer/intra_transfer/create_intra_transfer.vue').default },
+                    { path: '/edit_intra_transfer', name:'edit_intra_transfer', component: require('./components/staff/transfer/intra_transfer/edit_intra_transfer.vue').default },
+                    { path: '/intra_transfer_acknowledgement', name:'intra_transfer_acknowledgement', component: require('./components/staff/transfer/intra_transfer/acknowledgement.vue').default },
                 ],
             },
-
-            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement',
-            component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
     },
 
