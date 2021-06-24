@@ -76,6 +76,7 @@ class AdministrationController extends Controller{
             'from_date'             =>  $request['from_date'],
             'to_date'               =>  $request['to_date'],
             'type'                  =>  $request['type'],
+            'user_type'             =>  $request['user_type'],
             'remarks'               =>  $request['remarks'],
             'user_id'               =>$this->userId()
         ];

@@ -24,7 +24,14 @@
                         <label>Calander For:</label>
                         <select class="form-control select2" id="type" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }">
                             <option value="">--Select--</option>
-                            <option value="Staff Transfer">Staff Transfer</option>
+                            <template v-if="form.user_type=='Dzongkhag'">
+                                <option value="Intra Transfer">Intra Transfer</option>
+                                <option value="Intra Transfer Appeal">Intra Transfer Appeal</option>
+                            </template>
+                            <template v-if="form.user_type=='Ministry'">
+                                <option value="Inter Transfer">Inter Transfer</option>
+                                <option value="Inter Transfer Appeal">Inter Transfer Appeal</option>
+                            </template>
                         </select>
                         <has-error :form="form" field="type"></has-error>
                     </div>
@@ -56,6 +63,7 @@ export default {
                 type:'',
                 status: 1,
                 remarks:'',
+                user_type:'',
                 action_type:'add',
                 record_type:'calender',
             })
@@ -122,8 +130,16 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
-        Fire.$on('changefunction',(id)=> {
+        Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
+        });
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.form.user_type=data['acess_level'];
+        })
+        .catch(errors => {
+            console.log(errors)
         });
     },
 }

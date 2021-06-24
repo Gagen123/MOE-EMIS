@@ -653,7 +653,7 @@ class EstablishmentController extends Controller{
                 else if($data->establishment_type=="Bifurcation"){
                     $data->proposedName=Bifurcation::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
-                else{
+                else if($data->establishment_type=="Public School" || $data->establishment_type=="Public ECCD" || $data->establishment_type=="Public ECR"){
                     //dd('ddd');proposedName
                     $data->proposedName=ApplicationEstPublic::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }

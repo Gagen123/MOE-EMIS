@@ -24,6 +24,7 @@
                             <option value="HR Development">HR_Development</option>
                             <option value="Leave Service">Leave Service</option>
                             <option value="Staff Service">Staff Service</option>
+                            <option value="Staff Transfer Service">Staff Transfer Service</option>
                             <option value="Leadership Selection">Leadership Selection</option>
                             <option value="Organization Master">Organization Master</option>
                             <option value="Academics Master">Academics Master</option>
@@ -32,7 +33,7 @@
                             <option value="Mess Management">Mess Management</option>
                             <option value="Management Body">Management Body</option>
                             <option value="Staff Recuritment"> Staff Recuritment</option>
-                           
+
                         </select>
                         <has-error :form="form" field="guideline_for"></has-error>
                     </div>
