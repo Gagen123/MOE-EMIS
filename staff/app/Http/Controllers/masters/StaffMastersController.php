@@ -13,6 +13,7 @@ use App\Models\staff_masters\StaffMajorGrop;
 use App\Models\staff_masters\StaffSubMajorGrop;
 use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\TransferType;
 use App\Models\staff_masters\QualificationType;
 use App\Models\staff_masters\QualificationLevel;
 use App\Models\staff_masters\Qualification;
@@ -21,6 +22,8 @@ use App\Models\staff_masters\MaritalStatus;
 use App\Models\staff_masters\StaffSubjectArea;
 use App\Models\staff_masters\Subjects;
 use App\Models\staff_masters\CureerStage;
+use App\Models\staff_masters\TransferConfiguration;
+use App\Models\staff_masters\TransferConfigurationDetials;
 use App\Models\staff_masters\QualificationDescription;
 use App\Models\staff_masters\CourseMode;
 use App\Models\staff_masters\TransferUndertaking;
@@ -34,6 +37,7 @@ use App\Models\staff_service_masters\StaffOffenceAction;
 use App\Models\staff_masters\LeaveType;
 use App\Models\staff_masters\LeaveConfiguration;
 use App\Models\staff_masters\LeaveConfigurationDetials;
+ 
 
 
 
@@ -93,6 +97,7 @@ class StaffMastersController extends Controller{
                     $response_data = Subjects::create($data);
                 }
             }
+           
             if($request->actiontype=="edit"){
                 $data ="";
                 $table="";
@@ -132,6 +137,15 @@ class StaffMastersController extends Controller{
                 $data->update();
                 $response_data = $data;
             }
+        }
+        if($request['record_type']=="transfer_type"){
+
+            try{
+            $response_data = TransferType::create();
+            }catch(\Illuminate\Database\QueryException $ex){
+            dd($ex);
+            }
+            return $response_data;
         }
 
         if($request['record_type']=="staff_qualification"){
@@ -459,6 +473,9 @@ class StaffMastersController extends Controller{
     }
 
     public function loadStaffMasters($param=""){
+        if($param=="all_transfer_type_list"){
+            return $this->successResponse(TransferType::all());
+        }
         if($param=="all_transfer"){
             return $this->successResponse(TransferReason::all());
         }
@@ -733,13 +750,67 @@ class StaffMastersController extends Controller{
         
         return $this->successResponse($config_det, Response::HTTP_CREATED);
     }
+//transfer service by gagen
+    public function saveTransferConfigMasters(Request $request){
+        $rules = [
+            'transfer_type_id' =>  'required',
+            'role_id'          =>  'required',
+        ];
+        $customMessages = [
+            'transfer_type_id.required' => 'This field is required',
+            'role_id.required'          => 'This field is required',
+        ];
+        $data = array(
+            'transfer_type_id'          =>  $request['transfer_type_id'],
+            'submitter_role_id'         =>  $request['role_id'],
+            
+        );
+        $this->validate($request, $rules,$customMessages);
+        if($request['action_type']=="add"){
+            $data =$data +[
+                'created_by'                =>  $request['user_id'],
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            // dd($data);
+            $config_det= TransferConfiguration::create($data);
+            // dd($config_det);
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'transfer_config_id'    =>  $config_det->id,
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $action_Id= TransferConfigurationDetials::create($data);
+            }
+        }
+        if($request['action_type']=="edit"){
+            $data =$data +[
+                'updated_by'                =>  $request['user_id'],
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            TransferConfiguration ::where('id',$request['id'])->update($data);
+            TransferConfigurationDetials ::where('transfer_config_id',$request['id'])->delete();
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'transfer_config_id'      =>  $request['id'],
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $action_Id= TransferConfigurationDetials ::create($data);
+            }
+        }
+        return $this->successResponse($config_det, Response::HTTP_CREATED);
+    }
+
     
     public function loadLeaveConfigMasters($type="",$submitter=""){
-        return $this->successResponse(LeaveConfiguration::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
+        return $this->successResponse(TransferConfiguration ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
     }
     
     public function loadAllLeaveConfigMasters($type="",$submitter=""){
-        return $this->successResponse(LeaveConfiguration::all());
+        return $this->successResponse(TransferConfiguration ::all());
     }
     
     public function loadLeaveConfigDetails($id=""){
