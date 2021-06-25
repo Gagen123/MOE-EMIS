@@ -169,7 +169,7 @@ class AcademicController extends Controller
             'data.*.std_student_id.required' => 'This field is required',
         ];
             if($request['action']=="add"){
-                $rules['attendance_date'] = 'required|unique:aca_student_attendance';
+                $rules['attendance_date'] = ['required',Rule::unique('aca_student_attendance')->where('org_class_id',$request->org_class_id)];
                 $this->validate($request, $rules, $customMessages);
                 DB::transaction(function() use($request) {
                     $this->saveAttendance($request->all());
@@ -310,7 +310,7 @@ class AcademicController extends Controller
         $hasAttendance = DB::select($query1,$params1);
         return $this->successResponse(["studentAttendanceDetail"=>$studentAttendanceDetail,"hasAttendance"=>$hasAttendance]);
     }
-    public function saveStudentAssessment(Request $request){
+    public function saveStudentAssessment(Request $request,$userId){
         $rules = [
             'data.*.std_student_id' => 'required',
         ];
@@ -318,9 +318,9 @@ class AcademicController extends Controller
             'data.*.std_student_id.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        DB::transaction(function() use($request) {
+        DB::transaction(function() use($request,$userId) {
             $query= "DELETE FROM aca_student_assessment WHERE org_id = ? AND aca_assmt_term_id = ? AND org_class_id = ? AND aca_sub_id = ? ";
-           $param = [$request['org_id'],$request['aca_assmt_term_id'],$request['org_class_id'],$request['aca_sub_id']];
+           $param = [$request['data'][0]['org_id'],$request['aca_assmt_term_id'],$request['org_class_id'],$request['aca_sub_id']];
 
             if($request['org_stream_id']){
                 $query .= ' AND org_stream_id = ?';
@@ -333,14 +333,14 @@ class AcademicController extends Controller
             DB::delete($query,$param);
 
             $result = [
-                'org_id' => $request['org_id'],
+                'org_id' => $request['data'][0]['org_id'],
                 'org_class_id' => $request['org_class_id'],
                 'org_stream_id'  =>  $request['org_stream_id'],
                 'org_section_id'=> $request['org_section_id'],
                 'aca_sub_id'=>$request['aca_sub_id'],
                 'aca_assmt_term_id' =>  $request['aca_assmt_term_id'],
                 'class_stream_section' =>  $request['class_stream_section'],
-                'created_by' =>  $request['user_id'],
+                'created_by' =>  $userId,
                 'created_at'=>   date('Y-m-d h:i:s'),
             ];
             if($request['finalize']){
@@ -357,7 +357,7 @@ class AcademicController extends Controller
                                 'std_student_id' => $studentAssessmentDetail['std_student_id'],
                                 'aca_assmt_area_id'=>$value['aca_assmt_area_id'],
                                 'aca_rating_type_id'=>$value['aca_rating_type_id'],
-                                'created_by' => $request['user_id'],
+                                'created_by' => $userId,
                                 'created_at' => date('Y-m-d h:i:s')
                             ];
                             if(array_key_exists("descriptive_score", $value)){

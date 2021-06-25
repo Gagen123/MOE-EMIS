@@ -217,6 +217,8 @@ class AcademicController extends Controller
                     array_push($selectedStudents,$students[$i]);
                 }
             }
+        }else{
+            $selectedStudents =$students;
         }
         for($i=0;$i<count($selectedStudents);$i++) {
             foreach ($assessmentAreasRatings["data"]["assessmentAreas"] as $area) {
@@ -237,6 +239,8 @@ class AcademicController extends Controller
                         $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score"] = $studentAssessment["score"];
                     }
                     $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
+                    // $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
+
 
 
                 }
@@ -260,7 +264,8 @@ class AcademicController extends Controller
         $request['org_id'] = $this->getWrkingAgencyId();
 
         $data = $request->all();
-        $response_data = $this->apiService->createData('emis/academics/saveStudentAssessment', $data);
+
+        $response_data = $this->apiService->createData('emis/academics/saveStudentAssessment'.'/'.$this->userId(), $data);
         return $response_data;
     }
     public function unlockForEdit($Id){

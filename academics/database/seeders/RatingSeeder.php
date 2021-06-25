@@ -60,7 +60,7 @@ class RatingSeeder extends Seeder
             ],
             [
                 'id' => '54b29b7e-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Beginning',
                 'dzo_name'=> 'གཞི་འཛུགས།',
                 'score'=>'1',
@@ -70,7 +70,7 @@ class RatingSeeder extends Seeder
             ],
             [
                 'id' => '67fdfba5-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Approaching',
                 'dzo_name'=> 'ཉེ་འབྱོར།',
                 'score'=>'2',
@@ -80,7 +80,7 @@ class RatingSeeder extends Seeder
             ],
             [
                 'id' => '7881f340-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Meeting',
                 'dzo_name'=> 'རེ་མཐུན།',
                 'score'=>'3',
@@ -90,7 +90,7 @@ class RatingSeeder extends Seeder
             ],
             [
                 'id' => '88ddb252-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id' => '2eefff10-b8c5-11eb-b80d-b07b2586b8c6',
+                'aca_rating_type_id' => '4fdcc557-b8c5-11eb-b80d-b07b2586b8c6',
                 'name'=>'Exceeding',
                 'dzo_name'=> 'རྨད་བྱུང་།',
                 'score'=>'4',

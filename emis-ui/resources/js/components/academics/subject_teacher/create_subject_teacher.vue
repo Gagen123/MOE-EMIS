@@ -122,6 +122,7 @@ export default {
                         }
                     });
                 });
+            
                 finalSubjectTeachers.forEach((finalSubjectTeacher,index) => {
                     subjectTeachers["classSubjectTeachers"].forEach(classSubjectTeacher => {
                         if(finalSubjectTeacher.aca_sub_id == classSubjectTeacher.aca_sub_id && finalSubjectTeacher.org_class_id == classSubjectTeacher.org_class_id && (finalSubjectTeacher.org_stream_id == classSubjectTeacher.org_stream_id || (finalSubjectTeacher.org_stream_id == null && classSubjectTeacher.org_stream_id == null)) && (finalSubjectTeacher.org_section_id == classSubjectTeacher.org_section_id || (finalSubjectTeacher.org_section_id == null && classSubjectTeacher.org_section_id == null))){

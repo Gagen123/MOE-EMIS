@@ -145,29 +145,8 @@ class AcademicMastersController extends Controller
                 $data->assessed_by_class_teacher = $request['assessed_by_class_teacher'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
-                try{
-                   $data->update();
-                } 
-                catch(Exception $e){
-                    $message = explode(' ', $e->getMessage());
-                    $dbCode = rtrim($message[4], ']');
-                    $dbCode = trim($dbCode, '[');
-                    switch ($dbCode) {
-                        case 1062:
-                            $userMessage = 'The '.$request['name'].' already exist';
-                            break;
-                        case 1049:
-                            $userMessage = 'Unknown database - probably config error:';
-                            break;
-                        case 2002:
-                            $userMessage = 'DATABASE IS DOWN:';
-                            break;
-                        default:
-                            $userMessage = 'Untrapped Error:';
-                            break;
-                    }
-                    $responsedata = ['error' =>$userMessage];
-               }
+                $data->update();
+                
                 $responsedata = $data;
             }
         }
