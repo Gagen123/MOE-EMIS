@@ -20,7 +20,7 @@ class AcaStudentAssessmentDetail extends Migration
             $table->char('aca_assmt_area_id',36)->index();
             $table->char('aca_rating_type_id',36)->index();
             $table->unsignedDecimal('score',6,2)->nullable();
-            $table->string('descriptive_score',255);
+            $table->string('descriptive_score',255)->nullable();
             $table->string('remarks',1000)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();

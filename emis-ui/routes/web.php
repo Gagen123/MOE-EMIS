@@ -678,6 +678,7 @@ Route::prefix('academics')->group(function () {
     Route::get('/loadStudentAttendance',[App\Http\Controllers\academics\AcademicController::class,'loadStudentAttendance'])->name('loadStudentAttendance');
     Route::post('/saveStudentAttendance', [App\Http\Controllers\academics\AcademicController::class, 'saveStudentAttendance'])->name('saveStudentAttendance');
     Route::get('/getStudentElectiveSubjects', [App\Http\Controllers\academics\AcademicController::class, 'getStudentElectiveSubjects'])->name('getStudentElectiveSubjects');
+    Route::get('/getClassWithElectiveSubject', [App\Http\Controllers\academics\AcademicController::class, 'getClassWithElectiveSubject'])->name('getClassWithElectiveSubject');
     Route::get('/loadStudentAssessmentList', [App\Http\Controllers\academics\AcademicController::class, 'loadStudentAssessmentList'])->name('loadStudentAssessmentList');
     Route::get('/loadStudentAssessments', [App\Http\Controllers\academics\AcademicController::class, 'loadStudentAssessments'])->name('loadStudentAssessments');
     Route::post('/saveStudentAssessment', [App\Http\Controllers\academics\AcademicController::class, 'saveStudentAssessment'])->name('saveStudentAssessment');
@@ -686,8 +687,6 @@ Route::prefix('academics')->group(function () {
     Route::get('/loadConsolidatedResult', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResult'])->name('loadConsolidatedResult');
     Route::post('/saveConsolidatedResut', [App\Http\Controllers\academics\AcademicController::class, 'saveConsolidatedResut'])->name('saveConsolidatedResut');
     Route::get('/getStudentsForAttendance', [App\Http\Controllers\academics\AcademicController::class, 'getStudentsForAttendance'])->name('getStudentsForAttendance');
-
-
 });
 
 

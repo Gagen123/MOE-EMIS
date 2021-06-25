@@ -87,7 +87,7 @@ export default {
                 });
         },
         save(){
-            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,attendance_date:this.attendance_date,data:this.studentList})
+            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,attendance_date:this.attendance_date,data:this.studentList, old_date:this.old_attendance_date})
                 .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -112,6 +112,7 @@ export default {
     created() {
         this.class_stream_section =this.$route.params.data.class_stream_section;
         this.attendance_date = this.$route.params.data.attendance_date;
+        this.old_attendance_date = this.$route.params.data.attendance_date;
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.sectionId=this.$route.params.data.org_section_id;

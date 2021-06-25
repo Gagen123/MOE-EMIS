@@ -36,38 +36,38 @@ export default {
         }
     },
     methods:{
-        getClassStreamList(uri = 'loadCommons/loadClassStreamSection/userworkingagency/NA'){
-            axios.get(uri)
-            .then(response => {
-                let datas = response.data;
-                let classStreamSection = []
-                let renameId = [] 
-                datas.forEach(element => {
-                    if(element.stream && element.section){
-                       renameId['class_stream_section'] = element.class+' '+element.stream+' '+element.section
-                    }else if(element.stream){
-                        renameId['class_stream_section'] = element.class+' '+element.stream
-                    } else if(element.section){
-                        renameId['class_stream_section'] = element.class+' '+element.section
-                    }
-                    else{
-                        renameId['class_stream_section'] = element.class
-                    }
-                    renameId['org_class_id'] = element.org_class_id
-                    renameId['org_stream_id'] = element.org_stream_id
-                    renameId['org_section_id'] = element.org_section_id
-                    renameId['OrgClassStreamId'] = element.OrgClassStreamId
-                    
-                    const obj = {...renameId};
-                    classStreamSection.push(obj);
-                });
-                this.classesStreamSectionList = classStreamSection;
-            })
-            .catch(function (error){
+       async getClassStreamList(){
+          try{
+              let classes = []
+              let  classStreamSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => {return response.data});
+              let classWithElectiveSubjects = await axios.get('academics/getClassWithElectiveSubject').then(response => response.data.data);
+              let aa = []
+               classWithElectiveSubjects.forEach((classWithElectiveSubject,index)=>{
+                    classStreamSections.forEach((classStreamSection) =>{
+                        if(classStreamSection.org_class_id == classWithElectiveSubject.org_class_id && (classStreamSection.org_stream_id == classWithElectiveSubject.org_stream_id || (classStreamSection.org_stream_id == null && classWithElectiveSubject.org_stream_id == null))){
+                            if(classStreamSection.stream && classStreamSection.section){
+                                aa["class_stream_section"] =  classStreamSection.class+' '+classStreamSection.stream+' '+classStreamSection.section
+                            }else if(classStreamSection.stream){
+                                aa['class_stream_section'] = classStreamSection.class+' '+classStreamSection.stream
+                            } else if(classStreamSection.section){
+                                aa['class_stream_section'] = classStreamSection.class+' '+classStreamSection.section
+                            }
+                            aa['OrgClassStreamId'] = classStreamSection.OrgClassStreamId
+                            aa['org_class_id'] = classStreamSection.org_class_id
+                            aa['org_id'] = classStreamSection.org_id
+                            aa['org_section_id'] = classStreamSection.org_section_id
+                            aa['org_stream_id'] = classStreamSection.org_stream_id
+                            const obj = {...aa};
+                            classes.push(obj);
+                        }
+                    })
+                })
+                this.classesStreamSectionList = classes;
+            }catch(error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
-            });
+            };
         },
         showedit(data){
             this.$router.push({name:'edit_students_elective_subject',params: {data:data}});
