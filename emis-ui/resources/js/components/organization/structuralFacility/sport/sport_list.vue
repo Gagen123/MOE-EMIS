@@ -12,7 +12,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in sportList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.facilityName}}</td>
+                    <td>{{ item.facility}}</td>
                     <td>{{ item.type}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -37,7 +37,7 @@ export default {
         /**
          * method to load sport facility
          */
-        loadSportList(uri = 'organization/loadSport/null'){
+        loadSportList(uri = 'organization/loadSport'){
             axios.get(uri)
             .then(response => {
                 let data = response;

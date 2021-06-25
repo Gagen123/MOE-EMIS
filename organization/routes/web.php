@@ -322,6 +322,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getFacilityInDropdown', 'structuralFacility\SportController@getFacilityInDropdown');
             $router->get('/getSupportInDropdown', 'structuralFacility\SportController@getSupportInDropdown');
             $router->get('/getSubFacilityDropdown/{id}', 'structuralFacility\SportController@getSubFacilityDropdown');
+            $router->get('/getSportsDetails/{sportId}', 'structuralFacility\SportController@getSportsDetails');
 
         });
         $router->group(['prefix' => 'schoolFeeding'], function () use ($router) {

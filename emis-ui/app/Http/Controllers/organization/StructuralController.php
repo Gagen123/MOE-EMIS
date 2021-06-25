@@ -35,10 +35,11 @@ class StructuralController extends Controller
         $sport =[
             'organizationId'                        =>  $this->getWrkingAgencyId(),
             'facility'                              =>  $request['facility'],
-            'support'                               =>  $request['support'],
+           // 'support'                               =>  $request['support'],
             'items_received'                        =>  $request->items_received,
             'user_id'                               =>  $this->userId()
         ];
+       // dd( $sport);
         // try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
             return $response_data;
@@ -46,6 +47,12 @@ class StructuralController extends Controller
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;
         // }
+    }
+
+    public function getSportsDetails($sportId=""){
+       // dd($sportId);
+        $sportDetails = $this->apiService->listData('emis/organization/sport/getSportsDetails/'.$sportId);
+        return $sportDetails;
     }
 
     public function saveEccd(Request $request){
@@ -78,10 +85,9 @@ class StructuralController extends Controller
         // }
     }
     
-    public function loadSport($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
-        }
+    public function loadSport(){
+        $orgId=$this->getWrkingAgencyId();
+       // dd($orgId);
         $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
         return $loadSport;
     }
