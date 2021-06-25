@@ -3,10 +3,10 @@
         <div class="card card-danger card-outline" id="error_section" style="display:none">
             <div class="card-body pb-0 mb-0">
                 <div class="callout callout-danger">
-                    <div class="form-group row"> 
+                    <div class="form-group row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0" id="err_message"></label><br>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -15,33 +15,33 @@
             <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
                 <div class="card-body pb-0 mb-0" style="display:none">
                     <div class="callout callout-success">
-                        <div class="form-group row"> 
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Trainig Type:</label><br>
                                 <span class="text-blue text-bold">{{ trainingtypeList[form.training_type]}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Course Title:</label><br>
                                 <span class="text-blue text-bold">{{form.course_title}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Organized By (Department/Division):</label><br>
                                 <span class="text-blue text-bold">{{trainingtypeList[form.organizer]}}</span>
-                            </div> 
+                            </div>
                         </div>
-                        <div class="form-group row"> 
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Related Programme:</label><br>
                                 <span class="text-blue text-bold">{{ relatedProgrammeList[form.related_programme]}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Start Date:</label><br>
                                 <span class="text-blue text-bold">{{form.start_date}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">End Date:</label><br>
                                 <span class="text-blue text-bold">{{form.end_date}}</span>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -49,20 +49,20 @@
                                     <thead>
                                         <tr>
                                             <th>Attachment Name</th>
-                                            <th>File(Image,Doc,Excel,Pdf)</th>                           
+                                            <th>File(Image,Doc,Excel,Pdf)</th>
                                         </tr>
                                     </thead>
-                                    <tbody> 
+                                    <tbody>
                                         <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td> 
+                                            <td>
                                                 {{attach.user_defined_name}}
                                             </td>
-                                            <td>    
+                                            <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
-                                </table> 
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                                         <label>Participating as:<span class="text-danger">*</span></label>
                                         <br>
                                         <span v-for="(nature, index) in nature_of_participantList" :key="index" >
-                                            <input type="radio" @change="remove_error('nature_of_participant')" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature"> 
+                                            <input type="radio" @change="remove_error('nature_of_participant')" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature">
                                             <label class="pr-3"> {{ nature_of_participantListname[nature]  }} </label>
                                         </span><br>
                                         <span class="text-danger" id="nature_of_participant_err"></span>
@@ -130,7 +130,7 @@
                                             <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <a href="#" @click="deletefile(doc)" class="fa fa-times text-danger"> Delete </a><br>
-                                        </span> 
+                                        </span>
                                     </div>
                                 </div>
                             </form>
@@ -156,27 +156,27 @@
                         <thead>
                             <tr>
                                 <th>Sl#</th>
-                                <th>CID/Work Permit No</th>   
-                                <th>Name</th>   
-                                <th>Contact</th> 
+                                <th>CID/Work Permit No</th>
+                                <th>Name</th>
+                                <th>Contact</th>
                                 <th>Email</th>
                                 <th>participation</th>
-                                <th>Attachments</th> 
-                                <th class="pl-5 pr-5"> Action </th>                                 
+                                <th>Attachments</th>
+                                <th class="pl-5 pr-5"> Action </th>
                             </tr>
                         </thead>
-                        <tbody> 
+                        <tbody>
                             <tr v-for="(item, index) in participant_list" :key="index">
                                 <td>{{ index+1}}</td>
                                 <td>{{ item.staff_details.cid_work_permit}}</td>
-                                <td>{{ item.staff_details.name}}</td> 
+                                <td>{{ item.staff_details.name}}</td>
                                 <td>{{ item.contact}}</td>
-                                <td>{{ item.email }}</td> 
+                                <td>{{ item.email }}</td>
                                 <td>{{ nature_of_participantListname[item.nature_of_participant]}}</td>
                                 <td>
                                     <span v-for="(doc, index) in item.document" :key="index">
                                         <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
-                                    </span> 
+                                    </span>
                                 </td>
                                 <td>
                                     <a href="#" class="btn btn-info btn-sm btn-flat pl-2 pr-2 text-white" @click="loadeditpage(item,'edit')">Edit</a>
@@ -191,7 +191,7 @@
                             <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
                             <has-error :form="form" field="remarks"></has-error>
                         </div>
-                    </div> 
+                    </div>
                     <hr>
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -201,8 +201,8 @@
                 </div>
             </div>
         </div>
-        
-    </div>     
+
+    </div>
 </template>
 <script>
 export default {
@@ -217,7 +217,7 @@ export default {
             participant_list:[],
             editdocument:[],
             form: new form({
-                id: '', 
+                id: '',
                 programId:'',
                 training_type: '',
                 training_type_text:'',
@@ -245,7 +245,8 @@ export default {
         onChangeFileUpload(e){
             this.form.ref_docs.push({attachment:e.target.files[0]});
         },
-        openfile(file){ 
+
+        openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
@@ -258,17 +259,17 @@ export default {
                 let data = response.data.data;
                 if(type=="active_training_type_list"){
                     for(let i=0;i<data.length;i++){
-                        this.trainingtypeList[data[i].id] = data[i].name; 
+                        this.trainingtypeList[data[i].id] = data[i].name;
                     }
                 }
                 if(type=="active_related_programme_list"){
                     for(let i=0;i<data.length;i++){
-                        this.relatedProgrammeList[data[i].id] = data[i].name; 
+                        this.relatedProgrammeList[data[i].id] = data[i].name;
                     }
                 }
                 if(type=="active_nature_of_participant_list"){
                     for(let i=0;i<data.length;i++){
-                        this.nature_of_participantListname[data[i].id] = data[i].name; 
+                        this.nature_of_participantListname[data[i].id] = data[i].name;
                     }
                 }
             })
@@ -304,9 +305,9 @@ export default {
                                 'error!',
                                 'Not able to delete this file. Please contact system adminstrator.',
                                 'error',
-                            ); 
+                            );
                         }
-                        
+
                     })
                     .catch(function (error) {
                         console.log("Error:"+error);
@@ -343,15 +344,15 @@ export default {
                                     'error!',
                                     'Not able to delete this record. Please contact system adminstrator.',
                                     'error',
-                                ); 
+                                );
                             }
-                            
+
                         })
                         .catch(function (error) {
                             console.log("Error:"+error);
                         });
                     }
-                }); 
+                });
             }
             else{
                 this.form.id=item.id;
@@ -362,21 +363,21 @@ export default {
                 this.editdocument=item.document;
                 this.form.action_type='edit';
                 this.form.nature_of_participant=item.nature_of_participant;
-                $('#add_modal').modal('show'); 
+                $('#add_modal').modal('show');
             }
         },
         loadDetails(id,statusId){
             this.form.statusId=statusId;
-            this.form.programId=id; 
+            this.form.programId=id;
             axios.get('staff/hrdevelopment/loadDetails/'+id)
-            .then((response) => {   
+            .then((response) => {
                 let data=response.data.data;
                 if(data.app_no!=undefined && data.app_no!=""){
-                    let message="Your organization has already submitted Nominations for approval with applicaiton number: <b>"+data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                    this.$router.push({name:'acknowledgement_for_errors',params: {data:message}});
+                    let message="Your organization has already submitted Nominations for approval with Application number: <b>"+data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                    this.$router.push({name:'acknowledgement_for_nomination',params: {data:message}});
                 }
                 else{
-                    let from = new Date(data.nomination_start_date);  
+                    let from = new Date(data.nomination_start_date);
                     let to   = new Date(data.nomination_end_date);
                     let currentfulldate = new Date();
                     let check = new Date(currentfulldate.getFullYear(),(currentfulldate.getMonth() + 1), currentfulldate.getDate());
@@ -389,7 +390,7 @@ export default {
                     //     $('#err_message').html('Sorry! Nomination date is over');
                     //     $('#error_section').show();
                     //     $('#maindiv').hide();
-                    // } 
+                    // }
                     else{
                         this.getParticipantDetails(data.id);
                         this.form.training_type=data.training_type;
@@ -404,20 +405,20 @@ export default {
                         this.draft_attachments=JSON.parse(response.data.documents).data;
                         this.nature_of_participantList=data.nature_of_participant.split(', ');
                     }
-                    
+
                 }
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
             });
         },
         loadStaffList(){
-            axios.get('loadCommons/userworkingagency/userworkingagency')
-            .then((response) => {   
+            axios.get('loadCommons/loadStaffList/userworkingagency/NA')
+            .then((response) => {
                 let data=response.data.data;
                 this.staff_list=data;
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error:"+error);
             });
         },
@@ -427,7 +428,7 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="participant"){ 
+            if(id=="participant"){
                 let valu=$('#participant').val();
                 this.form.participant=valu.split('_')[0];
                 this.form.email=valu.split('_')[2];
@@ -458,7 +459,7 @@ export default {
                     formData.append('attachments[]', this.form.ref_docs[i].attachment);
                 }
                 axios.post('staff/hrdevelopment/saveParticipant', formData, config)
-                .then((response) =>{  
+                .then((response) =>{
                     this.form.id=response.data.data.id;
                     Toast.fire({
                         icon: 'success',
@@ -472,25 +473,25 @@ export default {
                     $('#file').val('');
                     $('#add_modal').modal('hide');
                 })
-                .catch((error) => { 
+                .catch((error) => {
                     console.log("Errors:"+error)
                 });
             }
         },
         getParticipantDetails(program_id){
             axios.get('staff/hrdevelopment/getParticipantDetails/nomination/'+program_id)
-            .then((response) => {   
+            .then((response) => {
                 let data=response.data.data;
                 this.participant_list=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
             });
         },
         validateaddform(){
             let retval=true;
             if($('#participant').val()==""){
-                retval=false;   
+                retval=false;
             }
             if($('#participant').val()==""){
                 $('#participant_err').html('Please select participant');
@@ -522,7 +523,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         submitforapproval(){
             Swal.fire({
                 text: "Are you sure you wish to submit this details ?",
@@ -534,10 +535,10 @@ export default {
                 }).then((result) => {
                 if (result.isConfirmed) {
                     this.form.post('/staff/hrdevelopment/submitParticipants')
-                    .then((response) => {  
+                    .then((response) => {
                         if(response!=null && response!=""){
-                            let message="Applicaiton for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                            this.$router.push({name:'acknowledgement',params: {data:message}});
+                            let message="Application for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            this.$router.push({name:'acknowledgement_for_nomination_success',params: {data:message}});
                             Swal.fire(
                                 'Success!',
                                 'Nomination details has beed submitted',
@@ -545,14 +546,14 @@ export default {
                             )
                         }
                     })
-                    .catch((error) => {  
+                    .catch((error) => {
                         console.log("Error:"+error)
                     });
                 }
             });
         }
     },
-    
+
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -560,9 +561,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

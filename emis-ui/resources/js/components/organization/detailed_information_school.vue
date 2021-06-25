@@ -10,7 +10,7 @@
                     <div class="card card-success card-outline">
                         <div class="card-body">
                             <div class="tab-pane">
-                                <form class="form-horizontal">
+                                <div class="form-horizontal">
                                     <hr>
                                     <div class="row invoice-info">
                                         <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
@@ -19,9 +19,9 @@
                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                             <div class="form-group row">
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is AspNet School:</label><br>
-                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                                    <label>Has Counselling room:</label><br>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Is GeoPoliticallyLocated:</label><br>
@@ -29,23 +29,25 @@
                                                     <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Is Resource Center:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Has Counselling room:</label><br>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
-                                                </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Has shift System:</label><br>
                                                     <label><input  type="radio" v-model="form.hasShiftSystem" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasShiftSystem" value="0" tabindex=""/> No</label>
                                                 </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+
+                                            </div>
+                                            <div class="form-group row">
+                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='AspNet'>
+                                                    <label>Is AspNet School:</label><br>
+                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isAspNetSchool" value="0" tabindex=""/> No</label>
+                                                </div>
+                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Resource'>
+                                                    <label>Is Resource Center:</label><br>
+                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="1" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.isResourceCenter" value="0" tabindex=""/> No</label>
+                                                </div>
+
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Has_CE'>
                                                     <label>Has CE:</label><br>
                                                     <label><input  type="radio" v-model="form.hasCE" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasCE" value="0" tabindex=""/> No</label>
@@ -77,19 +79,19 @@
                                                 <label class="mb-1"> Name:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorName" class="form-control editable_fields" id="proprietorName" />
                                                 <has-error :form="form" field="proprietorName"></has-error>
-                                                
+
                                                 <label class="mb-1"> CID:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorCid" class="form-control editable_fields" id="proprietorCid" />
                                                 <has-error :form="form" field="proprietorCid"></has-error>
-                                                
+
                                                 <label class="mb-1"> Phone:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorPhone" class="form-control editable_fields" id="proprietorPhone" />
                                                 <has-error :form="form" field="proprietorPhone"></has-error>
-                                                
+
                                                 <label class="mb-1"> Email:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorEmail" class="form-control editable_fields" id="proprietorEmail" />
                                                 <has-error :form="form" field="proprietorEmail"></has-error>
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <hr>
@@ -144,26 +146,18 @@
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Compound Fencing:</label><br>
                                                     <label  v-for="(item, key, index) in  fence_list" :key="index" class="pr-4">
-                                                        <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/> 
+                                                        <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/>
                                                         {{item.name}}
                                                     </label>
                                                 </div>
-                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Distance From Dzongkhag HQ (KM):</label>
-                                                    <input type="number" min="0" v-model="form.distance_from_dzo" class="form-control editable_fields" id="cidOfOwner"/>
-                                                </div> -->
-                                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                    <label>Thram No:</label>
-                                                    <input type="text" name="thramNo" v-model="form.thramNo" class="form-control editable_fields" id="thramNo"/>
-                                                </div> -->
                                             </div>
                                             <div class="form-group row">
-                                                
-                                                
+
+
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Disaster Area:</label><br>
-                                                    <label  v-for="(item, key, index) in  disasterList" :key="index" class="pr-4">
-                                                        <input  type="checkbox" v-model="form.disasterArea" :value="item.id" tabindex=""/> 
+                                                    <label  v-for="(item, index) in  disasterList" :key="index" class="pr-4">
+                                                        <input  type="checkbox" name="disasterArea" v-model="form.disasterArea" :value="item.id"/>
                                                         {{item.name}}
                                                     </label>
                                                 </div>
@@ -176,14 +170,14 @@
                                             <button class="btn btn-flat btn-primary" @click="updateorg()"><i class="fa fa-check"></i> Update</button>
                                         </div>
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
 </div>
 </template>
 <script>
@@ -219,7 +213,7 @@
                     climate_type:'',distance_from_dzo:'',
                     fencingtype:'',entranceGate:'',disasterArea:[],
                     fields_for:'school'
-                }) 
+                })
             }
         },
         methods:{
@@ -228,6 +222,11 @@
                 .then(response => {
                     let response_data=response.data.data;
                     this.orgDetails=response_data;
+                    if(response_data.category=="public_eccd" ||response_data.category=="private_eccd" ){
+                         $('#AspNet').hide();
+                         $('#Resource').hide();
+                         $('#Has_CE').hide();
+                    }
                     if(response_data.category=="public_school"){
                         this.category="Public School";
                     }
@@ -243,10 +242,9 @@
                     if(response_data.category=="private_eccd"){
                         this.category="Public ECCD";
                     }
-
                     this.form.isAspNetSchool=response_data.isAspNetSchool;
                     this.form.isColocated=response_data.isColocated;
-                    this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
+                    this.form.isGeoPoliticallyLocated=response_data.isGeopoliticallyLocated;
                     this.form.isResourceCenter=response_data.isResourceCenter;
                     this.form.isSenSchool=response_data.isSenSchool;
                     this.form.hasCounselingRoom=response_data.hasCounselingRoom;
@@ -257,28 +255,29 @@
                     if(response_data.locationDetials!=null && response_data.locationDetials!=""){
                         this.form.altitude=response_data.locationDetials.altitude;
                         this.form.climate_type=response_data.locationDetials.climate_type;
-                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
+                        this.form.disasterArea=response_data.locationDetials.disasterArea;
                         this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
                         this.form.entranceGate=response_data.locationDetials.entranceGate;
-                        this.form.fencingtypeId=response_data.locationDetials.fencingtypeId;
+                        this.form.fencingtype=response_data.locationDetials.fencingtypeId;
                         this.form.map_path=response_data.locationDetials.googleMapPath;
                         this.form.latitude=response_data.locationDetials.latitude;
                         this.form.longitude=response_data.locationDetials.longitude;
                         this.form.thramNo=response_data.locationDetials.thramNo;
                     }
-                    let prop=data.contact;
+                    let prop=response_data.contactDetails;
                     let contactDetails=[];
                     for(let i=0;i<prop.length;i++){
                      contactDetails.push({contactName:prop[i].contactTypeId,phone:prop[i].phone,mobile:prop[i].mobile,email:prop[i].email,});
                     }
-                    this.count=data.length;
+                    this.count=prop.length;
                     this.form.users=contactDetails;
-                    
+
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     console.log("Error: "+error);
                 });
             },
+
             updateorg(){
                 this.form.post('organization/updateOrgBasicDetials')
                 .then((response) => {
@@ -306,19 +305,22 @@
                 .then(response => {
                     let data = response.data;
                     for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
+                        this.levelArray[data[i].id] = data[i].name;
                     }
                 });
             },
             getLat: function(){
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(this.showPosition);
-                } 
+                }
             },
             showPosition(position){
-                $('#latitude').val(position.coords.latitude);
-                $('#longitude').val(position.coords.longitude);
-                $('#altitude').val(position.coords.altitude);
+                this.form.latitude  = position.coords.latitude;
+                this.form.longitude = position.coords.longitude
+                this.form.altitude  = position.coords.altitude
+                // $('#latitude').val(position.coords.latitude);
+                // $('#longitude').val(position.coords.longitude);
+                // $('#altitude').val(position.coords.altitude);
             },
             loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Disaster'){
                 axios.get(uri)
@@ -349,18 +351,18 @@
             },
             addMore: function(){
                 this.count++;
-                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})    
-            }, 
-            remove(index){    
+                this.form.users.push({contactName:'',phone:'',mobile:'',email:''})
+            },
+            remove(index){
                 if(this.form.users.length>1){
                   this.count--;
-                  this.form.users.splice(index,1); 
+                  this.form.users.splice(index,1);
                 }
             },
             showtextbox:function(type){
                 if(type=="Yes"){
                     $('#roadtypeyes').show();
-                    $('#roadtypeno').hide(); 
+                    $('#roadtypeno').hide();
                 }
                 else if(type=="No"){
                     $('#roadtypeno').show();
@@ -371,7 +373,6 @@
                     $('roadtypeno').show();
                 }
             },
-            
         },
         mounted(){
             this.getContactTypeDropdown();
@@ -385,11 +386,11 @@
                 let data = response.data.data;
                 this.form.org_id=data['Agency_Code'];
                 this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
-            
+
         }
     }
 </script>

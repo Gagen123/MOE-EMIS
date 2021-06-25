@@ -27,11 +27,11 @@ export default {
             if(type=="add_org_programs" || type=="edit_org_programs"){
                 this.$router.push("/"+type);
             }
-            if(type=="register_student_programs"){
-                this.$router.push("/register_student_programs");
-            }
-            if(type=="student_programs_list"){
-                this.$router.push("/student_programs_list");
+            // if(type=="register_student_programs"){
+            //     this.$router.push("/register_student_programs");
+            // }
+            if(type=="list_org_programs"){
+                this.$router.push("/list_org_programs");
             }
 		},
     },

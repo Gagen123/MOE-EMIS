@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">270 Feedback (Leadership Selection)</h6></li>
         </ol>
@@ -10,16 +10,27 @@
                        <span :class="item.screen_icon"></span>
                        {{ item.screen_name}}
                     </router-link>
-                </li> 
-
-                <li class="nav-item active pr-1">
-                    <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Nomination 
-                    </router-link>
                 </li>
 
+                <li class="nav-item active pr-1">
+                    <router-link id="service" to="/announcement" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Create Position
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link id="service" to="/apply_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Create Application
+                    </router-link>
+                </li>
+                <!-- Previous nomination Link
+                <li class="nav-item active pr-1">
+                    <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Nomination
+                    </router-link>
+                </li> -->
+
                 <!-- This menu should be static as its checked through the user id -->
-                <li class="nav-item active pr-1" style="display:none" id="feedback_link">
+                <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/leadership_feedback" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Feedback
                     </router-link>
@@ -44,9 +55,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log(error);
             });
         },
@@ -60,7 +71,7 @@ export default {
                     $('#feedback_link').show();
                 }
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log(error);
             });
         },

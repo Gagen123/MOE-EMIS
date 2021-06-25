@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item nomination-tab" @click="shownexttab('nomination-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Nomination Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Nomination Details </label>
                         </a>
                     </li>
                     <li class="nav-item feedback-tab" @click="shownexttab('feedback-tab')">
@@ -22,48 +22,48 @@
                             <div class="card-body">
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Selection For:<span class="text-danger">*</span></label> 
+                                        <label>Selection For:<span class="text-danger">*</span></label>
                                         <select class="form-control select2" id="selection_type" v-model="form.selection_type" :class="{ 'is-invalid': form.errors.has('selection_type') }">
                                             <option v-for="(item, index) in selectionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select> 
+                                        </select>
                                         <has-error :form="form" field="selection_type"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Position:<span class="text-danger">*</span></label> 
+                                        <label>Position:<span class="text-danger">*</span></label>
                                         <select class="form-control select2" id="position_title" v-model="form.position_title" :class="{ 'is-invalid': form.errors.has('position_title') }">
                                             <option v-for="(item, index) in positionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select> 
+                                        </select>
                                         <has-error :form="form" field="position_title"></has-error>
                                     </div>
-                                </div>  
+                                </div>
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Feed back Start Date:<span class="text-danger">*</span></label> 
+                                        <label>Feed back Start Date:<span class="text-danger">*</span></label>
                                         <input type="date" class="form-control" @change="remove_err('from_date')" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
                                         <has-error :form="form" field="from_date"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Feed back End Date:<span class="text-danger">*</span></label> 
+                                        <label>Feed back End Date:<span class="text-danger">*</span></label>
                                         <input type="date" @change="remove_err('to_date')" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
                                         <has-error :form="form" field="to_date"></has-error>
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
-                                        <label>Details:</label> 
+                                        <label>Details:</label>
                                         <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.details" id="details"></textarea>
                                         <has-error :form="form" field="details"></has-error>
                                     </div>
-                                </div> 
+                                </div>
                                 <hr>
                                 <div class="row form-group">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label><b><u>Nominees</u></b></label> 
+                                        <label><b><u>Nominees</u></b></label>
                                     </div>
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>CID/Passport/Emp Id:</label> 
+                                        <label>CID/Passport/Emp Id:</label>
                                         <input type="text" name="emp_deails" id="emp_deails" class="form-control">
                                         <span class="text-danger" id="emp_deails_err"></span>
                                     </div>
@@ -77,7 +77,7 @@
                                                     <th>Name</th>
                                                     <th>CID/Passport</th>
                                                     <th>Position Title</th>
-                                                    <th>Organizaiton</th>  
+                                                    <th>Organizaiton</th>
                                                     <th>Dzongkhag</th>
                                                 </tr>
                                             </thead>
@@ -91,7 +91,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td colspan="5">
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId" 
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId"
                                                         @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
                                                     </td>
                                                 </tr>
@@ -99,7 +99,7 @@
                                             <span id="nminees_error" class="text-danger"></span>
                                         </table>
                                     </div>
-                                </div> 
+                                </div>
                             </div>
                         </form>
                         <hr>
@@ -114,7 +114,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div v-for='(nom, index) in nominees' :key="index">
-                                        <label class="text-blue text-bold"><b><u> Select/Choose Feedback Provider for {{nom.name}}</u></b></label> 
+                                        <label class="text-blue text-bold"><b><u> Select/Choose Feedback Provider for {{nom.name}}</u></b></label>
                                         <span class="pr-1 pl-1" v-for='(feedback, index1) in feedbackTypeList' :key="index1">
                                             <button type="button" class="btn btn-primary btn-flat btn-sm fa-pull-right" @click="showmodel(nom.name,nom.id,feedback.name,feedback.id)"><i class="fa fa-plus"></i> Add  {{feedback.name}}</button>
                                         </span>
@@ -153,10 +153,10 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="bootbox-body">
-                                                <label class="text-blue text-bold">Adding <span id="feedbacktype"></span> feedback provider for <span id="feedbackprovidername"></span> </label> 
+                                                <label class="text-blue text-bold">Adding <span id="feedbacktype"></span> feedback provider for <span id="feedbackprovidername"></span> </label>
                                                 <div class="row form-group">
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                        <label>Select type:<span class="text-danger">*</span></label> 
+                                                        <label>Select type:<span class="text-danger">*</span></label>
                                                         <select class="form-control" @change="showfield()" id="staff_type" v-model="feedback.staff_type" :class="{ 'is-invalid': feedback.errors.has('staff_type') }">
                                                             <option value="">--Select--</option>
                                                             <option value="Internal">Internal</option>
@@ -165,7 +165,7 @@
                                                         <has-error :form="feedback" field="staff_type"></has-error>
                                                     </div>
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="internalstaff">
-                                                        <label>CID/Passport/Emp Id:</label> 
+                                                        <label>CID/Passport/Emp Id:</label>
                                                         <input type="text" name="emp_deails_forfeedback" id="emp_deails_forfeedback" class="form-control">
                                                         <span class="text-danger" id="emp_deails_forfeedback_err"></span>
                                                     </div>
@@ -175,19 +175,19 @@
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                        <label>CID:<span class="text-danger">*</span></label> 
+                                                        <label>CID:<span class="text-danger">*</span></label>
                                                         <input type="text" v-model="feedback.cid" :class="{ 'is-invalid': feedback.errors.has('cid') }" name="cid" id="cid" class="form-control">
                                                         <has-error :form="feedback" field="cid"></has-error>
                                                     </div>
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                        <label>Name:<span class="text-danger">*</span></label> 
+                                                        <label>Name:<span class="text-danger">*</span></label>
                                                         <input type="text" v-model="feedback.name" :class="{ 'is-invalid': feedback.errors.has('name') }" name="name" id="name" class="form-control">
                                                         <has-error :form="feedback" field="name"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
                                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                        <label>Emial:<span class="text-danger">*</span></label> 
+                                                        <label>Emial:<span class="text-danger">*</span></label>
                                                         <input type="text" v-model="feedback.email" :class="{ 'is-invalid': feedback.errors.has('email') }" name="email" id="email" class="form-control">
                                                         <has-error :form="feedback" field="email"></has-error>
                                                     </div>
@@ -197,7 +197,7 @@
                                         <div class="modal-footer">
                                             <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-flat btn-danger">Cancel</button>
                                             <button  @click="addFeedbackProvider('nomination')" type="button" class="btn btn-flat btn-primary">Add</button>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -213,7 +213,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -266,7 +266,7 @@ export default {
                 }
                 let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails').val();
                 axios.get(uri)
-                .then((response) => {  
+                .then((response) => {
                     let data=response.data.data;
                     $('#emp_deails').val('');
                     $('#nminees_error').html('');
@@ -274,7 +274,7 @@ export default {
                         Swal.fire({
                             text: "No details are found with this input!",
                             icon: 'error',
-                        }); 
+                        });
                     }
                     else{
                         this.form.nomi_staffList.push({id:'NA',staff_id:data.id, name:data.name, cid:data.cid_work_permit, po_title:data.position_title, org_id:data.working_agency_id,org:data.working_agency, dzo_id:data.dzo_id,dzo:data.dzongkhag})
@@ -300,14 +300,14 @@ export default {
                 }
                 let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails_forfeedback').val();
                 axios.get(uri)
-                .then((response) => {  
+                .then((response) => {
                     let data=response.data.data;
                     $('#emp_deails').val('');
                     if(data==null){
                         Swal.fire({
                             text: "No details are found with this input!",
                             icon: 'error',
-                        }); 
+                        });
                     }
                     else{
                         this.feedback.staff_id=data.id;
@@ -327,8 +327,8 @@ export default {
                 this.internalstaff=true;
             }
         },
-        shownexttab(nextclass){ 
-            if(nextclass=="feedback-tab" && this.validatednomination()){ 
+        shownexttab(nextclass){
+            if(nextclass=="feedback-tab" && this.validatednomination()){
                 $('#emp_deails_err').html('');
                 this.form.post('/staff/staffLeadershipSerivcesController/createLeadershipSelection')
                 .then((response) => {
@@ -355,7 +355,7 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.form.post('/staff/staffLeadershipSerivcesController/publishleadership')
-                        .then((response) => {  
+                        .then((response) => {
                             Swal.fire(
                                 'Success!',
                                 'Details has been saved successfully.',
@@ -363,7 +363,7 @@ export default {
                             )
                             this.$router.push('/list_leadership_nomination');
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error......"+error)
                         });
                     }
@@ -394,9 +394,9 @@ export default {
             }
             return returntype;
         },
-        remove(type,index){ 
+        remove(type,index){
             if(type=="nomination"){
-                // this.form.nomi_staffList.splice(index,1); 
+                // this.form.nomi_staffList.splice(index,1);
                 this.form.nomi_staffList.pop();
             }
         },
@@ -411,7 +411,7 @@ export default {
                 let data = response;
                 this.positionList =  data.data.data;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.positionarray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.positionarray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -441,11 +441,11 @@ export default {
             .catch((err) =>{
                 console.log("Error: "+err);
             });
-		}, 
+		},
         loadDraft(){
             this.form.nomi_staffList=[];
             axios.get('/staff/staffLeadershipSerivcesController/loadLeadershipSelection/draft/NA')
-            .then((response) =>{  
+            .then((response) =>{
                 let data=response.data.data;
                 this.form.id=data.id;
                 this.feedback.leadership_id=data.id;
@@ -471,17 +471,17 @@ export default {
                     });
                 }
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error: "+error);
             });
         },
         loadfeedbackProvider(){
             axios.get('/staff/staffLeadershipSerivcesController/loadNominationForLeadershipSelection/'+this.feedback.leadership_id)
-            .then((response) =>{  
+            .then((response) =>{
                 let data=response.data.data;
                 this.feedbackProviderList=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error: "+error);
             });
         },
@@ -498,7 +498,7 @@ export default {
                 this.form.position_title=$('#position_title').val();
             }
         },
-        getSelectionList(uri = 'questionAnswers/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -508,29 +508,29 @@ export default {
                 console.log('err: '+error);
             });
         },
-        getFeedbackTypeList(uri = 'questionAnswers/loadQuestionaries/loadcategoryType_Leadership_CategoryType'){
+        getFeedbackTypeList(uri = 'questionAnswerController/loadQuestionaries/loadcategoryType_Leadership_CategoryType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.feedbackTypeList =  data.data.data;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.feedbackArray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.feedbackArray[data.data.data[i].id] = data.data.data[i].name;
                 }
-                
+
             })
             .catch(function (error){
                 console.log('err: '+error);
             });
         },
-        
-        applyselect2(){ 
+
+        applyselect2(){
             if(!$('#selection_type').attr('class').includes('select2-hidden-accessible')){
                 $('#selection_type').addClass('select2-hidden-accessible');
             }
             if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
                 $('#position_title').addClass('select2-hidden-accessible');
             }
-        }, 
+        },
 
     },
     mounted(){

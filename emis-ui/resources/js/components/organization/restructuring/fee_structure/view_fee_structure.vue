@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Change in Fee Structure</label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Change in Fee Structure</label>
                         </a>
                     </li>
                 </ul>
@@ -44,7 +44,7 @@
                                         <label>Dzongkhag:</label>
                                         <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4"> 
+                                    <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Gewog:</label>
                                         <input type="text" readonly  class="form-control" id="gewogid"/>
                                     </div>
@@ -53,11 +53,31 @@
                                         <input type="text" readonly class="form-control" id="vilageId"/>
                                     </div>
                                 </div>
-                               
+
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
                                         <label>Propose New Fees:<span class="text-danger">*</span></label>
                                         <input type="number" min="1" readonly v-model="form.fees"  class="form-control" id="fees"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th>Upload File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                                    <td>  {{attach.user_defined_file_name}} ({{attach.name}})</td>
+                                                    <td>
+                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </form>
@@ -66,7 +86,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
@@ -89,11 +109,12 @@ export default {
             locationArray:{},
             calssArray:{},
             streamArray:{},
+            applicationdetailsatt:'',
             form: new form({
-                id:'', organizationId:'',fees:'', application_type:'fee_structure_change', 
+                id:'', organizationId:'',fees:'', application_type:'fee_structure_change',
                 application_for:'Change in Fee Structure', action_type:'edit', status:'Submitted',organization_type:'',
             }),
-        } 
+        }
     },
     methods: {
         /**
@@ -104,7 +125,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -117,8 +138,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -132,15 +153,15 @@ export default {
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'error',
                                         title: 'No dont have privileged to submit this application. Please contact system administrator'
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Applicaiton for Change in Fee details has been edited and submitted for approval. <br><b>Thank You !</b>";
+                                    let message="Application for Change in Fee details has been edited and submitted for approval. <br><b>Thank You !</b>";
                                     this.$router.push({name:'fee_structure_acknowledgement',params: {data:message}});
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Change details is saved successfully'
                                     });
@@ -154,7 +175,7 @@ export default {
                 });
             }
         },
-        
+
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -175,19 +196,20 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();  
-                this.getorgdetials($('#organizationId').val()); 
+                this.form.organizationId=$('#organizationId').val();
+                this.getorgdetials($('#organizationId').val());
             }
             if(id=="locationType"){
-                this.form.locationType=$('#locationType').val();  
+                this.form.locationType=$('#locationType').val();
             }
-            
-            
+
+
         },
-       
+
         getorgdetials(org_id){
              this.form.organizationId=org_id;
             $('#organizationId').val(org_id).trigger('change');
+            $('#organizationId').prop('disabled',true);
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
@@ -225,24 +247,24 @@ export default {
                 console.log('error: '+error);
             });
         },
-       
+
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
-        
+
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -256,7 +278,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name; 
+                    this.gewogArray[data[i].id] = data[i].name;
                 }
                 $('#gewogid').val(this.gewogArray[gewogId]);
             });
@@ -268,7 +290,7 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name; 
+                    this.villageArray[data[i].id] = data[i].name;
                 }
                 $('#vilageId').val(this.villageArray[vil_id])
             })
@@ -282,23 +304,24 @@ export default {
                 let data = response.data;
                 this.locationList = data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
-        loadApplicaitonDetials(){ 
+        loadApplicationDetials(){
             axios.get('organization/getChangeBasicDetails/'+this.record_id)
             .then(response => {
                 let response_data=response.data.data;
                 this.getorgdetials(response_data.change_details.organizationId);
                 this.form.id=response_data.change_details.id;
                 this.form.fees=response_data.change_details.proposedChange;
+                 this.applicationdetailsatt=response_data.attachments;
             });
         },
-        
+
     },
-    
-    mounted() { 
+
+    mounted() {
         this.getLocation();
         this.loadproposedBy();
         this.loadactivedzongkhagList();
@@ -310,15 +333,15 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.record_id=this.$route.params.data.application_no;
-        this.loadApplicaitonDetials();
-        
+        this.loadApplicationDetials();
+
     }
 }
 </script>

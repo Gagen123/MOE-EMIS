@@ -37,11 +37,13 @@ class OrganizationMasterController extends Controller{
             'model'                     =>  $request->model,
             'user_id'                   =>  $this->userId()
         ];
+      //  dd($request_data);
         $response_data= $this->apiService->createData('emis/organization/organizationMasterController/saveOrganizationMaster', $request_data);
         return $response_data;
     }
     
     public function loadOrganizaitonmasters($type="",$model=""){
+      //  dd('m here at UI');
         $type = $this->apiService->listData('emis/organization/organizationMasterController/loadOrganizaitonmasters/'.$type.'/'.$model);
         return $type;
     }

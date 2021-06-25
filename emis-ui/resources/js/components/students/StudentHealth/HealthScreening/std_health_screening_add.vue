@@ -60,6 +60,7 @@
                         <has-error :form="student_form" field="std_section"></has-error>
                     </div>
                 </div>
+                <label>Student List:</label>
                 <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="student-list-table" class="table w-100 table-bordered table-striped">
@@ -83,14 +84,14 @@
                                 <tr v-for="(student, index) in studentList" :key="index">    
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> {{student.CmnSexId}} </td>
-                                        <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
+                                    <td> {{genderArray[student.CmnSexId]}}  </td>
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]"/>
+                                        <input type="checkbox" name="height" class="form-control-input screencheck" v-model="student_form.std_screened[index]" :value="student.id" />
                                     </td>
                                     <td>
-                                        <input type="checkbox" name="weight" class="form-control-input refferedcheck" v-model="student_form.std_referred[index]"/>
+                                        <input type="checkbox" name="weight" class="form-control-input refferedcheck" v-model="student_form.std_referred[index]" :value="student.id" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -117,6 +118,7 @@ export default {
             classStreamSections:[],
             classList:[],
             sectionList:[],
+            genderArray:{},
             streamList:[],
             byClass:[],
             studentList:[],
@@ -168,6 +170,19 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.genderArray[data[i].id] = data[i].name;
+                }
+            })
         },
 
         /**
@@ -244,17 +259,22 @@ export default {
             if(type=="save"){
                 this.student_form.std_screened=[];
                 let screenedArray=[];
-                $("input[name='height']:checked").each( function () {
+                let oTable = $('#student-list-table').dataTable({
+                    stateSave: true,
+                    destroy: true,
+                });
+                $("input[name='height']:not(:checked)",oTable.fnGetNodes()).each( function () {
                     screenedArray.push($(this).val());
                 });
                 this.student_form.std_screened=screenedArray;
                 
                 this.student_form.std_referred=[];
                 let referredArray=[];
-                $("input[name='weight']:checked").each( function () {
+                $("input[name='weight']:checked",oTable.fnGetNodes()).each( function () {
                     referredArray.push($(this).val());
                 });
                 this.student_form.std_referred=referredArray;
+                console.log(this.student_form)
 
                 this.student_form.post('/students/addHealthScreeningRecords',this.student_form)
                     .then(() => {
@@ -314,13 +334,23 @@ export default {
             }
             
         },
-            checkall(class_to_check,id){
-                if($('#'+id).prop('checked')){
-                    $("."+class_to_check).prop("checked",true);
-                }
-                else{
-                    $("."+class_to_check).prop("checked",false);
-                }
+
+        checkall(class_to_check,id){
+            let oTable = $('#student-list-table').dataTable({
+                stateSave: true,
+                destroy: true,
+            });
+
+            let allPages = oTable.fnGetNodes();
+
+            if($('#'+id).prop('checked')){
+                $("."+class_to_check, allPages).prop("checked",true);
+            }
+            else{
+                $("."+class_to_check, allPages).prop("checked",false);
+            }
+            $("."+class_to_check).toggleClass('allChecked');
+            
         }
     },
     mounted() {
@@ -345,10 +375,9 @@ export default {
        
         this.loadActiveScreeningTitleList();
         this.loadActiveScreeningEndorserList();
-        
+        this.loadGenderArrayList();
         this.loadClassList();
-        // this.loadSectionList();
-        // this.loadStreamList();
+        
         this.dt =  $("#student-list-table").DataTable()
     },
     watch: {

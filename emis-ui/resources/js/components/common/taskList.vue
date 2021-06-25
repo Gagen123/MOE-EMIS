@@ -175,7 +175,14 @@
                 if(data.service_name.includes('Reopen')){ 
                     this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
                 }
+                 if(data.application_number.includes('Recu')){ 
+                    this.$router.push({name:"view_principal_recuritment",params:{data:data,type:actiontype}});
+                }
+                if(data.application_number.includes('Expat')){ 
+                    this.$router.push({name:"open_expatriate_verification",params:{data:data,type:actiontype}});
+                }
             }   
+             
         }
     },
     mounted(){

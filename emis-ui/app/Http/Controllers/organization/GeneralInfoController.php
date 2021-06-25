@@ -51,13 +51,13 @@ class GeneralInfoController extends Controller
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/equipment/saveEquipmentAndFurniture', $loc);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadEquipment($orgId=""){
@@ -93,7 +93,7 @@ class GeneralInfoController extends Controller
         return $type;
     }
     public function getFurnitureItem($itemId=""){
-     //   dd('m here');
+     //  dd('m here');
         $itemList = $this->apiService->listData('emis/organization/furniture/getFurnitureItem/'.$itemId);
         return $itemList;
     }
@@ -170,13 +170,13 @@ class GeneralInfoController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/organization/connectivity/saveConnectivity', $connectivity);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function getRoadTypeDropdown(){
@@ -389,6 +389,7 @@ class GeneralInfoController extends Controller
     }
 
     public function getOrgProfile($id = ""){
+       // dd($id);
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;
     }
@@ -432,6 +433,7 @@ class GeneralInfoController extends Controller
     //New function to update the basic organization details
 
     public function updateOrgBasicDetials(Request $request){
+        dd($request);
         switch($request['fields_for']){
             case "eccd" : {
                     $validation = $this->validateEccdFields($request);
@@ -453,16 +455,13 @@ class GeneralInfoController extends Controller
                 break;
             }
         }
-
         $rules = $validation['rules'];
         $customMessages = $validation['messages'];
-
         $this->validate($request, $rules, $customMessages);
 
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
         return $response_data;
-
-
+        
     }
 
     private function validateOrganizationFields($request){
@@ -570,9 +569,9 @@ class GeneralInfoController extends Controller
 
         $rules = [
             'isGeoPoliticallyLocated'   =>  'required',
-            'isAspNetSchool'            =>  'required',
-            'isColocated'               =>  'required',
-            'isResourceCenter'          =>  'required',
+            // 'isAspNetSchool'            =>  'required',
+            // 'isColocated'               =>  'required',
+            // 'isResourceCenter'          =>  'required',
             'isSenSchool'               =>  'required',
             'hasCounselingRoom'         =>  'required',
             'hasShiftSystem'            =>  'required',
@@ -581,19 +580,21 @@ class GeneralInfoController extends Controller
             'latitude'                  =>  'required',
             'altitude'                  =>  'required',
             'map_path'                  =>  'required',
-            //'climate_type'              =>  'required',
+            'climate_type'              =>  'required',
             'distance_from_dzo'         =>  'required',
-            //'fencingtype'               =>  'required',
+            'fencingtype'               =>  'required',
             'entranceGate'              =>  'required',
+            'disasterArea'              =>  'required',
+            
         ];
 
         $customMessages = [
             'isGeoPoliticallyLocated.required'   =>  'This field is required',
             'category.required'                  =>  'This field is required',
-            'isAspNetSchool.required'            =>  'This field is required',
-            'isColocated.required'               =>  'This field is required',
+            // 'isAspNetSchool.required'            =>  'This field is required',
+            // 'isColocated.required'               =>  'This field is required',
             'isFeedingSchool.required'           =>  'This field is required',
-            'isResourceCenter.required'          =>  'This field is required',
+            // 'isResourceCenter.required'          =>  'This field is required',
             'isSenSchool.required'               =>  'This field is required',
             'hasCounselingRoom.required'         =>  'This field is required',
             'hasShiftSystem.required'            =>  'This field is required',
@@ -601,10 +602,11 @@ class GeneralInfoController extends Controller
             'latitude.required'                  =>  'This field is required',
             'altitude.required'                  =>  'This field is required',
             'map_path.required'                  =>  'This field is required',
-            //'climate_type.required'              =>  'This field is required',
+            'climate_type.required'              =>  'This field is required',
             'distance_from_dzo.required'         =>  'This field is required',
-            //'fencingtype.required'               =>  'This field is required',
+            'fencingtype.required'               =>  'This field is required',
             'entranceGate.required'              =>  'This field is required',
+            'disasterArea.required'              =>  'This field is required',
 
         ];
         $validation = array();
@@ -631,7 +633,8 @@ class GeneralInfoController extends Controller
             'distance_from_dzo'         =>  $request['initiatedby'],
             'fencingtype'               =>  $request['initiatedby'],
             'entranceGate'              =>  $request['initiatedby'],
-            'user_id'                    =>  $this->userId(),
+            'disasterArea'              =>  $request['initiatedby'],
+            'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];
 
@@ -641,6 +644,7 @@ class GeneralInfoController extends Controller
     private function setSchoolFields($request){
         $estd =[
             'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
+            'hasCE'                     =>  $request['hasCE'],
             'isAspNetSchool'            =>  $request['isAspNetSchool'],
             'isColocated'               =>  $request['isColocated'],
             'isFeedingSchool'           =>  $request['isFeedingSchool'],
@@ -657,7 +661,8 @@ class GeneralInfoController extends Controller
             'distance_from_dzo'         =>  $request['distance_from_dzo'],
             'fencingtype'               =>  $request['fencingtype'],
             'entranceGate'              =>  $request['entranceGate'],
-            'user_id'                    =>  $this->userId(),
+            'disasterArea'              =>  $request['disasterArea'],
+            'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];
 
@@ -716,12 +721,12 @@ class GeneralInfoController extends Controller
             'org_id'                        =>  $request['org_id'],
             'accessibleToilet'              =>  $request['accessibleToilet'],
             'disabilitiesInHostal'          =>  $request['disabilitiesInHostal'],
-            
+
             'adjustmentsAccomodatte'        =>  $request['adjustmentsAccomodatte'],
             'outdoorPlayground'             =>  $request['outdoorPlayground'],
             'outdoorRoutes'                 =>  $request['outdoorRoutes'],
             'newConstruction'               =>  $request['newConstruction'],
-            
+
             'girlsHostelAccessible'         =>  $request['girlsHostelAccessible'],
             'diningHall'                    =>  $request['diningHall'],
             'hostelWash'                    =>  $request['hostelWash'],
@@ -734,7 +739,7 @@ class GeneralInfoController extends Controller
 
             'senProgram'                    =>  $request['senProgram'],
             'studentDisabilities'           =>  $request['studentDisabilities'],
-            
+
             'professionalsSupportChildren'  =>  $request['professionalsSupportChildren'],
             'adultWorkingwithChildren'      =>  $request['adultWorkingwithChildren'],
             'supportDisabilitycommunity'    =>  $request['supportDisabilitycommunity'],

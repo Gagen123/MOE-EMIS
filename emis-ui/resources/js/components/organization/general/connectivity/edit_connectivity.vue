@@ -1,5 +1,7 @@
 <template>
     <div>
+        <div class="card card-primary card-outline">
+        </div> 
         <form class="bootbox-form" id="connectivity-detial">
             <div class="card-body">
                 <div class="row form-group">
@@ -70,6 +72,7 @@
                      <has-error :form="form" field="connectedtointernet"></has-error>
                    </div>
                 </div>
+                
                 <div class="form-group row" style="display:none" id="internetyes">
                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
                         <label>Types of connections :</label>
@@ -78,6 +81,7 @@
                             {{item.name}}
                         </label>
                     </div>
+                    <br><br>
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" > 
                      <label>Internet Service provider :</label>
                      <label  v-for="(item, key, index) in  serviceProviderList1" :key="index" class="pr-4">
@@ -85,12 +89,22 @@
                          {{item.name}}
                       </label> 
                   </div>
-                
-                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" > 
+                  <br><br>
+                   <!-- <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                            </div>
+                        </div> -->
+                 <!-- <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" > 
                      <label>Speed/Bandwidth :</label>
                      <input type="text" name="speedbandwidth" v-model="form.speedbandwidth" class="form-control editable_fields" id="speedbandwidth"/>
-                  </div>
-                  <br>
+                </div> -->
+                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Speed/Bandwidth:<span class="text-danger">*</span></label>
+                <div class="col-lg-8 col-md-8 col-sm-8">
+                <input class="form-control editable_fields " id="speedbandwidth" type="text" v-model="form.speedbandwidth">
+                </div>
+                  <br> <br><br>
                   
                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label >Is your School/ECCD/ECR connected to:<span class="text-danger">*</span> </label>
@@ -100,6 +114,7 @@
                         <label><input  type="checkbox" v-model="form.GovNET" value="1" tabindex="" /> GovNET</label>
                         <label><input  type="checkbox" v-model="form.independent" value="1" tabindex="" /> Independent</label>
                     </div>
+                    <br><br>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label >Does your School/ECCD/ECR use Internet Connection shared from Gewog/Community center/Dzongkhag?<span class="text-danger">*</span> </label>
                     </div>
@@ -108,11 +123,14 @@
                         <label><input  type="radio" v-model="form.sharedconnection" value="0" tabindex="" @click="showtextboxS('no')"/> No</label>
                         <has-error :form="form" field="sharedconnection"></has-error>
                     </div>
-                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="sharedconnection">
+                   
+                   
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="sharedconnection">
                        <label>Specify the Connection Type<span class="text-danger">*</span></label>
                        <input type="text" class="form-control" @change="removeerror('connectionsharedtype')" :class="{ 'is-invalid': form.errors.has('connectionsharedtype') }" id="connectionsharedtype" v-model="form.connectionsharedtype" >
                        <has-error :form="form" field="connectionsharedtype"></has-error>
                     </div>
+                    <br><br>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Internet Accessible to:</label><br>
                         <label  v-for="(item, key, index) in  internetAccessibleList" :key="index" class="pr-4">
@@ -303,53 +321,6 @@ export default {
             });
         },
 
-        /**
-         * method to reset form
-         */
-        // restForm(){
-        //     this.form.organizationId='',
-        //     this.form.id='',
-        //     this.form.connectedtoroad= '';
-        //     this.form.road_typeyes = '';
-        //     this.form.road_typeno = '';
-        //     this.form.hqdistance= '';
-        //     this.form.connectedtointernet= '';
-        //     this.form.connectiontype= '';
-        //     this.form.serviceprovider= '';
-        //     this.form.speedbandwidth='';
-        //     this.form.DrukREN = '';
-        //     this.form.GovNET = '';
-        //     this.form.independent = '';
-        //     this.form.sharedconnection = '';
-        //     this.form.connectionsharedtype = '';
-        //     this.form.sharedspeed = '';
-        //     this.form.internetAccessible =[];
-        //     this.form.electricity = '';
-        //     this.form.electricitysubstation = '';
-        // },
-
-        /**
-         * method to save data
-         */
-        // formaction: function(type){
-        //     if(type=="reset"){
-        //         this.restForm();
-        //     }
-        //     if(type=="save"){
-        //             this.form.post('/organization/saveConnectivityDetails',this.form)
-        //             .then(() => {
-        //             Toast.fire({
-        //                 icon: 'success',
-        //                 title: ' Detail is added successfully'
-        //             })
-        //             // this.$router.push('/edit_connectivity');
-        //         })
-        //         .catch(() => {
-        //             console.log("Error......");
-        //             this.applyselect();
-        //         })
-        //     }
-		// },
         updateconnectivity(){
                 this.form.post('organization/saveConnectivityDetails')
                 .then((response) => {
@@ -442,23 +413,7 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
-        // async changefunction(id){
-        //     if($('#'+id).val()!=""){
-        //         $('#'+id).removeClass('is-invalid select2');
-        //         $('#'+id+'_err').html('');
-        //         $('#'+id).addClass('select2');
-        //     }
-        //     if(id=="sex_id"){
-        //         this.form.sex_id=$('#sex_id').val();
-        //     }
-        //     if(id=="mother_tongue"){
-        //         this.form.mother_tongue=$('#mother_tongue').val();
-        //     }
-        //     if(id=="country"){
-        //         this.form.country=$('#country').val();
-        //     }
-             
-        // },
+      
         
     },
      mounted() {
@@ -480,26 +435,7 @@ export default {
             this.changefunction(id);
         });
     },
-    // created() {
-    //     this.form.connectedtoroad=this.$route.params.data.connectedtoroad;
-    //     this.form.road_typeyes=this.$route.params.data.road_typeyes;
-    //     this.form.road_typeno=this.$route.params.data.road_typeno;
-    //     this.form.hqdistance=this.$route.params.data.hqdistance;
-    //     this.form.connectedtointernet=this.$route.params.data.connectedtointernet;
-    //     this.form.connectiontype=this.$route.params.data.connectiontype;
-    //     this.form.serviceprovider=this.$route.params.data.serviceprovider;
-    //     this.form.speedbandwidth=this.$route.params.data.speedbandwidth;
-    //     this.form.DrukREN=this.$route.params.data.DrukREN;
-    //     this.form.GovNET=this.$route.params.data.GovNET;
-    //     this.form.independent=this.$route.params.data.independent;
-    //     this.form.sharedconnection=this.$route.params.data.sharedconnection;
-    //     this.form.connectionsharedtype=this.$route.params.data.connectionsharedtype;
-    //     this.form.sharedspeed=this.$route.params.data.sharedspeed;
-    //     this.form.internetAccessible=this.$route.params.data.internetAccessible;
-    //     this.form.electricity=this.$route.params.data.electricity;
-    //     this.form.electricitysubstation=this.$route.params.data.electricitysubstation;
-    //     this.form.id=this.$route.params.data.id;
-    // },
+  
 
 }
 </script>

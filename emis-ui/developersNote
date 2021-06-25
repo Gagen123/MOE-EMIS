@@ -53,5 +53,16 @@ Setting up the system administration, and user management:
 
     CeaProjectMembership table - field change of CaeProjectId to CeaProjectId
 
+    Additional master for vaccination added (no of doses)
+
+    Additional table for student vaccination
+
+
+    *********************SOME TO DO FOR THE FUTURE*********************************
+    1. Data table partition to take care of academic year
+    2. An additional field in the masters, with an option stating whether its an update or edit
+
+
+
 
 

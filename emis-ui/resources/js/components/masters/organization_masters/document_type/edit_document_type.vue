@@ -4,12 +4,12 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Document Type:<span class="text-danger">*</span></label> 
+                        <label>Document Type:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Description:</label> 
+                        <label>Description:</label>
                         <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
                         <has-error :form="form" field="description"></has-error>
                     </div>
@@ -19,11 +19,11 @@
                         <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
                     </div>
-                   
-                </div>  
+
+                </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Document For:<span class="text-danger">*</span></label> 
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label>Document For:<span class="text-danger">*</span></label>
                         <span v-for='(doc, index) in doc_for' :key="index">
                             <select name="addfield_1" id="addfield_1" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('addfield_1') }" v-model="doc.addfield_1">
                                 <option value="">--- Please Select ---</option>
@@ -37,7 +37,7 @@
                         <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                         <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                     </div>
-                </div>      
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
@@ -71,12 +71,12 @@ export default {
             }
         },
          addMore: function(){
-            this.doc_for.push({ addfield_1:''})    
-        }, 
-        
-        remove(index){    
+            this.doc_for.push({ addfield_1:''})
+        },
+
+        remove(index){
              if(this.doc_for.length>1){
-                this.doc_for.pop(); 
+                this.doc_for.pop();
             }
         },
         loadservices(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/Service'){
@@ -114,14 +114,14 @@ export default {
                 })
             }
 		},
-        
+
     },
     created(){
         this.loadservices();
         this.form.name=this.$route.query.data.name;
         let docfor=this.$route.query.data.applicableTo.split(', ');
         for(let i=0; i<docfor.length;i++){
-            this.doc_for.push({ addfield_1:docfor[i]}) 
+            this.doc_for.push({ addfield_1:docfor[i]})
         }
         this.form.addfield_1=this.$route.query.data.applicableTo;
         this.form.description=this.$route.query.data.description;

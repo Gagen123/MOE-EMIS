@@ -8,8 +8,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item kitchen-tab" @click="shownexttab('kitchen-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Kitchen Status </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Kitchen Status </label>
                         </a>
                     </li>
                     <li class="nav-item foodstore-tab" @click="shownexttab('foodstore-tab')">
@@ -35,8 +35,8 @@
                         <table class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <thead>
                                 <tr>
-                                    <th width="60px">Description</th>
-                                    <th width="40px">Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,7 +75,7 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id" @change="remove_err(item.id+'_'+ans.id)">
-                                                <label>{{ans.name}} </label>  
+                                                <label>{{ans.name}} </label>
                                             </span>
                                         </div>
                                         <label class="ml-4 text-danger" :id="item.id+'err'"></label>
@@ -94,8 +94,8 @@
                         <table class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <thead>
                                 <tr>
-                                    <th width="60px">Description</th>
-                                    <th width="40px">Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -134,7 +134,7 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id" @change="remove_err(item.id+'_'+ans.id)">
-                                                <label>{{ans.name}} </label>  
+                                                <label>{{ans.name}} </label>
                                             </span>
                                         </div>
                                         <label class="ml-4 text-danger" :id="item.id+'err'"></label>
@@ -154,8 +154,8 @@
                         <table class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="equipment-tab-table">
                             <thead>
                                 <tr>
-                                    <th width="60px">Description</th>
-                                    <th width="40px">Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -194,7 +194,7 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id" @change="remove_err(item.id+'_'+ans.id)">
-                                                <label>{{ans.name}} </label>  
+                                                <label>{{ans.name}} </label>
                                             </span>
                                         </div>
                                         <label class="ml-4 text-danger" :id="item.id+'err'"></label>
@@ -209,13 +209,13 @@
                                 <button class="btn btn-primary" @click="shownexttab('dinning-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="tab-pane fade tab-content-details" id="dinning-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <table class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="dinning-tab-table">
                             <thead>
                                 <tr>
-                                    <th width="60px">Description</th>
-                                    <th width="40px">Value</th>
+                                    <th style="width:60%">Description</th>
+                                    <th style="width:40%">Value</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -254,7 +254,7 @@
                                         <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <span v-for="(ans, index1) in item.ans_list" :key="index1">
                                                 <input type="checkbox" :name="'wash_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id" @change="remove_err(item.id+'_'+ans.id)">
-                                                <label>{{ans.name}} </label>  
+                                                <label>{{ans.name}} </label>
                                             </span>
                                         </div>
                                         <label class="ml-4 text-danger" :id="item.id+'err'"></label>
@@ -273,7 +273,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -314,10 +314,10 @@ export default {
         },
         shownexttab(nextclass){
             if(nextclass=="kitchen-tab"){
-                this.loadQuestionList('Kitchen');  
+                this.loadQuestionList('Kitchen');
                 this.loadWashDetialsList('kitchen');
                 this.change_tab(nextclass);
-            } 
+            }
             else{
                 if(nextclass=="foodstore-tab" ){
                     let validated=true;
@@ -348,24 +348,24 @@ export default {
                             else{
                                 this.questionList[i].answered =$('#'+this.questionList[i].id).val();
                             }
-                        } 
+                        }
                     }
                     if(validated){
                         this.ketchen_form.questionList=this.questionList;
                         this.ketchen_form.post('organization/structural/saveWashFeeding')
-                        .then((response) => { 
+                        .then((response) => {
                             if(response.data!=""){
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Data saved Successfully'
                                 });
-                                this.loadQuestionList('Food'); 
+                                this.loadQuestionList('Food');
                                 this.loadWashDetialsList('food');
                                 this.change_tab(nextclass);
                                 $("#tabcontentstable").detach().appendTo('#tabcontents_foodstore');
                             }
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error: "+error)
                         });
                     }
@@ -399,27 +399,27 @@ export default {
                             else{
                                 this.foodquestionList[i].answered =$('#'+this.foodquestionList[i].id).val();
                             }
-                        } 
+                        }
                     }
                     if(validated){
                         this.foodstore_form.questionList=this.foodquestionList;
                         this.foodstore_form.post('organization/structural/saveWashFeeding')
-                        .then((response) => { 
+                        .then((response) => {
                             if(response.data!=""){
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Data saved Successfully'
                                 });
-                                this.loadQuestionList('Equipment'); 
+                                this.loadQuestionList('Equipment');
                                 this.loadWashDetialsList('equipment');
                                 this.change_tab(nextclass);
                             }
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error: "+error)
                         });
                     }
-                    
+
                 }
                 if(nextclass=="dinning-tab"){
                     let validated=true;
@@ -450,29 +450,29 @@ export default {
                             else{
                                 this.equipquestionList[i].answered =$('#'+this.equipquestionList[i].id).val();
                             }
-                        } 
+                        }
                     }
                     if(validated){
                         this.equipment_form.questionList=this.equipquestionList;
                         this.equipment_form.post('organization/structural/saveWashFeeding')
-                        .then((response) => { 
+                        .then((response) => {
                             if(response.data!=""){
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Data saved Successfully'
                                 });
-                                this.loadQuestionList('Dinning'); 
+                                this.loadQuestionList('Dinning');
                                 this.loadWashDetialsList('dinning');
                                 this.change_tab(nextclass);
                             }
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error: "+error)
                         });
                     }
-                    
+
                 }
-                
+
                 if(nextclass=="final-tab"){
                     let validated=true;
                     for(let i=0;i<this.dinningquestionList.length;i++){
@@ -502,7 +502,7 @@ export default {
                             else{
                                 this.dinningquestionList[i].answered =$('#'+this.dinningquestionList[i].id).val();
                             }
-                        } 
+                        }
                     }
                     if(validated){
                         Swal.fire({
@@ -516,7 +516,7 @@ export default {
                             if (result.isConfirmed) {
                                 this.dinning_form.questionList=this.dinningquestionList;
                                 this.dinning_form.post('organization/structural/saveWashFeeding')
-                                .then((response) => { 
+                                .then((response) => {
                                     if(response.data!=""){
                                         Toast.fire({
                                             icon: 'success',
@@ -525,12 +525,12 @@ export default {
                                         this.$router.push({path:'/structural_index'});
                                     }
                                 })
-                                .catch((error) => {  
+                                .catch((error) => {
                                     console.log("Error: "+error)
                                 });
                             }
                         });
-                        
+
                     }
                 }
             }
@@ -552,7 +552,7 @@ export default {
         },
         loadQuestionList(param){
             this.questionList=[];
-            axios.get('questionAnswers/loadQuestionaries/withwhere_'+param+'_Question')
+            axios.get('questionAnswers/loadQuestionaries/washAndOthers_'+param+'_Question')
             .then(response => {
                 let data = response.data.data;
                 if(param=="Kitchen"){
@@ -567,8 +567,8 @@ export default {
                 if(param=="Dinning"){
                     this.dinningquestionList =  data;
                 }
-                
-            }) 
+
+            })
             .catch(function (error){
                 console.log(error.toString());
             });
@@ -590,7 +590,7 @@ export default {
                         $('#'+data[i].questionId+'_'+data[i].answer).val(data[i].answer);
                     }
                 }
-            })  
+            })
             .catch(function (error){
                 console.log(error.toString());
             });
@@ -605,17 +605,17 @@ export default {
                     $('#screenPermission').show();
                     $('#existmessage').html('You have no access to this page.');
                 }
-                
-            })    
-            .catch(errors => { 
+
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         }
     },
-    
+
     mounted(){
         // this.getScreenAccess();
-        this.loadQuestionList('Kitchen');  
+        this.loadQuestionList('Kitchen');
         this.loadWashDetialsList('kitchen');
     },
 }

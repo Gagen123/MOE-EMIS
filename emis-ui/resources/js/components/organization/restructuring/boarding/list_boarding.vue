@@ -32,7 +32,7 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -41,7 +41,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_to_Boadring'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Change_to_Boarding'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -57,7 +57,7 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_boarding',params: {data:data}});
         },
-        
+
     },
     mounted(){
         this.loadDataList();

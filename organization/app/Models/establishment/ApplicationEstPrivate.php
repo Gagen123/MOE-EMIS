@@ -31,6 +31,8 @@ class ApplicationEstPrivate extends Model
         'enrollmentGirls',
         'proposedLocation',
         'proposedInfrastructure',
-        'typeOfSchool'
+        'typeOfSchool',
+        'coLocatedParent',
+        'parentSchool',
     ];
 }

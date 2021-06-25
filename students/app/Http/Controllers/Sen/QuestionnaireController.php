@@ -16,7 +16,7 @@ class QuestionnaireController extends Controller
 
     //retrive questions
     public function getQuestionnaire($StudentId){
-       
+
         $isM_id = DataConfig::select('id')->where('isactive', '1')->first();
         // dd($isM_id);
         $questions = QuestionTypes::with(['questions' => function ($query) use ($StudentId, $isM_id) {

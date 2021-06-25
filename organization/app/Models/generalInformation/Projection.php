@@ -17,11 +17,11 @@ class Projection extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
+        'id', 
         'organizationId',
-        'projections',
         'class',
-        'stream',
-        'remarks'
+        'academicYear',
+        'ProjectionNo',
+        'remarks',
     ];
 }

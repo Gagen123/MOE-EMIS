@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\staff_leadership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;

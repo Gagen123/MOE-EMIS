@@ -4,8 +4,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item programme-tab" @click="shownexttab('programme-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Programme Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Programme Details </label>
                         </a>
                     </li>
                     <li class="nav-item eligibility-tab" @click="shownexttab('eligibility-tab')">
@@ -36,7 +36,7 @@
                                 <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
                                 <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                     <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.agencyName }}</option>
                                 </select>
                                 <has-error :form="form" field="organizer"></has-error>
                             </div>
@@ -61,7 +61,7 @@
                                 <has-error :form="form" field="end_date"></has-error>
                             </div>
                         </div>
-                        
+
                         <span id="professional_development_section" style="display:none">
                             <hr/>
                             <div class="form-group row">
@@ -208,41 +208,41 @@
                                     <thead>
                                         <tr>
                                             <th>Attachment Name</th>
-                                            <th>File(Image,Doc,Excel,Pdf)</th>                           
+                                            <th>File(Image,Doc,Excel,Pdf)</th>
                                         </tr>
                                     </thead>
-                                    <tbody> 
+                                    <tbody>
                                         <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td> 
+                                            <td>
                                                 <input type="text" class="form-control" readonly :value="attach.user_defined_name">
                                             </td>
-                                            <td>    
+                                            <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 <span v-if="dis_status==true">
                                                     <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
                                                 </span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                         <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                             <td>
                                                 <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                 <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                             </td>
-                                            <td>                                
+                                            <td>
                                                 <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                 <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                         <tr class="addmoredoc">
-                                            <td colspan="3"> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                            <td colspan="3">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                 @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore"
                                                 @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
                                             </td>
-                                        </tr>                                          
+                                        </tr>
                                     </tbody>
-                                </table> 
+                                </table>
                             </div>
                         </div>
                         <hr>
@@ -269,7 +269,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Nature of participation:<i class="text-danger">*</i></label><br/>
                                 <span v-for="(nature, index) in nature_of_participantList" :key="index" >
-                                    <input type="checkbox" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature.id"> 
+                                    <input type="checkbox" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature.id">
                                     <label class="pr-3"> {{ nature.name  }}</label>
                                 </span>
                                 <!-- <select v-model="form.nature_of_participant" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('nature_of_participant') }" class="form-control select2" name="nature_of_participant" id="nature_of_participant">
@@ -278,35 +278,35 @@
                                 </select> -->
                                 <has-error :form="form" field="nature_of_participant"></has-error>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Target Group:</label><br/>
                                 <span v-for="(tar, index) in target_groupList" :key="index" >
-                                    <input type="checkbox" v-model="form.target_group" :class="{ 'is-invalid' :form.errors.has('target_group') }" name="target_group" id="target_group" :value="tar.id"> 
+                                    <input type="checkbox" v-model="form.target_group" :class="{ 'is-invalid' :form.errors.has('target_group') }" name="target_group" id="target_group" :value="tar.id">
                                     <label class="pr-3"> {{ tar.name  }}</label>
                                 </span>
-                                <!-- <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
+                                 <select v-model="form.target_group" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('target_group') }" class="form-control select2" name="target_group" id="target_group">
                                     <option value=""> --Select--</option>
                                     <option v-for="(item, index) in target_groupList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                </select> -->
+                                </select>
                                 <has-error :form="form" field="target_group"></has-error>
-                            </div>
+                            </div> -->
                             <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Eligibility School Leve:l<i class="text-danger">*</i></label>
                                 <span v-for="(level, index) in org_levelList" :key="index" >
-                                    <input type="checkbox" v-model="form.org_level" :class="{ 'is-invalid' :form.errors.has('org_level') }" name="org_level" id="org_level" :value="level.id"> 
+                                    <input type="checkbox" v-model="form.org_level" :class="{ 'is-invalid' :form.errors.has('org_level') }" name="org_level" id="org_level" :value="level.id">
                                     <label class="pr-3"> {{ level.name  }}</label>
                                 </span>
                                 <has-error :form="form" field="org_level"></has-error>
                             </div> -->
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <table id="dynamic-table" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Sequence</th>
                                             <th>Authority Type</th>
-                                            <th>Role</th>                           
+                                            <th>Role</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -323,26 +323,26 @@
                                                 </select>
                                                 <span class="text-danger" :id="'authority_err'+(index+1)"></span>
                                             </td>
-                                            <td>                          
+                                            <td>
                                                 <select :id="'role'+(index+1)" class="form-control" v-model="user.role">
                                                     <option value="">--- Please Select ---</option>
                                                     <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
                                                 </select>
                                                 <span class="text-danger" :id="'role_err'+(index+1)"></span>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                         <tr id="addmoreroles">
-                                            <td colspan="3"> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                            <td colspan="3">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                 @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore"
                                                 @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                             </td>
-                                        </tr>                                          
+                                        </tr>
                                     </tbody>
-                                </table> 
+                                </table>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Remarks:</label>
@@ -361,7 +361,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -391,7 +391,7 @@ export default {
             roleList:[],
             draft_attachments:[],
             form: new form({
-                id: '', 
+                id: '',
                 training_type: '',
                 training_type_text:'',
                 course_title:'',
@@ -438,7 +438,7 @@ export default {
         }
     },
     methods: {
-        openfile(file){ 
+        openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
@@ -482,16 +482,16 @@ export default {
                                 'error!',
                                 'Not able to delete this file. Please contact system adminstrator.',
                                 'error',
-                            ); 
+                            );
                         }
-                        
+
                     })
                     .catch(function (error) {
                         console.log("Error:"+error);
                     });
                 }
             });
-            
+
         },
         addMore: function(){
             this.count++;
@@ -501,16 +501,16 @@ export default {
             this.filecount++;
             this.form.attachments.push({file_name:'',attachment:''})
         },
-        remove(index){    
+        remove(index){
             if(this.form.role_action_mapp.length>1){
                 this.count--;
-                this.form.role_action_mapp.pop(); 
+                this.form.role_action_mapp.pop();
             }
         },
-        removeattachments(index){    
+        removeattachments(index){
             if(this.form.attachments.length>1){
                 this.filecount--;
-                this.form.attachments.pop(); 
+                this.form.attachments.pop();
                 this.form.ref_docs.pop();
             }
         },
@@ -529,7 +529,7 @@ export default {
             else{
                 $('#file_name'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
             // this.form.attachments = e.target.files[0];
             // this.form.attachments = $("#attachments").file[0].name;
             // this.form.file_size = e.target.files[0].size;
@@ -574,13 +574,13 @@ export default {
                     this.target_groupList=data;
                 }
                 //this.loadHrDevelopmentMasters('active_target_group_list');
-                
+
             })
             .catch(function (error) {
                 console.log("Error:"+error);
             });
         },
-        
+
         loadprojectofdonorList(uri = 'masters/loadHrDevelopmentDepedentMastersData/projectdonor/'+$('#donor_agency').val()){
             this.projectofdonorList = [];
             axios.get(uri)
@@ -612,7 +612,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        
+
         loadsubjectList(uri = 'masters/loadStaffMasters/all_active_subject_List'){
             axios.get(uri)
             .then(response =>{
@@ -623,20 +623,20 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        
+
         loadroleList(uri = 'common/getRoles/active'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                this.roleList = data.data; 
+                this.roleList = data.data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-        
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save and publish ?",
                     icon: 'info',
@@ -647,7 +647,7 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.form.post('/staff/hrdevelopment/saveprogramFinalDetails')
-                        .then((response) => {  
+                        .then((response) => {
                             if(response!=null && response!=""){
                                 Swal.fire(
                                     'Success!',
@@ -657,19 +657,19 @@ export default {
                                 this.$router.push('/list_programme');
                             }
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error:"+error)
                         });
                     }
                 });
             }
-            else if(nextclass=="eligibility-tab"){ 
+            else if(nextclass=="eligibility-tab"){
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
                 }
-                
+
                 let formData = new FormData();
                 formData.append('id', this.form.id);
                 formData.append('ref_docs[]', this.form.ref_docs);
@@ -685,7 +685,7 @@ export default {
                 formData.append('related_programme', this.form.related_programme);
                 formData.append('start_date', this.form.start_date);
                 formData.append('end_date', this.form.end_date);
-                
+
                 if($('#training_type option:selected').text().toLowerCase().includes('qualification upgrad')){
                     formData.append('category', this.form.category);
                     formData.append('donor_agency', this.form.donor_agency);
@@ -708,7 +708,7 @@ export default {
                     formData.append('financial_source', this.form.financial_source);
                 }
                 formData.append('status', 'Created');
-                
+
                 formData.append('nomination_start_date', this.form.nomination_start_date);
                 formData.append('nomination_end_date', this.form.nomination_end_date);
                 formData.append('nature_of_participant', this.form.nature_of_participant);
@@ -717,7 +717,7 @@ export default {
                 formData.append('remarks', this.form.remarks);
                 if(this.action_param_type=="edit"){
                     axios.post('/staff/hrdevelopment/saveprogramDetails', formData, config)
-                    .then((response) => {  
+                    .then((response) => {
                         this.form.id=response.data.data.id;//need to check the id
                         Toast.fire({
                             icon: 'success',
@@ -728,7 +728,7 @@ export default {
                             theme: 'bootstrap4'
                         });
                     })
-                    .catch((error) => { 
+                    .catch((error) => {
                         this.change_tab('programme-tab');
                         if(!$('#training_type').attr('class').includes('select2-hidden-accessible')){
                             $('#training_type').addClass('select2-hidden-accessible');
@@ -821,10 +821,10 @@ export default {
                         $('#qualification_upgradation_section').show();
                     }
                     if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
-                        $('#professional_development_section').show(); 
+                        $('#professional_development_section').show();
                     }
                     this.form.training_type_text=$('#'+type_id+' option:selected').text();
-                }, 3000); 
+                }, 3000);
             }
             else{
                 this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
@@ -834,7 +834,7 @@ export default {
                 }
                 if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
                     this.pullPDPData();
-                    $('#professional_development_section').show(); 
+                    $('#professional_development_section').show();
                 }
             }
         },
@@ -854,48 +854,48 @@ export default {
             if(id=="organizer"){
                 this.form.organizer=$('#organizer').val();
             }
-            if(id=="programme_level"){ 
+            if(id=="programme_level"){
                 this.form.programme_level=$('#programme_level').val();
             }
-            if(id=="programme_type"){ 
+            if(id=="programme_type"){
                 this.form.programme_type=$('#programme_type').val();
             }
-            if(id=="course_type"){ 
+            if(id=="course_type"){
                 this.form.course_type=$('#course_type').val();
             }
-            if(id=="financial_source"){ 
+            if(id=="financial_source"){
                 this.form.financial_source=$('#financial_source').val();
             }
-            if(id=="category"){  
+            if(id=="category"){
                 this.form.category=$('#category').val();
             }
-            if(id=="donor_agency"){ 
+            if(id=="donor_agency"){
                 this.form.donor_agency=$('#donor_agency').val();
                 this.loadprojectofdonorList();
             }
-            if(id=="projectofdonor"){ 
+            if(id=="projectofdonor"){
                 this.form.projectofdonor=$('#projectofdonor').val();
             }
-            if(id=="study_country"){ 
+            if(id=="study_country"){
                 this.form.study_country=$('#study_country').val();
             }
-            if(id=="coursemode"){ 
+            if(id=="coursemode"){
                 this.form.coursemode=$('#coursemode').val();
             }
-            if(id=="degree"){ 
+            if(id=="degree"){
                 this.form.degree=$('#degree').val();
             }
-            if(id=="subject1"){ 
+            if(id=="subject1"){
                 this.form.subject1=$('#subject1').val();
             }
-            if(id=="subject2"){ 
+            if(id=="subject2"){
                 this.form.subject2=$('#subject2').val();
             }
         },
         loadDetails(id,type){
             this.action_param_type=type;
             axios.get('staff/hrdevelopment/loadDetails/'+id)
-            .then((response) => {   
+            .then((response) => {
                 let data=response.data.data;
                 this.form.id=data.id;
                 this.form.training_type=data.training_type;
@@ -956,7 +956,7 @@ export default {
                 for(let i=0;i<data.workflow.length;i++){
                     this.form.role_action_mapp.push({sequence:data.workflow[i].sequence,authority:data.workflow[i].authority_type,role:data.workflow[i].sys_role_id})
                 }
-               
+
                 if(type=="view"){
                     $('#training_type').prop('disabled',true);
                     $('#course_title').prop('disabled',true);
@@ -997,7 +997,7 @@ export default {
                     // }
                 }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
@@ -1012,7 +1012,7 @@ export default {
             });
         },
     },
-    
+
     mounted() {
         this.count=1,
         $('[data-toggle="tooltip"]').tooltip();
@@ -1021,7 +1021,7 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
         this.loadorganizerList();
         Fire.$on('changefunction',(id)=> {

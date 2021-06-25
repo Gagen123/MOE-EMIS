@@ -10,9 +10,11 @@ class Participant extends Migration
         Schema::create('staff_program_participant', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('program_id',36)->nullable(false);
+            $table->foreign('program_id')->references('id')->on('staff_program_details');
             $table->char('org_id',36)->nullable(false);
             $table->char('dzo_id',36)->nullable(false);
             $table->char('participant_id',36)->nullable(false);
+            $table->foreign('participant_id')->references('id')->on('stf_staff');
             $table->string('contact',50)->nullable(false);
             $table->string('email',100)->nullable(false);
             $table->string('nature_of_participant',100)->nullable(false);

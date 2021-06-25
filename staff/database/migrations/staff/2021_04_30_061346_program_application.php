@@ -10,6 +10,7 @@ class ProgramApplication extends Migration
         Schema::create('program_application', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('program_id',36)->nullable(false);
+            $table->foreign('program_id')->references('id')->on('staff_program_details');
             $table->char('org_id',36)->nullable(false);
             $table->char('dzo_id',36)->nullable(false);
             $table->string('app_no',36)->nullable(false);

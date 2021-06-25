@@ -7,8 +7,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Basic Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Basic Details </label>
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
@@ -27,7 +27,7 @@
                                     <label><u>Previous Details</u></label>
                                 </div>
                             </div>
-                            
+
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:</label>
@@ -175,13 +175,13 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
                                     <label class="mb-0">Parent School:</label>
                                     <span class="text-blue text-bold">{{appicationDetailsForm.parentSchool}}</span>
-                                </div>   
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Co-located with Parent School</label>
                                     <span class="text-blue text-bold">
                                         {{ appicationDetailsForm.coLocated  == 1 ? "Yes" :  "No"}}
                                     </span>
-                                </div> 
+                                </div>
                             </div>
                             <div v-if="appicationDetailsForm.category==0">
                                 <div class="row pb-2">
@@ -220,7 +220,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <div class="form-group row">
@@ -262,7 +262,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <Workflow
                             :appNo="appicationDetailsForm.applicationNo"
                         />
@@ -314,7 +314,7 @@ export default {
             }),
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:''
-            }), 
+            }),
         }
     },
 
@@ -333,7 +333,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -345,7 +345,7 @@ export default {
             .then(response => {
                 this.existing_details=response.data.data;
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error: "+error);
             });
         },
@@ -354,7 +354,7 @@ export default {
          */
         loadChangeBasicApplicationDetails(appId,type){
             axios.get('organization/loadChangeDetailForVerification/'+appId+'/'+type)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 // this.appicationDetailsForm.organizationId       =   data.organizationId;
                 // this.appicationDetailsForm.applicationNo        =   data.applicationNo;
@@ -380,12 +380,12 @@ export default {
                     $('#approveId').show();
                 }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
 
-        
+
 
         /**
          * method to show next tab and update application accordingly
@@ -400,7 +400,7 @@ export default {
                 }
                 if(action){
                     Swal.fire({
-                        text: "Are you sure you wish to "+nextclass+" this applicaiton ?",
+                        text: "Are you sure you wish to "+nextclass+" this Application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -413,19 +413,19 @@ export default {
                             this.form.post('organization/updateChangeBasicDetailApplication')
                             .then((response) => {
                                 if(response!=""){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
                                     });
                                     this.$router.push({path:'/tasklist'});
-                                } 
+                                }
                             })
                             .catch((err) => {
                                 Swal.fire(
                                     'error!',
                                     'Not able to update this application details. Please contact system administrator.Error: '+err,
                                     'error',
-                                ); 
+                                );
                                 console.log("Error:"+err)
                             })
                         }

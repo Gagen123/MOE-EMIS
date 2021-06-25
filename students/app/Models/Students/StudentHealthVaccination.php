@@ -16,9 +16,7 @@ class StudentHealthVaccination extends Model
         'StdVaccineTypeId',
         'date',
         'class',
-        'td_vaccine_at6_boys',
-        'td_vaccine_at6_girls',
-        'td_vaccine_at12_boys',
-        'td_vaccine_at12_boys',
+        'section',
+        'stream'
     ];
 }

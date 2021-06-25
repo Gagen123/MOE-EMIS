@@ -8,7 +8,7 @@
                     <th>Item</th>
                     <th>Usable</th>
                     <th>Not Usable</th>
-                    <th>Action</th> 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -49,16 +49,8 @@ export default {
                 this.equipmentList =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+
             });
-            setTimeout(function(){
-                $("#equipment-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
 
         /**

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
@@ -8,8 +8,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Current Organization Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Current Organization Details </label>
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
@@ -69,7 +69,7 @@
                                 <label>Geopolitically Located:</label>
                                 <span class="text-blue text-bold"> {{ data.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
                             </div>
-                        </div> 
+                        </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>SEN School:</label>
@@ -80,13 +80,13 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
                                 <label class="mb-0">Parent School:</label>
                                 <span class="text-blue text-bold">{{data.parentSchool}}</span>
-                            </div>   
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Co-located with Parent School</label>
                                 <span class="text-blue text-bold">
                                     {{ data.coLocated  == 1 ? "Yes" :  "No"}}
                                 </span>
-                            </div> 
+                            </div>
                         </div>
                        <div v-if="data.category==0">
                             <div class="row pb-2">
@@ -123,7 +123,7 @@
                                 <span v-for="(item, index) in  data.classes" :key="index">
                                     <br>
                                     <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.id] }}</label>
-                                </span> 
+                                </span>
                             </div>
                         </div>
                         <hr>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -255,7 +255,7 @@
                                                                 <input type="checkbox" v-model="form.stream"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
                                                             </span>
                                                         </span>
-                                                    </span> 
+                                                    </span>
                                                 </div>
                                             </div>
                                         </form>
@@ -382,7 +382,7 @@
                                                                 <input type="checkbox" v-model="form.stream1"  :id="stm.id" :value="item.id+'##'+stm.id"> <label class="pr-3"> {{ stm.stream  }}</label>
                                                             </span>
                                                         </span>
-                                                    </span> 
+                                                    </span>
                                                 </div>
                                             </div>
                                         </form>
@@ -401,13 +401,13 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             data:'',
             orgList:'',
             levelList:[],
@@ -435,9 +435,9 @@ export default {
                 ,name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
                 geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:''
                 ,class:[],stream:[],class1:[],stream1:[],class2:[],stream2:[]
-                
-            }), 
-        } 
+
+            }),
+        }
     },
     methods: {
 
@@ -449,7 +449,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -460,9 +460,9 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
-                
+
             });
         },
         /**
@@ -474,7 +474,7 @@ export default {
                 let data = response.data;
                 this.locationList = data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -535,7 +535,7 @@ export default {
                 let data = response.data.data;
                 this.dzongkhagList =  data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -691,8 +691,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -705,14 +705,14 @@ export default {
                         this.form.post('organization/saveBifurcation')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.applicationNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
-                                Toast.fire({  
+                                Toast.fire({
                                     icon: 'success',
                                     title: 'Bifurcation details has been submitted for further action.'
-                                }); 
-                            } 
-                            
+                                });
+                            }
+
                         })
                         .catch((er) => {
                             console.log("Error:"+er)
@@ -739,14 +739,14 @@ export default {
         getOrgDetails(id){
             // axios.get('organization/getFullSchoolDetials/'+id)
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.parent_id=data.id;
                 this.data=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         },
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -759,19 +759,19 @@ export default {
         /**
          * method to check pending status
          */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
 
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {  
+        //     .then((response) => {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
+        //             $('#ApplicationUnderProcess').show();
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
-        //     .catch((error) => {  
+        //     .catch((error) => {
         //         console.log("Error: "+error);
         //     });
         // },
@@ -782,7 +782,7 @@ export default {
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
-        
+
         this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
@@ -790,8 +790,8 @@ export default {
             if(data['acess_level']=="Org"){
                 this.getOrgDetails(data['Agency_Code']);
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
         this.getOrgList();
@@ -804,9 +804,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

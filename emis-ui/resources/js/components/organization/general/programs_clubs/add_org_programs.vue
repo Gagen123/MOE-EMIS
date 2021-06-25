@@ -31,50 +31,6 @@
                     <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
-            <!-- <label>Roles Assigned to Staff </label>
-            <div class="card">
-                <div class="form-group row">
-                    <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Teacher</th>
-                                    <th>Role</th>
-                                    <th>Remarks</th>                     
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="record1" v-for='(role, index) in student_form.assigned_staff' :key="index">
-                                    <td>
-                                        <select name="teacher" id="teacher" class="form-control" v-model="role.teacher" :class="{ 'is-invalid': student_form.errors.has('teacher') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <select name="role" id="role" class="form-control" v-model="role.role" :class="{ 'is-invalid': student_form.errors.has('role') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <input type="text" name="remarks" id="remarks" class="form-control" v-model="role.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" @change="remove_err('remarks')"/>
-                                        <has-error :student_form="form" field="remarks"></has-error>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td colspan="5"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                                </tr>                                          
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> -->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>

@@ -7,8 +7,8 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Organization Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Organization Details </label>
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
@@ -23,24 +23,24 @@
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <h4><u>Application Details</u></h4>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Application Number:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.application_no}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Submitted Date:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.application_date}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
                                     <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Public ECCD'">
                                     <label class="mb-0">Proposal Initiated By:</label>
                                     <span class="text-blue text-bold">{{proposed_by_list[applicationOrgdetails.initiated_by]}}</span>
@@ -48,17 +48,17 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
-                                </div>  
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School' ||applicationdetails.establishment_type=='Public ECR'">
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School'">
                                     <label class="mb-0">Level:</label>
                                     <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
-                                </div>  
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Dzongkhag:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.dzongkhag}}</span>
-                                </div>  
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Gewog:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.gewog}}</span>
@@ -66,13 +66,13 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Chiwog:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.village}}</span>
-                                </div>                 
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
                                     <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
-                                </div>   
+                                </div>
                                 <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
@@ -80,18 +80,16 @@
                                     </span>
                                 </div>  -->
                             </div>
-                            <!-- <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
+                            <div class="form-group row" v-if="applicationdetails.establishment_type=='Public School'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Is Feeding School:</label>
                                     <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
-                                </div>   
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationOrgdetails.isFeedingSchool  == 1">
-                                    <label class="mb-0">Feeding Modality:</label><br>
-                                    <label><input  type="checkbox" v-model="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="feeding" id="feeding3" value="3" tabindex=""/> Three Meals</label>
                                 </div>
-                            </div> -->
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="isFeeding  == 1">
+                                    <label class="mb-0">Feeding Modality: </label>
+                                    <span class="text-blue text-bold"> {{feed_details}} </span>
+                                </div>
+                            </div>
                             <div v-if="applicationdetails.establishment_type=='Private School' || applicationdetails.establishment_type=='Private ECCD'">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -123,10 +121,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                   <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Total Area of Land Proposed:</label>
                                         <span class="text-blue text-bold">{{applicationdetails.org_details.totalLand}}</span>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0">Type of School:</label>
                                         <span class="text-blue text-bold">{{ applicationdetails.org_details.typeOfSchool  == 1 ? "Day" :  "Boarding"}}</span>
@@ -139,17 +137,17 @@
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type == null || attach.upload_type=='Applicant'">
                                                     <td> {{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -165,7 +163,7 @@
                                 <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <h4><u>Classes / streams / Age Group</u></h4>
@@ -174,8 +172,8 @@
                                     <thead>
                                         <tr>
                                             <th>Classes</th>
-                                            <th class="strm_clas">Stream</th>  
-                                            <th></th>                     
+                                            <th class="strm_clas">Stream</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -183,19 +181,19 @@
                                             <td>
                                                 <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                             </td>
-                                            <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
+                                            <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
                                                 {{  streamArray[item.streamId]  }}
                                             </td>
-                                            <td class="strm_clas" v-else>                                
-                                            
+                                            <td class="strm_clas" v-else>
+
                                             </td>
-                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id" disabled>
                                             </td>
-                                            <td v-else>  
-                                                <input type="checkbox" checked="true">                           
+                                            <td v-else>
+                                                <input type="checkbox" checked="true" disabled>
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     </tbody>
                                 </table>
                                 <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
@@ -203,7 +201,7 @@
                                         <br>
                                         <input type="checkbox" checked="true"><label class="pr-4">
                                          &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                    </span> 
+                                    </span>
                                 </div>  -->
                             </div>
                         </div>
@@ -211,33 +209,45 @@
                             <h4><u>Site Visit and Verification Details</u></h4>
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Verifying Agency:</label> 
-                                    <input type="text" name="verifying_agency" v-model="form.verifying_agency" id="verifying_agency" class="form-control">
-                                    <span class="text-danger" id="verifying_agency_err"></span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Tentative Date:</label> 
+                                    <label>Tentative Date:</label>
                                     <input type="date" name="tentative_date" v-model="form.tentative_date" id="tentative_date" class="form-control">
                                     <span class="text-danger" id="tentative_date_err"></span>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-2" id="btnstentative">
+                                    <button type="button" class="btn btn-flat btn-sm btn-primary"
+                                    @click="addMoreagency()"><i class="fa fa-plus"></i> Add More Agency</button>
+                                    <button type="button" class="btn btn-flat btn-sm btn-danger"
+                                    @click="removeagency()"><i class="fa fa-trash"></i> Remove</button>
+                                </div>
                             </div>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(agent, index) in form.verifying_agency_list' :key="index">
+                                    <label>Verifying Agency:</label>
+                                    <input type="text" name="verifying_agency" v-model="form.verifying_agency[index]" :id="'verifying_agency'+index" class="form-control">
+                                    <span class="text-danger" id="verifying_agency_err"></span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(agent, index) in form.verifying_agency_verified_list' :key="index">
+                                    <label>Verifying Agency:</label>
+                                    <input type="text" name="verifying_agency" v-model="agent.verifying_agency" readonly class="form-control">
+                                </div>
+                             </div>
                             <div class="row pb-2" style="display:none" id="tentativeAttachment">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='tentative'">
                                                     <td>  {{attach.user_defined_file_name}}</td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -251,7 +261,7 @@
                                 <h5><u>Team Verification</u></h5>
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
-                                        <label>Enter the Members CID:</label> 
+                                        <label>Enter the Members CID:</label>
                                         <input type="text" name="emp_deails" id="emp_deails" class="form-control">
                                         <span class="text-danger" id="emp_deails_err"></span>
                                     </div>
@@ -275,7 +285,7 @@
                                                 </tr>
                                                 <tr id="removeBtn">
                                                     <td colspan="5">
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId" 
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId"
                                                         @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
                                                     </td>
                                                 </tr>
@@ -285,23 +295,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row pb-2" style="display:none" id="team_verificationAttachment">
+                            <!-- <div class="row pb-2" style="display:none" id="team_verificationAttachment">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <h5><u>Attachments</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='team_verification'">
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -309,7 +319,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
                          <div class="callout callout-success">
                             <h4><u>Attachments</u></h4>
@@ -319,7 +329,7 @@
                                         <thead>
                                             <tr>
                                                 <th>File Name</th>
-                                                <th>Upload File</th>                     
+                                                <th>Upload File</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -328,19 +338,19 @@
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
-                                                <td>                                
+                                                <td>
                                                     <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                             <tr>
-                                                <td colspan="5"> 
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                     @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                                     @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                                 </td>
-                                            </tr>                                          
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -376,7 +386,7 @@ export default {
         Workflow,
     },
     data(){
-        return{ 
+        return{
             count:1,
             showsearch:false,
             proprietorList:[],
@@ -389,51 +399,69 @@ export default {
             proposed_by_list:{},
             locationList:[],
             feeding:[],
+            isFeeding:0,
+            feed_details:'',
             applicationOrgdetails:{locationTypeId:'', level:'', proposedName:'', initiated_by:''},
             classStreamForm: new form({
                 id: '',class:[], stream:[], status:'submitted'
             }),
             form: new form({
-                id: '',applicationNo:'',actiontype:'',remarks:'',verifying_agency:'',tentative_date:'',update_type:'',servicename:'',
+                id: '',applicationNo:'',actiontype:'',remarks:'',verifying_agency_verified_list:[],verifying_agency_list:[{verifying_agency:''}],verifying_agency:[],tentative_date:'',update_type:'',servicename:'',
                 nomi_staffList:[],fileUpload: [],
                 attachments:
                 [{
                     file_name:'',attachment:''
                 }],
                 ref_docs:[],
-            }), 
-        } 
+            }),
+        }
     },
     methods:{
         getAttachmentType(type){
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
             .then(response => {
                 let data = response.data;
-                data.forEach((item => {
-                    this.count++;
-                    this.form.fileUpload.push({file_name:item.name, file_upload:''})
-                }));
-            })    
-            .catch(errors => { 
+                if(data!=null && data!=""){
+                    data.forEach((item => {
+                        this.count++;
+                        this.form.fileUpload.push({file_name:item.name, file_upload:''})
+                    }));
+                }
+            })
+            .catch(errors => {
                 console.log(errors)
-            });   
+            });
         },
         loadestablishmentapplicationdetails(appId,type){
             $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.applicationNo=data.application_no;
                 this.form.servicename=data.establishment_type;
                 this.form.id=data.id;
+                this.applicationdetails=data;
+                this.applicationOrgdetails=data.org_details;
                 this.class_section=data.org_class_stream;
+                let meals="";
                 if(data.org_details.isFeedingSchool==1){
+                    this.isFeeding=1;
                     for(let i=0;i<data.feeding_modality.length;i++){
                         if(data.feeding_modality[i].noOfMeals!=undefined){
-                            $('#feeding'+data.feeding_modality[i].noOfMeals).prop('checked',true);
+                            if(data.feeding_modality[i].noOfMeals==1){
+                                meals+='One Meal, ';
+                            }
+                            if(data.feeding_modality[i].noOfMeals==2){
+                                meals+='Two Meal,';
+                            }
+                            if(data.feeding_modality[i].noOfMeals==3){
+                                meals+='Three Meal';
+                            }
+                            $("#feedingmodal"+data.feeding_modality[i].noOfMeals).prop("checked",true);
                         }
                     }
-                    $('#feedingDetails').show();
+                    this.feed_details=meals;
+                    $('#mealDetails').html(meals);
                 }
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
@@ -441,9 +469,9 @@ export default {
                 if(response.data.app_stage.toLowerCase().includes('approve')){
                     $('#approveId').show();
                 }
-
                 if(data.app_verification==null){
-                    this.getAttachmentType('ForTransaction__Update_Tentative_Date_for_Public');
+                    //tentative document
+                    this.getAttachmentType('ForTransaction__Tentative_Date_for_Public');
                     $('#update_btn_level').html('Notify For Tentative Date');
                     this.form.update_type='tentative';
                     $('#updateBtn').show();
@@ -452,13 +480,34 @@ export default {
                 }
                 else{
                     $('#tentativeAttachment').show();
-                    this.form.verifying_agency=data.app_verification.verifyingAgency;
+                    // this.form.verifying_agency=data.app_verification.verifyingAgency;
+                    let veri=data.app_verification.verifyingAgency.split(',');
+                    this.form.verifying_agency_list=[];
+                    for(let i=0;i<veri.length;i++){
+                        this.form.verifying_agency_verified_list.push({verifying_agency:veri[i]});
+                    }
+                    $('#btnstentative').hide();
                     this.form.id=data.app_verification.id;
                     $('#verifying_agency').prop('readonly',true);
                     this.form.tentative_date=data.app_verification.tentativeDate;
                     $('#tentative_date').prop('readonly',true);
                     $('#verifier_team').show();
-                    if(data.app_verification_team.length==0){
+
+                    if((data.establishment_type=="Private School" ||  data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
+                        $('#verifyId').hide();
+                        $('#approveId').hide();
+                        $('#rejectbtn').hide();
+                    }
+                    //approver documents
+                    this.getAttachmentType('ForTransaction__Application_for_Public_School_Approver');
+                    $('#team_verificationAttachment').show();
+                    $('#removeBtn').hide();
+                    this.form.update_type='final_verification';
+                    this.showsearch=true;
+                    $('#updateBtn').hide();
+                    $('#update_btn_level').hide();
+
+                    //if(data.app_verification_team.length==0){
                         // this.form.update_type='team_verification';
                         // this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
                         // // $('#update_btn_level').html('Notify For team Verification');
@@ -467,44 +516,41 @@ export default {
                         // $('#verifyId').show();
                         // $('#approveId').show();
                         // $('#update_btn_level').hide();
-                        this.showsearch=true;
-                        this.form.update_type='final_verification';
-                        this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
-                        $('#removeBtn').hide();
-                        $('#team_verificationAttachment').show();
-                    }
-                    else{
-                        if((data.establishment_type=="Private School" || data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
-                            $('#verifyId').hide();
-                            $('#approveId').hide();
-                            $('#rejectbtn').hide();
-                        }
-                        this.showsearch=false;
-                        this.form.update_type='final_verification';
-                        this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
-                        $('#removeBtn').hide();
-                        $('#team_verificationAttachment').show();
-                        for(let i=0;i<data.app_verification_team.length;i++){
-                            this.form.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
-                                name:data.app_verification_team[i].name,
-                                cid:data.app_verification_team[i].cid,
-                                po_title:data.app_verification_team[i].po_title,
-                            })
-                        }
-                    }
+                    //     this.showsearch=true;
+                    //     this.form.update_type='final_verification';
+
+                    //     $('#removeBtn').hide();
+                    //     $('#team_verificationAttachment').show();
+                    // }
+                    // else{
+
+                    //     this.showsearch=false;
+                    //     this.form.update_type='final_verification';
+                    //     this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
+                    //     $('#removeBtn').hide();
+                    //     $('#team_verificationAttachment').show();
+                    //     for(let i=0;i<data.app_verification_team.length;i++){
+                    //         this.form.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
+                    //             name:data.app_verification_team[i].name,
+                    //             cid:data.app_verification_team[i].cid,
+                    //             po_title:data.app_verification_team[i].po_title,
+                    //         })
+                    //     }
+                    // }
+
                 }
-                this.applicationdetails=data;
-                this.applicationOrgdetails=data.org_details;
+
+
                 if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
                     $('.strm_clas').show();
                 }
-                
+
             })
-            .catch((error) => {  
-                console.log("Error......"+error);
+            .catch((error) => {
+                console.log("Error: "+error);
             });
         },
-        openfile(file){ 
+        openfile(file){
             let file_path=file.path+'/'+file.name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
@@ -517,11 +563,20 @@ export default {
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.form.fileUpload.length>1){
                 this.count--;
-                this.form.fileUpload.splice(index,1); 
+                this.form.fileUpload.splice(index,1);
             }
+        },
+        addMoreagency: function(){
+            this.form.verifying_agency_list.push({verifying_agency:''})
+        },
+        /**
+         * method to remove fields
+         */
+        removeagency(index){
+           this.form.verifying_agency_list.pop();
         },
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
@@ -532,7 +587,7 @@ export default {
             else{
                 $('#fileName'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
 
         remove_error(field_id){
@@ -540,7 +595,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
         getEmpDetails(){
             if($('#emp_deails').val()==""){
                 $('#emp_deails_err').html('Please provide this field');
@@ -556,7 +611,7 @@ export default {
                 }
                 let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails').val();
                 axios.get(uri)
-                .then((response) => {  
+                .then((response) => {
                     let data=response.data.data;
                     $('#emp_deails').val('');
                     $('#nminees_error').html('');
@@ -564,7 +619,7 @@ export default {
                         Swal.fire({
                             text: "No details are found with this input!",
                             icon: 'error',
-                        }); 
+                        });
                     }
                     else{
                         this.form.nomi_staffList.push({id:'NA',staff_id:data.id, name:data.name, cid:data.cid_work_permit, po_title:data.position_title, org_id:data.working_agency_id,org:data.working_agency, dzo_id:data.dzo_id,dzo:data.dzongkhag})
@@ -621,7 +676,7 @@ export default {
                             formData.append('servicename', this.form.servicename);
                             // for(let i=0;i<this.form.nomi_staffList.length;i++){
                             //     alert( JSON.stringify(this.form.nomi_staffList[i]));
-                               
+
                             // }
                             formData.append('nomi_staffList', JSON.stringify(this.form.nomi_staffList));
                             formData.append('ref_docs[]', this.form.ref_docs);
@@ -633,19 +688,19 @@ export default {
                             axios.post('organization/updateNewEstablishmentApplication', formData, config)
                             .then((response) => {
                                 if(response!=""){
-                                    Toast.fire({  
+                                    Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
                                     });
                                     this.$router.push({path:'/tasklist'});
-                                } 
+                                }
                             })
                             .catch((err) => {
                                 Swal.fire(
                                     'error!',
                                     'Not able to update these application details. Please contact system administrator.Error: '+err,
                                     'error',
-                                ); 
+                                );
                                 console.log("Error:"+err)
                             })
                         }
@@ -667,7 +722,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.levelList[data[i].id] = data[i].name; 
+                    this.levelList[data[i].id] = data[i].name;
                 }
             });
         },
@@ -676,7 +731,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.locationList[data[i].id] = data[i].name; 
+                    this.locationList[data[i].id] = data[i].name;
                 }
             });
         },
@@ -697,7 +752,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -707,7 +762,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].stream; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
@@ -716,7 +771,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.proposed_by_list[data[i].id] = data[i].name; 
+                    this.proposed_by_list[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -733,8 +788,8 @@ export default {
         this.loadproposedBy();
         // this.applicationdetails.applicationNo=this.$route.params.data.application_number;
         this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
-        
-        
+
+
     }
 }
 </script>

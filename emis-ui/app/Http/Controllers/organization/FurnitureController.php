@@ -53,7 +53,7 @@ class FurnitureController extends Controller
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()
         ];
-
+      // dd($loc);
         try{
             $response_data= $this->apiService->createData('emis/organization/furniture/saveFurniture', $loc);
             return $response_data;
@@ -62,11 +62,17 @@ class FurnitureController extends Controller
             return $e;
         }
     }
-
+ 
     public function loadFurniture(){
         $orgId=$this->getWrkingAgencyId();
+       // dd($orgId);
         $dis = $this->apiService->listData('emis/organization/furniture/loadFurniture/'.$orgId);
         return $dis;
     }
-
+    
+    public function getFurnitureDetails($furId=""){
+        // dd('m here');
+        $furDetails = $this->apiService->listData('emis/organization/furniture/getFurnitureDetails/'.$furId);
+        return $furDetails;
+    }
 }

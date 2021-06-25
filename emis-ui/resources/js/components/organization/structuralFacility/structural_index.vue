@@ -19,7 +19,7 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link id="eccd" to="/eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link id="eccd" to="/eccdfacilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         ECCD Facilities
                     </router-link>
@@ -42,6 +42,12 @@
                         Infrastructure
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" >
+                    <router-link id="regularstaff" to="/eccdinfrastructure_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class=""></span>
+                        ECCD Infrastructure
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1">
                     <router-link id="financial_information" to="/financial_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
@@ -54,12 +60,12 @@
                         Income Facilities
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
+                <!-- <li class="nav-item active pr-1">
                     <router-link id="disasters_information" to="/disasters_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Disaster Information
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link id="compound_information" to="/compound_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>

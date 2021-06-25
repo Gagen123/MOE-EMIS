@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="applicaitonUnderProcess">
+        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="existmessage"></div>
         </div>
@@ -80,13 +80,13 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.gewog}}</span>
+                                        <span class="text-blue text-bold" id="gewogName"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:</label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name"> </span>
+                                        <span class="text-blue text-bold" id="chewogName" > </span>
                                     </div>
                                 </div>
                                 <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
@@ -95,7 +95,7 @@
                                         <span v-for="(item, index) in  data.classes" :key="index">
                                             <br>
                                             <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.classId] }}</label>
-                                        </span> 
+                                        </span>
                                     </div>
                                 </div>
                             </form>
@@ -126,7 +126,7 @@
                                         <has-error :form="form" field="level1"></has-error>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <!-- <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
                                         <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
@@ -134,7 +134,7 @@
                                         <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
                                         <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
@@ -216,8 +216,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>  
-                                                <th></th>                     
+                                                <th class="strm_clas">Stream</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -225,42 +225,81 @@
                                                 <td>
                                                     <label class="pr-4"> &nbsp;{{ item.class }} </label>
                                                 </td>
-                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     {{  item.stream  }}
                                                 </td>
-                                                <td class="strm_clas" v-else>                                
-                                                
+                                                <td class="strm_clas" v-else>
+
                                                 </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
                                                     <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
                                                 </td>
-                                                <td v-else>  
-                                                    <input type="checkbox" v-model="form.class" :value="item.classId">                              
-                                                    
+                                                <td v-else>
+                                                    <input type="checkbox" v-model="form.class" :value="item.classId">
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <hr>
-                    <div class="row form-group fa-pull-right">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
-                        </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Upload the Required Documents</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Upload File</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                    <td>
+                                        <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                        <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                    </td>
+                                    <td>
+                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5">
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="row form-group fa-pull-right">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                     </div>
                 </div>
             </div>
+
         </div>
-        
+
     </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             data:'',
             orgList:'',
             levelList:[],
@@ -282,17 +321,40 @@ export default {
             streamArray:[],
             sectionArray:[],
             classStreamList:[],
-
+            gewogArray:{},
+            villageArray:{},
             form: new form({
-                id: '',parent_id:'',name:'',
+                id: '',parent_id:'',name:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'add', status:'Submitted',
                 name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',
-                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[]
-                
-            }), 
-        } 
+                geoLocated1:'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
+            }),
+        }
     },
     methods: {
-
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
         /**
          * method to remove error
          */
@@ -301,7 +363,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -312,9 +374,9 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
-                
+
             });
         },
         /**
@@ -326,7 +388,7 @@ export default {
                 let data = response.data;
                 this.locationList = data;
                 for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name; 
+                    this.locationArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -400,7 +462,7 @@ export default {
                 let data = response.data.data;
                 this.dzongkhagList =  data;
                 for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name; 
+                    this.dzongkhagArray[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -425,7 +487,7 @@ export default {
         /**
          * method to get gewog list
          */
-        async getgewoglist(id){
+        getGewogList(id,gewogId){
             let dzoId=$('#dzongkhag').val();
             if(id!="" && dzoId==null){
                 dzoId=id;
@@ -433,8 +495,12 @@ export default {
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.gewog_list = data.data.data;
+                let data = response.data.data;
+                this.gewog_list = data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray[data[i].id] = data[i].name;
+                }
+                $('#gewogName').html(this.gewogArray[gewogId]);
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -462,7 +528,7 @@ export default {
         /**
          * method to get village list
          */
-        async getvillagelist(id){
+        async getvillagelist(id,vil_id){
             let gewogId=$('#gewog').val();
             if(id!="" && gewogId==null){
                 gewogId=id;
@@ -470,8 +536,12 @@ export default {
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
+                let data = response.data.data;
+                this.villageList = data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray[data[i].id] = data[i].name;
+                }
+                $('#chewogName').html(this.villageArray[vil_id])
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -556,7 +626,7 @@ export default {
             }
             if(id=="dzongkhag"){
                 this.form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+                this.getGewogList($('#dzongkhag').val(),'');
             }
             if(id=="dzongkhag1"){
                 this.form.dzongkhag1=$('#dzongkhag1').val();
@@ -581,8 +651,8 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this details ?",
                     icon: 'info',
@@ -592,20 +662,59 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveBifurcation')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('parent_id', this.form.parent_id);
+                        formData.append('name', this.form.name);
+                        formData.append('name1', this.form.name1);
+                        formData.append('level1', this.form.level1);
+                        formData.append('category1', this.form.category1);
+                        formData.append('dzongkhag1', this.form.dzongkhag1);
+                        formData.append('gewog1', this.form.gewog1);
+                        formData.append('chiwog1', this.form.chiwog1);
+                        formData.append('location1', this.form.location1);
+                        formData.append('geoLocated1', this.form.geoLocated1);
+                        formData.append('senSchool1', this.form.senSchool1);
+                        formData.append('coLocated1', this.form.coLocated1);
+                        formData.append('parentSchool1', this.form.parentSchool1);
+                        for(let i=0;i<this.form.class.length;i++){
+                            formData.append('class[]', this.form.class[i]);
+                        }
+                         for(let i=0;i<this.form.stream.length;i++){
+                            formData.append('stream[]', this.form.stream[i]);
+                        }
+
+                        formData.append('application_for', this.form.application_for);
+                        formData.append('action_type', this.form.action_type);
+                        formData.append('status', this.form.status);
+                        formData.append('application_type', this.form.application_type);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        axios.post('organization/saveBifurcation', formData, config)
+                        //this.form.post('organization/saveBifurcation')
                         .then((response) => {
                             if(response!=""){
-                                let message="Applicaiton for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
-                                Toast.fire({  
+                                Toast.fire({
                                     icon: 'success',
                                     title: 'Bifurcation details has been submitted for further action.'
-                                }); 
-                            } 
-                            
+                                });
+                            }
+
                         })
                         .catch((er) => {
-                            console.log("Error:"+er)
+                            console.log("Error:"+er);
+                            this.form.errors.errors = err.response.data.errors;
                      })
                     }
                 });
@@ -627,16 +736,18 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
         getOrgDetails(id){
-            // axios.get('organization/getFullSchoolDetials/'+id)
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 this.form.parent_id=data.id;
                 this.data=data;
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+                this.form.name=data.name;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         },
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -649,22 +760,35 @@ export default {
         /**
          * method to check pending status
          */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */ 
+        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
 
         // checkPendingApplication(){
         //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {  
+        //     .then((response) => {
         //         let data=response.data;
         //         if(data!=""){
         //             $('#mainform').hide();
-        //             $('#applicaitonUnderProcess').show();
+        //             $('#ApplicationUnderProcess').show();
         //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
         //         }
         //     })
-        //     .catch((error) => {  
+        //     .catch((error) => {
         //         console.log("Error: "+error);
         //     });
         // },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
     },
     created(){
@@ -672,7 +796,6 @@ export default {
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
-        
         this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
@@ -680,8 +803,8 @@ export default {
             if(data['acess_level']=="Org"){
                 this.getOrgDetails(data['Agency_Code']);
             }
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
         this.getOrgList();
@@ -694,13 +817,13 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
+        this.getAttachmentType('ForTransaction__Application_for_Bifurcation');
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();

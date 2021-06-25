@@ -36,9 +36,8 @@ class RestructuringController extends Controller
         //File Upload
         $files = $request->attachments;
         $filenames = $request->attachmentname;
-        $remarks = $request->remarks;
         $attachment_details=[];
-        $file_store_path=config('services.constant.file_stored_base_path').'Change Application';
+        $file_store_path=config('services.constant.file_stored_base_path').$request['application_type'];
         if($files!=null && $files!=""){
             if(sizeof($files)>0 && !is_dir($file_store_path)){
                 mkdir($file_store_path,0777,TRUE);
@@ -61,6 +60,7 @@ class RestructuringController extends Controller
         $request['attachment_details'] = $attachment_details;
         $establishment_data="";
         $validation ="";
+        // dd($request['application_type']);
         switch($request['application_type']){
             case "name_change" : {
                     $validation = $this->validateNameChangeFields($request);
@@ -72,11 +72,16 @@ class RestructuringController extends Controller
                     $establishment_data = $this->setFeedingChange($request);
                     break;
                 }
-            case "level_change" : {
+            case "downgradation" : {
                     $validation = $this->validateChangeInLevel($request);
                     $establishment_data = $this->setChangeInLevel($request);
                     break;
                 }
+            case "upgradation" : {
+                $validation = $this->validateChangeInLevel($request);
+                $establishment_data = $this->setChangeInLevel($request);
+                break;
+            }
             case "proprietor_change" : {
                     $validation = $this->validateChangeInProprietor($request);
                     $establishment_data = $this->setChangeInProprietor($request);
@@ -107,9 +112,9 @@ class RestructuringController extends Controller
                 $establishment_data = $this->setFeeStructure($request);
                 break;
             }
-            case "boadring_change" : {
+            case "boarding_change" : {
                 $validation = $this->validateGeneralChange($request);
-                $establishment_data = $this->setBoadring($request);
+                $establishment_data = $this->setBoarding($request);
                 break;
             }
             case "stream_change" : {
@@ -127,11 +132,14 @@ class RestructuringController extends Controller
                 break;
             }
         }
-        // $rules = $validation['rules'];
-        // $customMessages = $validation['messages'];
+        $rules = $validation['rules'];
+        $customMessages = $validation['messages'];
 
-        // $this->validate($request, $rules, $customMessages);
-
+        $this->validate($request, $rules, $customMessages);
+        $establishment_data=$establishment_data+[
+            'attachment_details'            =>   $attachment_details,
+        ];
+        // dd($establishment_data);
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet,$request->application_for);
         $screen_id="";
@@ -139,7 +147,7 @@ class RestructuringController extends Controller
         $app_role="";
         $screen_name="";
         foreach($workflowdet as $work){
-            if($work->screenName==$request->application_for){
+            if(strtolower($work->screenName)==strtolower($request->application_for)){
                 $screen_id=$work->SysSubModuleId;
                 $status=$work->Sequence;
                 $app_role=$work->SysRoleId;
@@ -149,14 +157,10 @@ class RestructuringController extends Controller
         if($screen_id==null || $screen_id==""){
             return 'No Screen';
         }
-        // $establishment_data['action_type'] = "add";
         // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
-        // return $response_data; 
-        // dd($response_data);
-    //    dd($request->action_type);
+        // dd($response_data,$workflowdet,$request->application_for);
         if($request->action_type!="edit"){
-            $service_name=json_decode($response_data)->data->establishment_type;
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
@@ -177,6 +181,20 @@ class RestructuringController extends Controller
         }
         return $response_data;
         // return $response_data;
+    }
+    public function deleteFile($full_path="",$id=""){
+        $full_path=str_replace('SSS','/',$full_path);
+        $headers = ['Content-Type: application/pdf'];
+        $file_name = explode('/',$full_path);
+        $finel_name = end($file_name);
+        // dd($full_path);
+        // $response_data = $this->apiService->deleteData("emis/organization/changeDetails/deleteFile", $id);
+        $response_data="";
+        if (file_exists($full_path)){
+            unlink($full_path);
+            $response_data = $this->apiService->deleteData("emis/organization/changeDetails/deleteFile", $id);
+        }
+        return $response_data;
     }
 
     public function getChangeBasicDetails($appId=""){
@@ -233,7 +251,6 @@ class RestructuringController extends Controller
         $workflowstatus="";
         $screen_id="";
         $sequence="";
-        $workflowstatus="";
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
@@ -243,7 +260,7 @@ class RestructuringController extends Controller
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
             // dd(strtolower($work->screenName),$work->Establishment_type,$service_name);
-            if($work->Sequence!=1 && $work->screenName==$service_name){
+            if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -327,12 +344,14 @@ class RestructuringController extends Controller
         }
 
         $estd =[
-            'status'                       =>   $org_status,
-            'application_number'           =>   $request->applicationNo,
-            'remarks'                      =>   $request->remarks,
-            'attachment_details'           =>   $attachment_details,
-            'user_id'                      =>   $this->userId()
+            'status'                        =>   $org_status,
+            'calssXIXII'                    =>   $request->calssXIXII,
+            'application_number'            =>   $request->applicationNo,
+            'remarks'                       =>   $request->remarks,
+            'attachment_details'            =>   $attachment_details,
+            'user_id'                       =>   $this->userId()
         ];
+        // dd($estd);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/updateChangeBasicDetails', $estd);
         // dd($response_data);
         return $work_response_data;
@@ -391,7 +410,7 @@ class RestructuringController extends Controller
             $app_role="";
             $service_name=json_decode($response_data)->data->establishment_type;
             foreach($workflowdet as $work){
-                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                if(strtolower($work->Establishment_type)==strtolower(str_replace (' ', '_',strtolower($service_name)))){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -491,7 +510,7 @@ class RestructuringController extends Controller
 
     public function updateMergerApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -543,9 +562,9 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
@@ -558,18 +577,32 @@ class RestructuringController extends Controller
 
     public function saveClosure(Request $request){
         // dd($request);
-        $file = $request->attachments;
-        $path="";
-        $file_store_path='Closure';
-        if($file!=null && $file!="" && $file!="undefined"){
-            $fle="public/".$request->profile_path;
-            if (Storage::exists($fle)){
-                Storage::delete($fle);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'closure';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
             }
-            $file_name = time().'_' .$file->getClientOriginalName();
-            $file_path = $request->file('attachments')->storeAs($file_store_path, $file_name, 'public');
-            $path=$file_store_path.'/'.$file_name;
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
         }
+
         $rules = [
             'reason'          =>  'required',
             'organizationId'  =>   'required'
@@ -584,9 +617,10 @@ class RestructuringController extends Controller
             'reason'            =>$request['reason'],
             'remark'            =>$request['remark'],
             'id'                =>$request['id'],
-            'attachments'       =>$path,
+            'attachment_details'       =>$attachment_details,
             'user_id'           =>$this->userId()
         ];
+        // dd($closure);
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
         // dd($response_data);
         //Work Flow Process (based on Public School Establishment)
@@ -599,7 +633,7 @@ class RestructuringController extends Controller
             $screen_name="";
             $app_role="";
             foreach($workflowdet as $work){
-                if($work->screenName==$request->application_for){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -612,7 +646,7 @@ class RestructuringController extends Controller
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>'Closure',//service name
+                'service_name'      =>$screen_name,//service name
                 'name'              =>'Closure',//service name
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
@@ -692,7 +726,7 @@ class RestructuringController extends Controller
 
     public function updateClosureApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -722,7 +756,7 @@ class RestructuringController extends Controller
         $filenames = $request->attachmentname;
         $remarks = $request->remarks;
         $attachment_details=[];
-        $file_store_path=config('services.constant.file_stored_base_path').'MergerVerification';
+        $file_store_path=config('services.constant.file_stored_base_path').'ClosureVerification';
         if($files!=null && $files!=""){
             if(sizeof($files)>0 && !is_dir($file_store_path)){
                 mkdir($file_store_path,0777,TRUE);
@@ -736,7 +770,7 @@ class RestructuringController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
-                            'saveapplication_number'     =>  $request->applicationNo,
+                            'saveapplication_number' =>  $request->applicationNo,
                             // 'remark'                 =>  $remarks[$index]
                         )
                     );
@@ -744,21 +778,22 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
-            'status'                       =>   $org_status,
-            'application_number'           =>   $request->applicationNo,
-            'remarks'                      =>   $request->yourRemark,
-            'user_id'                      =>   $this->userId()
+            'status'                        =>   $org_status,
+            'application_number'            =>   $request->applicationNo,
+            'remarks'                       =>   $request->yourRemark,
+            'attachment_details'            =>   $attachment_details,
+            'user_id'                       =>   $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/closure/updateClosureDetails', $estd);
         // dd($response_data);
         return $work_response_data;
 
         //Ugyen's old route
-        
+
         // // dd($closure);
         // $response_data= $this->apiService->createData('emis/organization/closure/updateClosure', $closure);
         // return $work_response_data;
@@ -786,7 +821,33 @@ class RestructuringController extends Controller
             'senSchool1.required'    => 'SEN School is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').$request['application_type'];
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                        )
+                    );
+                }
+            }
+        }
         $bifurcation =[
+            'appId'                     =>  $request['appId'],
+            'id'                        =>  $request['id'],
             'name'                      =>  $request['name'],
             'name1'                     =>  $request['name1'],
             'level1'                    =>  $request['level1'],
@@ -801,9 +862,15 @@ class RestructuringController extends Controller
             'coLocated1'                =>  $request['coLocated1'],
             'class1'                    =>  $request['class'],
             'stream1'                   =>  $request['stream'],
-            'parent_id'                 =>  $request['parent_id']
+            'parent_id'                 =>  $request['parent_id'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],
+            'application_type'          =>  $request['application_type'],
+            'action_by'                 =>$this->userId(),
+            'attachment_details'        =>   $attachment_details,
         ];
-
+        // dd($bifurcation);
         $response_data= $this->apiService->createData('emis/organization/bifurcation/saveBifurcation', $bifurcation);
 
         //Work Flow Process (based on Public School Establishment)
@@ -818,7 +885,7 @@ class RestructuringController extends Controller
             $service_name=json_decode($response_data)->data->establishment_type;
 
             foreach($workflowdet as $work){
-                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -871,11 +938,16 @@ class RestructuringController extends Controller
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/bifurcation/loadBifurcationForVerification/'.$appNo));
         //dd($this->apiService->listData('emis/organization/bifurcation/loadBifurcationForVerification/'.$appNo));
-        $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
+        $service_name=$loadOrganizationDetails->data->establishment_type;
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
-            if($work->Sequence!=1 && strpos(strtolower($work->screenName),'merge')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            // if($work->Sequence!=1 && strpos(strtolower($work->screenName),'merge')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            //     $workflowstatus=$work->Status_Name;
+            //     $screen_id=$work->SysSubModuleId;
+            //     $sequence=$work->Sequence;
+            // }
+            if($work->Sequence!=1 && $work->screenName==$service_name){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -893,7 +965,7 @@ class RestructuringController extends Controller
 
     public function updateBifurcationApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -945,9 +1017,9 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
@@ -976,7 +1048,7 @@ class RestructuringController extends Controller
             'gewog1'             =>  'required',
             'chiwog1'            =>  'required',
             'location1'          =>  'required',
-            'senSchool1'         =>  'required',
+            // 'senSchool1'         =>  'required',
         ];
         $customMessages = [
             'name1.required'         => 'Name is required',
@@ -986,9 +1058,34 @@ class RestructuringController extends Controller
             'gewog1.required'        => 'Gewog is required',
             'chiwog1.required'       => 'Chiwog is required',
             'location1.required'     => 'Location Type is required',
-            'senSchool1.required'    => 'SEN School is required',
+            // 'senSchool1.required'    => 'SEN School is required',
         ];
         $this->validate($request, $rules, $customMessages);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'re_opening';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number'     =>  $request->applicationNo,
+                            // 'remark'                 =>  $remarks[$index]
+                        )
+                    );
+                }
+            }
+        }
         $reopening =[
             'name1'                     =>  $request['name1'],
             'level1'                    =>  $request['level1'],
@@ -1003,13 +1100,18 @@ class RestructuringController extends Controller
             'coLocated1'                =>  $request['coLocated1'],
             'class1'                    =>  $request['class'],
             'stream1'                   =>  $request['stream'],
-            'parent_id'                 =>  $request['parent_id']
+            'parent_id'                 =>  $request['parent_id'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'attachment_details'        =>  $attachment_details,
+            'action_by'                 =>$this->userId(),
+
         ];
-
+        // dd($reopening);
         $response_data= $this->apiService->createData('emis/organization/reopening/saveReopening', $reopening);
-
-        //Work Flow Process (based on Public School Establishment)
-        //get submitter role
+        // dd($response_data);
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
             // dd($workflowdet);
@@ -1017,10 +1119,9 @@ class RestructuringController extends Controller
             $status="";
             $screen_name="";
             $app_role="";
-            $service_name=json_decode($response_data)->data->establishment_type;
 
             foreach($workflowdet as $work){
-                if($work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
@@ -1034,7 +1135,7 @@ class RestructuringController extends Controller
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>'Reopening',//service name
+                'service_name'      =>$screen_name,
                 'name'              =>'Reopening',//service name
                 'application_number'=>json_decode($response_data)->data->application_no,
                 'screen_id'         =>$screen_id,
@@ -1069,12 +1170,16 @@ class RestructuringController extends Controller
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/reopening/loadReopeningForVerification/'.$appNo));
-        //dd($this->apiService->listData('emis/organization/reopening/loadReopeningForVerification/'.$appNo));
-        $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
-        // dd($service_name,$workflowdet);
+        // dd($loadOrganizationDetails,$workflowdet);
+        $service_name=$loadOrganizationDetails->data->establishment_type;
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
-            if($work->Sequence!=1 && strpos(strtolower($work->screenName),'reopening')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            // if($work->Sequence!=1 && strpos(strtolower($work->screenName),'reopening')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            //     $workflowstatus=$work->Status_Name;
+            //     $screen_id=$work->SysSubModuleId;
+            //     $sequence=$work->Sequence;
+            // }
+            if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -1096,7 +1201,7 @@ class RestructuringController extends Controller
 
     public function updateReopeningApplication(Request $request){
         //updating the work flow and status
-        
+
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
@@ -1148,15 +1253,15 @@ class RestructuringController extends Controller
             }
         }
 
-        
+
         //change the following for each type of application
-        
+
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,
             'remarks'                      =>   $request->remarks,
             'attachment_details'           =>   $attachment_details,
-            'user_id'                      =>   $this->userId() 
+            'user_id'                      =>   $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/reopening/updateReopeningDetails', $estd);
         // dd($response_data);
@@ -1346,19 +1451,17 @@ class RestructuringController extends Controller
     private function setchangeofstream($request){
         $change =[
             'organizationId'            =>  $request['organizationId'],
-            'level_change'              =>  $request['level_change'],
-            'level'                     =>  $request['level'],
-            'class'                     =>  $request['class'],
-            'stream'                    =>  $request['stream'],
+            // 'level_change'              =>  $request['level_change'],
+            // 'level'                     =>  $request['level'],
+            // 'class'                     =>  $request['class'],
+            'stream'                    =>  $request['streams'],
             'application_type'          =>  $request['application_type'],
             'application_for'           =>  $request['application_for'],
             'action_type'               =>  $request['action_type'],
             'status'                    =>  $request['status'],
             'id'                        =>  $request['id'],
             'app_level_change_id'       =>  $request['app_level_change_id'],
-            'stream'                    =>   $request->stream,
             'changetype'                =>   $request->changetype,
-            'attachment_details'            =>  $request['attachment_details'],
             'user_id'                   =>  $this->userId()
         ];
 
@@ -1470,7 +1573,7 @@ class RestructuringController extends Controller
         return $change;
     }
 
-    private function setBoadring($request){
+    private function setBoarding($request){
         $change =[
             'organizationId'            =>  $request['organizationId'],
             'isFeedingSchool'           =>  $request['isFeedingSchool'],

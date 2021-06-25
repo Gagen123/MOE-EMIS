@@ -6,7 +6,7 @@
                     <th >SL#</th>
                     <th >Thram No</th>
                     <th >Plot No</th>
-                    <th >Peg Information</th>
+                  <!-- <th >Peg Information</th> -->
                     <th >Compound Area</th>
                     <th >Action</th> 
                 </tr>
@@ -16,7 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.thramNo}}</td>
                     <td>{{ item.plotNo}}</td>
-                    <td>{{ item.pegInformation}}</td>
+                    <!-- <td>{{ item.pegInformation}}</td> -->
                     <td>{{ item.compoundArea}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

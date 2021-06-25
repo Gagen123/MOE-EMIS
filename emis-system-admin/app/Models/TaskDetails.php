@@ -13,7 +13,7 @@ class TaskDetails extends Model
         'id',
         'table_name',
         'service_name',
-        'name',
+        // 'name',
         'screen_id',
         'application_number',
         'status_id',
@@ -27,7 +27,7 @@ class TaskDetails extends Model
         'claimed_date',
         'last_action_by',
         'last_action_date',
-        'app_role_id',
-        'record_type_id'
+        // 'app_role_id',
+        // 'record_type_id'
     ];
 }

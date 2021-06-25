@@ -35,10 +35,24 @@ class AdministrationController extends Controller{
                 'status'    =>  'required',
             ];
         }
+        if($request['record_type']=="calender"){
+            $rules = [
+                'from_date'         =>  'required | date',
+                'to_date'           =>  'required | date | after:from_date',
+                'type'              =>  'required',
+            ];
+            $customMessages = [
+                'from_date.required' => 'This field is required',
+                'to_date.required' => 'This field is required',
+                'to_date.after'             => 'This field cannot be before start date',
+                'type.required' => 'This field is required',
+
+            ];
+        }
         if($request['record_type']=="gewog" || $request['record_type']=="village"){
             $rules = [
                 'name'          =>  'required',
-                'parent_field'  => 'required',
+                'parent_field'  =>  'required',
                 'code'          =>  'required',
                 'status'        =>  'required',
             ];
@@ -57,7 +71,13 @@ class AdministrationController extends Controller{
             'status'                =>  $request['status'],
             'actiontype'            =>  $request['action_type'],
             'id'                    =>  $request['id'],
-            'record_type'           =>$request['record_type'],
+            'record_type'           =>  $request['record_type'],
+            'year'                  =>  $request['year'],
+            'from_date'             =>  $request['from_date'],
+            'to_date'               =>  $request['to_date'],
+            'type'                  =>  $request['type'],
+            'user_type'             =>  $request['user_type'],
+            'remarks'               =>  $request['remarks'],
             'user_id'               =>$this->userId()
         ];
         // dd($data);
@@ -149,6 +169,30 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
+    
+    public function saveTransferConfigMasters(Request $request){
+        $rules=[];
+        $customMessages =[];
+        $rules = [
+            'transfer_type_id'          =>  'required',
+            'role_id'                   =>  'required',
+        ];
+        $customMessages = [
+            'transfer_type_id.required' => 'This field is required',
+            'role_id.required'          => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $data =[
+            'id'                        =>  $request['id'],
+            'transfer_type_id'          =>  $request['transfer_type_id'],
+            'role_id'                   =>  $request['role_id'],
+            'action_type'               =>  $request['action_type'],
+            'role_action_mapp'          =>  $request['role_action_mapp'],
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
+        return $response_data;
+    }
     public function saveLeaveConfigMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -1138,10 +1182,10 @@ class AdministrationController extends Controller{
         $dis = $this->apiService->listData('emis/masters/disasterComm/loadDisasterComm');
         return $dis;
     }
-   
 
 
-    // Furniture 
+
+    // Furniture
     public function saveFurnitureType(Request $request){
         $rules = [
             'name'  =>  'required',
@@ -1236,11 +1280,45 @@ class AdministrationController extends Controller{
         return $strCategory;
     }
 
+    public function saveEccdFacility(Request $request){
+        $rules = [
+            'faciltytype'           =>  'required',
+            'structuretype'         =>  'required',
+            'status'                =>  'required',
+        ];
+        $customMessages = [
+            'faciltytype.required'          => 'faciltytype category is required',
+            'structuretype.required'        => 'Sub category name is required',
+            'status.required'               => 'Status field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $cat =[
+            'faciltytype'               =>  $request['faciltytype'],
+            'structuretype'             =>  $request['structuretype'],
+            'description'               =>  $request['description'],
+            'status'                    =>  $request['status'],
+            'actiontype'                =>  $request['action_type'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>$this->userId()
+        ];
+        //dd($cat);
+        $response_data= $this->apiService->createData('emis/masters/eccdfacility/saveEccdFacility', $cat);
+        return $response_data;
+
+    }
+    public function loadEccdFacilityList(Request $request){
+        $eccdfacity = $this->apiService->listData('emis/masters/eccdfacility/loadEccdFacilityList');
+        return $eccdfacity;
+    }
+    public function getEccdStructureType(Request $request){
+        $strCategory = $this->apiService->listData('emis/masters/eccdfacility/getEccdStructureType');
+        return $strCategory;
+    }
 
 
-    
-    
 
-    
+
+
+
 
 }

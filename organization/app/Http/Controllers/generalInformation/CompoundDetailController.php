@@ -29,7 +29,6 @@ class CompoundDetailController extends Controller
     }
 
     public function saveSchoolCompundDetails(Request $request){
-     // dd('my services');
       $id = $request->id;
       if( $id != null)
        {
@@ -37,10 +36,10 @@ class CompoundDetailController extends Controller
              'organizationId'                => $request->organizationId,
              'thramNo'                       => $request->thramno,
              'plotNo'                        => $request->plotno,
-             'pegInformation'                => $request->peginfo,
+             'attachments'                   => $request->attachments,
              'compoundArea'                  => $request->sizecompound,
              'playgroundArea'                => $request->sizeplayground,
-                'playgroundAreaUsable'          => $request->playgroundused,
+             'playgroundAreaUsable'          => $request->playgroundused,
              'status'                        => $request->status,
              'agricultureArea'               => $request->agriculturalarea,
              'agricultureAreaUsed'           => $request->areaused,
@@ -60,7 +59,7 @@ class CompoundDetailController extends Controller
                 'organizationId'                => $request->organizationId,
                 'thramNo'                       => $request->thramno,
                 'plotNo'                        => $request->plotno,
-                'pegInformation'                => $request->peginfo,
+                'attachments'                   => $request->attachments,
                 'compoundArea'                  => $request->sizecompound,
                 'playgroundArea'                => $request->sizeplayground,
                 'playgroundAreaUsable'          => $request->playgroundused,
@@ -73,7 +72,7 @@ class CompoundDetailController extends Controller
                 'created_at'                    =>date('Y-m-d h:i:s'),
                 'updated_at'                    =>date('Y-m-d h:i:s'),
             ];
-              //  dd($data);
+            //  dd($data);
         }
         $response_data = OrganizationCompoundDetail::create($data);
         

@@ -1,11 +1,10 @@
 const routes = [
     //Academics Masters Route
     { path: '/academic-master', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
-        children: 
+        children:
         [
-           
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
-            
+
             // { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
             //     children: [
             //         { path: '', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
@@ -25,7 +24,7 @@ const routes = [
             { path: '/subject-master', component: require('./components/masters/academics_masters/subject/subject_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
-                    { path: '/list-subject', name: 'aca_list_subject', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
+                    { path: '/list-subject', name: 'list_subject', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
                     { path: '/create-subject', name: 'aca_create_subject', component: require('./components/masters/academics_masters/subject/create_subject.vue').default },
                     { path: '/edit-subject', name: 'aca_edit_subject', component: require('./components/masters/academics_masters/subject/edit_subject.vue').default },
                 ]
@@ -58,8 +57,8 @@ const routes = [
                     { path: '/create-subject-assessment-area', name: 'aca_subject_assessment_area', component: require('./components/masters/academics_masters/class_subject_assessment_area/create_class_subject_assessment_area.vue').default },
                 ]
             },
-         
-            
+
+
         ]
     },
     //Academics Transaction Route
@@ -75,7 +74,7 @@ const routes = [
         },
         { path:'/subject-teacher', component:require('./components/academics/subject_teacher/subject_teacher_index.vue').default,
             children: [
-                { path: '', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
+                { path: '',name:'subject-teacher', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
                 { path: '/create-subject-teacher',name:'create_subject_teacher', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
             ]
         },
@@ -113,13 +112,13 @@ const routes = [
 
             ]
         },
-        
+
 
     ]
 }
 
 
 
-   
+
 ];
 export default routes

@@ -8,18 +8,18 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Organization Details </label>                              
-                        </a>
-                    </li>
-                    <li class="nav-item file-tab" @click="shownexttab('file-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">File Uploads </label>
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Organization Details </label>
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Classes and Stream </label>
+                        </a>
+                    </li>
+                    <li class="nav-item file-tab" @click="shownexttab('file-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">File Uploads </label>
                         </a>
                     </li>
                 </ul>
@@ -35,9 +35,9 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="number" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                <input type="number" max="11" min="11" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
                                 <has-error :form="form" field="proprietorCid"></has-error>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
@@ -46,7 +46,7 @@
                                 <has-error :form="form" field="proprietorName"></has-error>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -75,7 +75,7 @@
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        
+
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -140,7 +140,68 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('file-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
+                            </div>
+                        </div><br>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Classes</th>
+                                        <th class="strm_clas">Stream</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                        </td>
+                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                            {{  item.stream  }}
+                                        </td>
+                                        <td class="strm_clas" v-else></td>
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
+                                        </td>
+                                        <td v-else>
+                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">
+                                        </td>
+                                    </tr> -->
+                                    <tr v-for="(item, key, index) in  class_section" :key="index">
+                                        <td>
+                                            <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                        </td>
+                                        <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
+                                            {{  streamArray[item.streamId]  }}
+                                        </td>
+                                        <td class="strm_clas" v-else>
+
+                                        </td>
+                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id" disabled>
+                                        </td>
+                                        <td v-else>
+                                            <input type="checkbox" checked="true" disabled>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('file-tab')"> Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -158,7 +219,7 @@
                                         <thead>
                                             <tr>
                                                 <th>File Name</th>
-                                                <th>Upload File</th>                     
+                                                <th>Upload File</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -167,101 +228,36 @@
                                                     <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
-                                                <td>                                
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <td>
+                                                    <input type="file" name="attachment" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
-                                            </tr> 
+                                            </tr>
                                             <tr>
-                                                <td colspan="5"> 
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                     @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                                     @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                                 </td>
-                                            </tr>                                          
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')"> Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Select classes and streams:<span class="text-danger">*</span></label>
-                            </div>
-                        </div><br>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row" >
-                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Classes</th>
-                                        <th class="strm_clas">Stream</th>  
-                                        <th></th>                     
-                                    </tr>
-                                </thead>
-                                <tbody id="afer_verification" style="display:none">
-                                    <tr v-for="(item, key, index) in  class_section" :key="index">
-                                        <td>
-                                            <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
-                                        </td>
-                                        <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">                                
-                                            {{  streamArray[item.streamId]  }}
-                                        </td>
-                                        <td class="strm_clas" v-else>                                
-                                        
-                                        </td>
-                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
-                                        </td>
-                                        <td v-else>  
-                                            <input type="checkbox" checked="true">                           
-                                        </td>
-                                    </tr> 
-                                </tbody>
-                                <tbody id="class_edit" style="display:none">
-                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
-                                        <td>
-                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                        </td>
-                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                            {{  item.stream  }}
-                                        </td>
-                                        <td class="strm_clas" v-else>                                
-                                          
-                                        </td>
-                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">                                
-                                            <input type="checkbox" v-model="classStreamForm.stream"  :id="item.id" :value="item.id">
-                                        </td>
-                                        <td v-else>  
-                                            <input type="checkbox" v-model="classStreamForm.class" :value="item.classId">                              
-                                            
-                                        </td>
-                                    </tr> 
-                                </tbody>
-                            </table>
-                        </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
-                                <textarea class="form-control" @change="remove_error('remarks')" v-model="classStreamForm.remarks" id="remarks"></textarea>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="file_form.remarks" id="remarks"></textarea>
                                 <span class="text-danger" id="remarks_err"></span>
                             </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
-                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('file-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('class-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
                             </div>
                         </div>
@@ -275,6 +271,7 @@
 export default {
     data(){
         return{
+            record_id:'',
             dzongkhag:'',
             levelList:[],
             locationList:[],
@@ -296,26 +293,30 @@ export default {
                 id:'',
                 file_name: '',
                 fileUpload: [],
-                record_type:'edit',
+                record_type:'add',
                 application_number:'',
+                status:'Submitted',
+                application_number:'',
+                service_name:'New Establishment of Private School',
                 attachments:
                 [{
                     file_name:'',attachment:''
                 }],
                 ref_docs:[],
+                update_type:"Document Update",
             }),
             form: new form({
                 id: '', proposedName:'', level:'',category:'2', dzongkhag:'', gewog:'', chiwog:'0', proposedLocation:'',
                 proprietorCid:'', proprietorName:'', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'', totalLand:'',
                 enrollmentBoys:'', enrollmentGirls:'', typeOfSchool:'', establishment_type:'private_school', status:'pending',
-                action_type:'edit',application_number:'',
-                
+                action_type:'add',
+
             }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',application_number:'',
-                action_type:'edit',submit_type:'',remarks:'',proposedName:'',update_type:'',
-            }) 
-        } 
+                action_type:'add',submit_type:'',remarks:'',proposedName:'',
+            })
+        }
     },
     methods: {
         /**
@@ -326,7 +327,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        }, 
+        },
 
         /**
          * method to get level in dropdown
@@ -337,7 +338,7 @@ export default {
                 let data = response.data;
                 this.levelList = data;
                  for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name; 
+                    this.levelArray[data[i].id] = data[i].name;
                 }
             });
         },
@@ -372,23 +373,26 @@ export default {
             });
         },
 
-        
-        async getvillagelist(id){
-            let gewogId=$('#gewog').val();
-            if(id!="" && (gewogId==null || gewogId=="")){
-                gewogId=id;
-            }
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+
+        async getvillagelist(id,chewqogid){
+            let uri = 'masters/all_active_dropdowns/gewog/'+id;
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
+                let data = response.data.data;
+                this.villageList = data;
+                for(let i=0;i<data.length;i++){
+                    this.villagelistArray[data[i].id] = data[i].name;
+                }
+                if(chewqogid!="NA"){
+                    this.form.chiwog=chewqogid;
+                    $('#chiwog').val(chewqogid).trigger('change');
+                }
+
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-
         /**
          * method to add more fields
          */
@@ -398,21 +402,21 @@ export default {
         },
         addMoreStudents: function(){
             this.count++;
-            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
+            this.file_form.assigned_student.push({student:'',std_role:'', remarks:''})
+        },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.file_form.roles.length>1){
                 this.count--;
-                this.file_form.roles.splice(index,1); 
+                this.file_form.roles.splice(index,1);
             }
         },
-        removeStudents(index){    
+        removeStudents(index){
              if(this.file_form.assigned_student.length>1){
                 this.count--;
-                this.file_form.assigned_student.splice(index,1); 
+                this.file_form.assigned_student.splice(index,1);
             }
         },
 
@@ -425,7 +429,7 @@ export default {
             else{
                 $('#fileName'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
 
 
@@ -483,69 +487,47 @@ export default {
         /**
          * method to get class in checkbox
          */
+        // getClass:function(){
+        //     axios.get('/organization/getClass')
+        //       .then(response => {
+        //         this.classList = response.data;
+        //     });
+        // },
+
+        // /**
+        //  * method to get stream in checkbox
+        //  */
+        // getStream:function(){
+        //     axios.get('/organization/getStream')
+        //       .then(response => {
+        //         this.streamList = response.data;
+        //     });
+        // },
+
         getClass:function(){
             axios.get('/organization/getClass')
               .then(response => {
                 let data = response.data;
-                this.classList = data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
 
-        /**
-         * method to get stream in checkbox
-         */
         getStream:function(){
             axios.get('/organization/getStream')
               .then(response => {
-                  let data=response.data;
-                this.streamList = data;
+                let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].class; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
-
         /**
          * method to show next tab
          */
-        shownexttab(nextclass){ 
-            // if(nextclass=="final-tab"){ 
-            //     Swal.fire({
-            //         text: "Are you sure you wish to save this details ?",
-            //         icon: 'info',
-            //         showCancelButton: true,
-            //         confirmButtonColor: '#3085d6',
-            //         cancelButtonColor: '#d33',
-            //         confirmButtonText: 'Yes!',
-            //         }).then((result) => {
-            //         if (result.isConfirmed) {
-            //             this.classStreamForm.post('organization/saveClassStream')
-            //             .then((response) => {
-            //                 if(response.data=="No Screen"){
-            //                     Toast.fire({  
-            //                         icon: 'error',
-            //                         title: 'Technical Errors: please contact system administrator for further details'
-            //                     });
-            //                 }
-            //                 if(response!="" && response!="No Screen"){
-            //                     let message="Applicaiton for new Establishment has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-            //                     this.$router.push({name:'acknowledgement_private_school',params: {data:message}});
-            //                     Toast.fire({  
-            //                         icon: 'success',
-            //                         title: 'Application for new establishment has been submitted for further action'
-            //                     });
-            //                 } 
-            //             })
-            //             .catch((err) => {
-            //                 console.log("Error:"+err)
-            //             })
-            //         }
-            //     });
-            // }
-            if(nextclass=="final-tab" || nextclass=="reject"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab" || nextclass=="reject"){
                 let subform=true;
                 let status="";
                 let message="";
@@ -556,14 +538,15 @@ export default {
                     }
                     else{
                         status="Are you sure you wish to reject this application? ";
-                        message="Applicaiton for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
+                        message="Application for new Establishment has been recorded in the system as reject. System Generated application number for this transaction is: ";
                     }
                 }
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
-                    message="Applicaiton details for new Establishment has been updated and send for further approval. ";
+                    message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
+
                     Swal.fire({
                         text: status,
                         icon: 'info',
@@ -573,38 +556,77 @@ export default {
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
                         if (result.isConfirmed) {
-                            this.classStreamForm.submit_type=nextclass;
-                            this.classStreamForm.proposedName=this.form.proposedName;
-                            this.classStreamForm.post('organization/saveClassStream')
-                            .then((response) => {
-                                if(response=="No Screen"){
-                                    Toast.fire({  
-                                        icon: 'error',
-                                        title: 'Technical Errors: please contact system administrator for further details'
-                                    });
+                            let clasArray=[];
+                            $("input[name='attachment']:checked").each( function () {
+                                clasArray.push($(this).val());
+                            });
+                            if(clasArray.length<1){
+                                const config = {
+                                    headers: {
+                                        'content-type': 'multipart/form-data'
+                                    }
                                 }
-                                if(response!="" && response!="No Screen"){
-                                    let res=' <br><b>Thank You !</b>';
-                                    this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
-                                    Toast.fire({  
-                                        icon: 'success',
-                                        title: 'Application for new establishment has been udpated for further action'
-                                    });
-                                } 
-                            })
-                            .catch((err) => {
-                                console.log("Error:"+err)
-                            })
+                                let formData = new FormData();
+                                formData.append('id', this.file_form.id);
+                                formData.append('ref_docs[]', this.file_form.ref_docs);
+                                for(let i=0;i<this.file_form.ref_docs.length;i++){
+                                    formData.append('attachments[]', this.file_form.ref_docs[i].attach);
+                                    formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
+                                }
+                                formData.append('application_number', this.file_form.application_number);
+                                formData.append('remarks', this.file_form.remarks);
+                                formData.append('status', this.file_form.status);
+                                formData.append('service_name', this.file_form.service_name);
+                                formData.append('update_type', this.file_form.update_type);
+                                formData.append('proposedName', this.form.proposedName);
+                                axios.post('organization/saveUploadedFiles', formData, config)
+                                .then((response) => {
+                                    if(response.data!=""){
+                                        if(response=="No Screen"){
+                                            Toast.fire({
+                                                icon: 'error',
+                                                title: 'Technical Errors: please contact system administrator for further details'
+                                            });
+                                        }
+                                        if(response!="" && response!="No Screen"){
+                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
+                                            Toast.fire({
+                                                icon: 'success',
+                                                title: 'Application for new establishment has been submitted for further action'
+                                            });
+                                        }
+                                    }
+                                })
+                                .catch((error) => {
+                                    this.applyselect2();
+                                    this.change_tab('file-tab');
+                                    console.log("Error:"+error)
+                                })
+                            }
+                            else{
+                                Swal.fire({
+                                    text: "Please attach files ",
+                                    icon: 'info',
+                                    confirmButtonText: 'OK',
+                                    showCancelButton: true,
+                                });
+                            }
                         }
                     });
                 }
             }
             else{
-                if(nextclass=="file-tab"){
+                if(nextclass=="class-tab"){
+                    this.form.feeding=[];
+                    let meals=[];
+                    $("input[name='feeding']:checked").each( function () {
+                        meals.push($(this).val());
+                    });
+                    this.form.feeding=meals;
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.loadpendingdetails('Private_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -614,37 +636,40 @@ export default {
                         console.log("Error:"+error)
                     })
                 }
-                else if(nextclass=="class-tab"){
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
-                        }
-                    }
-                    let formData = new FormData();
-                    formData.append('id', this.file_form.id);
-                    formData.append('ref_docs[]', this.file_form.ref_docs);
-                    for(let i=0;i<this.file_form.ref_docs.length;i++){
-                        formData.append('attachments[]', this.file_form.ref_docs[i].attach);
-                        formData.append('attachmentname[]', this.file_form.ref_docs[i].name);
-                    }
-                    formData.append('application_number', this.file_form.application_number);
-                    axios.post('organization/saveUploadedFiles', formData, config)
-                    .then((response) => {
-                        if(response.data!=""){
-                            this.change_tab(nextclass);
-                        }
-                    })
-                    .catch((error) => {
-                       this.applyselect2();
-                        this.change_tab('organization-tab');
-                        console.log("Error:"+error)
-                    })
+                else if(nextclass=="file-tab"){
+                    // this.classStreamForm.submit_type=nextclass;
+                    // // this.classStreamForm.proposedName=this.form.proposedName;
+                    // this.classStreamForm.post('organization/saveClassStream')
+                    // .then((response) => {
+                    //     if(response.data!=""){
+                    //         this.change_tab(nextclass);
+                    //     }
+                    // })
+                    // .catch((err) => {
+                    //     console.log("Error:"+err)
+                    // })
+                this.change_tab(nextclass);
                 }else{
                     this.change_tab(nextclass);
                 }
             }
         },
-        loadApplicaitonDetials(){
+        getgewoglistunderdzo(dzongkhag,gewog_id){
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.gewog_list = data;
+                for(let i=0;i<data.length;i++){
+                    this.gewog_listArray[data[i].id] = data[i].name;
+                }
+                if(gewog_id!="NA"){
+                    this.form.gewog=gewog_id;
+                    $('#gewog').val(gewog_id).trigger('change');
+                }
+            });
+        },
+        loadApplicationDetials(){
             axios.get('organization/loadEstablishmentApplciaiton/'+this.record_id)
             .then(response => {
                 let data = response.data.data;
@@ -663,22 +688,21 @@ export default {
                 this.form.proposedName  =data.estb_details.proposedName;
                 this.form.level=data.estb_details.levelId;
                 $('#level').val(data.estb_details.levelId).trigger('change');
-                
+
                 this.getClassStream(this.levelArray[data.estb_details.levelId]);
 
                 this.form.gewog  =data.gewogId;
+                this.class_section=data.estb_classStream;
                 $('#gewog').val(data.gewogId).trigger('change');
-
-                if(data.status=="Notified For Team Verification"){
-                    this.getAttachmentType('');//Attachment name here
+                if(data.status=="Notified For Tentative Date"){
                     $('#class_edit').hide();
                     $('#rejectbtn').hide();
-                    this.class_section=data.estb_classStream;
                     $('#afer_verification').show();
-                    this.classStreamForm.update_type="Document Update";
+                    this.getAttachmentType('ForTransaction__Private_School_Document_Update');
+                    this.file_form.update_type="Document Update";
                 }
                 else{
-                    this.getAttachmentType('ForTransaction__Private_School');
+
                     $('#class_edit').show();
                     $('#afer_verification').hide();
                 }
@@ -688,19 +712,10 @@ export default {
                 this.attachment_details=data.estb_attachments;
                 this.form.dzongkhag=data.dzongkhagId;
                 this.getgewoglistunderdzo(data.dzongkhagId,data.gewogId);
-                
-            })    
-            .catch(errors => { 
+
+            })
+            .catch(errors => {
                 console.log('error in retrieving: '+errors)
-            });
-        },
-       loadpendingdetails(type){
-            axios.get('organization/loaddraftApplication/'+type)
-              .then(response => {
-                let draft = response.data.data;
-                if(draft!=null){
-                    
-                }
             });
         },
         applyselect2(){
@@ -734,15 +749,14 @@ export default {
 
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
-            .then((response) => {  
-
+            .then((response) => {
                 let data=response.data.data[0];
                 this.form.cid           =   data.cid;
                 this.form.name          =   data.fullName;
                 this.form.phoneNo       =   data.phoneNo;
                 this.form.email         =   data.email;
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
@@ -763,9 +777,9 @@ export default {
                 console.log(exception);
             });
         },
-        
+
         getScreenAccess(){
-            axios.get('common/getScreenAccess/workflow__establishment__private_school')
+            axios.get('common/getScreenAccess/workflow__establishment__New_Establishment_of_Private_School')
             .then(response => {
                 let data = response.data[0].total_count;
                 if(data<1){
@@ -773,8 +787,8 @@ export default {
                     $('#mainform').hide();
                     $('#message').html('This page is not accessible to you. Please contact system administrator for further assistant<br> Thank you');
                 }
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         },
@@ -786,10 +800,10 @@ export default {
                     this.count++;
                     this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
                 }));
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
-            });   
+            });
         }
     },
     mounted() {
@@ -799,33 +813,31 @@ export default {
         this.getLevel();
         this.getLocation();
         this.getOrgList();
-        
+        // this.getAttachmentType();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             this.dzongkhag=data['Dzo_Id'];
             this.form.dzongkhag=data['Dzo_Id'];
             this.getGewogList(data['Dzo_Id']);
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
-        
+
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text()); 
+            Fire.$emit('changefunction',$(this).attr('id'),$(this).find('option:selected').text());
         });
-        
+
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
         });
-       this.loadpendingdetails('Private_School');
-
         this.record_id=this.$route.params.id;
-        this.loadApplicaitonDetials();
-    }, 
+        this.loadApplicationDetials();
+    },
 }
 </script>

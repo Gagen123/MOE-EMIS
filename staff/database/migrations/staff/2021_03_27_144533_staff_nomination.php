@@ -9,6 +9,7 @@ class StaffNomination extends Migration{
         Schema::create('stf_nomination', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('personal_id',36)->nullable(false);
+            $table->foreign('personal_id')->references('id')->on('stf_staff');
             $table->char('nomi_cid',36)->nullable(false);
             $table->string('nomi_name',200)->nullable(false);
             $table->char('nomi_desig',36)->nullable(false);

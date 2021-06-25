@@ -122,6 +122,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadStrSubCategory', 'Masters\StructureSubCategoryController@loadStrSubCategory');
 
     });
+    $router->group(['prefix' => 'masters/eccdfacility'], function () use ($router) {
+        // structure sub category route
+        $router->post('/saveEccdFacility', 'Masters\StructureSubCategoryController@saveEccdFacility');
+        $router->get('/getEccdStructureType', 'Masters\StructureSubCategoryController@getEccdStructureType');
+        $router->get('/loadEccdFacilityList', 'Masters\StructureSubCategoryController@loadEccdFacilityList');
+
+    });
 
     $router->group(['prefix' => 'masters/equipmentItem'], function () use ($router) {
         // equipment item route
@@ -214,6 +221,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getType', 'generalInformation\EquipmentController@getType');
             $router->get('/getItem/{typeId}', 'generalInformation\EquipmentController@getItem');
             $router->get('/getLocationUse', 'generalInformation\EquipmentController@getLocationUse');
+            $router->get('/getEquipmentDetails/{equId}', 'generalInformation\EquipmentController@getEquipmentDetails');
         });
 
         $router->group(['prefix' => 'furniture'], function () use ($router) {
@@ -222,6 +230,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getFurnitureType', 'generalInformation\FurnitureController@getFurnitureType');
             $router->get('/getFurnitureItem/{typeId}', 'generalInformation\FurnitureController@getFurnitureItem');
             $router->get('/getFurnitureUse', 'generalInformation\FurnitureController@getFurnitureUse');
+            $router->get('/getFurnitureDetails/{furId}', 'generalInformation\FurnitureController@getFurnitureDetails');
         });
 
         //newly added routes
@@ -230,6 +239,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveVisitorInformation', 'generalInformation\VisitorController@saveVisitorInformation');
             $router->get('/loadVisitorInformation/{orgId}', 'generalInformation\VisitorController@loadVisitorInformation');
             $router->get('/getVisitorTypeDropdown', 'generalInformation\VisitorController@getVisitorTypeDropdown');
+            $router->get('/getVisitorDetails/{visId}', 'generalInformation\VisitorController@getVisitorDetails');
         });
         $router->group(['prefix' => 'connectivity'], function () use ($router) {
             $router->post('/saveConnectivityDetails', 'generalInformation\VariousConnectivityController@saveConnectivityDetails');
@@ -335,8 +345,20 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getInfrastructureDetails/{infraId}', 'structuralFacility\InfrastructureController@getInfrastructureDetails');
             $router->post('/saveWashFeeding', 'structuralFacility\InfrastructureController@saveWashFeeding');
             $router->get('/getWashFeeding/{type}', ['uses' => 'structuralFacility\InfrastructureController@getWashFeeding']);
+            $router->post('/saveEccdFacilities', 'structuralFacility\InfrastructureController@saveEccdFacilities');
+            $router->get('/getEccdFacilitiesList/{type}', ['uses' => 'structuralFacility\InfrastructureController@getEccdFacilitiesList']);
 
         });
+
+        //ECCD Infracture
+        $router->group(['prefix' => 'eccdinfrastructure'], function () use ($router) {
+            $router->get('/getStructureTypeInDropdown', 'structuralFacility\InfrastructureController@getStructureTypeInDropdown'); 
+            $router->get('/geteccdStructureFacilityInDropdown/{structuretype}', 'structuralFacility\InfrastructureController@geteccdStructureFacilityInDropdown');
+            $router->post('/saveEccdInfrastructure', 'structuralFacility\EccdInfrastructureController@saveEccdInfrastructure');
+            $router->get('/loadEccdInfrastructureList/{orgId}', 'structuralFacility\EccdInfrastructureController@loadEccdInfrastructureList');
+            $router->get('/getEccdInfrastructureDetails/{eccdinfraId}', 'structuralFacility\EccdInfrastructureController@getEccdInfrastructureDetails');
+
+        });  
 
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
@@ -400,6 +422,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadChangeDetailForVerification/{appNo}', ['uses' => 'establishment\ChangeBasicDetailsController@loadChangeDetailForVerification']);
             $router->get('/loadPriviousOrgDetails/{orgId}', ['uses' => 'establishment\ChangeBasicDetailsController@loadPriviousOrgDetails']);
             $router->post('/updateChangeBasicDetails', 'establishment\ChangeBasicDetailsController@updateChangeBasicDetails');
+            $router->delete('/deleteFile/{id}', ['uses' => 'establishment\ChangeBasicDetailsController@deleteFile']);
         });
 
         $router->group(['prefix' => 'bifurcation'], function () use ($router) {

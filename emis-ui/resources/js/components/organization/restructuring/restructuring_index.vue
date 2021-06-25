@@ -7,7 +7,7 @@
             <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                        <span :class="item.screen_icon"></span> 
+                        <span :class="item.screen_icon"></span>
                         {{ item.screen_name}}
                     </router-link>
                 </li>
@@ -18,8 +18,13 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link to="/upgrade_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Upgrade
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
                     <router-link to="/level_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Upgrade/Downgrade
+                        Downgrade
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
@@ -42,11 +47,6 @@
                         Autonomy
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1">
-                    <router-link id="location_change_index" to="/location_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Location Type Change
-                    </router-link>
-                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link id="fee_structure_change_index" to="/fee_structure_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change in Fee Structure
@@ -54,7 +54,7 @@
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link id="bording_change_index" to="/bording_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Change to Boadring School
+                        Change to Boarding School
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
@@ -62,18 +62,18 @@
                         Change in Stream
                     </router-link>
                 </li>
-              
+
                 <li class="nav-item active pr-1">
                     <router-link id="expension_index" to="/expension_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Expansion
                     </router-link>
                 </li>
-                
+
                 <li class="nav-item pr-1"  @click="activatelink('volunteer')">
                     <router-link id="volunteer" to="/bifurcation_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Bifurcation
                     </router-link>
-                </li> 
+                </li>
                 <li class="nav-item pr-1" @click="activatelink('merger_index')">
                     <router-link to ="/merger_index" id="merger_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Merger
@@ -112,9 +112,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("Error:"+error)
             });
         },

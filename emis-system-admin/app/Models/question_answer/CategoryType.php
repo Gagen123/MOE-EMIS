@@ -10,7 +10,7 @@ class CategoryType extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'parent_id',
+        'module_id',
         'name',
         'status',
         'type',
@@ -20,6 +20,6 @@ class CategoryType extends Model{
         'updated_at'
     ];
     public function module() {
-        return $this->belongsTo(Module::class, 'parent_id')->select('id','name');
-    } 
+        return $this->belongsTo(Module::class, 'module_id')->select('id','name');
+    }
 }

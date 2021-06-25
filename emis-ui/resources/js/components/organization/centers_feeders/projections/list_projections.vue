@@ -1,42 +1,43 @@
 <template>
     <div>
-        <table id="award-list-table" class="table table-bordered text-sm table-striped">
+        <table id="sport-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th >SL#</th>
-                    <th >Class</th>
-                    <th >Projections</th>
-                    <th >Remarks</th>
-                    <th >Action</th> 
+                    <th>SL#</th>
+                    <th>Class</th>
+                    <th>No of Projection</th>
+                    <th>Academic Year</th>
+                    <!-- <th>Action</th>  -->
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.class}}</td>
-                    <td>{{ item.projections}}</td>
-                    <td>{{ item.remarks}}</td>
-                    <td>{{ }}</td>
-                    <td>
+                    <td>{{ classList[item.class]}}</td>
+                    <td>{{ item.ProjectionNo}}</td>
+                    <td>{{ item.academicYear}}</td>
+                    <!-- <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                            <a href="#" class="btn btn-info" @click="ProjectionEdit(item)"><i class="fas fa-edit"></i ></a>
                         </div>
-                    </td>
+                    </td> -->
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
+
 <script>
 export default {
     data(){
         return{
-            org_id:'2',
-            dataList:[], 
+            dataList:[],
+            classList:{},
         }
     },
+
     methods:{
-        loadDataList(uri='organization/loadProjections'){
+      loadDataList(uri='organization/loadProjections'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -44,21 +45,34 @@ export default {
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-            setTimeout(function(){
-                $("#award-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
-        showedit(data){
-            this.$router.push({name:'edit_student_whereabouts',params: {data:data}});
+
+        /**
+         * method to view sport list
+         */
+        ProjectionEdit(data){
+            data.action='edit';
+            this.$router.push({name:'edit_projections',params: {data:data}});
+        },
+
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                 for(let i=0;i<data.data.data.length;i++){
+                    this.classList[data.data.data[i].id] = data.data.data[i].class; 
+                }
+               // this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
     },
     mounted(){
+        this.loadClassList();
         this.loadDataList();
     },
 }

@@ -118,6 +118,7 @@ export default {
          */
         formaction: function(type){
             if(type=="reset"){
+                this.form.id= '';
                 this.form.type= '';
                 this.form.item= '';
                 this.form.usable= '';
@@ -128,7 +129,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Furniture is added successfully'
+                        title: 'Furniture is updated successfully'
                     })
                     this.$router.push('/furniture_list');
                 })
@@ -170,24 +171,41 @@ export default {
                 this.locationUse = data;
             });
         },
+        getFurnitureDetails(furId){
+            axios.get('organization/getFurnitureDetails/'+furId)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.type                  =    data.type;
+                this.getType();
+                this.form.item                  =    data.item;
+                this.getItem();
+                this.form.usable                =    data.usable;
+                this.form.notusable             =    data.notusable;
+                this.form.id                    =    data.id;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
     },
 
-    mounted() { 
+   created() { 
+        this.getFurnitureDetails(this.$route.params.data.id);
         this.getType();
-        this.getLocationUse();
-    },
-     created() {
-        this.getType();
-        this.getLocationUse();
-    },
-
-    mounted(){
-        this.form.type=this.$route.params.data.typeId;
         this.getItem();
-        this.form.item=this.$route.params.data.itemId;
-        this.form.location=this.$route.params.data.locationUsageId;
-        this.form.number=this.$route.params.data.number;
-        this.form.id=this.$route.params.data.id;
-    }
+        this.getLocationUse();
+       
+    },
+   
+    // mounted(){
+    //     this.getType();
+    //     this.form.type=this.$route.params.data.type;
+    //     this.getItem();
+    //     this.form.item=this.$route.params.data.item;
+    //     this.form.notusable=this.$route.params.data.notusable;
+    //     this.form.usable=this.$route.params.data.usable;
+    //     this.form.id=this.$route.params.data.id;
+    // }
 }
 </script>

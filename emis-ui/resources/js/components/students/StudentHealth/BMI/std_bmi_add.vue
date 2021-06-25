@@ -11,9 +11,9 @@
                         <has-error :form="student_form" field="term_id"></has-error>
                     </div> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Date of Measurement:</label>
+                        <label>Date of Supplementation Issued:</label>
                         <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
-                    <has-error :form="student_form" field="date"></has-error>
+                        <has-error :form="student_form" field="date"></has-error>
                     </div> 
                 </div>
                 <div class="form-group row">
@@ -44,12 +44,12 @@
                         <table id="student-list-table" class="table w-100 table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Student ID</th>
+                                    <th>Sl No</th>
                                     <th>Name</th> 
                                     <th>Sex</th>
                                     <th>Age</th>
-                                    <th>Height</th>
-                                    <th>Weight</th>
+                                    <th>Height (in meters)</th>
+                                    <th>Weight (in Kg)</th>
                                     <th>Remarks</th>
                                 </tr>
                             </thead>
@@ -57,10 +57,8 @@
                                 <tr v-for="(student, index) in studentList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
-                                    <td> get SEX </td>
-                                        <input type="hidden" name="student_id" class="form-control" 
-                                        v-model="student_form.std_id[index]">
-                                        {{ student.StdStudentId}}
+                                    <td> {{genderArray[student.CmnSexId]}}  </td>
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
                                         <input type="number" name="height" class="form-control" v-model="student_form.height[index]"/>
@@ -95,6 +93,8 @@ export default {
             streamList:[],
             byClass:[],
             studentList:[],
+            genderArray:{},
+            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 term_id: '',
@@ -107,7 +107,6 @@ export default {
                 weight:[],
                 remarks:[]
             }),
-
         }
     },
 
@@ -122,12 +121,20 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.genderArray[data[i].id] = data[i].name;
+                }
+            })
         },
+
         /**
          * to load the class list
          */
@@ -178,19 +185,27 @@ export default {
             });
         },
 
+        
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
             var age_dt = new Date(diff_ms);
             return Math.abs(age_dt.getUTCFullYear()-1970);
         },
+        
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
         formaction: function(type){
             if(type=="reset"){
-                this.student_form.term_id= '';
+                this.student_form.screening= '';
+                this.student_form.prepared_by='';
+                this.student_form.screening_position='';
+                this.student_form.screening_endorsed_by= '';
                 this.student_form.date='';
-                this.student_form.std_class= '';
-                this.student_form.boys_given= '';
-                this.student_form.girls_given= '';
             }
             if(type=="save"){
                 this.student_form.post('/students/addBmiRecords',this.student_form)
@@ -205,15 +220,12 @@ export default {
                     console.log("Error......")
                 })
             }
-		},
+        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
-            if(id=="std_class"){
-                this.student_form.std_class=$('#std_class').val();
             }
             if(id=="term_id"){
                 this.student_form.term_id=$('#term_id').val();
@@ -221,6 +233,8 @@ export default {
             if(id=="std_class"){
                 this.student_form.std_class=$('#std_class').val();
                 let class_selected = $("#std_class").val();
+                this.getStreamList();
+                this.getSectionList();
                 if(class_selected == 11 || class_selected == 12){
                     $(".stream_selection").show();
                     $(".section_selection").show();
@@ -229,6 +243,7 @@ export default {
                     $(".stream_selection").hide();
                 }
             }
+
             if(id=="std_stream"){
                 this.student_form.std_stream=$('#std_stream').val();
             }
@@ -243,6 +258,7 @@ export default {
 
                 this.student_form.std_section=$('#std_section').val();
             }
+            
         },
         checkall(class_to_check,id){
             if($('#'+id).prop('checked')){
@@ -272,9 +288,12 @@ export default {
         });
 
         this.loadActiveTermList();
+        this.loadGenderArrayList();
+        
         this.loadClassList();
         this.loadSectionList();
         this.loadStreamList();
     },
+    
 }
 </script>

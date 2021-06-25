@@ -27,6 +27,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
 
         $router->post('/saveLeaveConfigMasters', ['uses' => 'masters\StaffMastersController@saveLeaveConfigMasters']);
+        $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMastersController@saveTransferConfigMasters']);
         $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
         $router->get('/loadAllLeaveConfigMasters','masters\StaffMastersController@loadAllLeaveConfigMasters');
         $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
@@ -93,6 +94,27 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
         });
 
+        //principal recuritment Approval controller by gagen
+        $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
+            $router->post('/savePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@savePrincipalApproval']);
+            $router->post('/updatePrincipalApproval', ['uses' => 'staff\StaffRecruitmentController@updatePrincipalApproval']);
+            $router->get('/loadPrincipalRecuritmentApplication/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalRecuritmentApplication']);
+            $router->get('/loadPrincipalApprovalApplication/{id}/{type}', ['uses' => 'staff\StaffRecruitmentController@loadApprovalApplication']);
+            $router->get('/loadPrincipalApplicationDetials/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalApplicationDetials']);
+            $router->get('/loadPrincipalAttachmentDetials/{id}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalAttachmentDetials']);
+
+        });
+
+         //Expatriate recuritment Approval controller by gagen
+        $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
+            $router->post('/saveExpatriateRecuritment', ['uses' => 'staff\StaffRecruitmentController@saveExpatriateRecuritment']);
+            $router->post('/UpdateExpatriateRecuritment', ['uses' => 'staff\StaffRecruitmentController@UpdateExpatriateRecuritment']);
+            $router->get('/loadPrincipalRecuritmentApplication/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalRecuritmentApplication']);
+            $router->get('/loadExpatriateApprovalApplication/{id}/{type}', ['uses' => 'staff\StaffRecruitmentController@loadApprovalApplication']);
+
+
+        });
+
         $router->group(['prefix' => 'managementBody'], function () use ($router) {
             $router->post('/saveManagementBody', ['uses' => 'staff\ManagementBodyController@saveManagementBody']);
             $router->post('/saveManagementBodyComposition', ['uses' => 'staff\ManagementBodyController@saveManagementBodyComposition']);
@@ -132,6 +154,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
         });
         $router->group(['prefix' => 'staffLeadershipSerivcesController'], function () use ($router) {
+            $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);
+            $router->get('/loadAllPosts/{user_id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllPosts']);
+            $router->get('/loadDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadDetials']);
+            $router->get('/loadPostDetials/{role_ids}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadPostDetials']);
+
             $router->post('/createLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@createLeadershipSelection']);
             $router->get('/loadLeadershipSelection/{type}/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadLeadershipSelection']);
             $router->post('/createNominationForLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@createNominationForLeadershipSelection']);
