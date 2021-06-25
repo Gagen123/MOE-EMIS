@@ -157,6 +157,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);
             $router->get('/loadAllPosts/{user_id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllPosts']);
             $router->get('/loadDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadDetials']);
+            $router->get('/loadPostDetials/{role_ids}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadPostDetials']);
 
             $router->post('/createLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@createLeadershipSelection']);
             $router->get('/loadLeadershipSelection/{type}/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadLeadershipSelection']);

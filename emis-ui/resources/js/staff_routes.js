@@ -636,6 +636,16 @@ const routes = [
                     { path: '/view_announcement', name:'view_announcement', component: require('./components/staff/leadership/announcement/view_announcement.vue').default },
                 ],
             },
+            { path: '/apply_index',
+            component: require('./components/staff/leadership/application/application_index.vue').default,
+            children:[
+                { path: '/', name:'apply_index',  component: require('./components/staff/leadership/application/list_application.vue').default },
+                { path: '/list_application',name:'list_application',  component: require('./components/staff/leadership/application/list_application.vue').default },
+                { path: '/create_application',name:'create_application', component: require('./components/staff/leadership/application/create_application.vue').default },
+                { path: '/edit_application', name:'edit_application', component: require('./components/staff/leadership/application/edit_application.vue').default },
+                { path: '/view_application', name:'view_application', component: require('./components/staff/leadership/application/view_application.vue').default },
+            ],
+        },
             { path: '/nomination_index',
                 component: require('./components/staff/leadership/leadership_nomination/leadership_nomination_index.vue').default,
                 children:[

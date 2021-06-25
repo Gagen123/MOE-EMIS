@@ -483,6 +483,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/createPost', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createPost'])->name('createPost');
         Route::get('/loadAllPosts', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllPosts'])->name('loadAllPosts');
         Route::get('/loadDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadDetials'])->name('loadDetials');
+        Route::get('/loadPostDetials', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadPostDetials'])->name('loadPostDetials');
 
         Route::post('/createLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createLeadershipSelection'])->name('createLeadershipSelection');
         Route::get('/loadLeadershipSelection/{type}/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadLeadershipSelection'])->name('loadLeadershipSelection');

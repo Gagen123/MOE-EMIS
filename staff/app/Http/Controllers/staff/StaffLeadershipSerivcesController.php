@@ -117,7 +117,18 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         return $this->successResponse($respomse_data);
     }
-
+    public function loadPostDetials($role_ids=""){
+        $participant=explode(',', $role_ids);
+        $posts=ApplicableApplicant::wherein('role_id',$participant)->get()->groupby('leadership_id');
+        if($posts!=null && $posts!="" && sizeof($posts)>0){
+            foreach($posts as $post){
+                dd($post);
+                $post->application_details=LeadershipDetails::where('id',$post->leadership_id)->first();
+                $post->attachments=RequiredAttachment::where('leadership_id',$post->leadership_id)->get();
+            }
+        }
+        return $this->successResponse($posts);
+    }
 
     public function createLeadershipSelection(Request $request){
         $response_data=[];

@@ -56,7 +56,10 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadDetials/'.$id);
         return $response_data;
     }
-
+    public function loadPostDetials($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadPostDetials/'.$this->getRoleIds('roleIds'));
+        return $response_data;
+    }
 
     public function createLeadershipSelection(Request $request){
         $rules = [
