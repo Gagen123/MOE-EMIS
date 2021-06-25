@@ -345,6 +345,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getInfrastructureDetails/{infraId}', 'structuralFacility\InfrastructureController@getInfrastructureDetails');
             $router->post('/saveWashFeeding', 'structuralFacility\InfrastructureController@saveWashFeeding');
             $router->get('/getWashFeeding/{type}', ['uses' => 'structuralFacility\InfrastructureController@getWashFeeding']);
+            $router->post('/saveEccdFacilities', 'structuralFacility\InfrastructureController@saveEccdFacilities');
+            $router->get('/getEccdFacilitiesList/{type}', ['uses' => 'structuralFacility\InfrastructureController@getEccdFacilitiesList']);
 
         });
 

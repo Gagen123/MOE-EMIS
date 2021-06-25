@@ -199,6 +199,21 @@ class StructuralController extends Controller
         return $wash_feeding_detials;
     }
     
+    public function saveEccdFacilities(Request $request){
+        $eccd_data =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'questionList'              =>  $request->questionList,
+            'type'                      =>  $request->type,
+            'user_id'                   =>  $this->userId() 
+        ];
+        // dd($request->questionList);
+        $response_data= $this->apiService->createData('emis/organization/infrastructure/saveEccdFacilities', $eccd_data);
+        return $response_data;
+    }
+    public function getEccdFacilitiesList($type=""){
+        $eccd_facilities_detials = $this->apiService->listData('emis/organization/infrastructure/getEccdFacilitiesList/'.$type.'SSS'.$this->getWrkingAgencyId());
+        return $eccd_facilities_detials;
+    }
 
     public function saveKitchenStatus(Request $request){
         $kitchenStatus =[
