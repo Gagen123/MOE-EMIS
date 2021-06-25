@@ -32,11 +32,11 @@ class AdministrationController extends Controller{
                 $validate=$this->validate($request, $rule);
                 $data =[
                     'country_name'  =>  $request['name'],
-                    'nationality'  =>  $request['nationality'],
-                    'code'  =>  $request['code'],
-                    'status'    =>  $request['status'],
-                    'created_by'=>  $request['user_id'],
-                    'created_at'=>  date('Y-m-d h:i:s'),
+                    'nationality'   =>  $request['nationality'],
+                    'code'          =>  $request['code'],
+                    'status'        =>  $request['status'],
+                    'created_by'    =>  $request['user_id'],
+                    'created_at'    =>  date('Y-m-d h:i:s'),
                 ];
                 $country = Country::create($data);
                 return $this->successResponse($country, Response::HTTP_CREATED);
@@ -114,10 +114,13 @@ class AdministrationController extends Controller{
                         'to_date'       =>  $request['to_date'],
                         'type'          =>  $request['type'],
                         'remarks'       =>  $request['remarks'],
+                        'user_type'     =>  $request['user_type'],
                         'status'        =>  $request['status'],
+                        'user_type'     =>  $request['user_type'],
                         'created_by'    =>  $request['user_id'],
                         'created_at'    =>  date('Y-m-d h:i:s'),
                     ];
+                   
                     $response_data = Calender::create($data);
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -226,6 +229,9 @@ class AdministrationController extends Controller{
     }
     public function loadGlobalMasters($param=""){
         // dd("inside system admin serices");
+        if($param=="all_transfer_type_list"){
+            return $this->successResponse(Calender::all());
+        }
         if($param=="all_country"){
             return $this->successResponse(Country::all());
         }
@@ -263,6 +269,7 @@ class AdministrationController extends Controller{
             return $this->successResponse(Guidelines::where('status','1')->get());
         }
         if($param=="all_calender"){
+
             return $this->successResponse(Calender::all());
         }
         if($param=="active_calender"){

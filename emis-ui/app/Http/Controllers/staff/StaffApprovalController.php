@@ -126,9 +126,7 @@ class StaffApprovalController extends Controller
             }
                  return $response_data;
     }
-
     public function loadPrincipalRecuritmentApplication($appNo="",$type=""){
-        
         $update_data=[
             'applicationNo'     =>  $appNo,
             'type'              =>  $type,
@@ -166,8 +164,6 @@ class StaffApprovalController extends Controller
         // $PrincipalApprovalDetails->app_stage=$workflowstatus;
         return json_encode($PrincipalApprovalDetails);
     }
-    
-
     public function updatePrincipalApproval(Request $request){
         $org_status='Verified';
         $work_status=$request->sequence;
@@ -193,7 +189,6 @@ class StaffApprovalController extends Controller
         ];
         // dd($workflow_data);
         $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $remarks = $request->remarks;
@@ -228,7 +223,6 @@ class StaffApprovalController extends Controller
         $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/updatePrincipalApproval', $data);
         return ($response_data);
     }
-
     public function UpdateExpatriateRecuritment(Request $request){
         $org_status='Verified';
         $work_status=$request->sequence;
@@ -394,7 +388,6 @@ class StaffApprovalController extends Controller
                     $screen_name=$work->screenName;
                 }
             }
-
             if($screen_id==null || $screen_id==""){
                 return 'No Screen';
             }
@@ -465,7 +458,6 @@ class StaffApprovalController extends Controller
         $validation['messages'] = $customMessages;
 
         return ($validation);
-
     }
     public function loadPrincipalApprovalApplication($type=""){
         $loadPrincipalApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApprovalApplication/'.$this->userId().'/'.$type );

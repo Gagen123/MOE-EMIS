@@ -70,21 +70,22 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
-            $data = DB::table('classes as c')
-            ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
-            ->select('cl.*', 'c.class', 'c.id AS classId')
-            ->where('cl.organizationId',$response_data->id)
-            ->orderBy('c.displayOrder', 'asc')
-            ->get();
-            $response_data->classes=$data;
-
-            if($response_data->category=="private_school"){
-                $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
-            }
-            else{
-                $feed_det=OrganizationFeedingDetails::where('organizationId',$id)->get();
-                if($feed_det!= NULL && $feed_det !=""){
-                    $response_data->meals=$feed_det;
+            if($response_data!=null && $response_data!=""){
+                $data = DB::table('classes as c')
+                ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
+                ->select('cl.*', 'c.class', 'c.id AS classId')
+                ->where('cl.organizationId',$response_data->id)
+                ->orderBy('c.displayOrder', 'asc')
+                ->get();
+                $response_data->classes=$data;
+                if($response_data->category=="private_school"){
+                    $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
+                }
+                else{
+                    $feed_det=OrganizationFeedingDetails::where('organizationId',$id)->get();
+                    if($feed_det!= NULL && $feed_det !=""){
+                        $response_data->meals=$feed_det;
+                    }
                 }
             }
         }

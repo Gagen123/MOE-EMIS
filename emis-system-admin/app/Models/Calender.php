@@ -14,6 +14,8 @@ class Calender extends Model{
         'to_date',
         'type',
         'remarks',
+        'user_type',
+        'user_type',
         'created_by',
         'updated_by',
         'created_at',

@@ -17,17 +17,16 @@
                 alt="User profile picture"
               />
             </div>
-            <h3 class="profile-username text-center">Full Name</h3>
-            <p class="text-muted text-center">{{ user }}</p>
+            <h3 class="profile-username text-center">{{ name }}</h3>
             <ul class="list-group list-group-unbordered mb-3">
               <li class="list-group-item">
-                <b>Name</b><a class="float-right">Full Name</a>
+                <b>Name</b><a class="float-right">{{ name }}</a>
               </li>
               <li class="list-group-item">
-                <b>School Name</b> <a class="float-right">YHSS</a>
+                <b>CID</b> <a class="float-right">{{ cid }}</a>
               </li>
               <li class="list-group-item">
-                <b>Dzongkhag</b> <a class="float-right">Thimphu</a>
+                <b>Contact</b> <a class="float-right">{{ contact }}</a>
               </li>
             </ul>
           </div>
@@ -74,16 +73,28 @@ export default {
   data() {
     return {
       user: "",
+      cid:'',
+      code:'',
+      email:'',
+      name:'',
+      contact:'',
     };
   },
 
-  mounted() {
-    axios
-      .get("verify")
-      .then((response) => {
-        this.user = response.data.user;
-      })
-      .catch((error) => {});
-  },
+    mounted() {
+        axios.get('getSessionDetail')
+        .then(response => {
+            let data = response.data.data.user;
+            this.cid=data['std_cid'];
+            this.code=data['std_code'];
+            this.type=data['user_type'];
+            this.email=data['email'];
+            this.name=data['full_name'];
+            this.contact=data['phone_number'];
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+    },
 };
 </script>
