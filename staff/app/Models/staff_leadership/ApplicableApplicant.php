@@ -13,4 +13,7 @@ class ApplicableApplicant extends Model
         'leadership_id',
         'role_id',
     ];
+    public function leadershipDetails(){
+        return $this->belongsTo(LeadershipDetails::class, 'leadership_id');
+    }
 }

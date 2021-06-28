@@ -71,4 +71,9 @@ class HomeController extends Controller
             return redirect()->away('user_logout');
         }
     }
+
+    public function new_register(Request $request){
+        dd($request);
+    }
+
 }

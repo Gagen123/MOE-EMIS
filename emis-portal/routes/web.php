@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('/login_screen', [App\Http\Controllers\Admin\HomeController::class, 'login_screen'])->name('login_screen');
     Route::get('/userlogin', [App\Http\Controllers\Admin\HomeController::class, 'userlogin'])->name('userlogin');
     Route::get('/user_logout', [App\Http\Controllers\Admin\HomeController::class, 'user_logout'])->name('user_logout');
+    Route::post('/new_register', [App\Http\Controllers\Admin\HomeController::class, 'new_register'])->name('new_register');
     // Auth::routes(['verify' => true]);
     Route::get('/getSessionDetail', [App\Http\Controllers\Admin\HomeController::class, 'getSessionDetail'])->name('getSessionDetail');
 

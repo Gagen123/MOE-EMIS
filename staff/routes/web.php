@@ -157,8 +157,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);
             $router->get('/loadAllPosts/{user_id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllPosts']);
             $router->get('/loadDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadDetials']);
-            $router->get('/loadPostDetials/{role_ids}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadPostDetials']);
-
+            $router->get('/loadAllPostList/{role_ids}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllPostList']);
+            $router->get('/loadPostDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadPostDetials']);
+            $router->post('/submitApplication', ['uses' => 'staff\StaffLeadershipSerivcesController@submitApplication']);
+            $router->get('/loadAllApplication/{user_id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllApplication']);
+            $router->get('/loadapplicaitontDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadapplicaitontDetials']);
             $router->post('/createLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@createLeadershipSelection']);
             $router->get('/loadLeadershipSelection/{type}/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadLeadershipSelection']);
             $router->post('/createNominationForLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@createNominationForLeadershipSelection']);
