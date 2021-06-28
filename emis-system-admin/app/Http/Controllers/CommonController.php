@@ -90,6 +90,7 @@ class CommonController extends Controller{
                 }
                 else if($type=="commonTransferOthers"){
                     foreach($screen_status as $i => $srcn){
+                        return $screen_status;
                         return $srcn;
                         $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';  
                         if(sizeof($screen_status)-2==$i){
