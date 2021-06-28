@@ -114,6 +114,28 @@
                 }
             });
         },
+         loadcommontaskFoTransfer(){
+            axios.get('common/getTaskList/commonTransferOthers')
+            .then(response => {
+                let data = response.data;
+                if(data!=undefined){
+                    for(let i =0; i<data.length; i++){
+                        this.commonTaskList.push(data[i]);
+                    }
+                }
+            });
+        },
+         loadcommontaskFoTransfer(){
+            axios.get('common/getTaskList/commonTransferOthers')
+            .then(response => {
+                let data = response.data;
+                if(data!=undefined){
+                    for(let i =0; i<data.length; i++){
+                        this.commonTaskList.push(data[i]);
+                    }
+                }
+            });
+        },
         loadowntask(){
             axios.get('common/getTaskList/own')
             .then(response => {
@@ -192,6 +214,7 @@
         this.loadcommontask();
         this.loadcommontaskFoLeave(); 
         this.loadowntask();
+        this.loadcommontaskFoTransfer();
     },
     watch:{
         commonTaskList() {

@@ -67,6 +67,7 @@ class CommonController extends Controller{
         $param="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
+            
             // dd($response_data);
             // if($response_data!=null && $response_data!=[]){
             //     foreach($response_data as $work){
@@ -75,8 +76,15 @@ class CommonController extends Controller{
             // }
             $response_data= $param;
         }
-        else{
-            $response_data=$this->getApprovalWorkStatus();
+        if($type=="commonTransferOthers"){
+            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
+            
+            // if($response_data!=null && $response_data!=[]){
+            //     foreach($response_data as $work){
+            //         $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->transfer_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
+            //     }
+            // }
+            $response_data= $param;
         }
         $data =[
             'access_level'          =>  $this->getAccessLevel(),
@@ -87,6 +95,7 @@ class CommonController extends Controller{
             'type'                  =>  $type,
         ];
         $param = http_build_query($data);
+
         if($param!="NA"){
             $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
             return $response_data;
@@ -129,7 +138,6 @@ class CommonController extends Controller{
 
     //Get Student List by orgId and OrgClassStream
     public function getStudentList($orgId,$orgClassStreamId){
-        dd($orgClassStreamId);
         $data=$this->apiService->listData('emis/students/getStudentList/'.$orgId.'/'.$orgClassStreamId);
         return $data;
     }

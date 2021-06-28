@@ -4,11 +4,11 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Leave Type:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="leave_type_id" v-model="form.leave_type_id" :class="{ 'is-invalid': form.errors.has('leave_type_id') }">
-                            <option v-for="(item, index) in leavetypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <label>Transfer Type:<span class="text-danger">*</span></label> 
+                        <select class="form-control select2" id="transfer_type_id" v-model="form.transfer_type_id" :class="{ 'is-invalid': form.errors.has('transfer_type_id') }">
+                            <option v-for="(item, index) in transfertypeList" :key="index" v-bind:value="item.id">{{ item.type }}</option>
                         </select> 
-                        <has-error :form="form" field="leave_type_id"></has-error>
+                        <has-error :form="form" field="transfer_type_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Submitter:<span class="text-danger">*</span></label> 
@@ -74,12 +74,12 @@
 export default {
     data(){
         return {
-            leavetypeList:[],
+            transfertypeList:[],
             roleList:[],
             count:0,
             form: new form({
                 id: '',
-                leave_type_id:'',
+                transfer_type_id:'',
                 role_id:'',
                 action_type:'edit',
                 role_action_mapp:
@@ -106,11 +106,11 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
+        loadtransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                this.leavetypeList =  data.data.data;
+                this.transfertypeList =  data.data.data;
             })
             .catch(function (error){
                 console.log(error);
@@ -129,14 +129,14 @@ export default {
         
 		formaction: function(type){
             if(type=="save"){
-                this.form.post('/masters/saveLeaveConfigMasters',this.form)
+                this.form.post('/masters/saveTransferConfigMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details added successfully'
+                        title: 'Details updated successfully'
                     })
                     this.applyselect2();
-                    this.$router.push('/list_leave_config');
+                    this.$router.push('/list_transfer_config');
                 })
                 .catch((err) => {
                     this.applyselect2();
@@ -150,8 +150,8 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="leave_type_id"){
-                this.form.leave_type_id=$('#leave_type_id').val();
+            if(id=="transfer_type_id"){
+                this.form.transfer_type_id=$('#transfer_type_id').val();
                 this.getLeave_details($('#role_id').val());
             }
             if(id=="role_id"){
@@ -160,8 +160,8 @@ export default {
             }
         },
         getLeave_details(){
-            if($('#leave_type_id').val()!="" && $('#leave_type_id').val()!=null && $('#role_id').val()!="" && $('#role_id').val()!=null){
-                axios.get('masters/loadLeaveConfigMasters/'+$('#leave_type_id').val()+'/'+$('#role_id').val())
+            if($('#transfer_type_id').val()!="" && $('#transfer_type_id').val()!=null && $('#role_id').val()!="" && $('#role_id').val()!=null){
+                axios.get('masters/loadLeaveConfigMasters/'+$('#transfer_type_id').val()+'/'+$('#role_id').val())
                 .then(response =>{
                     let data = response;
                     if(data.data.data!=null){
@@ -174,13 +174,13 @@ export default {
             }
         },        
         loadConfigDetails(id){
-            axios.get('masters/loadLeaveConfigDetails/'+id)
+            axios.get('masters/loadTransferConfigDetails/'+id)
             .then(response =>{
                 let data = response.data.data;
                 if(data!=null){
                     this.form.id=data.id;
-                    this.form.leave_type_id=data.leave_type_id;
-                    $('#leave_type_id').val(data.leave_type_id).trigger('change');
+                    this.form.transfer_type_id=data.transfer_type_id;
+                    $('#transfer_type_id').val(data.transfer_type_id).trigger('change');
                     this.form.role_id=data.submitter_role_id;
                     $('#role_id').val(data.submitter_role_id).trigger('change');
                     this.form.role_action_mapp=[];
@@ -195,8 +195,8 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
-                $('#leave_type_id').addClass('select2-hidden-accessible');
+            if(!$('#transfer_type_id').attr('class').includes('select2-hidden-accessible')){
+                $('#transfer_type_id').addClass('select2-hidden-accessible');
             }
             if(!$('#role_id').attr('class').includes('select2-hidden-accessible')){
                 $('#role_id').addClass('select2-hidden-accessible');
@@ -215,7 +215,7 @@ export default {
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
         });
-        this.loadleaveTypeList();
+        this.loadtransferType();
         this.loadroleList();
         this.loadConfigDetails(this.$route.params.data);
     },

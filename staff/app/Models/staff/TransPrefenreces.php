@@ -11,7 +11,9 @@ class TransPrefenreces extends Model{
     protected $fillable = [
         'id',
         'transfer_application_id',
+        'transferType',
         'dzongkhag_id',
+        'school_id',
         'preference',
         'created_by',
         'updated_by',

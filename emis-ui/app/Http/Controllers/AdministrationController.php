@@ -226,9 +226,17 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/loadAllLeaveConfigMasters');
         return $response_data;
     }
+    public function loadAllTransferConfigMasters(){
+        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters/'.$this->userId());
+        return $response_data;
+    }
 
     public function loadLeaveConfigDetails($id=""){
         $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/'.$id);
+        return $response_data;
+    }
+    public function loadTransferConfigDetails($id=""){
+        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
         return $response_data;
     }
 

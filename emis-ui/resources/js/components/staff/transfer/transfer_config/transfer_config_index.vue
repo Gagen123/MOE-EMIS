@@ -30,19 +30,18 @@ export default {
             this.$router.push({name:type});
         },
 
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.leavetypeList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+        // loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         this.leavetypeList =  data.data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log(error);
+        //     });
+        // },
     },
     mounted(){
-        this.loadleaveTypeList();
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
     },
