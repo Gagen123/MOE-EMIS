@@ -37,18 +37,18 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getElectiveSubjects/{classId}[/{streamId}]',['uses' => 'academic\AcademicController@getElectiveSubjects']);
         $router->post('/saveStudentElectiveSubject',['uses' => 'academic\AcademicController@saveStudentElectiveSubject']);
         $router->get('/getStudentElectiveSubjects',['uses' => 'academic\AcademicController@getStudentElectiveSubjects']);
+        $router->get('/getClassWithElectiveSubject',['uses' => 'academic\AcademicController@getClassWithElectiveSubject']);
         $router->post('/saveStudentAttendance',['uses' => 'academic\AcademicController@saveStudentAttendance']);
         $router->get('/loadStudentAttendance/{orgId}/{staffId}',['uses' => 'academic\AcademicController@loadStudentAttendance']);
         $router->get('/loadStudentAttendanceDetail/{orgId}',['uses' => 'academic\AcademicController@loadStudentAttendanceDetail']);
         $router->get('/loadStudentAssessmentList/{staffId}/{orgId}',['uses' => 'academic\AcademicController@loadStudentAssessmentList']);
         $router->get('/loadAssessmentAreas/{term_id}/{sub_id}/{class_id}[/{stream_id}]',['uses' => 'academic\AcademicController@loadAssessmentAreas']);
         $router->get('/loadStudentAssessments/{org_id}',['uses' => 'academic\AcademicController@loadStudentAssessments']);
-        $router->post('/saveStudentAssessment',['uses' => 'academic\AcademicController@saveStudentAssessment']);
+        $router->post('/saveStudentAssessment/{userId}',['uses' => 'academic\AcademicController@saveStudentAssessment']);
         $router->post('/unlockForEdit/{Id}',['uses' => 'academic\AcademicController@unlockForEdit']);
         $router->get('/loadConsolidatedResultList/{staffId}/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResultList']);
         $router->get('/loadAssessmentAreasForConsolidated',['uses' => 'academic\AcademicController@loadAssessmentAreasForConsolidated']);
         $router->get('/loadConsolidatedResult/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResult']); 
         $router->post('/saveConsolidatedResut',['uses' => 'academic\AcademicController@saveConsolidatedResut']);
-
     });
 });

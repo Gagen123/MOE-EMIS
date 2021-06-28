@@ -322,6 +322,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getFacilityInDropdown', 'structuralFacility\SportController@getFacilityInDropdown');
             $router->get('/getSupportInDropdown', 'structuralFacility\SportController@getSupportInDropdown');
             $router->get('/getSubFacilityDropdown/{id}', 'structuralFacility\SportController@getSubFacilityDropdown');
+            $router->get('/getSportsDetails/{sportId}', 'structuralFacility\SportController@getSportsDetails');
 
         });
         $router->group(['prefix' => 'schoolFeeding'], function () use ($router) {
@@ -345,6 +346,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getInfrastructureDetails/{infraId}', 'structuralFacility\InfrastructureController@getInfrastructureDetails');
             $router->post('/saveWashFeeding', 'structuralFacility\InfrastructureController@saveWashFeeding');
             $router->get('/getWashFeeding/{type}', ['uses' => 'structuralFacility\InfrastructureController@getWashFeeding']);
+            $router->post('/saveEccdFacilities', 'structuralFacility\InfrastructureController@saveEccdFacilities');
+            $router->get('/getEccdFacilitiesList/{type}', ['uses' => 'structuralFacility\InfrastructureController@getEccdFacilitiesList']);
 
         });
 

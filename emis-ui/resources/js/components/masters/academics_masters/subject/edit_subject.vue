@@ -71,6 +71,7 @@ export default {
             subject_category_list:[],
             selected:'',
             form: new form({
+                id:'',
                 aca_sub_category_id:'',
                 aca_sub_group_id:'',
                 name: '',
@@ -156,7 +157,7 @@ export default {
         this.form.aca_sub_category_id=this.$route.params.data.aca_sub_category_id;
         this.form.aca_sub_group_id=this.$route.params.data.aca_sub_group_id;
         this.form.name=this.$route.params.data.sub_name;
-        this.form.dzo_name=this.$route.params.data.sub_dzo_name;
+        this.form.dzo_name=this.$route.params.data.dzo_name;
         this.form.display_order = this.$route.params.data.display_order
         this.form.status=this.$route.params.data.status;
         this.form.assessed_by_class_teacher=this.$route.params.data.assessed_by_class_teacher;

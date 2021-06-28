@@ -5,10 +5,13 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', function () {
         return view('welcome');
     });
+    Route::get('/user_register', [App\Http\Controllers\Admin\HomeController::class, 'user_register'])->name('user_register');
     Route::get('/login_screen', [App\Http\Controllers\Admin\HomeController::class, 'login_screen'])->name('login_screen');
     Route::get('/userlogin', [App\Http\Controllers\Admin\HomeController::class, 'userlogin'])->name('userlogin');
     Route::get('/user_logout', [App\Http\Controllers\Admin\HomeController::class, 'user_logout'])->name('user_logout');
     // Auth::routes(['verify' => true]);
+    Route::get('/getSessionDetail', [App\Http\Controllers\Admin\HomeController::class, 'getSessionDetail'])->name('getSessionDetail');
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('home', function () {

@@ -165,6 +165,10 @@ class AcademicController extends Controller
         }
         return json_encode(["students"=>$students, "electiveSubjects"=>json_decode($this->getElectiveSubjects($request->classId, $request->streamId),true)]);
     }
+    public function getClassWithElectiveSubject(){
+        $classWithElectiveSubject = $this->apiService->listData('emis/academics/getClassWithElectiveSubject');
+        return $classWithElectiveSubject;
+    }
     public function loadStudentAttendance(){
         $orgId = $this->getWrkingAgencyId();
         $staffId = $this->staffId();
@@ -213,6 +217,8 @@ class AcademicController extends Controller
                     array_push($selectedStudents,$students[$i]);
                 }
             }
+        }else{
+            $selectedStudents =$students;
         }
         for($i=0;$i<count($selectedStudents);$i++) {
             foreach ($assessmentAreasRatings["data"]["assessmentAreas"] as $area) {
@@ -233,6 +239,8 @@ class AcademicController extends Controller
                         $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score"] = $studentAssessment["score"];
                     }
                     $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
+                    // $selectedStudents[$i][$studentAssessment["aca_assmt_area_id"]]["score_text"] = $studentAssessment["score_text"];
+
 
 
                 }
@@ -256,7 +264,8 @@ class AcademicController extends Controller
         $request['org_id'] = $this->getWrkingAgencyId();
 
         $data = $request->all();
-        $response_data = $this->apiService->createData('emis/academics/saveStudentAssessment', $data);
+
+        $response_data = $this->apiService->createData('emis/academics/saveStudentAssessment'.'/'.$this->userId(), $data);
         return $response_data;
     }
     public function unlockForEdit($Id){
@@ -301,9 +310,7 @@ class AcademicController extends Controller
             $uri .= (('&aca_assmt_term_id='.$request->aca_assmt_term_id));
         }
         $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
-
         $consolidatedResult = json_decode($this->apiService->listData($uri),true);
-
         $instructionalDaysPerYear = array_column($consolidatedResult["data"]['instructionalDays'],"instructional_days");
         $overAllInstructionalDays = array_sum($instructionalDaysPerYear);
         $terms = [];
@@ -324,7 +331,7 @@ class AcademicController extends Controller
                         }
                         //Prepare unique list of areas
                         if(!$this->hasArea($consolidated, $areas)){
-                            array_push($areas,["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"],"aca_sub_id"=>$consolidated["aca_sub_id"],"aca_assmt_area_id"=>$consolidated["aca_assmt_area_id"], "assessment_area"=>$consolidated["assessment_area"],"assmt_area_dzo_name"=>$consolidated["assmt_area_dzo_name"], "weightage"=>$consolidated["weightage"], "aca_rating_type_id"=>$consolidated["aca_rating_type_id"], "input_type"=>$consolidated["input_type"]]);
+                            array_push($areas,["aca_assmt_term_id"=>$consolidated["aca_assmt_term_id"],"aca_sub_id"=>$consolidated["aca_sub_id"],"aca_assmt_area_id"=>$consolidated["aca_assmt_area_id"], "assessment_area"=>$consolidated["assessment_area"],"assessment_area_hint"=>$consolidated["assessment_area_hint"],"assmt_area_dzo_name"=>$consolidated["assmt_area_dzo_name"], "weightage"=>$consolidated["weightage"], "aca_rating_type_id"=>$consolidated["aca_rating_type_id"], "input_type"=>$consolidated["input_type"]]);
                         }
 
                         $students[$i][$consolidated["aca_assmt_term_id"]][$consolidated["aca_sub_id"]][$consolidated["aca_assmt_area_id"]]['score'] = $consolidated["score"];
@@ -360,10 +367,17 @@ class AcademicController extends Controller
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = "Pass";
                     }
                 }
+                if($overAllInstructionalDays == 0){
+                    $students[$i][$consolidated["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = 0;
+                    $students[$i][$consolidated["aca_assmt_term_id"]]["final_attendance_in_percentage"]["area_total"]["score"] ="NA";
+                }else{
+                    $students[$i][$consolidated["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = $overAllInstructionalDays;
+                    $students[$i][$consolidated["aca_assmt_term_id"]]["final_attendance_in_percentage"]["area_total"]["score"] ="100%";
+                }
                 foreach($consolidatedResult["data"]['absentDays'] as $absentDay){
                     if($absentDay['std_student_id'] == $students[$i]["std_student_id"]){
                         $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = ($overAllInstructionalDays - $absentDay['absent_days']);
-                        $students[$i][$absentDay["aca_assmt_term_id"]]["final_attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"]/$overAllInstructionalDays),0);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["final_attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"]/$overAllInstructionalDays),0)."%";
                     }
                 }
 
@@ -454,7 +468,7 @@ class AcademicController extends Controller
 
 
         }
-       return json_encode(["results"=>$students,"terms"=>$terms,"subjects"=>$subjects,"areas"=>$originalAreas,"overAllInstructionalDays" => $overAllInstructionalDays]);
+       return json_encode(["results"=>$students,"terms"=>$terms,"subjects"=>$subjects,"areas"=>$originalAreas,"overAllInstructionalDays" => $overAllInstructionalDays, "abbreviations"=>$consolidatedResult["data"]['abbreviations']]);
     }
 
     private function hasTerm($row, $terms){

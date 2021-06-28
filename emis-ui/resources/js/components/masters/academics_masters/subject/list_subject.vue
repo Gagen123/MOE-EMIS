@@ -5,10 +5,10 @@
                 <table id="subject-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th >Display  Order</th>
-                            <th >Subject Category Name</th>
-                            <th >Subject Group Name</th>
-                            <th >Subject Name</th>
+                            <th >Display Order</th>
+                            <th >Subject Category</th>
+                            <th >Subject Group</th>
+                            <th >Subject</th>
                             <th >Status</th>
                             <th >Action</th> 
                         </tr>
@@ -17,7 +17,7 @@
                         <tr v-for="(item, index) in subjectList" :key="index">
                             <td class="text-right">{{ item.display_order}}</td>
                             <td>{{item.sub_category_name}}</td>
-                            <td>{{item.sub_group_name}}</td>
+                            <td>{{item.sub_group_name}} <span v-if="item.dzo_sub_group_name">( {{ item.dzo_sub_group_name }} )</span></td>
                             <td>{{ item.sub_name }} <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span></td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>

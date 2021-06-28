@@ -97,6 +97,10 @@ class AcademicController extends Controller
 
         return $this->successResponse (DB::select($query, $params));
     }
+    public function getClassWithElectiveSubject(){
+        $classWithElectiveSubject = DB::select('SELECT DISTINCT org_class_id, org_stream_id FROM aca_class_subject WHERE is_elective = 1');
+        return $this->successResponse($classWithElectiveSubject);
+    }
     public function saveStudentElectiveSubject(Request $request){
         $rules = [
             'data.*.std_student_id' => 'required'
@@ -165,7 +169,7 @@ class AcademicController extends Controller
             'data.*.std_student_id.required' => 'This field is required',
         ];
             if($request['action']=="add"){
-                $rules['attendance_date'] = 'required|unique:aca_student_attendance';
+                $rules['attendance_date'] = ['required',Rule::unique('aca_student_attendance')->where('org_class_id',$request->org_class_id)];
                 $this->validate($request, $rules, $customMessages);
                 DB::transaction(function() use($request) {
                     $this->saveAttendance($request->all());
@@ -225,7 +229,7 @@ class AcademicController extends Controller
 
     public function loadAssessmentAreas($term_id,$sub_id,$class_id, $stream_id=""){
         $areaFormat = DB::table("aca_setting")->where("id",1)->value("value");
-        $query = "SELECT t1.aca_assmt_area_id,if($areaFormat=2,t2.name,ifnull(t2.code,t2.name)) AS assessment_area,t2.dzo_name AS assmt_area_dzo_name, trim(t1.weightage)+0 AS weightage,IFNULL(t2.aca_rating_type_id,t3.aca_rating_type_id) AS aca_rating_type_id,t4.input_type, t1.display_order
+        $query = "SELECT t1.aca_assmt_area_id,IF($areaFormat=2,t2.name,IFNUll(t2.code,t2.name)) AS assessment_area,IF($areaFormat=1,(t2.name),'') AS name, IF($areaFormat=1,(t2.code),'') AS code ,t2.dzo_name AS assmt_area_dzo_name, trim(t1.weightage)+0 AS weightage,IFNULL(t2.aca_rating_type_id,t3.aca_rating_type_id) AS aca_rating_type_id,t4.input_type, t1.display_order
         FROM aca_class_subject_assessment t1
             JOIN aca_assessment_area t2 ON t1.aca_sub_id = t2.aca_sub_id AND t1.aca_assmt_area_id=t2.id
             JOIN aca_class_subject t3 on t1.aca_sub_id=t3.aca_sub_id AND t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id is null AND t3.org_stream_id IS NULL))
@@ -306,7 +310,7 @@ class AcademicController extends Controller
         $hasAttendance = DB::select($query1,$params1);
         return $this->successResponse(["studentAttendanceDetail"=>$studentAttendanceDetail,"hasAttendance"=>$hasAttendance]);
     }
-    public function saveStudentAssessment(Request $request){
+    public function saveStudentAssessment(Request $request,$userId){
         $rules = [
             'data.*.std_student_id' => 'required',
         ];
@@ -314,9 +318,9 @@ class AcademicController extends Controller
             'data.*.std_student_id.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        DB::transaction(function() use($request) {
+        DB::transaction(function() use($request,$userId) {
             $query= "DELETE FROM aca_student_assessment WHERE org_id = ? AND aca_assmt_term_id = ? AND org_class_id = ? AND aca_sub_id = ? ";
-           $param = [$request['org_id'],$request['aca_assmt_term_id'],$request['org_class_id'],$request['aca_sub_id']];
+           $param = [$request['data'][0]['org_id'],$request['aca_assmt_term_id'],$request['org_class_id'],$request['aca_sub_id']];
 
             if($request['org_stream_id']){
                 $query .= ' AND org_stream_id = ?';
@@ -329,14 +333,14 @@ class AcademicController extends Controller
             DB::delete($query,$param);
 
             $result = [
-                'org_id' => $request['org_id'],
+                'org_id' => $request['data'][0]['org_id'],
                 'org_class_id' => $request['org_class_id'],
                 'org_stream_id'  =>  $request['org_stream_id'],
                 'org_section_id'=> $request['org_section_id'],
                 'aca_sub_id'=>$request['aca_sub_id'],
                 'aca_assmt_term_id' =>  $request['aca_assmt_term_id'],
                 'class_stream_section' =>  $request['class_stream_section'],
-                'created_by' =>  $request['user_id'],
+                'created_by' =>  $userId,
                 'created_at'=>   date('Y-m-d h:i:s'),
             ];
             if($request['finalize']){
@@ -353,12 +357,12 @@ class AcademicController extends Controller
                                 'std_student_id' => $studentAssessmentDetail['std_student_id'],
                                 'aca_assmt_area_id'=>$value['aca_assmt_area_id'],
                                 'aca_rating_type_id'=>$value['aca_rating_type_id'],
-                                'created_by' => $request['user_id'],
+                                'created_by' => $userId,
                                 'created_at' => date('Y-m-d h:i:s')
                             ];
                             if(array_key_exists("descriptive_score", $value)){
                                 $data['descriptive_score'] = $value['descriptive_score'];
-                            }else{
+                            }else if(array_key_exists("score", $value)){
                                 $data['score'] = $value['score'];
                             }
                             StudentAssessmentDetail::create($data);
@@ -403,7 +407,7 @@ class AcademicController extends Controller
         $query = "SELECT t11.display_order AS term_display_order,t12.display_order AS subject_display_order,
             IFNULL(t13.display_order,t21.display_order) AS area_display_order,t1.id, t1.aca_assmt_term_id, t2.std_student_id,
             t1.aca_sub_id, t2.aca_assmt_area_id, t2.aca_rating_type_id, t11.name AS term,t11.dzo_name AS term_dzo_name,
-            t12.name AS subject,t12.dzo_name AS sub_dzo_name, if($areaFormat=2,t21.name,ifnull(t21.code,t21.name)) AS assessment_area,
+            t12.name AS subject,t12.dzo_name AS sub_dzo_name, if($areaFormat=2,t21.name,ifnull(t21.code,t21.name)) AS assessment_area,if($areaFormat=2,'',t21.name) AS assessment_area_hint,
             t21.dzo_name AS assmt_area_dzo_name,trim(t13.weightage)+0 AS weightage,t4.input_type, IF(t4.input_type=2,t2.descriptive_score,
             IFNULL(t3.name,NULLIF(trim(t2.score)+0,0))) AS score, t2.remarks
         FROM (aca_student_assessment t1 JOIN aca_assessment_term t11 ON t1.aca_assmt_term_id = t11.id JOIN aca_subject t12 ON t1.aca_sub_id=t12.id)
@@ -473,7 +477,12 @@ class AcademicController extends Controller
                 JOIN aca_student_attendance_detail t3 ON t1.id = t3.aca_std_attendance_id
                     JOIN aca_assessment_term t2 ON t1.attendance_date >= t2.from_date AND t1.attendance_date <= t2.to_date
                 WHERE t1.org_id = ? AND t1.org_class_id = ? $condition GROUP BY t2.id, t3.std_student_id",$param);
-        return $this->successResponse(["consolidatedResult"=>$consolidatedResult,"studentRank"=> $studentRank, "instructionalDays"=>$instructional_days,"absentDays"=>$absent_days]);
+                if($areaFormat==2){
+                    $abbreviations = [];
+                }else{
+                    $abbreviations = $this->getAssessmentAreaCode();
+                }
+        return $this->successResponse(["consolidatedResult"=>$consolidatedResult,"studentRank"=> $studentRank, "instructionalDays"=>$instructional_days,"absentDays"=>$absent_days,'abbreviations'=>$abbreviations]);
 
     }
     public function saveConsolidatedResut(Request $request){
@@ -524,6 +533,10 @@ class AcademicController extends Controller
             }
         });
         return $this->successResponse(1, Response::HTTP_CREATED);
+    }
+    private function getAssessmentAreaCode(){
+       $code = DB::select('SELECT DISTINCT name,code,dzo_name FROM aca_assessment_area ORDER BY code');
+        return $code;
     }
 
 

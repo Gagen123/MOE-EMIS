@@ -22,7 +22,7 @@ class AssessmentFrequencySeeder extends Seeder
                 'name'=>'Quarterly',
                 'not_assessed' => '0',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -30,7 +30,7 @@ class AssessmentFrequencySeeder extends Seeder
                 'name'=>'Half Yearly',
                 'not_assessed' => '0',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -38,7 +38,7 @@ class AssessmentFrequencySeeder extends Seeder
                 'name'=>'Not Assessed',
                 'not_assessed' => '1',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ]
           

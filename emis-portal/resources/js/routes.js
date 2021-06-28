@@ -2,10 +2,7 @@ export default [
     { path: '/admissionRequest', component: require('./components/admissions/requestadmission.vue').default },
     { path: '/track_application', component: require('./components/admissions/track_application.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
-    { path: '/profile', component: require('./components/Profile.vue').default },
-    { path: '/Userprofile', component: require('./components/Profile/Userprofile.vue').default },
-    { path: '/Profile/tag', component: require('./components/Profile/Tag.vue').default },
-    { path: '/Profile/category', component: require('./components/Profile/Category.vue').default },
+    { path: '/userprofile', component: require('./components/Profile/Userprofile.vue').default },
     { path: '/result', component: require('./components/results/result.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default },
 
