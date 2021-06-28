@@ -16,7 +16,7 @@
             <div class="card-body login-card-body">
                 <div id="loginsection">
                     <p class="login-box-msg">Register</p>
-                    <form action="/userlogin" method="get">
+                    <form action="/new_register" method="POST">
                         @if($Invalid!=null)
                             <div class="alert alert-danger col-12"> {{ $Invalid }}</div>
                         @endif
@@ -81,7 +81,7 @@
                             $('#forgotpassword').hide();
                             $('#loginsection').show();
                         }
-                    })
+                    });
                 }
             }
         </script>

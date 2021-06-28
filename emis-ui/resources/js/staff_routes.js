@@ -644,6 +644,7 @@ const routes = [
                 { path: '/create_application',name:'create_application', component: require('./components/staff/leadership/application/create_application.vue').default },
                 { path: '/edit_application', name:'edit_application', component: require('./components/staff/leadership/application/edit_application.vue').default },
                 { path: '/view_application', name:'view_application', component: require('./components/staff/leadership/application/view_application.vue').default },
+                { path: '/application_acknowledgement', name:'application_acknowledgement', component: require('./components/staff/leadership/application/acknowledgement.vue').default },
             ],
         },
             { path: '/nomination_index',

@@ -67,7 +67,7 @@ class CommonController extends Controller{
         $param="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
-            
+
             // dd($response_data);
             // if($response_data!=null && $response_data!=[]){
             //     foreach($response_data as $work){
@@ -77,7 +77,7 @@ class CommonController extends Controller{
             // $response_data= $param;
         }
         else if($type=="commonTransferOthers"){
-            $response_data= $this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds'));
+            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
         }
         else{
             $response_data=$this->getApprovalWorkStatus();
@@ -92,7 +92,7 @@ class CommonController extends Controller{
         ];
         // dd($data);
         $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
-        dd($response_data);
+        // dd($response_data);
         return $response_data;
 
     }

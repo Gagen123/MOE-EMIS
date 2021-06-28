@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>No. of Days:</label>
-                        <input type="number" readonly class="form-control" :class="{ 'is-invalid': form.errors.has('no_days') }"  name="no_days" id="no_days" v-model="form.no_days">
+                        <input type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_days') }"  name="no_days" id="no_days" v-model="form.no_days">
                         <has-error :form="form" field="no_days"></has-error>
                     </div>
 
@@ -297,6 +297,13 @@ export default {
     mounted(){
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
+        let currdate=currentdate.getFullYear()+'-'+currentdate.getMonth() + 1+'-'+currentdate.getDate();
+        if(fromDate<=currdate && todate>=currdate){
+
+        }
+        else{
+            errormessfge
+        }
         this.current_date=currentdate.getDate()+'/'+currentdate.toLocaleString('default', { month: 'long' })+'/'+currentdate.getFullYear();
         this.form.date_of_application=currentdate.getFullYear()+'-'+('0' + (currentdate.getMonth() + 1)).slice(-2)+'-'+('0' + currentdate.getDate()).slice(-2);
         $('.select2').select2();

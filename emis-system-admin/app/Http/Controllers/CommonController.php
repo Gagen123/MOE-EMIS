@@ -40,9 +40,9 @@ class CommonController extends Controller{
         $user_id=$data['user_id'];
         $response_data=[];
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
-        
+
         if($type=="own"){
-            $result_data.='t.claimed_by="'.$user_id.'"'; 
+            $result_data.='t.claimed_by="'.$user_id.'"';
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' AND t.user_dzo_id="'.$dzo_id.'"';
             }
@@ -55,22 +55,22 @@ class CommonController extends Controller{
             if(strtolower($access_level)=="org"){
                 $result_data.='t.working_agency_id="'.$org_id.'" AND ';
             }
-            $result_data.=' t.claimed_by IS NULL'; 
+            $result_data.=' t.claimed_by IS NULL';
             // for($i=0;$i<sizeof($param)-1;$i++){
             //     if($type=="commonLeaveOthers"){
             //         if(sizeof($param)-2==$i){
-            //             $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))';  
-            //         } 
-            //         else{ 
-            //             $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
-            //         } 
+            //             $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))';
+            //         }
+            //         else{
+            //             $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR ';
+            //         }
             //     }else{
             //         if(sizeof($param)-2==$i){
-            //             $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))'; 
-            //         } 
-            //         else{ 
-            //             $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
-            //         } 
+            //             $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))';
+            //         }
+            //         else{
+            //             $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR ';
+            //         }
             //     }
             // }
             // return $screen_status;
@@ -78,13 +78,13 @@ class CommonController extends Controller{
                 $result_data.=' AND (';
                 if($type=="commonLeaveOthers"){
                     foreach($screen_status as $i => $srcn){
-                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';  
-                        if(sizeof($screen_status)-2==$i){
-                            $result_data.=')'; 
-                        } 
-                        else{ 
-                            $result_data.=' OR '; 
-                        } 
+                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                        if(sizeof($screen_status)-1==$i){
+                            $result_data.=')';
+                        }
+                        else{
+                            $result_data.=' OR ';
+                        }
                     }
                     $response_data=DB::select($result_data);;
                 }
@@ -99,22 +99,30 @@ class CommonController extends Controller{
                         else{ 
                             $result_data.=' OR '; 
                         } 
+                        $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                        if(sizeof($screen_status)-1==$i){
+                            $result_data.=')';
+                        }
+                        else{
+                            $result_data.=' OR ';
+                        }
                     }
-                    $response_data=DB::select($result_data);;
+                    // return $result_data;
+                    $response_data=DB::select($result_data);
                 }
                 else{
                     // dd(sizeof($screen_status));
                     foreach($screen_status as $i => $srcn){
                         // dd(sizeof($screen_status),$i);
-                        $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') '; 
-                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR '; 
-                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')'; 
+                        $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') ';
+                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR ';
+                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')';
                         if(sizeof($screen_status)-1==$i){
-                            $result_data.=')'; 
-                        } 
-                        else{ 
-                            $result_data.=' OR '; 
-                        } 
+                            $result_data.=')';
+                        }
+                        else{
+                            $result_data.=' OR ';
+                        }
                     }
                     return $result_data;
                     $response_data=DB::select($result_data);
@@ -123,7 +131,7 @@ class CommonController extends Controller{
             return $response_data;
         }
     }
-    
+
     public function releaseApplication($application_number=""){
         $update_data=[
             'claimed_by'     =>  null,
@@ -138,7 +146,7 @@ class CommonController extends Controller{
     public function getGewogNameById($id=""){
         return Gewog::where('id',$id)->first();
     }
-    
+
     public function checkPendingApplication($type="",$user_id=""){
         $response_data="";
         if($type=="establishment"){
@@ -158,6 +166,6 @@ class CommonController extends Controller{
         }
         return $response_data;
     }
-    
-    
+
+
 }

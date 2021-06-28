@@ -41,7 +41,7 @@ this asdf<template>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>No. of Days:</label>
-                        <input type="number" readonly class="form-control" :class="{ 'is-invalid': form.errors.has('no_days') }"  name="no_days" id="no_days" v-model="form.no_days">
+                        <input type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('no_days') }"  name="no_days" id="no_days" v-model="form.no_days">
                         <has-error :form="form" field="no_days"></has-error>
                     </div>
 
