@@ -26,7 +26,7 @@ class AssessmentTermSeeder extends Seeder
                 'to_date'=>'2021-06-30',
                 'display_order'=>'1',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -38,7 +38,7 @@ class AssessmentTermSeeder extends Seeder
                 'to_date'=>'2021-12-31',
                 'display_order'=>'2',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -50,7 +50,7 @@ class AssessmentTermSeeder extends Seeder
                 'to_date'=>'2021-04-15',
                 'display_order'=>'3',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -62,7 +62,7 @@ class AssessmentTermSeeder extends Seeder
                 'to_date'=>'2021-06-30',
                 'display_order'=>'4',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -74,7 +74,7 @@ class AssessmentTermSeeder extends Seeder
                 'to_date'=>'2021-10-15',
                 'display_order'=>'5',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             [
@@ -86,7 +86,7 @@ class AssessmentTermSeeder extends Seeder
                 'to_date'=>'2021-12-31',
                 'display_order'=>'6',
                 'status' => '1',
-                'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
             

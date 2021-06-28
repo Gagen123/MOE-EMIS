@@ -125,7 +125,6 @@ export default {
                 console.log(error);
             });
         },
-        
 		formaction: function(type){
             if(type=="save"){
                 this.form.post('/masters/saveTransferConfigMasters',this.form)
@@ -151,14 +150,14 @@ export default {
             }
             if(id=="transfer_type_id"){
                 this.form.transfer_type_id=$('#transfer_type_id').val();
-                this.getLeave_details($('#role_id').val());
+                this.getTransfer_details($('#role_id').val());
             }
             if(id=="role_id"){
                 this.form.role_id=$('#role_id').val();
-                this.getLeave_details();
+                this.getTransfer_details();
             }
         },
-        getLeave_details(){
+        getTransfer_details(){
             if($('#transfer_type_id').val()!="" && $('#transfer_type_id').val()!=null && $('#role_id').val()!="" && $('#role_id').val()!=null){
                 axios.get('masters/loadLeaveConfigMasters/'+$('#transfer_type_id').val()+'/'+$('#role_id').val())
                 .then(response =>{

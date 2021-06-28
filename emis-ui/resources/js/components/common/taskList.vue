@@ -89,8 +89,7 @@
         return{
             commonTaskList:[],
             myTaskList:[],
-            dt:'',
-            dt1:'',
+            
         }
     },
     methods: {
@@ -105,6 +104,29 @@
         },
         loadcommontaskFoLeave(){
             axios.get('common/getTaskList/commonLeaveOthers')
+            .then(response => {
+                let data = response.data;
+                if(data!=undefined){
+                    for(let i =0; i<data.length; i++){
+                        this.commonTaskList.push(data[i]);
+                    }
+                }
+            });
+        },
+         loadcommontaskFoTransfer(){
+            axios.get('common/getTaskList/commonTransferOthers')
+            .then(response => {
+                alert(JSON.stringify(response));
+                let data = response.data;
+                if(data!=undefined){
+                    for(let i =0; i<data.length; i++){
+                        this.commonTaskList.push(data[i]);
+                    }
+                }
+            });
+        },
+         loadcommontaskFoTransfer(){
+            axios.get('common/getTaskList/commonTransferOthers')
             .then(response => {
                 let data = response.data;
                 if(data!=undefined){
@@ -192,6 +214,7 @@
         this.loadcommontask();
         this.loadcommontaskFoLeave(); 
         this.loadowntask();
+        this.loadcommontaskFoTransfer();
     },
     watch:{
         commonTaskList() {

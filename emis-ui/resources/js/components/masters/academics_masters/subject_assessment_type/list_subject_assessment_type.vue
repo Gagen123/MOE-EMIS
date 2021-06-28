@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="subject-assessment-type-table" class="table display table-sm table-bordered table-striped">
+                <table id="subject-assessment-type-list-table" class="table display table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                          <th>SL#</th>
@@ -37,6 +37,7 @@ export default {
     },
     methods:{
         async getClassStreamList(){
+            try{
                 let classStreams = await axios('masters/loadClassStreamMapping/NA').then(response => response.data.data);
                 let assessedClasses = await axios('masters/loadAcademicMasters/assessed_classes').then(response => response.data.data) 
                 let selectedClassStreams = []
@@ -58,12 +59,11 @@ export default {
                     
                 });
                 this.classesStreamsList = selectedClassStreams
-            // a
-            // .catch(function (error){
-            //     if(error.toString().includes("500")){
-            //         $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-            //     }
-            // });
+            }catch(err){
+                 if(err.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            }
         },
         showedit(data){
             this.$router.push({name:'aca_edit_subject_assessment_type',params: {data:data}});
@@ -71,13 +71,17 @@ export default {
     },
     mounted(){ 
         this.getClassStreamList();
-        this.dt =  $("#subject-assessment-type-table").DataTable()
+        this.dt =  $("#subject-assessment-type-list-table").DataTable({
+            distroy:true,
+        })
     },
     watch: {
         classesStreamsList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#subject-assessment-type-table").DataTable()
+                this.dt =  $("#subject-assessment-type-list-table").DataTable({
+                    distroy:true,
+                })
             });
         }
     }

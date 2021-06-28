@@ -31,6 +31,7 @@ class CommonController extends Controller{
             'user_id'               =>  $request->user_id,
             'type'                  =>  $request->type,
         ];
+        // return $data;
         $access_level=$data['access_level'];
         $dzo_id=$data['dzongkhag'];
         $org_id=$data['org'];
@@ -38,10 +39,16 @@ class CommonController extends Controller{
         $type=$data['type'];
         $user_id=$data['user_id'];
         $response_data=[];
-        // dd($screen_status);
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
         
-        if($type=="common" || $type=="commonLeaveOthers"){
+        if($type=="own"){
+            $result_data.='t.claimed_by="'.$user_id.'"'; 
+            if(strtolower($access_level)=="dzongkhag"){
+                $result_data.=' AND t.user_dzo_id="'.$dzo_id.'"';
+            }
+            return DB::select($result_data);
+        }
+        else{
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.$dzo_id.' AND ';
             }
@@ -66,8 +73,9 @@ class CommonController extends Controller{
             //         } 
             //     }
             // }
-            if($screen_status!="" && sizeof($screen_status)>0){
-                $result_data.=' AND ('; 
+            // return $screen_status;
+            if($screen_status!=""){
+                $result_data.=' AND (';
                 if($type=="commonLeaveOthers"){
                     foreach($screen_status as $i => $srcn){
                         $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';  
@@ -79,7 +87,21 @@ class CommonController extends Controller{
                         } 
                     }
                     $response_data=DB::select($result_data);;
-                }else{
+                }
+                else if($type=="commonTransferOthers"){
+                    foreach($screen_status as $i => $srcn){
+                        return $srcn;
+                        $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';  
+                        if(sizeof($screen_status)-2==$i){
+                            $result_data.=')'; 
+                        } 
+                        else{ 
+                            $result_data.=' OR '; 
+                        } 
+                    }
+                    $response_data=DB::select($result_data);;
+                }
+                else{
                     // dd(sizeof($screen_status));
                     foreach($screen_status as $i => $srcn){
                         // dd(sizeof($screen_status),$i);
@@ -93,19 +115,11 @@ class CommonController extends Controller{
                             $result_data.=' OR '; 
                         } 
                     }
-                    // return $result_data;
+                    return $result_data;
                     $response_data=DB::select($result_data);
                 }
             }
             return $response_data;
-        }
-        
-        if($type=="own"){
-            $result_data.='t.claimed_by="'.$user_id.'"'; 
-            if(strtolower($access_level)=="dzongkhag"){
-                $result_data.=' AND t.user_dzo_id="'.$dzo_id.'"';
-            }
-            return DB::select($result_data);
         }
     }
     

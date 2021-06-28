@@ -4,22 +4,32 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Subject Group Name:<span class="text-danger">*</span></label> 
+                        <label>Subject Group :<span class="text-danger">*</span></label> 
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('dzongkhag_name')" type="text">
                         <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Subject Category:<span class="text-danger">*</span></label> 
+                        <select class="form-control form-control-sm select2" id="subject_category_id" v-model="form.aca_sub_category_id" :class="{ 'is-invalid': form.errors.has('aca_sub_category_id') }"  @change="remove_err('subject_category_id')">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in subject_category_list" :key="index" v-bind:value="item.id">{{ item.name }} 
+                                <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
+                            </option>
+                        </select> 
+                        <has-error :form="form" field="aca_sub_category_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Dzongkha Name:</label> 
                         <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                </div>  
+                 <div class="row form-group">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
                         <has-error :form="form" field="display_order"></has-error>
                     </div>
-                </div>  
-                 <div class="row form-group">
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">status:</label>
                         <br>
@@ -39,11 +49,14 @@
 export default {
     data() {
         return {
+            subject_category_list:[],
             form: new form({
                 id: '',
                 name: '',
+                aca_sub_category_id:'',
                 dzo_name:'',
                 display_order:'',
+                is_sub_group:1,
                 status:'',
                 record_type:'subject_group',
                 action_type:'edit',
@@ -51,6 +64,16 @@ export default {
         }
     },
     methods: {
+        loadSubcategoryList(uri = 'masters/loadAcademicMasters/all_active_subject_category'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.subject_category_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -80,11 +103,28 @@ export default {
     },
     created() {
         this.form.name=this.$route.params.data.name;
+        this.form.aca_sub_category_id = this.$route.params.data.aca_sub_category_id
         this.form.dzo_name=this.$route.params.data.dzo_name;
         this.form.display_order = this.$route.params.data.display_order
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     },
+    mounted(){
+           $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').select2().
+        on("select2:select", e => {
+            const event = new Event("change", { bubbles: true, cancelable: true });
+            e.params.data.element.parentElement.dispatchEvent(event);
+        })
+        .on("select2:unselect", e => {
+        const event = new Event("change", { bubbles: true, cancelable: true });
+        e.params.data.element.parentElement.dispatchEvent(event);
+        });
+        this.loadSubcategoryList()
+    }
     
 }
 </script>

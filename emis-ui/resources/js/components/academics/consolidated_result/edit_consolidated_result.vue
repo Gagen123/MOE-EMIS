@@ -27,8 +27,11 @@
                             </tr>
                              <tr>
                                 <th v-for="(item2,index2) in areas" :key="index2" class="text-center">
-                                    {{item2.assessment_area}} 
-                                    <span v-if="item2.input_type==1">({{item2.weightage}}%)</span>
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item2.assessment_area_hint">
+                                         {{item2.assessment_area}} 
+                                         <span v-if="item2.input_type==1">({{item2.weightage}}%)</span>
+                                    </span>
+
                                 </th> 
                             </tr>
                         </thead>

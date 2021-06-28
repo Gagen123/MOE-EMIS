@@ -430,7 +430,7 @@ export default {
                     }
                 }
                 if(validated==true){
-                    this.outdoor_form.post('organization/structural/saveOutdoorInfo')
+                    this.outdoor_form.post('organization/structural/saveEccdFacilities')
                     .then((response) => {
                         if(response.data!=""){
                             Toast.fire({
@@ -480,7 +480,7 @@ export default {
                     }
                 }
                 if(validated==true){
-                    this.indoor_form.post('organization/structural/saveIndoorInfo')
+                    this.indoor_form.post('organization/structural/saveEccdFacilities')
                     .then((response) => {
                         if(response.data!=""){
                             Toast.fire({
@@ -530,7 +530,7 @@ export default {
                     }
                 }
                 if(validated==true){
-                    this.indoorspace_form.post('organization/structural/saveIndoorSpace')
+                    this.indoorspace_form.post('organization/structural/saveEccdFacilities')
                     .then((response) => {
                         if(response.data!=""){
                             Toast.fire({
@@ -580,7 +580,7 @@ export default {
                     }
                 }
                 if(validated==true){
-                    this.building_form.post('organization/structural/saveBuildingInfo')
+                    this.building_form.post('organization/structural/saveEccdFacilities')
                     .then((response) => {
                         if(response.data!=""){
                             Toast.fire({
@@ -639,7 +639,7 @@ export default {
                         confirmButtonText: 'Yes!',
                         }).then((result) => {
                         if (result.isConfirmed) {
-                            this.location_form.post('organization/structural/saveECCDLocationInfo')
+                            this.location_form.post('organization/structural/saveEccdFacilities')
                             .then((response) => {
                                 if(response.data!=""){
                                     Toast.fire({
@@ -662,7 +662,7 @@ export default {
                 this.change_tab(nextclass);
             }
         },
-        change_tab(nextclass){
+        change_tab(nextclass){ 
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
             $('.'+nextclass+' >a').addClass('active');
@@ -705,7 +705,7 @@ export default {
             });
         },
         loadOutdoorList(param){
-            let uri = 'organization/structural/getloadOutdoorList/'+param;
+            let uri = 'organization/structural/getEccdFacilitiesList/'+param;
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

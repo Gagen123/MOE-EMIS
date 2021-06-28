@@ -13,7 +13,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.class}}</td>
+                    <td>{{ classList[item.class]}}</td>
                     <td>{{ item.ProjectionNo}}</td>
                     <td>{{ item.academicYear}}</td>
                     <!-- <td>
@@ -62,7 +62,7 @@ export default {
             .then(response => {
                 let data = response;
                  for(let i=0;i<data.data.data.length;i++){
-                    this.classList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.classList[data.data.data[i].id] = data.data.data[i].class; 
                 }
                // this.classList =  data.data.data;
             })

@@ -229,6 +229,13 @@ class AdministrationController extends Controller{
     }
     public function loadGlobalMasters($param=""){
         // dd("inside system admin serices");
+        if($param=="intra_transfer"){
+            return $this->successResponse(Calender::where('type','Intra Transfer')->get());
+        }
+
+        if($param=="inter_transfer"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->get());
+        }
         if($param=="all_transfer_type_list"){
             return $this->successResponse(Calender::all());
         }

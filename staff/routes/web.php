@@ -30,7 +30,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMastersController@saveTransferConfigMasters']);
         $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
         $router->get('/loadAllLeaveConfigMasters','masters\StaffMastersController@loadAllLeaveConfigMasters');
+        $router->get('/loadAllTransferConfigMasters/{user_id}','masters\StaffMastersController@loadAllTransferConfigMasters');
         $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
+        $router->get('/loadTransferConfigDetails/{id}','masters\StaffMastersController@loadTransferConfigDetails');
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);
@@ -85,13 +87,13 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->group(['prefix' => 'transfer'], function () use ($router) {
             $router->post('/saveTransferWindow', ['uses' => 'staff\TransferController@saveTransferWindow']);
             $router->get('/loadTransferWindow', ['uses' => 'staff\TransferController@loadTransferWindow']);
-
-            $router->get('/getcurrentTransferWindowDetails/{id}', ['uses' => 'staff\TransferController@getcurrentTransferWindowDetails']);
-            $router->post('/submitapplicantDetails', ['uses' => 'staff\TransferController@submitapplicantDetails']);
+            $router->get('/getcurrentTransferWindowDetails/{type}', ['uses' => 'staff\TransferController@getcurrentTransferWindowDetails']);
+            $router->post('/submitIntialapplicantDetails', ['uses' => 'staff\TransferController@submitIntialapplicantDetails']);
             $router->get('/getDraftDetails/{user_id}', ['uses' => 'staff\TransferController@getDraftDetails']);
             $router->post('/submitFinalapplicantDetails', ['uses' => 'staff\TransferController@submitFinalapplicantDetails']);
             $router->get('/loadtrainsferDetails/{appNo}', ['uses' => 'staff\TransferController@loadtrainsferDetails']);
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
+            $router->get('/loadtransferDetails/{type}', ['uses' => 'staff\TransferController@loadtransferDetails']);
         });
 
         //principal recuritment Approval controller by gagen
@@ -146,6 +148,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
             $router->get('/checkEligibility/{type_id}/{role_ids}', ['uses' => 'staff\StaffServicesController@checkEligibility']);
             $router->get('/getLeaveConfigDetails/{role_ids}', ['uses' => 'staff\StaffServicesController@getLeaveConfigDetails']);
+            $router->get('/getTransferConfigDetails/{role_ids}', ['uses' => 'staff\StaffServicesController@getTransferConfigDetails']);
             $router->post('/submitLeaveApplication', ['uses' => 'staff\StaffServicesController@submitLeaveApplication']);
             $router->get('/loadLeaveDetails/{appNo}', ['uses' => 'staff\StaffServicesController@loadLeaveDetails']);
             $router->post('/verifyApproveRejectLeaveApplication', ['uses' => 'staff\StaffServicesController@verifyApproveRejectLeaveApplication']);

@@ -6,7 +6,7 @@
                     <thead>
                         <tr>
                             <th >Display Order</th>
-                            <th >Subject Name</th>
+                            <th >Subject</th>
                             <th >Assessment Area</th>
                             <th >Assessment Area Code</th>
                             <th >Rating Type</th>

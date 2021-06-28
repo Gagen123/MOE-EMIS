@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="card card-danger card-outline" id="invalidsection" style="display:none">
             <div class="card-body pb-0 mb-0">
                 <div class="callout callout-danger">
@@ -18,11 +17,6 @@
                     <li class="nav-item application-tab" @click="shownexttab('application-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Application Details </label>
-                        </a>
-                    </li>
-                    <li class="nav-item service-tab" @click="shownexttab('service-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Service Details </label>
                         </a>
                     </li>
                     <li class="nav-item undertaking-tab" @click="shownexttab('undertaking-tab')">
@@ -45,7 +39,7 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label class="mb-0">From Date:</label>
-                                            <span class="text-blue text-bold">{{ form.t_from_data}}</span>
+                                            <span class="text-blue text-bold">{{form.t_from_date}}</span>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label class="mb-0">End Date:</label>
@@ -75,7 +69,7 @@
                                 <label class="mb-0.5">Applicant:<i class="text-danger">*</i></label>
                                 <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
                                     <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}, {{item.position_title.name}}</option>
+                                    <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="staff_id"></has-error>
                             </div>
@@ -99,71 +93,11 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('service-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="service-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Previous Working History</label>
-                                <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>SlNo</th>
-                                            <th>Working Agency</th>
-                                            <th>Dzongkhag</th>
-                                            <th>year</th>
-                                            <th>Position Title</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item, index) in working_history_list" :key="index">
-                                            <td>{{ index+1}}</td>
-                                            <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td>
-                                            <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Training Area</label>
-                                <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>SlNo</th>
-                                            <th>Training Name</th>
-                                            <th>Vanue</th>
-                                            <th>year</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                         <tr v-for="(item, index) in training_details_list" :key="index">
-                                            <td>{{ index+1}}</td>
-                                            <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td>
-                                            <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="tab-pane fade tab-content-details" id="undertaking-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -206,7 +140,7 @@
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag3"></has-error>
-                                            </td>
+                                            </td> 
                                         </tr>
                                     </tbody>
                                 </table>
@@ -275,7 +209,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('service-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                 <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>submit </button>
                             </div>
                         </div>
@@ -299,19 +233,22 @@ export default {
             working_history_list:[],
             training_details_list:[],
             draft_attachments:[],
+            intratransfer:[],
             form: new form({
-                t_from_data:'',
-                t_to_date:'',
-                t_year:'',
-                t_remarks:'',
-                t_id:'',
-
                 id: '',
+                t_year:'',
+                t_from_date:'',
+                t_to_date:'',
+                t_remarks:'',
+                transferwindow_id:'',
                 staff_id: '',
                 reason_id:'',
                 description:'',
+                current_date:'',
+
                 preference_dzongkhag:[],
                 status: 'pending',
+                transferType:"inter_transfer",
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
@@ -351,28 +288,8 @@ export default {
                 $('#'+e.target.id).val('');
             }
         },
-		formaction: function(type){
-            if(type=="reset"){
-                this.form.from_date= '';
-                this.form.to_date= '';
-                this.remarks='';
-            }
-            if(type=="save"){
-                this.form.post('/staff/saveTransferWindow')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/list_transfer_window');
-                })
-                .catch(() => {
-                    console.log("Error.")
-                })
-            }
-		},
         loadstaff(){
-            let uri = 'loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
+            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -433,72 +350,87 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
-            if(nextclass=="final-tab"){
-                if(this.validated_final_form()){
-                    Swal.fire({
-                        text: "Are you sure you wish to submit for further approval ?",
-                        icon: 'info',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes!',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            const config = {
-                                headers: {
-                                    'content-type': 'multipart/form-data'
-                                }
-                            }
-                            let formData = new FormData();
-                            formData.append('id', this.form.id);
-                            formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
-                            formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
-                            formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
-                            for(let i=0;i<this.form.ref_docs.length;i++){
-                                formData.append('attachments[]', this.form.ref_docs[i].attachment);
-                                formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
-                            }
-                            axios.post('/staff/transfer/submitFinalapplicantDetails', formData, config)
-                            .then((response) =>{
-                                if(response!="" && response!="No Screen"){
-                                    let message="Application for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Application for Transfer has been submitted for further action'
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                console.log("Errors:"+error)
+            if(nextclass=="undertaking-tab"){
+                // if(this.form.t_to_date <=this.form.current_date){
+                    // if(this.form.t_from_date >this.form.current_date){
+                    let formData = new FormData();
+                        formData.append('transferwindow_id', this.form.transferwindow_id);
+                        formData.append('staff_id', this.form.staff_id);
+                        formData.append('reason_id', this.form.reason_id);
+                        formData.append('description', this.form.description);
+                        formData.append('transferType', this.form.transferType);
+                    
+                    axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
+                    .then((response) =>{
+                        if(response!="" && response!="No Screen"){
+                            this.form.id=response.data.data.id;
+                            // let message="Application for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Application for Transfer has been submitted for further action'
                             });
                         }
+                    })
+
+                    .catch((error) => {
+                        console.log("Errors:"+error)
                     });
-                }
+                    this.change_tab(nextclass);
+                    // }
+                // }
+            //      else{
+            //         Toast.fire({
+            //                 icon: 'error',
+            //                 title: 'Your application failed to submit since transfer window period is closed'
+            //             });
+            //  }
             }
-            else if(nextclass=="service-tab"){
-                this.form.post('/staff/transfer/submitapplicantDetails')
-                .then((response) => {
-                    if(response!=null && response!=""){
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Applicant details has beed saved successfully'
+
+                else if(nextclass=="final-tab"){
+                    if(this.validated_final_form()){
+                        Swal.fire({
+                            text: "Are you sure you wish to submit for further approval ?",
+                            icon: 'info',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes!',
+                            }).then((result) => {
+                            if (result.isConfirmed) {
+                                const config = {
+                                    headers: {
+                                        'content-type': 'multipart/form-data'
+                                    }
+                                }
+                                let formData = new FormData();
+                                formData.append('id', this.form.id);
+                                formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
+                                formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
+                                formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
+                                formData.append('transferType', this.form.transferType);
+                                for(let i=0;i<this.form.ref_docs.length;i++){
+                                    formData.append('attachments[]', this.form.ref_docs[i].attachment);
+                                    formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
+                                }
+                                axios.post('/staff/transfer/submitFinalapplicantDetails', formData, config)
+                                .then((response) =>{
+                                    if(response!="" && response!="No Screen"){
+                                        // let message="Application for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                        this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Application for Transfer has been submitted for further action'
+                                        });
+                                    }
+                                })
+                                .catch((error) => {
+                                    console.log("Errors:"+error)
+                                });
+                            }
                         });
-                        this.change_tab(nextclass);
-                        this.getDraftDetails();
                     }
-                })
-                .catch((error) =>{
-                    console.log("Error:"+error)
-                });
-            }
-            else if(nextclass=="service-tab"){
-                this.getDraftDetails();
-                this.change_tab(nextclass);
-            }
-            else{
-                this.change_tab(nextclass);
-            }
+                }
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -509,10 +441,12 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
+
         profile_details(){
             axios.get('common/getSessionDetail')
             .then(response => {
-                let data = response.data.data;
+                let data5689
+                p = response.data.data;
                 this.form.staff_id=data['staff_id'];
                 $('#staff_id').val(data['staff_id']).trigger('change');
             })
@@ -520,12 +454,14 @@ export default {
                 console.log(errors)
             });
         },
-        gettransferconfig(){
-            axios.get('staff/transfer/getcurrentTransferWindowDetails/NA')
-            .then(response => {
-                let data = response.data.data;
-                if(data!=null){
-                    this.form.t_from_data=data.from_date;
+        
+        loadtransferwindow(){
+            axios.get('masters/loadGlobalMasters/intra_transfer')
+           .then((response) => {
+                let data=response.data.data[0];
+                 if(data!=null){
+                    this.form.transferwindow_id=data.id;
+                    this.form.t_from_date=data.from_date;
                     this.form.t_to_date=data.to_date;
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
@@ -544,9 +480,9 @@ export default {
                     $('#invalidsection').show();
                     $('#t_form_details').hide();
                 }
-            })
-            .catch(errors =>{
-                console.log(errors)
+             })
+            .catch((error) => {
+                console.log("Error."+error);
             });
         },
         changefunction(id){
@@ -586,6 +522,9 @@ export default {
         }
     },
     mounted() {
+        let currentdate = new Date();
+        this.form.year=currentdate.getFullYear();
+        this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -604,7 +543,7 @@ export default {
         this.loadreasons();
         this.loadactivedzongkhagList();
         this.loadundertakingList();
-        this.gettransferconfig();
+        this.loadtransferwindow();
     },
 }
 </script>

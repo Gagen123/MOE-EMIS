@@ -226,9 +226,17 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/loadAllLeaveConfigMasters');
         return $response_data;
     }
+    public function loadAllTransferConfigMasters(){
+        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters/'.$this->userId());
+        return $response_data;
+    }
 
     public function loadLeaveConfigDetails($id=""){
         $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/'.$id);
+        return $response_data;
+    }
+    public function loadTransferConfigDetails($id=""){
+        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
         return $response_data;
     }
 
@@ -242,19 +250,17 @@ class AdministrationController extends Controller{
     }
 
     public function saveAcademicMasters(Request $request){
-        $rules=[];
-        $customMessages =[];
-
         if($request['record_type'] == 'subject_group') {
             $rules = [
-                'name'  =>  'required',
+                'name'    =>  'required',
+                'aca_sub_category_id' => 'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
-
             ];
             $customMessages = [
-                'name.required' => 'This field is required',
                 'display_order.required' => 'This field is required',
+                'name.required' => 'This field is required',
+                'aca_sub_category_id.required' => 'This field is required',
                 'status.required' => 'This field is required',
             ];
         }
@@ -291,8 +297,8 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
-
         $this->validate($request, $rules, $customMessages);
+       
         $request['user_id'] = $this->userId();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
