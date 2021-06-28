@@ -89,8 +89,7 @@
         return{
             commonTaskList:[],
             myTaskList:[],
-            dt:'',
-            dt1:'',
+            
         }
     },
     methods: {
@@ -117,6 +116,7 @@
          loadcommontaskFoTransfer(){
             axios.get('common/getTaskList/commonTransferOthers')
             .then(response => {
+                alert(JSON.stringify(response));
                 let data = response.data;
                 if(data!=undefined){
                     for(let i =0; i<data.length; i++){

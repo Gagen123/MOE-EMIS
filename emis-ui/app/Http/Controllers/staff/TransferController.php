@@ -159,7 +159,6 @@ class TransferController extends Controller{
         return json_encode($loadTransferDetails);
     }
     public function getStaffNameWithId($id=""){
-        dd($id);
         $response_data = $this->apiService->listData('emis/staff/transfer/loadtransferDetails/'.$id);
         return $response_data; 
 

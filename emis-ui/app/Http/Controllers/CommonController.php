@@ -74,17 +74,13 @@ class CommonController extends Controller{
             //         $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
             //     }
             // }
-            $response_data= $param;
+            // $response_data= $param;
         }
-        if($type=="commonTransferOthers"){
-            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
-            
-            // if($response_data!=null && $response_data!=[]){
-            //     foreach($response_data as $work){
-            //         $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->transfer_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
-            //     }
-            // }
-            $response_data= $param;
+        else if($type=="commonTransferOthers"){
+            $response_data= $this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds'));
+        }
+        else{
+            $response_data=$this->getApprovalWorkStatus();
         }
         $data =[
             'access_level'          =>  $this->getAccessLevel(),
@@ -94,15 +90,10 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        $param = http_build_query($data);
-
-        if($param!="NA"){
-            $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
-            return $response_data;
-        }
-        else{
-            return null;
-        }
+        // dd($data);
+        $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
+        dd($response_data);
+        return $response_data;
 
     }
     public function getTaskcount(){
