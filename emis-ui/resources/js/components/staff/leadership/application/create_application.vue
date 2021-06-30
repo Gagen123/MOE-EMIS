@@ -74,7 +74,7 @@
                                 <tbody>
                                     <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                         <td>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index)">
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                             <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                         </td>
                                         <td>

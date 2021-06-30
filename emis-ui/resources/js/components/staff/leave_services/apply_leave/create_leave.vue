@@ -51,6 +51,45 @@
                         <has-error :form="form" field="reason"></has-error>
                     </div>
                 </div>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="form-group row">
+                        <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" style="display:none" id="applyId"><i class="fa fa-save"></i> Submit</button>
@@ -62,6 +101,7 @@
 export default {
     data(){
         return {
+            count:0,
             leavetypeList:[],
             staffList:[],
             roleList:[],
@@ -79,11 +119,38 @@ export default {
                 to_date:'',
                 no_days:'',
                 reason:'',
+                submitted_to:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
                 action_type:'create'
             })
         }
     },
     methods: {
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#file_name'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#file_name'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#file_name'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.count++;
+            this.form.attachments.push({file_name:'', attachment:''});
+        },
+        remove(){
+            if(this.form.attachments.length>1){
+                this.count--;
+                this.form.attachments.pop();
+            }
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -92,8 +159,8 @@ export default {
         loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.leavetypeList =  data.data.data;
+                let data = response.data.data;
+                this.leavetypeList =  data;
             })
             .catch(function (error){
                 console.log(error);
@@ -150,7 +217,28 @@ export default {
                     confirmButtonText: 'Yes!',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('/staff/staffServices/submitLeaveApplication',this.form)
+                        let formData = new FormData();
+                        formData.append('leave_type_id', this.form.leave_type_id);
+                        formData.append('staff_id', this.form.staff_id);
+                        formData.append('year', this.form.year);
+                        formData.append('date_of_application', this.form.date_of_application);
+                        formData.append('from_date', this.form.from_date);
+                        formData.append('to_date', this.form.to_date);
+                        formData.append('no_days', this.form.no_days);
+                        formData.append('reason', this.form.reason);
+                        formData.append('submitted_to', this.form.submitted_to);
+                        formData.append('action_type', this.form.action_type);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        axios.post('/staff/staffServices/submitLeaveApplication', formData, config)
+                        // this.form.post('/staff/staffServices/submitLeaveApplication',this.form)
                         .then((response) => {
                             if(response.data.data!=undefined){
                                 let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
@@ -211,12 +299,13 @@ export default {
         getLeave_details(){
             axios.get('staff/staffServices/checkEligibility/'+$('#leave_type_id').val())
             .then(response =>{
-                let data = response;
-                if(data.data.data!=""){
+                let data = response.data;
+                if(data!=""){
                     //need to handle for multiple role later, for now it will take for first role at the index 0
-                    this.total_leave_apply=' ('+data.data.data[0].leave_details.category+')';
-                    this.actual_leave_avail=data.data.data[0].leave_details.no_days;
-                    this.leave_balance=data.data.data[0].leave_details.no_days;
+                    this.total_leave_apply=' ('+data.data.leave_details.category+')';
+                    this.actual_leave_avail=data.data.leave_details.no_days;
+                    this.leave_balance=data.data.leave_details.no_days;
+                    this.form.submitted_to=data.data.next_role_id.role_id;
                     $('#form_details').show();
                     $('#applyId').show();
                     this.getApprovedLeaveCount();
@@ -267,7 +356,7 @@ export default {
             axios.get('staff/staffServices/getOnGoingLeave/'+this.form.staff_id)
             .then(response =>{
                 let data = response.data.data;
-                if(data!=""){
+                if(data!=null && data!=""){
                     Swal.fire({
                         title: 'Already Applied ! ',
                         text: "Sorry! You have submitted leave application with Application number: "+data.application_number+' which is under process.',
@@ -288,9 +377,6 @@ export default {
             if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
                 $('#leave_type_id').addClass('select2-hidden-accessible');
             }
-            if(!$('#role_id').attr('class').includes('select2-hidden-accessible')){
-                $('#role_id').addClass('select2-hidden-accessible');
-            }
         },
 
     },
@@ -298,12 +384,12 @@ export default {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         let currdate=currentdate.getFullYear()+'-'+currentdate.getMonth() + 1+'-'+currentdate.getDate();
-        if(fromDate<=currdate && todate>=currdate){
+        // if(fromDate<=currdate && todate>=currdate){
 
-        }
-        else{
-            errormessfge
-        }
+        // }
+        // else{
+        //     errormessfge
+        // }
         this.current_date=currentdate.getDate()+'/'+currentdate.toLocaleString('default', { month: 'long' })+'/'+currentdate.getFullYear();
         this.form.date_of_application=currentdate.getFullYear()+'-'+('0' + (currentdate.getMonth() + 1)).slice(-2)+'-'+('0' + currentdate.getDate()).slice(-2);
         $('.select2').select2();

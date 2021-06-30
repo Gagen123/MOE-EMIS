@@ -88,6 +88,16 @@ class CommonController extends Controller{
                     }
                     $response_data=DB::select($result_data);;
                 }
+                else if($type=="commontaskForleadershipSelection"){
+                    if($screen_status=="Valid"){
+                        $result_data.=' t.application_number like "STF_REC%"  AND t.status_id=1)';
+                        // return $result_data;
+                        $response_data=DB::select($result_data);
+                    }
+                    else{
+                        return null;
+                    }
+                }
                 else if($type=="commonTransferOthers"){
                     foreach($screen_status as $i => $srcn){
                         $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
@@ -123,6 +133,15 @@ class CommonController extends Controller{
         }
     }
 
+    public function getNotification($role_ids="",$user_id=""){
+        $roles='"'.$role_ids.'"';
+        if(strpos($role_ids,',')!==false){
+            $roles='"'.str_replace(',','","',$role_ids).'"';
+        }
+        $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id WHERE ';
+        $result_data.=' IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        return DB::select($result_data);
+    }
     public function releaseApplication($application_number=""){
         $update_data=[
             'claimed_by'     =>  null,
