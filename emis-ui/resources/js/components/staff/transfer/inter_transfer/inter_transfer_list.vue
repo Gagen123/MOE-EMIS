@@ -56,26 +56,13 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        getStaffNameWithId(){
-        let uri ='staff/transfer/getStaffNameWithId';
-        axios.get(uri)
-        .then(response =>{
-            let data = response;
-            this.staffList = data.data.data;
-        })
-        .catch(function (error){
-            console.log("Error:"+error)
-        });
-        },
     },
     mounted() {
         this.loadtransferDetails();
-        this.getStaffNameWithId();
         this.dt =  $("#training-table").DataTable()
     },
     watch: {
         transfer_list(){
-            this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#training-table").DataTable()
             });

@@ -90,9 +90,7 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        // dd($data);
         $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
-        // dd($response_data);
         return $response_data;
 
     }

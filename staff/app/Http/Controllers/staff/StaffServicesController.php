@@ -305,9 +305,9 @@ class StaffServicesController extends Controller{
         $rules = [
             'staff_id'                  =>  'required',
             'reason'                    =>  'required',
-            'from_date'                  =>  'required',
-            'to_date'                    =>  'required',
-            'no_days'                    =>  'required',
+            'from_date'                 =>  'required',
+            'to_date'                   =>  'required',
+            'no_days'                   =>  'required',
         ];
         $customMessages = [
             'staff_id.required'         => 'This field is required',

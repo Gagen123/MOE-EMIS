@@ -116,23 +116,15 @@
          loadcommontaskFoTransfer(){
             axios.get('common/getTaskList/commonTransferOthers')
             .then(response => {
-                alert(JSON.stringify(response));
                 let data = response.data;
                 if(data!=undefined){
-                    for(let i =0; i<data.length; i++){
-                        this.commonTaskList.push(data[i]);
-                    }
-                }
-            });
-        },
-         loadcommontaskFoTransfer(){
-            axios.get('common/getTaskList/commonTransferOthers')
-            .then(response => {
-                let data = response.data;
-                if(data!=undefined){
-                    for(let i =0; i<data.length; i++){
-                        this.commonTaskList.push(data[i]);
-                    }
+                    this.commonTaskList=data;
+
+                    // for(let i =0; i<data.length; i++){
+                    //     this.commonTaskList.push(data[i]);
+                    //     // alert(data[i].application_number);
+                    //     // this.commonTaskList.push(=);
+                    // }
                 }
             });
         },
@@ -188,14 +180,14 @@
                 if(data.service_name.includes('Closure')){
                     this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Transfer')){
-                    this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
-                }
                 if(data.service_name.includes('Leave')){ 
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Reopen')){ 
                     this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.application_number.includes('TR')){ 
+                    this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
                 }
                  if(data.application_number.includes('Recu')){ 
                     this.$router.push({name:"view_principal_recuritment",params:{data:data,type:actiontype}});

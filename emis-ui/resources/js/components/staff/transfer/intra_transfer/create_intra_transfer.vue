@@ -245,6 +245,7 @@ export default {
                 reason_id:'',
                 description:'',
                 current_date:'',
+                 type_id:'',
 
                 preference_dzongkhag:[],
                 transferType:"intra_transfer",
@@ -330,6 +331,16 @@ export default {
                 }
             });
         },
+          LoadTransferType(uri = 'masters/loadGlobalMasters/intra'){
+            axios.get(uri)
+            .then(response =>{
+                this.form.type_id = response.data.data.id;
+
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
         validated_final_form(){
             let returntue=true;
             if($('#preference_school1').val()==null){
@@ -353,6 +364,8 @@ export default {
             //   if(this.form.t_to_date <=this.form.current_date){
             //         if(this.form.t_from_date >this.form.current_date){
                     let formData = new FormData();
+                        
+                        formData.append('type_id', this.form.type_id);
                         formData.append('transferwindow_id', this.form.transferwindow_id);
                         formData.append('staff_id', this.form.staff_id);
                         formData.append('reason_id', this.form.reason_id);
@@ -403,6 +416,7 @@ export default {
                                 }
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
+                                formData.append('type_id', this.form.type_id);
                                 formData.append('preference_school1', this.form.preference_school1);
                                 formData.append('preference_school2', this.form.preference_school2);
                                 formData.append('preference_school3', this.form.preference_school3);
@@ -542,6 +556,7 @@ export default {
         this.loadOrgList();
         this.loadundertakingList();
         this.loadtransferwindow();
+        this.LoadTransferType();
     },
 }
 </script>

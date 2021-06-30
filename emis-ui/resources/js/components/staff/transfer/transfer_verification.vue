@@ -11,11 +11,6 @@
                             <label class="mb-0.5">Application Details </label>
                         </a>
                     </li>
-                    <li class="nav-item service-tab" @click="shownexttab('service-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Service Details </label>
-                        </a>
-                    </li>
                     <li class="nav-item undertaking-tab" @click="shownexttab('undertaking-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Options & Undertaking</label>
@@ -26,7 +21,7 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
+                        <!-- <div class="callout callout-success">
                             <span><label><u>Transfer Config Detials</u></label></span>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -48,7 +43,7 @@
                                     <span class="text-blue text-bold">{{t_remarks}}</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="callout callout-success">
                             <span><label><u>Applicant Detials</u></label></span>
@@ -62,19 +57,13 @@
                                     <span class="text-blue text-bold">{{genderArray[app_details.sex_id]}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Position Title:</label><br>
-                                    <span class="text-blue text-bold">{{positiontitleList[app_details.position_title_id]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Transfer Reason:</label><br>
+                                     <label class="mb-0">Transfer Reason:</label><br>
                                     <span class="text-blue text-bold">{{reasonList[form.transfer_reason_id]}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Brif description for seeking transfer</label><br>
+                                    <label class="mb-0">Brief description for seeking transfer</label><br>
                                     <span class="text-blue text-bold">{{form.description}}</span>
                                 </div>
                             </div>
@@ -82,68 +71,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('service-tab')">Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade tab-content-details" id="service-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Previous Working History</label>
-                                <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>SlNo</th>
-                                            <th>Working Agency</th>
-                                            <th>Dzongkhag</th>
-                                            <th>year</th>
-                                            <th>Position Title</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item, index) in working_history_list" :key="index">
-                                            <td>{{ index+1}}</td>
-                                            <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td>
-                                            <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Training Area</label>
-                                <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>SlNo</th>
-                                            <th>Training Name</th>
-                                            <th>Vanue</th>
-                                            <th>year</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                         <tr v-for="(item, index) in training_details_list" :key="index">
-                                            <td>{{ index+1}}</td>
-                                            <td>{{ item.w}}</td>
-                                            <td>{{ item.staff_details.name}}</td>
-                                            <td>{{ item.contact}}</td>
-                                            <td>{{ item.email }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')"> <i class="fa fa-arrow-right"></i>Next </button>
+                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -231,7 +159,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('service-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                  <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
@@ -293,8 +221,8 @@ export default {
                 let data=response.data.data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
-                this.form.transfer_reason_id         =   data.transfer_reason_id;
-                this.form.description                =   data.description;
+                this.form.transfer_reason_id=data.transfer_reason_id;
+                this.form.description=data.description;
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
                         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
@@ -479,8 +407,10 @@ export default {
     },
     mounted(){
         this.form.application_no=this.$route.params.data.application_number;
+        
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();
+        this.gettransferconfig();
         this.loadpositionTitleList();
         this.loadreasons();
         this.loadactivedzongkhagList();

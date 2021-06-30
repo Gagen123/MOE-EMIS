@@ -10,6 +10,7 @@ class TransferApplication extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
+        'transfer_type_id',
         'transfer_window_id',
         'staff_id',
         'transfer_reason_id',

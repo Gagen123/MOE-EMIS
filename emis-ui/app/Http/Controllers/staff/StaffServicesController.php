@@ -188,7 +188,6 @@ class StaffServicesController extends Controller{
         $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
         
         if($appRole_id!=[]){
-            // dd($appRole_id[0]->SysRoleId);
             $staff_data =[
                 'id'                        =>  $request->id,
                 'leave_type_id'             =>  $request->leave_type_id,
