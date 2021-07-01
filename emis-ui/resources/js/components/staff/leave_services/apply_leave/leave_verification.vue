@@ -216,25 +216,26 @@ export default {
             axios.get('/staff/staffServices/loadLeaveDetails/'+appNo+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
-                this.form.date_of_application         =   data.date_of_application;
-                this.form.application_no         =   data.application_no;
-                this.form.from_date         =   data.from_date;
-                this.form.to_date         =   data.to_date;
-                this.form.no_days         =   data.no_days;
-                this.form.leave_type_id=data.leave_type_id;
-                this.form.reason  =   data.reason;
-                this.form.appName=data.applicant_details.name;
-                this.form.contact_number=data.applicant_details.contact_no;
-                this.form.email=data.applicant_details.email;
-                this.form.gender=data.applicant_details.sex_id;
+                this.form.date_of_application           =   data.date_of_application;
+                this.form.application_no                =   data.application_no;
+                this.form.from_date                     =   data.from_date;
+                this.form.to_date                       =   data.to_date;
+                this.form.no_days                       =   data.no_days;
+                this.form.leave_type_id                 =   data.leave_type_id;
+                this.form.reason                        =   data.reason;
+                this.form.staff_id                      =   data.applicant_details.staff_id;
+                 this.form.appName                      =   data.applicant_details.name;
+                this.form.contact_number                =   data.applicant_details.contact_no;
+                this.form.email                         =   data.applicant_details.email;
+                this.form.gender                        =   data.applicant_details.sex_id;
                 if(data.app_seq_no!=10 && data.app_seq_no!=0){
                     $('#verifyId').show();
                 }
                 if(data.app_seq_no==10 ){
                     $('#approveId').show();
                 }
-                this.form.status_id=data.app_seq_no;
-                this.form.position_title=data.applicant_details.position_title_id;
+                this.form.status_id                     =   data.app_seq_no;
+                this.form.position_title                =   data.applicant_details.position_title_id;
             })
             .catch((error) =>{
                 console.log("Error: "+error);

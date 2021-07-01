@@ -268,8 +268,32 @@ class StaffServicesController extends Controller{
         return $this->successResponse($response_data);
     }
 
-    public function getNextNotificationDetails($user_id="",$role_ids="",$application_number=""){
-        //update notification detials
+    public function getAppVeriLeaveConfigDetails($leave_type_id="",$app_role_id="",$role_id=""){
+        $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$leave_type_id)->where('submitter_role_id',$app_role_id)
+        ->select('id','leave_type_id')->first();
+        if($response_data!=null && $response_data!=""){
+            //done for single role onle
+            if(strpos( $role_id,',')){
+                $role_ids=explode(',',$role_id);
+                $currentLeaveConfigDetails=LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->wherein('role_id',$role_ids)
+                ->select('sequence')->first();
+            }
+            else{
+                $currentLeaveConfigDetails=LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->where('role_id',$role_id)
+                ->select('sequence')->first();
+            }
+
+            $nxtLeaveConfigDetails= LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->where('sequence',$currentLeaveConfigDetails->sequence+1)
+            ->select('id','sequence','authority_type_id','role_id')->first();
+            if($response_data!=null && $response_data!=""){
+                return $nxtLeaveConfigDetails;
+            }else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
     }
     public function getLeaveConfigDetails($role_ids=""){
         $result_data="";
