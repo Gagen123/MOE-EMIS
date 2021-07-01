@@ -51,6 +51,59 @@ this asdf<template>
                         <has-error :form="form" field="reason"></has-error>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="form-group row">
+                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-8">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                        <template>
+                                            <td>{{attach.user_defined_name}} </td>
+                                            <td>  {{attach.original_name}}</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                <span>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                </span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-footer text-right">
                     <button type="button" id="updatebtn" style="display:none" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Update</button>
                 </div>
@@ -66,6 +119,7 @@ export default {
             staffList:[],
             total_leave_apply:'',
             leave_balance:'',
+            applicationdetailsatt:'',
             form: new form({
                 staff_id:'',
                 leave_type_id:'',
@@ -76,11 +130,79 @@ export default {
                 no_days:'',
                 reason:'',
                 status:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
                 action_type:'edit'
             })
         }
     },
     methods: {
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
         loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
             axios.get(uri)
             .then(response =>{
@@ -186,10 +308,31 @@ export default {
                     confirmButtonText: 'Yes!',
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('/staff/staffServices/editLeaveApplication',this.form)
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('leave_type_id', this.form.leave_type_id);
+                        formData.append('staff_id', this.form.staff_id);
+                        formData.append('year', this.form.year);
+                        formData.append('date_of_application', this.form.date_of_application);
+                        formData.append('from_date', this.form.from_date);
+                        formData.append('to_date', this.form.to_date);
+                        formData.append('no_days', this.form.no_days);
+                        formData.append('reason', this.form.reason);
+                        formData.append('action_type', this.form.action_type);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        axios.post('/staff/staffServices/submitLeaveApplication', formData, config)
+                        // this.form.post('/staff/staffServices/editLeaveApplication',this.form)
                         .then((response) => {
-                            if(response.data.data!=undefined){
-                                let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            if(response.data!=undefined){
+                                let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
@@ -206,7 +349,6 @@ export default {
                                     });
                                 }
                             }
-                            //
                         })
                         .catch((err) =>{
                             console.log("Error: "+err);
@@ -221,9 +363,6 @@ export default {
         applyselect2(){
             if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
                 $('#leave_type_id').addClass('select2-hidden-accessible');
-            }
-            if(!$('#role_id').attr('class').includes('select2-hidden-accessible')){
-                $('#role_id').addClass('select2-hidden-accessible');
             }
         },
     },
@@ -240,6 +379,7 @@ export default {
         this.form.no_days=this.$route.params.data.no_days;
         this.form.reason=this.$route.params.data.reason;
         this.form.status=this.$route.params.data.status;
+        this.applicationdetailsatt=this.$route.params.data.attachment_details;
         if(this.$route.params.data.status!="Approved" && this.$route.params.data.status!="Rejected"){
             $('#updatebtn').show();
         }

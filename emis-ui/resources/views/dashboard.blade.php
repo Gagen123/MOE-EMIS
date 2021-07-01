@@ -22,13 +22,13 @@
         <div class="content-wrapper">
             <section class="content">
               <router-view></router-view>
-              
+
             </section>
         </div>
         @include('common.footer')
     </div>
-    
-    <script src="js/app.js"></script>  
+
+    <script src="js/app.js"></script>
 </body>
 <script>
     $('#mainmenu >li >a').addClass('border-bot');
@@ -59,6 +59,26 @@
             window.location="{{route('logout') }}";
           }
       });
+    }
+    getNotification();
+    let count=10;
+    setInterval(function(){
+        getNotification();
+    }, 50000);
+    function getNotification(){
+        axios.get('common/getNotification')
+        .then(response => {
+            let data = response.data;
+            if(data!=undefined){
+                $('#n_details').html('');
+                $('#notificationcount').html(data.length);
+                data.forEach(item =>{
+                    $('#n_details').append(
+                        '<a href="#/'+item.call_back_link+'" class="nav-link "><b>'+ item.notification_for +'</b> ('+ item.notification_message+')</a>'
+                    );
+                });
+            }
+        });
     }
     </script>
 </html>

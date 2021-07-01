@@ -217,8 +217,8 @@ class StaffLeadershipSerivcesController extends Controller{
             $act_det = LeadershipApplication::where ('id', $request->id)->firstOrFail();
             $act_det->fill($data);
             $response_data=$act_det->save();
-            if(!$request->attachment_details==null){
-                DocumentDetails::where('parent_id',$request->id)->delete();
+            if($request->attachment_details!=null){
+                // DocumentDetails::where('parent_id',$request->id)->delete();
                 foreach($request->attachment_details as $att){
                     $doc_data =[
                         'parent_id'                        =>  $request->id,
@@ -227,7 +227,6 @@ class StaffLeadershipSerivcesController extends Controller{
                         'original_name'                    =>  $att['original_name'],
                         'user_defined_name'                =>  $att['user_defined_name'],
                     ];
-                    dd($doc_data);
                     DocumentDetails::create($doc_data);
                 }
             }

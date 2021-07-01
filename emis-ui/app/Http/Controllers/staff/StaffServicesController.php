@@ -1,4 +1,3 @@
-
 <?php
 
 namespace App\Http\Controllers\staff;
@@ -12,7 +11,7 @@ class StaffServicesController extends Controller{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
-    
+
     public $database_name="staff_db";
     public $leave_table_name="staff_leave_application";
     public $service_name="Leave";
@@ -49,23 +48,23 @@ class StaffServicesController extends Controller{
             'remarks'                    =>  $request->remarks,
             'coursetitle'                =>  $request->coursetitle,
             'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId() 
+            'user_id'                    =>  $this->userId()
         ];
         // dd($staff_data);
         $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAward', $staff_data);
         return $response_data;
     }
-    
+
     public function loadStaffAward(){
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffAward/'.$this->userId());
         return $response_data;
     }
-    
+
     public function deleteStaffServices($type="",$id=""){
         $response_data= $this->apiService->listData('emis/staff/staffServices/deleteStaffServices/'.$type.'/'.$id);
         return $response_data;
     }
-    
+
     public function saveStaffResponsibility(Request $request){
         $rules = [
             'staff'             =>  'required',
@@ -82,18 +81,18 @@ class StaffServicesController extends Controller{
             'responsibility'             =>  $request->responsibility,
             'remarks'                    =>  $request->remarks,
             'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId() 
+            'user_id'                    =>  $this->userId()
         ];
         // dd($staff_data);
         $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffResponsibility', $staff_data);
         return $response_data;
     }
-    
+
     public function loadStaffResponsibility(){
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffResponsibility/'.$this->userId());
         return $response_data;
     }
-    
+
     public function saveStaffDisaplinary(Request $request){
         $rules = [
             'staff'                 =>  'required',
@@ -120,18 +119,18 @@ class StaffServicesController extends Controller{
             'offence_description'        =>  $request->offence_description,
             'description_on_action'      =>  $request->description_on_action,
             'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId() 
+            'user_id'                    =>  $this->userId()
         ];
         // dd($staff_data);
         $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffDisaplinary', $staff_data);
         return $response_data;
     }
-    
+
     public function loadStaffdisaplinary(){
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffdisaplinary/'.$this->userId());
         return $response_data;
     }
-    
+
     public function saveStaffAttendance(Request $request){
         $staff_data =[
             'id'                        =>  $request->id,
@@ -142,12 +141,12 @@ class StaffServicesController extends Controller{
             'org'                       =>  $this->getWrkingAgencyId(),
             'dzongkhag'                 =>  $this->getUserDzoId(),
             'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId() 
+            'user_id'                    =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAttendance', $staff_data);
         return $response_data;
     }
-    
+
     public function loadStaffattendance($dzo_id=""){
         // $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         $param=$dzo_id;
@@ -185,9 +184,34 @@ class StaffServicesController extends Controller{
             'no_days.required'         => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
+
         $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
-        
+
         if($appRole_id!=[]){
+            $files = $request->attachments;
+            $filenames = $request->attachmentname;
+            $attachment_details=[];
+            $file_store_path=config('services.constant.file_stored_base_path').'Leave_services';
+            if($files!=null && $files!=""){
+                if(sizeof($files)>0 && !is_dir($file_store_path)){
+                    mkdir($file_store_path,0777,TRUE);
+                }
+                if(sizeof($files)>0){
+                    foreach($files as $index => $file){
+                        $file_name = time().'_' .$file->getClientOriginalName();
+                        move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                        array_push($attachment_details,
+                            array(
+                                'path'                   =>  $file_store_path,
+                                'original_name'          =>  $file_name,
+                                'user_defined_name'      =>  $filenames[$index],
+                                'saveapplication_number' =>  $request->applicationNo,
+                            )
+                        );
+                    }
+                }
+            }
+            // dd($appRole_id[0]->SysRoleId);
             $staff_data =[
                 'id'                        =>  $request->id,
                 'leave_type_id'             =>  $request->leave_type_id,
@@ -200,18 +224,20 @@ class StaffServicesController extends Controller{
                 'reason'                    =>  $request->reason,
                 'status'                    =>  'Pending For Approval',
                 'action_type'               =>  $request->action_type,
+                'attachment_details'        =>  $attachment_details,
                 'org'                       =>  $this->getWrkingAgencyId(),
                 'dzongkhag'                 =>  $this->getUserDzoId(),
-                'user_id'                   =>  $this->userId() 
-            ]; 
+                'user_id'                   =>  $this->userId()
+            ];
             $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
             // dd($response_data);
+            $appNo=json_decode($response_data)->data->application_number;
             $workflow_data=[
                 'db_name'               =>  $this->database_name,
                 'table_name'            =>  $this->leave_table_name,
                 'service_name'          =>  $this->service_name,
-                'application_number'    =>  json_decode($response_data)->data->application_number,
-                'screen_id'             =>  json_decode($response_data)->data->application_number,
+                'application_number'    =>  $appNo,
+                'screen_id'             =>  $appNo,
                 'status_id'             =>  1,
                 'app_role_id'           =>  $appRole_id[0]->SysRoleId,
                 'record_type_id'        =>  $request->leave_type_id,
@@ -222,13 +248,28 @@ class StaffServicesController extends Controller{
                 'action_by'             =>  $this->userId(),
             ];
             $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            // $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveSubmittedRole/'.));
+            $notification_data=[
+                'notification_for'              =>  'Leave Application',
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $request->submitted_to,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
             return $work_response_data;
         }
         else{
             return 'No role mapping found for this selected user. Please contact with system administrator';
         }
     }
-    
+
     public function editLeaveApplication(Request $request){
         $rules = [
             'staff_id'                  =>  'required',
@@ -253,8 +294,8 @@ class StaffServicesController extends Controller{
             'no_days'                   =>  $request->no_days,
             'reason'                    =>  $request->reason,
             'action_type'               =>  $request->action_type,
-            'user_id'                   =>  $this->userId() 
-        ]; 
+            'user_id'                   =>  $this->userId()
+        ];
         $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
         return $response_data;
     }
@@ -264,7 +305,7 @@ class StaffServicesController extends Controller{
             'type'              =>  $type,
             'user_id'           =>  $this->userId(),
         ];
-        $updated_data=json_decode($this->apiService->createData('emis/common/updateTaskDetails',$update_data)); 
+        $updated_data=json_decode($this->apiService->createData('emis/common/updateTaskDetails',$update_data));
         $leave_details=json_decode($this->apiService->getListData('emis/staff/staffServices/loadLeaveDetails/'.$appNo));
         $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
         if($response_data!=null){
@@ -285,7 +326,7 @@ class StaffServicesController extends Controller{
         }
         return json_encode($leave_details);
     }
-    
+
     public function verifyApproveRejectLeaveApplication(Request $request){
         $work_status=$request->status_id+1;
         $app_status='Pending for approval';
@@ -314,11 +355,11 @@ class StaffServicesController extends Controller{
             'status'                       =>   $app_status,
             'application_number'           =>   $request->application_number,
             'remarks'                      =>   $request->remarks,
-            'user_id'                      =>   $this->userId() 
+            'user_id'                      =>   $this->userId()
         ];
         // dd($request->status_id,$workflow_data,$update_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        
+
         $response_data= $this->apiService->createData('emis/staff/staffServices/verifyApproveRejectLeaveApplication', $update_data);
         return $response_data;
     }
@@ -331,11 +372,11 @@ class StaffServicesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffServices/getOnGoingLeave/'.$staff_id);
         return $response_data;
     }
-    
+
     public function getallLeaves(){
         $response_data= $this->apiService->listData('emis/staff/staffServices/getallLeaves/'.$this->staffId().'__'.$this->userId());
         return $response_data;
     }
-    
-    
+
+
 }

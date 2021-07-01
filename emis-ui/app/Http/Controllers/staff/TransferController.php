@@ -135,7 +135,7 @@ class TransferController extends Controller{
         // $work_status=$workflowdet['status'];
         $dat=$this->apiService->getListData('emis/common/getTaskDetials/'.$appNo);
 
-        // $workflowstatus=$this->getAllCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
+        // $workflowstatus=$this->getAllCurreleave_detailsntWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $loadTransferDetails = json_decode($this->apiService->listData('emis/staff/transfer/loadtrainsferDetails/'.$appNo));
         // $loadTransferDetails->app_stage=$workflowstatus;
         // if(strpos(rtrim($workflowstatus,','),',')!==false){

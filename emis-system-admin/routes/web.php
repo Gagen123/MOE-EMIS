@@ -39,6 +39,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'workflow'], function () use ($router){
         $router->post('/insertWorkflow', ['uses' => 'WorkflowController@insertWorkflow']);
         $router->post('/updateTaskDetails', ['uses' => 'WorkflowController@updateTaskDetails']);
+        $router->post('/insertNotification', ['uses' => 'WorkflowController@insertNotification']);
+
     });
     $router->group(['prefix' => 'common'], function () use ($router){
         $router->get('/getApplicationDetials/{applicationId}', ['uses' => 'CommonController@getApplicationDetials']);
@@ -48,7 +50,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getDzoNameById/{id}', ['uses' => 'CommonController@getDzoNameById']);
         $router->get('/getGewogNameById/{id}', ['uses' => 'CommonController@getGewogNameById']);
         $router->get('/checkPendingApplication/{type}/{user_id}', ['uses' => 'CommonController@checkPendingApplication']);
-
+        $router->post('/getNotification/{role_ids}/{user_id}', ['uses' => 'CommonController@getNotification']);
     });
 
     $router->group(['prefix' => 'questionAnswerController'], function () use ($router){

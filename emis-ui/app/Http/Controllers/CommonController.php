@@ -67,7 +67,6 @@ class CommonController extends Controller{
         $param="";
         if($type=="commonLeaveOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
-
             // dd($response_data);
             // if($response_data!=null && $response_data!=[]){
             //     foreach($response_data as $work){
@@ -75,6 +74,14 @@ class CommonController extends Controller{
             //     }
             // }
             // $response_data= $param;
+        }
+        else if($type=="commontaskForleadershipSelection"){
+            if(strpos($this->getRoleIds('roleIds'),config('services.constant.hrd_role_id'))!==false){
+                $response_data="Valid";//pull leadership application only for HRD role
+            }
+            else{
+                $response_data="Invalid";
+            }
         }
         else if($type=="commonTransferOthers"){
             $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
@@ -93,6 +100,11 @@ class CommonController extends Controller{
         $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         return $response_data;
 
+    }
+
+    public function getNotification(){
+        $response_data=$this->apiService->getListData('emis/common/getNotification',$this->getRoleIds('roleIds').'/'.$this->userId());
+        return $response_data;
     }
     public function getTaskcount(){
         $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));

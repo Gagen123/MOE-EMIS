@@ -88,7 +88,7 @@ class HomeController extends Controller{
                 // $module = collect($module)->sortBy('Sequence')->reverse()->toArray();
                 $module = collect($module)->sortBy('Sequence')->toArray();
                 // $sub_modules = collect($sub_modules)->sortBy('Sequence')->toArray();
-                
+
                 // dd($role_workflow_submitter);
                 // if($role_workflow_submitter!=null){
                 //     foreach(json_decode($role_workflow_submitter) as $i=> $work){
@@ -159,7 +159,7 @@ class HomeController extends Controller{
                 //dd(json_decode($role_workflow));
                 Session::put('role_priv', $role_riv);
                 // Session::put('role_workflow', $role_workflow);
-                
+
                 if($user->org_organization_id!=null){
                     $org_profile= json_decode($this->apiService->listData('emis/common_services/getOrgProfile/'.$user->org_organization_id));
                     // dd( $org_profile);
@@ -236,7 +236,7 @@ class HomeController extends Controller{
         }
         return $screens;
     }
-    
+
     public function get_privileges($id=""){
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
