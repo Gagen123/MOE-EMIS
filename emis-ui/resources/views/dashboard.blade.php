@@ -74,7 +74,7 @@
                 $('#notificationcount').html(data.length);
                 data.forEach(item =>{
                     $('#n_details').append(
-                        '<a href="#/'+item.call_back_link+'" class="nav-link "><b>'+ item.notification_for +'</b> ('+ item.notification_message+')</a>'
+                        '<a href="#/'+item.call_back_link+'" class="nav-link "><b>'+ item.notification_for +'</b> ('+ item.notification_appNo+')</a>'
                     );
                 });
             }

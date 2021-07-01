@@ -140,7 +140,7 @@ class StaffServicesController extends Controller{
             'staffList'                 =>  $request->staffList,
             'org'                       =>  $this->getWrkingAgencyId(),
             'dzongkhag'                 =>  $this->getUserDzoId(),
-            'action_type'                =>  $request->action_type,
+            'action_type'               =>  $request->action_type,
             'user_id'                    =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAttendance', $staff_data);
@@ -232,6 +232,7 @@ class StaffServicesController extends Controller{
             $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
             // dd($response_data);
             $appNo=json_decode($response_data)->data->application_number;
+            // dd($this->getRoleIds('roleIds'), $appRole_id[0]->SysRoleId,$request->staff_id);
             $workflow_data=[
                 'db_name'               =>  $this->database_name,
                 'table_name'            =>  $this->leave_table_name,
@@ -247,6 +248,7 @@ class StaffServicesController extends Controller{
                 'working_agency_id'     =>  $this->getWrkingAgencyId(),
                 'action_by'             =>  $this->userId(),
             ];
+            // dd($workflow_data);
             $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             // $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveSubmittedRole/'.));
             $notification_data=[
@@ -358,7 +360,9 @@ class StaffServicesController extends Controller{
             'user_id'                      =>   $this->userId()
         ];
         // dd($request->status_id,$workflow_data,$update_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $notification_detials=$this->apiService->listData('emis/staff/staffServices/getNextNotificationDetails/'.$this->userId().'/'.$this->getRoleIds('roleIds').'/'.$request->application_number);
 
         $response_data= $this->apiService->createData('emis/staff/staffServices/verifyApproveRejectLeaveApplication', $update_data);
         return $response_data;

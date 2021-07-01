@@ -96,23 +96,23 @@ trait AuthUser
         return $w_status;
     }
 
-    public function getcurrentworkflowStatusForUpdate($param=""){
-        $works=Session::get('role_workflow');
-        $w_status=0;
-        $screen_id=0;
-        foreach(json_decode($works) as $i=> $work){
-            if (strpos(strtolower($work->process_name), $param) !== false) {
-                if($work->Sequence!=1){
-                    $w_status= $work->Sequence;
-                    $screen_id=$work->screen_id;
-                }
-            }
-        }
-        return [
-           'status' =>$w_status,
-           'screen_id' =>$screen_id,
-        ];
-    }
+    // public function getcurrentworkflowStatusForUpdate($param=""){
+    //     $works=Session::get('role_workflow');
+    //     $w_status=0;
+    //     $screen_id=0;
+    //     foreach(json_decode($works) as $i=> $work){
+    //         if (strpos(strtolower($work->process_name), $param) !== false) {
+    //             if($work->Sequence!=1){
+    //                 $w_status= $work->Sequence;
+    //                 $screen_id=$work->screen_id;
+    //             }
+    //         }
+    //     }
+    //     return [
+    //        'status' =>$w_status,
+    //        'screen_id' =>$screen_id,
+    //     ];
+    // }
 
     
     

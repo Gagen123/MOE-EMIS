@@ -91,7 +91,7 @@ this asdf<template>
                                         </td>
                                         <td></td>
                                     </tr>
-                                    <tr>
+                                    <tr v-if="isset">
                                         <td colspan="5">
                                             <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                             @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
@@ -120,6 +120,7 @@ export default {
             total_leave_apply:'',
             leave_balance:'',
             applicationdetailsatt:'',
+            isset:false,
             form: new form({
                 staff_id:'',
                 leave_type_id:'',
@@ -177,7 +178,7 @@ export default {
                 if (result.isConfirmed) {
                     let file_path=file.path+'/'+file.original_name;
                     file_path=file_path.replaceAll('/', 'SSS');
-                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
                     axios.get(uri)
                     .then(response => {
                         let data = response;
@@ -382,6 +383,7 @@ export default {
         this.applicationdetailsatt=this.$route.params.data.attachment_details;
         if(this.$route.params.data.status!="Approved" && this.$route.params.data.status!="Rejected"){
             $('#updatebtn').show();
+            this.isset=true;
         }
         this.getLeave_details();
         this.getApprovedLeaveCount();

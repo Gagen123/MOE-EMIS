@@ -131,8 +131,8 @@ class TransferController extends Controller{
             'user_id'           =>  $this->userId(),
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data);
-        // $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
-        // $work_status=$workflowdet['status'];
+        $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
+        $work_status=$workflowdet['status'];
         $dat=$this->apiService->getListData('emis/common/getTaskDetials/'.$appNo);
 
         // $workflowstatus=$this->getAllCurreleave_detailsntWorkflowStatus(json_decode($updated_data)->data->screen_id);
@@ -170,8 +170,12 @@ class TransferController extends Controller{
             $work_status=0;
             $transfer_status="Rejected";
         }
-        if($request->actiontype=="approve"){
+        else if($request->actiontype=="approve"){
             $transfer_status="Approved";
+            $work_status=10;
+        }
+        else{
+
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
