@@ -240,8 +240,8 @@ export default {
                         axios.post('/staff/staffServices/submitLeaveApplication', formData, config)
                         // this.form.post('/staff/staffServices/submitLeaveApplication',this.form)
                         .then((response) => {
-                            if(response.data.data!=undefined){
-                                let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            if(response.data!=undefined){
+                                let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
@@ -250,7 +250,7 @@ export default {
                                 )
                             }
                             else{
-                                if(response.data.includes('No role mapping found for this selected use')){
+                                if(response.includes('No role mapping found for this selected use')){
                                     Swal.fire({
                                         title: 'No Role Configuration ! ',
                                         text: "Sorry! "+response.data,

@@ -26,6 +26,12 @@ class WorkflowController extends Controller{
             'action_by'             => 'required',
         ];
         $this->validate($request, $rules);
+        if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
+            $exist_workflow=Workflow::where('application_number',$request->application_number)->get();
+            if($exist_workflow!=null && $exist_workflow!="" && sizeof($exist_workflow)>0){
+                Workflow::where('application_number',$request->application_number)->delete();
+            }
+        }
         $data=[
             'database_name'         =>$request->db_name,
             'table_name'            =>$request->table_name,
@@ -44,10 +50,14 @@ class WorkflowController extends Controller{
             if(strpos($request->status_id,'__submitterRejects')!==false){
                 $status=explode('__',$status)[0];
             }
+            $exist_task=TaskDetails::where('application_number',$request->application_number)->get();
+            if($exist_task!=null && $exist_task!="" && sizeof($exist_task)>0){
+                TaskDetails::where('application_number',$request->application_number)->delete();
+            }
             $task_data=[
                 'table_name'            =>$request->table_name,
                 'service_name'          =>$request->service_name,
-                // 'name'                  =>$request->name,
+                'name'                  =>$request->name,
                 'screen_id'             =>$request->screen_id,
                 'application_number'    =>$request->application_number,
                 'status_id'             =>$status,
@@ -59,8 +69,8 @@ class WorkflowController extends Controller{
                 'applied_on'            =>date('Y-m-d h:i:s'),
                 'last_action_by'        =>$request->action_by,
                 'last_action_date'      =>date('Y-m-d h:i:s'),
-                // 'app_role_id'           => $request->app_role_id,
-                // 'record_type_id'        => $request->record_type_id,
+                'app_role_id'           => $request->app_role_id,
+                'record_type_id'        => $request->record_type_id,
             ];
             // dd($task_data);
             try{

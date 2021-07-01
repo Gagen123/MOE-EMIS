@@ -102,55 +102,7 @@
                 }
             });
         },
-        loadcommontaskForleadershipSelection(){
-            axios.get('common/getTaskList/commontaskForleadershipSelection')
-            .then(response => {
-                let data = response.data;
-                if(data!=undefined){
-                    // if(this.commonTaskList==""){
-                    //     this.commonTaskList=data;
-                    // }
-                    for(let i =0; i<data.length; i++){
-                        this.commonTaskList.push(data[i]);
-                    }
-                }
-            });
-        },
-        loadcommontaskFoLeave(){
-            axios.get('common/getTaskList/commonLeaveOthers')
-            .then(response => {
-                let data = response.data;
-                if(data!=undefined){
-                    for(let i =0; i<data.length; i++){
-                        alert(data[i]);
-                        this.commonTaskList.push(data[i]);
-                    }
-                }
-            });
-        },
-        loadcommontaskFoTransfer(){
-            axios.get('common/getTaskList/commonTransferOthers')
-            .then(response => {
-                alert(JSON.stringify(response));
-                let data = response.data;
-                if(data!=undefined){
-                    for(let i =0; i<data.length; i++){
-                        this.commonTaskList.push(data[i]);
-                    }
-                }
-            });
-        },
-         loadcommontaskFoTransfer(){
-            axios.get('common/getTaskList/commonTransferOthers')
-            .then(response => {
-                let data = response.data;
-                if(data!=undefined){
-                    for(let i =0; i<data.length; i++){
-                        this.commonTaskList.push(data[i]);
-                    }
-                }
-            });
-        },
+
         loadowntask(){
             axios.get('common/getTaskList/own')
             .then(response => {
@@ -227,10 +179,7 @@
         this.dt =  $("#common-task-table").DataTable();
         this.dt1 =  $("#own-task-table").DataTable()
         this.loadcommontask();
-        this.loadcommontaskFoLeave();
-        this.loadcommontaskForleadershipSelection();
         this.loadowntask();
-        this.loadcommontaskFoTransfer();
     },
     watch:{
         commonTaskList() {

@@ -267,26 +267,31 @@ class StaffServicesController extends Controller{
         }
         return $this->successResponse($response_data);
     }
-    // public function getLeaveConfigDetails($role_ids=""){
-    //     $result_data="";
-    //     if(strpos( $role_ids,',')){
-    //         $role_ids=explode(',',$role_ids);
-    //         $roles="";
-    //         foreach($role_ids as $role){
-    //             $roles.="'$role',";
-    //         }
-    //         $roles=rtrim($roles,',');
-    //         $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l
-    //         LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id
-    //         WHERE d.role_id IN(".$roles.")";
-    //     }
-    //     else{
-    //         $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l
-    //         LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id
-    //         WHERE d.role_id ='".$role_ids."'";
-    //     }
-    //     return DB::select($result_data);
-    // }
+
+    public function getNextNotificationDetails($user_id="",$role_ids="",$application_number=""){
+        //update notification detials
+    }
+    public function getLeaveConfigDetails($role_ids=""){
+        $result_data="";
+        if(strpos( $role_ids,',')){
+            $role_ids=explode(',',$role_ids);
+            $roles="";
+            foreach($role_ids as $role){
+                $roles.="'$role',";
+            }
+            $roles=rtrim($roles,',');
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l
+            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id
+            WHERE d.role_id IN(".$roles.")";
+        }
+        else{
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l
+            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id
+            WHERE d.role_id ='".$role_ids."'";
+        }
+        return DB::select($result_data);
+    }
+
     public function getTransferConfigDetails($role_ids=""){
         $result_data="";
         if(strpos( $role_ids,',')){
