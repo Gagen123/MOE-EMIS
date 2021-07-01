@@ -90,6 +90,7 @@ class StaffLeadershipSerivcesController extends Controller{
                 }
             }
         }
+        // dd($attachment_details);
         $rules = [
             'post_id'    =>  'required',
             'staff_id'    =>  'required',
@@ -111,13 +112,14 @@ class StaffLeadershipSerivcesController extends Controller{
             'user_id'                       =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/submitApplication', $app_data);
+        $appNo=json_decode($response_data)->data->application_number;
         if($request->id==""){
             $workflow_data=[
                 'db_name'           =>  'staff_database',
                 'table_name'        =>  'staff_leadership_application',
                 'service_name'      =>  'Leadership Selection',
-                'application_number'=>  json_decode($response_data)->data->application_number,
-                'screen_id'         =>  json_decode($response_data)->data->application_number,
+                'application_number'=>  $appNo,
+                'screen_id'         =>  $appNo,
                 'status_id'         =>  1,
                 'remarks'           =>  $request->remarks,
                 'user_dzo_id'       =>  $this->getUserDzoId(),
@@ -126,6 +128,21 @@ class StaffLeadershipSerivcesController extends Controller{
                 'action_by'         =>  $this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            //Notification data
+            $notification_data=[
+                'notification_for'              =>  'Leadership Selection',
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  config('services.constant.notification_leadership_selection_applicaiton'),
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
     }

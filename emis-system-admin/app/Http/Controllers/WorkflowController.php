@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
 use App\Models\TaskDetails;
+use  App\Models\Notification;
+use  App\Models\NotificationTo;
 
 class WorkflowController extends Controller{
     use ApiResponser;
@@ -67,8 +69,8 @@ class WorkflowController extends Controller{
                 dd($ex);
 
             }
-            
-        } 
+
+        }
         else{
             $task_data=[
                 'status_id'             =>$request->status_id,
@@ -85,9 +87,9 @@ class WorkflowController extends Controller{
             else{
                 TaskDetails::where('application_number', $request->application_number)->update($task_data);
             }
-            
+
             $workflowdetails = TaskDetails::where('application_number', $request->application_number)->first();;
-        }   
+        }
         return $this->successResponse($workflowdetails, Response::HTTP_CREATED);
     }
 
@@ -101,5 +103,44 @@ class WorkflowController extends Controller{
         }
         $response_data= TaskDetails::where('application_number', $request->applicationNo)->first();
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    public function insertNotification(Request $request) {
+        $notification_data=[
+            'notification_for'              =>  $request->notification_for,
+            'notification_appNo'            =>  $request->notification_appNo,
+            'notification_message'          =>  $request->notification_message,
+            'notification_type'             =>  $request->notification_type,
+            'notification_access_type'      =>  $request->notification_access_type,
+            'call_back_link'                =>  $request->call_back_link,
+            'access_level'                  =>  $request->access_level,
+            'created_by'                    =>$request->action_by,
+            'created_at'                    =>date('Y-m-d h:i:s'),
+        ];
+        $notificationDetails = Notification::create($notification_data);
+        if(strpos($request->user_role_id,',')!==false){
+            $user_roles=explode(',', $request->user_role_id);
+            foreach($user_roles as $usr){
+                $notification_to_data=[
+                    'notification_id'               =>  $notificationDetails->id,
+                    'user_role_id'                  =>  $usr,
+                    'dzo_id'                        =>  $request->dzo_id,
+                    'access_level'                  =>  $request->access_level,
+                    'working_agency_id'             =>  $request->working_agency_id,
+                ];
+                NotificationTo::create($notification_to_data);
+            }
+        }
+        else{
+            $notification_to_data=[
+                'notification_id'               =>  $notificationDetails->id,
+                'user_role_id'                  =>  $request->user_role_id,
+                'dzo_id'                        =>  $request->dzo_id,
+                'access_level'                  =>  $request->access_level,
+                'working_agency_id'             =>  $request->working_agency_id,
+            ];
+            NotificationTo::create($notification_to_data);
+        }
+
+        return $this->successResponse($notificationDetails, Response::HTTP_CREATED);
     }
 }

@@ -76,7 +76,7 @@
                                     </tr>
                                     <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                         <td>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index)">
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                             <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                         </td>
                                         <td>
@@ -258,7 +258,6 @@ export default {
                 this.post_detail=data;
                 this.form.id=data.id;
                 this.form.remarks=data.remarks;
-                alert(data.post_id);
                 this.form.post_id=data.post_id;
                 this.require_count=data.attachments.length;
                 this.count=data.attachments.length;
@@ -326,11 +325,11 @@ export default {
                     .then((response) => {
                         if(response.data!=""){
                             if(response!="" && response!="No Screen"){
-                                let res='Your application is submitted and system generated application number is: '+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let res='Your application aganst system generated application number: <b>'+response.data.data.application_number+'.</b><br> has been updated and send for further action. <br><b>Thank You !</b>';
                                 this.$router.push({name:'application_acknowledgement',params: {data:res }});
                                 Toast.fire({
                                     icon: 'success',
-                                    title: 'Application is submitted successfully'
+                                    title: 'Application is udpated successfully'
                                 });
                             }
                         }

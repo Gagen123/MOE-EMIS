@@ -68,7 +68,7 @@
                                 </td>
                                 <td>
                                     <a href="#" data-toggle="tooltip" title="Click here to open application" @click="loadApplicationDetals(mytask,'open')"> {{ mytask.application_number }}</a>
-                                </td> 
+                                </td>
                                 <td>{{ mytask.service_name }}</td>
                                 <td>{{ mytask.name }}</td>
                                 <td>{{ mytask.applicant_name }} ({{ mytask.applicant_role }})</td>
@@ -89,7 +89,7 @@
         return{
             commonTaskList:[],
             myTaskList:[],
-            
+
         }
     },
     methods: {
@@ -102,18 +102,33 @@
                 }
             });
         },
-        loadcommontaskFoLeave(){
-            axios.get('common/getTaskList/commonLeaveOthers')
+        loadcommontaskForleadershipSelection(){
+            axios.get('common/getTaskList/commontaskForleadershipSelection')
             .then(response => {
                 let data = response.data;
                 if(data!=undefined){
+                    // if(this.commonTaskList==""){
+                    //     this.commonTaskList=data;
+                    // }
                     for(let i =0; i<data.length; i++){
                         this.commonTaskList.push(data[i]);
                     }
                 }
             });
         },
-         loadcommontaskFoTransfer(){
+        loadcommontaskFoLeave(){
+            axios.get('common/getTaskList/commonLeaveOthers')
+            .then(response => {
+                let data = response.data;
+                if(data!=undefined){
+                    for(let i =0; i<data.length; i++){
+                        alert(data[i]);
+                        this.commonTaskList.push(data[i]);
+                    }
+                }
+            });
+        },
+        loadcommontaskFoTransfer(){
             axios.get('common/getTaskList/commonTransferOthers')
             .then(response => {
                 alert(JSON.stringify(response));
@@ -157,15 +172,15 @@
                     }).then((result) => {
                     if (result.isConfirmed) {
                         axios.get('common/releaseApplication/'+data.application_number)
-                        .then((response) =>{ 
-                            Toast.fire({  
+                        .then((response) =>{
+                            Toast.fire({
                                 icon: 'success',
                                 title: 'Application has been release to group task'
-                            }); 
+                            });
                             this.loadcommontask();
                             this.loadowntask();
                         })
-                        .catch((error) =>{ 
+                        .catch((error) =>{
                             console.log("Errors:"+error)
                         });
                     }
@@ -191,20 +206,20 @@
                 if(data.service_name.includes('Transfer')){
                     this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Leave')){ 
+                if(data.service_name.includes('Leave')){
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Reopen')){ 
+                if(data.service_name.includes('Reopen')){
                     this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
                 }
-                 if(data.application_number.includes('Recu')){ 
+                 if(data.application_number.includes('Recu')){
                     this.$router.push({name:"view_principal_recuritment",params:{data:data,type:actiontype}});
                 }
-                if(data.application_number.includes('Expat')){ 
+                if(data.application_number.includes('Expat')){
                     this.$router.push({name:"open_expatriate_verification",params:{data:data,type:actiontype}});
                 }
-            }   
-             
+            }
+
         }
     },
     mounted(){
@@ -212,7 +227,8 @@
         this.dt =  $("#common-task-table").DataTable();
         this.dt1 =  $("#own-task-table").DataTable()
         this.loadcommontask();
-        this.loadcommontaskFoLeave(); 
+        this.loadcommontaskFoLeave();
+        this.loadcommontaskForleadershipSelection();
         this.loadowntask();
         this.loadcommontaskFoTransfer();
     },
