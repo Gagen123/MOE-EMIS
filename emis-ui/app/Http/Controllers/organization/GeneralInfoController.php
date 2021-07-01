@@ -296,8 +296,10 @@ class GeneralInfoController extends Controller
     }
 
     public function saveClassMapping(Request $request){
+        dd('from Ui');
+     
         $rules = [
-            'school'         =>  'required',
+            'school'           =>  'required',
             'class.*'          =>  'required',
         ];
         $customMessages = [
@@ -319,6 +321,7 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
     public function getCurrentClassStream($school_id = ""){
+       // dd('m here at UI');
         $itemList = $this->apiService->listData('emis/organization/classMapping/getCurrentClassStream/'.$school_id);
         return $itemList;
     }

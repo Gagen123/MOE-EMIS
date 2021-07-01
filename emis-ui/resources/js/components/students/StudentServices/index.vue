@@ -23,6 +23,12 @@
                         Disciplinary Record
                     </router-link>
                 </li>
+                <li class="nav-item pr-1" @click="activatelink('counselling')">
+                    <router-link to="/student_counselling_record" id="counselling" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Counselling Record
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>
