@@ -141,7 +141,7 @@ class StaffServicesController extends Controller{
             'org'                       =>  $this->getWrkingAgencyId(),
             'dzongkhag'                 =>  $this->getUserDzoId(),
             'action_type'               =>  $request->action_type,
-            'user_id'                    =>  $this->userId()
+            'user_id'                   =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAttendance', $staff_data);
         return $response_data;
@@ -332,13 +332,46 @@ class StaffServicesController extends Controller{
     public function verifyApproveRejectLeaveApplication(Request $request){
         $work_status=$request->status_id+1;
         $app_status='Pending for approval';
+        $notification_data=[
+            'notification_for'              =>  'Leave Application',
+            'notification_access_type'      =>  'all',
+            'notification_appNo'            =>  $request->application_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
+        $user_id=$appRole_id[0]->user_id;
         if($request->actiontype=="reject"){
             $work_status=0;
             $app_status="Rejected";
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Your Application for Leave has been rejected. Reason for the rejection: '.$request->remarks,
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'notificationMessage',
+                'user_role_id'                  =>  $user_id,
+            ];
         }
-        if($request->actiontype=="approve"){
+        else if($request->actiontype=="approve"){
             $app_status="Approved";
             $work_status=10;
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Your Application for Leave has been Approved ',
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'notificationMessage',
+                'user_role_id'                  =>  $user_id,
+            ];
+        }
+        else{
+            //get next role id from leave config to send notification.
+            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getAppVeriLeaveConfigDetails/'.$request->leave_type_id.'/'.$appRole_id[0]->SysRoleId.'/'.$this->getRoleIds('roleIds')));
+            $notification_data=$notification_data+[
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $response_data->role_id,
+            ];
         }
         $workflow_data=[
             'db_name'           =>  $this->database_name,
@@ -362,7 +395,8 @@ class StaffServicesController extends Controller{
         // dd($request->status_id,$workflow_data,$update_data);
 
         $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        $notification_detials=$this->apiService->listData('emis/staff/staffServices/getNextNotificationDetails/'.$this->userId().'/'.$this->getRoleIds('roleIds').'/'.$request->application_number);
+
+        $this->apiService->createData('emis/staff/staffServices/updateNextNotification'.$notification_data);
 
         $response_data= $this->apiService->createData('emis/staff/staffServices/verifyApproveRejectLeaveApplication', $update_data);
         return $response_data;
