@@ -15,7 +15,7 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.staff_id}}</td>
+                             <td>{{ StaffName[item.staff_id]}}</td>
                             <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
@@ -36,11 +36,8 @@ export default {
             transfer_list:[],
             loaddetails:[],
             staff_id:[],
+            StaffName:{},
 
-              form: new form({
-                staff_id: '',
-            })
-            
         }
         
     },
@@ -51,37 +48,34 @@ export default {
         loadtransferDetails(){
             axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
+                // alert(JSON.stringify(response.data));
                 let data = response.data
                 this.transfer_list = data;
-                if(data!=null){
-                    this.staff_id=data.staff_id;
-                    $('#staff_id').val(data.staff_id).trigger('change');
-                }
              })
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
         },
-        getStaffNameWithId(){
-            let uri ='staff/transfer/getStaffNameWithId/' +$('#staff_id').val();
+        loadstaff(){
+            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.staffList = data.data.data;
+                // alert(JSON.stringify(response.data.data[0]));
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.StaffName[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
         applyselect2(){
-            if(!$('#staff_id').attr('class').includes('select2-hidden-accessible')){
-                $('#staff_id').addClass('select2-hidden-accessible');
-            }
         },
     },
     mounted() {
         this.loadtransferDetails();
-        this.getStaffNameWithId();
+        this.loadstaff();
         this.dt =  $("#training-table").DataTable()
     },
     watch: {
