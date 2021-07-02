@@ -155,6 +155,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getApprovedLeaveCount/{staff_id}/{leave_type_id}', ['uses' => 'staff\StaffServicesController@getApprovedLeaveCount']);
             $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
             $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
+
+            $router->get('/getAppVeriLeaveConfigDetails/{leave_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\StaffServicesController@getAppVeriLeaveConfigDetails']);
+
         });
         $router->group(['prefix' => 'staffLeadershipSerivcesController'], function () use ($router) {
             $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);

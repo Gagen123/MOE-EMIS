@@ -64,41 +64,31 @@ class CommonController extends Controller{
         return $work_status;
     }
     public function getTaskList($type=""){
-        $param="";
-        if($type=="commonLeaveOthers"){
-            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
-            // dd($response_data);
-            // if($response_data!=null && $response_data!=[]){
-            //     foreach($response_data as $work){
-            //         $param.=$work->role_id.'SSS'.$work->sequence.'SSS'.$work->leave_type_id.'SSS'.$work->submitter_role_id.'OUTSEP';
-            //     }
-            // }
-            // $response_data= $param;
-        }
-        else if($type=="commontaskForleadershipSelection"){
-            if(strpos($this->getRoleIds('roleIds'),config('services.constant.hrd_role_id'))!==false){
-                $response_data="Valid";//pull leadership application only for HRD role
-            }
-            else{
-                $response_data="Invalid";
-            }
-        }
-        else if($type=="commonTransferOthers"){
-            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
-        }
-        else{
-            $response_data=$this->getApprovalWorkStatus();
-        }
+        $approval_response_data=$this->getApprovalWorkStatus();
         $data =[
             'access_level'          =>  $this->getAccessLevel(),
-            'work_status'           =>  $response_data,
             'org'                   =>  $this->getWrkingAgencyId(),
             'dzongkhag'             =>  $this->getUserDzoId(),
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        // dd($data);
-        $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
+
+        $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
+        $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
+
+        if(strpos($this->getRoleIds('roleIds'),config('services.constant.hrd_role_id'))!==false){
+            $leadership_data="Valid";//pull leadership application only for HRD role
+        }
+        else{
+            $leadership_data="Invalid";
+        }
+        $task_data=$data+[
+            'work_status'               =>  $approval_response_data,
+            'leave_config_data'         =>  $leave_config_data,
+            'tr_config_data'            =>  $tr_data,
+            'leadership_config_data'    =>  $leadership_data,
+        ];
+        $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
         // dd($response_data);
         return $response_data;
 
