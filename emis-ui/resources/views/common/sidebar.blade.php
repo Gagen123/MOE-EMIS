@@ -579,7 +579,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="studenthealth">
-                        <router-link to="/student_health" class="nav-link">
+                        <router-link to="/counselling_record" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Counseling Services

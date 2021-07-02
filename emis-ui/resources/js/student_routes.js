@@ -451,16 +451,36 @@ const routes = [
             ]
         },
         //Counselling records
-        { path: '/student_counselling_record', component: require('./components/students/counselling_records/index_counselling_records.vue').default,
-        children: [
-            { path: '/', name:'student_counselling_record', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
-            { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
-            { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
-            { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
-        ]
-    },
+       
     ]
     },
+//     { path: '/student_counselling_record', component: require('./components/students/counselling_records/index.vue').default,
+//     children: [
+//         { path: '/general_index',name:"general_index", component: require('./components/organization/general/index_list.vue').default },
+//         { path: '/', name:'student_counselling_record', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+//         { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+//         { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
+//         { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
+        
+//     ]
+// },
+
+{ path: '/counselling_record', component: require('./components/students/counselling_records/index.vue').default,
+    children:[
+        { path: '/counselling_record',name:"counselling_record", component: require('./components/students/counselling_records/index_list.vue').default },
+
+        { path: '/student_counselling_record',
+            component: require('./components/students/counselling_records/index_counselling_records.vue').default,
+            children: [
+                { path: '',name:'index_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+                { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
+                { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
+                { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+            ]
+        }
+
+    ]
+},
 
     //Student Programs and Clubs Routes
     { path: '/student_programs_clubs', component: require('./components/students/StudentExtraCurricular/programs_clubs_index.vue').default,
