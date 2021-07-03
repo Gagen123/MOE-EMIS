@@ -22,7 +22,7 @@ class Notification extends Migration
             $table->timestamp('updated_at')->nullable();
         });
         Schema::create('notification_details_audit', function (Blueprint $table) {
-            $table->char('audit_id',36)->unique()->primary();
+            $table->increments('audit_id',11);
             $table->char('id',36);
             $table->string('notification_for',50)->nullable(false);
             $table->string('notification_appNo',50)->nullable(true);

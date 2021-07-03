@@ -95,6 +95,7 @@ class CommonController extends Controller{
     }
 
     public function getNotification(){
+        // dd($this->getRoleIds('roleIds').'/'.$this->userId());
         $response_data=$this->apiService->getListData('emis/common/getNotification',$this->getRoleIds('roleIds').'/'.$this->userId());
         return $response_data;
     }

@@ -342,6 +342,7 @@ class StaffServicesController extends Controller{
             'action_by'                     =>  $this->userId(),
         ];
         $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
+        // dd($appRole_id,$request->staff_id);
         $user_id=$appRole_id[0]->user_id;
         if($request->actiontype=="reject"){
             $work_status=0;
@@ -396,8 +397,8 @@ class StaffServicesController extends Controller{
 
         $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
-        $this->apiService->createData('emis/staff/staffServices/updateNextNotification'.$notification_data);
-
+        $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        // dd($data);
         $response_data= $this->apiService->createData('emis/staff/staffServices/verifyApproveRejectLeaveApplication', $update_data);
         return $response_data;
     }

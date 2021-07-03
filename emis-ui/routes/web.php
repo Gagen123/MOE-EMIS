@@ -507,6 +507,11 @@ Route::prefix('staff')->group(function () {
 
         Route::get('/checkforfeedbackLink', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'checkforfeedbackLink'])->name('checkforfeedbackLink');
         Route::get('/getleadershipDetailsForFeedback/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getleadershipDetailsForFeedback'])->name('getleadershipDetailsForFeedback');
+        Route::get('/loadapplicaitontDetialsforVerification/{application_number}/{type}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetialsforVerification'])->name('loadapplicaitontDetialsforVerification');
+        Route::get('/loadData/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadData'])->name('loadData');
+        Route::post('/saveData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveData'])->name('saveData');
+        Route::get('/loadexistingData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadexistingData'])->name('loadexistingData');
+
     });
 
 

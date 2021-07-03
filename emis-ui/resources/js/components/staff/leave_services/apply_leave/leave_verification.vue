@@ -223,7 +223,7 @@ export default {
                 this.form.no_days                       =   data.no_days;
                 this.form.leave_type_id                 =   data.leave_type_id;
                 this.form.reason                        =   data.reason;
-                this.form.staff_id                      =   data.applicant_details.staff_id;
+                this.form.staff_id                      =   data.staff_id;
                  this.form.appName                      =   data.applicant_details.name;
                 this.form.contact_number                =   data.applicant_details.contact_no;
                 this.form.email                         =   data.applicant_details.email;

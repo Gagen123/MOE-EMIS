@@ -17,7 +17,7 @@ class Notificationto extends Migration
             $table->string('user_role_id',255)->nullable(false);
         });
         Schema::create('notification_to_audit', function (Blueprint $table) {
-            $table->char('audit_id',36)->unique()->primary();
+            $table->increments('audit_id',11);
             $table->char('id',36);
             $table->string('notification_id',50)->nullable(false);
             $table->foreign('notification_id')->references('id')->on('notification_details');
