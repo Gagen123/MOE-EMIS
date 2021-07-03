@@ -23,7 +23,3 @@ class StaffLeaveConfig extends Migration
         Schema::dropIfExists('master_staff_leave_config');
     }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 103b6b6456c960f308fc43e06f5f7bc1209ce4ba

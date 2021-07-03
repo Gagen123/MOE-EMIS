@@ -7,11 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
 use App\Models\TaskDetails;
+<<<<<<< HEAD
 use  App\Models\Notification;
 use App\Models\NotificationAudit;
 use  App\Models\NotificationTo;
 use App\Models\NotificationToAudit;
 use App\Models\NotificationVisited;
+=======
+>>>>>>> a2c0551d466c551c1a2f9319d1f8a2e18de386bb
 
 class WorkflowController extends Controller{
     use ApiResponser;
@@ -29,12 +32,6 @@ class WorkflowController extends Controller{
             'action_by'             => 'required',
         ];
         $this->validate($request, $rules);
-        if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
-            $exist_workflow=Workflow::where('application_number',$request->application_number)->get();
-            if($exist_workflow!=null && $exist_workflow!="" && sizeof($exist_workflow)>0){
-                Workflow::where('application_number',$request->application_number)->delete();
-            }
-        }
         $data=[
             'database_name'         =>$request->db_name,
             'table_name'            =>$request->table_name,
@@ -52,10 +49,6 @@ class WorkflowController extends Controller{
             $status=$request->status_id;
             if(strpos($request->status_id,'__submitterRejects')!==false){
                 $status=explode('__',$status)[0];
-            }
-            $exist_task=TaskDetails::where('application_number',$request->application_number)->get();
-            if($exist_task!=null && $exist_task!="" && sizeof($exist_task)>0){
-                TaskDetails::where('application_number',$request->application_number)->delete();
             }
             $task_data=[
                 'table_name'            =>$request->table_name,
@@ -75,13 +68,14 @@ class WorkflowController extends Controller{
                 'app_role_id'           => $request->app_role_id,
                 'record_type_id'        => $request->record_type_id,
             ];
-            // dd($task_data);
             try{
                 return $workflowdetails = TaskDetails::create($task_data);
             }catch(\Illuminate\Database\QueryException $ex){
                 dd($ex);
+
             }
-        }
+            
+        } 
         else{
             $task_data=[
                 'status_id'             =>$request->status_id,
@@ -98,9 +92,9 @@ class WorkflowController extends Controller{
             else{
                 TaskDetails::where('application_number', $request->application_number)->update($task_data);
             }
-
+            
             $workflowdetails = TaskDetails::where('application_number', $request->application_number)->first();;
-        }
+        }   
         return $this->successResponse($workflowdetails, Response::HTTP_CREATED);
     }
 
@@ -115,6 +109,7 @@ class WorkflowController extends Controller{
         $response_data= TaskDetails::where('application_number', $request->applicationNo)->first();
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+<<<<<<< HEAD
     public function insertNotification(Request $request) {
         $notification_data=[
             'notification_for'              =>  $request->notification_for,
@@ -217,4 +212,7 @@ class WorkflowController extends Controller{
         ];
         NotificationVisited::create($not_visited);
     }
+=======
+>>>>>>> a2c0551d466c551c1a2f9319d1f8a2e18de386bb
 }
+

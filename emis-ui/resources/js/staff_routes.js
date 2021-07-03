@@ -495,8 +495,11 @@ const routes = [
                     { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
                 ],
             },
+            
         ]
     },
+    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+    
     // Recuritment by gagen
     //principal recuritment
     { path: '/recuritment_index', component: require('./components/staff/recuritment/recuritment_index.vue').default,
@@ -582,7 +585,7 @@ const routes = [
                 component: require('./components/staff/management/create_body/management_body_index.vue').default,
                 children:[
                     { path: '/', name:'create_management_body_index',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
-                    { path: '/list_management_body',name:'list_management_body',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
+                    { path: '/list_management_body',name:'list_management_89body',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
                     { path: '/create_management_body',name:'create_management_body',  component: require('./components/staff/management/create_body/create_management_body.vue').default },
                     { path: '/edit_management_body',name:'edit_management_body',  component: require('./components/staff/management/create_body/edit_management_body.vue').default },
                 ],

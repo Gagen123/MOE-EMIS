@@ -21,6 +21,7 @@ class Notification extends Migration
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
+<<<<<<< HEAD
         Schema::create('notification_details_audit', function (Blueprint $table) {
             $table->increments('audit_id',11);
             $table->char('id',36);
@@ -38,9 +39,10 @@ class Notification extends Migration
             $table->timestamp('audited_at')->nullable();
             $table->timestamp('audited_by')->nullable();
         });
+=======
+>>>>>>> a2c0551d466c551c1a2f9319d1f8a2e18de386bb
     }
     public function down(){
         Schema::dropIfExists('notification_details');
-        Schema::dropIfExists('notification_details_audit');
     }
 }

@@ -109,7 +109,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                this.transferType =  data.data.data;
+                this.transferType = data.data.data;
             })
             .catch(function (error){
                 console.log(error);
@@ -148,29 +148,8 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="transfer_type_id"){
-                this.form.transfer_type_id=$('#transfer_type_id').val();
-                this.getTransfer_details($('#role_id').val());
-            }
-            if(id=="role_id"){
-                this.form.role_id=$('#role_id').val();
-                this.getTransfer_details();
-            }
+            
         },
-        getTransfer_details(){
-            if($('#transfer_type_id').val()!="" && $('#transfer_type_id').val()!=null && $('#role_id').val()!="" && $('#role_id').val()!=null){
-                axios.get('masters/loadLeaveConfigMasters/'+$('#transfer_type_id').val()+'/'+$('#role_id').val())
-                .then(response =>{
-                    let data = response;
-                    if(data.data.data!=null){
-                       this.$router.push({name:'edit_leave_config',params: {data:data.data.data.id}});
-                    }
-                })
-                .catch(function (error){
-                    console.log(error);
-                });
-            }
-        },        
         
         applyselect2(){
             if(!$('#transfer_type_id').attr('class').includes('select2-hidden-accessible')){

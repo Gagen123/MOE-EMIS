@@ -102,7 +102,6 @@
                 }
             });
         },
-
         loadowntask(){
             axios.get('common/getTaskList/own')
             .then(response => {
@@ -139,7 +138,6 @@
                 });
             }
             else{
-
                 if(data.application_number.includes('Estb')){
                     this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
                 }

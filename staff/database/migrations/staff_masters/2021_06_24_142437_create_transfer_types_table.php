@@ -21,7 +21,3 @@ class MastersDegree extends Migration{
         Schema::dropIfExists('master_transfer_type');
     }
 }
-<<<<<<< HEAD
-
-=======
->>>>>>> 103b6b6456c960f308fc43e06f5f7bc1209ce4ba
