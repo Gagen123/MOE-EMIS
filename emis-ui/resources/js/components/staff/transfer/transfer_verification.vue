@@ -62,7 +62,11 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                     <label class="mb-0">Transfer Type:</label><br>
+                                    <span class="text-blue text-bold">{{form.transfer_type}}</span>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <label class="mb-0">Brief description for seeking transfer</label><br>
                                     <span class="text-blue text-bold">{{form.description}}</span>
                                 </div>
@@ -146,9 +150,9 @@
                                 </table>
                             </div>
                         </div>
-                        <Workflow
+                        <!-- <Workflow
                             :appNo="form.application_no"
-                        />
+                        /> -->
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
@@ -197,6 +201,7 @@ export default {
             form: new form({
                 id: '',
                 application_no:'',
+                transfer_type:'',
                 staff_id: '',
                 transfer_reason_id:'',
                 description:'',
@@ -223,6 +228,15 @@ export default {
                 this.getStaffDetials(data.staff_id);
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
+                 this.form.staff_id=data.staff_id;
+                this.form.transfer_type=data.transferType;
+                
+                if(data.app_seq_no!=10 && data.app_seq_no!=0){
+                    $('#verifyId').show();
+                }
+                if(data.app_seq_no==10 ){
+                    $('#approveId').show();
+                }
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
                         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
@@ -353,6 +367,7 @@ export default {
         loadGenders(uri="masters/loadGlobalMasters/all_active_gender"){
             axios.get(uri)
             .then(response => {
+               
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
                     this.genderArray[data.data.data[i].id] = data.data.data[i].name;
@@ -362,18 +377,18 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('Error: '+error);
-            });
-        },
+        // loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         for(let i=0;i<data.data.data.length;i++){
+        //             this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+        //         }
+        //     })
+        //     .catch(function (error){
+        //         console.log('Error: '+error);
+        //     });
+        // },
         loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
@@ -411,8 +426,9 @@ export default {
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();
         this.gettransferconfig();
-        this.loadpositionTitleList();
+        // this.loadpositionTitleList();
         this.loadreasons();
+        this.getStaffDetials();
         this.loadactivedzongkhagList();
     }
 }

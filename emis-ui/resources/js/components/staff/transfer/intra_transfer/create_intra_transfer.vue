@@ -415,7 +415,6 @@ export default {
                                     }
                                 }
                                 let formData = new FormData();
-                                
                                 formData.append('type_id', this.form.type_id);
                                 formData.append('preference_school1', this.form.preference_school1);
                                 formData.append('preference_school2', this.form.preference_school2);
