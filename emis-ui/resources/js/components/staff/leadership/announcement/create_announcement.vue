@@ -34,6 +34,26 @@
                     </div>
                 </div>
                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>270 Degree Feedback:<span class="text-danger">*</span></label><br>
+                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                        <has-error :form="form" field="feedback"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Shortlisting:<span class="text-danger">*</span></label><br>
+                        <label><input v-model="form.shortlist"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.shortlist"  type="radio" value="0" /> No</label>
+                        <has-error :form="form" field="shortlist"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Interview:<span class="text-danger">*</span></label><br>
+                        <label><input v-model="form.interview"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.interview"  type="radio" value="0" /> No</label>
+                        <has-error :form="form" field="shortlist"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Details:</label>
                         <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.details" id="details"></textarea>
@@ -99,6 +119,9 @@ export default {
                 details:'',
                 document_List:[{document:''}],
                 applicant_List:[{applicant:''}],
+                feedback:1,
+                interview:1,
+                shortlist:1,
                 action_type:'created'
             }),
         }

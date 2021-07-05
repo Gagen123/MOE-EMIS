@@ -19,6 +19,9 @@ class StaffLeadershipSerivcesController extends Controller{
         $rules = [
             'selection_type'    =>  'required',
             'position_title'    =>  'required',
+            'feedback'          =>  'required',
+            'interview'         =>  'required',
+            'shortlist'         =>  'required',
             'details'           =>  'required',
             'from_date'         =>  'required | date',
             'to_date'           =>  'required | date | after:from_date',
@@ -26,6 +29,9 @@ class StaffLeadershipSerivcesController extends Controller{
         $customMessages = [
             'selection_type.required'   => 'This field is required',
             'position_title.required'   => 'This field is required',
+            'feedback.required'         => 'This field is required',
+            'interview.required'        => 'This field is required',
+            'shortlist.required'        => 'This field is required',
             'details.required'          => 'This field is required',
             'from_date.required'        => 'This field is required',
             'to_date.required'          => 'This field is required',
@@ -36,6 +42,9 @@ class StaffLeadershipSerivcesController extends Controller{
             'id'                            =>  $request->id,
             'selection_type'                =>  $request->selection_type,
             'position_title'                =>  $request->position_title,
+            'feedback'                      =>  $request->feedback,
+            'interview'                     =>  $request->interview,
+            'shortlist'                     =>  $request->shortlist,
             'details'                       =>  $request->details,
             'from_date'                     =>  $request->from_date,
             'to_date'                       =>  $request->to_date,
@@ -157,6 +166,17 @@ class StaffLeadershipSerivcesController extends Controller{
         return $response_data;
     }
 
+    public function loadapplicaitontDetialsforVerification($application_number="",$type=""){
+        $update_data=[
+            'applicationNo'     =>  $application_number,
+            'type'              =>  $type,
+            'user_id'           =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadapplicaitontDetialsforVerification/'.$application_number);
+        return $response_data;
+    }
+
     public function createLeadershipSelection(Request $request){
         $rules = [
             'selection_type'    =>  'required',
@@ -252,4 +272,53 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getleadershipDetailsForFeedback/'.$id);
         return $response_data;
     }
+
+    public function saveData(Request $request){
+        $rules = [
+            'name'                              =>  'required',
+            'status'                            =>  'required',
+        ];
+        $customMessages = [
+            'name.required'                     => 'This field is required',
+            'status.required'                   => 'This field is required',
+        ];
+        if($request->record_type=="Question"){
+            $rules = $rules+[
+                'category_type_id'              =>  'required',
+                'answer_type'                   =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'category_type_id.required'     => 'This field is required',
+                'answer_type.required'          => 'This field is required',
+            ];
+        }
+        $this->validate($request, $rules,$customMessages);
+
+        $nomi_data =[
+            'id'                            =>  $request->id,
+            'name'                          =>  $request->name,
+            'status'                        =>  $request->status,
+            'category_type_id'              =>  $request->category_type_id,
+            'answer_type'                   =>  $request->answer_type,
+            'answer'                        =>  $request->answer,
+            'record_type'                   =>  $request->record_type,
+            'action_type'                   =>  $request->action_type,
+            'user_id'                       =>  $this->userId()
+        ];
+        // dd($nomi_data);
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveData', $nomi_data);
+        return $response_data;
+    }
+
+    public function loadData($param=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadData/'.$param);
+        return $response_data;
+    }
+
+    public function loadexistingData($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadexistingData/'.$id);
+        return $response_data;
+    }
+
+
 }
