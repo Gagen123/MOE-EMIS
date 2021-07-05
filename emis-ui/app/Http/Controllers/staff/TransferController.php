@@ -147,76 +147,133 @@ class TransferController extends Controller{
         return json_encode($loadTransferDetails);
     }
     public function updateTransferApplication(Request $request){
-        $work_status=$request->status_id+1;
-        $app_status='Pending for approval';
-        $notification_data=[
-            'notification_for'              =>  'Transfer Application',
-            'notification_access_type'      =>  'all',
-            'notification_appNo'            =>  $request->application_no,
-            'dzo_id'                        =>  $this->getUserDzoId(),
-            'working_agency_id'             =>  $this->getWrkingAgencyId(),
-            'access_level'                  =>  $this->getAccessLevel(),
-            'action_by'                     =>  $this->userId(),
-        ];
-        $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
-        $user_id=$appRole_id[0]->user_id;
+        $org_status='Verified';
+        $work_status=$request->status_id+2;
         if($request->actiontype=="reject"){
             $work_status=0;
-            $app_status="Rejected";
-            $notification_data=$notification_data+[
-                'notification_message'          =>  'Your Application for Leave has been rejected. Reason for the rejection: '.$request->remarks,
-                'notification_type'             =>  'user',
-                'call_back_link'                =>  'notificationMessage',
-                'user_role_id'                  =>  $user_id,
-            ];
+            $org_status="Rejected";
         }
-        else if($request->actiontype=="approve"){
-            $app_status="Approved";
-            $work_status=10;
-            $notification_data=$notification_data+[
-                'notification_message'          =>  'Your Application for Leave has been Approved ',
-                'notification_type'             =>  'user',
-                'call_back_link'                =>  'notificationMessage',
-                'user_role_id'                  =>  $user_id,
-            ];
-        }
-        else{
-            //get next role id from leave config to send notification.
-            $response_data= json_decode($this->apiService->listData('emis/staff/transfer/getAppVeriTransferConfigDetails/'.$request->transfer_type_id.'/'.$appRole_id[0]->SysRoleId.'/'.$this->getRoleIds('roleIds')));
-            dd($response_data);
-            $notification_data=$notification_data+[
-                'notification_message'          =>  '',
-                'notification_type'             =>  'role',
-                'call_back_link'                =>  'tasklist',
-                'user_role_id'                  =>  $response_data->role_id,
-            ];
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
         }
         $workflow_data=[
-            'db_name'           =>  $this->database_name,
-            'table_name'        =>  $this->leave_table_name,
-            'service_name'      =>  $this->service_name,
-            'application_number'=>  $request->application_number,
-            'screen_id'         =>  $request->application_number,
-            'status_id'         =>  $work_status,
-            'remarks'           =>  $request->remarks,
-            'user_dzo_id'       =>  $this->getUserDzoId(),
-            'access_level'      =>  $this->getAccessLevel(),
-            'working_agency_id' =>  $this->getWrkingAgencyId(),
-            'action_by'         =>  $this->userId(),
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$this->service_name,
+            'application_number'=>$request->application_no,
+            'screen_id'         =>$request->application_no,
+            'status_id'         =>$work_status,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
         ];
-        $update_data =[
-            'status'                       =>   $app_status,
-            'application_number'           =>   $request->application_number,
-            'remarks'                      =>   $request->remarks,
-            'user_id'                      =>   $this->userId()
+        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $remarks = $request->remarks;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'transferVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number' =>  $request->application_no,
+                        )
+                    );
+                }
+            }
+        }
+        $data =[
+            'status'                        =>   $org_status,
+            'application_number'            =>   $request->application_no,
+            'remarks'                       =>   $request->remarks,
+            'attachment_details'            =>   $attachment_details,
+            'user_id'                       =>   $this->userId()
         ];
-        $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
-        // $this->apiService->createData('emis/staff/staffServices/updateNextNotification'.$notification_data);
-
-        $response_data= $this->apiService->createData('emis/staff/staffServices/updateTransferApplication', $update_data);
+        $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
         return $response_data;
     }
+    // public function updateTransferApplication(Request $request){
+    //     $work_status=$request->status_id+1;
+    //     $app_status='Pending for approval';
+    //     $notification_data=[
+    //         'notification_for'              =>  'Transfer Application',
+    //         'notification_access_type'      =>  'all',
+    //         'notification_appNo'            =>  $request->application_no,
+    //         'dzo_id'                        =>  $this->getUserDzoId(),
+    //         'working_agency_id'             =>  $this->getWrkingAgencyId(),
+    //         'access_level'                  =>  $this->getAccessLevel(),
+    //         'action_by'                     =>  $this->userId(),
+    //     ];
+    //     $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
+    //     $user_id=$appRole_id[0]->user_id;
+    //     if($request->actiontype=="reject"){
+    //         $work_status=0;
+    //         $app_status="Rejected";
+    //         $notification_data=$notification_data+[
+    //             'notification_message'          =>  'Your Application for Leave has been rejected. Reason for the rejection: '.$request->remarks,
+    //             'notification_type'             =>  'user',
+    //             'call_back_link'                =>  'notificationMessage',
+    //             'user_role_id'                  =>  $user_id,
+    //         ];
+    //     }
+    //     else if($request->actiontype=="approve"){
+    //         $app_status="Approved";
+    //         $work_status=10;
+    //         $notification_data=$notification_data+[
+    //             'notification_message'          =>  'Your Application for Leave has been Approved ',
+    //             'notification_type'             =>  'user',
+    //             'call_back_link'                =>  'notificationMessage',
+    //             'user_role_id'                  =>  $user_id,
+    //         ];
+    //     }
+    //     else{
+    //         //get next role id from transfer config to send notification.
+    //         $response_data= json_decode($this->apiService->listData('emis/staff/transfer/getAppVeriTransferConfigDetails/'.$request->transfer_type_id.'/'.$appRole_id[0]->SysRoleId.'/'.$this->getRoleIds('roleIds')));
+    //         $notification_data=$notification_data+[
+    //             'notification_message'          =>  '',
+    //             'notification_type'             =>  'role',
+    //             'call_back_link'                =>  'tasklist',
+    //             'user_role_id'                  =>  $response_data->role_id,
+    //         ];
+    //     }
+    //     $workflow_data=[
+    //         'db_name'           =>  $this->database_name,
+    //         'table_name'        =>  $this->transfer_table_name,
+    //         'service_name'      =>  $this->service_name,
+    //         'application_number'=>  $request->application_number,
+    //         'screen_id'         =>  $request->application_number,
+    //         'status_id'         =>  $work_status,
+    //         'remarks'           =>  $request->remarks,
+    //         'user_dzo_id'       =>  $this->getUserDzoId(),
+    //         'access_level'      =>  $this->getAccessLevel(),
+    //         'working_agency_id' =>  $this->getWrkingAgencyId(),
+    //         'action_by'         =>  $this->userId(),
+    //     ];
+    //     $update_data =[
+    //         'status'                       =>   $app_status,
+    //         'application_number'           =>   $request->application_number,
+    //         'remarks'                      =>   $request->remarks,
+    //         'user_id'                      =>   $this->userId()
+    //     ];
+    //     $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+    //     // $this->apiService->createData('emis/staff/staffServices/updateNextNotification'.$notification_data);
+
+    //     $response_data= $this->apiService->createData('emis/staff/staffServices/updateTransferApplication', $update_data);
+    //     return $response_data;
+    // }
 
     // public function updateTransferApplication1(Request $request){
     //     $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
