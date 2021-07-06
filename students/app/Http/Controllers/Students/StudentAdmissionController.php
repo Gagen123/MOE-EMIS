@@ -199,7 +199,6 @@ class StudentAdmissionController extends Controller
 
 
     public function saveStudentGardianDetails(Request $request){
-        // dd($request);
         $rules = [
             'merital_status'                        => 'required',
             'primary_contact'                       => 'required',
@@ -360,7 +359,9 @@ class StudentAdmissionController extends Controller
         ];
 
         // $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
-        $data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
+        //
+        // Ask Tshewang why the delete before inserting
+        //$data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
         if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
             $data =[
                 'student_id'                =>  $request->student_id,
@@ -421,6 +422,7 @@ class StudentAdmissionController extends Controller
             ];
             $response_data = StudentGuardainDetails::create($std_admission);
         }
+
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -856,6 +858,17 @@ class StudentAdmissionController extends Controller
          $response_data = requestForAdmission::create($data);
          return $this->successResponse($response_data, Response::HTTP_CREATED);
 
+    }
+
+    /**
+     * Get the application details
+     * 
+     * For EMIS Portal
+     */
+
+    public function getApplicationDetails($id=""){
+        $response_data = std_admission::where ('id', $id)->first();
+        return $this->successResponse($response_data);
     }
 
 }
