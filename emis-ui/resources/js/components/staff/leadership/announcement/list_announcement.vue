@@ -16,7 +16,7 @@
                     <tbody>
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.selection_type=='Others' ? item.selection_type:selectionList[item.selection_type] }}</td>
+                            <td>{{ selectionList[item.selection_type] }}</td>
                             <td>{{ positionarray[item.position_title] }}</td>
                             <td>{{ item.from_date }}</td>
                             <td>{{ item.to_date }}</td>
@@ -52,7 +52,7 @@ export default {
                 console.log("Error: "+error);
             });
         },
-        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

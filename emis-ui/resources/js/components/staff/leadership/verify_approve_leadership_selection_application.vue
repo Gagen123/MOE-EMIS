@@ -6,6 +6,7 @@
         <div id="maindiv">
             <div class="card card-primary card-outline card-outline-tabs">
                 <div class="card-body">
+                    <!-- Post Details -->
                     <template v-if="post_detail!=''">
                         <div class="callout callout-success">
                             <span><label><u>Post Detials</u></label></span>
@@ -26,13 +27,14 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Details:</label>
                                     <span class="text-blue text-bold">{{post_detail.details}}</span>
                                 </div>
                             </div>
                         </div>
                     </template>
+                    <!-- Application Detauils -->
                     <div class="callout callout-success">
                         <span><label><u>Applicant Detials</u></label></span>
                         <div class="row form-group">
@@ -88,11 +90,11 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Applicant Attachment -->
                     <div class="callout callout-success">
-                        <span><label><u>Attachment Detials</u></label></span>
+                        <span><label><u>Applicant Attachment(s)</u></label></span>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Documents<span class="text-danger">*</span></label>
                                 <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -116,9 +118,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="callout callout-info">
+
+                    <!-- Feedback Section -->
+                    <div class="callout callout-info" v-if="form.current_status!='Submitted'">
+                        <div class="row form-group" v-if="form.shortlisted_remarks!=''">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Shortlisted Remarks: </label>
+                                <span class="text-blue text-bold">{{form.shortlisted_remarks}}</span>
+                            </div>
+                        </div>
                         <h4><u>Feedback Configuration Details</u></h4>
-                        <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
+                        <div class="row form-group" v-if="form.current_status=='Shortlisted' && form.feedback==1">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date" v-model="form.feedback_start_date">
@@ -186,7 +196,7 @@
                                                     <span v-if="stf.status=='Submitted'" class="right badge badge-success">{{stf.status}}</span>
                                                 </td>
                                                 <td >
-                                                    <button v-if="form.current_status=='Submitted' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
+                                                    <button v-if="form.current_status=='Shortlisted' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
                                                         @click="deleteNomination(stf.id)"> Delete</button>
                                                     <button v-if="stf.status=='Submitted'" type="button" class="btn btn-flat btn-sm btn-primary pt-0 pb-1" id="open"
                                                         @click="checkfeedback(stf.id)"> Open</button>
@@ -198,61 +208,75 @@
                                 <span class="text-danger" id="feedbackNomineesList_err"></span>
                             </div>
                         </div>
-                        <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
+                        <div class="row form-group" v-if="form.current_status=='Shortlisted' && form.feedback==1">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Details for Feedback Provider:</label>
                                 <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.feedback_details" id="feedback_details"></textarea>
                                 <has-error :form="form" field="feedback_details"></has-error>
                             </div>
                         </div>
-
-                        <span v-if="form.current_status!='Notified for Feedback'">
-                            <h4><u>Attachments</u></h4>
-                            <div class="form-group row">
-                                <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-8">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>File Name</th>
-                                                <th>Upload File</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                                <td>
-                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                    <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                                </td>
-                                                <td>
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Remarks</label>
-                                    <textarea class="form-control" @change="remove_error('remarks')" v-model="form.verification_remarks" id="remarks"></textarea>
-                                    <span class="text-danger" id="remarks_err"></span>
-                                </div>
-                            </div>
-                        </span>
                     </div>
+                    <!-- Verification Attachments and remarks -->
+                    <div class="callout callout-info">
+                        <h4><u>Remarks & Attachments (If any)</u></h4>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Upload File</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                            <template v-if="attach.attachment_for=='Leadership Selection'">
+                                                <td>{{attach.user_defined_name}} </td>
+                                                <td>  {{attach.original_name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+
+                                        <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                            <td>
+                                                <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                            </td>
+                                            <td>
+                                                <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks</label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.verification_remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
+                    </div>
+
                     <hr>
+                    <!-- Action Buttons -->
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Submitted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
+                            <button class="btn btn-info text-white" @click="shownexttab('shortlist')" v-if="form.current_status=='Submitted' && form.shortlist==1"> <i class="fa fa-save"></i> Shortlist </button>
+                            <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Shortlisted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
                             <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i> Approve </button>
                             <button class="btn btn-danger" v-if="form.current_status!='Notified for Feedback'" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                         </div>
@@ -414,6 +438,8 @@ export default {
                 details:'',
                 document:'',
                 applicant:'',
+                staff_id:'',
+                shortlisted_remarks:'',
                 aplicant_cid:'',
                 aplicant_position_title:'',
                 aplicant_working_agency:'',
@@ -604,6 +630,7 @@ export default {
                 this.form.id=data.id;
                 this.form.remarks=data.remarks;
                 this.form.applicant=data.aplicant_name;
+                this.form.staff_id=data.staff_id;
                 this.form.aplicant_cid=data.aplicant_cid;
                 this.form.aplicant_position_title=data.aplicant_position_title;
                 this.form.aplicant_working_agency=data.aplicant_working_agency;
@@ -613,6 +640,7 @@ export default {
                 this.form.application_date=data.created_at;
                 this.form.post_id=data.post_id;
                 this.form.current_status=data.status;
+                this.form.shortlisted_remarks=data.shortlisted_remarks;
                 this.form.feedback=data.Post_details.feedback;
                 this.form.interview=data.Post_details.interview;
                 this.form.shortlist=data.Post_details.shortlist;
@@ -621,7 +649,6 @@ export default {
                 this.form.feedback_remarks=data.feedback_remarks;
                 this.form.feedback_details=data.feedback_details;
                 this.applicationdetailsatt=data.attachments;
-
             })
             .catch((error) =>{
                 console.log("Error: "+error);
@@ -789,6 +816,9 @@ export default {
             if(this.validateVerificationForm(type)){
                 this.form.action_type=type;
                 let message="";
+                if(type=="shortlist"){
+                    message="Shortlist this applicant";
+                }
                 if(type=="feedback"){
                     message="Send Notification to mentioned feedback providers";
                 }
@@ -808,6 +838,7 @@ export default {
                         }
                         let formData = new FormData();
                         formData.append('id', this.form.id);
+                        formData.append('staff_id', this.form.staff_id);
                         formData.append('application_number', this.form.application_number);
                         formData.append('application_date', this.form.application_date);
                         formData.append('selection_type', this.form.selection_type);

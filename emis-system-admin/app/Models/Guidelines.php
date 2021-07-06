@@ -14,6 +14,7 @@ class Guidelines extends Model
         'guideline_for',
         'guideline',
         'status',
+        'display_order',
         'created_by',
         'created_at',
         'updated_by',

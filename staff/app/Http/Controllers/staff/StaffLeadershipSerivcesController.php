@@ -444,6 +444,14 @@ class StaffLeadershipSerivcesController extends Controller{
                 'answer_type.required'          => 'This field is required',
             ];
         }
+        if($request->record_type=="LeadershipType"){
+            $rules = $rules+[
+                'isfeedbackapplicable'              =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'isfeedbackapplicable.required'     => 'This field is required',
+            ];
+        }
         $this->validate($request, $rules,$customMessages);
         $databaseModel=$request->record_type;
         $modelName = "App\\Models\\"."$databaseModel";
@@ -457,12 +465,21 @@ class StaffLeadershipSerivcesController extends Controller{
                 'created_by'    =>  $request->user_id,
                 'created_at'    =>  date('Y-m-d h:i:s'),
             ];
+            //additional data for question
             if($request->record_type=="Question"){
                 $data =$data+[
                     'category_type_id'   =>  $request->category_type_id,
+                    'leadership_type_id' =>  $request->leadership_type,
                     'answer_type'        =>  $request->answer_type,
                 ];
             }
+            //additional data for service
+            if($request->record_type=="LeadershipType"){
+                $data = $data+[
+                    'isfeedbackapplicable'          =>  $request->isfeedbackapplicable,
+                ];
+            }
+
             $response_data = $model::create($data);
             if($request->record_type=="Question"){
                 if($request->answer!=null && $request->answer!="" && sizeof($request->answer)>0){
@@ -490,9 +507,15 @@ class StaffLeadershipSerivcesController extends Controller{
             $data->status           = $request->status;
             $data->updated_by       = $request->user_id;
             $data->updated_at       = date('Y-m-d h:i:s');
+            //additional data for question
             if($request->record_type=="Question"){
                 $data->category_type_id      = $request->category_type_id;
+                $data->leadership_type_id    = $request->leadership_type;
                 $data->answer_type           = $request->answer_type;
+            }
+            //additional data for leadership type
+            if($request->record_type=="LeadershipType"){
+                $data->isfeedbackapplicable           = $request->isfeedbackapplicable;
             }
             $data->update();
 
@@ -607,15 +630,27 @@ class StaffLeadershipSerivcesController extends Controller{
             }
         }
         $response_data="";
-        $data =[
-            'feedback_remarks'          =>  $request->verification_remarks,
-            'feedback_start_date'       =>  $request->feedback_start_date,
-            'feedback_end_date'         =>  $request->feedback_end_date,
-            'feedback_details'          =>  $request->feedback_details,
-            'status'                    =>  $request->current_status,
-            'feedback_updated_date'     =>  date('Y-m-d h:i:s'),
-            'feedback_updated_by'       =>  $request->user_id,
-        ];
+        if($request->current_status=="Notified for Feedback"){
+            $data =[
+                'feedback_remarks'          =>  $request->verification_remarks,
+                'feedback_start_date'       =>  $request->feedback_start_date,
+                'feedback_end_date'         =>  $request->feedback_end_date,
+                'feedback_details'          =>  $request->feedback_details,
+                'status'                    =>  $request->current_status,
+                'feedback_updated_date'     =>  date('Y-m-d h:i:s'),
+                'feedback_updated_by'       =>  $request->user_id,
+            ];
+        }
+
+        if($request->current_status=="Shortlisted"){
+            $data =[
+                'status'                =>  $request->current_status,
+                'shortlisted_remarks'   =>  $request->verification_remarks,
+                'shortlisted_at'        =>  date('Y-m-d h:i:s'),
+                'shortlisted_by'        =>  $request->user_id,
+            ];
+        }
+
         LeadershipApplication::where('id',$request->id)->update($data);
         $response_data = LeadershipApplication::where('id',$request->id)->first();;
         return $this->successResponse($response_data, Response::HTTP_CREATED);

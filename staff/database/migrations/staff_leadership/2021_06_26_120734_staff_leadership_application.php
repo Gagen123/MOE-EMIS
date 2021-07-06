@@ -17,6 +17,9 @@ class StaffLeadershipApplication extends Migration
             $table->char('org_id',36)->nullable(false);
             $table->char('accessLevel',50)->nullable(false);
             $table->char('remarks',255)->nullable(true);
+            $table->char('shortlisted_remarks',255)->nullable(true);
+            $table->char('shortlisted_by',36)->nullable(true);
+            $table->timestamp('shortlisted_at')->nullable(true);
             $table->string('feedback_remarks',255)->nullable(true);
             $table->string('feedback_details',255)->nullable(true);
             $table->date('feedback_start_date')->nullable(true);

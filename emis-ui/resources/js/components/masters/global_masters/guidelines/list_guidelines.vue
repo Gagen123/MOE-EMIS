@@ -7,6 +7,7 @@
                     <th >Guideline for</th>
                     <th >Guidelines</th>
                     <th >Status</th>
+                    <th >display Order</th>
                     <th >Created At</th>
                     <th >Action</th>
                 </tr>
@@ -17,6 +18,7 @@
                     <td>{{ item.guideline_for}}</td>
                     <td>{{ item.guideline}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.display_order}}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

@@ -669,6 +669,16 @@ const routes = [
                     { path: '/open_feedback', name:'open_feedback',  component: require('./components/staff/leadership/feedback/open_feedback.vue').default },
                 ],
             },
+
+            { path: '/leadership_type_index',
+                component: require('./components/staff/leadership/questions/leadership_type/leadership_type_index.vue').default,
+                children:[
+                    { path: '/',name:'leadership_type_index',  component: require('./components/staff/leadership/questions/leadership_type/list_leadership_type.vue').default },
+                    { path: '/list_leadership_type',name:'list_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/list_leadership_type.vue').default },
+                    { path: '/create_leadership_type',name:'create_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/create_leadership_type.vue').default },
+                    { path: '/edit_leadership_type',name:'edit_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/edit_leadership_type.vue').default },
+                ],
+            },
             { path: '/feedback_category',
                 component: require('./components/staff/leadership/questions/feedback_category/feedback_category_index.vue').default,
                 children:[

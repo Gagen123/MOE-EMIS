@@ -3,7 +3,16 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Leadership Type:</label>
+                        <select class="form-control select2" id="leadership_type" v-model="form.leadership_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('leadership_type') }">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in leadershipe_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="leadership_type"></has-error>
+                        <span class="text-danger" id="leadership_type_err"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Category Type:</label>
                         <select class="form-control select2" id="category_type_id" v-model="form.category_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type_id') }">
                             <option value=""> --Select--</option>
@@ -93,6 +102,7 @@ export default {
     data() {
         return {
             category_type_list:[],
+            leadershipe_list:[],
             is_answer_option:false,
             count:0,
             base_count:0,
@@ -133,6 +143,17 @@ export default {
             .then(response =>{
                 let data = response;
                 this.category_type_list=data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        leadershipelist(){
+            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.leadershipe_list=data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -213,6 +234,9 @@ export default {
             if(id=="category_type_id"){
                 this.form.category_type_id=$('#category_type_id').val();
             }
+            if(id=="leadership_type"){
+                this.form.leadership_type=$('#leadership_type').val();
+            }
             if(id=="answer_type"){
                 this.form.answer_type=$('#answer_type').val();
                 if($('#answer_type').val()=="Dropdown" || $('#answer_type').val()=="Radio" || $('#answer_type').val()=="Checkbox"){
@@ -227,6 +251,7 @@ export default {
             theme: 'bootstrap4'
         });
         this.loadcategorylist();
+        this.leadershipelist();
         $('.select2').on('select2:select', function (){
             Fire.$emit('changeval',$(this).attr('id'))
         });
@@ -244,6 +269,10 @@ export default {
 
             this.form.category_type_id=data.category_type_id;
             $('#category_type_id').val(data.category_type_id).trigger('change');
+
+            this.form.leadership_type=data.leadership_type_id;
+            $('#leadership_type').val(data.leadership_type_id).trigger('change');
+
             if($("#answer_type option:selected").text()=="Radio" || $("#answer_type option:selected").text()=="Dropdown" || $("#answer_type option:selected").text()=="Checkbox"){
                 this.is_answer_option=true;
             }

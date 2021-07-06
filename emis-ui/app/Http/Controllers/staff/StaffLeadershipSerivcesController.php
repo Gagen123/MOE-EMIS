@@ -287,13 +287,23 @@ class StaffLeadershipSerivcesController extends Controller{
                 'answer_type.required'          => 'This field is required',
             ];
         }
+        if($request->record_type=="LeadershipType"){
+            $rules = $rules+[
+                'isfeedbackapplicable'              =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'isfeedbackapplicable.required'     => 'This field is required',
+            ];
+        }
         $this->validate($request, $rules,$customMessages);
 
         $nomi_data =[
             'id'                            =>  $request->id,
             'name'                          =>  $request->name,
+            'isfeedbackapplicable'          =>  $request->isfeedbackapplicable,
             'status'                        =>  $request->status,
             'category_type_id'              =>  $request->category_type_id,
+            'leadership_type'               =>  $request->leadership_type,
             'answer_type'                   =>  $request->answer_type,
             'answer'                        =>  $request->answer,
             'record_type'                   =>  $request->record_type,
@@ -380,6 +390,7 @@ class StaffLeadershipSerivcesController extends Controller{
                 }
             }
         }
+
         //get feedback provider to send notification
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getFeedbackProviderData/'.$request->application_number);
         if($request->action_type=="feedback" && $response_data!=null && $response_data!="" && sizeof(json_decode($response_data))>0){
@@ -416,6 +427,30 @@ class StaffLeadershipSerivcesController extends Controller{
         if($request->action_type=="feedback"){
             $current_status="Notified for Feedback";
         }
+        if($request->action_type=="shortlist"){
+            $current_status="Shortlisted";
+        }
+         //Notification to applicant
+         $staff_user_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
+                    // dd($feed->participant,$appRole_id,$feed->partifipant_from);
+                    $staff_user_id=$staff_user_id[0]->user_id.',';
+         $notification_data=[
+            'notification_for'              =>  'Updates on Leadership Selection',
+            'notification_access_type'      =>  'all',
+            'notification_message'          =>  'Your application for Leadership Selection has been '.$current_status.' For more information, open your application from application list',
+            'notification_type'             =>  'user',
+            'call_back_link'                =>  'view_notification_message',
+            'action'                        =>  'delete_on_view',
+            'user_role_id'                  =>  $staff_user_id,
+            'notification_appNo'            =>  $request->application_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/insertNotification', $notification_data);
+        $notification=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+
         $nomi_data =[
             'id'                        =>  $request->id,
             'application_number'        =>  $request->application_number,

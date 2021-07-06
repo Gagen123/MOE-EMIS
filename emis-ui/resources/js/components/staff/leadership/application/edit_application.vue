@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label>Details:</label>
                             <span class="text-blue text-bold">{{post_detail.details}}</span>
                         </div>
