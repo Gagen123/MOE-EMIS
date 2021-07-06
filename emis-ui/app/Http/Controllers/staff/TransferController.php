@@ -148,7 +148,7 @@ class TransferController extends Controller{
     }
     public function updateTransferApplication(Request $request){
         $org_status='Verified';
-        $work_status=$request->status_id+2;
+        $work_status=$request->status_id+1;
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";

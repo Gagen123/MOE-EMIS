@@ -7,14 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
 use App\Models\TaskDetails;
-<<<<<<< HEAD
-use  App\Models\Notification;
-use App\Models\NotificationAudit;
-use  App\Models\NotificationTo;
-use App\Models\NotificationToAudit;
-use App\Models\NotificationVisited;
-=======
->>>>>>> a2c0551d466c551c1a2f9319d1f8a2e18de386bb
 
 class WorkflowController extends Controller{
     use ApiResponser;
@@ -109,7 +101,6 @@ class WorkflowController extends Controller{
         $response_data= TaskDetails::where('application_number', $request->applicationNo)->first();
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-<<<<<<< HEAD
     public function insertNotification(Request $request) {
         $notification_data=[
             'notification_for'              =>  $request->notification_for,
@@ -212,7 +203,5 @@ class WorkflowController extends Controller{
         ];
         NotificationVisited::create($not_visited);
     }
-=======
->>>>>>> a2c0551d466c551c1a2f9319d1f8a2e18de386bb
 }
 
