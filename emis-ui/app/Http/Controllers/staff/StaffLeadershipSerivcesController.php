@@ -262,12 +262,7 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllLeadershipSelection');
         return $response_data;
     }
-    public function checkforfeedbackLink(){
-        if($this->staffId()!=""){
-            $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/checkforfeedbackLink/'.$this->staffId() );
-            return $response_data;
-        }
-    }
+
     public function getleadershipDetailsForFeedback($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getleadershipDetailsForFeedback/'.$id);
         return $response_data;
@@ -320,5 +315,144 @@ class StaffLeadershipSerivcesController extends Controller{
         return $response_data;
     }
 
+    public function saveFeedbackProviderData(Request $request){
+        $rules = [
+            'feedback_type'                            =>  'required',
+        ];
+        $customMessages = [
+            'feedback_type.required'                   => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $nomi_data =[
+            'application_number'        =>  $request->application_number,
+            'partifipant_from'          =>  $request->partifipant_from,
+            'email'                     =>  $request->email,
+            'contact'                   =>  $request->contact,
+            'participant'               =>  $request->participant,
+            'positiontitle'             =>  $request->positiontitle,
+            'cid'                       =>  $request->cid,
+            'name'                      =>  $request->name,
+            'department'                =>  $request->department,
+            'school'                    =>  $request->school,
+            'dzongkhag'                 =>  $request->dzongkhag,
+            'feedback_type'             =>  $request->feedback_type,
+            'action_type'               =>  $request->action_type,
+            'user_id'                   =>  $this->userId()
+        ];
+        // dd($nomi_data);
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveFeedbackProviderData', $nomi_data);
+        return $response_data;
+    }
+
+    public function getFeedbackProviderData($appNo=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getFeedbackProviderData/'.$appNo);
+        // dd(json_decode($response_data));
+        return $response_data;
+    }
+
+    public function deleteNomination($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/deleteNomination/'.$id);
+        return $response_data;
+    }
+
+    public function verifyApproveNotify(Request $request){
+        //upload attachments
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'Leadership_selection_verification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    //move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'saveapplication_number' =>  $request->applicationNo,
+                        )
+                    );
+                }
+            }
+        }
+        //get feedback provider to send notification
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getFeedbackProviderData/'.$request->application_number);
+        if($request->action_type=="feedback" && $response_data!=null && $response_data!="" && sizeof(json_decode($response_data))>0){
+            $feedback_provider=json_decode($response_data);
+            $user_id="";
+            foreach($feedback_provider as $feed){
+                if($feed->partifipant_from=="outofministry"){
+                    //$feed['email'] send email notification
+                }
+                else{
+                    $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$feed->participant));
+                    // dd($feed->participant,$appRole_id,$feed->partifipant_from);
+                    $user_id=$user_id.$appRole_id[0]->user_id.',';
+                }
+            }
+            $notification_data=[
+                'notification_for'              =>  'Leadership Selection',
+                'notification_access_type'      =>  'all',
+                'notification_message'          =>  '',
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'leadership_feedback',
+                'user_role_id'                  =>  rtrim($user_id,','),
+                'notification_appNo'            =>  $request->application_number,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            // dd($notification_data);
+            $notification=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        }
+        //prepare data for verification, approval and other updates
+        $current_status="";
+        if($request->action_type=="feedback"){
+            $current_status="Notified for Feedback";
+        }
+        $nomi_data =[
+            'id'                        =>  $request->id,
+            'application_number'        =>  $request->application_number,
+            'application_date'          =>  $request->application_date,
+            'feedback'                  =>  $request->feedback,
+            'interview'                 =>  $request->interview,
+            'shortlist'                 =>  $request->shortlist,
+            'details'                   =>  $request->details,
+            'aplicant_cid'              =>  $request->aplicant_cid,
+            'aplicant_position_title'   =>  $request->aplicant_position_title,
+            'aplicant_working_agency'   =>  $request->aplicant_working_agency,
+            'aplicant_working_dzo'      =>  $request->aplicant_working_dzo,
+            'aplicant_working_gewog'    =>  $request->aplicant_working_gewog,
+            'verification_remarks'      =>  $request->verification_remarks,
+            'feedback_start_date'       =>  $request->feedback_start_date,
+            'feedback_end_date'         =>  $request->feedback_end_date,
+            'feedback_details'          =>  $request->feedback_details,
+            'current_status'            =>  $current_status,
+            'action_type'               =>  $request->action_type,
+            'attachment_details'        =>  $attachment_details,
+            'user_id'                   =>  $this->userId()
+        ];
+        // dd($nomi_data);
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/verifyApproveNotify', $nomi_data);
+        return $response_data;
+    }
+    //pull applicaiton detials for feedback
+    public function checkforfeedbackLink(){
+        if($this->staffId()!=""){
+            $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/checkforfeedbackLink/'.$this->staffId() );
+            return $response_data;
+        }
+    }
+
+    public function getFeedbackData($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getFeedbackData/'.$id);
+        return $response_data;
+    }
 
 }

@@ -150,7 +150,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
             $router->get('/checkEligibility/{type_id}/{role_ids}', ['uses' => 'staff\StaffServicesController@checkEligibility']);
             $router->get('/getLeaveConfigDetails/{role_ids}', ['uses' => 'staff\StaffServicesController@getLeaveConfigDetails']);
-            
+
             $router->post('/submitLeaveApplication', ['uses' => 'staff\StaffServicesController@submitLeaveApplication']);
             $router->get('/loadLeaveDetails/{appNo}', ['uses' => 'staff\StaffServicesController@loadLeaveDetails']);
             $router->post('/verifyApproveRejectLeaveApplication', ['uses' => 'staff\StaffServicesController@verifyApproveRejectLeaveApplication']);
@@ -181,8 +181,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadData/{param}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadData']);
             $router->post('/saveData', ['uses' => 'staff\StaffLeadershipSerivcesController@saveData']);
             $router->get('/loadexistingData/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadexistingData']);
+            $router->post('/saveFeedbackProviderData', ['uses' => 'staff\StaffLeadershipSerivcesController@saveFeedbackProviderData']);
+            $router->get('/getFeedbackProviderData/{appNo}', ['uses' => 'staff\StaffLeadershipSerivcesController@getFeedbackProviderData']);
+            $router->get('/deleteNomination/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@deleteNomination']);
+            $router->post('/verifyApproveNotify', ['uses' => 'staff\StaffLeadershipSerivcesController@verifyApproveNotify']);
+            $router->get('/getFeedbackData/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@getFeedbackData']);
         });
-
     });
 
     $router->group(['prefix' => 'loadstaff'], function () use ($router) {

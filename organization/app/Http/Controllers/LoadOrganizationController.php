@@ -57,6 +57,12 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
             }
         }
+        if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
+            foreach($response_data as $res){
+                $lev=Level::where('id',$res['levelId'])->first();
+                $res->name=$res->name.' '.json_decode($lev)->name;
+            }
+        }
         return $this->successResponse($response_data);
     }
 

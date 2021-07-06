@@ -495,11 +495,11 @@ const routes = [
                     { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
                 ],
             },
-            
+
         ]
     },
     { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
-    
+
     // Recuritment by gagen
     //principal recuritment
     { path: '/recuritment_index', component: require('./components/staff/recuritment/recuritment_index.vue').default,
@@ -574,7 +574,7 @@ const routes = [
 
         ]
     },
-    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+
     //Management Body Transactions
     { path:'/management_body',
         component: require('./components/staff/management/management_body_index.vue').default,
