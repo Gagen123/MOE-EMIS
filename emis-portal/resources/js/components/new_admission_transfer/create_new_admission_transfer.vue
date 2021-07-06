@@ -3,7 +3,7 @@
         <div class="row form-group">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>CidNo/Student Code:</label>
-                <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('cid_std_code') }" id="cid_std_code" v-model="form.cid_std_code" placeholder="Ref/cid No">
+                <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('cid_std_code') }" id="cid_std_code" v-model="form.cid_std_code" placeholder="CID/Ref. No">
                 <has-error :form="form" field="cid_std_code"></has-error>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pt-4 mt-2">

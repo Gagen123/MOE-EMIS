@@ -46,6 +46,7 @@ class std_admission extends Model
         'CmnChiwogId',
         'CmnLanguageId',
         'Status',
+        'school_decision',
         'Remarks',
         'created_by',
         'created_at',
