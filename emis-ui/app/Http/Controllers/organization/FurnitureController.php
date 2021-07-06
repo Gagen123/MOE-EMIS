@@ -65,8 +65,14 @@ class FurnitureController extends Controller
  
     public function loadFurniture(){
         $orgId=$this->getWrkingAgencyId();
+       // dd($orgId);
         $dis = $this->apiService->listData('emis/organization/furniture/loadFurniture/'.$orgId);
         return $dis;
     }
- 
+    
+    public function getFurnitureDetails($furId=""){
+        // dd('m here');
+        $furDetails = $this->apiService->listData('emis/organization/furniture/getFurnitureDetails/'.$furId);
+        return $furDetails;
+    }
 }

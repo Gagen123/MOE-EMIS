@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\staff_leadership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
@@ -12,6 +11,9 @@ class LeadershipDetails extends Model{
         'id',
         'selection_type',
         'position_title',
+        'feedback',
+        'interview',
+        'shortlist',
         'from_date',
         'to_date',
         'details',

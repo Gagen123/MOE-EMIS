@@ -38,7 +38,9 @@ return [
     ],
 
     'constant'=>[
-        'file_stored_base_path' => env('FILE__BASE_PATH')
+        'file_stored_base_path' => env('FILE__BASE_PATH'),
+        'notification_leadership_selection_applicaiton' => env('APPLICATION_SUBMISSION_FOR_LEADERSHIP_SELECTION'),
+        'hrd_role_id'=> env('HRD_ROLE_ID')
     ],
 
 ];

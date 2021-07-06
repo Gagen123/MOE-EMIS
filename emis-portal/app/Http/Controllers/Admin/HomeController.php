@@ -21,6 +21,10 @@ class HomeController extends Controller
         return view('userlogin',['Invalid'=>'']);
     }
 
+    function user_register(){
+        return view('register',['Invalid'=>'']);
+    }
+
     function userlogin(Request $request){
         $rules = [
             'email'  =>  'required',
@@ -34,8 +38,7 @@ class HomeController extends Controller
         $this->validate($request, $rules, $customMessages);
         $data = $request->only('email', 'password');
         if( Session::get('User_details')==null){
-            // dd($data);
-            $response_data = $this->apiService->createData('portallogin', $data);
+            $response_data = $this->apiService->createData('emisportallogin', $data);
             // dd($response_data);
             if(json_decode($response_data)==null || json_decode($response_data)=="null" || json_decode($response_data)=="Not Found"){
                 return view('userlogin',['Invalid'=>'No able to validate details. Please check your route connections and calling urls']);
@@ -51,13 +54,26 @@ class HomeController extends Controller
             Session::put([
                 'User_details'=> $users,
             ]);
-
         }
         return redirect()->away('/dashboard');
     }
     public function user_logout(){
-        Session::forget('User_Details');
+        Session::forget('User_details');
         Session::flush();
         return view('welcome',['Invalid'=>'']);
     }
+
+    public function getSessionDetail(){
+        if(Session::get('User_details')!=""){
+            return ['data' => Session::get('User_details')];
+        }
+        else{
+            return redirect()->away('user_logout');
+        }
+    }
+
+    public function new_register(Request $request){
+        dd($request);
+    }
+
 }

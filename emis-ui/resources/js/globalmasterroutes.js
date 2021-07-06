@@ -69,6 +69,16 @@ const global_routes = [
             { path: '/edit_guidelines', name:'edit_guidelines', component: require('./components/masters/global_masters/guidelines/edit_guidelines.vue').default },
             ],
         },
+        { path: '/calender_index',
+            component: require('./components/masters/global_masters/calender/calender_index.vue').default,
+            children:[
+            { path: '/',name:'calender_index', component: require('./components/masters/global_masters/calender/list_calender.vue').default },
+            { path: '/list_calender',name:'list_calender', component: require('./components/masters/global_masters/calender/list_calender.vue').default },
+            { path: '/create_calender', name:'create_calender', component: require('./components/masters/global_masters/calender/create_calender.vue').default },
+            { path: '/edit_calender', name:'edit_calender', component: require('./components/masters/global_masters/calender/edit_calender.vue').default },
+            ],
+        },
+
 
     ]
 }

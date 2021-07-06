@@ -17,7 +17,7 @@ class Projection extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
+        'id', 
         'organizationId',
         'class',
         'academicYear',

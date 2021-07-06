@@ -97,10 +97,11 @@ class HrDevelopmentController extends Controller{
                             'user_defined_name'       =>  $filenames[$index],
                         )
                     );
+                    // dd($attachment_details);
                 }
             }
         }
-        
+
         $request_data =[
             'id'                                =>  $request->id,
             'training_type'                     =>  $request->training_type,
@@ -131,12 +132,12 @@ class HrDevelopmentController extends Controller{
             'thesis_title'                      =>  $request->thesis_title,
             'attachment_details'                =>  $attachment_details,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->userId() 
+            'user_id'                           =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveprogramDetails', $request_data);
         return $response_data;
     }
-    
+
     public function loadDraftDetails(){
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadDraftDetails/'.$this->userId());
         return $response_data;
@@ -147,15 +148,15 @@ class HrDevelopmentController extends Controller{
             'nomination_end_date'               =>  'required | date',
             'nature_of_participant'             =>  'required',
             // 'target_group'                      =>  'required',
-            'role_action_mapp'                  =>  'required',
-            
+            // 'role_action_mapp'                  =>  'required',
+
         ];
         $customMessages = [
             'nomination_start_date.required'              => 'Please select nomination start date',
             'nomination_end_date.required'                => 'Please select nomination end date',
             'nature_of_participant.required'              => 'Please select this field',
             // 'target_group.required'                       => 'Please select this field',
-            'role_action_mapp.required'                   => 'This field is required',
+            // 'role_action_mapp.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
         $request_data =[
@@ -167,19 +168,19 @@ class HrDevelopmentController extends Controller{
             'org_level'                        =>  $request->org_level,
             'role_action_mapp'                 =>  $request->role_action_mapp,
             'remarks'                          =>  $request->remarks,
-            'user_id'                           =>  $this->userId() 
+            'user_id'                           =>  $this->userId()
         ];
         // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveprogramFinalDetails', $request_data);
         return $response_data;
     }
-    
+
     public function loadprogramDetails(){
         $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadprogramDetails/'.$param);
         return $response_data;
     }
-    
+
     public function loadDetails($id=""){
         $data =[
             'org'                   =>  $this->getWrkingAgencyId(),
@@ -190,7 +191,7 @@ class HrDevelopmentController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadDetails/'.$query);
         return $response_data;
     }
-    
+
     public function loadProgramDetailsForNomination(){
         $roles=$this->currentUser()['roles'];
         $roleIds="";
@@ -202,7 +203,7 @@ class HrDevelopmentController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/loadProgramDetailsForNomination/'.$roleIds);
         return $response_data;
     }
-    
+
     public function saveParticipant(Request $request){
         $rules = [
             'programId'             =>  'required',
@@ -221,6 +222,7 @@ class HrDevelopmentController extends Controller{
         $this->validate($request, $rules,$customMessages);
 
         $files = $request->attachments;
+        // dd($files);
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopmentParticipant';
         if($files!=null && $files!=""){
@@ -251,13 +253,13 @@ class HrDevelopmentController extends Controller{
             'nature_of_participant'     =>  $request->nature_of_participant,
             'attachment_details'        =>  $attachment_details,
             'action_type'               =>  $request->action_type,
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
         // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveParticipant', $request_data);
         return $response_data;
     }
-    
+
     public function getParticipantDetails($action_type="",$id=""){
         $data =[
             'org'                 =>  $this->getWrkingAgencyId(),
@@ -286,50 +288,51 @@ class HrDevelopmentController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/deleteParticipant/'.$id);
         return $response_data;
     }
-    
+
     public function submitParticipants(Request $request){
         $request_data =[
             'programId'                 =>  $request->programId,
             'org_id'                    =>  $this->getWrkingAgencyId(),
             'dzo_id'                    =>  $this->getUserDzoId(),
             'remarks'                   =>  $request->remarks,
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/submitParticipants', $request_data);
-        $workflow_data=[
-            'db_name'           =>'staff_db',
-            'table_name'        =>'program_application',
-            'service_name'      => 'Hr Development',
-            'application_number'=>json_decode($response_data)->data->app_no,
-            'screen_id'         =>$request->programId,
-            'status_id'         =>$request->statusId,
-            'remarks'           =>$request->remarks,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
+        // dd( $response_data);
+        // $workflow_data=[
+        //     'db_name'           =>'staff_db',
+        //     'table_name'        =>'program_application',
+        //     'service_name'      => 'Hr Development',
+        //     'application_number'=>json_decode($response_data)->data->app_no,
+        //     'screen_id'         =>$request->programId,
+        //     'status_id'         =>$request->statusId,
+        //     'remarks'           =>$request->remarks,
+        //     'user_dzo_id'       =>$this->getUserDzoId(),
+        //     'access_level'      =>$this->getAccessLevel(),
+        //     'working_agency_id' =>$this->getWrkingAgencyId(),
+        //     'action_by'         =>$this->userId(),
+        // ];
         // dd($workflow_data);
-        $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        //$work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         // dd($work_response_data);
-        return $work_response_data;
+        return $response_data;
     }
-    
+
     public function updateParticipant(Request $request){
         $request_data =[
             'updatedata'                 =>  $request->participant_list,
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/updateParticipant', $request_data);
         return $response_data;
     }
-    
+
     public function updateapplication(Request $request){
         $request_data =[
             'programId'                 =>  $request->programId,
             'remarks'                   =>  $request->remarks,
             'status'                    =>$request->statusId,
-            'user_id'                   =>  $this->userId() 
+            'user_id'                   =>  $this->userId()
         ];
         $response_data = $this->apiService->createData('emis/staff/hrdevelopment/updateapplication', $request_data);
         $workflow_data=[

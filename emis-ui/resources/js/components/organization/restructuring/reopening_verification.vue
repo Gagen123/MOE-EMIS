@@ -8,10 +8,97 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
+                        <div class="callout callout-success" v-if="existing_details!=''">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label><u>Current Details School to be re-opened:</u></label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Name:</label>
+                                    <span class="text-blue text-bold">{{existing_details.name}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{levelArray[existing_details.levelId]}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Year of Establishment:</label>
+                                    <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category:</label>
+                                    <span class="text-blue text-bold">{{existing_details.category}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Gewog:</label>
+                                    <span class="text-blue text-bold">{{selected_gewog}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Village:</label>
+                                    <span class="text-blue text-bold">{{selected_village}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Classes</th>
+                                                <th class="strm_clas">Stream</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, key, index) in  existing_details.classes" :key="index">
+                                                <td>
+                                                    <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                                </td>
+                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
+                                                    {{  streamArray[item.streamId]  }}
+                                                </td>
+                                                <td class="strm_clas" v-else> </td>
+                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                    <input type="checkbox" checked="true" disabled name="calssXIXII" :value="item.classId">
+                                                </td>
+                                                <td v-else>
+                                                    <input type="checkbox" checked="true" disabled>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="callout callout-info" v-if="appicationDetails!=''">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Application Details</u></label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Application Number:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.application_no}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Application Date:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.reopening.dateOfReopening}}</span>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Type of Change:</label>
+                                    <span class="text-blue text-bold">{{appicationDetails.establishment_type}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -26,33 +113,19 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Date of Proposal:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.reopening.dateOfReopening}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="appicationDetails.reopening.category!='private_school' || appicationDetails.reopening.category!='private_eccd'">
-                                    <label>Zest Code:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.reopening.zestAgencyCode}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Category:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.reopening.category}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{dzoArray[appicationDetails.reopening.dzongkhagId]}}</span>
+                                    <span class="text-blue text-bold">{{dzoArray[appicationDetails.dzongkhagId]}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Gewog:</label>
-                                    <span class="text-blue text-bold">{{gewogArray[appicationDetails.reopening.dzongkhagId]}}</span>
+                                    <span class="text-blue text-bold">{{selected_gewog1}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Village:</label>
-                                    <span class="text-blue text-bold">{{selected_village}}</span>
+                                    <span class="text-blue text-bold">{{selected_village1}}</span>
                                 </div>
                             </div>
-                            <!-- <div class="form-group row">
+                            <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
@@ -63,7 +136,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="(item, key, index) in  appicationDetails.reopening.classes" :key="index">
+                                            <tr v-for="(item, key, index) in  appicationDetails.change_classes" :key="index">
                                                 <td>
                                                     <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                                 </td>
@@ -72,153 +145,21 @@
                                                 </td>
                                                 <td class="strm_clas" v-else> </td>
                                                 <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true">
+                                                    <input type="checkbox" checked="true" disabled name="calssXIXII" :value="item.classId">
                                                 </td>
                                                 <td v-else>
-                                                    <input type="checkbox" checked="true">
+                                                    <input type="checkbox" checked="true" disabled>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div> -->
-
-                            <!-- <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Classes Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  existing_details.classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
-                        <div class="callout callout-info">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Application Number:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.application_no}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Type of Change:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.establishment_type}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='name_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Propose New Name:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.reopening.proposedChange}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposal Initiated Bye:</label>
-                                    <span class="text-blue text-bold">{{proposed_by_list[appicationDetails.reopening.initiatedBy]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='location_type_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed Location:</label>
-                                    <span class="text-blue text-bold">{{locationArray[appicationDetails.reopening.proposedChange]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='expension_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Current Capacity:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.reopening.proposedChange}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed Capacity:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.reopening.changeInDetails}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='feeding_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Is Feeding School:</label>
-                                    <label><input  type="radio" v-model="isfeedingschool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="isfeedingschool" value="0" tabindex=""/> No</label>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                    <label class="mb-0">Feeding Modality:</label>
-                                    <label><input  type="checkbox" v-model="feeding1" id="feeding1" value="1" /> One Meal</label>
-                                    <label><input  type="checkbox" v-model="feeding2" value="2"/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="feeding3" value="3" /> Three Meals</label>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Is SEN School:</label>
-                                    <label><input  type="radio" v-model="senSchool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="senSchool" value="0" tabindex=""/> No</label>
-                                </div>
-                            </div>
-                            <div v-if="appicationDetails.application_type=='proprietor_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Proprietor Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">CID:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorCid}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorName}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Phone No:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorPhone}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Mobile No:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorMobile}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Email:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorEmail}}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Proposed Level:</label>
-                                        <span class="text-blue text-bold">{{levelArray[appicationDetails.reopening.proposedChange]}}</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Change In Classes Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  appicationDetails.change_classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="callout callout-info">
-                            <!-- <div class="row pb-2" id="team_verificationAttachment">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h5><u>Attachments</u></h5>
+                            <div class="form-group row">
+                                <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <h5><u>Attachments (if applicable)</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -239,11 +180,6 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
-                            </div> -->
-                            <div class="form-group row">
-                                <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                                    <h5><u>Any Supporting Documents and Attachments (if applicable)</u></h5>
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
@@ -299,48 +235,6 @@
                         </div>
                     </div>
 
-                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Previous Class Stream Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section1" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList1" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-info">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -364,12 +258,17 @@ export default {
             levelArray:{},
             dzoArray:{},
             gewogArray:{},
+            gewogArray1:{},
             calssArray:{},
             streamArray:{},
             proposed_by_list:{},
             locationArray:{},
             selected_gewog:'',
+            selected_gewog1:'',
             selected_village:'',
+            selected_village1:'',
+            villageArray:{},
+            villageArray1:{},
             appicationDetails:[],
             isfeedingschool:'',
             senSchool:'',
@@ -433,7 +332,7 @@ export default {
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
             .then(response => {
                 this.existing_details=response.data.data;
-                this.form.category=existing_details.category;
+                this.form.category=this.existing_details.category;
                 this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
             })
@@ -441,21 +340,7 @@ export default {
                 console.log("Error: "+error);
             });
         },
-        /**
-         * method to load previous org details
-         */
-        loadPriviousOrgDetails2(org_id){
-            axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
-            .then(response => {
-                this.oldOrg2=response.data.data;
-                this.form.category=oldOrg2.category;
-                this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
-                this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
-            })
-            .catch((error) => {
-                console.log("Error: "+error);
-            });
-        },
+
         /**
          * method to load previous org details
          */
@@ -463,27 +348,13 @@ export default {
             axios.get('organization/loadReopeningForVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
-                this.loadPriviousOrgDetails(data.reopening.OldOrganizationId);
-                this.loadPriviousOrgDetails2(data.reopening.OldOrganizationId2);
+                this.loadPriviousOrgDetails(data.reopening.organizationId);
                 this.appicationDetails=data;
                 this.form.sequence=response.data.sequence;
                 this.form.screen_id=response.data.screen_id;
                 this.form.establishment_type=data.establishment_type;
-                this.isfeedingschool=data.reopening.proposedChange;
-                this.senSchool=data.reopening.proposedChange;
-                if(data.change_feeding!="" && data.change_feeding!=undefined && data.change_feeding.length>0){
-                    for(let i=0; i< data.change_feeding.length; i++){
-                        if(i==0){
-                            this.feeding1=data.change_feeding[i].noOfMeals;
-                        }
-                        if(i==1){
-                            this.feeding2=data.change_feeding[i].noOfMeals;
-                        }
-                        if(i==2){
-                            this.feeding3=data.change_feeding[i].noOfMeals;
-                        }
-                    }
-                }
+                this.getgewog1(response.data.data.dzongkhagId,response.data.data.gewogId);
+                this.getVillage1(response.data.data.gewogId,response.data.data.chiwogId);
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
@@ -589,8 +460,20 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
+            })
+            .catch(function (error) {
+                console.log('err: '+error);
+            });
+        },
+        getgewog1(dzoId,gewogId){
+            axios.get('masters/all_active_dropdowns/dzongkhag/'+dzoId)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.gewogArray1[data[i].id] = data[i].name;
+                }
+                this.selected_gewog1=this.gewogArray1[gewogId];
             })
             .catch(function (error) {
                 console.log('err: '+error);
@@ -604,6 +487,19 @@ export default {
                     this.villageArray[data[i].id] = data[i].name;
                 }
                 this.selected_village=this.villageArray[villageId];
+            })
+            .catch(function (error) {
+                console.log('err: '+error);
+            });
+        },
+        getVillage1(gewogId,villageId){
+            axios.get('masters/all_active_dropdowns/gewog/'+gewogId)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.villageArray1[data[i].id] = data[i].name;
+                }
+                this.selected_village1=this.villageArray1[villageId];
             })
             .catch(function (error) {
                 console.log('err: '+error);

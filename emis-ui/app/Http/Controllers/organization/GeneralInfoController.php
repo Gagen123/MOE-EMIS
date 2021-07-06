@@ -389,6 +389,7 @@ class GeneralInfoController extends Controller
     }
 
     public function getOrgProfile($id = ""){
+       // dd($id);
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;
     }
@@ -432,6 +433,7 @@ class GeneralInfoController extends Controller
     //New function to update the basic organization details
 
     public function updateOrgBasicDetials(Request $request){
+        dd($request);
         switch($request['fields_for']){
             case "eccd" : {
                     $validation = $this->validateEccdFields($request);
@@ -459,8 +461,7 @@ class GeneralInfoController extends Controller
 
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
         return $response_data;
-
-
+        
     }
 
     private function validateOrganizationFields($request){

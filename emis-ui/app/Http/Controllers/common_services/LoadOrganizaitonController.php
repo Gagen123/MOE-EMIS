@@ -17,7 +17,7 @@ class LoadOrganizaitonController extends Controller{
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
         //if Ministry then give entire list
         $access_level = $this->getAccessLevel();
-        if($access_level == 'Ministry'){
+        if($access_level == 'Ministry' && $type!="dzongkhagwise" && $type!="gewoggwise"){
             $type = "allorganizationList";
         }
 
@@ -46,6 +46,8 @@ class LoadOrganizaitonController extends Controller{
         if($type=="gewoggwise"){
             $param=$id;
         }
+        
+        // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
 
@@ -62,7 +64,7 @@ class LoadOrganizaitonController extends Controller{
         return $this->apiService->getListData('emis/common_services/loadOrgDetails/'.$type.'/'.$id);
     }
 
-    public function loadHeaquarterList($type="",$id=""){
+    public function loadHeaquarterList($type="",$parent_id=""){
         $param="";
         //type=allList: to list entire headquarters
         if($type=="allList"){
@@ -83,7 +85,7 @@ class LoadOrganizaitonController extends Controller{
 
     /**
      * type values "NOT AVAILABLE" and "ANY"
-     * 
+     *
      */
 
     public function loadClassStreamSection($type="",$id=""){
@@ -127,7 +129,7 @@ class LoadOrganizaitonController extends Controller{
 
     public function loadStreamList($id){
         return $this->apiService->getListData('emis/common_services/loadStreamList/'.$id);
-    } 
+    }
 
     public function loadSectionList($id){
         return $this->apiService->getListData('emis/common_services/loadSectionList/'.$id);

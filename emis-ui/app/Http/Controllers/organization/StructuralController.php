@@ -35,10 +35,11 @@ class StructuralController extends Controller
         $sport =[
             'organizationId'                        =>  $this->getWrkingAgencyId(),
             'facility'                              =>  $request['facility'],
-            'support'                               =>  $request['support'],
+           // 'support'                               =>  $request['support'],
             'items_received'                        =>  $request->items_received,
             'user_id'                               =>  $this->userId()
         ];
+       // dd( $sport);
         // try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
             return $response_data;
@@ -46,6 +47,12 @@ class StructuralController extends Controller
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;
         // }
+    }
+
+    public function getSportsDetails($sportId=""){
+       // dd($sportId);
+        $sportDetails = $this->apiService->listData('emis/organization/sport/getSportsDetails/'.$sportId);
+        return $sportDetails;
     }
 
     public function saveEccd(Request $request){
@@ -78,10 +85,9 @@ class StructuralController extends Controller
         // }
     }
     
-    public function loadSport($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
-        }
+    public function loadSport(){
+        $orgId=$this->getWrkingAgencyId();
+       // dd($orgId);
         $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
         return $loadSport;
     }
@@ -199,6 +205,21 @@ class StructuralController extends Controller
         return $wash_feeding_detials;
     }
     
+    public function saveEccdFacilities(Request $request){
+        $eccd_data =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'questionList'              =>  $request->questionList,
+            'type'                      =>  $request->type,
+            'user_id'                   =>  $this->userId() 
+        ];
+        // dd($request->questionList);
+        $response_data= $this->apiService->createData('emis/organization/infrastructure/saveEccdFacilities', $eccd_data);
+        return $response_data;
+    }
+    public function getEccdFacilitiesList($type=""){
+        $eccd_facilities_detials = $this->apiService->listData('emis/organization/infrastructure/getEccdFacilitiesList/'.$type.'SSS'.$this->getWrkingAgencyId());
+        return $eccd_facilities_detials;
+    }
 
     public function saveKitchenStatus(Request $request){
         $kitchenStatus =[

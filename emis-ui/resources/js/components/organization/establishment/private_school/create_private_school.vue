@@ -585,8 +585,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.application_number=response.data.data.Application_details.application_no;
-                            this.classStreamForm.application_number=response.data.data.Application_details.application_no;
+                            this.file_form.application_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }

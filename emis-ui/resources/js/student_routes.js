@@ -293,42 +293,6 @@ const routes = [
 { path: '/student_sen_list',name:'student_sen_list', component: require('./components/students/Sen/sen_student_list.vue').default },
 { path: '/sen_questions',name:'sen_questions', component: require('./components/students/Sen/sen_question.vue').default },
 
-
-
-    //ACADEMIC MASTER
-    { path: '/academic-link', component: require('./components/masters/academics_masters/academics_master_index.vue').default,
-        children:[
-            {
-                path: '/',
-                name:'academic-link',
-                component: require('./components/masters/academics_masters/academics_master_list.vue').default,
-            },
-            {  path: '/subject-group-master', component: require('./components/masters/academics_masters/subject_group/subject_group_index.vue').default,
-                children: [
-                    { path: '', name:'subject-group-master', component: require('./components/masters/academics_masters/subject_group/list_subject_group.vue').default },
-                    { path: '/list-subject-group', name: 'list_subject_group', component: require('./components/masters/academics_masters/subject_group/list_subject_group.vue').default },
-                    { path: '/create-subject-group', name: 'create_subject_group', component: require('./components/masters/academics_masters/subject_group/create_subject_group.vue').default },
-                    { path: '/edit-subject-group', name: 'edit_subject_group', component: require('./components/masters/academics_masters/subject_group/edit_subject_group.vue').default },
-                ],
-            },
-            {  path: '/subject-master', component: require('./components/masters/academics_masters/subject/subject_index.vue').default,
-                children: [
-                    { path: '', name:'subject-master', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
-                    { path: '/list-subject', name: 'aca_list_subject', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
-                    { path: '/create-subject', name: 'aca_create_subject', component: require('./components/masters/academics_masters/subject/create_subject.vue').default },
-                    { path: '/edit-subject', name: 'aca_edit_subject', component: require('./components/masters/academics_masters/subject/edit_subject.vue').default },
-                ],
-            },
-            {  path: '/assessment-area-master', component: require('./components/masters/academics_masters/assessment_area/assessment_area_index.vue').default,
-                children: [
-                    { path: '', name:'assessment-area-master', component: require('./components/masters/academics_masters/assessment_area/list_assessment_area.vue').default },
-                    { path: '/list-assessment-area', name: 'aca_list_assessment_area', component: require('./components/masters/academics_masters/assessment_area/list_assessment_area.vue').default },
-                    { path: '/create-assessment-area', name: 'aca_create_assessment_area', component: require('./components/masters/academics_masters/assessment_area/create_assessment_area.vue').default },
-                    { path: '/edit-assessment-area', name: 'aca_edit_assessment_area', component: require('./components/masters/academics_masters/assessment_area/edit_assessment_area.vue').default },
-                ],
-            },
-        ]
-    },
     //Student List and Profile Related Routes
     { path: '/student_profile',name:'student_profile', component: require('./components/students/General/student_profile.vue').default },
     { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },

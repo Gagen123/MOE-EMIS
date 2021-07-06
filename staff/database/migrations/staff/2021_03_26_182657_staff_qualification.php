@@ -9,6 +9,7 @@ class StaffQualification extends Migration{
         Schema::create('stf_qualification', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('personal_id',36)->nullable(false);
+            $table->foreign('personal_id')->references('id')->on('stf_staff');
             $table->char('description',36)->nullable(false);
             $table->char('qualification',36)->nullable(false);
             $table->char('coursemode',36)->nullable(false);

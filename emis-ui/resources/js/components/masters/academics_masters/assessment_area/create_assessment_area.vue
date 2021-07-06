@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Subject Name:<span class="text-danger">*</span></label> 
+                        <label>Subject :<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="subject_category_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in subject_list" :key="index" v-bind:value="item.id">{{ item.name }}

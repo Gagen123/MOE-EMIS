@@ -1398,7 +1398,7 @@ class ChangeBasicDetailsController extends Controller
         ];
         HistoryForOrganizaitonDetail::create($org_data);
         $org_update_data =[
-            'current_fees'               =>  $change_details->proposedChange,
+            'current_fees'              =>  $change_details->proposedChange,
             'updated_by'                =>  date('Y-m-d h:i:s'),
             'updated_at'                =>  $request->user_id,
         ];

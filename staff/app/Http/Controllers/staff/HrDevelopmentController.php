@@ -182,7 +182,7 @@ class HrDevelopmentController extends Controller{
             'nomination_end_date'               =>  'required | date',
             'nature_of_participant'             =>  'required',
             // 'target_group'                      =>  'required',
-            'role_action_mapp'                  =>  'required',
+            // 'role_action_mapp'                  =>  'required',
 
         ];
         $customMessages = [
@@ -190,7 +190,7 @@ class HrDevelopmentController extends Controller{
             'nomination_end_date.required'                => 'Please select nomination end date',
             'nature_of_participant.required'              => 'Please select this field',
             // 'target_group.required'                       => 'Please select this field',
-            'role_action_mapp.required'                   => 'This field is required',
+            // 'role_action_mapp.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
         $participant="";
@@ -209,7 +209,7 @@ class HrDevelopmentController extends Controller{
             'nomination_start_date'            =>  $request->nomination_start_date,
             'nomination_end_date'              =>  $request->nomination_end_date,
             'nature_of_participant'            =>  $participant,
-            'target_group'                     =>  $target_group,
+            // 'target_group'                     =>  $target_group,
             'org_level'                        =>  $org_level,
             'published_date'                   =>  date('Y-m-d h:i:s'),
             'remarks'                          =>  $request->remarks,
@@ -219,20 +219,20 @@ class HrDevelopmentController extends Controller{
 
         $act_det->fill($request_data);
         $response_data=$act_det->save();
-        $workflow=HrWorkflow::where('program_id',$request->id)->get();
-        if(sizeof($workflow)>0){
-            $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')");
-            HrWorkflow::where('program_id',$request->id)->delete();
-        }
-        foreach ($request->role_action_mapp as $i=> $rol){
-            $work_details = array(
-                'program_id'=>$request->id,
-                'sequence'=>$rol['sequence'],
-                'authority_type'=>$rol['authority'],
-                'sys_role_id'=>$rol['role'],
-            );
-            $action_Id= HrWorkflow::create($work_details);
-        }
+        // $workflow=HrWorkflow::where('program_id',$request->id)->get();
+        // if(sizeof($workflow)>0){
+        //     $procid=DB::select("CALL emis_program_detils_audit_proc('".$request->id."','".$request->user_id."','workflow')");
+        //     HrWorkflow::where('program_id',$request->id)->delete();
+        // }
+        // foreach ($request->role_action_mapp as $i=> $rol){
+        //     $work_details = array(
+        //         'program_id'=>$request->id,
+        //         'sequence'=>$rol['sequence'],
+        //         'authority_type'=>$rol['authority'],
+        //         'sys_role_id'=>$rol['role'],
+        //     );
+        //     $action_Id= HrWorkflow::create($work_details);
+        // }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -257,15 +257,17 @@ class HrDevelopmentController extends Controller{
     public function loadDetails($id=""){
         parse_str($id,$param_array);
         $app_det=ProgramApplication::where('program_id',$param_array['id'])->where('org_id',$param_array['org'])->where('dzo_id',$param_array['dzongkhag'])->first();
-        if($app_det!=null && $app_det!=""){
-            $hrdev= $app_det;
-        }
-        else{
-            $hrdev=HrDevelopment::where('id',$param_array['id'])->where('status','Created')->first();
-            if($hrdev!="" && $hrdev!=null){
-                $hrdev->workflow=HrWorkflow::where('program_id',$param_array['id'])->orderBy('sequence')->get();
-            }
-        }
+        // if($app_det!=null && $app_det!=""){
+        //     $hrdev= $app_det;
+        // }
+        // else{
+        //     $hrdev=HrDevelopment::where('id',$param_array['id'])->where('status','Created')->first();
+        //     if($hrdev!="" && $hrdev!=null){
+        //         $hrdev->workflow=HrWorkflow::where('program_id',$param_array['id'])->orderBy('sequence')->get();
+        //     }
+        // }
+        $hrdev=HrDevelopment::where('id',$param_array['id'])->first();
+        $hrdev->prog_app=ProgramApplication::where('program_id',$param_array['id'])->first();
         return $this->successResponse($hrdev);
     }
 
@@ -273,10 +275,13 @@ class HrDevelopmentController extends Controller{
         $param = rtrim($param, ", ");
         $param=explode(',',$param);
 
-        $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->get();
-        foreach($work_details as $work){
-            $work->pro_app=ProgramApplication::where('program_id',$work->program_id)->first();
-        }
+        // $work_details=HrWorkflow::with('with_program')->wherein('sys_role_id',$param)->get();
+        // foreach($work_details as $work){
+        //     $work->pro_app=ProgramApplication::where('program_id',$work->program_id)->first();
+        // }
+        $work_details=HrDevelopment::where('status','Created')->get();
+
+
         // if(sizeof($work_details)>0){
         //     foreach($work_details as $work){
         //         $work->actiontype='Nominating';
@@ -434,6 +439,12 @@ class HrDevelopmentController extends Controller{
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
             $response_data= ProgramApplication::create($request_data);
+            $update_data =[
+                'status'                    =>  'Completed',
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            HrDevelopment::where('id',$request->programId)->update($update_data);
         }
         else{
             $response_data="Already Submitted";

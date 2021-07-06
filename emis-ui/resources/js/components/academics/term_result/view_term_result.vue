@@ -25,11 +25,15 @@
                                 </th>
                                 <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
 
-                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} 
-                                     <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
-                                     <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                 <th v-for="(item, index) in assessmentAreaList" :key="index">
+                                       <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item.name">
+                                            {{item.assessment_area}} 
+                                            <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
+                                            <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                        </span>
+                                  
                                 </th>
-                                <th v-if="totalWeightage>-1">
+                                <th v-if="totalWeightage>=1">
                                     Total 
                                     <span v-if="term_dzo_name && sub_dzo_name"> ( བསྡོམས། ) </span> 
                                     ({{totalWeightage}}%)
@@ -42,7 +46,7 @@
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
-                                        {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}}
+                                        {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}} 
                                         <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)">
                                     </span>
                                 </td>
@@ -52,6 +56,14 @@
                     </table>
                 </div>
             </div>
+            <footer>
+                <ul class="list-inline">
+                    <strong>Abbreviations:</strong>
+                    <li v-for ="(item,index) in assessmentAreaList" :key="index" class="list-inline-item text-justify">
+                        <small v-if="item.code"> <b>{{item.code}} </b> - {{ item.name }} </small>
+                    </li>
+                </ul>
+            </footer>
         </form>
     </div>  
 
@@ -103,7 +115,7 @@
                         
                     }); 
             }, 300);  
-       }                  
+       }
     },
     computed:{
         totalWeightage(){

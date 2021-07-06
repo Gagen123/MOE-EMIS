@@ -14,7 +14,7 @@
                 </tr>
             </thead>
             <tbody>
-                
+
                 <tr v-for="(training, index) in staffList" :key="index">
                    <td>{{ index + 1 }} </td>
                     <td>{{ training.course_title }}</td>
@@ -22,21 +22,22 @@
                     <td>{{ training.end_date }}</td>
                     <td>{{ training.nomination_start_date }}</td>
                     <td>{{ training.nomination_end_date }}</td>
-                    <td>{{ training.status==  'Created' ? "Nominating" : training.status }}</td>
+                    <td>{{ training.status }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'view')">Veiw</a>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'edit')">Edit</a>
+                        <a href="#" v-if="training.status=='Created'" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.id,'edit')">Edit</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data() {
         return {
             staffList:[],
+            dt:'',
         }
     },
     methods: {
@@ -56,12 +57,21 @@ export default {
         this.loadStaffList();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
         $("#staff-table").DataTable({
             "responsive": true,
             "autoWidth": false,
-        }); 
+        });
+        this.dt =  $("#staff-table").DataTable()
+    },
+    watch: {
+        staffList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#staff-table").DataTable()
+            });
+        }
     },
 }
 </script>

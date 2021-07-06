@@ -24,91 +24,104 @@ class CommonController extends Controller{
     }
     public function getTaskList(Request $request){
         $data =[
-            'access_level'          =>  $request->access_level,
-            'work_status'           =>  $request->work_status,
-            'org'                   =>  $request->org,
-            'dzongkhag'             =>  $request->dzongkhag,
-            'user_id'               =>  $request->user_id,
-            'type'                  =>  $request->type,
+            'access_level'              =>  $request->access_level,
+            'work_status'               =>  $request->work_status,
+            'org'                       =>  $request->org,
+            'leave_config_data'         =>  $request->leave_config_data,
+            'tr_config_data'            =>  $request->tr_config_data,
+            'leadership_config_data'    =>  $request->leadership_config_data,
+            'dzongkhag'                 =>  $request->dzongkhag,
+            'user_id'                   =>  $request->user_id,
+            'type'                      =>  $request->type,
         ];
         $access_level=$data['access_level'];
         $dzo_id=$data['dzongkhag'];
         $org_id=$data['org'];
-        $screen_status=$data['work_status'];
+        $work_flow_from_system_admin_status=$data['work_status'];
+        $work_flow_for_leave=$data['leave_config_data'];
+        $work_flow_for_leadership=$data['leadership_config_data'];
+        $work_flow_for_transfer=$data['tr_config_data'];
         $type=$data['type'];
         $user_id=$data['user_id'];
-        $response_data=[];
-        // dd($screen_status);
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
-        
-        if($type=="common" || $type=="commonLeaveOthers"){
+
+        if($type=="own"){
+            $result_data.='t.claimed_by="'.$user_id.'"';
+            if(strtolower($access_level)=="dzongkhag"){
+                $result_data.=' AND t.user_dzo_id="'.$dzo_id.'"';
+            }
+            return DB::select($result_data);
+        }
+        else{
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.$dzo_id.' AND ';
             }
             if(strtolower($access_level)=="org"){
                 $result_data.='t.working_agency_id="'.$org_id.'" AND ';
             }
-            $result_data.=' t.claimed_by IS NULL'; 
-            // for($i=0;$i<sizeof($param)-1;$i++){
-            //     if($type=="commonLeaveOthers"){
-            //         if(sizeof($param)-2==$i){
-            //             $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))';  
-            //         } 
-            //         else{ 
-            //             $result_data.='( t.application_number like "L%" AND t.record_type_id="'.explode('SSS',$param[$i])[2].'" AND t.app_role_id="'.explode('SSS',$param[$i])[3].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
-            //         } 
-            //     }else{
-            //         if(sizeof($param)-2==$i){
-            //             $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].'))'; 
-            //         } 
-            //         else{ 
-            //             $result_data.='( t.screen_id="'.explode('SSS',$param[$i])[0].'" AND t.status_id='.explode('SSS',$param[$i])[1].') OR '; 
-            //         } 
-            //     }
-            // }
-            if($screen_status!="" && sizeof($screen_status)>0){
-                $result_data.=' AND ('; 
-                if($type=="commonLeaveOthers"){
-                    foreach($screen_status as $i => $srcn){
-                        $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';  
-                        if(sizeof($screen_status)-2==$i){
-                            $result_data.=')'; 
-                        } 
-                        else{ 
-                            $result_data.=' OR '; 
-                        } 
+
+            //pulling workflow set up from system administration such as org approval and change detials etc..
+            if($work_flow_from_system_admin_status!=""){
+                $result_data.=' (t.claimed_by IS NULL AND (';
+                foreach($work_flow_from_system_admin_status as $i => $srcn){
+                    $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') ';
+                    if(sizeof($work_flow_from_system_admin_status)-1==$i){
+                        $result_data.='))';
                     }
-                    $response_data=DB::select($result_data);;
-                }else{
-                    // dd(sizeof($screen_status));
-                    foreach($screen_status as $i => $srcn){
-                        // dd(sizeof($screen_status),$i);
-                        $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') '; 
-                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.str_replace('_',' ',$srcn['Establishment_type']).'" AND t.status_id='.($srcn['Sequence']-1).') OR '; 
-                        // $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'" AND LOWER(t.service_name)="'.$srcn['Establishment_type'].'" AND t.name IN ("Change in Name","Upgrade Downgrade","Expansion","Change in Feeding Details","Change in Location Type","Change in SEN details","Change in Autonomous","Closure","Merger","Bifurcation","Re-Opening","Change in Fees","Change in Stream") AND t.status_id='.($srcn['Sequence']-1).')'; 
-                        if(sizeof($screen_status)-1==$i){
-                            $result_data.=')'; 
-                        } 
-                        else{ 
-                            $result_data.=' OR '; 
-                        } 
+                    else{
+                        $result_data.=' OR ';
                     }
-                    // return $result_data;
-                    $response_data=DB::select($result_data);
                 }
             }
-            return $response_data;
-        }
-        
-        if($type=="own"){
-            $result_data.='t.claimed_by="'.$user_id.'"'; 
-            if(strtolower($access_level)=="dzongkhag"){
-                $result_data.=' AND t.user_dzo_id="'.$dzo_id.'"';
+
+            //pulling leave application
+            if($work_flow_for_leave!=""){
+                $result_data.=' OR (t.claimed_by IS NULL AND (';
+                foreach($work_flow_for_leave as $i => $srcn){
+                    $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                    if(sizeof($work_flow_for_leave)-1==$i){
+                        $result_data.='))';
+                    }
+                    else{
+                        $result_data.=' OR ';
+                    }
+                }
             }
+
+            //pulling application for the leadership selection
+            if($work_flow_for_leadership=="Valid"){
+                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+            }
+
+            //pulling application for the transfer
+            if($work_flow_for_transfer!=""){
+                $result_data.='  OR (t.claimed_by IS NULL AND (';
+                foreach($work_flow_for_transfer as $i => $srcn){
+                    $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                    if(sizeof($work_flow_for_transfer)-1==$i){
+                        $result_data.='))';
+                    }
+                    else{
+                        $result_data.=' OR ';
+                    }
+                }
+            }
+            //final query
+            // return $result_data;
             return DB::select($result_data);
+
         }
     }
-    
+
+    public function getNotification($role_ids="",$user_id=""){
+        $roles='"'.$role_ids.'"';
+        if(strpos($role_ids,',')!==false){
+            $roles='"'.str_replace(',','","',$role_ids).'"';
+        }
+        $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_appNo,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id LEFT JOIN notification_visited v ON v.notification_id=d.id WHERE ';
+        $result_data.=' v.user_id IS NULL AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        return DB::select($result_data);
+    }
     public function releaseApplication($application_number=""){
         $update_data=[
             'claimed_by'     =>  null,
@@ -123,7 +136,7 @@ class CommonController extends Controller{
     public function getGewogNameById($id=""){
         return Gewog::where('id',$id)->first();
     }
-    
+
     public function checkPendingApplication($type="",$user_id=""){
         $response_data="";
         if($type=="establishment"){
@@ -143,6 +156,6 @@ class CommonController extends Controller{
         }
         return $response_data;
     }
-    
-    
+
+
 }

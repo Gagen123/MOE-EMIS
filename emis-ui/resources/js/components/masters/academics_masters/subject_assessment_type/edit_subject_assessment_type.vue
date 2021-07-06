@@ -8,7 +8,7 @@
             </div>  
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="subject-assessment-type-table" class="table table-sm table-bordered table-striped">
+                    <table id="subject-assessment-type-table" class="subject-assessment-type-table table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Subject</th>
@@ -103,12 +103,6 @@ export default {
             .catch(function (error){
                 console.log('Error..... '+error)
             });
-            setTimeout(function(){
-                $("#subject-assessment-type-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
         loadRatingTypeList(uri = 'masters/loadAcademicMasters/all_active_rating_type'){
             axios.get(uri)
@@ -145,7 +139,9 @@ export default {
     mounted(){ 
         this.loadClassSubject();
         this.loadRatingTypeList();
-        this.dt =  $("#subject-assessment-type-table").DataTable();
+        this.dt =  $("#subject-assessment-type-table").DataTable({
+            destroy: true,
+        });
     },
     created() {
         this.classId=this.$route.params.data.org_class_id;
@@ -157,7 +153,9 @@ export default {
         classSubjects(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#subject-assessment-type-table").DataTable()
+                this.dt =  $("#subject-assessment-type-table").DataTable({
+                     destroy: true,
+                })
             });
         }
     }

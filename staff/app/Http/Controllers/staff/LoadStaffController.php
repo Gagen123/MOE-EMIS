@@ -20,7 +20,7 @@ class LoadStaffController extends Controller{
         if($type=="userdzongkhagwise" || $type=="dzongkhagwise"){
             return $this->successResponse(PersonalDetails::where('dzo_id',$parent_id)->where('status','Created')->get());
         }
-        if($type=="orgwise" || $type=="userworkingagency"){
+        if($type=="orgwise" || $type=="userworkingagency" || $type=="dzo_hq_departmentwise"){
             return $this->successResponse(PersonalDetails::where('working_agency_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="emptype"){

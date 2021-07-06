@@ -47,6 +47,7 @@ class LoadOrganizationController extends Controller{
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
         }
+
         if($type=="allorganizationList"){
             if($id=="allData"){
                 $response_data=OrganizationDetails::all();
@@ -60,7 +61,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadInactiveOrgList($dzo_id){
-        $response_data=OrganizationDetails::where('status','0')
+        $response_data=OrganizationDetails::where('status','0')->orwhere('status','Closed')
                             ->where('dzongkhagId',$dzo_id)
                             ->select( 'id','name','levelId','dzongkhagId')->get();
         return $response_data;
@@ -70,21 +71,23 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
-            $data = DB::table('classes as c')
-            ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
-            ->select('cl.*', 'c.class', 'c.id AS classId')
-            ->where('cl.organizationId',$response_data->id)
-            ->orderBy('c.displayOrder', 'asc')
-            ->get();
-            $response_data->classes=$data;
-
-            if($response_data->category=="private_school"){
-                $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
-            }
-            else{
-                $feed_det=OrganizationFeedingDetails::where('organizationId',$id)->get();
-                if($feed_det!= NULL && $feed_det !=""){
-                    $response_data->meals=$feed_det;
+            $response_data->level=Level::where('id',$response_data->levelId)->first();
+            if($response_data!=null && $response_data!=""){
+                $data = DB::table('classes as c')
+                ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
+                ->select('cl.*', 'c.class', 'c.id AS classId')
+                ->where('cl.organizationId',$response_data->id)
+                ->orderBy('c.displayOrder', 'asc')
+                ->get();
+                $response_data->classes=$data;
+                if($response_data->category=="private_school"){
+                    $response_data->proprietor=OrganizationProprietorDetails::where('organizationId',$id)->first();
+                }
+                else{
+                    $feed_det=OrganizationFeedingDetails::where('organizationId',$id)->get();
+                    if($feed_det!= NULL && $feed_det !=""){
+                        $response_data->meals=$feed_det;
+                    }
                 }
             }
         }
@@ -104,13 +107,13 @@ class LoadOrganizationController extends Controller{
             if($loc!=null && $loc!=""){
                 $response_data->locationDetials=$loc;
             }
-            // $contact = ContactDetails::where('organizationId',$response_data->id)->first();
-            // if($contact!=null && $contact!=""){
-            //     $response_data->contactDetails=$contact;
-            // } 
+            $contact = ContactDetails::where('organizationId',$response_data->id)->first();
+            if($contact!=null && $contact!=""){
+                $response_data->contactDetails=$contact;
+            }
         }
         if($type=="Headquarterbyid"){
-            $response_data=HeadQuaterDetails::where('id',$id)->first();
+            $response_data=HeadQuaterDetails::where('id',$id)->select('id','agencyName AS name','dzongkhagId')->first();
         }
         return $this->successResponse($response_data);
     }
@@ -148,12 +151,14 @@ class LoadOrganizationController extends Controller{
     }
 
     public function getOrgProfile($id=""){
+        //dd($id);
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=""){
             $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
             $response_data->orgName=$org_det->name;
             $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
         }
+        //dd($response_data);
         return $this->successResponse($response_data);
     }
 
