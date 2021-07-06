@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
 use App\Models\TaskDetails;
+use  App\Models\Notification;
+use App\Models\NotificationAudit;
+use  App\Models\NotificationTo;
+use App\Models\NotificationToAudit;
+use App\Models\NotificationVisited;
 
 class WorkflowController extends Controller{
     use ApiResponser;
