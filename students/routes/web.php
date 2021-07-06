@@ -81,7 +81,13 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
 
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
+            //to get the application details
+            $router->get('/getApplicationDetails/{id}',['uses' => 'Students\StudentAdmissionController@getApplicationDetails']);
         });
+        //Student Updates
+        $router->post('/saveStudentUpdates',['uses' => 'Students\StudentUpdateController@saveStudentUpdates']);
+        $router->get('/loadStudentUpdatesList/{param}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
+
         //SEN Controller
         $router->group(['prefix' => 'sen'], function () use ($router) {
             $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);

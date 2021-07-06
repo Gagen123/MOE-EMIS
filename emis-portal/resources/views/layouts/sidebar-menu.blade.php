@@ -11,13 +11,19 @@
         <li class="nav-item">
             <router-link to="/admission_transfer_index" class="nav-link">
                 <i class="fa fa-users nav-icon blue"></i>
-                <p>Admission</p>
+                <p>Registration Details</p>
             </router-link>
         </li>
         <li class="nav-item">
             <router-link to="/admissionRequest" class="nav-link">
                 <i class="fa fa-users nav-icon blue"></i>
                 <p> Request for admission</p>
+            </router-link>
+        </li>
+        <li class="nav-item">
+            <router-link to="/track_application" class="nav-link">
+            <i class="fa fa-search nav-icon blue"></i>
+              <p> Apply to Schools</p>
             </router-link>
         </li>
         <li class="nav-item">
@@ -33,7 +39,7 @@
         </li>
     </ul>
   </nav>
-  {{-- <script>
+  <!-- {{-- <script>
     function logout(){
       Swal.fire({
         title: 'Are you sure you wish to signout?',
@@ -48,4 +54,4 @@
         }
       });
     }
-</script> --}}
+</script> --}} -->

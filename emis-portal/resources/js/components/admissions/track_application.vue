@@ -9,7 +9,7 @@
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label id="level_name"></label>
-                                <input type="text" class="form-control" @keyup.enter="applicationDetailsbyCID('cid_passport')"   :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="Ref/cid No">
+                                <input type="text" class="form-control" @keyup.enter="applicationDetailsbyCID('cid_passport')"   :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="CID/Ref. No">
                                 <has-error :form="form" field="cid_passport"></has-error>
                             </div>
                         </div>
