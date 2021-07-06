@@ -18,9 +18,10 @@ class LocalProcureController extends Controller
     }
 
     public function saveLocalProcure(Request $request){
-       //  dd('m here');
-        $facility = $request['facility'];
-     foreach ($request->local_item as $i=> $item){
+      //  dd($request);
+      $orgId = $request['organizationId'];
+      $date = $request['dateOfprocure'];
+        foreach ($request->local_item as $i=> $item){
             $localprocure = array(
              'organizationId'             =>  $orgId,
              'dateOfprocure'              =>  $date,
@@ -36,13 +37,19 @@ class LocalProcureController extends Controller
          $localpro = LocalProcure::create($localprocure);
         }
       //  dd('m here');
-     //    dd('localprocure'); 
+      //   dd('localprocure'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
-    public function loadLocalProcure($org_Id=""){
+    public function loadLocalProcure($orgId=""){
         //   return 'from service of mine';
         $list = DB::table('local_procures')
-        ->select('organizationId', 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->where('organizationId', $org_Id)->get();
+        ->select('organizationId', 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->where('organizationId', $orgId)->get();
         return $list;
+    }
+
+    public function localProcureEditList($locId=""){
+        // dd($furId);
+        $response_data=LocalProcure::where('id', $locId)->first();
+        return $this->successResponse($response_data);
     }
 }

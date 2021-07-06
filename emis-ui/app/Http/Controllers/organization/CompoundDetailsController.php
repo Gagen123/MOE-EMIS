@@ -96,5 +96,6 @@ class CompoundDetailsController extends Controller
         $data = $this->apiService->listData('emis/organization/compoundDetails/loadcompoundareadetials/'.$orgId);
         return $data;
     }
+    
 
 }

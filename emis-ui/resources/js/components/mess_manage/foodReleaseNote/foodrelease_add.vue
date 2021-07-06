@@ -28,7 +28,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
                        <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
-                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="form" field="quarter"></has-error> 
                     </div>

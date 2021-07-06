@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
+use Illuminate\Support\Facades\Storage;
 
 class MessManagementController extends Controller
 {
@@ -95,9 +96,11 @@ class MessManagementController extends Controller
 
     // //local Procurement
 
-    public function loadLocalProcure($org_Id=""){
-     //return json_encode('from UI');  
-        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure'.$org_Id);
+    public function loadLocalProcure(){
+        //return json_encode('from UI');  
+        $orgId = $this->getWrkingAgencyId();
+       // dd($orgId);
+        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure/'.$orgId);
         return $list;
     }
 
@@ -128,6 +131,11 @@ class MessManagementController extends Controller
         catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+    public function localProcureEditList($locId=''){
+       // dd('from Ui');
+        $list = $this->apiService->listData('emis/messManagement/localProcureEditList/'.$locId);
+        return $list;
     }
 
     // Stock Received 
@@ -163,7 +171,8 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadFoodReleaseListing($org_Id=""){
+    public function loadFoodReleaseListing(){
+        $org_Id=$this->getWrkingAgencyId();
        // dd('m here');
         $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$org_Id);
         return $list;
@@ -188,31 +197,25 @@ class MessManagementController extends Controller
 
     //just added
     public function getStockReceivedDetails($stockreceivedId=""){
+       // dd(' mhere');
         $receivedDetails = $this->apiService->listData('emis/messManagement/getStockReceivedDetails/'.$stockreceivedId);
         return $receivedDetails;
     }
 
-    public function viewitemreceived($stockreceivedId=""){
-       // return($stockreceivedId);
-        //dd('m here');
-        $itemrcv = $this->apiService->listData('emis/messManagement/viewitemreceived/'.$stockreceivedId);
-        return $itemrcv;
-    }
+    // public function viewitemreceived($stockreceivedId=""){
+    //    // return($stockreceivedId);
+    //    // dd('m here');
+    //     $itemrcv = $this->apiService->listData('emis/messManagement/viewitemreceived/'.$stockreceivedId);
+    //     return $itemrcv;
+    // }
 
     // Stock Issued
-    public function getStockIssuedList($org_Id=""){
-        //  dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/getStockIssuedList'.$org_Id);
+    public function loadStockIssuedList(){
+        //  dd('from UI');
+        $org_Id=$this->getWrkingAgencyId();
+        $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList'.$org_Id);
         return $list;
     }
-    // public function loadStockIssuedList($org_Id=""){
-    //   //  dd('m here');
-    //  if($org_Id=="null" || $org_Id==""){
-    //      $org_Id=$this->getWrkingAgencyId();
-    //     }
-    //   $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList'.$org_Id);
-    //   return $list;
-    // }
 
     public function saveStockIssued(Request $request){
      //return $request

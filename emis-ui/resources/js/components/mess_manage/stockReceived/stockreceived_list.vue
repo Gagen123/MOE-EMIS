@@ -99,8 +99,7 @@ export default {
     },
 
     methods:{
-        loadFoodReleaseListing(org_Id){
-        let uri = 'mess_manage/loadFoodReleaseListing/'+org_Id;
+        loadFoodReleaseListing(uri = 'mess_manage/loadFoodReleaseListing'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -126,7 +125,7 @@ export default {
             axios.get('mess_manage/viewitemreceived/' + this.displayItem.id)
             .then(response => { 
                 let data = response;
-                this.itemreceived_list =  data.data;
+                this.itemreceived_list =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -147,7 +146,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.quarterList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.quarterList[data.data.data[i].id] = data.data.data[i].Name; 
                 }
             })
             .catch(function (error) {
