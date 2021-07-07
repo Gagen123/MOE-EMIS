@@ -10,16 +10,18 @@ class TransferApplication extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'aplication_number',
+        'transfer_type_id',
         'transfer_window_id',
         'staff_id',
         'transfer_reason_id',
+        'transferType',
         'description',
+        'status',
+        'dzongkhagApproved',
         'created_by',
         'updated_by',
         'created_at',
         'updated_at',
-        'status',
-        'dzongkhagApproved'
+        
     ];
 }

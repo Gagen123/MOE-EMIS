@@ -26,8 +26,10 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveLeaveConfigMasters', [App\Http\Controllers\AdministrationController::class, 'saveLeaveConfigMasters'])->name('saveLeaveConfigMasters');
     Route::post('/saveTransferConfigMasters', [App\Http\Controllers\AdministrationController::class, 'saveTransferConfigMasters'])->name('saveTransferConfigMasters');
     Route::get('/loadLeaveConfigMasters/{type}/{submitter}', [App\Http\Controllers\AdministrationController::class, 'loadLeaveConfigMasters'])->name('loadLeaveConfigMasters');
+    Route::get('/loadAllTransferConfigMasters', [App\Http\Controllers\AdministrationController::class, 'loadAllTransferConfigMasters'])->name('loadAllTransferConfigMasters');
     Route::get('/loadAllLeaveConfigMasters', [App\Http\Controllers\AdministrationController::class, 'loadAllLeaveConfigMasters'])->name('loadAllLeaveConfigMasters');
     Route::get('/loadLeaveConfigDetails/{id}', [App\Http\Controllers\AdministrationController::class, 'loadLeaveConfigDetails'])->name('loadLeaveConfigDetails');
+    Route::get('/loadTransferConfigDetails/{id}', [App\Http\Controllers\AdministrationController::class, 'loadTransferConfigDetails'])->name('loadTransferConfigDetails');
     Route::post('/saveLocation', [App\Http\Controllers\AdministrationController::class, 'saveLocation'])->name('saveLocation');
     Route::get('/loadLocation', [App\Http\Controllers\AdministrationController::class, 'loadLocation'])->name('loadLocation');
 
@@ -242,11 +244,12 @@ Route::prefix('organization')->group(function () {
     /** structural facility route */
     Route::post('/saveSport', [App\Http\Controllers\organization\StructuralController::class, 'saveSport'])->name('saveSport');
     Route::post('/saveEccd', [App\Http\Controllers\organization\StructuralController::class, 'saveEccd'])->name('saveEccd');
-    Route::get('/loadSport/{orgId}', [App\Http\Controllers\organization\StructuralController::class, 'loadSport'])->name('loadSport');
+    Route::get('/loadSport', [App\Http\Controllers\organization\StructuralController::class, 'loadSport'])->name('loadSport');
     Route::get('/loadeccd/{orgId}', [App\Http\Controllers\organization\StructuralController::class, 'loadeccd'])->name('loadeccd');
     Route::get('/getFacilityInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getFacilityInDropdown'])->name('getFacilityInDropdown');
     Route::get('/getSupportInDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getSupportInDropdown'])->name('getSupportInDropdown');
     Route::get('/getSubFacilityDropdown/{facilityId}', [App\Http\Controllers\organization\StructuralController::class, 'getSubFacilityDropdown'])->name('getSubFacilityDropdown');
+    Route::get('/getSportsDetails/{sportId}', [App\Http\Controllers\organization\StructuralController::class, 'getSportsDetails'])->name('getSportsDetails');
 
     Route::post('/saveKitchenStatus', [App\Http\Controllers\organization\StructuralController::class, 'saveKitchenStatus'])->name('saveKitchenStatus');
     Route::get('/loadKitchenStatus', [App\Http\Controllers\organization\StructuralController::class, 'loadKitchenStatus'])->name('loadKitchenStatus');
@@ -435,13 +438,18 @@ Route::prefix('staff')->group(function () {
         Route::post('/updateapplication', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateapplication'])->name('updateapplication');
     });
 
+    // Transfer route
     Route::prefix('transfer')->group(function (){
         Route::get('/getcurrentTransferWindowDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'getcurrentTransferWindowDetails'])->name('getcurrentTransferWindowDetails');
-        Route::post('/submitapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitapplicantDetails'])->name('submitapplicantDetails');
+        Route::post('/submitIntialapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitIntialapplicantDetails'])->name('submitIntialapplicantDetails');
         Route::get('/getDraftDetails', [App\Http\Controllers\staff\TransferController::class, 'getDraftDetails'])->name('getDraftDetails');
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
         Route::get('/loadtrainsferDetails/{appNo}/{type}', [App\Http\Controllers\staff\TransferController::class, 'loadtrainsferDetails'])->name('loadtrainsferDetails');
         Route::post('/updateTransferApplication', [App\Http\Controllers\staff\TransferController::class, 'updateTransferApplication'])->name('updateTransferApplication');
+        Route::get('/LoadSchoolByDzoId/{param}/{id}', [App\Http\Controllers\staff\TransferController::class, 'LoadSchoolByDzoId'])->name('LoadSchoolByDzoId');
+        Route::get('/loadtransferDetails/{param}', [App\Http\Controllers\staff\TransferController::class, 'loadtransferDetails'])->name('loadtransferDetails');
+        Route::get('/getStaffNameWithId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getStaffNameWithId'])->name('getStaffNameWithId');
+
     });
     Route::prefix('managementBody')->group(function (){
         Route::post('/saveManagementBody', [App\Http\Controllers\staff\ManagementBodyController::class, 'saveManagementBody'])->name('saveManagementBody');
@@ -485,17 +493,29 @@ Route::prefix('staff')->group(function () {
         Route::post('/createPost', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createPost'])->name('createPost');
         Route::get('/loadAllPosts', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllPosts'])->name('loadAllPosts');
         Route::get('/loadDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadDetials'])->name('loadDetials');
-        Route::get('/loadPostDetials', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadPostDetials'])->name('loadPostDetials');
-
+        Route::get('/loadAllPostList', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllPostList'])->name('loadAllPostList');
+        Route::get('/loadPostDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadPostDetials'])->name('loadPostDetials');
+        Route::post('/submitApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'submitApplication'])->name('submitApplication');
+        Route::get('/loadapplicaitontDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetials'])->name('loadapplicaitontDetials');
+        Route::get('/loadAllApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllApplication'])->name('loadAllApplication');
         Route::post('/createLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createLeadershipSelection'])->name('createLeadershipSelection');
         Route::get('/loadLeadershipSelection/{type}/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadLeadershipSelection'])->name('loadLeadershipSelection');
         Route::post('/createNominationForLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createNominationForLeadershipSelection'])->name('createNominationForLeadershipSelection');
         Route::get('/loadNominationForLeadershipSelection/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadNominationForLeadershipSelection'])->name('loadNominationForLeadershipSelection');
         Route::post('/publishleadership', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'publishleadership'])->name('publishleadership');
         Route::get('/loadAllLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllLeadershipSelection'])->name('loadAllLeadershipSelection');
-
+        Route::post('/saveFeedbackProviderData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveFeedbackProviderData'])->name('saveFeedbackProviderData');
+        Route::get('/getFeedbackProviderData/{appNo}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getFeedbackProviderData'])->name('getFeedbackProviderData');
+        Route::get('/deleteNomination/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'deleteNomination'])->name('deleteNomination');
+        Route::post('/verifyApproveNotify', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'verifyApproveNotify'])->name('verifyApproveNotify');
+        Route::get('/getFeedbackData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getFeedbackData'])->name('getFeedbackData');
         Route::get('/checkforfeedbackLink', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'checkforfeedbackLink'])->name('checkforfeedbackLink');
         Route::get('/getleadershipDetailsForFeedback/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getleadershipDetailsForFeedback'])->name('getleadershipDetailsForFeedback');
+        Route::get('/loadapplicaitontDetialsforVerification/{application_number}/{type}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetialsforVerification'])->name('loadapplicaitontDetialsforVerification');
+        Route::get('/loadData/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadData'])->name('loadData');
+        Route::post('/saveData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveData'])->name('saveData');
+        Route::get('/loadexistingData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadexistingData'])->name('loadexistingData');
+
     });
 
 
@@ -514,6 +534,8 @@ Route::prefix('common')->group(function () {
     Route::get('/getDzoNameById/{id}', [App\Http\Controllers\CommonController::class, 'getDzoNameById'])->name('getDzoNameById');
     Route::get('/getGewogNameById/{id}', [App\Http\Controllers\CommonController::class, 'getGewogNameById'])->name('getGewogNameById');
     // Route::get('/getOrgDetailsById/{id}/{accesslevel}', [App\Http\Controllers\CommonController::class, 'getOrgDetailsById'])->name('getOrgDetailsById');
+
+    Route::get('/getNotification', [App\Http\Controllers\CommonController::class, 'getNotification'])->name('getNotification');
 
     //Get Student List
     Route::get('/getStudentList/{orgId}/{orgClassStreamId}', [App\Http\Controllers\CommonController::class, 'getStudentList'])->name('getStudentList');
@@ -583,6 +605,10 @@ Route::prefix('students')->group(function () {
     Route::get('/getStudentParentsDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentParentsDetails'])->name('getStudentParentsDetails');
     Route::get('/getStudentRoleDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentRoleDetails'])->name('getStudentRoleDetails');
     Route::get('/getStudentProgrammeDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentProgrammeDetails'])->name('getStudentProgrammeDetails');
+
+    //Update Student Details Routs
+    Route::post('/saveStudentUpdates', [App\Http\Controllers\student\StudentUpdateController::class, 'saveStudentUpdates'])->name('saveStudentUpdates');
+    Route::get('/loadStudentUpdatesList/{param}', [App\Http\Controllers\student\StudentUpdateController::class, 'loadStudentUpdatesList'])->name('loadStudentUpdatesList');
 
     Route::post('/saveStudentAward', [App\Http\Controllers\student\StudentAwardController::class, 'saveStudentAward'])->name('saveStudentAward');
     Route::get('/loadStudentAwards/{param}', [App\Http\Controllers\student\StudentAwardController::class, 'loadStudentAwards'])->name('loadStudentAwards');

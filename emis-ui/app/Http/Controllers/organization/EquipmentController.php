@@ -53,7 +53,7 @@ class EquipmentController extends Controller
         // }
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;
-        // }
+        // } 
     }
 
     public function loadEquipment(){

@@ -6,10 +6,10 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
+                            <th>Application Number</th>
                             <th>Position for</th>
                             <th>Position title</th>
-                            <th>Apply From Date</th>
-                            <th>Apply To Date</th>
+                            <th>Applied On</th>
                             <th>Status</th>
                             <th class="pl-5 ml-5 pr-5 ml-5 text-center">Action</th>
                         </tr>
@@ -17,14 +17,14 @@
                     <tbody>
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
+                            <td>{{ item.application_number }}</td>
                             <td>{{ item.selection_type=='Others' ? item.selection_type:selectionList[item.selection_type] }}</td>
                             <td>{{ positionarray[item.position_title] }}</td>
-                            <td>{{ item.from_date }}</td>
-                            <td>{{ item.to_date }}</td>
+                            <td>{{ item.created_at }}</td>
                             <td>{{ item.status }}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-edit"></span> Edit</a>
+                                <a href="#" v-if="item.status=='Submitted'" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-edit"></span> Edit</a>
                             </td>
                         </tr>
                     </tbody>

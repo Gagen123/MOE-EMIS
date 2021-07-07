@@ -23,7 +23,21 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Shortlisting:</label>
+                        <span class="text-blue text-bold">{{form.shortlist==1 ? 'Yes':'No'}}</span>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>270 Degree Feedback:</label>
+                        <span class="text-blue text-bold">{{form.feedback==1 ? 'Yes':'No'}}</span>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Interview:</label>
+                        <span class="text-blue text-bold">{{form.interview==1 ? 'Yes':'No'}}</span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Details:</label>
                         <span class="text-blue text-bold">{{form.details}}</span>
                     </div>
@@ -55,6 +69,9 @@ export default {
                 id:'',
                 selection_type:'',
                 position_title:'',
+                feedback:1,
+                interview:1,
+                shortlist:1,
                 from_date:'',
                 to_date:'',
                 details:'',
@@ -78,7 +95,7 @@ export default {
                 console.log(error);
             });
         },
-        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -113,6 +130,9 @@ export default {
                 this.form.from_date=data.from_date;
                 this.form.to_date=data.to_date;
                 this.form.details=data.details;
+                this.form.shortlist=data.shortlist;
+                this.form.interview=data.interview;
+                this.form.feedback=data.feedback;
                 this.form.selection_type=data.selection_type;
                 if(data.applicable_applicant.length>0){
                     for(let i=0;i<data.applicable_applicant.length;i++){

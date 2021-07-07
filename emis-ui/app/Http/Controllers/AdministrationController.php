@@ -67,6 +67,7 @@ class AdministrationController extends Controller{
             'parent_field'          =>  $request['parent_field'],
             'code'                  =>  $request['code'],
             'guideline_for'         =>  $request['guideline_for'],
+            'display_order'         =>  $request['display_order'],
             'guidelines'            =>  $request['guidelines'],
             'status'                =>  $request['status'],
             'actiontype'            =>  $request['action_type'],
@@ -169,7 +170,7 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
-    
+
     public function saveTransferConfigMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -226,9 +227,17 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/loadAllLeaveConfigMasters');
         return $response_data;
     }
+    public function loadAllTransferConfigMasters(){
+        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters/'.$this->userId());
+        return $response_data;
+    }
 
     public function loadLeaveConfigDetails($id=""){
         $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/'.$id);
+        return $response_data;
+    }
+    public function loadTransferConfigDetails($id=""){
+        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
         return $response_data;
     }
 
@@ -304,7 +313,7 @@ class AdministrationController extends Controller{
             ];
         }
         $this->validate($request, $rules, $customMessages);
-       
+
         $request['user_id'] = $this->userId();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);

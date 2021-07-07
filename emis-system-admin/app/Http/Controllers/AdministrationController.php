@@ -120,7 +120,7 @@ class AdministrationController extends Controller{
                         'created_by'    =>  $request['user_id'],
                         'created_at'    =>  date('Y-m-d h:i:s'),
                     ];
-                   
+
                     $response_data = Calender::create($data);
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -177,6 +177,7 @@ class AdministrationController extends Controller{
                     if($request->record_type=="village"){
                         $data->gewog_id = $request['parent_field'];
                     }
+
                     $data->code         = $request['code'];
                     $data->status       = $request['status'];
                     $data->updated_by   = $request['user_id'];
@@ -199,6 +200,7 @@ class AdministrationController extends Controller{
                         'guideline_for'     =>  $guidefor,
                         'guideline'         =>  $guide['guideline'],
                         'status'            =>  $guide['status'],
+                        'display_order'     =>  $guide['display_order'],
                         'created_by'        =>  $request['user_id'],
                         'created_at'        =>  date('Y-m-d h:i:s'),
                     ];
@@ -212,6 +214,7 @@ class AdministrationController extends Controller{
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }
+
             if($request->actiontype=="edit"){
                 // dd( $request['guideline_for'], $request['name'],$request['id']);
                 $data = Guidelines::find($request['id']);
@@ -219,6 +222,7 @@ class AdministrationController extends Controller{
                 DB::select("CALL emis_audit_proc('".$this->database."','master_guidelines','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
                 $data->guideline_for = $request['guideline_for'];
                 $data->guideline = $request['name'];
+                $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->updated_by = $request['user_id'];
                 $data->updated_at = date('Y-m-d h:i:s');
@@ -229,6 +233,19 @@ class AdministrationController extends Controller{
     }
     public function loadGlobalMasters($param=""){
         // dd("inside system admin serices");
+        if($param=="intra_transfer"){
+            return $this->successResponse(Calender::where('type','Intra Transfer')->get());
+        }
+
+        if($param=="inter_transfer"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->get());
+        }
+        if($param=="inter"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+        }
+        if($param=="intra"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+        }
         if($param=="all_transfer_type_list"){
             return $this->successResponse(Calender::all());
         }
@@ -285,7 +302,7 @@ class AdministrationController extends Controller{
             return $this->successResponse(Village::where('gewog_id',$parent_id)->get());
         }
         if($model=="guidelines"){
-            return $this->successResponse(Guidelines::where('guideline_for',str_replace('_',' ',$parent_id))->where('status',1)->get());
+            return $this->successResponse(Guidelines::where('guideline_for',str_replace('_',' ',$parent_id))->where('status',1)->orderby('display_order','ASC')->get());
         }
 
     }

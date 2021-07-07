@@ -26,5 +26,15 @@ class TrackApplicationController extends Controller
         $response_data= $this->apiService->createData('emis/students/admission/acceptApplication', $request_data);
         return $response_data;
     }
+    
+    /**
+     * Get the application details by id
+     * Checks the std_admissions table
+     */
+
+    public function getApplicationDetails($id=""){
+        $application_data = $this->apiService->listData('emis/students/admission/getApplicationDetails/'.$id);
+        return $application_data;
+    }
 
 }

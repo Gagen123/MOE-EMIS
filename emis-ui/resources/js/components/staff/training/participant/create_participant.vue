@@ -322,7 +322,7 @@ export default {
                 }
                 if(type=="active_nature_of_participant_list"){
                     for(let i=0;i<data.length;i++){
-                        this.nature_of_participantListname[data[i].id] = data[i].name;
+                        this.nature_of_participantListname[data[i].id] = data[i].name+', '+data[i].name;
                     }
                 }
             })

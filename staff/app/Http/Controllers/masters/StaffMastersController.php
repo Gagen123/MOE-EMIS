@@ -806,13 +806,22 @@ class StaffMastersController extends Controller{
         return $this->successResponse(TransferConfig ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
     }
 
-    public function loadAllLeaveConfigMasters($type="",$submitter=""){
-        return $this->successResponse(TransferConfig ::all());
+    public function loadAllTransferConfigMasters($user_id){
+        return $this->successResponse(TransferConfig::where('created_by',$user_id)->get());
+    }
+
+    public function loadAllLeaveConfigMasters(){
+        return $this->successResponse(LeaveConfiguration::get());
     }
 
     public function loadLeaveConfigDetails($id=""){
         $data=LeaveConfiguration::where('id',$id)->first();
         $data->conDetails= LeaveConfigurationDetials::where('leave_config_id',$id)->get();
+        return $this->successResponse($data);
+    }
+    public function loadTransferConfigDetails($id=""){
+        $data=TransferConfig::where('id',$id)->first();
+        $data->conDetails= TransferConfigDetails::where('transfer_config_id',$id)->get();
         return $this->successResponse($data);
     }
 }

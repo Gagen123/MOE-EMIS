@@ -2,81 +2,106 @@
     <div>
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-body">
+                <template v-if="post_detail!=''">
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Position Title:</label>
+                            <span class="text-blue text-bold">{{positionList[post_detail.position_title]}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Application Start Date:</label>
+                            <span class="text-blue text-bold">{{post_detail.from_date}}</span>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Application End Date:</label>
+                            <span class="text-blue text-bold">{{post_detail.to_date}}</span>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>Details:</label>
+                            <span class="text-blue text-bold">{{post_detail.details}}</span>
+                        </div>
+                    </div>
+                </template>
+                <hr/>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Selection For:<span class="text-danger">*</span></label>
-                        <select class="form-control select2" id="selection_type" v-model="form.selection_type" :class="{ 'is-invalid': form.errors.has('selection_type') }">
-                            <option value="">--Select--</option>
-                            <option v-for="(item, index) in selectionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            <option value="Others">Others</option>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4 pb-4">
+                        <label>Applicant:<i class="text-danger">*</i></label>
+                        <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}, {{item.position_title}}</option>
                         </select>
-                        <has-error :form="form" field="selection_type"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Position Title:<span class="text-danger">*</span></label>
-                        <select class="form-control select2" id="position_title" v-model="form.position_title" :class="{ 'is-invalid': form.errors.has('position_title') }">
-                            <option value="">--Select--</option>
-                            <option v-for="(item, index) in positionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="position_title"></has-error>
+                        <has-error :form="form" field="staff_id"></has-error>
                     </div>
                 </div>
+
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Application Start Date:<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" @change="remove_err('from_date')" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
-                        <has-error :form="form" field="from_date"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Application End Date:<span class="text-danger">*</span></label>
-                        <input type="date" @change="remove_err('to_date')" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
-                        <has-error :form="form" field="to_date"></has-error>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Remarks</label>
+                        <textarea class="form-control" v-model="form.remarks" id="remarks" name="remarks"></textarea>
+                        <span class="text-danger" id="remarks_err"></span>
                     </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Details:</label>
-                        <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.details" id="details"></textarea>
-                        <has-error :form="form" field="details"></has-error>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
                     </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(agent, index) in form.document_List' :key="index">
-                        <label>Required Attachment:</label>
-                        <input type="text" name="document" v-model="agent.document" :id="'document'+index" class="form-control">
-                        <span class="text-danger" id="document_err"></span>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <button type="button" class="btn btn-flat btn-sm btn-primary"
-                        @click="addMoreattahcments('doc')"><i class="fa fa-plus"></i> Add</button>
-                        <button type="button" class="btn btn-flat btn-sm btn-danger"
-                        @click="removeattachments('doc')"><i class="fa fa-trash"></i> Remove</button>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(app, index) in form.applicant_List' :key="index">
-                        <label>Applicable Applicant:<span class="text-danger">*</span></label>
-                        <select name="applicant" :id="'applicant'+(index)" class="form-control" v-model="app.applicant">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                        </select>
-                        <span class="text-danger" id="applicant_err"></span>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <button type="button" class="btn btn-flat btn-sm btn-primary"
-                        @click="addMoreattahcments('applicant')"><i class="fa fa-plus"></i> Add</button>
-                        <button type="button" class="btn btn-flat btn-sm btn-danger"
-                        @click="removeattachments('applicant')"><i class="fa fa-trash"></i> Remove</button>
+                <div class="card">
+                    <div class="form-group row">
+                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-8">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                        <template>
+                                            <td>{{attach.user_defined_name}} </td>
+                                            <td>  {{attach.original_name}}</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                <span>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                </span>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <hr>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-primary fa-pull-right" @click="submitAnnouncement('feedback-tab')"><i class="fa fa-save"></i> Save & Apply </button>
+                        <button class="btn btn-primary fa-pull-right" @click="submitApplication()"><i class="fa fa-save"></i> Submit </button>
                     </div>
                 </div>
             </div>
@@ -85,95 +110,116 @@
 </template>
 <script>
 export default {
-    data(){
+     data(){
         return {
-            selectionList:[],
-            positionList:[],
-            roleList:[],
+            require_count:0,
+            count:0,
+            selectionList:{},
+            positionList:{},
+            roleList:{},
+            staffList:[],
+            post_detail:'',
+            applicationdetailsatt:'',
             form: new form({
                 id:'',
-                selection_type:'',
-                position_title:'',
-                from_date:'',
-                to_date:'',
-                details:'',
-                document_List:[{document:''}],
-                applicant_List:[{applicant:''}],
+                post_id:'',
+                staff_id:'',
+                dzo_id:'',
+                org_id:'',
+                accessLevel:'',
+                remarks:'',
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
+                applicant:'',
                 action_type:'edit'
             }),
         }
     },
     methods: {
-        submitAnnouncement(){
-            if(this.validated()){
-                Swal.fire({
-                    text: "Are you sure you wish to save this post ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if(result.isConfirmed){
-                        this.form.post('/staff/staffLeadershipSerivcesController/createPost')
-                        .then((response) =>{
-                            if(response!=""){
-                                Swal.fire(
-                                    'Success!',
-                                    'Post details has been updates and published successfully.',
-                                    'success',
-                                )
-                                this.$router.push('/list_application');
-                            }
-                        })
-                        .catch((error) =>{
-                            console.log("Error: "+error);
-                            this.applyselect2();
-                        });
-                    }
-                });
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
             }
         },
-        validated(){
-            let return_type=true;
-            for(let i=0;i<this.form.applicant_List.length;i++){
-                if($('#applicant'+i).val()==""){
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Sorry! ',
-                        text: 'Please select applicable applicant',
+        addMore: function(){
+            this.form.attachments.push({file_name:'', file_upload:''})
+        },
+        remove(index){
+            if(this.form.attachments.length>1){
+                this.form.attachments.pop();
+            }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
                     });
-                    return_type=false;
                 }
-            }
-            return return_type;
+            });
         },
-        removeattachments(type){
-            if(type=="doc"){
-                this.form.document_List.pop();
-            }
-            if(type=="applicant"){
-                this.form.applicant_List.pop();
-            }
-        },
-        addMoreattahcments(type){
-            if(type=="doc"){
-                this.form.document_List.push({document:''})
-            }
-            if(type=="applicant"){
-                this.form.applicant_List.push({applicant:''})
-            }
-        },
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
+        loadstaff(){
+            let uri = 'loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.staffList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
         },
         loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.positionList =  data.data.data;
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.positionList[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error){
                 console.log(error);
@@ -182,20 +228,45 @@ export default {
         getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.selectionList =  data.data.data;
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.selectionList[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error){
                 console.log('err in retrieving services: '+error);
             });
         },
-        applyselect2(){
-            if(!$('#selection_type').attr('class').includes('select2-hidden-accessible')){
-                $('#selection_type').addClass('select2-hidden-accessible');
-            }
-            if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
-                $('#position_title').addClass('select2-hidden-accessible');
-            }
+        loadroleList(uri = 'masters/getroles/allActiveRoles'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.roleList[data[i].Id] = data[i].Name;
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
+
+        loadPostDetials(id){
+            axios.get('/staff/staffLeadershipSerivcesController/loadapplicaitontDetials/'+id)
+            .then((response) =>{
+                let data=response.data.data[0];
+                this.loadstaff();
+                this.post_detail=data;
+                this.form.id=data.id;
+                this.form.remarks=data.remarks;
+                this.form.post_id=data.post_id;
+                this.require_count=data.attachments.length;
+                this.count=data.attachments.length;
+                this.applicationdetailsatt=data.attachments;
+                this.getstaffDetails();
+            })
+            .catch((error) =>{
+                console.log("Error: "+error);
+            });
         },
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -203,50 +274,71 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="selection_type"){
-                this.form.selection_type=$('#selection_type').val();
-            }
             if(id=="position_title"){
                 this.form.position_title=$('#position_title').val();
             }
         },
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.roleList =  data.data;
+        getstaffDetails(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                this.form.staff_id=data['staff_id'];
+                this.form.dzo_id=data['Dzo_Id'];
+                this.form.org_id=data['Agency_Code'];
+                this.form.accessLevel=data['acess_level'];
+                $('#staff_id').val(data['staff_id']).trigger('change');
+                $('#staff_id').prop('disabled',true);
             })
-            .catch(function (error){
-                console.log(error);
+            .catch(errors => {
+                console.log(errors)
             });
         },
-        loadDetials(){
-            axios.get('/staff/staffLeadershipSerivcesController/loadDetials/'+this.form.id)
-            .then((response) =>{
-                let data=response.data.data;
-                this.form.selection_type=data.selection_type;
-                $('#selection_type').val(data.selection_type).trigger('change');
-                this.form.position_title=data.position_title;
-                $('#position_title').val(data.position_title).trigger('change');
-                this.form.from_date=data.from_date;
-                this.form.to_date=data.to_date;
-                this.form.details=data.details;
-                this.form.selection_type=data.selection_type;
-                if(data.applicable_applicant.length>0){
-                    this.form.applicant_List=[];
-                    for(let i=0;i<data.applicable_applicant.length;i++){
-                        this.form.applicant_List.push({applicant:data.applicable_applicant[i].role_id});
+        submitApplication(){
+            Swal.fire({
+                text: 'Are you sure you wish to submit this application ? ',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let formData = new FormData();
+                    formData.append('post_id', this.form.post_id);
+                    formData.append('id', this.form.id);
+                    formData.append('staff_id', this.form.staff_id);
+                    formData.append('dzo_id', this.form.dzo_id);
+                    formData.append('org_id', this.form.org_id);
+                    formData.append('accessLevel', this.form.accessLevel);
+                    formData.append('remarks', this.form.remarks);
+                    for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
                     }
-                }
-                if(data.attachments.length>0){
-                    this.form.document_List=[];
-                    for(let i=0;i<data.attachments.length;i++){
-                        this.form.document_List.push({document:data.attachments[i].attachment});
+
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
                     }
+                    axios.post('/staff/staffLeadershipSerivcesController/submitApplication', formData, config)
+                    .then((response) => {
+                        if(response.data!=""){
+                            if(response!="" && response!="No Screen"){
+                                let res='Your application aganst system generated application number: <b>'+response.data.data.application_number+'.</b><br> has been updated and send for further action. <br><b>Thank You !</b>';
+                                this.$router.push({name:'application_acknowledgement',params: {data:res }});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application is udpated successfully'
+                                });
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.log("Error:"+error);
+                        this.form.errors.errors = error.response.data.errors;
+                    })
                 }
-            })
-            .catch((error) =>{
-                console.log("Error: "+error);
             });
         }
 
@@ -265,8 +357,8 @@ export default {
         this.getSelectionList();
         this.loadroleList();
         this.loadPositionTitleList();
-        this.form.id=this.$route.params.id;
-        this.loadDetials();
+
+        this.loadPostDetials(this.$route.params.id);
     },
 }
 </script>

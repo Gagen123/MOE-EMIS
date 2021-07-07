@@ -6,22 +6,21 @@
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Year</th>
-                            <th>From Date</th>
-                            <th>To Date</th>
-                            <th>Action</th>
+                            <th>Applicant Name</th>
+                            <th>Application Number</th>
+                            <th>Date of Apply</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.year}}</td>
-                            <td>{{ item.from_date}}</td>
-                            <td>{{ item.to_date}}</td>
+                             <td>{{ StaffName[item.staff_id]}}</td>
+                            <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
+                            <td>{{ item.created_at}}</td>
+                           <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <!-- <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td> -->
-                            <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                            </td>
+                            
                         </tr>
                     </tbody>
                 </table>
@@ -35,26 +34,48 @@ export default {
         return{
             totle:0,
             transfer_list:[],
-            transfer_window_list:[],
-            dt:''
+            loaddetails:[],
+            staff_id:[],
+            StaffName:{},
+
         }
+        
     },
     methods: {
         showedit(staff){
             this.$router.push({name:"edit_transfer_window",params:{data:staff}});
 		},
-        loadtransferwindow(){
-            axios.get('staff/loadTransferList')
+        loadtransferDetails(){
+            axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
-                this.transfer_window_list =  response.data.data;
+                // alert(JSON.stringify(response.data));
+                let data = response.data
+                this.transfer_list = data;
              })
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
         },
+        loadstaff(){
+            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
+            axios.get(uri)
+            .then(response =>{
+                // alert(JSON.stringify(response.data.data[0]));
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.StaffName[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        applyselect2(){
+        },
     },
     mounted() {
-        this.loadtransferwindow();
+        this.loadtransferDetails();
+        this.loadstaff();
         this.dt =  $("#training-table").DataTable()
     },
     watch: {

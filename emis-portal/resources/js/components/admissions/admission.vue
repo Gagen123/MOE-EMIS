@@ -3,7 +3,7 @@
         <div class="card card-primary card-outline">
             <div class="card-body">
                 <div class="form-group">
-                    <label class="mb-0">CidNo/Student Code:</label>
+                    <label class="mb-0">CID No./Student Code:</label>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label id="level_name"></label>

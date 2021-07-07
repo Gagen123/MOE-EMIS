@@ -47,6 +47,7 @@ class LoadOrganizationController extends Controller{
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
         }
+
         if($type=="allorganizationList"){
             if($id=="allData"){
                 $response_data=OrganizationDetails::all();
@@ -54,6 +55,12 @@ class LoadOrganizationController extends Controller{
             else{        // dd($request);
 
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
+            }
+        }
+        if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
+            foreach($response_data as $res){
+                $lev=Level::where('id',$res['levelId'])->first();
+                $res->name=$res->name.' '.json_decode($lev)->name;
             }
         }
         return $this->successResponse($response_data);
@@ -70,6 +77,7 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
+            $response_data->level=Level::where('id',$response_data->levelId)->first();
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
