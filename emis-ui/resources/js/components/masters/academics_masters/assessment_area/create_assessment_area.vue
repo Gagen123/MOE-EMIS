@@ -1,13 +1,14 @@
 <template>
     <div>
-        <form class="bootbox-form">
+        <form class="bootbox-form" autocomplete="off">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject :<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="subject_category_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }">
+                        <select class="form-control select2 subject" id="subject_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }" @change="onChange">
                             <option value=""> --Select--</option>
-                            <option v-for="(item, index) in subject_list" :key="index" v-bind:value="item.id">{{ item.name }}
+                            <option v-for="(item, index) in subject_list" :key="index" v-bind:value="item.id" :data-category-id="item.aca_sub_category_id">
+                                {{ item.name }}
                                 <span v-if="item.dzo_name">( {{item.dzo_name}} )</span>
                             </option>
                         </select> 
@@ -19,14 +20,14 @@
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Dzongkha Assessment Area:</label>
+                        <label>Assessment Area (In Dzongkha Text):</label>
                         <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('dzo_name') }" id="dzo_name" @change="remove_err('dzo_name')" type="text">
                         <has-error :form="form" field="dzo_name"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Assessment Area Code:<span class="text-danger">*</span></label>
+                        <label>Assessment Area Abbreviation:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
@@ -34,12 +35,11 @@
                         <label>Rating Type:</label> 
                          <select v-model="form.aca_rating_type_id" class="form-control select2" id="aca_rating_type_id"> 
                             <option value="">--Select--</option>
-                            <option v-for="(item, index) in filterRating(1)" :key="index" :value="item.id">{{ item.name }}</option>
                         </select> 
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
+                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number" min="0">
                         <has-error :form="form" field="display_order"></has-error>
                     </div>
                 </div>  
@@ -65,6 +65,7 @@ export default {
         return {
             subject_list:[],
             rating_type_list:[],
+            filtered_rating_type:[],
             form: new form({
                 aca_sub_id:'',
                 aca_rating_type_id:'',
@@ -95,18 +96,25 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadRatingTypeList(uri = 'masters/loadAcademicMasters/all_active_rating_type'){
+        onChange(){
+		    var aca_sub_category_id = $('#subject_id option:selected').data('category-id')
+            var ratingtypes = "<option value=''>--Select--</option>"
+            this.rating_type_list.forEach((item,index)=>{
+                if(item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id || item.aca_sub_category_id === null )){
+                    ratingtypes += ("<option value='" + item.id + "'>" + item.name + "</option>")
+                }
+            })
+            $("#aca_rating_type_id").html(ratingtypes) 
+        },
+        loadRatingTypeList(){
+            let uri = 'masters/loadAcademicMasters/all_active_rating_type'
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.rating_type_list = data.data.data;
+                this.rating_type_list = response.data.data
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
-        },
-        filterRating(value){
-           return this.rating_type_list.filter(item => item.input_type != value);
         },
 		formaction: function(type){
             if(type=="reset"){
@@ -134,7 +142,7 @@ export default {
             }
 		}, 
     },
-      mounted(){ 
+    mounted(){ 
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -150,7 +158,6 @@ export default {
         });
         this.loadSubList()
         this.loadRatingTypeList()
-        this.filterRating()
     },
 }
 </script>

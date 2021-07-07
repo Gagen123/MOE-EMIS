@@ -4,10 +4,12 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Subject Name:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="aca_sub_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }">
+                        <label>Subject:<span class="text-danger">*</span></label> 
+                       <select class="form-control select2 subject" id="subject_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }" @change="onChange">
                             <option value=""> --Select--</option>
-                            <option v-for="(item, index) in subject_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in subject_list" :key="index" v-bind:value="item.id" :data-category-id="item.aca_sub_category_id">
+                                {{ item.name }}
+                            </option>
                         </select> 
                         <has-error :form="form" field="aca_sub_category_id"></has-error>
                     </div>
@@ -31,8 +33,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Rating Type:</label> 
                          <select v-model="form.aca_rating_type_id" class="form-control select2" id="aca_rating_type_id" :class="{ 'is-invalid': form.errors.has('aca_rating_type_id') }"> -->
-                            <option value=""> --Select--</option>
-                            <option v-for="(item, index) in filterRating(1)" :key="index" :value="item.id">{{ item.name }}</option>
+                           <option v-for="(item, index) in filterRating(1)" :key="index" :value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="aca_sub_group_id"></has-error>
                     </div>
@@ -83,7 +84,7 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-        loadSubList(uri = 'masters/loadAcademicMasters/all_active_subject'){
+        loadSubList(uri = 'masters/loadAcademicMasters/all_active_subject_and_sub_subject'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -94,19 +95,28 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        onChange(){
+            this.filterRating()
+        },
         loadRatingTypeList(uri = 'masters/loadAcademicMasters/all_active_rating_type'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
                 this.rating_type_list = data.data.data
-                console.log(this.rating_type_list)
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-        filterRating(value){
-           return this.rating_type_list.filter(item => item.input_type != value);
+        filterRating(){
+           var aca_sub_category_id = $('#subject_id option:selected').data('category-id')
+            var ratingtypes = ""
+            this.rating_type_list.forEach((item,index)=>{
+                if(item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id || item.aca_sub_category_id === null )){
+                    ratingtypes += ("<option value='" + item.id + "'>" + item.name + "</option>")
+                }
+            })
+            $("#aca_rating_type_id").html(ratingtypes) 
         },
 		formaction: function(type){
             if(type=="reset"){
