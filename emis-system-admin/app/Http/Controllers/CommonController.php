@@ -28,7 +28,6 @@ class CommonController extends Controller{
             'work_status'               =>  $request->work_status,
             'org'                       =>  $request->org,
             'leave_config_data'         =>  $request->leave_config_data,
-            'tr_config_data'            =>  $request->tr_config_data,
             'leadership_config_data'    =>  $request->leadership_config_data,
             'dzongkhag'                 =>  $request->dzongkhag,
             'user_id'                   =>  $request->user_id,
@@ -40,7 +39,8 @@ class CommonController extends Controller{
         $work_flow_from_system_admin_status=$data['work_status'];
         $work_flow_for_leave=$data['leave_config_data'];
         $work_flow_for_leadership=$data['leadership_config_data'];
-        $work_flow_for_transfer=$data['tr_config_data'];
+        $work_flow_for_transfer=$request->tr_config_data;
+        // return $request->tr_config_data; 
         $type=$data['type'];
         $user_id=$data['user_id'];
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
@@ -94,6 +94,7 @@ class CommonController extends Controller{
             }
 
             //pulling application for the transfer
+            // return $work_flow_for_transfer;
             if($work_flow_for_transfer!=""){
                 $result_data.='  OR (t.claimed_by IS NULL AND (';
                 foreach($work_flow_for_transfer as $i => $srcn){
@@ -119,7 +120,8 @@ class CommonController extends Controller{
             $roles='"'.str_replace(',','","',$role_ids).'"';
         }
         $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_appNo,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id LEFT JOIN notification_visited v ON v.notification_id=d.id WHERE ';
-        $result_data.=' v.user_id IS NULL AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        // return $result_data;
         return DB::select($result_data);
     }
     public function releaseApplication($application_number=""){

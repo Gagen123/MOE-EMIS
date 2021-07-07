@@ -86,7 +86,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Brif description for seeking transfer</label>
+                                <label class="mb-0.5">Brief description for seeking transfer</label>
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>

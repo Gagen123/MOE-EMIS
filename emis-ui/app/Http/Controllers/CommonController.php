@@ -74,7 +74,8 @@ class CommonController extends Controller{
         ];
         $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
-        $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
+        $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
+        // dd($tr_data);
         if(config('services.constant.hrd_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.hrd_role_id'))!==false){
             $leadership_data="Valid";//pull leadership application only for HRD role
         }

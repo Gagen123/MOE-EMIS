@@ -161,7 +161,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                  <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('verify')"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
@@ -198,6 +198,7 @@ export default {
                 id: '',
                 application_no:'',
                 staff_id: '',
+                status_id:'',
                 transfer_reason_id:'',
                 description:'',
                 preference_dzongkhag1:'',
@@ -218,41 +219,32 @@ export default {
         loadtransferdetails(appId,type){
             axios.get('staff/transfer/loadtrainsferDetails/'+appId+'/'+type)
             .then((response) =>{
-                // alert(JSON.stringify(response.data));
                 let data=response.data.data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
-                this.form.app_stage=data.sequence;
                 this.form.staff_id=data.staff_id;
-                for(let i=0;i<data.preferences.length;i++){
-                    if(i==0){
-                        this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
-                        $('#approvedDzongkhag1').val(data.preferences[i].dzongkhag_id);
-                    }
-                    if(i==1){
-                        this.form.preference_dzongkhag2     =   data.preferences[i].dzongkhag_id;
-                        $('#approvedDzongkhag2').val(data.preferences[i].dzongkhag_id);
-                    }
-                    if(i==2){
-                        this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
-                        $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
-                    }
-                }
-                this.draft_attachments=data.documents;
-                if(response.data.app_stage.toLowerCase().includes('verifi')){
+                // for(let i=0;i<data.preferences.length;i++){
+                //     if(i==0){
+                //         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
+                //         $('#approvedDzongkhag1').val(data.preferences[i].dzongkhag_id);
+                //     }
+                //     if(i==1){
+                //         this.form.preference_dzongkhag2     =   data.preferences[i].dzongkhag_id;
+                //         $('#approvedDzongkhag2').val(data.preferences[i].dzongkhag_id);
+                //     }
+                //     if(i==2){
+                //         this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
+                //         $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
+                //     }
+                // }
+                if(this.form.status_id!=10 && this.form.status_id!=0){
                     $('#verifyId').show();
                 }
-                if(response.data.app_stage.toLowerCase().includes('approve')){
+                if(this.form.status_id==2 ){
                     $('#approveId').show();
-                    $('#approveDzohead').show();
-                    $('#approveDzo1').show();
-                    $('#approveDzo2').show();
-                    $('#approveDzo3').show();
-                }
-                if(response.data.app_stage.toLowerCase().includes('con')){
-                    $('#confirm').show();
+                     $('#verifyId').hide();
                 }
             })
             .catch((error) =>{
@@ -320,7 +312,6 @@ export default {
                         }).then((result) => {
                         if (result.isConfirmed) {
                             this.form.actiontype=nextclass;
-                            this.form.attachments;
                             this.form.dzongkhagApproved=$("input[name='dzongkhagApproved']:checked").val();
                             this.form.post('staff/transfer/updateTransferApplication')
                             .then((response) => {
@@ -411,7 +402,7 @@ export default {
     },
     mounted(){
         this.form.application_no=this.$route.params.data.application_number;
-        
+        this.form.status_id=this.$route.params.data.status_id;
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();
         this.gettransferconfig();

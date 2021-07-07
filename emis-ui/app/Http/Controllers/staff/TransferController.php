@@ -155,6 +155,7 @@ class TransferController extends Controller{
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
+            $work_status=10;
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -170,35 +171,35 @@ class TransferController extends Controller{
             'action_by'         =>$this->userId(),
         ];
         $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        $files = $request->attachments;
-        $filenames = $request->attachmentname;
-        $remarks = $request->remarks;
-        $attachment_details=[];
-        $file_store_path=config('services.constant.file_stored_base_path').'transferVerification';
-        if($files!=null && $files!=""){
-            if(sizeof($files)>0 && !is_dir($file_store_path)){
-                mkdir($file_store_path,0777,TRUE);
-            }
-            if(sizeof($files)>0){
-                foreach($files as $index => $file){
-                    $file_name = time().'_' .$file->getClientOriginalName();
-                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
-                    array_push($attachment_details,
-                        array(
-                            'path'                   =>  $file_store_path,
-                            'original_name'          =>  $file_name,
-                            'user_defined_name'      =>  $filenames[$index],
-                            'saveapplication_number' =>  $request->application_no,
-                        )
-                    );
-                }
-            }
-        }
+        // $files = $request->attachments;
+        // $filenames = $request->attachmentname;
+        // $remarks = $request->remarks;
+        // $attachment_details=[];
+        // $file_store_path=config('services.constant.file_stored_base_path').'transferVerification';
+        // if($files!=null && $files!=""){
+        //     if(sizeof($files)>0 && !is_dir($file_store_path)){
+        //         mkdir($file_store_path,0777,TRUE);
+        //     }
+        //     if(sizeof($files)>0){
+        //         foreach($files as $index => $file){
+        //             $file_name = time().'_' .$file->getClientOriginalName();
+        //             move_uploaded_file($file,$file_store_path.'/'.$file_name);
+        //             array_push($attachment_details,
+        //                 array(
+        //                     'path'                   =>  $file_store_path,
+        //                     'original_name'          =>  $file_name,
+        //                     'user_defined_name'      =>  $filenames[$index],
+        //                     'saveapplication_number' =>  $request->application_no,
+        //                 )
+        //             );
+        //         }
+        //     }
+        // }
         $data =[
             'status'                        =>   $org_status,
             'application_number'            =>   $request->application_no,
             'remarks'                       =>   $request->remarks,
-            'attachment_details'            =>   $attachment_details,
+            // 'attachment_details'            =>   $attachment_details,
             'user_id'                       =>   $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);

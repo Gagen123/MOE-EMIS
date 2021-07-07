@@ -71,8 +71,8 @@ class WorkflowController extends Controller{
                 dd($ex);
 
             }
-            
-        } 
+
+        }
         else{
             $task_data=[
                 'status_id'             =>$request->status_id,
@@ -89,9 +89,9 @@ class WorkflowController extends Controller{
             else{
                 TaskDetails::where('application_number', $request->application_number)->update($task_data);
             }
-            
+
             $workflowdetails = TaskDetails::where('application_number', $request->application_number)->first();;
-        }   
+        }
         return $this->successResponse($workflowdetails, Response::HTTP_CREATED);
     }
 
@@ -175,7 +175,7 @@ class WorkflowController extends Controller{
             'updated_by'                         =>  $request->action_by,
             'updated_at'                         =>  date('Y-m-d h:i:s'),
         ];
-        Notification::where('notification_appNo',$record_id)->update($notification_data);
+        Notification::where('notification_appNo',$request->notification_appNo)->update($notification_data);
         $notification_to=NotificationTo::where('notification_id',$record_id)->get();
         if($notification_to!=null && $notification_to!="" && sizeof($notification_to)>0){
             foreach($notification_to as $noti){
@@ -194,14 +194,39 @@ class WorkflowController extends Controller{
         }
 
         NotificationTo::where('notification_id',$record_id)->delete();
-        $not_to_data=[
-            'notification_id'           =>  $record_id,
-            'user_role_id'              =>  $noti['user_role_id'],
-            'access_level'              =>  $noti['access_level'],
-            'dzo_id'                    =>  $noti['dzo_id'],
-            'working_agency_id'         =>  $noti['working_agency_id'],
-        ];
-        NotificationTo::create($not_to_data);
+        // $not_to_data=[
+        //     'notification_id'           =>  $record_id,
+        //     'user_role_id'              =>  $noti['user_role_id'],
+        //     'access_level'              =>  $noti['access_level'],
+        //     'dzo_id'                    =>  $noti['dzo_id'],
+        //     'working_agency_id'         =>  $noti['working_agency_id'],
+        // ];
+        // NotificationTo::create($not_to_data);
+        if(strpos($request->user_role_id,',')!==false){
+            $user_roles=explode(',', $request->user_role_id);
+            foreach($user_roles as $usr){
+                if($usr!=""){
+                    $notification_to_data=[
+                        'notification_id'               =>  $notificationDetails->id,
+                        'user_role_id'                  =>  $usr,
+                        'dzo_id'                        =>  $request->dzo_id,
+                        'access_level'                  =>  $request->access_level,
+                        'working_agency_id'             =>  $request->working_agency_id,
+                    ];
+                    NotificationTo::create($notification_to_data);
+                }
+            }
+        }
+        else{
+            $notification_to_data=[
+                'notification_id'               =>  $notificationDetails->id,
+                'user_role_id'                  =>  $request->user_role_id,
+                'dzo_id'                        =>  $request->dzo_id,
+                'access_level'                  =>  $request->access_level,
+                'working_agency_id'             =>  $request->working_agency_id,
+            ];
+            NotificationTo::create($notification_to_data);
+        }
         $not_visited=[
             'notification_id'           =>  $record_id,
             'user_id'                   =>  $request->action_by,

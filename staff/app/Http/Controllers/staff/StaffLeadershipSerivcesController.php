@@ -14,6 +14,7 @@ use App\Models\staff_leadership\NominationDetails;
 use App\Models\staff_leadership\FeedbackProviderDetails;
 use App\Models\staff_leadership\RequiredAttachment;
 use App\Models\staff\ApplicationSequence;
+use App\Models\staff\Nomination;
 use App\Models\staff\PersonalDetails;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
@@ -408,24 +409,6 @@ class StaffLeadershipSerivcesController extends Controller{
         return $this->successResponse($respomse_data);
     }
 
-    public function checkforfeedbackLink($id=""){
-        // return FeedbackProviderDetails::where('staff_id',$id)->get();
-        // dd($id);
-        $respomse_data=DB::table('staff_leadership_nominee_feedback_detials as f')
-        ->join('staff_leadership_detials as l', 'f.leadership_id', '=', 'l.id')
-        ->join('master_stf_position_title as p', 'l.position_title', '=', 'p.id')
-        ->join('staff_leadership_nomination_detials as n', 'n.id', '=', 'f.nominees_id')
-        ->leftjoin('stf_staff as s', 's.id', '=', 'n.staff_id')
-        ->join('master_stf_position_title as np', 's.position_title_id', '=', 'np.id')
-
-        ->select('l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type',
-        'n.id','n.staff_id','s.name AS nominee_name','np.name AS nominee_position_title','n.dzongkhag_id','n.org_id')
-        ->where('f.staff_id', $id)
-        ->where('l.to_date','>=',date('Y-m-d'))
-        ->where('l.status', 'created')->get();
-        return $this->successResponse($respomse_data);
-    }
-
     public function getleadershipDetailsForFeedback($id=""){
         $respomse_data=DB::table('staff_leadership_nominee_feedback_detials as f')
         ->join('staff_leadership_detials as l', 'f.leadership_id', '=', 'l.id')
@@ -565,5 +548,109 @@ class StaffLeadershipSerivcesController extends Controller{
         return $response_data;
     }
 
+    public function saveFeedbackProviderData(Request $request){
+        $rules = [
+            'feedback_type'                            =>  'required',
+        ];
+        $customMessages = [
+            'feedback_type.required'                   => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $response_data="";
+        if($request->action_type=="add"){
+            $data =[
+                'application_number'        =>  $request->application_number,
+                'partifipant_from'          =>  $request->partifipant_from,
+                'email'                     =>  $request->email,
+                'contact'                   =>  $request->contact,
+                'participant'               =>  $request->participant,
+                'positiontitle'             =>  $request->positiontitle,
+                'cid'                       =>  $request->cid,
+                'name'                      =>  $request->name,
+                'department'                =>  $request->department,
+                'school'                    =>  $request->school,
+                'dzongkhag'                 =>  $request->dzongkhag,
+                'feedback_type'             =>  $request->feedback_type,
+                'action_type'               =>  $request->action_type,
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = FeedbackProviderDetails::create($data);
+        }
+        if($request->action_type=="edit"){
+            //need to write edit code if required
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
+    public function getFeedbackProviderData($appNo=""){
+        $response_data=FeedbackProviderDetails::where('application_number',$appNo)->get();
+        return $response_data;
+    }
+    public function deleteNomination($id=""){
+        $response_data=FeedbackProviderDetails::where('id',$id)->delete();
+        return $response_data;
+    }
+
+    public function verifyApproveNotify(Request $request){
+        //$request->id is LeadershipApplication
+        if($request->attachment_details!=null){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $request->id,
+                    'attachment_for'                   =>  'Leadership Selection',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                DocumentDetails::create($doc_data);
+            }
+        }
+        $response_data="";
+        $data =[
+            'feedback_remarks'          =>  $request->verification_remarks,
+            'feedback_start_date'       =>  $request->feedback_start_date,
+            'feedback_end_date'         =>  $request->feedback_end_date,
+            'feedback_details'          =>  $request->feedback_details,
+            'status'                    =>  $request->current_status,
+            'feedback_updated_date'     =>  date('Y-m-d h:i:s'),
+            'feedback_updated_by'       =>  $request->user_id,
+        ];
+        LeadershipApplication::where('id',$request->id)->update($data);
+        $response_data = LeadershipApplication::where('id',$request->id)->first();;
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
+    public function checkforfeedbackLink($id=""){
+        // $respomse_data=DB::table('staff_leadership_nominee_feedback_detials as f')
+        // ->join('staff_leadership_detials as l', 'f.leadership_id', '=', 'l.id')
+        // ->join('master_stf_position_title as p', 'l.position_title', '=', 'p.id')
+        // ->join('staff_leadership_nomination_detials as n', 'n.id', '=', 'f.nominees_id')
+        // ->leftjoin('stf_staff as s', 's.id', '=', 'n.staff_id')
+        // ->join('master_stf_position_title as np', 's.position_title_id', '=', 'np.id')
+
+        // ->select('l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type',
+        // 'n.id','n.staff_id','s.name AS nominee_name','np.name AS nominee_position_title','n.dzongkhag_id','n.org_id')
+        // ->where('f.staff_id', $id)
+        // ->where('l.to_date','>=',date('Y-m-d'))
+        // ->where('l.status', 'created')->get();
+        $response_data=FeedbackProviderDetails::where('participant',$id)->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            foreach($response_data as $data){
+                $app_details=LeadershipApplication::where('application_number',$data['application_number'])->first();
+                if($app_details!=null && $app_details!=""){
+                    $data->application_details=$app_details;
+                    $leadership_detials=LeadershipDetails::where('id',$app_details->leadership_id)->first();
+                    $data->post_details=$leadership_detials;
+                }
+            }
+        }
+        return $this->successResponse($response_data);
+    }
+
+    public function getFeedbackData($id=""){
+        $response_data=FeedbackProviderDetails::where('',$id)->get();
+        return $response_data;
+    }
 
 }

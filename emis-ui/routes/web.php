@@ -504,7 +504,11 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadNominationForLeadershipSelection/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadNominationForLeadershipSelection'])->name('loadNominationForLeadershipSelection');
         Route::post('/publishleadership', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'publishleadership'])->name('publishleadership');
         Route::get('/loadAllLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllLeadershipSelection'])->name('loadAllLeadershipSelection');
-
+        Route::post('/saveFeedbackProviderData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveFeedbackProviderData'])->name('saveFeedbackProviderData');
+        Route::get('/getFeedbackProviderData/{appNo}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getFeedbackProviderData'])->name('getFeedbackProviderData');
+        Route::get('/deleteNomination/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'deleteNomination'])->name('deleteNomination');
+        Route::post('/verifyApproveNotify', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'verifyApproveNotify'])->name('verifyApproveNotify');
+        Route::get('/getFeedbackData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getFeedbackData'])->name('getFeedbackData');
         Route::get('/checkforfeedbackLink', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'checkforfeedbackLink'])->name('checkforfeedbackLink');
         Route::get('/getleadershipDetailsForFeedback/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getleadershipDetailsForFeedback'])->name('getleadershipDetailsForFeedback');
         Route::get('/loadapplicaitontDetialsforVerification/{application_number}/{type}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetialsforVerification'])->name('loadapplicaitontDetialsforVerification');
