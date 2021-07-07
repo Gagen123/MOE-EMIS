@@ -16,6 +16,7 @@ class Notification extends Migration
             $table->string('notification_access_type',50)->nullable(false)->comment('dzongkhag level, org level, all');
             $table->char('access_level',20);
             $table->string('call_back_link',225)->nullable();
+            $table->string('action',200)->nullable();
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',50)->nullable(true);
             $table->timestamp('created_at')->nullable();
@@ -31,6 +32,7 @@ class Notification extends Migration
             $table->string('notification_access_type',50)->nullable(false)->comment('dzongkhag level, org level, all');
             $table->char('access_level',20);
             $table->string('call_back_link',225)->nullable();
+            $table->string('action',200)->nullable();
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',50)->nullable(true);
             $table->timestamp('created_at')->nullable();

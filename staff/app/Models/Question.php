@@ -11,6 +11,7 @@ class Question extends Model{
     protected $fillable = [
         'id',
         'category_type_id',
+        'leadership_type_id',
         'name',
         'answer_type',
         'status',

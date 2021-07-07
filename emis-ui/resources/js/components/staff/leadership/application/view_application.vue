@@ -20,7 +20,7 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label>Details:</label>
                             <span class="text-blue text-bold">{{post_detail.details}}</span>
                         </div>
@@ -52,7 +52,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
-                                    <template>
+                                    <template v-if="attach.attachment_for=='Leadership Application'">
                                         <td>{{attach.user_defined_name}} </td>
                                         <td>  {{attach.original_name}}</td>
                                         <td>
@@ -63,6 +63,50 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="callout callout-info" v-if="form.current_status!='Submitted'">
+                    <h4><u>Application Verification Details</u></h4>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                        <template v-if="attach.attachment_for=='Leadership Selection'">
+                                            <td>{{attach.user_defined_name}} </td>
+                                            <td>  {{attach.original_name}}</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row" v-if="form.shortlisted_remarks!=''">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Shortlisted Remarks: </label>
+                            <span class="text-blue text-bold">{{form.shortlisted_remarks}}</span>
+                        </div>
+                    </div>
+                    <div class="row" v-if="form.feedback_remarks!=''">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Remarks for Feedback Notification: </label>
+                            <span class="text-blue text-bold">{{form.feedback_remarks}}</span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="form.feedback_remarks">
+                            <label class="mb-0">Remarks for Feedback Notification: </label>
+                            <span class="text-blue text-bold">{{form.feedback_remarks}}</span>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -87,7 +131,8 @@ export default {
                 details:'',
                 document:'',
                 applicant:'',
-                action_type:'edit'
+                shortlisted_remarks:'',
+                feedback_remarks:'',
             }),
         }
     },
@@ -143,6 +188,8 @@ export default {
                 this.form.remarks=data.remarks;
                 this.form.applicant=data.staff_id;
                 this.form.post_id=data.post_id;
+                this.form.shortlisted_remarks=data.shortlisted_remarks;
+                this.form.feedback_remarks=data.feedback_remarks;
                 this.require_count=data.attachments.length;
                 this.count=data.attachments.length;
                 this.applicationdetailsatt=data.attachments;

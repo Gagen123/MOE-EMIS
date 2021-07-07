@@ -4,23 +4,25 @@
             <table id="data-table" class="table table-bordered text-sm table-striped">
                 <thead>
                     <tr>
-                        <th >SL#</th>
-                        <th >Category</th>
-                        <th >Question</th>
-                        <th >Status</th>
-                        <th >Created Date</th>
-                        <th class="pl-4">Action</th>
+                        <th style="width:5%">SL#</th>
+                        <th style="width:10%">Leadership</th>
+                        <th style="width:10%">Category</th>
+                        <th style="width:40%">Question</th>
+                        <th style="width:10%">Status</th>
+                        <th style="width:15%">Created Date</th>
+                        <th style="width:10%" class="pl-4">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item, index) in dataList" :key="index">
                         <td>{{ index + 1 }}</td>
+                        <td>{{ leadershipe_list[item.leadership_type_id]}}</td>
                         <td>{{ categoryList[item.category_type_id]}}</td>
                         <td>{{ item.name}}</td>
                         <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                         <td>{{ item.created_at }}</td>
                         <td>
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > View & Edit</a>
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                         </td>
                     </tr>
                 </tbody>
@@ -35,6 +37,7 @@ export default {
             dataList:[],
             dt:'',
             categoryList:{},
+            leadershipe_list:{},
         }
     },
     methods:{
@@ -48,6 +51,19 @@ export default {
             })
             .catch(function (error){
                 console.log(error);
+            });
+        },
+        leadershipelist(){
+            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.leadershipe_list[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
         loadquestionList(uri = 'staff/staffLeadershipSerivcesController/loadData/allData_Question'){
@@ -67,6 +83,7 @@ export default {
     },
     mounted(){
         this.loadcategoryList();
+        this.leadershipelist();
         this.loadquestionList();
         this.dt =  $("#data-table").DataTable()
     },

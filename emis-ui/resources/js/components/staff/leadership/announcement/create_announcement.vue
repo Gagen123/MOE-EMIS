@@ -8,7 +8,6 @@
                         <select class="form-control select2" id="selection_type" v-model="form.selection_type" :class="{ 'is-invalid': form.errors.has('selection_type') }">
                             <option value="">--Select--</option>
                             <option v-for="(item, index) in selectionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            <option value="Others">Others</option>
                         </select>
                         <has-error :form="form" field="selection_type"></has-error>
                     </div>
@@ -35,26 +34,47 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>270 Degree Feedback:<span class="text-danger">*</span></label><br>
-                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
-                        <label><input v-model="form.feedback"  type="radio" value="0" /> No</label>
-                        <has-error :form="form" field="feedback"></has-error>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend pr-2">
+                                <span class="img-bordered bg-black">1</span>
+                            </div>
+                            <div class="input-group-append pt-1">
+                                <label class="pr-3">Shortlisting:<span class="text-danger">*</span></label><br />
+                                <label><input v-model="form.shortlist"  type="radio" value="1" /> Yes</label>
+                                <label class="pl-2"><input v-model="form.shortlist"  type="radio" value="0" /> No</label>
+                                <has-error :form="form" field="shortlist"></has-error>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Shortlisting:<span class="text-danger">*</span></label><br>
-                        <label><input v-model="form.shortlist"  type="radio" value="1" /> Yes</label>
-                        <label><input v-model="form.shortlist"  type="radio" value="0" /> No</label>
-                        <has-error :form="form" field="shortlist"></has-error>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend pr-2">
+                                <span class="img-bordered bg-black">2</span>
+                            </div>
+                            <div class="input-group-append pt-1">
+                                <label class="pr-3">270 Degree Feedback:<span class="text-danger">*</span></label><br />
+                                <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
+                                <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                                <has-error :form="form" field="feedback"></has-error>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Interview:<span class="text-danger">*</span></label><br>
-                        <label><input v-model="form.interview"  type="radio" value="1" /> Yes</label>
-                        <label><input v-model="form.interview"  type="radio" value="0" /> No</label>
-                        <has-error :form="form" field="shortlist"></has-error>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend pr-2">
+                                <span class="img-bordered bg-black">3</span>
+                            </div>
+                            <div class="input-group-append pt-1">
+                                <label class="pr-3">Interview:<span class="text-danger">*</span></label><br />
+                                <label><input v-model="form.interview"  type="radio" value="1" /> Yes</label>
+                                <label class="pl-2"><input v-model="form.interview"  type="radio" value="0" /> No</label>
+                                <has-error :form="form" field="shortlist"></has-error>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Details:</label>
                         <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.details" id="details"></textarea>
                         <has-error :form="form" field="details"></has-error>
@@ -202,7 +222,7 @@ export default {
                 console.log(error);
             });
         },
-        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
