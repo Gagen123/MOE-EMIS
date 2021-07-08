@@ -6,14 +6,20 @@
         <div id="maindiv">
             <div class="card card-primary card-outline card-outline-tabs">
                 <div class="card-body">
+                    <!-- Post Details -->
                     <template v-if="post_detail!=''">
                         <div class="callout callout-success">
                             <span><label><u>Post Detials</u></label></span>
                             <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Leadership Selection For:</label>
+                                    <span class="text-blue text-bold">{{selectionListArray[post_detail.selection_type]}}</span>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Position Title:</label>
                                     <span class="text-blue text-bold">{{positionList[post_detail.position_title]}}</span>
                                 </div>
+
                             </div>
                             <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -26,13 +32,14 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Details:</label>
                                     <span class="text-blue text-bold">{{post_detail.details}}</span>
                                 </div>
                             </div>
                         </div>
                     </template>
+                    <!-- Application Detauils -->
                     <div class="callout callout-success">
                         <span><label><u>Applicant Detials</u></label></span>
                         <div class="row form-group">
@@ -88,11 +95,11 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Applicant Attachment -->
                     <div class="callout callout-success">
-                        <span><label><u>Attachment Detials</u></label></span>
+                        <span><label><u>Applicant Attachment(s)</u></label></span>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Documents<span class="text-danger">*</span></label>
                                 <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -116,9 +123,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="callout callout-info">
+
+                    <!-- Feedback Section -->
+                    <div class="callout callout-info" v-if="form.current_status!='Submitted'">
+                        <div class="row form-group" v-if="form.shortlisted_remarks!=''">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Shortlisted Remarks: </label>
+                                <span class="text-blue text-bold">{{form.shortlisted_remarks}}</span>
+                            </div>
+                        </div>
                         <h4><u>Feedback Configuration Details</u></h4>
-                        <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
+                        <div class="row form-group" v-if="form.current_status=='Shortlisted' && form.feedback==1">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date" v-model="form.feedback_start_date">
@@ -184,11 +199,12 @@
                                                 <td>
                                                     <span v-if="stf.status=='Pending'" class="right badge badge-warning">{{stf.status}}</span>
                                                     <span v-if="stf.status=='Submitted'" class="right badge badge-success">{{stf.status}}</span>
+                                                    <span v-if="stf.status=='Visited'" class="right badge badge-primary">{{stf.status}}</span>
                                                 </td>
                                                 <td >
-                                                    <button v-if="form.current_status=='Submitted' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
+                                                    <button v-if="form.current_status=='Shortlisted' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
                                                         @click="deleteNomination(stf.id)"> Delete</button>
-                                                    <button v-if="stf.status=='Submitted'" type="button" class="btn btn-flat btn-sm btn-primary pt-0 pb-1" id="open"
+                                                    <button v-if="stf.status!='Pending'" type="button" class="btn btn-flat btn-sm btn-primary pt-0 pb-1" id="open"
                                                         @click="checkfeedback(stf.id)"> Open</button>
                                                 </td>
                                             </template>
@@ -198,63 +214,101 @@
                                 <span class="text-danger" id="feedbackNomineesList_err"></span>
                             </div>
                         </div>
-                        <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
+                        <div class="row form-group" v-if="form.current_status=='Shortlisted' && form.feedback==1">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Details for Feedback Provider:</label>
                                 <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.feedback_details" id="feedback_details"></textarea>
                                 <has-error :form="form" field="feedback_details"></has-error>
                             </div>
                         </div>
+                    </div>
+                    <!-- Verification Attachments and remarks -->
+                    <div class="callout callout-info">
+                        <h4><u>Remarks & Attachments (If any)</u></h4>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Upload File</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                         <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                            <template v-if="attach.attachment_for=='Leadership Selection'">
+                                                <td>{{attach.user_defined_name}} </td>
+                                                <td>  {{attach.original_name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
 
-                        <span v-if="form.current_status!='Notified for Feedback'">
-                            <h4><u>Attachments</u></h4>
-                            <div class="form-group row">
-                                <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-8">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>File Name</th>
-                                                <th>Upload File</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                                <td>
-                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                    <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                                </td>
-                                                <td>
-                                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                                    <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="5">
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                                    @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                                    @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                            <td>
+                                                <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                            </td>
+                                            <td>
+                                                <input type="file" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Remarks</label>
-                                    <textarea class="form-control" @change="remove_error('remarks')" v-model="form.verification_remarks" id="remarks"></textarea>
-                                    <span class="text-danger" id="remarks_err"></span>
-                                </div>
+                        </div>
+                        <div class="row" v-if="feedback_status=='Completed' && form.current_status!='Interviewed'">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Interview Date:<span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" @change="remove_error('interniew_date')" :class="{ 'is-invalid': form.errors.has('interniew_date') }"  name="interniew_date" id="interniew_date" v-model="form.interniew_date">
+                                <has-error :form="form" field="interniew_date"></has-error>
+                                <span class="text-danger" id="interniew_date_err"></span>
                             </div>
-                        </span>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Interview Score:<span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" @change="remove_error('interniew_score')" :class="{ 'is-invalid': form.errors.has('interniew_score') }"  name="interniew_score" id="interniew_score" v-model="form.interniew_score">
+                                <has-error :form="form" field="interniew_score"></has-error>
+                                <span class="text-danger" id="interniew_score_err"></span>
+                            </div>
+                        </div>
+                        <div class="row" v-if="form.current_status=='Interviewed'">
+                           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Interview Date:</label>
+                                <span class="text-blue text-bold">{{form.interniew_date}}</span>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Interview Score:</label>
+                                <span class="text-blue text-bold">{{form.interniew_score}}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks</label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.verification_remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                     </div>
                     <hr>
+                    <!-- Action Buttons -->
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Submitted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
-                            <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i> Approve </button>
-                            <button class="btn btn-danger" v-if="form.current_status!='Notified for Feedback'" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
+                            <button class="btn btn-info text-white" @click="shownexttab('shortlist')" v-if="form.current_status=='Submitted' && form.shortlist==1"> <i class="fa fa-save"></i> Shortlist </button>
+                            <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Shortlisted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
+                            <button class="btn btn-primary" @click="shownexttab('interview')" v-if="form.current_status=='Notified for Feedback' && form.interview==1 && feedback_status=='Completed'"> <i class="fa fa-check"></i> Update Interview </button>
+                            <button class="btn btn-primary" @click="shownexttab('select')" v-if="form.current_status=='Interviewed'"> <i class="fa fa-save"></i> Select </button>
+                            <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                         </div>
                     </div>
                 </div>
@@ -365,12 +419,123 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade show" id="feedback_modal" aria-modal="true" style="padding-right: 17px;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Feedback Details</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                feedback_details
+                                <div class="callout callout-success">
+                                    <span><label><u>Feedback Provider Detial</u></label></span>
+                                    <div class="row form-group">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Last Date for Feedback:</label><br>
+                                            <span class="text-blue text-bold">{{ feedback_details.cid }}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Name:</label><br>
+                                            <span class="text-blue text-bold">{{feedback_details.name}}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Position:</label><br>
+                                            <span class="text-blue text-bold">{{feedback_details.positiontitle }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Feedback Category:</label><br>
+                                            <span class="text-blue text-bold">{{ feedbackCategoryArray[feedback_details.feedback_type] }}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Contact No:</label><br>
+                                            <span class="text-blue text-bold">{{feedback_details.contact}}</span>
+                                        </div>
+                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                            <label>Email:</label><br>
+                                            <span class="text-blue text-bold">{{feedback_details.email }}</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row form-group">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width:5%">Sl#</th>
+                                                        <th style="width:55%">Question</th>
+                                                        <th style="width:40%">Answers</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item, index) in feedback_form.questionList" :key="index">
+                                                        <td>{{ index+1}}</td>
+                                                        <td>{{ item.name}}</td>
+                                                        <td v-if="item.answer_type=='TextArea'">
+                                                            <textarea class="form-control" disabled :name="'answer_textarea'+index" v-model="item.answered" :id="item.id" ></textarea>
+                                                        </td>
+
+                                                        <td v-if="item.answer_type=='Text'">
+                                                            <input class="form-control" disabled :name="'answer_text'+index" type="text" v-model="item.answered" :id="item.id">
+                                                        </td>
+
+                                                        <td v-if="item.answer_type=='Number'">
+                                                            <input class="form-control" disabled :name="'answer_number'+index" type="number" v-model="item.answered" :id="item.id" >
+                                                        </td>
+
+                                                        <td v-if="item.answer_type=='Radio'">
+                                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span v-for="(ans, index1) in item.answers" :key="index1">
+                                                                    <input type="radio" disabled :name="'answer_radio'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id"> <label>  {{ans.name}} </label>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+
+                                                        <td v-if="item.answer_type=='Dropdown'">
+                                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <select name="category" disabled v-model="item.answered" :id="item.id" class="form-control">
+                                                                    <option value="">--- Please Select ---</option>
+                                                                    <option v-for="(item, index) in item.answers" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                                </select>
+                                                            </div>
+                                                        </td>
+
+                                                        <td v-if="item.answer_type=='Checkbox'">
+                                                            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                <span v-for="(ans, index1) in item.answers" :key="index1">
+                                                                    <input type="checkbox" disabled :name="'answer_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id">
+                                                                    <label>{{ans.name}} </label>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer text-right">
+                        <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                        <button data-bb-handler="confirm" @click="updatedVisited(feedback_details.id)" type="button" class="btn btn-primary">visited</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data(){
         return {
+            feedback_status:'Completed',
             count:0,
             positionList:{},
             roleList:{},
@@ -383,6 +548,12 @@ export default {
             feedbackCategoryArray:{},
             applicationdetailsatt:'',
             feedbackNomineesList:[],
+            feedback_details:'',
+            questionList:[],
+            selectionListArray:{},
+            feedback_form: new form({
+                questionList:[],
+            }),
             selectstaff: new form({
                 nominees:[],
                 application_number:'',
@@ -414,6 +585,8 @@ export default {
                 details:'',
                 document:'',
                 applicant:'',
+                staff_id:'',
+                shortlisted_remarks:'',
                 aplicant_cid:'',
                 aplicant_position_title:'',
                 aplicant_working_agency:'',
@@ -424,6 +597,8 @@ export default {
                 feedback_end_date:'',
                 feedback_details:'',
                 feedback_remarks:'',
+                interniew_score:'',
+                interniew_date:'',
                 current_status:'',
                 attachments:
                 [{
@@ -599,11 +774,11 @@ export default {
             axios.get('/staff/staffLeadershipSerivcesController/loadapplicaitontDetialsforVerification/'+appNo+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
-
                 this.post_detail=data.Post_details;
                 this.form.id=data.id;
                 this.form.remarks=data.remarks;
                 this.form.applicant=data.aplicant_name;
+                this.form.staff_id=data.staff_id;
                 this.form.aplicant_cid=data.aplicant_cid;
                 this.form.aplicant_position_title=data.aplicant_position_title;
                 this.form.aplicant_working_agency=data.aplicant_working_agency;
@@ -613,6 +788,7 @@ export default {
                 this.form.application_date=data.created_at;
                 this.form.post_id=data.post_id;
                 this.form.current_status=data.status;
+                this.form.shortlisted_remarks=data.shortlisted_remarks;
                 this.form.feedback=data.Post_details.feedback;
                 this.form.interview=data.Post_details.interview;
                 this.form.shortlist=data.Post_details.shortlist;
@@ -621,7 +797,8 @@ export default {
                 this.form.feedback_remarks=data.feedback_remarks;
                 this.form.feedback_details=data.feedback_details;
                 this.applicationdetailsatt=data.attachments;
-
+                this.form.interniew_score=data.interniew_score;
+                this.form.interniew_date=data.interniew_date;
             })
             .catch((error) =>{
                 console.log("Error: "+error);
@@ -732,6 +909,14 @@ export default {
                 let data = response.data;
                 this.feedbackNomineesList=data;
                 this.form.feedbackNomineesList=data;
+                data.forEach(itm => {
+                    if(itm.status!='Visited'){
+                        this.feedback_status='UnderProcess';
+                    }
+                });
+                if(data.length<1){
+                    this.feedback_status='UnderProcess';
+                }
             })
             .catch(function (error){
                 console.log(error);
@@ -761,7 +946,9 @@ export default {
             axios.get('/staff/staffLeadershipSerivcesController/getFeedbackData/'+id)
             .then(response =>{
                 let data = response.data;
-                this.feedback=data;
+                this.feedback_details=data;
+                this.loadFeedbackQuestion(data.feedback_type,this.post_detail.selection_type,data.answers);
+                $('#feedback_modal').modal('show');
             })
             .catch(function (error){
                 console.log(error);
@@ -783,15 +970,39 @@ export default {
                     returntype=false;
                 }
             }
+            if(this.feedback_status=="Completed"){
+                if($('#interniew_date').val()==""){
+                    $('#interniew_date_err').html('Please mention Interview Date');
+                    returntype=false;
+                }
+                if($('#interniew_score').val()==""){
+                    $('#interniew_score_err').html('Please mention Interview Score');
+                    returntype=false;
+                }
+            }
             return returntype;
         },
         shownexttab(type){
             if(this.validateVerificationForm(type)){
                 this.form.action_type=type;
                 let message="";
+                if(type=="shortlist"){
+                    message="Shortlist this applicant";
+                }
                 if(type=="feedback"){
                     message="Send Notification to mentioned feedback providers";
                 }
+                if(type=="reject"){
+                    message="Reject this application";
+                }
+
+                if(type=="interview"){
+                    message="Update for Interview for this application";
+                }
+                if(type=="select"){
+                    message="Select this applicant";
+                }
+
                 Swal.fire({
                     text: "Are you sure you wish to "+message,
                     icon: 'info',
@@ -808,6 +1019,7 @@ export default {
                         }
                         let formData = new FormData();
                         formData.append('id', this.form.id);
+                        formData.append('staff_id', this.form.staff_id);
                         formData.append('application_number', this.form.application_number);
                         formData.append('application_date', this.form.application_date);
                         formData.append('selection_type', this.form.selection_type);
@@ -829,6 +1041,8 @@ export default {
                         formData.append('feedback_details', this.form.feedback_details);
                         formData.append('current_status', this.form.current_status);
                         formData.append('action_type', this.form.action_type);
+                        formData.append('interniew_date', this.form.interniew_date);
+                        formData.append('interniew_score', this.form.interniew_score);
 
                         formData.append('ref_docs[]', this.form.ref_docs);
                         for(let i=0;i<this.form.ref_docs.length;i++){
@@ -859,6 +1073,60 @@ export default {
             }
 
         },
+
+        //loadFeedback qeustion according to the type and position
+        async loadFeedbackQuestion(feedback_category_id,leadership_selection_id,ans_data){
+            axios.get('staff/staffLeadershipSerivcesController/loadData/allQuestionUnderCat_Question_'+feedback_category_id+'_'+leadership_selection_id)
+            .then(response => {
+                let data = response.data.data;
+                this.feedback_form.questionList=data;
+                if(this.feedback_form.questionList!=null && this.feedback_form.questionList!="" && ans_data.length>0){
+                    //set time interval so that question can populate and then respective answer can be shown
+                    setInterval(function(){
+                       for(let i=0;i<ans_data.length;i++){
+                            if(ans_data[i].ans_type=="Checkbox" || ans_data[i].ans_type=="Radio"){
+                                $('#'+ans_data[i].questionId+'_'+ans_data[i].answer).prop('checked',true);
+                            }
+                            else if(ans_data[i].ans_type=="Text" || ans_data[i].ans_type=="Number" ||
+                            ans_data[i].ans_type=="TextArea" || ans_data[i].ans_type=="Dropdown"){
+                                $('#'+ans_data[i].questionId).val(ans_data[i].answer);
+                            }
+                            else{
+                                $('#'+ans_data[i].questionId+'_'+ans_data[i].answer).val(ans_data[i].answer);
+                            }
+                        }
+                    }, 500);
+                }
+            })
+            .catch(function (error){
+                console.log('err: '+error);
+            });
+        },
+
+        //get position details to populate form
+        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.selectionListArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log('err: '+error);
+            });
+        },
+        updatedVisited(itmId){
+            axios.get('staff/staffLeadershipSerivcesController/updatedVisited/'+itmId)
+            .then(response => {
+                let data = response.data;
+                this.loadexistingfeedbackprovider(this.selectstaff.application_number);
+                $('#feedback_modal').modal('hide');
+            })
+            .catch(function (error){
+                console.log('err: '+error);
+            });
+        }
     },
     created(){
         $('[data-toggle="tooltip"]').tooltip();
@@ -880,6 +1148,7 @@ export default {
         this.loadroleList();
         this.loadPositionTitleList();
         this.loadactivedzongkhagList();
+        this.getSelectionList();
         this.form.application_number=this.$route.params.data.application_number;
         this.selectstaff.application_number=this.$route.params.data.application_number;
         this.loadApplicationDetils(this.$route.params.data.application_number,this.$route.params.type);

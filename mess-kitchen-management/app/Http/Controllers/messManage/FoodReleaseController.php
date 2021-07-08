@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\FoodRelease;
-use App\Models\mess_manage\ItemReleasedNote; 
-use App\Models\mess_manage\FoodReleaseDocuments; 
+use App\Models\mess_manage\ItemReleasedNote;
+use App\Models\mess_manage\FoodReleaseDocuments;
 use Illuminate\Support\Facades\DB;
 
 class FoodReleaseController extends Controller
@@ -53,7 +53,7 @@ class FoodReleaseController extends Controller
         // dd($request->items_release);
         // foreach ($request->items_released as $i => $item){
         //     $itemreleasednote = array(
-        //       //  'foodreleaseId'              =>  $releasId[0], 
+        //       //  'foodreleaseId'              =>  $releasId[0],
         //         'foodreleaseId'              =>  $foodrel->id,
         //         'item_id'                    =>  $item['item'],
         //         'quantity'                   =>  $item['quantity'],
@@ -66,7 +66,7 @@ class FoodReleaseController extends Controller
         // }
         // foreach($request->attachment_details as $att){
         //     $doc_data = array(
-        //       //  'foodreleaseId'              =>  $releasId[0], 
+        //       //  'foodreleaseId'              =>  $releasId[0],
         //         'foodreleaseId'              =>  $foodrel->id,
         //         'attachment_for'             =>  'Food Release Note',
         //         'path'                       =>  $att['path'],

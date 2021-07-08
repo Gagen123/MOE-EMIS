@@ -17,12 +17,14 @@ class AcaStudentAttendanceDetail extends Migration
             $table->char('id',36)->primary();
             $table->char('aca_std_attendance_id',36)->index();
             $table->char('std_student_id',36)->index();
-            // $table->unsignedTinyInteger('is_present')->index()->default(1)->comment('0 - Absent, 1 - Present');
+            $table->char('aca_absence_reason_id',36)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
 
             $table->foreign('aca_std_attendance_id')->references('id')->on('aca_student_attendance')->onDelete('cascade');
+            $table->foreign('aca_absence_reason_id')->references('id')->on('aca_absence_reason');
+
 
         });
     }

@@ -114,6 +114,7 @@ class WorkflowController extends Controller{
             'notification_type'             =>  $request->notification_type,
             'notification_access_type'      =>  $request->notification_access_type,
             'call_back_link'                =>  $request->call_back_link,
+            'action'                        =>  $request->action,
             'access_level'                  =>  $request->access_level,
             'created_by'                    =>$request->action_by,
             'created_at'                    =>date('Y-m-d h:i:s'),
@@ -145,6 +146,7 @@ class WorkflowController extends Controller{
 
         return $this->successResponse($notificationDetails, Response::HTTP_CREATED);
     }
+
     public function updateNextNotification(Request $request){
         $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
         $record_id=$notificationDetails->id;
@@ -227,6 +229,16 @@ class WorkflowController extends Controller{
             ];
             NotificationTo::create($notification_to_data);
         }
+        $not_visited=[
+            'notification_id'           =>  $record_id,
+            'user_id'                   =>  $request->action_by,
+        ];
+        NotificationVisited::create($not_visited);
+    }
+
+    public function visitedNotification(Request $request){
+        $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
+        $record_id=$notificationDetails->id;
         $not_visited=[
             'notification_id'           =>  $record_id,
             'user_id'                   =>  $request->action_by,

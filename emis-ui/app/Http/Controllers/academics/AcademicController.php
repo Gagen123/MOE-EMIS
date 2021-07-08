@@ -108,14 +108,26 @@ class AcademicController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();
+        $request['org_id'] = $this->getWrkingAgencyId();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/academics/saveSubjectTeacher', $data);
         return $response_data;
 
     }
-    public function getSubjectTeacher(){
+    public function getSubjectTeacher(Request $request){
+
         $orgId = $this->getWrkingAgencyId();
-        $subjectTeacher = $this->apiService->listData('emis/academics/getSubjectTeacher/'.$orgId);
+        $uri = 'emis/academics/getSubjectTeacher/'.$orgId;
+
+        $uri .= ('?org_class_id='.$request->org_class_id);
+
+        if($request->org_stream_id !== null){
+            $uri .= (('&org_stream_id='.$request->org_stream_id));
+        }
+        if($request->org_section_id !== null){
+            $uri .= (('&org_section_id='.$request->org_section_id));
+        }
+        $subjectTeacher = $this->apiService->listData($uri);
         return $subjectTeacher;
     }
     public function saveStudentElectiveSubject(Request $request){
@@ -281,7 +293,7 @@ class AcademicController extends Controller
     public function loadAssessmentAreasForConsolidated($class_id, $stream_id="",$term_id=""){
         $uri = 'emis/academics/loadAssessmentAreasForConsolidated';
 
-        $uri .= ('?&org_class_id='.$class_id);
+        $uri .= ('?org_class_id='.$class_id);
 
         if($stream_id!== null){
             $uri .= (('&org_stream_id='.$stream_id));
@@ -298,7 +310,7 @@ class AcademicController extends Controller
 
         $uri = 'emis/academics/loadConsolidatedResult/'.$org_id;
 
-        $uri .= ('?&org_class_id='.$request->classId);
+        $uri .= ('?org_class_id='.$request->classId);
 
         if($request->streamId !== null){
             $uri .= (('&org_stream_id='.$request->streamId));

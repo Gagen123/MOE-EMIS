@@ -106,6 +106,10 @@ class CommonController extends Controller{
                     }
                 }
             }
+            //pulling approved transfer Application for DEO
+            if($request->approved_transfer_data=="Valid"){
+                $result_data.=' (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "Inter Transfer")';
+            }
             //final query
             // return $result_data;
             return DB::select($result_data);

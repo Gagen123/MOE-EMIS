@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <div class="row form-group">
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label>Details:</label>
                             <span class="text-blue text-bold">{{post_detail.details}}</span>
                         </div>
@@ -63,7 +63,7 @@
                 </div>
                 <div class="card">
                     <div class="form-group row">
-                        <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                 <thead>
                                     <tr>
@@ -228,8 +228,8 @@ export default {
                 if(data.attachments.length>0){
                     this.form.attachments=[];
                     for(let i=0;i<data.attachments.length;i++){
-                        this.form.attachments.push({file_name:data.attachments[i].attachment,attachment:''});
                         $('#file_name'+i).prop('readonly',true);
+                        this.form.attachments.push({file_name:data.attachments[i].attachment,attachment:''});
                     }
                 }
                 this.getstaffDetails();

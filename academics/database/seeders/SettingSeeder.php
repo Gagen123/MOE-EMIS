@@ -22,6 +22,12 @@ class SettingSeeder extends Seeder
                 'value'=>'1',
                 'description_of_value' => '1 - Code/abbreviation 2 - Name',
             ],
+            [
+                'id' => '2',
+                'description' => 'In result, show upto postion',
+                'value'=>'3',
+                'description_of_value' => 'The position depends on the value',
+            ],
         ]);
     }
 }

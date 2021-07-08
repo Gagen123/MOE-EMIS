@@ -25,7 +25,6 @@ class AcaResultConsolidated extends Migration
             $table->dateTime('finalized_date')->nullable();
             $table->unsignedTinyInteger('published')->nullable()->default(0)->index();
             $table->dateTime('published_date')->nullable();
-            $table->string('remarks',500)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
