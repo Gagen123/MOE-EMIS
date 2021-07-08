@@ -11,13 +11,5 @@ use App\Traits\AuthUser;
 use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller{
-    public function getProfileDetail(){
-        if(Session::get('User_Details')!=""){
-            return ['data' => Session::get('User_Details')];
-        }
-        else{
-            $redirection_url=config('services.login.base_uri').'logout';
-            return redirect()->away($redirection_url);
-        }
-    }
+
 }

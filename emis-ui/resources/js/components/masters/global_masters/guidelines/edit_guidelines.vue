@@ -23,6 +23,7 @@
                             <option value="HR Development">HR_Development</option>
                             <option value="Leave Service">Leave Service</option>
                             <option value="Staff Service">Staff Service</option>
+                            <option value="Staff Updates">Staff Updates</option>
                             <option value="Staff Transfer Service">Staff Transfer Service</option>
                             <option value="Leadership Selection">Leadership Selection</option>
                             <option value="Organization Master">Organization Master</option>

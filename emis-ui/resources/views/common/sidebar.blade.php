@@ -494,6 +494,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item has-treeview" id="inset_link">
+                        <router-link to="/staff_update_services" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="nav-icon fas fa-list"></i>
+                                Staff update Services
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="track_application">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>

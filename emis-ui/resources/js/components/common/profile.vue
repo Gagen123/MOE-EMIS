@@ -159,7 +159,7 @@
             },
         },
         mounted() {
-            axios.get('staff/profileController/getProfileDetail')
+            axios.get('common/getSessionDetail')
             .then(response => {
                 let data = response.data.data;
                 let roleName="";

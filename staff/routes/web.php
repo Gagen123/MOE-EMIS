@@ -202,4 +202,10 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
 
     });
+
+    //Staff Update Services
+    $router->group(['prefix' => 'staffUpdateController'], function () use ($router) {
+        $router->post('/saveStaffcareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffcareerStage']);
+
+    });
 });
