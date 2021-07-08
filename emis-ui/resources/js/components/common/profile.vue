@@ -19,7 +19,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3"> 
+                <div class="col-md-3">
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
@@ -45,7 +45,7 @@
                             <p class="text-muted pl-3">
                                {{role}}
                             </p>
-                            <hr> 
+                            <hr>
                             <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
                             <p class="text-muted">MInistry of education, Mothithang, Thimphu</p>
                         </div>
@@ -68,7 +68,7 @@
                                             <input type="email" class="form-control" v-model="email"  id="email" placeholder="Email">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="inputExperience" class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-form-label">Contact Number</label>
                                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -107,7 +107,7 @@
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
 </div>
 </template>
 <script>
@@ -127,8 +127,8 @@
                 .then(response => {
                     let data = response.data;
                     this.dzongkhag=data.name;
-                })    
-                .catch(errors => { 
+                })
+                .catch(errors => {
                     console.log(errors)
                 });
             },
@@ -137,8 +137,8 @@
                 .then(response => {
                     let data = response.data;
                     this.gewog=data.name;
-                })    
-                .catch(errors => { 
+                })
+                .catch(errors => {
                     console.log(errors)
                 });
             },
@@ -151,15 +151,15 @@
                 .then(response => {
                     let data = response.data.data;
                     this.orgDetails=data;
-                    
-                })    
-                .catch(errors => { 
+
+                })
+                .catch(errors => {
                     console.log(errors)
                 });
             },
         },
         mounted() {
-            axios.get('common/getSessionDetail')
+            axios.get('staff/profileController/getProfileDetail')
             .then(response => {
                 let data = response.data.data;
                 let roleName="";
@@ -182,8 +182,8 @@
                 this.getgewog(data['Geo_Id']);
                 this.getorgName(data['Agency_Code'],data['acess_level']);
                 this.accessLevel=data['acess_level'];
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         }

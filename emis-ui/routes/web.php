@@ -405,6 +405,10 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadExpatriateApprovalApplication/{type}', [App\Http\Controllers\staff\StaffApprovalController::class, 'loadExpatriateApprovalApplication'])->name('loadExpatriateApprovalApplication');
 
     });
+    Route::prefix('profileController')->group(function (){
+        Route::get('/getProfileDetail', [App\Http\Controllers\staff\ProfileController::class, 'getProfileDetail'])->name('getProfileDetail');
+    });
+
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');
     Route::get('/loadQualification/{staff_id}', [App\Http\Controllers\staff\StaffController::class, 'loadQualification'])->name('loadQualification');
@@ -515,6 +519,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadData/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadData'])->name('loadData');
         Route::post('/saveData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveData'])->name('saveData');
         Route::get('/loadexistingData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadexistingData'])->name('loadexistingData');
+        Route::post('/saveFeedback', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveFeedback'])->name('saveFeedback');
+        Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
 
     });
 

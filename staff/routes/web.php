@@ -186,6 +186,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/deleteNomination/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@deleteNomination']);
             $router->post('/verifyApproveNotify', ['uses' => 'staff\StaffLeadershipSerivcesController@verifyApproveNotify']);
             $router->get('/getFeedbackData/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@getFeedbackData']);
+            $router->post('/saveFeedback', ['uses' => 'staff\StaffLeadershipSerivcesController@saveFeedback']);
+            $router->get('/updatedVisited/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@updatedVisited']);
         });
     });
 

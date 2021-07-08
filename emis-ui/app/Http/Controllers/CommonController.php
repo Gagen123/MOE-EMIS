@@ -1,16 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use GuzzleHttp\Client;
 use App\Traits\AuthUser;
 use App\Helper\EmisService;
-use Illuminate\Http\Request;
 use App\Traits\ServiceHelper;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 
 class CommonController extends Controller{
     use ServiceHelper;
@@ -111,15 +105,7 @@ class CommonController extends Controller{
         $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
     }
 
-    public function getSessionDetail($applicationId=""){
-        if(Session::get('User_Details')!=""){
-            return ['data' => Session::get('User_Details')];
-        }
-        else{
-            $redirection_url=config('services.login.base_uri').'logout';
-            return redirect()->away($redirection_url);
-        }
-    }
+
 
     public function getDzoNameById($id=""){
         return $this->apiService->getListData('emis/common/getDzoNameById/'.$id);

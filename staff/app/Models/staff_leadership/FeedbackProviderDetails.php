@@ -24,7 +24,9 @@ class FeedbackProviderDetails extends Model{
         'feedback_type',
         'status',
         'created_by',
-        'created_at'
+        'created_at',
+        'updated_at',
+        'updated_by',
     ];
     // public function leadershipDetails(){
     //     return $this->belongsTo(LeadershipDetails::class, 'leadership_id');

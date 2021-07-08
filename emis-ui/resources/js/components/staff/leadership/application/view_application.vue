@@ -106,7 +106,16 @@
                             <span class="text-blue text-bold">{{form.feedback_remarks}}</span>
                         </div>
                     </div>
-
+                    <div class="row" v-if="form.interniew_date!=''">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Interview Date: </label>
+                            <span class="text-blue text-bold">{{form.interniew_date}}</span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="form.feedback_remarks">
+                            <label class="mb-0">Your Score: </label>
+                            <span class="text-blue text-bold">{{form.interniew_score}}</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,6 +142,8 @@ export default {
                 applicant:'',
                 shortlisted_remarks:'',
                 feedback_remarks:'',
+                interniew_score:'',
+                interniew_date:'',
             }),
         }
     },
@@ -190,6 +201,8 @@ export default {
                 this.form.post_id=data.post_id;
                 this.form.shortlisted_remarks=data.shortlisted_remarks;
                 this.form.feedback_remarks=data.feedback_remarks;
+                this.form.interniew_score=data.interniew_score;
+                this.form.interniew_date=data.interniew_date;
                 this.require_count=data.attachments.length;
                 this.count=data.attachments.length;
                 this.applicationdetailsatt=data.attachments;
