@@ -3,12 +3,15 @@ namespace App\Http\Controllers\staff;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\staff\TransferWindow;
 use App\Models\staff\TransferApplication;
 use App\Models\staff\ApplicationSequence;
 use App\Models\staff\TransPrefenreces;
 use App\Models\staff\DocumentDetails;
+use App\Models\staff_masters\TransferConfig;
+use App\Models\staff_masters\TransferConfigDetails;
 
 class TransferController extends Controller{
     use ApiResponser;
@@ -17,13 +20,10 @@ class TransferController extends Controller{
         date_default_timezone_set('Asia/Dhaka');
     }
 
-    public function getcurrentTransferWindowDetails($type=""){
-        if($type=="intra_transfer"){
-            return $this->successResponse(TransferWindow::where('from_date','<=',date('Y-m-d'))->where('to_date','>=',date('Y-m-d'))->first());
-        }
-        // else{
-        //     return $this->successResponse(TransferWindow::where('id',$id)->first());
-        // }
+    public function getcurrentTransferWindowDetails($id=""){
+        return $id;
+            // return $this->successResponse(TransferWindow::where('from_date','<=',date('Y-m-d'))->where('to_date','>=',date('Y-m-d'))->first());
+            return $this->successResponse(TransferWindow::where('id',$id)->first());
     }
 
     public function submitIntialapplicantDetails(Request $request){
@@ -38,6 +38,7 @@ class TransferController extends Controller{
         $this->validate($request, $rules,$customMessages);
         $request_data =[
             'id'                                =>  $request->id,
+            'transfer_type_id'                  =>  $request->record_type_id,
             'transfer_window_id'                =>  $request->transferwindow_id,
             'staff_id'                          =>  $request->staff_id,
             'transferType'                      =>  $request->transferType,
@@ -112,6 +113,7 @@ class TransferController extends Controller{
         if($request->preference_dzongkhag1!=""){
         $request_data =[
             'transfer_application_id'       =>  $request->id,
+            'transfer_type_id'              =>  $request->record_type_id,
             'transferType'                  =>  $request->transferType,
             'dzongkhag_id'                  =>  $request->preference_dzongkhag1,
             'preference'                    =>  1,
@@ -123,6 +125,7 @@ class TransferController extends Controller{
         if($request->preference_dzongkhag2!=""){
             $request_data =[
                 'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag2,
                 'preference'                    =>  2,
@@ -135,6 +138,7 @@ class TransferController extends Controller{
         if($request->preference_dzongkhag3!=""){
             $request_data =[
                 'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag3,
                 'preference'                    =>  3,
@@ -146,6 +150,7 @@ class TransferController extends Controller{
         if($request->preference_school1!=""){
             $request_data =[
                 'transfer_application_id'       =>  $request->id,
+                'record_type_id'                =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school1,
@@ -158,6 +163,7 @@ class TransferController extends Controller{
         if($request->preference_school2!=""){
             $request_data =[
                 'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school2,
@@ -170,6 +176,7 @@ class TransferController extends Controller{
         if($request->preference_school3!=""){
             $request_data =[
                 'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school3,
@@ -216,6 +223,54 @@ class TransferController extends Controller{
         }
         $response_data=TransferApplication::where('aplication_number', $request->application_number)->update($request_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    public function getTransferConfigDetails($role_ids=""){
+        $result_data="";
+        if(strpos( $role_ids,',')){
+            $role_ids=explode(',',$role_ids);
+            $roles="";
+            foreach($role_ids as $role){
+                $roles.="'$role',";
+            }
+            $roles=rtrim($roles,',');
+            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l 
+            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id  
+            WHERE d.role_id IN(".$roles.")";
+        }
+        else{
+            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l 
+            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id 
+            WHERE d.role_id ='".$role_ids."'";
+        }
+        return DB::select($result_data);
+    }
+
+    public function getAppVeriTransferConfigDetails($transfer_type_id="",$app_role_id="",$role_id=""){
+        $response_data=TransferConfig::with('transferDetails')->where('transfer_type_id',$transfer_type_id)->where('submitter_role_id',$app_role_id)
+        ->select('id','transfer_type_id')->first();
+        if($response_data!=null && $response_data!=""){
+            //done for single role onle
+            if(strpos( $role_id,',')){
+                $role_ids=explode(',',$role_id);
+                $currenttransferConfigDetails=TransferConfigDetails::where('transfer_config_id',$response_data->id)->wherein('role_id',$role_ids)
+                ->select('sequence')->first();
+            }
+            else{
+                $currenttransferConfigDetails=TransferConfigDetails::where('transfer_config_id',$response_data->id)->where('role_id',$role_id)
+                ->select('sequence')->first();
+            }
+
+            $nxtTransferConfigDetails= TransferConfigDetails::where('transfer_config_id',$response_data->id)->where('sequence',$currenttransferConfigDetails->sequence+1)
+            ->select('id','sequence','authority_type_id','role_id')->first();
+            if($response_data!=null && $response_data!=""){
+                return $nxtTransferConfigDetails;
+            }else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
     }
     public function saveTransferWindow(Request $request){
         $response_data=[];
@@ -268,13 +323,9 @@ class TransferController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    public function loadtransferDetails($type= ""){
-       if($type=="inter_transfer"){
-         $response_data=TransferApplication::where ('transferType', 'inter_transfer')->get();
-       }
-       if($type=='intra_transfer'){
-         $response_data=TransferApplication::where ('transferType', 'intra_transfer')->get();
-       }
-       return$response_data;
+    public function loadtransferDetails($type= "",$userId=""){
+         $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
+         $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
+         return$response_data;
     }
 }

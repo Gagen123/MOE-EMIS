@@ -236,6 +236,12 @@ class AdministrationController extends Controller{
         if($param=="inter_transfer"){
             return $this->successResponse(Calender::where('type','Inter Transfer')->get());
         }
+        if($param=="inter"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+        }
+        if($param=="intra"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+        }
         if($param=="all_transfer_type_list"){
             return $this->successResponse(Calender::all());
         }

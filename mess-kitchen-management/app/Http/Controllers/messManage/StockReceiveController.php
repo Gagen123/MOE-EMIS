@@ -21,7 +21,7 @@ class StockReceiveController extends Controller
     }
 
     public function getStockReceivedDetails($stockreceivedId=""){
-        dd('m here');
+      //  dd('m here');
         $response_data=StockReceived::where('id',$stockreceivedId)->first();
         $response_data->stockreceived=StockReceivedItem::where('stockreceivedId',$response_data->id)->get();
         return $this->successResponse($response_data); 

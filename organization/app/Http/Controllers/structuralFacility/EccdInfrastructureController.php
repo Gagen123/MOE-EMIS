@@ -55,7 +55,7 @@ class EccdInfrastructureController extends Controller
                 foreach ($request->input('users') as  $i=> $facility){
                   
                     $facilityInStructure = array(
-                        'eccdinfrastructureId'         =>   $request->id,
+                        'eccdinfrastructureId'          =>  $request->id,
                         'facilityTypeId'                =>  $facility['facility'],
                         'facilityName'                  =>  $facility['facilityNo'],
                         'capacity'                      =>  $facility['capacity'],

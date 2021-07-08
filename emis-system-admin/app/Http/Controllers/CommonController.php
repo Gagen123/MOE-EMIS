@@ -59,14 +59,14 @@ class CommonController extends Controller{
             if(strtolower($access_level)=="org"){
                 $result_data.='t.working_agency_id="'.$org_id.'" AND ';
             }
-            $result_data.=' t.claimed_by IS NULL';
+
             //pulling workflow set up from system administration such as org approval and change detials etc..
             if($work_flow_from_system_admin_status!=""){
-                $result_data.=' AND (';
+                $result_data.=' (t.claimed_by IS NULL AND (';
                 foreach($work_flow_from_system_admin_status as $i => $srcn){
                     $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') ';
                     if(sizeof($work_flow_from_system_admin_status)-1==$i){
-                        $result_data.=')';
+                        $result_data.='))';
                     }
                     else{
                         $result_data.=' OR ';
@@ -76,11 +76,11 @@ class CommonController extends Controller{
 
             //pulling leave application
             if($work_flow_for_leave!=""){
-                $result_data.=' OR (';
+                $result_data.=' OR (t.claimed_by IS NULL AND (';
                 foreach($work_flow_for_leave as $i => $srcn){
                     $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_leave)-1==$i){
-                        $result_data.=')';
+                        $result_data.='))';
                     }
                     else{
                         $result_data.=' OR ';
@@ -90,17 +90,16 @@ class CommonController extends Controller{
 
             //pulling application for the leadership selection
             if($work_flow_for_leadership=="Valid"){
-                $result_data.=' OR (';
-                $result_data.=' t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
             }
 
             //pulling application for the transfer
             if($work_flow_for_transfer!=""){
-                $result_data.=' OR (';
+                $result_data.='  OR (t.claimed_by IS NULL AND (';
                 foreach($work_flow_for_transfer as $i => $srcn){
                     $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_transfer)-1==$i){
-                        $result_data.=')';
+                        $result_data.='))';
                     }
                     else{
                         $result_data.=' OR ';
@@ -119,8 +118,9 @@ class CommonController extends Controller{
         if(strpos($role_ids,',')!==false){
             $roles='"'.str_replace(',','","',$role_ids).'"';
         }
-        $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_appNo,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id WHERE ';
-        $result_data.=' IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_appNo,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id LEFT JOIN notification_visited v ON v.notification_id=d.id WHERE ';
+        $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        // return $result_data;
         return DB::select($result_data);
     }
     public function releaseApplication($application_number=""){

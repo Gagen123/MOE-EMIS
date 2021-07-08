@@ -530,14 +530,6 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="studentlist">
-                        <router-link to="/student_list" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Update Student Details
-                            </p>
-                        </router-link>
-                    </li>
                     <li class="nav-item" id="admission">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
@@ -547,18 +539,18 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="studentservices">
-                        <router-link to="/class_section" class="nav-link">
+                        <router-link to="/update_student_details" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Class Section Allocation
+                                Update Student Details
                             </p>
                         </router-link>
                     </li>
                     <li class="nav-item" id="studentservices">
-                        <router-link to="/student_services" class="nav-link">
+                        <router-link to="/class_section" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Update Student Details
+                                Class Section Allocation
                             </p>
                         </router-link>
                     </li>

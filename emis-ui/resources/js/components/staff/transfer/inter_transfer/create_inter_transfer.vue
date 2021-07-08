@@ -245,6 +245,7 @@ export default {
                 reason_id:'',
                 description:'',
                 current_date:'',
+                type_id:'',
 
                 preference_dzongkhag:[],
                 status: 'pending',
@@ -331,6 +332,16 @@ export default {
                 }
             });
         },
+        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
+            axios.get(uri)
+            .then(response =>{
+                this.form.type_id = response.data.data.id;
+
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
         validated_final_form(){
             let returntue=true;
             if($('#preference_dzongkhag1').val()==null){
@@ -354,6 +365,7 @@ export default {
                 // if(this.form.t_to_date <=this.form.current_date){
                     // if(this.form.t_from_date >this.form.current_date){
                     let formData = new FormData();
+                        formData.append('type_id', this.form.type_id);
                         formData.append('transferwindow_id', this.form.transferwindow_id);
                         formData.append('staff_id', this.form.staff_id);
                         formData.append('reason_id', this.form.reason_id);
@@ -405,6 +417,7 @@ export default {
                                 }
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
+                                formData.append('type_id', this.form.type_id);
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
                                 formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
@@ -544,6 +557,8 @@ export default {
         this.loadactivedzongkhagList();
         this.loadundertakingList();
         this.loadtransferwindow();
+        this.LoadTransferType();
+        // this.getTransferConfiguration()
     },
 }
 </script>

@@ -440,7 +440,7 @@ Route::prefix('staff')->group(function () {
 
     // Transfer route
     Route::prefix('transfer')->group(function (){
-        Route::get('/getcurrentTransferWindowDetails/{type}', [App\Http\Controllers\staff\TransferController::class, 'getcurrentTransferWindowDetails'])->name('getcurrentTransferWindowDetails');
+        Route::get('/getcurrentTransferWindowDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'getcurrentTransferWindowDetails'])->name('getcurrentTransferWindowDetails');
         Route::post('/submitIntialapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitIntialapplicantDetails'])->name('submitIntialapplicantDetails');
         Route::get('/getDraftDetails', [App\Http\Controllers\staff\TransferController::class, 'getDraftDetails'])->name('getDraftDetails');
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
@@ -504,9 +504,18 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadNominationForLeadershipSelection/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadNominationForLeadershipSelection'])->name('loadNominationForLeadershipSelection');
         Route::post('/publishleadership', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'publishleadership'])->name('publishleadership');
         Route::get('/loadAllLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllLeadershipSelection'])->name('loadAllLeadershipSelection');
-
+        Route::post('/saveFeedbackProviderData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveFeedbackProviderData'])->name('saveFeedbackProviderData');
+        Route::get('/getFeedbackProviderData/{appNo}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getFeedbackProviderData'])->name('getFeedbackProviderData');
+        Route::get('/deleteNomination/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'deleteNomination'])->name('deleteNomination');
+        Route::post('/verifyApproveNotify', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'verifyApproveNotify'])->name('verifyApproveNotify');
+        Route::get('/getFeedbackData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getFeedbackData'])->name('getFeedbackData');
         Route::get('/checkforfeedbackLink', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'checkforfeedbackLink'])->name('checkforfeedbackLink');
         Route::get('/getleadershipDetailsForFeedback/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'getleadershipDetailsForFeedback'])->name('getleadershipDetailsForFeedback');
+        Route::get('/loadapplicaitontDetialsforVerification/{application_number}/{type}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetialsforVerification'])->name('loadapplicaitontDetialsforVerification');
+        Route::get('/loadData/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadData'])->name('loadData');
+        Route::post('/saveData', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveData'])->name('saveData');
+        Route::get('/loadexistingData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadexistingData'])->name('loadexistingData');
+
     });
 
 
@@ -596,6 +605,10 @@ Route::prefix('students')->group(function () {
     Route::get('/getStudentParentsDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentParentsDetails'])->name('getStudentParentsDetails');
     Route::get('/getStudentRoleDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentRoleDetails'])->name('getStudentRoleDetails');
     Route::get('/getStudentProgrammeDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentProgrammeDetails'])->name('getStudentProgrammeDetails');
+
+    //Update Student Details Routs
+    Route::post('/saveStudentUpdates', [App\Http\Controllers\student\StudentUpdateController::class, 'saveStudentUpdates'])->name('saveStudentUpdates');
+    Route::get('/loadStudentUpdatesList/{param}', [App\Http\Controllers\student\StudentUpdateController::class, 'loadStudentUpdatesList'])->name('loadStudentUpdatesList');
 
     Route::post('/saveStudentAward', [App\Http\Controllers\student\StudentAwardController::class, 'saveStudentAward'])->name('saveStudentAward');
     Route::get('/loadStudentAwards/{param}', [App\Http\Controllers\student\StudentAwardController::class, 'loadStudentAwards'])->name('loadStudentAwards');

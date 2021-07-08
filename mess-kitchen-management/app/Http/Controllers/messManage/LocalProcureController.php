@@ -18,9 +18,30 @@ class LocalProcureController extends Controller
     }
 
     public function saveLocalProcure(Request $request){
+      $id = $request->id;
+      if($id != null){
+        DB::table('local_procures')->where('id', $request->id)->delete();
+        foreach ($request->local_item as $i=> $item){
+            $localprocure = array(
+             'organizationId'             =>  $request->organizationId,
+             'dateOfprocure'              =>  $request->dateOfprocure,
+             'id'                         =>  $request->id,
+             'item_id'                    =>  $item['item'],
+             'quantity'                   =>  $item['quantity'],
+             'unit_id'                    =>  $item['unit'],
+             'amount'                     =>  $item['amount'],
+             'remark'                     =>  $item['remark'],
+             'updated_by'                 =>  $request->user_id,
+             'created_at'                 =>  date('Y-m-d h:i:s')
+            );
+
+            $localpro = LocalProcure::create($localprocure);
+        }
+         return $this->successResponse($localpro,Response::HTTP_CREATED);
+        }else {
       //  dd($request);
-      $orgId = $request['organizationId'];
-      $date = $request['dateOfprocure'];
+        $orgId = $request['organizationId'];
+        $date = $request['dateOfprocure'];
         foreach ($request->local_item as $i=> $item){
             $localprocure = array(
              'organizationId'             =>  $orgId,
@@ -40,16 +61,17 @@ class LocalProcureController extends Controller
       //   dd('localprocure'); 
         return $this->successResponse($localpro, Response::HTTP_CREATED);  
     }
+}
     public function loadLocalProcure($orgId=""){
         //   return 'from service of mine';
         $list = DB::table('local_procures')
-        ->select('organizationId', 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->where('organizationId', $orgId)->get();
+        ->select('id as id','organizationId', 'dateOfprocure as dateOfprocure', 'item_id as item','quantity as quantity', 'unit_id as unit', 'amount as amount')->where('organizationId', $orgId)->get();
         return $list;
     }
 
     public function localProcureEditList($locId=""){
-        // dd($furId);
-        $response_data=LocalProcure::where('id', $locId)->first();
+       //  dd($locId);
+        $response_data=LocalProcure::where('id', $locId)->get();
         return $this->successResponse($response_data);
     }
 }

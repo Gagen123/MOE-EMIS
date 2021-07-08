@@ -57,6 +57,8 @@ Setting up the system administration, and user management:
 
     Additional table for student vaccination
 
+    Additional table - student history
+
 
     *********************SOME TO DO FOR THE FUTURE*********************************
     1. Data table partition to take care of academic year

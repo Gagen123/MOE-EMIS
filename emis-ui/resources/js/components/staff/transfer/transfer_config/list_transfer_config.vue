@@ -12,8 +12,8 @@
             <tbody>
                 <tr v-for="(item, index) in transferConfigurationList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.transfer_type_id}}</td>
-                    <td>{{ item.submitter_role_id}}</td>
+                    <td>{{transfertypeList[item.transfer_type_id]}}</td>
+                    <td>{{ roleList[item.submitter_role_id]}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
@@ -27,7 +27,8 @@ export default {
     data(){
         return{
             transferConfigurationList:[],
-            TransferTypeName:[],
+            transfertypeList:{},
+            roleList:{},
         }
     },
     methods:{
@@ -35,8 +36,8 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
+                //  alert(JSON.stringify(data.data.data));
                 this.transferConfigurationList = data.data.data;
-                this.TransferTypeName= data.data.data.id;
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
@@ -44,20 +45,32 @@ export default {
                 }
             });
         },
-        // TransferTypeName(id){
-        //     alert("dsdsds");
-        //     axios.get('masters/loadGlobalMasters/'+id)
-        //     .then(response => {
-        //         let data = response;
-        //         this.transferConfigurationList = data.data.data;
-        //         this.transferTypeid= data.data.data.id;
-        //     })
-        //     .catch(function (error){
-        //         if(error.toString().includes("500")){
-        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-        //         }
-        //     });
-        // },
+        LoadTransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                // alert(JSON.stringify(data.data.data));
+                for(let i=0;i<data.data.data.length;i++){
+                    this.transfertypeList[data.data.data[i].id] = data.data.data[i].type;
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+
+        },
+        loadroleList(uri = 'masters/getroles/allActiveRoles'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                 for(let i=0;i<data.data.length;i++){
+                    this.roleList[data.data[i].id] = data.data[i].Name;
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
 
         showedit(data){
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
@@ -65,7 +78,9 @@ export default {
     },
     mounted(){ 
         this.TransferConfigurationList();
-        // this.TransferTypeName();
+        this.LoadTransferType();
+        this.loadroleList();
+
     },
     watch:{
         leaveConfigurationList() {

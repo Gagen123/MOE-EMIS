@@ -140,11 +140,11 @@ export default {
             .then((response) => {  
                 let data=response.data.data;
                 this.form.dateOfreceived        =    data.dateOfreceived;
-                this.form.quarter               =    data.quarter;
+                this.form.quarter               =    data.quarter_id;
                 $('#quarter').val(data.quarter).trigger('change');
                 this.loadActiveQuarterList();
                 this.form.remarks               =    data.remarks;
-                this.form.id                    =    data.id;
+                this.form.id                    =    stockreceivedId;
 
                 let prop=data.stockreceived;
                 let stockreceivedDetails=[];
@@ -153,8 +153,7 @@ export default {
                     quantity:prop[i].quantity,
                     unit:prop[i].unit_id,
                     remarks:prop[i].remarks});
-                    this.loadActiveItemList();
-                    this.loadActiveUnitList();
+                   
                 }
                 this.count=data.length;
                 this.form.items_received=stockreceivedDetails;
@@ -272,6 +271,8 @@ export default {
        
     },
      mounted() { 
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'

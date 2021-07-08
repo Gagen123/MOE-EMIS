@@ -290,6 +290,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response;
+                alert(data.data.data.length);
                 this.staffList = data.data.data;
             })
             .catch(function (error){

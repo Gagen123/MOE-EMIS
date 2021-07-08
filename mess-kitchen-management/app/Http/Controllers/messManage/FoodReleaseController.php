@@ -33,6 +33,21 @@ class FoodReleaseController extends Controller
         ];
        // dd($foodrelease);
         $foodrel = FoodRelease::create($foodrelease);
+        $attachmentId =  $foodrel->id;
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $attach =[
+                    'attachmentId'              =>  $attachmentId,
+                    'path'                      =>  $att['path'],
+                    'attachment_for'            =>  'Food Release Note',
+                    'user_defined_name'         =>  $att['user_defined_name'],
+                    'original_name'             =>  $att['original_name'],
+                    
+                ];
+               // dd($attach);
+                FoodReleaseDocuments::create($attach);
+            }
+        } 
 
        // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
         // dd($request->items_release);
@@ -62,7 +77,7 @@ class FoodReleaseController extends Controller
         //     );
         //     FoodReleaseDocuments::create($doc_data);
         // }
-        return $this->successResponse($foodrel, Response::HTTP_CREATED);
+        return $this->successResponse($foodrelease, Response::HTTP_CREATED);
        // dd($foodrel);
     }
     public function loadFoodReleaseList(){

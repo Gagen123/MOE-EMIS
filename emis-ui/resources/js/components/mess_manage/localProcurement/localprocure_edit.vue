@@ -2,6 +2,7 @@
     <div>
         <form class="bootbox-form" id="localprocureId">
             <div class="card-body">
+                <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Procurement:<span class="text-danger">*</span></label> 
@@ -174,29 +175,26 @@ export default {
              if(this.form.local_item.length>1){
                 this.count--;
                 this.form.local_item.splice(index,1); 
-            }
+            } 
         },
         localProcureEditList(locId){
+            this.form.local_item=[];
             axios.get('mess_manage/localProcureEditList/' +locId)
             .then((response) =>{
                 let data=response.data.data;
-                this.form.dateOfprocure         = data.dateOfprocure;
-                this.form.id                    = locId;
-                let prop =data.localProcure;
-                let localProcureList=[];
-                for(let i=0; i<prop.length;i++){
-                    localProcureList.push({
-                       item:prop[i].item_id,
-                       quantity:prop[i].quantity,
-                       unit:prop[i].unit_id,
-                       amount:prop[i].amount,
-                       remark:prop[i].remarks
+               // alert(data.length);
+                for(let i=0; i<data.length;i++){
+                    this.form.dateOfprocure         = data[i].dateOfprocure;
+                    this.form.id                    = data[i].id;
+                    this.form.local_item.push({
+                       item:data[i].item_id,
+                       quantity:data[i].quantity,
+                       unit:data[i].unit_id,
+                       amount:data[i].amount,
+                       remark:data[i].remark
                     });
-                    this.loadActiveItemList();
-                    this.loadActiveUnitList();
                 }
                 this.count=data.length;
-                this.form.users=localProcureList;
             })
             .catch((error) =>{  
                 console.log("Error:"+error);
@@ -204,6 +202,8 @@ export default {
         }
     },
     mounted() { 
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -218,9 +218,10 @@ export default {
        
     },
     created() {
+        this.localProcureEditList(this.$route.params.data.id);
         this.loadActiveItemList(); 
         this.loadActiveUnitList();
-        this.localProcureEditList(this.$route.params.data.id);
+        
         
     }
 }

@@ -11,6 +11,7 @@ use  App\Models\Notification;
 use App\Models\NotificationAudit;
 use  App\Models\NotificationTo;
 use App\Models\NotificationToAudit;
+use App\Models\NotificationVisited;
 
 class WorkflowController extends Controller{
     use ApiResponser;
@@ -28,12 +29,6 @@ class WorkflowController extends Controller{
             'action_by'             => 'required',
         ];
         $this->validate($request, $rules);
-        if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
-            $exist_workflow=Workflow::where('application_number',$request->application_number)->get();
-            if($exist_workflow!=null && $exist_workflow!="" && sizeof($exist_workflow)>0){
-                Workflow::where('application_number',$request->application_number)->delete();
-            }
-        }
         $data=[
             'database_name'         =>$request->db_name,
             'table_name'            =>$request->table_name,
@@ -51,10 +46,6 @@ class WorkflowController extends Controller{
             $status=$request->status_id;
             if(strpos($request->status_id,'__submitterRejects')!==false){
                 $status=explode('__',$status)[0];
-            }
-            $exist_task=TaskDetails::where('application_number',$request->application_number)->get();
-            if($exist_task!=null && $exist_task!="" && sizeof($exist_task)>0){
-                TaskDetails::where('application_number',$request->application_number)->delete();
             }
             $task_data=[
                 'table_name'            =>$request->table_name,
@@ -74,12 +65,13 @@ class WorkflowController extends Controller{
                 'app_role_id'           => $request->app_role_id,
                 'record_type_id'        => $request->record_type_id,
             ];
-            // dd($task_data);
             try{
                 return $workflowdetails = TaskDetails::create($task_data);
             }catch(\Illuminate\Database\QueryException $ex){
                 dd($ex);
+
             }
+
         }
         else{
             $task_data=[
@@ -167,9 +159,9 @@ class WorkflowController extends Controller{
             'call_back_link'            =>  $request->call_back_link,
             'created_by'                =>  $request->created_by,
             'created_at'                =>  $request->created_at,
-            'updated_by'                =>  $request->updated_by,
-            'udpated_on'                =>  $request->udpated_on,
-            'audited_by'                =>  $request->updated_by,
+            'updated_by'                =>  $request->action_by,
+            'updated_at'                =>  $request->udpated_on,
+            'audited_by'                =>  $request->action_by,
             'audited_at'                =>  date('Y-m-d h:i:s'),
         ];
         NotificationAudit::create($not_audit_data);
@@ -180,10 +172,10 @@ class WorkflowController extends Controller{
             'notification_access_type'           =>  $request->notification_access_type,
             'access_level'                       =>  $request->access_level,
             'call_back_link'                     =>  $request->call_back_link,
-            'updated_by'                         =>  $request->updated_by,
-            'udpated_on'                         =>  date('Y-m-d h:i:s'),
+            'updated_by'                         =>  $request->action_by,
+            'updated_at'                         =>  date('Y-m-d h:i:s'),
         ];
-        Notification::where('notification_appNo',$record_id)->update($notification_data);
+        Notification::where('notification_appNo',$request->notification_appNo)->update($notification_data);
         $notification_to=NotificationTo::where('notification_id',$record_id)->get();
         if($notification_to!=null && $notification_to!="" && sizeof($notification_to)>0){
             foreach($notification_to as $noti){
@@ -194,7 +186,7 @@ class WorkflowController extends Controller{
                     'access_level'              =>  $noti['access_level'],
                     'dzo_id'                    =>  $noti['dzo_id'],
                     'working_agency_id'         =>  $noti['working_agency_id'],
-                    'audited_by'                =>  $request->updated_by,
+                    'audited_by'                =>  $request->action_by,
                     'audited_at'                =>  date('Y-m-d h:i:s'),
                 ];
                 NotificationToAudit::create($not_to_audit_data);
@@ -202,18 +194,44 @@ class WorkflowController extends Controller{
         }
 
         NotificationTo::where('notification_id',$record_id)->delete();
-        $not_to_data=[
-            'notification_id'           =>  $record_id,
-            'user_role_id'              =>  $noti['user_role_id'],
-            'access_level'              =>  $noti['access_level'],
-            'dzo_id'                    =>  $noti['dzo_id'],
-            'working_agency_id'         =>  $noti['working_agency_id'],
-        ];
-        NotificationTo::create($not_to_data);
+        // $not_to_data=[
+        //     'notification_id'           =>  $record_id,
+        //     'user_role_id'              =>  $noti['user_role_id'],
+        //     'access_level'              =>  $noti['access_level'],
+        //     'dzo_id'                    =>  $noti['dzo_id'],
+        //     'working_agency_id'         =>  $noti['working_agency_id'],
+        // ];
+        // NotificationTo::create($not_to_data);
+        if(strpos($request->user_role_id,',')!==false){
+            $user_roles=explode(',', $request->user_role_id);
+            foreach($user_roles as $usr){
+                if($usr!=""){
+                    $notification_to_data=[
+                        'notification_id'               =>  $notificationDetails->id,
+                        'user_role_id'                  =>  $usr,
+                        'dzo_id'                        =>  $request->dzo_id,
+                        'access_level'                  =>  $request->access_level,
+                        'working_agency_id'             =>  $request->working_agency_id,
+                    ];
+                    NotificationTo::create($notification_to_data);
+                }
+            }
+        }
+        else{
+            $notification_to_data=[
+                'notification_id'               =>  $notificationDetails->id,
+                'user_role_id'                  =>  $request->user_role_id,
+                'dzo_id'                        =>  $request->dzo_id,
+                'access_level'                  =>  $request->access_level,
+                'working_agency_id'             =>  $request->working_agency_id,
+            ];
+            NotificationTo::create($notification_to_data);
+        }
         $not_visited=[
             'notification_id'           =>  $record_id,
-            'user_id'                   =>  $request->updated_by,
+            'user_id'                   =>  $request->action_by,
         ];
-        NotificationTo::create($not_visited);
+        NotificationVisited::create($not_visited);
     }
 }
+

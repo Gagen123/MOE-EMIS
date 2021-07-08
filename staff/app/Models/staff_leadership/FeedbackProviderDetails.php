@@ -10,20 +10,26 @@ class FeedbackProviderDetails extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'leadership_id',
-        'staff_id',
-        'staff_type',
+        'application_number',
+        'partifipant_from',
+        'participant',
+        'positiontitle',
         'cid',
         'name',
         'email',
-        'feedback_id',
-        'nominees_id',
+        'contact',
+        'department',
+        'school',
+        'dzongkhag',
+        'feedback_type',
+        'status',
         'created_by',
+        'created_at'
     ];
-    public function leadershipDetails(){
-        return $this->belongsTo(LeadershipDetails::class, 'leadership_id');
-    }
-    public function nomineeDetails(){
-        return $this->belongsTo(NominationDetails::class, 'nominees_id');
-    }
+    // public function leadershipDetails(){
+    //     return $this->belongsTo(LeadershipDetails::class, 'leadership_id');
+    // }
+    // public function nomineeDetails(){
+    //     return $this->belongsTo(NominationDetails::class, 'nominees_id');
+    // }
 }

@@ -11,6 +11,9 @@ class LeadershipDetails extends Migration
             $table->char('id',36)->unique()->primary();
             $table->char('selection_type',36)->nullable(false);
             $table->char('position_title',36)->nullable(false);
+            $table->enum('feedback', ['0', '1'])->default('1')->nullable(false);
+            $table->enum('interview', ['0', '1'])->default('1')->nullable(false);
+            $table->enum('shortlist', ['0', '1'])->default('1')->nullable(false);
             $table->date('from_date')->nullable(false);
             $table->date('to_date')->nullable(false);
             $table->string('details')->nullable();

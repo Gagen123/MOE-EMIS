@@ -38,37 +38,43 @@
                         <has-error :form="form" field="remarks"></has-error>
                     </div>
                 </div>
-                <div class="form-group row">
+                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0.5">Attachments</label>
-                        <table id="participant-table" class="table w-100 table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Attachment Name</th> 
-                                    <th>File</th> 
-                                </tr> 
-                            </thead> 
-                            <tbody>
-                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                    <td>
-                                        <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                        <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                    </td>
-                                    <td>                                
-                                        <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td colspan="3"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
-                                        @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                                </tr> 
-                            </tbody>
-                        </table>
+                        <label class="mb-0">Attach Food Release Note/Additional Documents<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="form-group row">
+                        <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- <div class="card">
@@ -153,7 +159,7 @@ export default {
                 // [{
                 //     item:'',quantity:'',unit:'', remarks:'',
                 // }], 
-                 attachments:
+                attachments:
                 [{
                     file_name:'',attachment:''
                 }],
@@ -186,20 +192,52 @@ export default {
             if(type=="reset"){
                 this.restForm();
             }
+            // if(type=="save"){
+            //         this.form.post('/mess_manage/saveFoodRelease',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Food release detail is added successfully'
+            //         })
+            //         this.$router.push('/foodrelease_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......");
+            //         this.applyselect();
+            //     })
+            // }
             if(type=="save"){
-                    this.form.post('/mess_manage/saveFoodRelease',this.form)
+                 const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('dateOfrelease', this.form.dateOfrelease);
+                formData.append('dzongkhag', this.form.dzongkhag);
+                // alert(this.form.attachments);
+                formData.append('organizaiton', this.form.organizaiton);
+                formData.append('quarter', this.form.quarter);
+                formData.append('remarks', this.form.remarks);
+                 for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    }
+               
+                    axios.post('/mess_manage/saveFoodRelease',formData,config)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food release detail is added successfully'
+                        title: ' Detail is added successfully'
                     })
                     this.$router.push('/foodrelease_list');
                 })
-                .catch(() => {
-                    console.log("Error......");
-                    this.applyselect();
+                .catch((err) => {
+                    console.log("Error."+err.message)
                 })
             }
+
+
         },
         //     if(type=="save"){
         //         const config = { 
@@ -231,13 +269,13 @@ export default {
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#file_name'+currentcount).val()!=""){
-                this.form.ref_docs.push({file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]});
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
                 $('#file_name'+currentcount).prop('readonly',true);
             }
             else{
                 $('#file_name'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
 
         applyselect(){
@@ -323,6 +361,7 @@ export default {
                 let data = response;
                 this.orgList = data.data.data;
             })
+            
             .catch(function (error){
                 console.log("Error:"+error)
             });
@@ -373,15 +412,16 @@ export default {
         //         this.form.items_released.splice(index,1); 
         //     }
         // },
-        addMoreattachments: function(){
-            this.filecount++;
-            this.form.attachments.push({file_name:'',attachment:''})
+         addMore: function(){
+            this.count++;
+            this.form.attachments.push({file_name:'', attachment:''});
         },
-        removeattachments(index){    
+        remove(){
             if(this.form.attachments.length>1){
-                this.filecount--;
-                this.form.attachments.pop(); 
-                this.form.ref_docs.pop();
+                if(this.count>this.require_count){
+                    this.count--;
+                    this.form.attachments.pop();
+                }
             }
         },
         changefunction(id){
