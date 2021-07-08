@@ -15,6 +15,7 @@ class StudentAttendanceDetail extends Model
         'id',
         'aca_std_attendance_id',
         'std_student_id',
+        'aca_absence_reason_id',
         'created_by',
         'created_at',
         'updated_by',

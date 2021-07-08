@@ -19,7 +19,7 @@
                                 </td>                                                                              
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <select v-model="classAssessmentFrequencyList[index].aca_assmt_frequency_id" class="form-control  editable_fields" id="aca_assmnt_frequency_id" > 
+                                        <select v-model="classAssessmentFrequencyList[index].aca_assmt_frequency_id" class="form-control select2 editable_fields" > 
                                             <option selected="selected" value="">--SELECT--</option>
                                             <option v-for="(item1, index1) in assesmentFrequencyList" :key="index1" :value="item1.id">{{ item1.name }}</option>
                                         </select>
@@ -86,6 +86,7 @@ export default {
                     classAssessmentFrequencies.forEach(item => {
                         if(classStream.org_class_id == item.org_class_id && (classStream.org_stream_id == item.org_stream_id || classStream.org_stream_id == null)){
                             finalClassStreams[index].aca_assmt_frequency_id = item.aca_assmt_frequency_id
+                            finalClassStreams[index].id = item.id
                            
                         }
                     })
@@ -123,15 +124,43 @@ export default {
         this.classAssessmentFrequency();
         this.dt =  $("#class-assessment-frequency-table").DataTable({
             columnDefs: [
-                    { width: 2, targets: 0},
-                ],
+                { width: 2, targets: 0},
+            ],
+             drawCallback: function(dt) {
+                $('.select2').select2().
+                on("select2:select", e => {
+                    const event = new Event("change", { bubbles: true, cancelable: true });
+                    e.params.data.element.parentElement.dispatchEvent(event);
+                })
+                .on("select2:unselect", e => {
+                const event = new Event("change", { bubbles: true, cancelable: true });
+                e.params.data.element.parentElement.dispatchEvent(event);
+                });
+            },
+            destroy: true,
         })
     },
     watch: {
         classAssessmentFrequencyList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#class-assessment-frequency-table").DataTable()
+                this.dt =  $("#class-assessment-frequency-table").DataTable({
+                    columnDefs: [
+                        { width: 2, targets: 0},
+                    ],
+                   drawCallback: function(dt) {
+                    $('.select2').select2().
+                        on("select2:select", e => {
+                            const event = new Event("change", { bubbles: true, cancelable: true });
+                            e.params.data.element.parentElement.dispatchEvent(event);
+                        })
+                        .on("select2:unselect", e => {
+                        const event = new Event("change", { bubbles: true, cancelable: true });
+                        e.params.data.element.parentElement.dispatchEvent(event);
+                        });
+                    },
+                    destroy: true,
+                })
             });
         }
     }

@@ -24,7 +24,6 @@ class AcaStudentAssessment extends Migration
             $table->string('class_stream_section',100);
             $table->date('finalized_date')->nullable();
             $table->unsignedTinyInteger('finalized')->default(0)->index();
-            $table->string('remarks',1000)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();

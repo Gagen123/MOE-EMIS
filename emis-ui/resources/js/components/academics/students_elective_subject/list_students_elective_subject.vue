@@ -70,7 +70,7 @@ export default {
             };
         },
         showedit(data){
-            this.$router.push({name:'edit_students_elective_subject',params: {data:data}});
+            this.$router.push({name:'create_students_elective_subject',params: {data:data}});
         },
     },
     mounted(){ 

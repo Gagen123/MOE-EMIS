@@ -60,6 +60,7 @@ export default {
                                 studentsAttendance[index]['class_stream_section'] = item.class
                             }
                             studentsAttendance[index]['OrgClassStreamId'] = item.OrgClassStreamId
+                            // studentsAttendance[index]['aca_absence_reason_id'] = item.aca_absence_reason_id
 
                         }
                     })

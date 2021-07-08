@@ -4,29 +4,20 @@ const routes = [
         children:
         [
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
-
-            // { path: '/national-holiday-master', component: require('./components/masters/academics_masters/national_holiday/national_holiday_index.vue').default,
-            //     children: [
-            //         { path: '', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
-            //         { path: '/list-national-holiday', name:'list_national_holiday', component: require('./components/masters/academics_masters/national_holiday/list_national_holiday.vue').default },
-            //         { path: '/create-national-holiday', name: 'create_national_holiday', component: require('./components/masters/academics_masters/national_holiday/create_national_holidy.vue').default },
-            //         { path: '/edit-national-holiday', name: 'edit_national_holiday', component: require('./components/masters/academics_masters/national_holiday/edit_national_holiday.vue').default },
-            //     ]
-            // },
-            { path: '/subject-group-master', component: require('./components/masters/academics_masters/subject_group/subject_group_index.vue').default,
-                children: [
-                    { path: '', component: require('./components/masters/academics_masters/subject_group/list_subject_group.vue').default },
-                    { path: '/list-subject-group', name: 'list_subject_group', component: require('./components/masters/academics_masters/subject_group/list_subject_group.vue').default },
-                    { path: '/create-subject-group', name: 'create_subject_group', component: require('./components/masters/academics_masters/subject_group/create_subject_group.vue').default },
-                    { path: '/edit-subject-group', name: 'edit_subject_group', component: require('./components/masters/academics_masters/subject_group/edit_subject_group.vue').default },
-                ]
-            },
             { path: '/subject-master', component: require('./components/masters/academics_masters/subject/subject_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
                     { path: '/list-subject', name: 'list_subject', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
-                    { path: '/create-subject', name: 'aca_create_subject', component: require('./components/masters/academics_masters/subject/create_subject.vue').default },
-                    { path: '/edit-subject', name: 'aca_edit_subject', component: require('./components/masters/academics_masters/subject/edit_subject.vue').default },
+                    { path: '/create-subject', name: 'create_subject', component: require('./components/masters/academics_masters/subject/create_subject.vue').default },
+                    { path: '/edit-subject', name: 'edit_subject', component: require('./components/masters/academics_masters/subject/edit_subject.vue').default },
+                ]
+            },
+            { path: '/sub-subject-master', component: require('./components/masters/academics_masters/sub_subject/sub_subject_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/sub_subject/list_sub_subject.vue').default },
+                    { path: '/list-sub-subject', name: 'list_sub_subject', component: require('./components/masters/academics_masters/sub_subject/list_sub_subject.vue').default },
+                    { path: '/create-sub-subject', name: 'create_sub_subject', component: require('./components/masters/academics_masters/sub_subject/create_sub_subject.vue').default },
+                    { path: '/edit-sub-subject', name: 'edit_sub_subject', component: require('./components/masters/academics_masters/sub_subject/edit_sub_subject.vue').default },
                 ]
             },
             { path: '/assessment-area-master', component: require('./components/masters/academics_masters/assessment_area/assessment_area_index.vue').default,
@@ -57,7 +48,15 @@ const routes = [
                     { path: '/create-subject-assessment-area', name: 'aca_subject_assessment_area', component: require('./components/masters/academics_masters/class_subject_assessment_area/create_class_subject_assessment_area.vue').default },
                 ]
             },
+            { path: '/reasons-for-absent', component: require('./components/masters/academics_masters/reason_for_absent/reason_for_absent_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/reason_for_absent/list_reason_for_absent.vue').default },
+                    { path: '/list-reasons-for-absent', name:'list_reason_for_absent', component: require('./components/masters/academics_masters/reason_for_absent/list_reason_for_absent.vue').default },
+                    { path: '/create-reasons-for-absent', name: 'create_reason_for_absent', component: require('./components/masters/academics_masters/reason_for_absent/create_reason_for_absent.vue').default },
+                    { path: '/edit-reasons-for-absent', name: 'edit_reason_for_absent', component: require('./components/masters/academics_masters/reason_for_absent/edit_reason_for_absent.vue').default },
 
+            ]
+         },
 
         ]
     },
@@ -74,15 +73,16 @@ const routes = [
         },
         { path:'/subject-teacher', component:require('./components/academics/subject_teacher/subject_teacher_index.vue').default,
             children: [
-                { path: '',name:'subject-teacher', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
+                { path: '',name:'subject-teacher', component:require('./components/academics/subject_teacher/list_subject_teacher.vue').default},
                 { path: '/create-subject-teacher',name:'create_subject_teacher', component:require('./components/academics/subject_teacher/create_subject_teacher.vue').default},
+                { path: '/list-subject-teacher',name:'list_subject_teacher', component:require('./components/academics/subject_teacher/list_subject_teacher.vue').default},
             ]
         },
         { path:'/student-elective-subject', component:require('./components/academics/students_elective_subject/students_elective_subject_index.vue').default,
             children: [
                 { path: '', component:require('./components/academics/students_elective_subject/list_students_elective_subject.vue').default},
                 { path: '/list-students-elective-subject', name: 'list_students_elective_subject', component: require('./components/academics/students_elective_subject/list_students_elective_subject.vue').default },
-                { path: '/edit-student-elective-subject',name:'edit_students_elective_subject', component:require('./components/academics/students_elective_subject/edit_students_elective_subject.vue').default},
+                { path: '/create-student-elective-subject',name:'create_students_elective_subject', component:require('./components/academics/students_elective_subject/create_students_elective_subject.vue').default},
             ]
         },
         { path:'/term-result', component:require('./components/academics/term_result/term_result_index.vue').default,
@@ -112,6 +112,15 @@ const routes = [
 
             ]
         },
+    //     { path:'/instructional-days', component:require('./components/academics/student_attendance/student_attendance_index.vue').default,
+    //     children: [
+    //         { path: '', component:require('./components/academics/student_attendance/list_student_attendance.vue').default},
+    //         { path: '/list-student-attendance', name: 'list_student_attendance', component: require('./components/academics/student_attendance/list_student_attendance.vue').default},
+    //         { path: '/create-student-attendance', name: 'create_student_attendance', component: require('./components/academics/student_attendance/create_student_attendance.vue').default },
+    //         { path: '/edit-student-attendance',name:'edit_student_attendance', component:require('./components/academics/student_attendance/edit_student_attendance.vue').default},
+
+    //     ]
+    // },
 
 
     ]

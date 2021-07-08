@@ -18,7 +18,7 @@ class AssessmentAreaSeeder extends Seeder
         DB::table('aca_assessment_area')->insert([
             //AssessmentArea for Dzo
             [
-                'id' => 'b3001031-b8cd-11eb-b80d-b07b2586b8c6',
+                'id' => 'aaa62102-dd49-11eb-9d5b-e89eb413ce43',
                 'name' => 'Listening & Speaking',
                 'code' => 'LS',
                 'dzo_name'=>'ཉན་སླབ།',
@@ -381,55 +381,6 @@ class AssessmentAreaSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Assessment Area for science subject
-            [
-                'id' => '1d62e738-d028-11eb-a9e6-e89eb413ce43',
-                'name' => 'Scientific Knowledge',
-                'code' => 'SK',
-                'dzo_name'=>'',
-                'aca_sub_id' => 'c00d93b6-b8cb-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id ' => null,
-                'display_order'=>'31',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-            [
-                'id' => '123bf79e-d028-11eb-a9e6-e89eb413ce43',
-                'name' => 'Working Scientifically',
-                'code' => 'WS',
-                'dzo_name'=>'',
-                'aca_sub_id' => 'c00d93b6-b8cb-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id ' => null,
-                'display_order'=>'32',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-            [
-                'id' => '05ef9667-d028-11eb-a9e6-e89eb413ce43',
-                'name' => 'Scientific Values',
-                'code' => 'SV',
-                'dzo_name'=>'',
-                'aca_sub_id' => 'c00d93b6-b8cb-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id ' => null,
-                'display_order'=>'33',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-            [
-                'id' => 'fba1974b-d027-11eb-a9e6-e89eb413ce43',
-                'name' => 'MidTerm Exam',
-                'code' => 'MT',
-                'dzo_name'=>'',
-                'aca_sub_id' => 'c00d93b6-b8cb-11eb-b80d-b07b2586b8c6',
-                'aca_rating_type_id ' => null,
-                'display_order'=>'34',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
            
             //Assessment Area for Socail Studies
 
