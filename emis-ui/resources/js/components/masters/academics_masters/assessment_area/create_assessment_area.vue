@@ -5,14 +5,14 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject :<span class="text-danger">*</span></label> 
-                        <select class="form-control select2 subject" id="subject_id" v-model="form.aca_sub_id" :class="{ 'is-invalid': form.errors.has('aca_sub_id') }" @change="onChange">
+                        <select class="form-control select2" id="aca_sub_id" v-model="form.aca_sub_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('aca_sub_id') }" @change="onChange('aca_sub_id')">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in subject_list" :key="index" v-bind:value="item.id" :data-category-id="item.aca_sub_category_id">
                                 {{ item.name }}
                                 <span v-if="item.dzo_name">( {{item.dzo_name}} )</span>
                             </option>
                         </select> 
-                        <has-error :form="form" field="aca_sub_category_id"></has-error>
+                        <has-error :form="form" field="aca_sub_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Assessment Area:<span class="text-danger">*</span></label>
@@ -80,11 +80,6 @@ export default {
         }
     },
     methods: {
-        remove_err(field_id){
-            if($('#' + field_id).val()!=""){
-                $('#' + field_id).removeClass('is-invalid')
-            }
-        },
         loadSubList(uri = 'masters/loadAcademicMasters/all_active_subject'){
             axios.get(uri)
             .then(response => {
@@ -96,7 +91,11 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        onChange(){
+        onChange(id){
+            if($('#' + id).val()!=""){
+               $('#'+id).removeClass('is-invalid select2');
+               $('#'+id).addClass('select2');
+            }
 		    var aca_sub_category_id = $('#subject_id option:selected').data('category-id')
             var ratingtypes = "<option value=''>--Select--</option>"
             this.rating_type_list.forEach((item,index)=>{

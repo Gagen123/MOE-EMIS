@@ -745,7 +745,7 @@ export default {
                 }
             });
         },
-        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
+        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response;

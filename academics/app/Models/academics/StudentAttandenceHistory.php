@@ -20,6 +20,7 @@ class StudentAttendanceHistory extends Model
         'class_stream_section',
         'attendance_date',
         'std_student_id',
+        'aca_absence_reason_id',
         'recorded_for',
         'created_by',
         'created_at',

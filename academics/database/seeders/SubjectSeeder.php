@@ -16,6 +16,7 @@ class SubjectSeeder extends Seeder
     public function run()
     {
         DB::table('aca_subject')->insert([
+
             //Dzongkha subject
             [
                 'id' => '19979f9d-b8cc-11eb-b80d-b07b2586b8c6',
@@ -43,6 +44,7 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
+
             //Mathematics subject
             [
                 'id' => 'e11febf6-b8cb-11eb-b80d-b07b2586b8c6',
@@ -57,12 +59,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Environment Studies subject
+            // Science subject 
             [
-                'id' => '029773c2-cef4-11eb-8c53-e89eb413ce43',
+                'id' => 'c00d93b6-b8cb-11eb-b80d-b07b2586b8c6',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Environment Studies',
+                'name' => 'Science',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'4',
@@ -70,12 +72,13 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-            //HPE subject is Compulsory but not Graded
+
+            // General Science subject 
             [
-                'id' => '3f846f32-cef5-11eb-8c53-e89eb413ce43',
+                'id' => '6a7a26d1-de97-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'HPE',
+                'name' => 'General Science',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'5',
@@ -84,12 +87,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Moral/Values/Civic/Buddist Education subject is Compulsory but not Graded
+            //Socail Studies
             [
-                'id' => '9b864903-cef5-11eb-8c53-e89eb413ce43',
+                'id' => '2f733141-d029-11eb-a9e6-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Moral/Values/Civic/Buddist Education',
+                'name' => 'Social Studies',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'6',
@@ -97,13 +100,12 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-
-             //Arts subject is Compulsory but not Graded
-             [
-                'id' => '059f0cc6-cef6-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+            //History subject
+            [
+                'id' => '0bc3a3dc-b8ca-11eb-b80d-b07b2586b8c6',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Arts',
+                'name' => 'History',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'7',
@@ -112,12 +114,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Music subject is Compulsory but not Graded
+            //Geography subject
             [
-                'id' => 'e2caf47d-d02b-11eb-a9e6-e89eb413ce43',
-                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'id' => 'ec491ebe-de97-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Music',
+                'name' => 'Geography',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'8',
@@ -125,12 +127,13 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-            // ICT subject is Compulsory but not Graded
+
+            // Science (Physics,Chemistry,Biology)
             [
-                'id' => '75eedb73-cef6-11eb-8c53-e89eb413ce43',
+                'id' => '9bb96ba6-de98-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'ICT',
+                'name' => 'Science (Physics,Chemistry,Biology)',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'9',
@@ -138,13 +141,12 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-
-            //science(Physics) subject
-            [
-                'id' => '3ce9cdb1-b8c9-11eb-b80d-b07b2586b8c6',
+              //Commerce
+              [
+                'id' => 'b1204e8f-cefd-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Physics',
+                'name' => 'Commerce',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'10',
@@ -153,12 +155,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //science(Chemistry) subject
+            //Accountancy
             [
-                'id' => '7b5a4b19-b8c9-11eb-b80d-b07b2586b8c6',
+                'id' => 'fd9b9ca3-cefd-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Chemistry',
+                'name' => 'Accountancy',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'11',
@@ -167,12 +169,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //science(Biology) subject
+            //Business Mathematics
             [
-                'id' => 'e8600895-b8c9-11eb-b80d-b07b2586b8c6',
+                'id' => '470ed853-de9c-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Biology',
+                'name' => 'Business Mathematics',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'12',
@@ -181,9 +183,9 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //History and Civics subject
+            // History and Civics
             [
-                'id' => '0bc3a3dc-b8ca-11eb-b80d-b07b2586b8c6',
+                'id' => '7d7bcfc7-de99-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
                 'name' => 'History and Civics',
@@ -194,13 +196,13 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-          
-             //Visual Arts 
-             [
-                'id' => '91ca4ff8-cef7-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+
+            // Economics subject
+            [
+                'id' => '514070b5-cef8-11eb-8c53-e89eb413ce43',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Visual Arts',
+                'name' => 'Economics',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'14',
@@ -209,29 +211,15 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            // TVET Orientation subject
+            //Business and Enterpreneurship
             [
-                'id' => '0a734b20-cef8-11eb-8c53-e89eb413ce43',
+                'id' => '9e60a1ef-de9c-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'TVET Orientation',
+                'name' => 'Business and Enterpreneurship',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'15',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-             // Economics subject
-             [
-                'id' => '514070b5-cef8-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Economics',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'16',
                 'status' => '1',
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
@@ -245,18 +233,32 @@ class SubjectSeeder extends Seeder
                 'name' => 'Media Studies',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
+                'display_order'=>'16',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            // TVET Orientation subject
+            [
+                'id' => '0a734b20-cef8-11eb-8c53-e89eb413ce43',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Technical and Vocational Education Training',
+                'dzo_name'=> '',
+                'assessed_by_class_teacher' => '0',
                 'display_order'=>'17',
                 'status' => '1',
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
 
-            // International Languages Subjects 
+            //Environment Science subject
             [
-                'id' => '2fdced1d-cef9-11eb-8c53-e89eb413ce43',
+                'id' => '029773c2-cef4-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'International Languages',
+                'name' => 'Environment Science',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'18',
@@ -265,12 +267,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            // Environmental Science Subjects 
+            // Agriculture for Food Security
             [
-                'id' => '7002696b-cef9-11eb-8c53-e89eb413ce43',
+                'id' => 'b1a51a08-de9b-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Environmental Science',
+                'name' => 'Agriculture for Food Security',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'19',
@@ -279,12 +281,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            // Buddhiest Studies Subjects 
+            //Commercial Studies
             [
-                'id' => '9357dc91-cef9-11eb-8c53-e89eb413ce43',
+                'id' => 'c14eddcc-de9b-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Buddhist Studies',
+                'name' => 'Commercial Studies',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'20',
@@ -293,12 +295,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Law plus Subjects introduced from time to time as deemed necesarry
+            // ICT subject is Compulsory but not Graded
             [
-                'id' => 'c553b2fd-cef9-11eb-8c53-e89eb413ce43',
+                'id' => '75eedb73-cef6-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Law plus Subjects introduced from time to time as deemed necesarry',
+                'name' => 'Information and Communication Technology',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'21',
@@ -307,12 +309,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-             //English/Khordey Lam Sum 
+             //HPE subject is Compulsory but not Graded
              [
-                'id' => 'ebdf7030-cef9-11eb-8c53-e89eb413ce43',
+                'id' => '3f846f32-cef5-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'English/Khordey Lam Sum',
+                'name' => 'Health and Physical Education',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'22',
@@ -321,12 +323,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Ngagdroen 
+            //Values Education is Compulsory but not Graded
             [
-                'id' => '1682377e-cefa-11eb-8c53-e89eb413ce43',
+                'id' => '9b864903-cef5-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Ngagdroen',
+                'name' => 'Values Education',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'23',
@@ -334,13 +336,13 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-                 
-            //Nyer-Khoi-Nam-Shed
+
+            //Arts Education is Compulsory but not Graded
             [
-                'id' => '40647ac5-cefa-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'id' => '059f0cc6-cef6-11eb-8c53-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Nyer-Khoi-Nam-Shed',
+                'name' => 'Arts Education',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'24',
@@ -349,12 +351,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Ka-Ned Selwai Melong under Rigzhung
+            //science(Physics) subject
             [
-                'id' => 'edbe1880-cefa-11eb-8c53-e89eb413ce43',
+                'id' => '3ce9cdb1-b8c9-11eb-b80d-b07b2586b8c6',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Ka-Ned Selwai Melong',
+                'name' => 'Physics',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'25',
@@ -362,13 +364,13 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-            
-            //Chenju
+
+            //science(Chemistry) subject
             [
-                'id' => 'eba8a994-cefb-11eb-8c53-e89eb413ce43',
+                'id' => '7b5a4b19-b8c9-11eb-b80d-b07b2586b8c6',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Chenju',
+                'name' => 'Chemistry',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'26',
@@ -377,12 +379,12 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-             //Sumtag
-             [
-                'id' => '036a7330-cefc-11eb-8c53-e89eb413ce43',
+            //science(Biology) subject
+            [
+                'id' => 'e8600895-b8c9-11eb-b80d-b07b2586b8c6',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
-                'name' => 'Sumtag',
+                'name' => 'Biology',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
                 'display_order'=>'27',
@@ -391,49 +393,7 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Dajur
-            [
-                'id' => '1f0eec91-cefc-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Dajur',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'28',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
 
-            //Nyen-ngag
-            [
-                'id' => '41f56c70-cefc-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Nyen-ngag',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'29',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-
-            [
-                'id' => '27fde268-cefb-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'TVET Subjects',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'30',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-   
             //English Subject for class IX, X, XI and XII
             [
                 'id' => '72a65ede-b8ca-11eb-b80d-b07b2586b8c6',
@@ -484,34 +444,6 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
-            // Science subject 
-            [
-                'id' => 'c00d93b6-b8cb-11eb-b80d-b07b2586b8c6',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Science(Physics,Chemistry,Biology)',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'31',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            // Business  Mathemetics subject
-
-            [
-                'id' => 'a5c26370-cefc-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Business  Mathemetics',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'32',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
 
             //Rigzhung
             [
@@ -521,123 +453,12 @@ class SubjectSeeder extends Seeder
                 'name' => 'Rigzhung',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '0',
-                'display_order'=>'33',
+                'display_order'=>'28',
                 'status' => '1',
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
 
-            //Entrepreneurship Education
-            [
-                'id' => '0c7dacdb-cefd-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Entrepreneurship Education',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'34',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-             //Law
-            [
-                'id' => '3e54db87-cefd-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Law',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'35',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            //Gyalrab 
-            [
-                'id' => '58994546-cefd-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Gyalrab',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'36',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            // Tsi
-            [
-                'id' => '7d7f112a-cefd-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Tsi',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'36',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            //Nencha
-            [
-                'id' => '5d35b1ef-d02c-11eb-a9e6-e89eb413ce43',
-                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Nencha',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'38',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            //Commerce
-            [
-                'id' => 'b1204e8f-cefd-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Commerce',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'39',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            //Accountancy
-            [
-                'id' => 'fd9b9ca3-cefd-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Accountancy',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'40',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-            // 2 subjects from a pool of TVE subjects
-            [
-                'id' => '4c534a62-cefe-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => '2 subjects from a pool of TVE subjects',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'41',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
 
             //Personal Characteristics 
 
@@ -648,30 +469,12 @@ class SubjectSeeder extends Seeder
                 'name' => 'Personal Characteristics',
                 'dzo_name'=> '',
                 'assessed_by_class_teacher' => '1',
-                'display_order'=>'42',
+                'display_order'=>'29',
                 'status' => '1',
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
 
-            //Socail Studies
-
-            [
-                'id' => '2f733141-d029-11eb-a9e6-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
-                'aca_sub_id' => null,
-                'name' => 'Social Studies',
-                'dzo_name'=> '',
-                'assessed_by_class_teacher' => '0',
-                'display_order'=>'43',
-                'status' => '1',
-                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
-                'created_at' => Carbon::now(),
-            ],
-
-
-           
-           
         ]);
     }
 }

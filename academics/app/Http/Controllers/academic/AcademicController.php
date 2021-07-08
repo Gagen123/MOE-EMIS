@@ -132,12 +132,9 @@ class AcademicController extends Controller
             $query1 .= ' AND org_section_id = ?';
             array_push($param1, $request['org_section_id']);
         }
-        try{
         $classSubjects = DB::select($query,$param);
         $classSubjectTeachers = DB::select($query1,$param1);
-        }catch(Exception $e){
-            dd($e);
-        }
+       
         return $this->successResponse(["classSubjects"=>$classSubjects, "classSubjectTeachers"=>$classSubjectTeachers]);
     }
     public function getStudentElectiveSubjects(){
@@ -209,6 +206,7 @@ class AcademicController extends Controller
             if($studentAttendance['is_present']=="0"){
                 StudentAttendanceDetail::create(
                     ['aca_std_attendance_id' => $stdAttendance->id,
+                    'aca_absence_reason_id' => $studentAttendance['remarks_id'],
                     'std_student_id' => $studentAttendance['std_student_id'],
                     'created_by' => $request['user_id'],
                     'created_at' => date('Y-m-d h:i:s')]
@@ -271,6 +269,7 @@ class AcademicController extends Controller
                     'class_stream_section' => $request['class_stream_section'],
                     'attendance_date' => $request['attendance_date'],
                     'std_student_id' => $studentAttendance['std_student_id'],
+                    'aca_absence_reason_id' => $studentAttendance['remarks_id'],
                     'recorded_for' => "Student Attendance Change",
                     'created_by' => $request['user_id'],
                     'created_at' => date('Y-m-d h:i:s')
@@ -368,7 +367,7 @@ class AcademicController extends Controller
         return $this->successResponse($studentAttendance);
     }
     public function loadStudentAttendanceDetail($orgId,Request $request){
-        $query = "SELECT (t2.id IS NOT NULL) AS absent, t1.org_id,t1.org_class_id, t1.org_stream_id, t1.org_section_id,t1.attendance_date,t2.std_student_id
+        $query = "SELECT (t2.id IS NOT NULL) AS absent, t1.org_id,t1.org_class_id, t1.org_stream_id, t1.org_section_id,t1.attendance_date,t2.std_student_id,t2.aca_absence_reason_id
                         FROM aca_student_attendance t1
                    LEFT JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id WHERE t1.attendance_date = ? AND t1.org_id = ? AND t1.org_class_id = ?";
         $params = [$request->attendance_date,$orgId,$request->org_class_id];
