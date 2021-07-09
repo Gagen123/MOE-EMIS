@@ -74,6 +74,7 @@ return array(
     'App\\Services\\Emis\\Staff\\StaffSerivces' => $baseDir . '/app/Services/Emis/Staff/StaffSerivces.php',
     'App\\Services\\System\\AdministrationService' => $baseDir . '/app/Services/System/AdministrationService.php',
     'App\\Traits\\ApiResponser' => $baseDir . '/app/Traits/ApiResponser.php',
+    'App\\Traits\\AuthUser' => $baseDir . '/app/Traits/AuthUser.php',
     'App\\Traits\\ServiceHelper' => $baseDir . '/app/Traits/ServiceHelper.php',
     'App\\Traits\\Uuid' => $baseDir . '/app/Traits/Uuid.php',
     'Asm89\\Stack\\Cors' => $vendorDir . '/asm89/stack-cors/src/Cors.php',
