@@ -11,8 +11,10 @@ class Question extends Model{
     protected $fillable = [
         'id',
         'category_type_id',
+        'leadership_type_id',
         'name',
         'answer_type',
+        'display_order',
         'status',
         'created_by',
         'created_at',

@@ -11,6 +11,7 @@ class Guideline extends Migration
             $table->char('id',36)->unique()->primary();
             $table->string('guideline_for',100)->nullable(false);
             $table->string('guideline',500)->nullable(false);
+            $table->string('display_order',10)->nullable(false);
             $table->boolean('status')->default(1);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',50)->nullable(true);

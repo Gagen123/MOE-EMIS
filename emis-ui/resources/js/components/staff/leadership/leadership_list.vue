@@ -7,7 +7,7 @@
                 </tr>
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index+1}})  </td>
-                    <td>{{ item.guideline}}</td>
+                    <td>{{ item.guideline }}</td>
                 </tr>
             </tbody>
         </table>

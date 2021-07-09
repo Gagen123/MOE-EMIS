@@ -495,11 +495,11 @@ const routes = [
                     { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
                 ],
             },
-            
+
         ]
     },
     { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
-    
+
     // Recuritment by gagen
     //principal recuritment
     { path: '/recuritment_index', component: require('./components/staff/recuritment/recuritment_index.vue').default,
@@ -574,7 +574,7 @@ const routes = [
 
         ]
     },
-    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+
     //Management Body Transactions
     { path:'/management_body',
         component: require('./components/staff/management/management_body_index.vue').default,
@@ -623,6 +623,24 @@ const routes = [
             },
         ]
     },
+     //Staff Update Services
+     { path:'/staff_update_services',
+        component: require('./components/staff/staff_updates/staff_update_index.vue').default,
+        children:[
+            { path: '/', name:'staff_update_services', component: require('./components/staff/staff_updates/staff_update_list.vue').default },
+
+            { path: '/career_stage',
+                component: require('./components/staff/staff_updates/career_stage/career_stage_index.vue').default,
+                children:[
+                    { path: '/', name:'career_stage',  component: require('./components/staff/staff_updates/career_stage/list_career_stage.vue').default },
+                    { path: '/list_career_stage',name:'list_career_stage',  component: require('./components/staff/staff_updates/career_stage/list_career_stage.vue').default },
+                    { path: '/create_career_stage',name:'create_career_stage', component: require('./components/staff/staff_updates/career_stage/create_career_stage.vue').default },
+                    { path: '/edit_career_stage', name:'edit_career_stage', component: require('./components/staff/staff_updates/career_stage/edit_career_stage.vue').default },
+                ],
+            },
+        ]
+    },
+
     { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/leave_services/apply_leave/leave_verification.vue').default },
 
     //Leadership Selection
@@ -667,6 +685,16 @@ const routes = [
                     { path: '/', name:'leadership_feedback',  component: require('./components/staff/leadership/feedback/feedback_list.vue').default },
                     { path: '/list_feedback', name:'list_feedback',  component: require('./components/staff/leadership/feedback/feedback_list.vue').default },
                     { path: '/open_feedback', name:'open_feedback',  component: require('./components/staff/leadership/feedback/open_feedback.vue').default },
+                ],
+            },
+
+            { path: '/leadership_type_index',
+                component: require('./components/staff/leadership/questions/leadership_type/leadership_type_index.vue').default,
+                children:[
+                    { path: '/',name:'leadership_type_index',  component: require('./components/staff/leadership/questions/leadership_type/list_leadership_type.vue').default },
+                    { path: '/list_leadership_type',name:'list_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/list_leadership_type.vue').default },
+                    { path: '/create_leadership_type',name:'create_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/create_leadership_type.vue').default },
+                    { path: '/edit_leadership_type',name:'edit_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/edit_leadership_type.vue').default },
                 ],
             },
             { path: '/feedback_category',

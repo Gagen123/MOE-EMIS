@@ -67,6 +67,7 @@ class AdministrationController extends Controller{
             'parent_field'          =>  $request['parent_field'],
             'code'                  =>  $request['code'],
             'guideline_for'         =>  $request['guideline_for'],
+            'display_order'         =>  $request['display_order'],
             'guidelines'            =>  $request['guidelines'],
             'status'                =>  $request['status'],
             'actiontype'            =>  $request['action_type'],
@@ -169,7 +170,7 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
-    
+
     public function saveTransferConfigMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -250,34 +251,38 @@ class AdministrationController extends Controller{
     }
 
     public function saveAcademicMasters(Request $request){
-        if($request['record_type'] == 'subject_group') {
+        if($request['record_type'] == 'subject') {
             $rules = [
                 'name'    =>  'required',
                 'aca_sub_category_id' => 'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
+                'assessed_by_class_teacher' => 'required'
+
             ];
             $customMessages = [
                 'display_order.required' => 'This field is required',
                 'name.required' => 'This field is required',
                 'aca_sub_category_id.required' => 'This field is required',
                 'status.required' => 'This field is required',
+                'assessed_by_class_teacher.required' => 'This field is required',
+
             ];
         }
-        if($request['record_type'] == 'subject') {
+        if($request['record_type'] == 'sub_subject') {
             $rules = [
+                'aca_sub_id' => 'required',
                 'aca_sub_category_id' => 'required',
                 'name'  =>  'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
-                'assessed_by_class_teacher' => 'required'
             ];
             $customMessages = [
+                'aca_sub_id.required' => 'This field is required',
                 'aca_sub_category_id.required' => 'This field is required',
                 'name.required' => 'This field is required',
                 'display_order.required' => 'This field is required',
                 'status.required' => 'This field is required',
-                'assessed_by_class_teacher.required' => 'This field is required',
 
             ];
         }
@@ -297,8 +302,18 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
+        if($request['record_type'] == 'reason_for_absent') {
+            $rules = [
+                'name'  =>  'required',
+                'status'    =>  'required',
+            ];
+            $customMessages = [
+                'name.required' => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
+        }
         $this->validate($request, $rules, $customMessages);
-       
+
         $request['user_id'] = $this->userId();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);

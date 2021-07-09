@@ -17,6 +17,7 @@ class Notification extends Model{
         'notification_access_type',
         'access_level',
         'call_back_link',
+        'action',
         'created_by',
         'created_at',
         'updated_by',

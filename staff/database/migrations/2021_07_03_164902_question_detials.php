@@ -10,8 +10,10 @@ class QuestionDetials extends Migration
         Schema::create('question_details', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('category_type_id',36)->nullable(false);
+            $table->char('leadership_type_id',36)->nullable(false);
             $table->string('name',200)->nullable(false);
             $table->string('answer_type',150)->nullable(true);
+            $table->string('display_order',11)->nullable(true);
             $table->boolean('status')->default(1);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',50)->nullable(true);

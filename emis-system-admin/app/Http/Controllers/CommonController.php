@@ -106,6 +106,10 @@ class CommonController extends Controller{
                     }
                 }
             }
+            //pulling approved transfer Application for DEO
+            if($request->approved_transfer_data=="Valid"){
+                $result_data.=' (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "Inter Transfer")';
+            }
             //final query
             // return $result_data;
             return DB::select($result_data);
@@ -119,7 +123,8 @@ class CommonController extends Controller{
             $roles='"'.str_replace(',','","',$role_ids).'"';
         }
         $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_appNo,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id LEFT JOIN notification_visited v ON v.notification_id=d.id WHERE ';
-        $result_data.=' v.user_id IS NULL AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        // return $result_data;
         return DB::select($result_data);
     }
     public function releaseApplication($application_number=""){

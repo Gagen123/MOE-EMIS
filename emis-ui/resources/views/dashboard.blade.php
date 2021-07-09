@@ -74,11 +74,16 @@
                 $('#notificationcount').html(data.length);
                 data.forEach(item =>{
                     $('#n_details').append(
-                        '<a href="#/'+item.call_back_link+'" class="nav-link "><b>'+ item.notification_for +'</b> ('+ item.notification_appNo+')</a>'
+                        ' <a href="#" onclick\="openNotification(\"'+item.call_back_link+'","'+item.id+'")" class="nav-link "><b>'+ item.notification_for +'</b> ('+ item.notification_appNo+')</a>'
+                        // ' <a href="#/'+item.call_back_link+'" class="nav-link "><b>'+ item.notification_for +'</b> ('+ item.notification_appNo+')</a>'
                     );
                 });
             }
         });
+    }
+    function openNotification(callback_url,id){
+        alert(callback_url);
+        this.$router.push({name:itme.callback_url,params:{id:id}});
     }
     </script>
 </html>
